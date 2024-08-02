@@ -1,14 +1,15 @@
 #' Data module for teal
 #'
-#' Fundamental data class for teal is [teal.data::teal_data()]. Data can be
-#' passed in multiple ways:
-#' 1. Directly as a [teal.data::teal_data()] object.
+#' Module handles `data` argument to the `srv_teal`. `teal` uses [teal_data()] within
+#' the whole framework and it could be provided in several way:
+#' 1. Directly as a [teal.data::teal_data()] object. This will be automatically converted
+#' to `reactive` `teal_data`.
 #' 2. As a `reactive` object returning [teal.data::teal_data()]. [See section](#reactive-teal_data).
 #'
 #' @section Reactive `teal_data`:
 #'
-#' [teal.data::teal_data()] can change depending on the reactive context and `srv_teal` will rebuild
-#' the app accordingly. There are two ways of interacting with the data:
+#' Data included to the application can be reactively changed and [srv_teal()] will rebuild
+#' the content respectively. There are two ways of making interactive `teal_data`:
 #' 1. Using a `reactive` object passed from outside the `teal` application. In this case, reactivity
 #' is controlled by external module and `srv_teal` will trigger accordingly to the changes.
 #' 2. Using [teal_data_module()] which is embedded in the `teal` application and data can be
@@ -19,39 +20,36 @@
 #' The difference is that in the first case the data is controlled from outside the app and in the
 #' second case the data is controlled from custom module called inside of the app.
 #'
-#' see [`validate_reactive_teal_data`] for more details.
+#' see [`module_teal_data`] for more details.
 #'
 #' @inheritParams init
 #'
 #' @param data (`teal_data`, `teal_data_module` or `reactive` returning `teal_data`)
-#' @return A `reactiveVal` which is set to:
+#' @return A `reactive` which returns:
 #' - `teal_data` when the object is validated
-#' - `NULL` when not validated.
-#' Important: `srv_data` suppress validate messages and returns `NULL` so that `srv_teal` can
-#' stop the reactive cycle as `observeEvent` calls based on the data have `ignoreNULL = TRUE`.
+#' - `shiny.silent.error` when not validated.
 #'
-#' @rdname module_data
-#' @name module_data
+#' @rdname module_init_data
+#' @name module_init_data
+#' @keywords internal
 NULL
 
-#' @rdname module_data
-#' @keywords internal
-ui_data <- function(id, data, title, header, footer) {
+#' @rdname module_init_data
+ui_init_data <- function(id, data) {
   ns <- shiny::NS(id)
   shiny::div(
     id = ns("content"),
     style = "display: inline-block;",
     if (inherits(data, "teal_data_module")) {
-      ui_teal_data_module(ns("teal_data_module"), transformer = data)
+      ui_teal_data(ns("teal_data_module"), data_module = data)
     } else {
       NULL
     }
   )
 }
 
-#' @rdname module_data
-#' @keywords internal
-srv_data <- function(id, data, modules, filter = teal_slices()) {
+#' @rdname module_init_data
+srv_init_data <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
@@ -67,10 +65,10 @@ srv_data <- function(id, data, modules, filter = teal_slices()) {
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     data_validated <- if (inherits(data, "teal_data_module")) {
-      srv_teal_data_module(
+      srv_teal_data(
         "teal_data_module",
         data = reactive(req(FALSE)), # to .fallback_on_failure to shiny.silent.error
-        transformer = data,
+        data_module = data,
         modules = modules,
         validate_shiny_silent_error = FALSE
       )

@@ -19,7 +19,7 @@ module(
   datanames = "all",
   server_args = NULL,
   ui_args = NULL,
-  transformers = NULL
+  transformers = list()
 )
 
 modules(..., label = "root")
@@ -73,7 +73,7 @@ a subset of datasets which are appended to the \code{data} argument in server fu
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformers}{(\code{list}) with \code{teal_data_module} that will be applied to transform the data.
+\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
 If so, the module developer is responsible to display the UI in the module itself.
 

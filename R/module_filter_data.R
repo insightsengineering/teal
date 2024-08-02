@@ -1,7 +1,7 @@
 #' Filter panel module in teal
 #'
 #' Creates filter panel module from `teal_data` object and returns `teal_data`. It is build in a way
-#' that filter panel changes and anything what happens before (e.g. [`module_data`]) is triggering
+#' that filter panel changes and anything what happens before (e.g. [`module_init_data`]) is triggering
 #' further reactive events only if something has changed and if the module is visible. Thanks to
 #' this special implementation all modules' data are recalculated only for those modules which are
 #' currently displayed.
@@ -12,20 +12,18 @@
 #'
 #' @inheritParams module_teal_module
 #' @param active_datanames (`reactive` returning `character`) this module's data names
-#' @name module_filter_panel
+#' @name module_filter_data
 #' @keywords internal
 NULL
 
-#' @keywords internal
-#' @rdname module_filter_panel
-ui_filter_panel <- function(id) {
+#' @rdname module_filter_data
+ui_filter_data <- function(id) {
   ns <- shiny::NS(id)
   uiOutput(ns("panel"))
 }
 
-#' @keywords internal
-#' @rdname module_filter_panel
-srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active) {
+#' @rdname module_filter_data
+srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) {
   checkmate::assert_class(datasets, "reactive")
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
@@ -49,8 +47,7 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   })
 }
 
-#' @keywords internal
-#' @rdname module_filter_panel
+#' @rdname module_filter_data
 .make_filtered_teal_data <- function(modules, data, datasets = NULL, datanames) {
   new_datasets <- c(
     # Filtered data
@@ -81,8 +78,7 @@ srv_filter_panel <- function(id, datasets, active_datanames, data_rv, is_active)
   tdata
 }
 
-#' @rdname module_filter_panel
-#' @keywords internal
+#' @rdname module_filter_data
 .observe_active_filter_changed <- function(datasets, is_active, active_datanames, data_rv) {
   previous_signature <- reactiveVal(NULL)
   filter_changed <- reactive({

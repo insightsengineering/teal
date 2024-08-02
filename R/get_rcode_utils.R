@@ -5,18 +5,16 @@
 #' @return Character vector of `library(<package>)` calls.
 #' @keywords internal
 get_rcode_libraries <- function() {
-  vapply(
+  libraries <- vapply(
     utils::sessionInfo()$otherPkgs,
     function(x) {
       paste0("library(", x$Package, ")")
     },
     character(1)
-  ) %>%
-    # put it into reverse order to correctly simulate executed code
-    rev() %>%
-    paste0(sep = "\n") %>%
-    paste0(collapse = "")
+  )
+  paste0(paste0(rev(libraries), sep = "\n"), collapse = "")
 }
+
 
 #' @noRd
 #' @keywords internal

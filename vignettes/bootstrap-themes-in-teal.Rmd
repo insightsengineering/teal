@@ -75,7 +75,10 @@ The most important HTML tags in `teal` have a specific id or class, so they can 
 
 ```
 library(magrittr)
-options("teal.bs_theme" = bslib::bs_theme(version = "5") %>% bslib::bs_add_rules("Anything understood by sass::as_sass()"))
+options("teal.bs_theme" = bslib::bs_add_rules(
+  bslib::bs_theme(version = "5"), 
+  "Anything understood by sass::as_sass()"
+))
 ```
 
 Other `bslib::bs_add_*` family functions could be used to specify low-level Bootstrap elements.
