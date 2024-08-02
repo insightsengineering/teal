@@ -75,11 +75,13 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Create a `teal_data_module` object for custom transformation of data for pre-processing before passing the data into the module.
+#' Create a `teal_data_module` object for custom transformation of data for pre-processing
+#' before passing the data into the module.
 #'
 #' @details
-#' `teal_transform_module` creates a `teal_data_module` object to transform the data in a `teal` application
-#' after it has been passed through the filter panel and before it is passed to the modules which uses the transform module.
+#' `teal_transform_module` creates a `teal_data_module` object to transform data in a `teal`
+#' application. This transformation happens after the data has passed through the filtering activity
+#' in teal. The transformed data is then sent to the server of the [teal_module()].
 #'
 #' See vignette `vignette("data-transform-as-shiny-module", package = "teal")` for more details.
 #'
@@ -89,7 +91,6 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' `shiny` module server function; that takes `id` and `data` argument,
 #' where the `id` is the module id and `data` is the reactive `teal_data` input.
 #' The server function must return reactive expression containing `teal_data` object.
-
 #' @examples
 #' my_transformers <- list(
 #'   teal_transform_module(
@@ -97,19 +98,18 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #'     ui = function(id) {
 #'       ns <- NS(id)
 #'       tags$div(
-#'         numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+#'         numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
 #'       )
 #'     },
 #'     server = function(id, data) {
 #'       moduleServer(id, function(input, output, session) {
 #'         reactive({
-#'           data() %>%
-#'             within(
-#'               {
-#'                 iris <- head(iris, num_rows)
-#'               },
-#'               num_rows = input$n_rows
-#'             )
+#'           within(data(),
+#'             {
+#'               iris <- head(iris, num_rows)
+#'             },
+#'             num_rows = input$n_rows
+#'           )
 #'         })
 #'       })
 #'     }
@@ -126,6 +126,6 @@ teal_transform_module <- function(ui, server, label = "transform module") {
   structure(
     list(ui = ui, server = server),
     label = label,
-    class = "teal_data_module"
+    class = c("teal_transform_module", "teal_data_module")
   )
 }

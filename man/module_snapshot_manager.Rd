@@ -109,4 +109,3 @@ Then that snapshot, and the previous snapshot history are dumped into the \code{
 \author{
 Aleksander Chlebowski
 }
-\keyword{internal}

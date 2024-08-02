@@ -43,8 +43,6 @@
 NULL
 
 #' @rdname module_bookmark_manager
-#' @keywords internal
-#'
 ui_bookmark_panel <- function(id, modules) {
   ns <- NS(id)
 
@@ -72,7 +70,6 @@ ui_bookmark_panel <- function(id, modules) {
 }
 
 #' @rdname module_bookmark_manager
-#' @keywords internal
 srv_bookmark_panel <- function(id, modules) {
   checkmate::assert_character(id)
   checkmate::assert_class(modules, "teal_modules")
@@ -153,7 +150,6 @@ srv_bookmark_panel <- function(id, modules) {
 
 
 #' @rdname module_bookmark_manager
-#' @keywords internal
 get_bookmarking_option <- function() {
   bookmark_option <- getShinyOption("bookmarkStore")
   if (is.null(bookmark_option) && identical(getOption("shiny.bookmarkStore"), "server")) {
@@ -163,7 +159,6 @@ get_bookmarking_option <- function() {
 }
 
 #' @rdname module_bookmark_manager
-#' @keywords internal
 need_bookmarking <- function(modules) {
   unlist(rapply2(
     modules_bookmarkable(modules),

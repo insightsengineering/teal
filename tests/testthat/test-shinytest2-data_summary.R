@@ -93,8 +93,9 @@ testthat::test_that(
     testthat::skip_if_not_installed("MultiAssayExperiment")
     skip_if_too_deep(5)
 
-    data <- teal.data::teal_data() %>%
-      within({
+    data <- within(
+      teal.data::teal_data(),
+      {
         mtcars1 <- mtcars
         mtcars2 <- data.frame(am = c(0, 1), test = c("a", "b"))
         iris <- iris
@@ -105,7 +106,8 @@ testthat::test_that(
         factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
         CO2[factors] <- lapply(CO2[factors], as.character)
         # nolint end: object_name.
-      })
+      }
+    )
 
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))

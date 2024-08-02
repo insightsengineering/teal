@@ -48,21 +48,23 @@ Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 Returns a \code{reactive} expression which returns the currently active module.
 }
 \description{
-This module is a central point of the \code{teal} app. It is called by \code{\link[=init]{init()}} but can be also
-used as a standalone module in your custom application. It is responsible for creating the main
-\code{shiny} app layout and initializing all the necessary components:
+Module to create a \code{teal} app. This module (\code{ui} and \code{server}) is called directly by \code{\link[=init]{init()}} after
+initial argument checking and setting default values. This module can be called directly and
+included in your custom application.
+Module is responsible for creating the main \code{shiny} app layout and initializing all the necessary
+components. This module establishes reactive connection between the input \code{data} and every other
+component in the app. Reactive change of the \code{data} triggers reload of the app and possibly
+keeping all inputs settings the same so the user can continue where one left off.
+}
+\section{data flow in \code{teal} application}{
+
+\code{teal} supports multiple data inputs (see \code{data} in \code{\link{module_init_data}}) but eventually, they are
+all converted to \code{reactive} returning \code{teal_data} in \code{module_teal}. There are several operations
+on this \verb{reactive teal_data} object:
 \itemize{
-\item \code{\link{module_data}} - for handling the \code{data}.
-\item \code{\link{module_teal_module}} - for handling the \code{modules}.
-\item \code{\link{module_filter_manager}} - for handling the \code{filter}.
-\item \code{\link{module_snapshot_manager}} - for handling the \code{snapshots}.
-\item \code{\link{module_bookmark_manager}} - for handling the \code{bookmarks}.
+\item data loading in \code{\link{module_init_data}}
+\item data filtering in \code{\link{module_filter_data}}
+\item data transformation in \code{\link{module_transform_data}}
 }
 }
-\details{
-This module establishes reactive connection between the \code{data} and every other component in the app.
-Reactive change of the \code{data} triggers reload of the app and possibly keeping all inputs settings
-the same so the user can continue where one left off.
-Similar applies to \code{\link{module_bookmark_manager}} which allows to start a new session with restored
-inputs.
-}
+

@@ -91,10 +91,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Collate:
     '1.0_filter_panel.R'
-    '1.0_module_data.R'
     '1.0_module_data_summary.R'
-    '1.0_module_teal_transform.R'
-    '1.0_validate_reactive_teal_data.R'
     'TealAppDriver.R'
     'dummy_functions.R'
     'get_rcode_utils.R'
@@ -104,9 +101,12 @@ Collate:
     'landing_popup_module.R'
     'module_bookmark_manager.R'
     'module_filter_manager.R'
+    'module_init_data.R'
     'module_nested_tabs.R'
     'module_snapshot_manager.R'
     'module_teal.R'
+    'module_teal_data.R'
+    'module_transform_data.R'
     'reporter_previewer_module.R'
     'show_rcode_modal.R'
     'tdata.R'

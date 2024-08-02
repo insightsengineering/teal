@@ -20,11 +20,13 @@ The server function must return reactive expression containing \code{teal_data} 
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Create a \code{teal_data_module} object for custom transformation of data for pre-processing before passing the data into the module.
+Create a \code{teal_data_module} object for custom transformation of data for pre-processing
+before passing the data into the module.
 }
 \details{
-\code{teal_transform_module} creates a \code{teal_data_module} object to transform the data in a \code{teal} application
-after it has been passed through the filter panel and before it is passed to the modules which uses the transform module.
+\code{teal_transform_module} creates a \code{teal_data_module} object to transform data in a \code{teal}
+application. This transformation happens after the data has passed through the filtering activity
+in teal. The transformed data is then sent to the server of the \code{\link[=teal_module]{teal_module()}}.
 
 See vignette \code{vignette("data-transform-as-shiny-module", package = "teal")} for more details.
 }
@@ -35,19 +37,18 @@ my_transformers <- list(
     ui = function(id) {
       ns <- NS(id)
       tags$div(
-        numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+        numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
       )
     },
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         reactive({
-          data() \%>\%
-            within(
-              {
-                iris <- head(iris, num_rows)
-              },
-              num_rows = input$n_rows
-            )
+          within(data(),
+            {
+              iris <- head(iris, num_rows)
+            },
+            num_rows = input$n_rows
+          )
         })
       })
     }

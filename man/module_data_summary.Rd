@@ -41,6 +41,12 @@ get_object_filter_overview_MultiAssayExperiment(
 \code{shiny} module instance id.}
 
 \item{teal_data}{(\code{reactive} returning \code{teal_data})}
+
+\item{filtered_data}{(\code{list}) of filtered objects}
+
+\item{unfiltered_data}{(\code{list}) of unfiltered objects}
+
+\item{dataname}{(\code{character(1)})}
 }
 \value{
 \code{NULL}.

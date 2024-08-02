@@ -12,13 +12,11 @@ vignette: >
 
 ## Introduction
 
-The input data supplied by the app developer in the `data` argument of the `init` function is passed through the filter panel and the filtered data is supplied to the all modules.
-It is important to note that the filter panel only performs one kind of computation on the datasets, it filters the data based on the user interaction.
-However, there are use cases where we need to provide a more customized transformation options for the app user.
-Historically, customised data transformations was achieved in the teal apps using the encoding panel, where the module developer provides custom UI and server logic for the data transformation.
-But, with the new `teal_transform_module` function, it is now possible to provide a more dynamic transformation capability which can be customised by the app developer and not just the module developer.
-
-The `teal_transform_module()` function can be used to create a `teal_data_module` object that is basically a shiny module where the module server function takes in the data from the filter panel and returns the data after applying the custom transformation logic.
+When data transformations need to occur inside the teal app, they typically happen within the teal module development by the teal module developer. This results in the transformation code being tightly coupled with the teal module. Any changes to the data transformation logic require updating the teal module, which can impact the teal app development until the module is updated.
+With the new `teal_transform_module()` function, it is possible to provide a more dynamic data transformation capability that can be customized by the teal app developer, not just the teal module developer.
+The `teal_transform_module()` function is essentially a Shiny module that takes `ui` and `server` arguments and can be provided to the `transformer` argument in a `module()`. When provided, teal will execute the data transformation logic for the specified module when it is loaded. 
+In addition, this approach makes it easier for teal app developers to handle additional data transformations while using the teal modules R packages like `teal.modules.general` and `teal.modules.clinical`.
+Let’s explore this new way to manage custom data transformations in teal apps.
 
 ## Creating your first custom data transformation module
 
@@ -29,16 +27,14 @@ library(teal)
 ```
 
 ```{r}
-data <- teal_data() %>%
-  within({
-    iris <- iris
-    mtcars <- mtcars
-  })
-
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
 
 app <- init(
   data = data,
-  modules = example_module()
+  modules = teal::example_module()
 )
 
 if (interactive()) {
@@ -53,11 +49,11 @@ In the `server` function we take in the reactive `data` and perform this transfo
 
 ```{r}
 library(teal)
-data <- teal_data() %>%
-  within({
-    iris <- iris
-    mtcars <- mtcars
-  })
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+datanames(data) <- c("iris", "mtcars")
 
 my_transformers <- list(
   teal_transform_module(
@@ -71,13 +67,12 @@ my_transformers <- list(
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         reactive({
-          data() %>%
-            within(
-              {
-                iris <- head(iris, num_rows)
-              },
-              num_rows = input$n_rows
-            )
+          within(data(),
+            {
+              iris <- head(iris, num_rows)
+            },
+            num_rows = input$n_rows
+          )
         })
       })
     }
@@ -86,7 +81,7 @@ my_transformers <- list(
 
 app <- init(
   data = data,
-  modules = example_module(transformers = my_transformers)
+  modules = teal::example_module(transformers = my_transformers)
 )
 
 if (interactive()) {
@@ -101,11 +96,11 @@ Also, note that this module does not have interactive UI elements.
 
 ```{r}
 library(teal)
-data <- teal_data() %>%
-  within({
-    iris <- iris
-    mtcars <- mtcars
-  })
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+datanames(data) <- c("iris", "mtcars")
 
 my_transformers <- list(
   teal_transform_module(
@@ -119,13 +114,12 @@ my_transformers <- list(
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         reactive({
-          data() %>%
-            within(
-              {
-                iris <- head(iris, num_rows)
-              },
-              num_rows = input$n_rows
-            )
+          within(data(),
+            {
+              iris <- head(iris, num_rows)
+            },
+            num_rows = input$n_rows
+          )
         })
       })
     }
@@ -141,11 +135,10 @@ my_transformers <- list(
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         reactive({
-          data() %>%
-            within({
-              mtcars$rownames <- rownames(mtcars)
-              rownames(mtcars) <- NULL
-            })
+          within(data(), {
+            mtcars$rownames <- rownames(mtcars)
+            rownames(mtcars) <- NULL
+          })
         })
       })
     }
@@ -154,7 +147,7 @@ my_transformers <- list(
 
 app <- init(
   data = data,
-  modules = example_module(transformers = my_transformers)
+  modules = teal::example_module(transformers = my_transformers)
 )
 
 if (interactive()) {

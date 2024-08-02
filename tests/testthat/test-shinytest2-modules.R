@@ -81,9 +81,10 @@ testthat::test_that("e2e: filter panel is not displayed when datanames is NULL",
 
   testthat::expect_true(
     is.na(
-      app$get_html_rvest(".teal_secondary_col") %>%
-        rvest::html_element("div") %>%
-        rvest::html_attr("style")
+      rvest::html_attr(
+        rvest::html_element(app$get_html_rvest(".teal_secondary_col"), "div"),
+        "style"
+      )
     )
   )
 
