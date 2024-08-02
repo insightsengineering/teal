@@ -81,7 +81,7 @@
 #' @rdname module_snapshot_manager
 #'
 #' @author Aleksander Chlebowski
-#'
+#' @keywords internal
 NULL
 
 #' @rdname module_snapshot_manager
