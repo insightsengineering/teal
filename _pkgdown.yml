@@ -19,6 +19,8 @@ navbar:
           href: coverage-report/
         - text: Unit test report
           href: unit-test-report/
+        - text: Non-CRAN unit test report
+          href: unit-test-report-non-cran/
     blueprint:
       text: Technical blueprint
       menu:
