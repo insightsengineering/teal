@@ -38,6 +38,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
         ),
         tags$i(
           class = "remove pull-right fa fa-angle-down",
+          style = "cursor: pointer;",
           title = "fold/expand transform panel",
           onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", wrapper_id)
         ),

@@ -1,4 +1,3 @@
-
 // when invoked it hides/show targetId element and change class of element from class1 <-> class2
 function togglePanelItem(element, targetId, class1, class2) {
   var target = document.getElementById(targetId);
