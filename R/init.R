@@ -170,7 +170,10 @@ init <- function(data,
     lifecycle::deprecate_soft(
       when = "0.16",
       what = "landing_popup_module()",
-      details = "Pass `landing_popup_module` to the `landing_popup` argument of the `init` instead of wrapping it into `modules()` and passing to the `modules` argument"
+      details = paste(
+        "Pass `landing_popup_module` to the `landing_popup` argument of the `init` ",
+        "instead of wrapping it into `modules()` and passing to the `modules` argument"
+      )
     )
   } else if (length(landing) > 1L) {
     stop("Only one `landing_popup_module` can be used.")

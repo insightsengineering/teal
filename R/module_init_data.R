@@ -1,31 +1,36 @@
-#' Data module for teal
+#' Data Module for teal
 #'
-#' Module handles `data` argument to the `srv_teal`. `teal` uses [teal_data()] within
-#' the whole framework and it could be provided in several way:
-#' 1. Directly as a [teal.data::teal_data()] object. This will be automatically converted
-#' to `reactive` `teal_data`.
-#' 2. As a `reactive` object returning [teal.data::teal_data()]. [See section](#reactive-teal_data).
+#' This module manages the `data` argument for `srv_teal`. The `teal` framework uses [teal_data()],
+#' which can be provided in various ways:
+#' 1. Directly as a [teal.data::teal_data()] object. This will automatically convert it into a `reactive` `teal_data`.
+#' 2. As a `reactive` object that returns a [teal.data::teal_data()] object.
 #'
-#' @section Reactive `teal_data`:
+#' @details
+#' ## Reactive `teal_data`:
 #'
-#' Data included to the application can be reactively changed and [srv_teal()] will rebuild
-#' the content respectively. There are two ways of making interactive `teal_data`:
-#' 1. Using a `reactive` object passed from outside the `teal` application. In this case, reactivity
-#' is controlled by external module and `srv_teal` will trigger accordingly to the changes.
-#' 2. Using [teal_data_module()] which is embedded in the `teal` application and data can be
-#' resubmitted when needed by the user.
+#' The data in the application can be reactively updated, prompting [srv_teal()] to rebuild the
+#' content accordingly. There are two methods for creating interactive `teal_data`:
+#' 1. Using a `reactive` object provided from outside the `teal` application. In this scenario,
+#' reactivity is controlled by an external module, and `srv_teal` responds to changes.
+#' 2. Using [teal_data_module()], which is embedded within the `teal` application, allowing data to
+#' be resubmitted by the user as needed.
 #'
-#' Since server of [teal_data_module()] must return `reactive` `teal_data` object, it means that
-#' both scenarios (1) and (2) are having the same effect for the reactivity of a `teal` application.
-#' The difference is that in the first case the data is controlled from outside the app and in the
-#' second case the data is controlled from custom module called inside of the app.
+#' Since the server of [teal_data_module()] must return a `reactive` `teal_data` object, both
+#' methods (1 and 2) produce the same reactive behavior within a `teal` application. The distinction
+#' lies in data control: the first method involves external control, while the second method
+#' involves control from a custom module within the app.
 #'
-#' see [`module_teal_data`] for more details.
+#' For more details, see [`module_teal_data`].
 #'
 #' @inheritParams init
 #'
-#' @param data (`teal_data`, `teal_data_module` or `reactive` returning `teal_data`)
-#' @return A `reactive` which returns:
+#' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
+#' The `ui` component of this module does not require `data` if `teal_data_module` is not provided.
+#' The `data` argument in the `ui` is included solely for the `$ui` function of the
+#' `teal_data_module`. Otherwise, it can be disregarded, ensuring that `ui_teal` does not depend on
+#' the reactive data of the enclosing application.
+#'
+#' @return A `reactive` object that returns:
 #' - `teal_data` when the object is validated
 #' - `shiny.silent.error` when not validated.
 #'

@@ -2,7 +2,6 @@
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#'
 #' Create a nested tab structure to embed modules in a `teal` application.
 #'
 #' @details

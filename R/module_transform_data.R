@@ -1,6 +1,6 @@
 #' Module to transform `reactive` `teal_data`
 #'
-#' Module calls multiple [module_teal_data] in sequence so that `reactive `teal_data` output
+#' Module calls multiple [`module_teal_data`] in sequence so that `reactive teal_data` output
 #' from one module is handed over to the following module's input.
 #'
 #' @inheritParams module_teal_data

@@ -4,7 +4,7 @@
 \alias{module_teal}
 \alias{ui_teal}
 \alias{srv_teal}
-\title{\code{teal} main app module}
+\title{\code{teal} main module}
 \usage{
 ui_teal(
   id,
@@ -28,7 +28,11 @@ nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module} or \code{reactive} returning \code{teal_data})}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
+The \code{ui} component of this module does not require \code{data} if \code{teal_data_module} is not provided.
+The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
+\code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
+the reactive data of the enclosing application.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -45,31 +49,28 @@ The footer of the app.}
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-Returns a \code{reactive} expression which returns the currently active module.
+\code{NULL} invisibly
 }
 \description{
-Module to create a \code{teal} app. This module (\code{ui} and \code{server}) is called directly by \code{\link[=init]{init()}} after
-initial argument checking and setting default values. This module can be called directly and
-included in your custom application.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+Module to create a \code{teal} app. This module can be called directly instead of \code{\link[=init]{init()}} and
+included in your custom application. Please note that \code{\link[=init]{init()}} adds \code{reporter_previewer_module}
+automatically, which is not a case when calling \code{ui/srv_teal} directly.
 }
 \details{
-Please note that \code{\link[=init]{init()}} adds \code{reporter_previewer_module} automatically, which is not a case
-when calling \code{ui/srv_teal} directly.
-
 Module is responsible for creating the main \code{shiny} app layout and initializing all the necessary
 components. This module establishes reactive connection between the input \code{data} and every other
-component in the app. Reactive change of the \code{data} triggers reload of the app and possibly
-keeping all inputs settings the same so the user can continue where one left off.
-}
-\section{data flow in \code{teal} application}{
+component in the app. Reactive change of the \code{data} passed as an argument, reloads the app and
+possibly keeps all input settings the same so the user can continue where one left off.
+\subsection{data flow in \code{teal} application}{
 
-\code{teal} supports multiple data inputs (see \code{data} in \code{\link{module_init_data}}) but eventually, they are
-all converted to \code{reactive} returning \code{teal_data} in \code{module_teal}. There are several operations
-on this \verb{reactive teal_data} object:
+This module supports multiple data inputs but eventually, they are all converted to \code{reactive}
+returning \code{teal_data} in this module. On this \verb{reactive teal_data} object several actions are
+performed:
 \itemize{
 \item data loading in \code{\link{module_init_data}}
 \item data filtering in \code{\link{module_filter_data}}
 \item data transformation in \code{\link{module_transform_data}}
 }
 }
-
+}

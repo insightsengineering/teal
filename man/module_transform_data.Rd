@@ -21,7 +21,7 @@ srv_transform_data(id, data, transforms, modules)
 \code{reactive} \code{teal_data}
 }
 \description{
-Module calls multiple \link{module_teal_data} in sequence so that \code{reactive }teal_data` output
+Module calls multiple \code{\link{module_teal_data}} in sequence so that \verb{reactive teal_data} output
 from one module is handed over to the following module's input.
 }
 \keyword{internal}

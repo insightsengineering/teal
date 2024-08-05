@@ -1,13 +1,8 @@
-#' Create a UI of nested tabs of `teal_modules`
+#' Calls all `modules`
 #'
-#' On the UI side each `teal_modules` is translated to a `tabsetPanel` and each
-#' of its children is another tab-module called recursively. The UI of a
-#' `teal_module` is obtained by calling its UI function.
-#'
-#' On the server side module recursively calls all elements of `modules` and returns currently
-#' active one.
-#' - `teal_module` returns self as a active module.
-#' - `teal_modules` also returns module active within self which is determined by the `input$active_tab`.
+#' On the UI side each `teal_modules` is translated to a `tabsetPanel` and each `teal_module` is a
+#' `tabPanel`. Both, UI and server are called recursively so that each tab is a separate module and
+#' reflect nested structure of `modules` argument.
 #'
 #' @name module_teal_module
 #'
@@ -26,12 +21,9 @@
 #'  which implies in filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
 #'
 #' @return
-#' Depending on the class of `modules`, `ui_teal_module` returns:
-#'   - `teal_module`: instantiated UI of the module.
-#'   - `teal_modules`: `bslib::navset_tab` with each tab corresponding to recursively
-#'     calling this function on it.
-#'
-#' `srv_teal_module` returns a reactive which returns the active module that corresponds to the selected tab.
+#' output of currently active module.
+#' - `srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
+#' - `srv_teal_module.teal_modules` returns output of module selected by `input$active_tab`.
 #'
 #' @keywords internal
 NULL

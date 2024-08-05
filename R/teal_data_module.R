@@ -6,8 +6,8 @@
 #' Create a `teal_data_module` object and evaluate code on it with history tracking.
 #'
 #' @details
-#' `teal_data_module` creates a `shiny` module to supply or modify data in a `teal` application.
-#' The module allows for running data pre-processing code (creation _and_ some modification) after the app starts.
+#' `teal_data_module` creates a `shiny` module to interactively supply or modify data in a `teal` application.
+#' The module allows for running any code (creation _and_ some modification) after the app starts or reloads.
 #' The body of the server function will be run in the app rather than in the global environment.
 #' This means it will be run every time the app starts, so use sparingly.
 #'
@@ -22,14 +22,15 @@
 #'  `shiny` module server function; must only take `id` argument;
 #'  must return reactive expression containing `teal_data` object
 #' @param label (`character(1)`) Label of the module.
-#' @param once (`logical(1)`) Applicable only when used in the `data` argument of `init`.
+#' @param once (`logical(1)`)
 #'  If `TRUE`, the data module will be shown only once and will disappear after successful data loading.
 #'  App user will no longer be able to interact with this module anymore.
 #'  If `FALSE`, the data module can be reused multiple times.
 #'  App user will be able to interact and change the data output from the module multiple times.
 #'
 #' @return
-#' `teal_data_module` returns an object of class `teal_data_module`.
+#' `teal_data_module` returns a list of class `teal_data_module` containing two elements, `ui` and
+#' `server` provided via arguments.
 #'
 #' @examples
 #' tdm <- teal_data_module(
@@ -79,7 +80,7 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' before passing the data into the module.
 #'
 #' @details
-#' `teal_transform_module` creates a `teal_data_module` object to transform data in a `teal`
+#' `teal_transform_module` creates a [`teal_data_module`] object to transform data in a `teal`
 #' application. This transformation happens after the data has passed through the filtering activity
 #' in teal. The transformed data is then sent to the server of the [teal_module()].
 #'
@@ -117,7 +118,6 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' )
 #'
 #' @name teal_transform_module
-#' @seealso [`teal_data_module`], [teal_data_module()]
 #'
 #' @export
 teal_transform_module <- function(ui, server, label = "transform module") {

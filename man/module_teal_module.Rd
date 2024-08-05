@@ -11,7 +11,7 @@
 \alias{srv_teal_module.default}
 \alias{srv_teal_module.teal_modules}
 \alias{srv_teal_module.teal_module}
-\title{Create a UI of nested tabs of \code{teal_modules}}
+\title{Calls all \code{modules}}
 \usage{
 ui_teal_module(id, modules, depth = 0L)
 
@@ -87,26 +87,15 @@ which implies in filter-panel to be "global". When \code{NULL} then filter-panel
 see \code{\link{module_filter_manager}}}
 }
 \value{
-Depending on the class of \code{modules}, \code{ui_teal_module} returns:
+output of currently active module.
 \itemize{
-\item \code{teal_module}: instantiated UI of the module.
-\item \code{teal_modules}: \code{bslib::navset_tab} with each tab corresponding to recursively
-calling this function on it.
+\item \code{srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
+\item \code{srv_teal_module.teal_modules} returns output of module selected by \code{input$active_tab}.
 }
-
-\code{srv_teal_module} returns a reactive which returns the active module that corresponds to the selected tab.
 }
 \description{
-On the UI side each \code{teal_modules} is translated to a \code{tabsetPanel} and each
-of its children is another tab-module called recursively. The UI of a
-\code{teal_module} is obtained by calling its UI function.
-}
-\details{
-On the server side module recursively calls all elements of \code{modules} and returns currently
-active one.
-\itemize{
-\item \code{teal_module} returns self as a active module.
-\item \code{teal_modules} also returns module active within self which is determined by the \code{input$active_tab}.
-}
+On the UI side each \code{teal_modules} is translated to a \code{tabsetPanel} and each \code{teal_module} is a
+\code{tabPanel}. Both, UI and server are called recursively so that each tab is a separate module and
+reflect nested structure of \code{modules} argument.
 }
 \keyword{internal}

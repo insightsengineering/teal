@@ -4,7 +4,7 @@
 \alias{module_init_data}
 \alias{ui_init_data}
 \alias{srv_init_data}
-\title{Data module for teal}
+\title{Data Module for teal}
 \usage{
 ui_init_data(id, data)
 
@@ -15,7 +15,11 @@ srv_init_data(id, data, modules, filter = teal_slices())
 string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module} or \code{reactive} returning \code{teal_data})}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
+The \code{ui} component of this module does not require \code{data} if \code{teal_data_module} is not provided.
+The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
+\code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
+the reactive data of the enclosing application.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 nested list of \code{teal_modules} or \code{teal_module} objects or a single
@@ -27,39 +31,38 @@ more details.}
 Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
-A \code{reactive} which returns:
+A \code{reactive} object that returns:
 \itemize{
 \item \code{teal_data} when the object is validated
 \item \code{shiny.silent.error} when not validated.
 }
 }
 \description{
-Module handles \code{data} argument to the \code{srv_teal}. \code{teal} uses \code{\link[=teal_data]{teal_data()}} within
-the whole framework and it could be provided in several way:
+This module manages the \code{data} argument for \code{srv_teal}. The \code{teal} framework uses \code{\link[=teal_data]{teal_data()}},
+which can be provided in various ways:
 \enumerate{
-\item Directly as a \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object. This will be automatically converted
-to \code{reactive} \code{teal_data}.
-\item As a \code{reactive} object returning \code{\link[teal.data:teal_data]{teal.data::teal_data()}}. \href{#reactive-teal_data}{See section}.
+\item Directly as a \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object. This will automatically convert it into a \code{reactive} \code{teal_data}.
+\item As a \code{reactive} object that returns a \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object.
 }
 }
-\section{Reactive \code{teal_data}}{
+\details{
+\subsection{Reactive \code{teal_data}:}{
 
-
-Data included to the application can be reactively changed and \code{\link[=srv_teal]{srv_teal()}} will rebuild
-the content respectively. There are two ways of making interactive \code{teal_data}:
+The data in the application can be reactively updated, prompting \code{\link[=srv_teal]{srv_teal()}} to rebuild the
+content accordingly. There are two methods for creating interactive \code{teal_data}:
 \enumerate{
-\item Using a \code{reactive} object passed from outside the \code{teal} application. In this case, reactivity
-is controlled by external module and \code{srv_teal} will trigger accordingly to the changes.
-\item Using \code{\link[=teal_data_module]{teal_data_module()}} which is embedded in the \code{teal} application and data can be
-resubmitted when needed by the user.
+\item Using a \code{reactive} object provided from outside the \code{teal} application. In this scenario,
+reactivity is controlled by an external module, and \code{srv_teal} responds to changes.
+\item Using \code{\link[=teal_data_module]{teal_data_module()}}, which is embedded within the \code{teal} application, allowing data to
+be resubmitted by the user as needed.
 }
 
-Since server of \code{\link[=teal_data_module]{teal_data_module()}} must return \code{reactive} \code{teal_data} object, it means that
-both scenarios (1) and (2) are having the same effect for the reactivity of a \code{teal} application.
-The difference is that in the first case the data is controlled from outside the app and in the
-second case the data is controlled from custom module called inside of the app.
+Since the server of \code{\link[=teal_data_module]{teal_data_module()}} must return a \code{reactive} \code{teal_data} object, both
+methods (1 and 2) produce the same reactive behavior within a \code{teal} application. The distinction
+lies in data control: the first method involves external control, while the second method
+involves control from a custom module within the app.
 
-see \code{\link{module_teal_data}} for more details.
+For more details, see \code{\link{module_teal_data}}.
 }
-
+}
 \keyword{internal}

@@ -101,7 +101,6 @@ their \code{label} attribute converted to a valid \code{shiny} id.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 Create a nested tab structure to embed modules in a \code{teal} application.
 }
 \details{

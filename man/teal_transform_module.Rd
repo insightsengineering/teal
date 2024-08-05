@@ -24,7 +24,7 @@ Create a \code{teal_data_module} object for custom transformation of data for pr
 before passing the data into the module.
 }
 \details{
-\code{teal_transform_module} creates a \code{teal_data_module} object to transform data in a \code{teal}
+\code{teal_transform_module} creates a \code{\link{teal_data_module}} object to transform data in a \code{teal}
 application. This transformation happens after the data has passed through the filtering activity
 in teal. The transformed data is then sent to the server of the \code{\link[=teal_module]{teal_module()}}.
 
@@ -55,7 +55,4 @@ my_transformers <- list(
   )
 )
 
-}
-\seealso{
-\code{\link{teal_data_module}}, \code{\link[=teal_data_module]{teal_data_module()}}
 }
