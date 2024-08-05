@@ -1,3 +1,6 @@
+testthat::skip_if_not_installed("shinytest2")
+testthat::skip_if_not_installed("rvest")
+
 testthat::test_that("wunder_bar_srv clicking filter icon opens filter-manager modal", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(

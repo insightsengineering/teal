@@ -40,6 +40,7 @@ for their respective message groups.
 If neither of the nested list elements is named, a header message is taken from \code{header}.
 }
 \examples{
+\dontshow{if (require("shinyvalidate")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(shiny)
 library(shinyvalidate)
 
@@ -109,7 +110,7 @@ server <- function(input, output) {
 if (interactive()) {
   shinyApp(ui, server)
 }
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[shinyvalidate:InputValidator]{shinyvalidate::InputValidator}}, \code{\link[shiny:validate]{shiny::validate}}

@@ -1,6 +1,3 @@
-library(shinytest2)
-library(rvest)
-
 simple_teal_data <- function() {
   data <- within(teal_data(), {
     iris <- iris
