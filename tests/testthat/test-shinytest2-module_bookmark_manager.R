@@ -1,3 +1,6 @@
+testthat::skip_if_not_installed("shinytest2")
+testthat::skip_if_not_installed("rvest")
+
 testthat::test_that("bookmark_manager_button is not rendered by default", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
