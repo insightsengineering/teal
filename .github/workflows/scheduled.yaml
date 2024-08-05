@@ -26,3 +26,9 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/branch-cleanup.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+  revdepcheck:
+    name: revdepcheck ↩️
+    uses: insightsengineering/r.pkg.template/.github/workflows/revdepcheck.yaml@main
+  rhub:
+    name: R-hub 🌐
+    uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@main
