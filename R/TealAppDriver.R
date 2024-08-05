@@ -9,7 +9,15 @@
 #'
 TealAppDriver <- R6::R6Class( # nolint: object_name.
   "TealAppDriver",
-  inherit = shinytest2::AppDriver,
+  inherit = {
+    if (!requireNamespace("shinytest2", quietly = TRUE)) {
+      stop("Please install 'shinytest2' package to use this class.")
+    }
+    if (!requireNamespace("rvest", quietly = TRUE)) {
+      stop("Please install 'rvest' package to use this class.")
+    }
+    shinytest2::AppDriver
+  },
   # public methods ----
   public = list(
     #' @description
