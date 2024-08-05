@@ -112,6 +112,12 @@ srv_filter_manager <- function(id, slices_global) {
       )
     })
 
+    bookmarked_slices <- restoreValue(session$ns("filter_state_on_bookmark"), NULL)
+    if (!is.null(bookmarked_slices)) {
+      logger::log_debug("filter_manager_srv: restoring filter state from bookmark.")
+      slices_global$slices_set(bookmarked_slices)
+    }
+
     mapping_table <- reactive({
       # We want this to be reactive on slices_global$all_slices() only as get_available_teal_slices()
       #   is dependent on slices_global$all_slices().
@@ -243,7 +249,7 @@ methods::setOldClass("reactivevalues")
 
 #' @importFrom methods new
 #' @rdname module_filter_manager
-.slicesGlobal <- methods::setRefClass(".slicesGlobal", # nolint
+.slicesGlobal <- methods::setRefClass(".slicesGlobal", # nolint: object_name.
   fields = list(
     all_slices = "reactiveVal",
     module_slices_api = "reactivevalues"
