@@ -64,14 +64,10 @@ teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
 
   # Otherwise, FilteredData will be created in the modules' scope later
-  ans <- teal.slice::init_filtered_data(
+  teal.slice::init_filtered_data(
     x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
     join_keys = teal.data::join_keys(x)
   )
-  # Piggy-back pre-processing code for datasets of interest so that filtering code can be appended later.
-  attr(ans, "preprocessing_code") <- teal.data::get_code(x, datanames = datanames, check_names = FALSE)
-  attr(ans, "verification_status") <- x@verified
-  ans
 }
 
 #' Template function for `TealReportCard` creation and customization

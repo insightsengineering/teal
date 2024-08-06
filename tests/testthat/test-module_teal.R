@@ -80,6 +80,22 @@ testthat::describe("srv_teal arguments", {
     )
   })
 
+  testthat::it("doesn't fail when data is empty", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(),
+        modules = modules(module(server = function(id, data) data, label = "module_1"))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+        testthat::expect_warning(modules_output$module_1()(), "datanames")
+      }
+    )
+  })
+
   testthat::it("accepts data to be teal_data_module returning reactive teal_data", {
     testthat::expect_no_error(
       shiny::testServer(
@@ -1336,6 +1352,19 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
+
+    testthat::it("what happens when module$label is duplicated (when nested modules)", {
+      testthat::skip("todo")
+    })
+  })
+})
+
+testthat::describe("srv_teal data reload", {
+  testthat::it("sets back the same active filters in each module", {
+    testthat::skip("todo")
+  })
+  testthat::it("doesn't fail when teal_data has no datasets", {
+    testthat::skip("todo")
   })
 })
 
