@@ -446,8 +446,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_string(var_name)
       private$set_active_ns()
       self$click(
-        sprintf(
-          selector = "#%s-filters-%s-add_filter_icon",
+        selector = sprintf(
+          "#%s-filters-%s-add_filter_icon",
           private$ns$filter_panel,
           dataset_name
         )
