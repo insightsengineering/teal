@@ -1,4 +1,4 @@
-# teal 0.15.2.9049
+# teal 0.15.2.9050
 
 ### Breaking changes
 * The `landing_popup_module()` needs to be passed as the `landing_popup` argument of `init` instead of being passed as a module of the `modules` argument of `init`
