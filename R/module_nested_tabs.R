@@ -58,7 +58,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
         function(module_id) {
           module_label <- modules$children[[module_id]]$label
           if (is.null(module_label)) {
-            module_label <- icon("database")
+            module_label <- icon("fas fa-database")
           }
           tabPanel(
             title = module_label,

@@ -78,6 +78,6 @@ include_teal_css_js <- function() {
     include_css_files(),
     # init.js is executed from the server
     include_js_files(except = "init.js"),
-    shinyjs::hidden(icon("gear")), # add hidden icon to load font-awesome css for icons
+    shinyjs::hidden(icon("fas fa-gear")), # add hidden icon to load font-awesome css for icons
   )
 }

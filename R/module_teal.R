@@ -79,7 +79,7 @@ ui_teal <- function(id,
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
     tags$div(
-      icon("arrows-rotate", "spin fa-spin"),
+      icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
       "Computing ...",
       # CSS defined in `custom.css`
       class = "shinybusymessage"
