@@ -447,7 +447,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$set_active_ns()
       self$click(
         sprintf(
-          "%s-filters-%s-toggle_add_panel",
+          selector = "#%s-filters-%s-add_filter_icon",
           private$ns$filter_panel,
           dataset_name
         )
