@@ -15,6 +15,7 @@ const showSidebar = (tabpanel_wrapper) => {
     .removeClass("col-sm-12")
     .addClass("col-sm-9");
   $(`#${tabpanel_wrapper} .teal_secondary_col`).fadeIn(650);
+  $(`#${tabpanel_wrapper} .teal_secondary_col`).trigger("shown");
 };
 const toggleFilterPanel = (tabpanel_wrapper) => {
   if (filter_open[tabpanel_wrapper] === undefined) {
