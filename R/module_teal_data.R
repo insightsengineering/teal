@@ -116,7 +116,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
             need(
               FALSE,
               paste(
-                data_out$message,
+                strip_style(data_out$message),
                 "Check your inputs or contact app developer if error persists.",
                 sep = ifelse(identical(data_out$message, ""), "", "\n")
               )
@@ -132,7 +132,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
             FALSE,
             paste(
               "Error when executing `teal_data_module` passed to `data`:\n ",
-              paste(data_out$message, collapse = "\n"),
+              strip_style(paste(data_out$message, collapse = "\n")),
               "\n Check your inputs or contact app developer if error persists."
             )
           )
@@ -144,7 +144,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
           inherits(data_out, "teal_data"),
           paste(
             "Error: `teal_data_module` passed to `data` failed to return `teal_data` object, returned",
-            toString(sQuote(class(data_out))),
+            strip_style(toString(sQuote(class(data_out)))),
             "instead.",
             "\n Check your inputs or contact app developer if error persists."
           )

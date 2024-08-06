@@ -87,39 +87,44 @@ srv_data_summary <- function(id, teal_data) {
       })
 
       output$table <- renderUI({
-        body_html <- apply(
-          summary_table(),
-          1,
-          function(x) {
-            tags$tr(
-              tagList(
-                tags$td(
-                  if (all(x[-1] == "")) {
-                    icon(
-                      name = "fas fa-exclamation-triangle",
-                      title = "Unsupported dataset",
-                      `data-container` = "body",
-                      `data-toggle` = "popover",
-                      `data-content` = "object not supported by the data_summary module"
-                    )
-                  },
-                  x[1]
-                ),
-                lapply(x[-1], tags$td)
+        summary_table_out <- try(summary_table())
+        if (inherits(summary_table_out, "try-error")) {
+          stop(strip_style(conditionMessage(attr(summary_table_out, "condition"))))
+        } else {
+          body_html <- apply(
+            summary_table_out,
+            1,
+            function(x) {
+              tags$tr(
+                tagList(
+                  tags$td(
+                    if (all(x[-1] == "")) {
+                      icon(
+                        name = "fas fa-exclamation-triangle",
+                        title = "Unsupported dataset",
+                        `data-container` = "body",
+                        `data-toggle` = "popover",
+                        `data-content` = "object not supported by the data_summary module"
+                      )
+                    },
+                    x[1]
+                  ),
+                  lapply(x[-1], tags$td)
+                )
               )
-            )
-          }
-        )
+            }
+          )
 
-        header_labels <- names(summary_table())
-        header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
+          header_labels <- names(summary_table())
+          header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
-        table_html <- tags$table(
-          class = "table custom-table",
-          tags$thead(header_html),
-          tags$tbody(body_html)
-        )
-        table_html
+          table_html <- tags$table(
+            class = "table custom-table",
+            tags$thead(header_html),
+            tags$tbody(body_html)
+          )
+          table_html
+        }
       })
 
       summary_table # testing purpose
