@@ -40,7 +40,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
           class = "remove pull-right fa fa-angle-down",
           style = "cursor: pointer;",
           title = "fold/expand transform panel",
-          onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", wrapper_id)
+          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", wrapper_id)
         ),
         div(
           id = wrapper_id,
