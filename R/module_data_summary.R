@@ -96,7 +96,7 @@ srv_data_summary <- function(id, teal_data) {
                 tags$td(
                   if (all(x[-1] == "")) {
                     icon(
-                      name = "exclamation-triangle",
+                      name = "fas fa-exclamation-triangle",
                       title = "Unsupported dataset",
                       `data-container` = "body",
                       `data-toggle` = "popover",

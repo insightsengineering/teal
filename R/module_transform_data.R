@@ -33,7 +33,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
         title = attr(data_mod, "label"),
         tags$span(
           class = "text-primary mb-4",
-          icon("square-pen", lib = "font-awesome"),
+          icon("fas fa-square-pen"),
           attr(data_mod, "label")
         ),
         tags$i(

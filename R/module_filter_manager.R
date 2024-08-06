@@ -88,7 +88,7 @@ srv_filter_manager_panel <- function(id, slices_global) {
 #' @rdname module_filter_manager
 ui_filter_manager <- function(id) {
   ns <- NS(id)
-  actionButton(ns("filter_manager"), NULL, icon = icon("filter"))
+  actionButton(ns("filter_manager"), NULL, icon = icon("fas fa-filter"))
   tags$div(
     class = "filter_manager_content",
     tableOutput(ns("slices_table"))

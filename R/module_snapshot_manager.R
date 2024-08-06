@@ -91,7 +91,7 @@ ui_snapshot_manager_panel <- function(id) {
     id = ns("show_snapshot_manager"),
     class = "btn action-button wunder_bar_button",
     title = "View filter mapping",
-    suppressMessages(icon("camera"))
+    suppressMessages(icon("fas fa-camera"))
   )
 }
 
@@ -124,9 +124,9 @@ ui_snapshot_manager <- function(id) {
     tags$div(
       class = "manager_table_row",
       tags$span(tags$b("Snapshot manager")),
-      actionLink(ns("snapshot_add"), label = NULL, icon = icon("camera"), title = "add snapshot"),
-      actionLink(ns("snapshot_load"), label = NULL, icon = icon("upload"), title = "upload snapshot"),
-      actionLink(ns("snapshot_reset"), label = NULL, icon = icon("undo"), title = "reset initial state"),
+      actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera"), title = "add snapshot"),
+      actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload"), title = "upload snapshot"),
+      actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo"), title = "reset initial state"),
       NULL
     ),
     uiOutput(ns("snapshot_list"))
@@ -172,8 +172,8 @@ srv_snapshot_manager <- function(id, slices_global) {
         modalDialog(
           textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
           footer = tagList(
-            actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("thumbs-down"))
+            actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("far fa-thumbs-up")),
+            modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))
           ),
           size = "s"
         )
@@ -223,8 +223,8 @@ srv_snapshot_manager <- function(id, slices_global) {
             placeholder = "Meaningful, unique name"
           ),
           footer = tagList(
-            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("thumbs-down"))
+            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("far fa-thumbs-up")),
+            modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))
           )
         )
       )
@@ -336,8 +336,8 @@ srv_snapshot_manager <- function(id, slices_global) {
           divs[[id_rowme]] <- tags$div(
             class = "manager_table_row",
             tags$span(tags$h5(s)),
-            actionLink(inputId = ns(id_pickme), label = icon("circle-check"), title = "select"),
-            downloadLink(outputId = ns(id_saveme), label = icon("save"), title = "save to file")
+            actionLink(inputId = ns(id_pickme), label = icon("far fa-circle-check"), title = "select"),
+            downloadLink(outputId = ns(id_saveme), label = icon("far fa-save"), title = "save to file")
           )
         }
       })
