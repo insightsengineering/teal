@@ -86,32 +86,38 @@ ui_teal_module.shiny.tag <- function(id, modules, depth = 0L) {
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
+
+  ui_teal <- div(
+    div(
+      class = "teal_validated",
+      ui_validate_reactive_teal_data(ns("validate_datanames"))
+    ),
+    do.call(modules$ui, args)
+  )
+
   div(
     id = id,
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) tags$div(style = "mt-6"),
-      fluidRow(
-        column(
-          width = 9,
-          div(
-            class = "teal_validated",
-            ui_validate_reactive_teal_data(ns("validate_datanames"))
-          ),
-          do.call(modules$ui, args),
-          class = "teal_primary_col"
-        ),
-        column(
-          width = 3,
-          ui_data_summary(ns("data_summary")),
-          ui_filter_data(ns("filter_panel")),
-          if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
-            ui_transform_data(ns("data_transform"), transforms = modules$transformers, class = "well")
-          },
-          class = "teal_secondary_col"
+      if (!is.null(modules$datanames)) {
+        fluidRow(
+          column(width = 9, ui_teal, class = "teal_primary_col"),
+          column(
+            width = 3,
+            ui_data_summary(ns("data_summary")),
+            ui_filter_data(ns("filter_panel")),
+            if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
+              ui_transform_data(ns("data_transform"), transforms = modules$transformers, class = "well")
+            },
+            class = "teal_secondary_col"
+          )
         )
-      )
+      } else {
+        ui_teal
+      }
+
     )
   )
 }
