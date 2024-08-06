@@ -103,7 +103,7 @@ testthat::test_that("e2e: reporter does not show the secondary column that shows
   skip_if_too_deep(5)
   app <- teal:::TealAppDriver$new(
     data = simple_teal_data(),
-    modules = modules(example_module(), report_module(label = "Module with Reporter"))
+    modules = report_module(label = "Module with Reporter")
   )
 
   app$click(NS(app$active_module_ns(), "reporter-add_report_card_simple-add_report_card_button"))
@@ -119,10 +119,19 @@ testthat::test_that("e2e: reporter does not show the secondary column that shows
 
   app$click(NS(app$active_module_ns(), "reporter-add_report_card_simple-add_card_ok"))
 
-  secondary_col <- "#teal-teal_modules-example_teal_module > div > div.col-sm-3.teal_secondary_col"
+  secondary_col <- paste0("#",
+    gsub("-module$", "", app$active_module_ns()),
+    " > div > div.col-sm-3.teal_secondary_col"
+  )
+
   testthat::expect_true(app$is_visible(secondary_col))
   app$navigate_teal_tab("Report previewer")
-  testthat::expect_false(app$is_visible(secondary_col))
+
+  secondary_col <- paste0("#",
+    gsub("-module$", "", app$active_module_ns()),
+    " > div > div.col-sm-3.teal_secondary_col"
+  )
+  testthat::expect_null(app$is_visible(secondary_col))
 
   app$stop()
 })
