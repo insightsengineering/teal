@@ -38,7 +38,7 @@ ui_data_summary <- function(id) {
           class = "remove pull-right fa fa-angle-down",
           style = "cursor: pointer;",
           title = "fold/expand data summary panel",
-          onclick = sprintf("togglePanelItem(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
+          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
         )
       )
     ),
