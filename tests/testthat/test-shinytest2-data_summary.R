@@ -107,7 +107,7 @@ testthat::test_that(
       }
     )
 
-    datanames(data) <- c("mtcars1", "mtcars2", "iris", "miniACC", "CO2", "factors")
+    datanames(data) <- c("CO2", "iris", "miniACC", "mtcars2", "mtcars1", "factors")
 
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
