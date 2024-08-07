@@ -294,3 +294,17 @@ defunction <- function(x) {
 get_unique_labels <- function(labels) {
   make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
 }
+
+#' Remove ANSI escape sequences from a string
+#' @noRd
+strip_style <- function(string) {
+  checkmate::assert_string(string)
+
+  gsub(
+    "(?:(?:\\x{001b}\\[)|\\x{009b})(?:(?:[0-9]{1,3})?(?:(?:;[0-9]{0,3})*)?[A-M|f-m])|\\x{001b}[A-M]",
+    "",
+    string,
+    perl = TRUE,
+    useBytes = TRUE
+  )
+}
