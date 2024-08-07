@@ -299,7 +299,7 @@ get_unique_labels <- function(labels) {
   make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
 }
 
-#' Function with regular expression imported from `crayon` package
+#' Remove ANSI escape sequences from a string
 #' @noRd
 strip_style <- function(string) {
   checkmate::assert_string(string)
