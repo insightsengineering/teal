@@ -256,7 +256,7 @@ testthat::test_that("e2e: teal_data_module will make other tabs inactive before 
 
   testthat::expect_true(
     app$get_html_rvest("#teal-teal_modules-active_tab") |>
-      rvest::html_nodes("a:not([data-value='teal_data_module'])") |>
+      rvest::html_nodes("a[data-value*='example_module']")
       rvest::html_attr("disabled") |>
       unique() |>
       is.na()
