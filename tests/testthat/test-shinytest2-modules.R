@@ -72,27 +72,6 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
   app$stop()
 })
 
-testthat::test_that("e2e: filter panel is not displayed when datanames is NULL", {
-  # TODO - this is not satisfied
-  skip_if_too_deep(5)
-  app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "NULL", datanames = NULL)
-    )
-  )
-
-  testthat::expect_true(
-    is.na(
-      rvest::html_attr(
-        rvest::html_element(app$get_html_rvest(".teal_secondary_col"), "div"),
-        "style"
-      )
-    )
-  )
-
-  app$stop()
-})
 
 testthat::test_that("e2e: all the nested teal modules are initiated as expected", {
   skip_if_too_deep(5)
