@@ -157,10 +157,15 @@ testthat::test_that("e2e: teal_data_module gets removed after successful data lo
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal-data-teal_data_module-data-submit")
+  submit <- "teal-data-teal_data_module-data-submit"
+  app$click(submit)
 
   testthat::expect_false(
     app$is_visible('#teal-teal_modules-active_tab a[data-value="teal_data_module"]')
+  )
+
+  testthat::expect_false(
+    app$is_visible(sprintf("#%s", submit))
   )
 
   app$stop()
@@ -242,7 +247,7 @@ testthat::test_that("e2e: teal_data_module will make other tabs inactive before 
 
   testthat::expect_equal(
     app$get_html_rvest("#teal-teal_modules-active_tab") |>
-      rvest::html_nodes("a[data-value*='example_module']")
+      rvest::html_nodes("a[data-value*='example_module']") |>
       rvest::html_attr("disabled"),
     c("disabled", "disabled")
   )
@@ -251,7 +256,7 @@ testthat::test_that("e2e: teal_data_module will make other tabs inactive before 
 
   testthat::expect_true(
     app$get_html_rvest("#teal-teal_modules-active_tab") |>
-      rvest::html_nodes("a[data-value*='example_module']")
+      rvest::html_nodes("a[data-value*='example_module']") |>
       rvest::html_attr("disabled") |>
       unique() |>
       is.na()
