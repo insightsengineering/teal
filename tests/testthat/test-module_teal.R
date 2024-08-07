@@ -1072,7 +1072,7 @@ testthat::describe("srv_teal filters", {
           filter = teal_slices(module_specific = TRUE)
         ),
         expr = {
-          testthat::skip("need a fix in a .slicesGlobal")
+          # testthat::skip("need a fix in a .slicesGlobal")
           session$setInputs(`teal_modules-active_tab` = "module_1")
           session$setInputs(`teal_modules-active_tab` = "module_2")
           slices_global$slices_set(teal_slices(

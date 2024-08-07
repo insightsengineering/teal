@@ -246,20 +246,30 @@ testthat::test_that("e2e: teal_data_module will make other tabs inactive before 
   )
 
   testthat::expect_equal(
-    app$get_html_rvest("#teal-teal_modules-active_tab") |>
-      rvest::html_nodes("a[data-value*='example_module']") |>
-      rvest::html_attr("disabled"),
+    rvest::html_attr(
+      rvest::html_nodes(
+        app$get_html_rvest("#teal-teal_modules-active_tab"),
+        "a[data-value*='example_module']"
+      ),
+      "disabled"
+    ),
     c("disabled", "disabled")
   )
 
   app$click("teal-data-teal_data_module-data-submit")
 
   testthat::expect_true(
-    app$get_html_rvest("#teal-teal_modules-active_tab") |>
-      rvest::html_nodes("a[data-value*='example_module']") |>
-      rvest::html_attr("disabled") |>
-      unique() |>
-      is.na()
+    is.na(
+      unique(
+        rvest::html_attr(
+          rvest::html_nodes(
+            app$get_html_rvest("#teal-teal_modules-active_tab"),
+            "a[data-value*='example_module']"
+          ),
+          "disabled"
+        )
+      )
+    )
   )
 
   app$stop()
