@@ -25,14 +25,16 @@ testthat::test_that("report_previewer_module default label is Report previewer "
 })
 
 testthat::test_that(
-  "report_previewer_module does not accept server_args out of formals(teal.reporter::reporter_previewer_srv) ", {
-  error_pattern <- ".*Assertion on \\'all\\(names\\(server_args"
-  testthat::expect_error(
-    reporter_previewer_module(server_args = list(x = "A")),
-    error_pattern
-  )
-  testthat::expect_error(
-    reporter_previewer_module(server_args = list(reporter = "A", global_knitr = 5, d = 1)),
-    error_pattern
-  )
-})
+  "report_previewer_module does not accept server_args out of formals(teal.reporter::reporter_previewer_srv) ",
+  {
+    error_pattern <- ".*Assertion on \\'all\\(names\\(server_args"
+    testthat::expect_error(
+      reporter_previewer_module(server_args = list(x = "A")),
+      error_pattern
+    )
+    testthat::expect_error(
+      reporter_previewer_module(server_args = list(reporter = "A", global_knitr = 5, d = 1)),
+      error_pattern
+    )
+  }
+)

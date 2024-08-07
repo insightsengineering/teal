@@ -117,7 +117,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       } else {
         ui_teal
       }
-
     )
   )
 }
