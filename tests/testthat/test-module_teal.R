@@ -824,6 +824,64 @@ testthat::describe("srv_teal teal_modules", {
       }
     )
   })
+
+  testthat::it("reveives code of datasets used in transform even if not specified explicitly", {
+    testthat::it("receives all possible objects while those not specified in module$datanames are unfiltered", {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(within(teal.data::teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+          })),
+          filter = teal_slices(
+            teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
+            teal_slice(dataname = "iris", varname = "Species", selected = "versicolor")
+          ),
+          modules = modules(
+            module(
+              label = "module_1",
+              server = function(id, data) data,
+              datanames = c("new_list"),
+              transformers = list(
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive({
+                        within(data(), new_list <- list(iris = iris, mtcars = mtcars))
+                      })
+                    })
+                  }
+                )
+              )
+            )
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          session$flushReact()
+          testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "new_list")
+          testthat::expect_identical(modules_output$module_1()()[["new_list"]]$mtcars, mtcars)
+          testthat::expect_identical(modules_output$module_1()()[["new_list"]]$iris, iris)
+          testthat::expect_identical(
+            teal.code::get_code(modules_output$module_1()()),
+            paste(
+              c(
+                "iris <- iris",
+                "mtcars <- mtcars",
+                'stopifnot(rlang::hash(iris) == "34844aba7bde36f5a34f6d8e39803508")',
+                'stopifnot(rlang::hash(mtcars) == "d0487363db4e6cc64fdb740cb6617fc0")',
+                "new_list <- list(iris = iris, mtcars = mtcars)"
+              ),
+              collapse = "\n"
+            )
+          )
+        }
+      )
+    })
+  })
 })
 
 testthat::describe("srv_teal filters", {
@@ -1512,31 +1570,30 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            datanames = "iris",
-            transformers = transform_list[c("iris", "mtcars")]
+            datanames = c("iris", "data_from_transform"),
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  moduleServer(id, function(input, output, session) {
+                    reactive({
+                      within(data(), data_from_transform <- list(iris = iris, mtcars = mtcars))
+                    })
+                  })
+                }
+              )
+            )
           )
         )
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         session$flushReact()
-        expected_iris <- head(iris[iris$Species == "versicolor", ])
+        data_from_transform <- modules_output$module_1()()[["data_from_transform"]]
+        testthat::expect_identical(data_from_transform$mtcars, mtcars)
+        expected_iris <- iris[iris$Species == "versicolor", ]
         rownames(expected_iris) <- NULL
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
-
-        expected_code <- paste(collapse = "\n", c(
-          "iris <- iris",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          "iris_raw <- iris",
-          'iris <- dplyr::filter(iris, Species == "versicolor")',
-          "iris <- head(iris)"
-        ))
-        testthat::expect_identical(
-          teal.code::get_code(modules_output$module_1()()),
-          expected_code
-        )
+        testthat::expect_identical(data_from_transform$iris, expected_iris)
       }
     )
   })

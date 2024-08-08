@@ -249,7 +249,6 @@ srv_teal_module.teal_module <- function(id,
         once = TRUE,
         eventExpr = module_teal_data_validated(),
         handlerExpr = {
-          browser()
           module_out(.call_teal_module(modules, datasets, module_teal_data_validated, reporter))
         }
       )
