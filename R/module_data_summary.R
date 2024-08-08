@@ -90,7 +90,7 @@ srv_data_summary <- function(id, teal_data) {
         summary_table_out <- try(summary_table(), silent = TRUE)
         if (inherits(summary_table_out, "try-error")) {
           # Ignore silent shiny error
-          if(!inherits(attr(summary_table_out, "condition"), "shiny.silent.error")) {
+          if (!inherits(attr(summary_table_out, "condition"), "shiny.silent.error")) {
             stop("Error occurred during data processing. See details in the main panel.")
           }
         } else {
