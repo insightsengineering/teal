@@ -113,6 +113,7 @@ Collate:
     'teal_data_module.R'
     'teal_data_module-eval_code.R'
     'teal_data_module-within.R'
+    'teal_data_utils.R'
     'teal_lockfile.R'
     'teal_reporter.R'
     'teal_slices-store.R'

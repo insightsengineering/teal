@@ -23,7 +23,7 @@ NULL
   data@id <- c(data@id, sample.int(.Machine$integer.max, size = length(code)))
   data@messages <- c(data@messages, rep("", length(code)))
   data@warnings <- c(data@warnings, rep("", length(code)))
-  validObject(data)
+  methods::validObject(data)
   data
 }
 
@@ -49,7 +49,7 @@ NULL
   new_data@messages <- rep("", length(new_data@code))
   new_data@env <- list2env(mget(x = datasets_to_extract, envir = data@env))
   teal.data::datanames(new_data) <- datanames
-  validObject(new_data)
+  methods::validObject(new_data)
   new_data
 }
 
