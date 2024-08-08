@@ -162,7 +162,7 @@ However, there is a way to customize the placement of the UI inside the module c
 
 In order to place the transformation UI inside the module there are few things one has to do:
 1. Create a custom module wrapper function.
-2. In the module wrapper function, Call the module and store it in a variable.
+2. Call the desired module in the module wrapper function and store it in a variable so it can be modified.
 3. Modify the UI of the module with the transform UI at the desired location by calling the `ui_transform_data`. Note that in order for the transform to work you need to change the name space of the id by passing `NS(gsub("-module$", "", id), "data_transform")`.
 4. Set the `custom_ui` attribute of the `module$transformers` to `TRUE`.
 
