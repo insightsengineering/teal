@@ -87,10 +87,12 @@ srv_data_summary <- function(id, teal_data) {
       })
 
       output$table <- renderUI({
-        summary_table_out <- try(summary_table())
+        summary_table_out <- try(summary_table(), silent = TRUE)
         if (inherits(summary_table_out, "try-error")) {
-          req(!inherits(attr(summary_table_out, "condition"), "shiny.silent.error"))
-          stop("Error occurred during data processing. See details in the main panel.")
+          # Ignore silent shiny error
+          if (!inherits(attr(summary_table_out, "condition"), "shiny.silent.error")) {
+            stop("Error occurred during data processing. See details in the main panel.")
+          }
         } else {
           body_html <- apply(
             summary_table_out,
