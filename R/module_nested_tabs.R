@@ -228,9 +228,9 @@ srv_teal_module.teal_module <- function(id,
 
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
-      # todo: create a new teal_data object with code subset, datasets and datanames (not just limit datanames)
-      teal.data::datanames(all_teal_data) <- .resolve_module_datanames(data = all_teal_data, modules = modules)
-      all_teal_data
+      # todo: reduce datanames, reduce code, reduce objects
+      module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
+      .subset_teal_data(all_teal_data, module_datanames)
     })
 
     module_teal_data_validated <- srv_validate_reactive_teal_data(
@@ -302,11 +302,11 @@ srv_teal_module.teal_module <- function(id,
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    teal_data_datanames(data)
+    .teal_data_datanames(data)
   } else {
     intersect(
       include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      teal_data_ls(data)
+      .teal_data_ls(data)
     )
   }
 }

@@ -34,3 +34,5 @@ RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint: object_n
 # Use non-exported function(s) from teal.code
 # This one is here because lang2calls should not be exported from teal.code
 lang2calls <- getFromNamespace("lang2calls", "teal.code")
+
+get_code_dependency <- getFromNamespace("get_code_dependency", "teal.data")

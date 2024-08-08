@@ -6,7 +6,8 @@
 #' this special implementation all modules' data are recalculated only for those modules which are
 #' currently displayed.
 #'
-#' @return A `eventReactive` which triggers only if all conditions are met:
+#' @return A `eventReactive` containing `teal_data` containing filtered objects and filter code.
+#' `eventReactive` triggers only if all conditions are met:
 #'  - tab is selected (`is_active`)
 #'  - when filters are changed (`get_filter_expr` is different than previous)
 #'
@@ -33,9 +34,12 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
         # technically it means that teal_data_module needs to be refreshed
         logger::log_debug("srv_filter_panel rendering filter panel.")
         filtered_data <- datasets()
-        filtered_data$srv_active("filters", active_datanames = active_datanames)
-        # todo: make sure to bump the `teal.slice` version. Please use the branch `669_insertUI@main` in `teal.slice`.
-        filtered_data$ui_active(session$ns("filters"), active_datanames = active_datanames)
+
+        if (length(active_datanames())) {
+          filtered_data$srv_active("filters", active_datanames = active_datanames)
+          # todo: make sure to bump the `teal.slice` version. Please use the branch `669_insertUI@main` in `teal.slice`.
+          filtered_data$ui_active(session$ns("filters"), active_datanames = active_datanames)
+        }
       })
     })
 
@@ -49,33 +53,12 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
 
 #' @rdname module_filter_data
 .make_filtered_teal_data <- function(modules, data, datasets = NULL, datanames) {
-  new_datasets <- c(
-    # Filtered data
-    sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE),
-    # Raw (unfiltered data)
-    stats::setNames(
-      lapply(datanames, function(x) datasets$get_data(x, filtered = FALSE)),
-      sprintf("%s_raw", datanames)
-    )
-  )
-
-  data_code <- teal.data::get_code(data, datanames = datanames)
-  raw_data_code <- sprintf("%1$s_raw <- %1$s", datanames)
-  filter_code <- get_filter_expr(datasets = datasets, datanames = datanames)
-
-  all_code <- paste(unlist(c(data_code, raw_data_code, "", filter_code)), collapse = "\n")
-  tdata <- do.call(
-    teal.data::teal_data,
-    c(
-      list(code = trimws(all_code, which = "right")),
-      list(join_keys = teal.data::join_keys(data)),
-      new_datasets
-    )
-  )
-  tdata@verified <- data@verified
-  # we want to keep same datanames that app dev initially set with respect to new teal_data's @env
-  teal.data::datanames(tdata) <- intersect(teal.data::datanames(data), teal_data_ls(tdata))
-  tdata
+  data <- eval_code(data, sprintf("%1$s_raw <- %1$s", datanames))
+  filtered_code <- teal.slice::get_filter_expr(datasets = datasets, datanames = datanames)
+  filtered_teal_data <- .append_evaluated_code(data, filtered_code)
+  filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
+  filtered_teal_data <- .append_modified_data(filtered_teal_data, filtered_datasets)
+  filtered_teal_data
 }
 
 #' @rdname module_filter_data
@@ -84,8 +67,8 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
   filter_changed <- reactive({
     req(inherits(datasets(), "FilteredData"))
     new_signature <- c(
-      get_code(data_rv()),
-      get_filter_expr(datasets = datasets(), datanames = active_datanames())
+      teal.data::get_code(data_rv()),
+      teal.slice::get_filter_expr(datasets = datasets(), datanames = active_datanames())
     )
     if (!identical(previous_signature(), new_signature)) {
       previous_signature(new_signature)

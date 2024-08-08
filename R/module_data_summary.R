@@ -24,7 +24,7 @@ ui_data_summary <- function(id) {
   ns <- NS(id)
   content_id <- ns("filters_overview_contents")
   tags$div(
-    id = id, # not used, can be used to customize CSS behavior
+    id = id,
     class = "well",
     tags$div(
       class = "row",
@@ -90,6 +90,8 @@ srv_data_summary <- function(id, teal_data) {
         summary_table_out <- try(summary_table())
         if (inherits(summary_table_out, "try-error")) {
           stop("Error occurred during data processing. See details in the main panel.")
+        } else if (!length(summary_table())) {
+          "no datanames to show"
         } else {
           body_html <- apply(
             summary_table_out,
