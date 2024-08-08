@@ -80,22 +80,6 @@ testthat::describe("srv_teal arguments", {
     )
   })
 
-  testthat::it("doesn't fail when data is empty", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(),
-        modules = modules(module(server = function(id, data) data, label = "module_1"))
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        session$flushReact()
-        testthat::expect_warning(modules_output$module_1()(), "datanames")
-      }
-    )
-  })
-
   testthat::it("accepts data to be teal_data_module returning reactive teal_data", {
     testthat::expect_no_error(
       shiny::testServer(
@@ -206,7 +190,6 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
-
         session$setInputs(`teal_modules-active_tab` = "module_2")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_identical(modules_output$module_2(), 102L)

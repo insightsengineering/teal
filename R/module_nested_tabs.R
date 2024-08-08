@@ -228,7 +228,6 @@ srv_teal_module.teal_module <- function(id,
 
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
-      # todo: reduce datanames, reduce code, reduce objects
       module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
       .subset_teal_data(all_teal_data, module_datanames)
     })

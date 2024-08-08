@@ -17,14 +17,6 @@
 NULL
 
 #' @rdname teal_data_utilities
-.clone_teal_data <- function(data) {
-  checkmate::assert_class(data, "teal_data")
-  new_data <- data
-  new_data@env <- rlang::env_clone(data@env, parent = parent.env(.GlobalEnv))
-  new_data
-}
-
-#' @rdname teal_data_utilities
 .append_evaluated_code <- function(data, code) {
   checkmate::assert_class(data, "teal_data")
   data@code <- c(data@code, code)
@@ -50,11 +42,11 @@ NULL
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(datanames, "character")
   new_data <- data
-  new_data@code <- get_code_dependency(data@code, datanames)
+  datasets_to_extract <- intersect(c(datanames, sprintf("%s_raw", datanames)), ls(data@env))
+  new_data@code <- get_code_dependency(data@code, datasets_to_extract)
   new_data@id <- sample.int(.Machine$integer.max, size = length(new_data@code))
   new_data@warnings <- rep("", length(new_data@code))
   new_data@messages <- rep("", length(new_data@code))
-  datasets_to_extract <- intersect(c(datanames, sprintf("%s_raw", datanames)), ls(data@env))
   new_data@env <- list2env(mget(x = datasets_to_extract, envir = data@env))
   teal.data::datanames(new_data) <- datanames
   validObject(new_data)
