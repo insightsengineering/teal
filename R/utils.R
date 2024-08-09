@@ -177,6 +177,7 @@ check_filter_datanames <- function(filters, datanames) {
   }
 }
 
+  datanames <- ls(teal.code::get_env(data), all.names = TRUE)
 #' Function for validating the title parameter of `teal::init`
 #'
 #' Checks if the input of the title from `teal::init` will create a valid title and favicon tag.
