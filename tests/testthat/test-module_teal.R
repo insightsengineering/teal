@@ -498,33 +498,13 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("is called and receives empty data even if no available datanames", {
-    data <- teal_data(iris = iris)
-    teal.data::datanames(data) <- "iris"
-
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive(data),
-        modules = modules(
-          module("module_1", server = function(id, data) data, datanames = "inexistent")
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), character(0))
-      }
-    )
-  })
-
-  testthat::it("receives all objects from @env except _raw when module$datanames = \"all\" and @datanames is empty", {
+  testthat::it("receives all objects from @env except `DATA_raw` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
     shiny::testServer(
       app = srv_teal,
       args = list(
         id = "test",
         data = reactive({
-          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, some_raw = data.frame(a = 1))
+          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, iris_raw = iris)
           teal.data::datanames(td) <- character(0)
           td
         }),
