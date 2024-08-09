@@ -198,10 +198,10 @@ teal_data_datanames <- function(data) {
 }
 
 #' Retrieve the datanames from a `teal_data` object
-#' 
+#'
 #' This function extracts the names of datasets stored within a `teal_data` object
 #' excluding those that represent raw datasets indicated by name ending with `_raw`.
-#' 
+#'
 #' @param data (`teal_data`)
 #' @return `character`
 #' @keywords internal
