@@ -6,8 +6,8 @@
 #' Create a `teal_data_module` object and evaluate code on it with history tracking.
 #'
 #' @details
-#' `teal_data_module` creates a `shiny` module to supply or modify data in a `teal` application.
-#' The module allows for running data pre-processing code (creation _and_ some modification) after the app starts.
+#' `teal_data_module` creates a `shiny` module to interactively supply or modify data in a `teal` application.
+#' The module allows for running any code (creation _and_ some modification) after the app starts or reloads.
 #' The body of the server function will be run in the app rather than in the global environment.
 #' This means it will be run every time the app starts, so use sparingly.
 #'
@@ -21,9 +21,16 @@
 #' @param server (`function(id)`)
 #'  `shiny` module server function; must only take `id` argument;
 #'  must return reactive expression containing `teal_data` object
+#' @param label (`character(1)`) Label of the module.
+#' @param once (`logical(1)`)
+#'  If `TRUE`, the data module will be shown only once and will disappear after successful data loading.
+#'  App user will no longer be able to interact with this module anymore.
+#'  If `FALSE`, the data module can be reused multiple times.
+#'  App user will be able to interact and change the data output from the module multiple times.
 #'
 #' @return
-#' `teal_data_module` returns an object of class `teal_data_module`.
+#' `teal_data_module` returns a list of class `teal_data_module` containing two elements, `ui` and
+#' `server` provided via arguments.
 #'
 #' @examples
 #' tdm <- teal_data_module(
@@ -53,11 +60,72 @@
 #' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]
 #'
 #' @export
-teal_data_module <- function(ui, server) {
+teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = "id", nargs = 1)
   structure(
     list(ui = ui, server = server),
-    class = "teal_data_module"
+    label = label,
+    class = "teal_data_module",
+    once = once
+  )
+}
+
+#' Data module for `teal` transformers.
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `teal_data_module` object for custom transformation of data for pre-processing
+#' before passing the data into the module.
+#'
+#' @details
+#' `teal_transform_module` creates a [`teal_data_module`] object to transform data in a `teal`
+#' application. This transformation happens after the data has passed through the filtering activity
+#' in teal. The transformed data is then sent to the server of the [teal_module()].
+#'
+#' See vignette `vignette("data-transform-as-shiny-module", package = "teal")` for more details.
+#'
+#'
+#' @inheritParams teal_data_module
+#' @param server (`function(id, data)`)
+#' `shiny` module server function; that takes `id` and `data` argument,
+#' where the `id` is the module id and `data` is the reactive `teal_data` input.
+#' The server function must return reactive expression containing `teal_data` object.
+#' @examples
+#' my_transformers <- list(
+#'   teal_transform_module(
+#'     label = "Custom transform for iris",
+#'     ui = function(id) {
+#'       ns <- NS(id)
+#'       tags$div(
+#'         numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
+#'       )
+#'     },
+#'     server = function(id, data) {
+#'       moduleServer(id, function(input, output, session) {
+#'         reactive({
+#'           within(data(),
+#'             {
+#'               iris <- head(iris, num_rows)
+#'             },
+#'             num_rows = input$n_rows
+#'           )
+#'         })
+#'       })
+#'     }
+#'   )
+#' )
+#'
+#' @name teal_transform_module
+#'
+#' @export
+teal_transform_module <- function(ui, server, label = "transform module") {
+  checkmate::assert_function(ui, args = "id", nargs = 1)
+  checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
+  structure(
+    list(ui = ui, server = server),
+    label = label,
+    class = c("teal_transform_module", "teal_data_module")
   )
 }

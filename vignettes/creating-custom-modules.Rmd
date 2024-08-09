@@ -56,7 +56,7 @@ Note that dataset choices are specified by the `datanames` property of the `teal
 ```{r, message=FALSE}
 library(teal)
 
-example_module <- function(label = "example teal module") {
+my_module <- function(label = "example teal module") {
   checkmate::assert_string(label)
 
   module(
@@ -149,10 +149,8 @@ srv_histogram_example <- function(id, data) {
     })
 
     # view code
-    output$code <- renderPrint({
-      plot_code_q() %>%
-        get_code() %>%
-        cat()
+    output$code <- renderText({
+      get_code(plot_code_q())
     })
   })
 }

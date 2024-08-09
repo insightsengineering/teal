@@ -48,7 +48,7 @@ teal_lockfile <- function() {
 
     lockfile_task <- ExtendedTask$new(create_renv_lockfile)
     lockfile_task$invoke(close = inherits(old_plan, "sequential"), lockfile_path)
-    logger::log_trace("lockfile creation invoked.")
+    logger::log_debug("lockfile creation invoked.")
   }
 }
 
@@ -69,9 +69,9 @@ create_renv_lockfile <- function(close = FALSE, lockfile_path = NULL) {
       )
     )
     if (any(grepl("Lockfile written", renv_logs))) {
-      logger::log_trace("lockfile created successfully.")
+      logger::log_debug("lockfile created successfully.")
     } else {
-      logger::log_trace("lockfile created with issues.")
+      logger::log_debug("lockfile created with issues.")
     }
 
     lockfile_path
@@ -94,7 +94,7 @@ teal_lockfile_downloadhandler <- function() {
       teal_lockfile <- "teal_app.lock"
       iter <- 1
       while (!file.exists(teal_lockfile) && iter <= 100) {
-        logger::log_trace("lockfile not created yet, retrying...")
+        logger::log_debug("lockfile not created yet, retrying...")
         Sys.sleep(0.25)
         iter <- iter + 1 # max wait time is 25 seconds
       }

@@ -31,7 +31,7 @@ The entire life cycle of objects involved in creating the report and configuring
 Let us consider an example module, based on the example module from `teal`:
 ```{r, message=FALSE}
 library(teal)
-example_module <- function(label = "example teal module") {
+my_module <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data) {
@@ -62,7 +62,7 @@ Using `teal`, you can launch this example module with the following:
 ```{r, eval = FALSE}
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = example_module()
+  modules = my_module()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -77,7 +77,7 @@ This informs `teal` that the module requires `reporter`, and it will be included
 See below:
 
 ```{r}
-example_module_with_reporting <- function(label = "example teal module") {
+my_module_with_reporting <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data, reporter) {
@@ -105,7 +105,7 @@ With these modifications, the module is now ready to be launched with `teal`:
 ```{r}
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = example_module_with_reporting()
+  modules = my_module_with_reporting()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -117,10 +117,10 @@ That requires inserting UI and server elements of the `teal.reporter` module int
 
 ### Insert `teal.reporter` module
 
-The UI and the server logic necessary for adding cards from `example_module_with_reporting` to the report are provided by `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`.
+The UI and the server logic necessary for adding cards from `my_module_with_reporting` to the report are provided by `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`.
 
 ```{r}
-example_module_with_reporting <- function(label = "example teal module") {
+my_module_with_reporting <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data, reporter) {
@@ -156,7 +156,7 @@ This updated module is now ready to be launched:
 ```{r}
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = example_module_with_reporting()
+  modules = my_module_with_reporting()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -182,7 +182,7 @@ custom_function <- function(card = teal.reporter::ReportCard$new()) {
   card
 }
 
-example_module_with_reporting <- function(label = "example teal module") {
+my_module_with_reporting <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data, reporter) {
@@ -216,7 +216,7 @@ example_module_with_reporting <- function(label = "example teal module") {
 ```{r}
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = example_module_with_reporting()
+  modules = my_module_with_reporting()
 )
 
 if (interactive()) shinyApp(app$ui, app$server)
@@ -353,7 +353,7 @@ app <- init(
   data = teal_data(AIR = airquality, IRIS = iris),
   modules = list(
     example_reporter_module(label = "with Reporter"),
-    example_module(label = "without Reporter")
+    my_module(label = "without Reporter")
   ),
   filter = teal_slices(teal_slice(dataname = "AIR", varname = "Temp", selected = c(72, 85))),
   header = "Example teal app with reporter"

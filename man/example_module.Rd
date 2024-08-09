@@ -4,7 +4,11 @@
 \alias{example_module}
 \title{An example \code{teal} module}
 \usage{
-example_module(label = "example teal module", datanames = "all")
+example_module(
+  label = "example teal module",
+  datanames = "all",
+  transformers = list()
+)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -15,6 +19,13 @@ filter panel will automatically update the shown filters to include only
 filters in the listed datasets. \code{NULL} will hide the filter panel,
 and the keyword \code{"all"} will show filters of all datasets. \code{datanames} also determines
 a subset of datasets which are appended to the \code{data} argument in server function.}
+
+\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
+Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+If so, the module developer is responsible to display the UI in the module itself.
+
+When the transformation does not have sufficient input data, the resulting data will fallback
+to the last successful transform or, in case there are none, to the filtered data.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.

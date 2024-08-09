@@ -2,7 +2,6 @@
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#'
 #' Create a nested tab structure to embed modules in a `teal` application.
 #'
 #' @details
@@ -49,6 +48,12 @@
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
+#' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
+#' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
+#' If so, the module developer is responsible to display the UI in the module itself.
+#'
+#' When the transformation does not have sufficient input data, the resulting data will fallback
+#' to the last successful transform or, in case there are none, to the filtered data.
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
@@ -118,21 +123,17 @@
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
-
 #' @rdname teal_modules
 #' @export
 #'
 module <- function(label = "module",
-                   server = function(id, ...) {
-                     moduleServer(id, function(input, output, session) {})
-                   },
-                   ui = function(id, ...) {
-                     tags$p(paste0("This module has no UI (id: ", id, " )"))
-                   },
+                   server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+                   ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
                    filters,
                    datanames = "all",
                    server_args = NULL,
-                   ui_args = NULL) {
+                   ui_args = NULL,
+                   transformers = list()) {
   # argument checking (independent)
   ## `label`
   checkmate::assert_string(label)
@@ -239,11 +240,18 @@ module <- function(label = "module",
     )
   }
 
+  ## `transformers`
+  checkmate::assert_list(transformers, types = "teal_data_module")
+
   structure(
     list(
       label = label,
-      server = server, ui = ui, datanames = unique(datanames),
-      server_args = server_args, ui_args = ui_args
+      server = server,
+      ui = ui,
+      datanames = unique(datanames),
+      server_args = server_args,
+      ui_args = ui_args,
+      transformers = transformers
     ),
     class = "teal_module"
   )

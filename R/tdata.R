@@ -171,7 +171,10 @@ get_metadata.default <- function(data, dataname) {
 #'
 #' @examples
 #' td <- teal_data()
-#' td <- within(td, iris <- iris) %>% within(mtcars <- mtcars)
+#' td <- within(
+#'   within(td, iris <- iris),
+#'   mtcars <- mtcars
+#' )
 #' td
 #' as_tdata(td)
 #' as_tdata(reactive(td))

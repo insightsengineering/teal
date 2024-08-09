@@ -189,12 +189,11 @@ For convenience, an empty `datanames` property is considered to mean "all object
 
 ```{r}
 data_with_objects <- teal_data(iris = iris, cars = mtcars)
-data_with_code <- teal_data() %>%
-  within({
-    iris <- iris
-    cars <- mtcars
-    not_a_dataset <- "data source credits"
-  })
+data_with_code <- within(teal_data(), {
+  iris <- iris
+  cars <- mtcars
+  not_a_dataset <- "data source credits"
+})
 datanames(data_with_objects)
 datanames(data_with_code)
 datanames(data_with_code) <- c("iris", "cars")

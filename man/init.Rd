@@ -11,7 +11,8 @@ init(
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
-  id = character(0)
+  id = character(0),
+  landing_popup = NULL
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ The footer of the app.}
 \item{id}{(\code{character}) optional
 string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
+
+\item{landing_popup}{(\code{teal_module}) optional
+A \code{landing_popup_module} to show up as soon as the teal app is initialized.}
 }
 \value{
 Named list containing server and UI functions.
