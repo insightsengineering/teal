@@ -37,7 +37,7 @@
 .teal_primary_col .teal_validated:has(.shiny-output-error),
 .teal_primary_col .teal_validated:has(.teal-output-warning) {
   margin: 1em 0 1em 0;
-  padding: .5em 0 .5em 0;
+  padding: .5em 0 .5em .5em;
 }
 
 .teal_primary_col > .teal_validated:has(.teal-output-warning),
