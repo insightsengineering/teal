@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{teal_data_ls}
 \alias{teal_data_ls}
-\title{Retrieve the datanames from a \code{teal_data} object}
+\title{Retrieve the dataset names from a \code{teal_data} object}
 \usage{
 teal_data_ls(data)
 }
