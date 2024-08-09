@@ -499,13 +499,13 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from @env except _raw when module$datanames = \"all\" and @datanames is empty", {
+  testthat::it("receives all objects from @env except `DATA_raw` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
     shiny::testServer(
       app = srv_teal,
       args = list(
         id = "test",
         data = reactive({
-          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, some_raw = data.frame(a = 1))
+          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, iris_raw = iris)
           teal.data::datanames(td) <- character(0)
           td
         }),
