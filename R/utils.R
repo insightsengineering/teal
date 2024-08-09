@@ -59,19 +59,15 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = teal_data_datanames(x)) {
+teal_data_to_filtered_data <- function(x, datanames = .teal_data_datanames(x)) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
 
   # Otherwise, FilteredData will be created in the modules' scope later
-  ans <- teal.slice::init_filtered_data(
+  teal.slice::init_filtered_data(
     x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
     join_keys = teal.data::join_keys(x)
   )
-  # Piggy-back pre-processing code for datasets of interest so that filtering code can be appended later.
-  attr(ans, "preprocessing_code") <- teal.data::get_code(x, datanames = datanames, check_names = FALSE)
-  attr(ans, "verification_status") <- x@verified
-  ans
 }
 
 #' Template function for `TealReportCard` creation and customization
@@ -179,35 +175,6 @@ check_filter_datanames <- function(filters, datanames) {
   } else {
     TRUE
   }
-}
-
-#' Wrapper on `teal.data::datanames`
-#'
-#' Special function used in internals of `teal` to return names of datasets even if `datanames`
-#' has not been set.
-#' @param data (`teal_data`)
-#' @return `character`
-#' @keywords internal
-teal_data_datanames <- function(data) {
-  checkmate::assert_class(data, "teal_data")
-  if (length(teal.data::datanames(data))) {
-    teal.data::datanames(data)
-  } else {
-    teal_data_ls(data)
-  }
-}
-
-#' Retrieve the dataset names from a `teal_data` object
-#'
-#' This function extracts the names of datasets stored within a `teal_data` object
-#' excluding those that represent raw datasets indicated by name ending with `_raw`.
-#'
-#' @param data (`teal_data`)
-#' @return `character`
-#' @keywords internal
-teal_data_ls <- function(data) {
-  datanames <- ls(teal.code::get_env(data), all.names = TRUE)
-  datanames[!datanames %in% paste0(datanames, "_raw")]
 }
 
 #' Function for validating the title parameter of `teal::init`

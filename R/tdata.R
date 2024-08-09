@@ -188,12 +188,12 @@ as_tdata <- function(x) {
   }
   if (is.reactive(x)) {
     checkmate::assert_class(isolate(x()), "teal_data")
-    datanames <- isolate(teal_data_datanames(x()))
+    datanames <- isolate(.teal_data_datanames(x()))
     datasets <- sapply(datanames, function(dataname) reactive(x()[[dataname]]), simplify = FALSE)
     code <- reactive(teal.code::get_code(x()))
     join_keys <- isolate(teal.data::join_keys(x()))
   } else if (inherits(x, "teal_data")) {
-    datanames <- teal_data_datanames(x)
+    datanames <- .teal_data_datanames(x)
     datasets <- sapply(datanames, function(dataname) reactive(x[[dataname]]), simplify = FALSE)
     code <- reactive(teal.code::get_code(x))
     join_keys <- isolate(teal.data::join_keys(x))

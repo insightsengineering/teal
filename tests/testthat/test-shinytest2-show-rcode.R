@@ -45,7 +45,7 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   r_code <- app$get_text(app$active_module_element("rcode-verbatim_content"))
 
   testthat::expect_match(r_code, "iris <- iris", fixed = TRUE)
-  testthat::expect_match(r_code, "iris_raw <- iris", fixed = TRUE)
+  testthat::expect_match(r_code, "iris._raw_ <- iris", fixed = TRUE)
   testthat::expect_match(r_code, "stopifnot(rlang::hash(", fixed = TRUE)
 
   app$stop()
