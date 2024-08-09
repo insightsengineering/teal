@@ -378,19 +378,16 @@ build_datanames_error_message <- function(label = NULL,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
                                           tagList = shiny::tagList) {
   tags$span(
-    tags$span(
-      ifelse(
-        is.null(label),
-        "Datanames",
-        sprintf("Module '%s' uses dataname(s)", label)
-      )
-    ),
+    tags$span("Datanames"),
     paste_datanames_character(extra_datanames, tags, tagList),
-    tags$span("not available in data"),
-    tagList(
-      tags$span("("),
-      tags$span(paste_datanames_character(datanames, tags, tagList)),
-      tags$span(")")
-    )
+    tags$span(ifelse(length(extra_datanames) > 1, "are missing", "is missing")),
+    tags$span(
+      paste(
+        ifelse(is.null(label), ",", sprintf("for module '%s',", label))
+      ),
+      .noWS = c("after-begin", "before-end")
+    ),
+    tags$span(ifelse(length(datanames) > 1, "which needs:", "which need:")),
+    tags$span(paste_datanames_character(datanames, tags, tagList))
   )
 }
