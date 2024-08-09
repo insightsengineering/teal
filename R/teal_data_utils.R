@@ -71,12 +71,12 @@ NULL
 #' @rdname teal_data_utilities
 .teal_data_datanames <- function(data) {
   checkmate::assert_class(data, "teal_data")
-  if (length(teal.data::datanames(data))) {
-    teal.data::datanames(data)
+  datanames <- teal.data::datanames(data)
+  if (length(datanames)) {
+    datanames
   } else {
     .teal_data_ls(data)
   }
-}
 
 #' @rdname teal_data_utilities
 .teal_data_ls <- function(data) {
