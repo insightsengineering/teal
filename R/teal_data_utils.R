@@ -41,15 +41,30 @@ NULL
 .subset_teal_data <- function(data, datanames) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(datanames, "character")
-  new_data <- data
-  datasets_to_extract <- intersect(c(datanames, sprintf("%s_raw", datanames)), ls(data@env))
-  new_data@code <- get_code_dependency(data@code, datasets_to_extract)
-  new_data@id <- sample.int(.Machine$integer.max, size = length(new_data@code))
-  new_data@warnings <- rep("", length(new_data@code))
-  new_data@messages <- rep("", length(new_data@code))
-  new_data@env <- list2env(mget(x = datasets_to_extract, envir = data@env))
-  teal.data::datanames(new_data) <- datanames
-  methods::validObject(new_data)
+  datanames_corrected <- intersect(datanames, ls(data@env))
+  dataname_corrected_with_raw <- intersect(c(datanames, sprintf("%s_raw", datanames)), ls(data@env))
+
+  if (!length(datanames)) {
+    return(teal_data())
+  }
+
+  new_data <- do.call(
+    teal.data::teal_data,
+    args = c(
+      mget(x = dataname_corrected_with_raw, envir = data@env),
+      list(
+        code = gsub(
+          "warning('Code was not verified for reproducibility.')\n",
+          "",
+          teal.data::get_code(data, datanames = dataname_corrected_with_raw),
+          fixed = TRUE
+        ),
+        join_keys = teal.data::join_keys(data)[datanames_corrected]
+      )
+    )
+  )
+  new_data@verified <- data@verified
+  teal.data::datanames(new_data) <- datanames_corrected
   new_data
 }
 
@@ -65,5 +80,5 @@ NULL
 
 #' @rdname teal_data_utilities
 .teal_data_ls <- function(data) {
-  grep("_raw$", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
+  ls(teal.code::get_env(data), all.names = TRUE)
 }
