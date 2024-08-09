@@ -381,7 +381,7 @@ build_datanames_error_message <- function(label = NULL,
     tags$span("Dataset"),
     paste_datanames_character(extra_datanames, tags, tagList),
     tags$span(ifelse(length(extra_datanames) > 1, "are missing", "is missing")),
-    tags$span("in the data available"),
+    tags$span("in the available data"),
     tags$span(
       paste(
         ifelse(is.null(label), ",", sprintf("for '%s',", label))
