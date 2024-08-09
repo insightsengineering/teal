@@ -407,7 +407,7 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`data-teal_data_module-data-dataset` = "iris", `teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
           ls(teal.code::get_env(modules_output$module_1()())),
-          c("iris", "iris_raw")
+          c("iris", "iris._raw_")
         )
 
         # comment: can't trigger reactivity in testServer - the change in a reactive input data
@@ -417,7 +417,7 @@ testthat::describe("srv_teal teal_modules", {
         session$flushReact()
         testthat::expect_identical(
           ls(teal.code::get_env(modules_output$module_2()())),
-          c("mtcars", "mtcars_raw")
+          c("mtcars", "mtcars._raw_")
         )
       }
     )
@@ -498,7 +498,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from @env except `DATA_raw` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
+  testthat::it("receives all objects from @env except `DATA._raw_` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -514,7 +514,10 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(
+          teal.data::datanames(modules_output$module_1()()),
+          c("iris", "iris_raw", "mtcars", "swiss")
+        )
       }
     )
   })
@@ -1274,11 +1277,11 @@ testthat::describe("srv_teal filters", {
           session$flushReact()
           # iris is not active
           testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-          testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+          testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
           # mtcars has been modified
           expected_mtcars <- subset(mtcars, cyl == 4)
           testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
-          testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+          testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
 
           expected_code <- paste0(
             c(
@@ -1286,8 +1289,8 @@ testthat::describe("srv_teal filters", {
               "mtcars <- mtcars",
               sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
               sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-              "iris_raw <- iris",
-              "mtcars_raw <- mtcars",
+              "iris._raw_ <- iris",
+              "mtcars._raw_ <- mtcars",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1426,9 +1429,9 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(mtcars))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
       }
     )
   })
@@ -1461,17 +1464,17 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         rownames(expected_iris) <- NULL
         expected_iris <- head(expected_iris)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 6)))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
 
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
           sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-          "iris_raw <- iris",
-          "mtcars_raw <- mtcars",
+          "iris._raw_ <- iris",
+          "mtcars._raw_ <- mtcars",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris)",
@@ -1510,17 +1513,17 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         session$flushReact()
 
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 4)))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars_raw"]], mtcars)
+        testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
 
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
           sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-          "iris_raw <- iris",
-          "mtcars_raw <- mtcars",
+          "iris._raw_ <- iris",
+          "mtcars._raw_ <- mtcars",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris)",
           "mtcars <- head(mtcars)"
@@ -1627,7 +1630,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
       }
     )
   })
@@ -1656,7 +1659,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
       }
     )
   })

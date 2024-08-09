@@ -42,7 +42,7 @@ NULL
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(datanames, "character")
   datanames_corrected <- intersect(datanames, ls(data@env))
-  dataname_corrected_with_raw <- intersect(c(datanames, sprintf("%s_raw", datanames)), ls(data@env))
+  dataname_corrected_with_raw <- intersect(c(datanames, sprintf("%s._raw_", datanames)), ls(data@env))
 
   if (!length(datanames)) {
     return(teal_data())
@@ -80,5 +80,5 @@ NULL
 
 #' @rdname teal_data_utilities
 .teal_data_ls <- function(data) {
-  ls(teal.code::get_env(data), all.names = TRUE)
+  grep("._raw_", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
 }
