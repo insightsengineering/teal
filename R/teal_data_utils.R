@@ -77,6 +77,7 @@ NULL
   } else {
     .teal_data_ls(data)
   }
+}
 
 #' @rdname teal_data_utilities
 .teal_data_ls <- function(data) {
