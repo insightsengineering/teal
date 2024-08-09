@@ -3,7 +3,7 @@
 #' In `teal` we need to recreate the `teal_data` object due to two operations:integer.max
 #' - we need to append filter-data code and objects which have been evaluated in `FilteredData` and
 #' we want to avoid double-evaluation.
-#' - we need to subset `teal_data` to datanames used by the module, to shorten obtainable R-code
+#' - we need to subset `teal_data` to `datanames` used by the module, to shorten obtainable R-code
 #'
 #' Due to above recreation of `teal_data` object can't be done simply by using public
 #' `teal.code` and `teal.data` methods.
