@@ -44,7 +44,7 @@ transform_list <<- list(
         observeEvent(input$n, n(input$n))
 
         reactive({
-          within(data(), iris <- head(iris, n_input), n_input = n())
+          within(data(), iris <- head(iris, n = n_input), n_input = n())
         })
       })
     }
@@ -57,7 +57,7 @@ transform_list <<- list(
         observeEvent(input$n, n(input$n))
 
         reactive({
-          within(data(), mtcars <- head(mtcars, n_input), n_input = n())
+          within(data(), mtcars <- head(mtcars, n = n_input), n_input = n())
         })
       })
     }
@@ -1419,8 +1419,8 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           "",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
-          "iris <- head(iris)",
-          "mtcars <- head(mtcars)"
+          "iris <- head(iris, n = 6)",
+          "mtcars <- head(mtcars, n = 6)"
         ))
         testthat::expect_identical(
           teal.code::get_code(modules_output$module_1()()),
@@ -1468,8 +1468,8 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           "mtcars_raw <- mtcars",
           "",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
-          "iris <- head(iris)",
-          "mtcars <- head(mtcars)"
+          "iris <- head(iris, n = 6)",
+          "mtcars <- head(mtcars, n = 6)"
         ))
         testthat::expect_identical(
           teal.code::get_code(modules_output$module_1()()),
