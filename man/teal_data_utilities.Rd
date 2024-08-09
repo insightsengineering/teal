@@ -36,7 +36,7 @@ In \code{teal} we need to recreate the \code{teal_data} object due to two operat
 \itemize{
 \item we need to append filter-data code and objects which have been evaluated in \code{FilteredData} and
 we want to avoid double-evaluation.
-\item we need to subset \code{teal_data} to datanames used by the module, to shorten obtainable R-code
+\item we need to subset \code{teal_data} to \code{datanames} used by the module, to shorten obtainable R-code
 }
 }
 \details{
