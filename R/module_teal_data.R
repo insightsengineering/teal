@@ -202,7 +202,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       res
     } else {
       logger::log_debug("{ label } failed, falling back to previous data.")
-      isolate(that())
+      that()
     }
   })
 }

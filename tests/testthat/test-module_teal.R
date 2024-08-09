@@ -23,8 +23,15 @@ transform_list <<- list(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
+        add_error <- reactiveVal(TRUE)
+        observeEvent(input$add_error, add_error(input$add_error))
+
         reactive({
-          stop("oh no!")
+          if (add_error()) {
+            stop("Oh no")
+          } else {
+            within(data(), iris <- head(iris, n = floor(nrow(iris) / 2)))
+          }
         })
       })
     }
@@ -33,8 +40,11 @@ transform_list <<- list(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
+        n <- reactiveVal(6)
+        observeEvent(input$n, n(input$n))
+
         reactive({
-          within(data(), iris <- head(iris))
+          within(data(), iris <- head(iris, n = n_input), n_input = n())
         })
       })
     }
@@ -43,8 +53,11 @@ transform_list <<- list(
     ui = function(id) NULL,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
+        n <- reactiveVal(6)
+        observeEvent(input$n, n(input$n))
+
         reactive({
-          within(data(), mtcars <- head(mtcars))
+          within(data(), mtcars <- head(mtcars, n = n_input), n_input = n())
         })
       })
     }
@@ -499,13 +512,13 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from @env except _raw when module$datanames = \"all\" and @datanames is empty", {
+  testthat::it("receives all objects from @env except `DATA_raw` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
     shiny::testServer(
       app = srv_teal,
       args = list(
         id = "test",
         data = reactive({
-          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, some_raw = data.frame(a = 1))
+          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, iris_raw = iris)
           teal.data::datanames(td) <- character(0)
           td
         }),
@@ -1406,8 +1419,8 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           "",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
-          "iris <- head(iris)",
-          "mtcars <- head(mtcars)"
+          "iris <- head(iris, n = 6)",
+          "mtcars <- head(mtcars, n = 6)"
         ))
         testthat::expect_identical(
           teal.code::get_code(modules_output$module_1()()),
@@ -1455,8 +1468,8 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           "mtcars_raw <- mtcars",
           "",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
-          "iris <- head(iris)",
-          "mtcars <- head(mtcars)"
+          "iris <- head(iris, n = 6)",
+          "mtcars <- head(mtcars, n = 6)"
         ))
         testthat::expect_identical(
           teal.code::get_code(modules_output$module_1()()),
@@ -1546,6 +1559,59 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["iris_raw"]], iris)
+      }
+    )
+  })
+
+  testthat::it("upstream data change is updated on transformer fallback", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = transform_list[c("iris", "fail")]
+          )
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        new_row_size <- 14
+        session$setInputs("teal_modules-module_1-data_transform-transform_module-data-n" = new_row_size)
+        session$flushReact()
+
+        testthat::expect_equal(nrow(modules_output$module_1()()[["iris"]]), new_row_size)
+      }
+    )
+  })
+
+  testthat::it("upstream data change with double reactivity resolves with correct this/that", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = transform_list[c("iris", "fail")]
+          )
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+
+        session$setInputs(
+          "teal_modules-module_1-data_transform-transform_module-data-n" = 12,
+          "teal_modules-module_1-data_transform-transform_module_1-data-add_error" = FALSE
+        )
+        session$flushReact()
+
+        testthat::expect_equal(nrow(modules_output$module_1()()[["iris"]]), 6)
       }
     )
   })

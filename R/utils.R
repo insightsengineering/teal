@@ -223,8 +223,17 @@ teal_data_datanames <- function(data) {
   }
 }
 
+#' Retrieve the dataset names from a `teal_data` object
+#'
+#' This function extracts the names of datasets stored within a `teal_data` object
+#' excluding those that represent raw datasets indicated by name ending with `_raw`.
+#'
+#' @param data (`teal_data`)
+#' @return `character`
+#' @keywords internal
 teal_data_ls <- function(data) {
-  grep("_raw$", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
+  datanames <- ls(teal.code::get_env(data), all.names = TRUE)
+  datanames[!datanames %in% paste0(datanames, "_raw")]
 }
 
 #' Function for validating the title parameter of `teal::init`
