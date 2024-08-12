@@ -7,8 +7,6 @@
 \alias{get_code_tdata}
 \alias{join_keys.tdata}
 \alias{get_metadata}
-\alias{get_metadata.tdata}
-\alias{get_metadata.default}
 \alias{as_tdata}
 \title{Create a \code{tdata} object}
 \usage{
@@ -21,10 +19,6 @@ get_code_tdata(...)
 \method{join_keys}{tdata}(...)
 
 get_metadata(...)
-
-get_metadata.tdata(...)
-
-get_metadata.default(...)
 
 as_tdata(...)
 }
