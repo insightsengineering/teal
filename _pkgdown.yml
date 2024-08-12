@@ -100,6 +100,7 @@ reference:
       - init
       - teal_data_module
       - teal_transform_module
+      - module_teal_with_splash
       - module_teal
       - module
       - modules

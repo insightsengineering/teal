@@ -25,7 +25,7 @@ example_module <- function(label = "example teal module", datanames = "all", tra
         })
 
         observeEvent(datanames_rv(), {
-          selected <- isolate(input$dataname)
+          selected <- input$dataname
           if (identical(selected, "")) {
             selected <- restoreInput(session$ns("dataname"), NULL)
           } else if (!(selected %in% datanames_rv())) {

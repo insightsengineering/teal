@@ -12,7 +12,7 @@ vignette: >
 
 ## Introduction
 
-`teal` version `0.15.x` (to be updated) introduced new argument in `teal::module` called `transformers`. 
+`teal` version `0.16` introduced new argument in `teal::module` called `transformers`. 
 This argument allows to pass a `list` of `teal_data_module` objects that are created using `teal_transform_module()` function.
 
 The main benefit of `teal_transform_module()` is the ability to transform data before passing it 
