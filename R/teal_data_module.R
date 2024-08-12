@@ -129,3 +129,11 @@ teal_transform_module <- function(ui, server, label = "transform module") {
     class = c("teal_transform_module", "teal_data_module")
   )
 }
+
+extract_transformers <- function(modules) {
+  if (inherits(modules, "teal_module")) {
+    modules$transformers
+  } else if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, extract_transformers)
+  }
+}
