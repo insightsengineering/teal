@@ -13,7 +13,7 @@ vignette: >
 ## Introduction
 
 `teal` ver `0.15.x` (TO BE UDPATED) introduced new argument in `teal::module` called `transformers`. 
-This argument allows to pass a `list` of `teal_data_module` objects that are created either with `teal_transform_module()` or `teal_data_module()` functions.
+This argument allows to pass a `list` of `teal_data_module` objects that are created using `teal_transform_module()` function.
 
 The main benefit of `teal_transform_module()` is the ability to transform data before passing the 
 data into the module. This feature allows to extend the regular behavior of existing modules by specifying custom data operations on data inside this module.
