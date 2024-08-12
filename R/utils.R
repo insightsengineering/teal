@@ -352,11 +352,17 @@ build_datanames_error_message <- function(label = NULL,
       paste(
         ifelse(is.null(label), ".", sprintf("for tab '%s'.", label))
       ),
-      .noWS = c("after-begin", "before-end")
+      .noWS = c("before")
     ),
-    tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
-    tags$span("available in data:"),
-    tags$span(paste_datanames_character(datanames, tags, tagList)),
-    tags$span(".", .noWS = "before")
+    if (length(datanames) >= 1) {
+      tagList(
+        tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
+        tags$span("available in data:"),
+        tags$span(paste_datanames_character(datanames, tags, tagList)),
+        tags$span(".", .noWS = "before")
+      )
+    } else {
+      tags$span("No datasets are available in data.")
+    }
   )
 }
