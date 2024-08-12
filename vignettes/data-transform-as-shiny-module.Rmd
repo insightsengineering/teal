@@ -54,7 +54,6 @@ We do this by creating the `ui` with the `numericInput` for the user to input th
 In the `server` function we take in the reactive `data` and perform this transformation and return the new reactive `data`.
 
 ```{r}
-library(teal)
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -103,7 +102,6 @@ Let's add another transformation to the `mtcars` dataset that creates a column w
 Note that this module does not have interactive UI elements.
 
 ```{r}
-library(teal)
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
