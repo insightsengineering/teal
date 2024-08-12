@@ -13,6 +13,7 @@
 #' @param objects (`list`) objects to append to `data@env`
 #' @param datanames (`character`) names of the datasets
 #' @return modified `teal_data`
+#' @keywords internal
 #' @name teal_data_utilities
 NULL
 

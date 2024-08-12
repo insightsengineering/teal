@@ -43,3 +43,4 @@ we want to avoid double-evaluation.
 Due to above recreation of \code{teal_data} object can't be done simply by using public
 \code{teal.code} and \code{teal.data} methods.
 }
+\keyword{internal}
