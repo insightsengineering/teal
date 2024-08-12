@@ -12,6 +12,4 @@
 #' @import shiny teal.data teal.slice
 #' @importFrom stats setNames
 #' @export
-#' @importFrom magrittr %>%
-magrittr::`%>%`
 NULL

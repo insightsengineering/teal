@@ -107,7 +107,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         )
       }
 
-      is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data_validated()))
+      is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",
@@ -172,7 +172,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 #' @return A character vector with the code lines.
 #' @keywords internal
 #'
-.get_hashes_code <- function(data, datanames = teal_data_datanames(data)) {
+.get_hashes_code <- function(data, datanames = .teal_data_datanames(data)) {
   # todo: this should be based on data_rv object not on datasets
   vapply(
     datanames,

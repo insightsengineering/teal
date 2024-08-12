@@ -36,7 +36,8 @@ will be displayed in the \code{teal} application. See \code{\link[=modules]{modu
 more details.}
 }
 \value{
-A \code{eventReactive} which triggers only if all conditions are met:
+A \code{eventReactive} containing \code{teal_data} containing filtered objects and filter code.
+\code{eventReactive} triggers only if all conditions are met:
 \itemize{
 \item tab is selected (\code{is_active})
 \item when filters are changed (\code{get_filter_expr} is different than previous)

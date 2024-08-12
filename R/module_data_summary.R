@@ -24,7 +24,7 @@ ui_data_summary <- function(id) {
   ns <- NS(id)
   content_id <- ns("filters_overview_contents")
   tags$div(
-    id = id, # not used, can be used to customize CSS behavior
+    id = id,
     class = "well",
     tags$div(
       class = "row",
@@ -93,6 +93,8 @@ srv_data_summary <- function(id, teal_data) {
           if (!inherits(attr(summary_table_out, "condition"), "shiny.silent.error")) {
             stop("Error occurred during data processing. See details in the main panel.")
           }
+        } else if (is.null(summary_table_out)) {
+          "no datasets to show"
         } else {
           body_html <- apply(
             summary_table_out,
@@ -144,7 +146,7 @@ get_filter_overview <- function(teal_data) {
     simplify = FALSE
   )
   unfiltered_data_objs <- sapply(
-    datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "_raw")]],
+    datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "._raw_")]],
     simplify = FALSE
   )
 
