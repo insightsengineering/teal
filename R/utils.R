@@ -119,22 +119,48 @@ check_modules_datanames <- function(modules, datanames) {
   recursive_check_datanames <- function(modules, datanames) {
     # check teal_modules against datanames
     if (inherits(modules, "teal_modules")) {
-      sapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
+      result <- lapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
+      result <- result[vapply(result, Negate(is.null), logical(1L))]
+      list(
+        string = do.call(c, as.list(unname(sapply(result, function(x) x$string)))),
+        html = function(with_module_name = TRUE) {
+          tagList(
+            lapply(
+              result,
+              function(x) x$html(with_module_name = with_module_name)
+            )
+          )
+        }
+      )
     } else {
       extra_datanames <- setdiff(modules$datanames, c("all", datanames))
       if (length(extra_datanames)) {
-        sprintf(
-          "Module '%s' uses datanames not available in 'data': (%s) not in (%s)",
-          modules$label,
-          toString(dQuote(extra_datanames, q = FALSE)),
-          toString(dQuote(datanames, q = FALSE))
+        list(
+          string = build_datanames_error_message(
+            modules$label,
+            datanames,
+            extra_datanames,
+            tags = list(span = paste, code = function(x) toString(dQuote(x, q = FALSE))),
+            paste0
+          ),
+          # Build HTML representation of the error message with <pre> formatting
+          html = function(with_module_name = TRUE) {
+            tagList(
+              build_datanames_error_message(
+                if (with_module_name) modules$label,
+                datanames,
+                extra_datanames
+              ),
+              tags$br(.noWS = "before")
+            )
+          }
         )
       }
     }
   }
-  check_datanames <- unlist(recursive_check_datanames(modules, datanames))
+  check_datanames <- recursive_check_datanames(modules, datanames)
   if (length(check_datanames)) {
-    paste(check_datanames, collapse = "\n")
+    check_datanames
   } else {
     TRUE
   }
@@ -286,5 +312,57 @@ strip_style <- function(string) {
     string,
     perl = TRUE,
     useBytes = TRUE
+  )
+}
+
+#' Convert character list to human readable html with commas and "and"
+#' @noRd
+paste_datanames_character <- function(x,
+                                      tags = list(span = shiny::tags$span, code = shiny::tags$code),
+                                      tagList = shiny::tagList) {
+  checkmate::assert_character(x)
+  do.call(
+    tagList,
+    lapply(seq_along(x), function(.ix) {
+      tagList(
+        tags$code(x[.ix]),
+        if (.ix != length(x)) {
+          tags$span(ifelse(.ix == length(x) - 1, " and ", ", "))
+        }
+      )
+    })
+  )
+}
+
+#' Build datanames error string for error message
+#'
+#' tags and tagList are overwritten in arguments allowing to create strings for
+#' logging purposes
+#' @noRd
+build_datanames_error_message <- function(label = NULL,
+                                          datanames,
+                                          extra_datanames,
+                                          tags = list(span = shiny::tags$span, code = shiny::tags$code),
+                                          tagList = shiny::tagList) {
+  tags$span(
+    tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
+    paste_datanames_character(extra_datanames, tags, tagList),
+    tags$span(ifelse(length(extra_datanames) > 1, "are missing", "is missing")),
+    tags$span(
+      paste(
+        ifelse(is.null(label), ".", sprintf("for tab '%s'.", label))
+      ),
+      .noWS = c("before")
+    ),
+    if (length(datanames) >= 1) {
+      tagList(
+        tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
+        tags$span("available in data:"),
+        tags$span(paste_datanames_character(datanames, tags, tagList)),
+        tags$span(".", .noWS = "before")
+      )
+    } else {
+      tags$span("No datasets are available in data.")
+    }
   )
 }

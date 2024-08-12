@@ -225,7 +225,7 @@ init <- function(data,
 
     is_modules_ok <- check_modules_datanames(modules, .teal_data_datanames(data))
     if (!isTRUE(is_modules_ok)) {
-      logger::log_warn(is_modules_ok)
+      lapply(is_modules_ok$string, logger::log_warn)
     }
 
     is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data))
