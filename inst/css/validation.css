@@ -21,17 +21,18 @@
 
 .teal_validated .teal-output-warning::before {
   content: "\26A0\FE0F";
-  padding-right: 0.5em;
 }
 
 .teal_validated .shiny-output-error::before {
   content: "\1F6A8";
-  padding-right: 0.5em;
+}
+
+.teal_primary_col .shiny-output-error::before {
+  content: "\1F6A8";
 }
 
 .teal_primary_col .teal-output-warning::before {
-  content: "\1F6A8";
-  padding-right: 0.5em;
+  content: "\26A0\FE0F";
 }
 
 .teal_primary_col .teal_validated:has(.shiny-output-error),

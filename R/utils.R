@@ -345,17 +345,17 @@ build_datanames_error_message <- function(label = NULL,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
                                           tagList = shiny::tagList) {
   tags$span(
-    tags$span("Dataset"),
+    tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
     tags$span(ifelse(length(extra_datanames) > 1, "are missing", "is missing")),
-    tags$span("in the available data"),
     tags$span(
       paste(
-        ifelse(is.null(label), ",", sprintf("for '%s',", label))
+        ifelse(is.null(label), ".", sprintf("for tab '%s'.", label))
       ),
       .noWS = c("after-begin", "before-end")
     ),
-    tags$span(ifelse(length(datanames) > 1, "which has:", "which have:")),
+    tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
+    tags$span("available in data:"),
     tags$span(paste_datanames_character(datanames, tags, tagList)),
     tags$span(".", .noWS = "before")
   )
