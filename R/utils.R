@@ -141,7 +141,9 @@ check_modules_datanames <- function(modules, datanames) {
             datanames,
             extra_datanames,
             tags = list(
-              span = function(..., .noWS = NULL) trimws(paste(..., sep = ifelse(is.null(.noWS), " ", ""), collapse = " ")),
+              span = function(..., .noWS = NULL) { # nolint: object_name
+                trimws(paste(..., sep = ifelse(is.null(.noWS), " ", ""), collapse = " "))
+              },
               code = function(x) toString(dQuote(x, q = FALSE))
             ),
             tagList = function(...) trimws(paste(...))
