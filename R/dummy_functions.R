@@ -28,7 +28,7 @@ example_module <- function(label = "example teal module", datanames = "all", tra
           selected <- input$dataname
           if (identical(selected, "")) {
             selected <- restoreInput(session$ns("dataname"), NULL)
-          } else if (!(selected %in% datanames_rv())) {
+          } else if (isFALSE(selected %in% datanames_rv())) {
             selected <- datanames_rv()[1]
           }
           updateSelectInput(
