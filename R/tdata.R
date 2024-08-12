@@ -45,18 +45,6 @@ get_metadata <- function(...) {
 
 #' @rdname tdata
 #' @export
-get_metadata.tdata <- function(...) {
-  .deprecate_tdata_msg()
-}
-
-#' @rdname tdata
-#' @export
-get_metadata.default <- function(...) {
-  .deprecate_tdata_msg()
-}
-
-#' @rdname tdata
-#' @export
 as_tdata <- function(...) {
   .deprecate_tdata_msg()
 }
