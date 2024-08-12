@@ -206,3 +206,20 @@ testthat::test_that("create_renv_lockfile creates a lock file during the executi
 
   testthat::expect_true(file.exists(renv_file_name))
 })
+
+testthat::test_that("check_modules_datanames message is the same in html tags and in string", {
+  testthat::skip_if_not_installed("rvest")
+  modules <- module(datanames = c("iris", "mtcars"), ui = function(id) NULL, server = function(id, data) NULL)
+
+  message <- check_modules_datanames(modules, "missing")
+
+  # Compares 2 strings (removes quotations and empty space surrounding tags)
+  testthat::expect_identical(
+    gsub("\"", "", message$string),
+    trimws(
+      rvest::html_text2(
+        rvest::read_html(as.character(message$html(with_module_name = TRUE)))
+      )
+    )
+  )
+})

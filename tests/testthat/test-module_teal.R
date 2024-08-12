@@ -1,6 +1,7 @@
 # comment: srv_teal is exported so the tests here are extensive and cover srv_data as well.
 #          testing of srv_data is not needed.
 module_output_table <<- function(output, id) {
+  testthat::skip_if_not_installed("rvest")
   table_id <- sprintf("teal_modules-%s-data_summary-table", id)
   html <- output[[table_id]]$html
   as.data.frame(rvest::html_table(rvest::read_html(html), header = TRUE)[[1]])
@@ -487,6 +488,34 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+      }
+    )
+  })
+
+  testthat::it("throws warning when dataname is not available", {
+    testthat::skip_if_not_installed("rvest")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+
+        testthat::expect_equal(
+          trimws(
+            rvest::html_text2(
+              rvest::read_html(
+                output[["teal_modules-module_1-validate_datanames-shiny_warnings"]]$html
+              )
+            )
+          ),
+          "Dataset iris is missing. No datasets are available in data."
+        )
       }
     )
   })

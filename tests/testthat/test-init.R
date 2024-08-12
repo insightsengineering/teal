@@ -56,14 +56,15 @@ testthat::test_that("init throws when an empty `data` is used", {
   )
 })
 
-testthat::test_that("init throws when datanames in modules incompatible w/ datanames in data", {
-  testthat::skip("To decide")
+testthat::test_that("init throws warning when datanames in modules incompatible w/ datanames in data", {
+  testthat::local_mocked_bindings(log_warn = warning, .package = "logger")
+
   testthat::expect_warning(
     init(
       data = teal.data::teal_data(mtcars = mtcars),
       modules = list(example_module(datanames = "iris"))
     ),
-    "Module 'example teal module' uses datanames not available in 'data'"
+    "Dataset \"iris\" is missing for tab 'example teal module'. Dataset available in data: \"mtcars\"."
   )
 })
 

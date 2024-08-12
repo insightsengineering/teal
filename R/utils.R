@@ -140,8 +140,11 @@ check_modules_datanames <- function(modules, datanames) {
             modules$label,
             datanames,
             extra_datanames,
-            tags = list(span = paste, code = function(x) toString(dQuote(x, q = FALSE))),
-            paste0
+            tags = list(
+              span = function(..., .noWS = NULL) trimws(paste(..., sep = ifelse(is.null(.noWS), " ", ""), collapse = " ")),
+              code = function(x) toString(dQuote(x, q = FALSE))
+            ),
+            tagList = function(...) trimws(paste(...))
           ),
           # Build HTML representation of the error message with <pre> formatting
           html = function(with_module_name = TRUE) {
@@ -347,19 +350,23 @@ build_datanames_error_message <- function(label = NULL,
   tags$span(
     tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
-    tags$span(ifelse(length(extra_datanames) > 1, "are missing", "is missing")),
     tags$span(
-      paste(
-        ifelse(is.null(label), ".", sprintf("for tab '%s'.", label))
-      ),
-      .noWS = c("before")
+      paste0(
+        ifelse(length(extra_datanames) > 1, "are missing", "is missing"),
+        ifelse(is.null(label), ".", sprintf(" for tab '%s'.", label))
+      )
     ),
     if (length(datanames) >= 1) {
       tagList(
         tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
         tags$span("available in data:"),
-        tags$span(paste_datanames_character(datanames, tags, tagList)),
-        tags$span(".", .noWS = "before")
+        tagList(
+          tags$span(
+            paste_datanames_character(datanames, tags, tagList),
+            tags$span(".", .noWS = "outside"),
+            .noWS = c("outside")
+          )
+        )
       )
     } else {
       tags$span("No datasets are available in data.")
