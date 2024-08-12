@@ -319,7 +319,7 @@ strip_style <- function(string) {
 #' @noRd
 paste_datanames_character <- function(x,
                                       tags = list(span = shiny::tags$span, code = shiny::tags$code),
-                                      tagList = shiny::tagList) {
+                                      tagList = shiny::tagList) { # nolint: object_name.
   checkmate::assert_character(x)
   do.call(
     tagList,
@@ -343,7 +343,7 @@ build_datanames_error_message <- function(label = NULL,
                                           datanames,
                                           extra_datanames,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
-                                          tagList = shiny::tagList) {
+                                          tagList = shiny::tagList) { # nolint: object_name.
   tags$span(
     tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
