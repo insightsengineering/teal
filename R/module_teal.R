@@ -108,7 +108,7 @@ ui_teal <- function(id,
     ),
     tags$div(
       id = ns("options_buttons"),
-      style = "margin-left: auto;",
+      style = "position: absolute; right: 10px;",
       bookmark_panel_ui,
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
