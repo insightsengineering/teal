@@ -52,6 +52,7 @@
 .nav {
   display: flex;
   flex-wrap: wrap;
+  width: calc(100% - 160px);
 }
 
 header {
@@ -66,7 +67,7 @@ footer {
 }
 
 #teal_secondary_col .well {
-  margin: 0  0 15px 0;
+  margin: 0 0 15px 0;
 }
 
 #shiny-modal:has(> .modal-dialog > .modal-content > #landingpopup) {
