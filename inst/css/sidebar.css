@@ -5,8 +5,11 @@
 .wunder_bar_button {
   font-size: 16px;
   padding: 8px !important;
-  float: right !important;
   background-color: transparent !important;
+}
+
+.filter_hamburger {
+  float: right !important;
 }
 
 .badge-count {

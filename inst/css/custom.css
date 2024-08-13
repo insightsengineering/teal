@@ -52,6 +52,7 @@
 .nav {
   display: flex;
   flex-wrap: wrap;
+  width: calc(100% - 160px);
 }
 
 header {
@@ -66,7 +67,7 @@ footer {
 }
 
 #teal_secondary_col .well {
-  margin: 0  0 15px 0;
+  margin: 0 0 15px 0;
 }
 
 #shiny-modal:has(> .modal-dialog > .modal-content > #landingpopup) {
@@ -76,4 +77,21 @@ footer {
 body:not(.modal-open) {
   padding-right: 0 !important;
   overflow: auto !important;
+}
+
+/* teal_data_module modal styling */
+body > div:has(~ #shiny-modal-wrapper .fade .blur_background) {
+  transition: filter 0.3s;
+}
+
+body > div:has(~ #shiny-modal-wrapper .blur_background) {
+  filter: blur(5px);
+}
+
+#shiny-modal.fade.in:has(.hide_background) {
+  transition: background-color 0.3s;
+}
+
+#shiny-modal:has(.hide_background) {
+  background-color: white;
 }

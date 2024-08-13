@@ -31,12 +31,15 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
 \item \href{#method-TealAppDriver-active_module_element_text}{\code{TealAppDriver$active_module_element_text()}}
 \item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
+\item \href{#method-TealAppDriver-active_data_summary_ns}{\code{TealAppDriver$active_data_summary_ns()}}
+\item \href{#method-TealAppDriver-active_data_summary_element}{\code{TealAppDriver$active_data_summary_element()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-get_active_module_table_output}{\code{TealAppDriver$get_active_module_table_output()}}
 \item \href{#method-TealAppDriver-get_active_module_plot_output}{\code{TealAppDriver$get_active_module_plot_output()}}
 \item \href{#method-TealAppDriver-set_active_module_input}{\code{TealAppDriver$set_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
+\item \href{#method-TealAppDriver-get_active_data_summary_table}{\code{TealAppDriver$get_active_data_summary_table()}}
 \item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
@@ -98,6 +101,7 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p(),
+  landing_popup = NULL,
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...
@@ -107,7 +111,7 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data, modules, filter, title, header, footer}}{arguments passed to \code{init}}
+\item{\code{data, modules, filter, title, header, footer, landing_popup}}{arguments passed to \code{init}}
 
 \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.
@@ -309,6 +313,39 @@ Get the active shiny name space for interacting with the filter panel.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_data_summary_ns"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_data_summary_ns}{}}}
+\subsection{Method \code{active_data_summary_ns()}}{
+Get the active shiny name space for interacting with the data-summary panel.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_data_summary_ns()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the data-summary component.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-active_data_summary_element"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-active_data_summary_element}{}}}
+\subsection{Method \code{active_data_summary_element()}}{
+Get the active shiny name space bound with a custom \code{element} name.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_data_summary_element(element)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{element}}{\code{character(1)} custom element name.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{string}) The active shiny name space of the component bound with the input \code{element}.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_input"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_input}{}}}
 \subsection{Method \code{get_active_module_input()}}{
@@ -429,6 +466,19 @@ Get the active datasets that can be accessed via the filter panel of the current
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_vars()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-get_active_data_summary_table"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_data_summary_table}{}}}
+\subsection{Method \code{get_active_data_summary_table()}}{
+Get the active data summary table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_data_summary_table()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{data.frame}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-is_visible"></a>}}

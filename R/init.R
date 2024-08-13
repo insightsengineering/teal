@@ -34,6 +34,8 @@
 #' @param id (`character`) optional
 #'   string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
+#' @param landing_popup (`teal_module`) optional
+#'   A `landing_popup_module` to show up as soon as the teal app is initialized.
 #'
 #' @return Named list containing server and UI functions.
 #'
@@ -99,8 +101,9 @@ init <- function(data,
                  title = build_app_title(),
                  header = tags$p(),
                  footer = tags$p(),
-                 id = character(0)) {
-  logger::log_trace("init initializing teal app with: data ('{ class(data) }').")
+                 id = character(0),
+                 landing_popup = NULL) {
+  logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
   ## `data`
@@ -115,6 +118,7 @@ init <- function(data,
     )
   }
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
+  checkmate::assert_class(landing_popup, "teal_module_landing", null.ok = TRUE)
 
   ## `modules`
   checkmate::assert(
@@ -159,10 +163,18 @@ init <- function(data,
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
-  landing_module <- NULL
   if (length(landing) == 1L) {
-    landing_module <- landing[[1L]]
+    landing_popup <- landing[[1L]]
     modules <- drop_module(modules, "teal_module_landing")
+    # TODO: verify the version before release.
+    lifecycle::deprecate_soft(
+      when = "0.16",
+      what = "landing_popup_module()",
+      details = paste(
+        "Pass `landing_popup_module` to the `landing_popup` argument of the `init` ",
+        "instead of wrapping it into `modules()` and passing to the `modules` argument"
+      )
+    )
   } else if (length(landing) > 1L) {
     stop("Only one `landing_popup_module` can be used.")
   }
@@ -203,17 +215,20 @@ init <- function(data,
 
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
-    if (length(teal_data_datanames(data)) == 0) {
+    if (length(.teal_data_datanames(data)) == 0) {
       stop("The environment of `data` is empty.")
     }
-    # in case of teal_data_module this check is postponed to the srv_teal_with_splash
-    is_modules_ok <- check_modules_datanames(modules, teal_data_datanames(data))
-    if (!isTRUE(is_modules_ok)) {
-      logger::log_error(is_modules_ok)
-      checkmate::assert(is_modules_ok, .var.name = "modules")
+
+    if (!length(teal.data::datanames(data))) {
+      warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
     }
 
-    is_filter_ok <- check_filter_datanames(filter, teal_data_datanames(data))
+    is_modules_ok <- check_modules_datanames(modules, .teal_data_datanames(data))
+    if (!isTRUE(is_modules_ok)) {
+      lapply(is_modules_ok$string, logger::log_warn)
+    }
+
+    is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data))
     if (!isTRUE(is_filter_ok)) {
       warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
@@ -221,26 +236,36 @@ init <- function(data,
     }
   }
 
-  # Note regarding case `id = character(0)`:
-  # rather than creating a submodule of this module, we directly modify
-  # the UI and server with `id = character(0)` and calling the server function directly
+  reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+    modules <- append_module(
+      modules,
+      reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
+    )
+  }
+
+  ns <- NS(id)
   # Note: UI must be a function to support bookmarking.
   res <- list(
-    ui = function(request) ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
+    ui = function(request) {
+      ui_teal(
+        id = ns("teal"), data = if (inherits(data, "teal_data_module")) data,
+        modules = modules, title = title, header = header, footer = footer
+      )
+    },
     server = function(input, output, session) {
-      if (!is.null(landing_module)) {
-        do.call(landing_module$server, c(list(id = "landing_module_shiny_id"), landing_module$server_args))
+      if (!is.null(landing_popup)) {
+        do.call(landing_popup$server, c(list(id = "landing_module_shiny_id"), landing_popup$server_args))
       }
 
       if (!is.null(lockfile_process)) {
         teal_lockfile_process_tracker(lockfile_process)
       }
-
-      srv_teal_with_splash(id = id, data = data, modules = modules, filter = deep_copy_filter(filter))
+      srv_teal(id = ns("teal"), data = data, modules = modules, filter = deep_copy_filter(filter))
     }
   )
 
-  logger::log_trace("init teal app has been initialized.")
+  logger::log_debug("init teal app has been initialized.")
 
   res
 }

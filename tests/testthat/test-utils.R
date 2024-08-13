@@ -51,7 +51,7 @@ test_that("teal_data_datanames returns names of the @env's objects when dataname
     iris <- head(iris)
     mtcars <- head(mtcars)
   })
-  testthat::expect_setequal(teal_data_datanames(teal_data), c("mtcars", "iris"))
+  testthat::expect_setequal(.teal_data_datanames(teal_data), c("mtcars", "iris"))
 })
 
 test_that("teal_data_datanames returns datanames which are set by teal.data::datanames", {
@@ -61,64 +61,7 @@ test_that("teal_data_datanames returns datanames which are set by teal.data::dat
     mtcars <- head(mtcars)
   })
   datanames(teal_data) <- "iris"
-  testthat::expect_equal(teal_data_datanames(teal_data), "iris")
-})
-
-test_that("modules_datasets returns correct structure", {
-  data <- teal_data() %>%
-    within({
-      iris <- iris
-      mtcars <- mtcars
-      x <- 5
-    })
-
-  modules <- modules(
-    label = "one",
-    modules(
-      label = "two",
-      example_module("example two", "all"),
-      modules(
-        label = "three",
-        example_module("example three", "iris"),
-        example_module("example four", "mtcars")
-      )
-    ),
-    example_module("example one", "iris")
-  )
-
-  filters <- teal_slices(
-    teal_slice("iris", "Species"),
-    teal_slice("iris", "Sepal.Length"),
-    teal_slice("mtcars", "mpg"),
-    teal_slice("mtcars", "cyl"),
-    teal_slice("mtcars", "gear"),
-    module_specific = TRUE,
-    mapping = list(
-      "example one" = "iris Species",
-      "example four" = "mtcars mpg",
-      global_filters = "mtcars cyl"
-    )
-  )
-
-  modules_structure <- rapply(
-    modules_datasets(data, modules, filters),
-    function(x) {
-      isolate(sapply(x$get_filter_state(), `[[`, "id"))
-    },
-    how = "replace"
-  )
-  expected_structure <- list(
-    two = list(
-      `example two` = "mtcars cyl",
-      three = list(
-        `example three` = list(),
-        `example four` = c("mtcars mpg", "mtcars cyl")
-      )
-    ),
-    `example one` = "iris Species"
-  )
-
-  testthat::expect_identical(modules_structure, expected_structure)
+  testthat::expect_equal(.teal_data_datanames(teal_data), "iris")
 })
 
 test_that("validate_app_title_tag works on validating the title tag", {
@@ -251,4 +194,15 @@ testthat::test_that("defunction recursively goes down a list", {
     defunction(x),
     y
   )
+})
+
+testthat::test_that("create_renv_lockfile creates a lock file during the execution", {
+  old_plan <- future::plan(future::sequential)
+  withr::defer(future::plan(old_plan))
+
+  renv_file_name <- "teal_app.lock"
+  withr::defer(file.remove(renv_file_name))
+  promise <- create_renv_lockfile(TRUE, renv_file_name)
+
+  testthat::expect_true(file.exists(renv_file_name))
 })

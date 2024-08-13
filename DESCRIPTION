@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9047
-Date: 2024-07-03
+Version: 0.15.2.9052
+Date: 2024-08-13
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -44,7 +44,6 @@ Imports:
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
-    magrittr (>= 1.5),
     methods,
     mirai,
     renv (>= 1.0.7),
@@ -97,13 +96,16 @@ Collate:
     'init.R'
     'landing_popup_module.R'
     'module_bookmark_manager.R'
+    'module_data_summary.R'
+    'module_filter_data.R'
     'module_filter_manager.R'
+    'module_init_data.R'
     'module_nested_tabs.R'
     'module_snapshot_manager.R'
-    'module_tabs_with_filters.R'
     'module_teal.R'
+    'module_teal_data.R'
     'module_teal_with_splash.R'
-    'module_wunder_bar.R'
+    'module_transform_data.R'
     'reporter_previewer_module.R'
     'show_rcode_modal.R'
     'tdata.R'
@@ -111,6 +113,7 @@ Collate:
     'teal_data_module.R'
     'teal_data_module-eval_code.R'
     'teal_data_module-within.R'
+    'teal_data_utils.R'
     'teal_lockfile.R'
     'teal_reporter.R'
     'teal_slices-store.R'

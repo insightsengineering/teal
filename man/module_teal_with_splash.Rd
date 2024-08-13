@@ -4,7 +4,7 @@
 \alias{module_teal_with_splash}
 \alias{ui_teal_with_splash}
 \alias{srv_teal_with_splash}
-\title{Add splash screen to \code{teal} application}
+\title{UI and server modules of \code{teal}}
 \usage{
 ui_teal_with_splash(
   id,
@@ -17,11 +17,15 @@ ui_teal_with_splash(
 srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
-\item{id}{(\code{character(1)})
-module id}
+\item{id}{(\code{character}) optional
+string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+rather than a standalone \code{shiny} app. This is a legacy feature.}
 
-\item{data}{(\code{teal_data} or \code{teal_data_module})
-For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
+The \code{ui} component of this module does not require \code{data} if \code{teal_data_module} is not provided.
+The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
+\code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
+the reactive data of the enclosing application.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)})
 The browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -34,7 +38,9 @@ The header of the app.}
 \item{footer}{(\code{shiny.tag} or \code{character(1)})
 The footer of the app.}
 
-\item{modules}{(\code{teal_modules}) object containing the output modules which
+\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
+nested list of \code{teal_modules} or \code{teal_module} objects or a single
+\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
@@ -45,48 +51,6 @@ Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 Returns a \code{reactive} expression containing a \code{teal_data} object when data is loaded or \code{NULL} when it is not.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
-Displays custom splash screen during initial delayed data loading.
-}
-\details{
-This module pauses app initialization pending delayed data loading.
-This is necessary because the filter panel and modules depend on the data to initialize.
-
-\code{teal_with_splash} follows the \code{shiny} module convention.
-\code{\link[=init]{init()}} is a wrapper around this that assumes that \code{teal} is
-the top-level module and cannot be embedded.
-
-Note: It is no longer recommended to embed \code{teal} in \code{shiny} apps as a module.
-but rather use \code{init} to create a standalone application.
-}
-\section{Reproducibility}{
-
-Reproducibility is supported by multiple features. \code{teal} includes a \code{utils::sessioInfo()} output to allow to compare
-packages used in the session. It also allows to create \code{renv} lockfile to support project setup reproducibility.
-For more information about lockfile creation visit \code{\link[=teal_lockfile]{teal_lockfile()}}.
-}
-
-\examples{
-teal_modules <- modules(example_module())
-# Shiny app with modular integration of teal
-ui <- fluidPage(
-  ui_teal_with_splash(id = "app1", data = teal_data())
-)
-
-server <- function(input, output, session) {
-  srv_teal_with_splash(
-    id = "app1",
-    data = teal_data(iris = iris),
-    modules = teal_modules
-  )
-}
-
-if (interactive()) {
-  shinyApp(ui, server)
-}
-
-}
-\seealso{
-\code{\link[=init]{init()}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+Please use \code{\link{module_teal}} instead.
 }

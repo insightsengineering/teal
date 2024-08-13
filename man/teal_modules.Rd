@@ -13,19 +13,13 @@
 \usage{
 module(
   label = "module",
-  server = function(id, ...) {
-     moduleServer(id, function(input, output, session) {
- 
-       })
- },
-  ui = function(id, ...) {
-     tags$p(paste0("This module has no UI (id: ", id, " )"))
-
-    },
+  server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+  ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
   filters,
   datanames = "all",
   server_args = NULL,
-  ui_args = NULL
+  ui_args = NULL,
+  transformers = list()
 )
 
 modules(..., label = "root")
@@ -79,6 +73,13 @@ a subset of datasets which are appended to the \code{data} argument in server fu
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
+\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
+Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+If so, the module developer is responsible to display the UI in the module itself.
+
+When the transformation does not have sufficient input data, the resulting data will fallback
+to the last successful transform or, in case there are none, to the filtered data.}
+
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
 \item For \code{format()} and \code{print()}: Arguments passed to other methods.
@@ -100,7 +101,6 @@ their \code{label} attribute converted to a valid \code{shiny} id.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 Create a nested tab structure to embed modules in a \code{teal} application.
 }
 \details{

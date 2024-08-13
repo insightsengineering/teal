@@ -1,14 +1,24 @@
-# teal 0.15.2.9047
-
-### Enhancement
-* Provided progress bar for modules loading and data filtering during teal app startup.
+# teal 0.15.2.9052
 
 ### New features
 
-* Possibility to download lockfile to restore app session for reproducibility.
+* Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object. #669
+* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server`. #1228
+* Introduced a new argument `once = FALSE` in `teal_data_module` to possibly reload data during a run time.
+* Possibility to download lockfile to restore app session for reproducibility. #479
 
-### Miscellaneous
-* Filter mapping display is no longer coupled to the snapshot manager.
+
+### Breaking changes
+
+* The `landing_popup_module()` needs to be passed as the `landing_popup` argument of `init` instead of being passed as a module of the `modules` argument of `init`.
+* `teal` no longer re-export `%>%`. Please load `library(magrittr)` instead or use `|>` from `base`.
+
+### Enhancement
+
+* Enhanced a system of data validation and a display of error messages.
+* Easier way of to call `javascript` events by setting `$(document).ready(function() { ... })`. #1114
+* Provided progress bar for modules loading and data filtering during teal app startup.
+* Filter mapping display has a separate icon in the tab.
 
 # teal 0.15.2
 

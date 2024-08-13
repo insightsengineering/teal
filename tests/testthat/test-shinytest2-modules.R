@@ -1,3 +1,6 @@
+testthat::skip_if_not_installed("shinytest2")
+testthat::skip_if_not_installed("rvest")
+
 testthat::test_that("e2e: the module server logic is only triggered when the teal module becomes active", {
   skip_if_too_deep(5)
   value_export_module <- function(label = "custom module") {
@@ -69,24 +72,6 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
   app$stop()
 })
 
-testthat::test_that("e2e: filter panel is not displayed when datanames is NULL", {
-  skip_if_too_deep(5)
-  app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "NULL", datanames = NULL)
-    )
-  )
-
-  testthat::expect_identical(
-    app$get_html_rvest(".teal_secondary_col") %>%
-      rvest::html_element("div") %>%
-      rvest::html_attr("style"),
-    "display: none;"
-  )
-
-  app$stop()
-})
 
 testthat::test_that("e2e: all the nested teal modules are initiated as expected", {
   skip_if_too_deep(5)

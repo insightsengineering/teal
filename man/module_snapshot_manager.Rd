@@ -2,28 +2,25 @@
 % Please edit documentation in R/module_snapshot_manager.R
 \name{module_snapshot_manager}
 \alias{module_snapshot_manager}
-\alias{snapshot_manager_ui}
-\alias{snapshot}
-\alias{snapshot_manager}
-\alias{snapshot_manager_module}
-\alias{snapshot_manager_srv}
+\alias{ui_snapshot_manager_panel}
+\alias{srv_snapshot_manager_panel}
+\alias{ui_snapshot_manager}
+\alias{srv_snapshot_manager}
 \title{Filter state snapshot management}
 \usage{
-snapshot_manager_ui(id)
+ui_snapshot_manager_panel(id)
 
-snapshot_manager_srv(id, slices_global, mapping_matrix, datasets)
+srv_snapshot_manager_panel(id, slices_global)
+
+ui_snapshot_manager(id)
+
+srv_snapshot_manager(id, slices_global)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{slices_global}{(\code{reactiveVal}) that contains a \code{teal_slices} object
 containing all \code{teal_slice}s existing in the app, both active and inactive.}
-
-\item{mapping_matrix}{(\code{reactive}) that contains a \code{data.frame} representation
-of the mapping of filter state ids (rows) to modules labels (columns);
-all columns are \code{logical} vectors.}
-
-\item{datasets}{non-nested (named \code{list}) of \code{FilteredData} objects.}
 }
 \value{
 \code{list} containing the snapshot history, where each element is an unlisted \code{teal_slices} object.
@@ -37,7 +34,7 @@ Snapshots allow the user to save the current filter state of the application for
 as well as to save it to file in order to share it with an app developer or other users,
 who in turn can upload it to their own session.
 
-The snapshot manager is accessed with the camera icon in the \code{\link{wunder_bar}}.
+The snapshot manager is accessed with the camera icon in the tabset bar.
 At the beginning of a session it presents three icons: a camera, an upload, and an circular arrow.
 Clicking the camera captures a snapshot, clicking the upload adds a snapshot from a file
 and applies the filter states therein, and clicking the arrow resets initial application state.
