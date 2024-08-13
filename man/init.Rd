@@ -17,34 +17,35 @@ init(
 }
 \arguments{
 \item{data}{(\code{teal_data} or \code{teal_data_module})
-For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
+For constructing the data object, refer to \code{\link[=teal_data]{teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.
+If \code{datanames} are not set for the \code{teal_data} object, defaults from the \code{teal_data} environment will be used.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
+Nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{filter}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+\item{filter}{(\code{teal_slices}) Optionally,
+specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)})
-The browser window title. Defaults to a title "teal app" with the icon of NEST.
+\item{title}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+the browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{header}{(\code{shiny.tag} or \code{character(1)})
-The header of the app.}
+\item{header}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+the header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)})
-The footer of the app.}
+\item{footer}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+the footer of the app.}
 
-\item{id}{(\code{character}) optional
-string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+\item{id}{(\code{character}) Optionally,
+a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
-\item{landing_popup}{(\code{teal_module}) optional
-A \code{landing_popup_module} to show up as soon as the teal app is initialized.}
+\item{landing_popup}{(\code{teal_module}) Optionally,
+a \code{landing_popup_module} to show up as soon as the teal app is initialized.}
 }
 \value{
 Named list containing server and UI functions.
@@ -55,20 +56,11 @@ Named list containing server and UI functions.
 End-users: This is the most important function for you to start a
 \code{teal} app that is composed of \code{teal} modules.
 }
-\details{
-When initializing the \code{teal} app, if \code{datanames} are not set for the \code{teal_data} object,
-defaults from the \code{teal_data} environment will be used.
-}
 \examples{
 app <- init(
-  data = teal_data(
-    new_iris = transform(iris, id = seq_len(nrow(iris))),
-    new_mtcars = transform(mtcars, id = seq_len(nrow(mtcars))),
-    code = "
-      new_iris <- transform(iris, id = seq_len(nrow(iris)))
-      new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
-    "
-  ),
+  data = teal_data() |>
+    within(new_iris <- transform(iris, id = seq_len(nrow(iris)))) |>
+    within(new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))),
   modules = modules(
     module(
       label = "data source",
@@ -105,7 +97,7 @@ app <- init(
   ),
   title = "App title",
   header = tags$h1("Sample App"),
-  footer = tags$p("Copyright 2017 - 2023")
+  footer = tags$p("Sample footer")
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
