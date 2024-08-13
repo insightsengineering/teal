@@ -1,288 +1,93 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://insightsengineering.github.io/teal/404.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/SECURITY.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/adding-support-for-reporting.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/actors.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/dataflow.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/filter_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/in_app_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/input_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/intro.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/module_encapsulation.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/blueprint/product_map.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/bootstrap-themes-in-teal.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/creating-custom-modules.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/data-as-shiny-module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/filter-panel.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/getting-started-with-teal.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/including-data-in-teal-applications.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/articles/teal-options.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/TealAppDriver.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/TealReportCard.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/TealSlicesBlock.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/calculate_hashes.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/check_filter_datanames.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/check_modules_datanames.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/create_app_id.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/deep_copy_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/dot-datasets_to_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/example_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/filter_manager_module_srv.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_client_timezone.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_code_tdata.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_datasets_code.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_metadata.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_rcode_libraries.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_unique_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/include_css_files.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/include_js_files.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/include_teal_css_js.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/init.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/is_arg_used.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/join_keys.tdata.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/landing_popup_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/matrix_to_mapping.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_bookmark_manager.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_filter_manager.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_management.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_nested_tabs.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_snapshot_manager.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_tabs_with_filters.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_teal.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_teal_with_splash.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/module_wunder_bar.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/modules_bookmarkable.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/modules_datasets.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/modules_depth.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/report_card_template.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/restoreValue.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/show_rcode_modal.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/slices_store.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/tdata.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/tdata2env.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/tdata_deprecation.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_data_datanames.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_lockfile.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_modules.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/unfold_mapping.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_app_title_tag.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_has_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_has_elements.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_has_variable.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_in.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_inputs.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_n_levels.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_no_intersection.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/validate_one_row_per_id.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://insightsengineering.github.io/teal/404.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/CONTRIBUTING.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/LICENSE-text.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/SECURITY.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/adding-support-for-reporting.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/actors.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/dataflow.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/filter_panel.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/in_app_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/input_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/intro.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/module_encapsulation.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/blueprint/product_map.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/bootstrap-themes-in-teal.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/creating-custom-modules.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/data-as-shiny-module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/data-transform-as-shiny-module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/filter-panel.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/getting-started-with-teal.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/including-data-in-teal-applications.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/teal-options.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/authors.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/news/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/TealAppDriver.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/TealReportCard.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/TealSlicesBlock.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/check_filter_datanames.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/check_modules_datanames.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/create_app_id.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/deep_copy_filter.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/dot-add_signature_to_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/dot-fallback_on_failure.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/dot-get_hashes_code.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/example_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/get_client_timezone.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/get_rcode_libraries.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/get_unique_labels.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/include_css_files.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/include_js_files.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/include_teal_css_js.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/index.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/init.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/is_arg_used.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/landing_popup_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_bookmark_manager.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_data_summary.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_filter_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_filter_manager.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_init_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_labels.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_management.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_snapshot_manager.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_teal.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_teal_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_teal_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_teal_with_splash.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_transform_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/modules_bookmarkable.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/modules_depth.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/report_card_template.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/restoreValue.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/show_rcode_modal.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/slices_store.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/tdata.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_data_utilities.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_lockfile.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_modules.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_transform_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_app_title_tag.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_has_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_has_elements.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_has_variable.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_in.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_inputs.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_n_levels.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_no_intersection.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/validate_one_row_per_id.html</loc></url>
 </urlset>
+
