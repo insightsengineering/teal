@@ -6,7 +6,7 @@
 #' @param ns (`function`) namespace function passed from the `session` object in the `shiny` server.
 #'  For `shiny` modules this will allow for proper name spacing of the registered input.
 #'
-#' @return returns `NULL`, invisibly.
+#' @return `NULL`, invisibly.
 #'
 #' @keywords internal
 #'
