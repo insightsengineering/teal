@@ -1,0 +1,50 @@
+/* adding boarder to the validated input */
+.teal_validated:has(.shiny-output-error) {
+  border: 1px solid red;
+  border-radius: 4px;
+}
+
+.teal_validated:has(.teal-output-warning) {
+  border: 1px solid orange;
+  border-radius: 4px;
+}
+
+
+.teal_validated .teal-output-warning {
+  color: #888;
+}
+
+.teal_validated .shiny-output-error,
+.teal_validated .teal-output-warning {
+  margin-top: 0.5em;
+}
+
+.teal_validated .teal-output-warning::before {
+  content: "\26A0\FE0F";
+}
+
+.teal_validated .shiny-output-error::before {
+  content: "\1F6A8";
+}
+
+.teal_primary_col .shiny-output-error::before {
+  content: "\1F6A8";
+}
+
+.teal_primary_col .teal-output-warning::before {
+  content: "\26A0\FE0F";
+}
+
+.teal_primary_col .teal_validated:has(.shiny-output-error),
+.teal_primary_col .teal_validated:has(.teal-output-warning) {
+  margin: 1em 0 1em 0;
+  padding: .5em 0 .5em .5em;
+}
+
+.teal_primary_col > .teal_validated:has(.teal-output-warning),
+.teal_primary_col > .teal_validated:has(.shiny-output-error) {
+  width: 100%;
+  background-color: rgba(223, 70, 97, 0.1);
+  border: 1px solid red;
+  padding: 1em;
+}

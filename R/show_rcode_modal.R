@@ -15,7 +15,7 @@
 #' @export
 show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDomain()) {
   lifecycle::deprecate_soft(
-    when = "0.15.3",
+    when = "0.16",
     what = "show_rcode_modal()",
     details = "This function will be removed in the next release."
   )

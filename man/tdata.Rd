@@ -3,60 +3,37 @@
 \name{tdata}
 \alias{tdata}
 \alias{new_tdata}
+\alias{tdata2env}
+\alias{get_code_tdata}
+\alias{join_keys.tdata}
+\alias{get_metadata}
+\alias{as_tdata}
 \title{Create a \code{tdata} object}
 \usage{
-new_tdata(data, code = "", join_keys = NULL, metadata = NULL)
+new_tdata(...)
+
+tdata2env(...)
+
+get_code_tdata(...)
+
+\method{join_keys}{tdata}(...)
+
+get_metadata(...)
+
+as_tdata(...)
 }
 \arguments{
-\item{data}{(named \code{list}) A list of \code{data.frame} or \code{MultiAssayExperiment} objects,
-which optionally can be \code{reactive}.
-Inside this object all of these items will be made \code{reactive}.}
-
-\item{code}{(\code{character} or \code{reactive} which evaluates to a \code{character}) containing
-the code used to generate the data. This should be \code{reactive} if the code is changing
-during a reactive context (e.g. if filtering changes the code). Inside this
-object \code{code} will be made reactive}
-
-\item{join_keys}{(\code{teal.data::join_keys}) object containing relationships between the
-datasets.}
-
-\item{metadata}{(named \code{list}) each element contains a list of metadata about the named \code{data.frame}
-Each element of these list should be atomic and length one.}
+\item{...}{ignored}
 }
 \value{
-A \code{tdata} object.
+nothing
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
-Create a new object called \code{tdata} which contains \code{data}, a \code{reactive} list of \code{data.frames}
-(or \code{MultiAssayExperiment}), with attributes:
-\itemize{
-\item \code{code} (\code{reactive}) containing code used to generate the data
-\item join_keys (\code{join_keys}) containing the relationships between the data
-\item metadata (named \code{list}) containing any metadata associated with the data frames
-}
-}
-\examples{
-
-data <- new_tdata(
-  data = list(iris = iris, mtcars = reactive(mtcars), dd = data.frame(x = 1:10)),
-  code = "iris <- iris
-    mtcars <- mtcars
-    dd <- data.frame(x = 1:10)",
-  metadata = list(dd = list(author = "NEST"), iris = list(version = 1))
-)
-
-# Extract a data.frame
-isolate(data[["iris"]]())
-
-# Get code
-isolate(get_code_tdata(data))
-
-# Get metadata
-get_metadata(data, "iris")
-
-}
-\seealso{
-\code{as_tdata}
+Recent changes in \code{teal} cause modules to fail because modules expect a \code{tdata} object
+to be passed to the \code{data} argument but instead they receive a \code{teal_data} object,
+which is additionally wrapped in a reactive expression in the server functions.
+In order to easily adapt such modules without a proper refactor,
+use this function to downgrade the \code{data} argument.
 }

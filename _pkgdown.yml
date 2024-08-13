@@ -6,7 +6,8 @@ template:
 
 navbar:
   structure:
-    left: [get-started, reference, articles, blueprint, tutorials, news, reports]
+    left:
+      [get-started, reference, articles, blueprint, tutorials, news, reports]
     right: [search, github]
   components:
     get-started:
@@ -47,49 +48,50 @@ navbar:
 
     github:
       icon: fa-github
+      aria-label: View on Github
       href: https://github.com/insightsengineering/teal
 
 articles:
-- title: Get started
-  navbar: Get started
-  contents:
-    - getting-started-with-teal
-- title: Using `teal`
-  navbar: Using `teal`
-  contents:
-    - filter-panel
-    - teal-options
-    - bootstrap-themes-in-teal
-- title: Data in `teal` apps
-  navbar: Data in `teal` apps
-  contents:
-    - including-data-in-teal-applications
-    - data-as-shiny-module
-- title: Extending `teal`
-  navbar: Extending `teal`
-  contents:
-    - creating-custom-modules
-    - adding-support-for-reporting
-- title: 📃 Technical blueprint
-  desc: >
-    The purpose of the blueprint is to aid new developer’s comprehension of the
-    fundamental principles of the `teal` framework. We will explore crucial `teal`
-    concepts such as data flow, actors, and filter panel, among others.
-  contents:
-    - blueprint/index
-    - blueprint/intro
-    - blueprint/actors
-    - blueprint/dataflow
-    - blueprint/product_map
-- title: ""
-  desc: >
-    Features.
-  contents:
-  - blueprint/input_data
-  - blueprint/in_app_data
-  - blueprint/filter_panel
-  - blueprint/module_encapsulation
-
+  - title: Get started
+    navbar: Get started
+    contents:
+      - getting-started-with-teal
+  - title: Using `teal`
+    navbar: Using `teal`
+    contents:
+      - filter-panel
+      - teal-options
+      - bootstrap-themes-in-teal
+  - title: Data in `teal` apps
+    navbar: Data in `teal` apps
+    contents:
+      - including-data-in-teal-applications
+      - data-as-shiny-module
+      - data-transform-as-shiny-module
+  - title: Extending `teal`
+    navbar: Extending `teal`
+    contents:
+      - creating-custom-modules
+      - adding-support-for-reporting
+  - title: 📃 Technical blueprint
+    desc: >
+      The purpose of the blueprint is to aid new developer’s comprehension of the
+      fundamental principles of the `teal` framework. We will explore crucial `teal`
+      concepts such as data flow, actors, and filter panel, among others.
+    contents:
+      - blueprint/index
+      - blueprint/intro
+      - blueprint/actors
+      - blueprint/dataflow
+      - blueprint/product_map
+  - title: ""
+    desc: >
+      Features.
+    contents:
+      - blueprint/input_data
+      - blueprint/in_app_data
+      - blueprint/filter_panel
+      - blueprint/module_encapsulation
 
 reference:
   - title: Core `teal` functions
@@ -97,10 +99,11 @@ reference:
     contents:
       - init
       - teal_data_module
+      - teal_transform_module
+      - module_teal_with_splash
+      - module_teal
       - module
       - modules
-      - srv_teal_with_splash
-      - ui_teal_with_splash
       - teal_slices
   - title: Helper Functions
     desc: Helper functions for `teal`

@@ -11,7 +11,7 @@
 \alias{within.teal_data_module}
 \title{Data module for \code{teal} applications}
 \usage{
-teal_data_module(ui, server)
+teal_data_module(ui, server, label = "data module", once = TRUE)
 
 \S4method{eval_code}{teal_data_module,character}(object, code)
 
@@ -25,6 +25,14 @@ teal_data_module(ui, server)
 \code{shiny} module server function; must only take \code{id} argument;
 must return reactive expression containing \code{teal_data} object}
 
+\item{label}{(\code{character(1)}) Label of the module.}
+
+\item{once}{(\code{logical(1)})
+If \code{TRUE}, the data module will be shown only once and will disappear after successful data loading.
+App user will no longer be able to interact with this module anymore.
+If \code{FALSE}, the data module can be reused multiple times.
+App user will be able to interact and change the data output from the module multiple times.}
+
 \item{object}{(\code{teal_data_module})}
 
 \item{code}{(\code{character} or \code{language}) code to evaluate. If \code{character}, comments are retained.}
@@ -36,7 +44,8 @@ must return reactive expression containing \code{teal_data} object}
 \item{...}{See \code{Details}.}
 }
 \value{
-\code{teal_data_module} returns an object of class \code{teal_data_module}.
+\code{teal_data_module} returns a list of class \code{teal_data_module} containing two elements, \code{ui} and
+\code{server} provided via arguments.
 
 \code{eval_code} returns a \code{teal_data_module} object with a delayed evaluation of \code{code} when the module is run.
 
@@ -48,8 +57,8 @@ must return reactive expression containing \code{teal_data} object}
 Create a \code{teal_data_module} object and evaluate code on it with history tracking.
 }
 \details{
-\code{teal_data_module} creates a \code{shiny} module to supply or modify data in a \code{teal} application.
-The module allows for running data pre-processing code (creation \emph{and} some modification) after the app starts.
+\code{teal_data_module} creates a \code{shiny} module to interactively supply or modify data in a \code{teal} application.
+The module allows for running any code (creation \emph{and} some modification) after the app starts or reloads.
 The body of the server function will be run in the app rather than in the global environment.
 This means it will be run every time the app starts, so use sparingly.
 
