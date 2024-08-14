@@ -162,7 +162,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     output$shiny_warnings <- renderUI({
       if (inherits(data_out_rv(), "teal_data")) {
         is_modules_ok <- check_modules_datanames(modules = modules, datanames = .teal_data_ls(data_validated()))
-        if (!isTRUE(is_modules_ok)) {
+        if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
           tags$div(
             is_modules_ok$html(
               # Show modules prefix on message only in teal_data_module tab
