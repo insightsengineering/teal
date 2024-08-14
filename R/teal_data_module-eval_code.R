@@ -35,9 +35,7 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
       moduleServer(id, function(input, output, session) {
         teal_data_rv <- object$server("mutate_inner")
 
-        if (!is.reactive(teal_data_rv)) {
-          stop("The `teal_data_module` must return a reactive expression.", call. = FALSE)
-        }
+        assert_reactiveExpr(teal_data_rv, .var.name = "teal_data_module")
 
         td <- eventReactive(teal_data_rv(),
           {

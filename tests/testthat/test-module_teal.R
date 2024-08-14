@@ -1644,7 +1644,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         ),
         expr = {}
       ),
-      "must return a reactive expression"
+      "Must be a reactive expression"
     )
   })
 

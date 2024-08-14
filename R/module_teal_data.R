@@ -55,7 +55,7 @@ srv_teal_data <- function(id,
                           modules = NULL,
                           validate_shiny_silent_error = TRUE) {
   checkmate::assert_string(id)
-  checkmate::assert_class(data, "reactive")
+  assert_reactiveExpr(data)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
@@ -96,16 +96,17 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
                                             data,
                                             modules = NULL,
                                             validate_shiny_silent_error = FALSE) {
-  moduleServer(id, function(input, output, session) {
-    if (!is.reactive(data)) {
-      stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
-    }
+  checkmate::assert_string(id)
+  assert_reactiveExpr(data)
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
+  checkmate::assert_flag(validate_shiny_silent_error)
 
-    data_out_rv <- reactive(tryCatch(data(), error = function(e) e))
+  moduleServer(id, function(input, output, session) {
+    data_out_r <- reactive(tryCatch(data(), error = function(e) e))
 
     data_validated <- reactive({
       # custom module can return error
-      data_out <- data_out_rv()
+      data_out <- data_out_r()
 
       # there is an empty reactive cycle on init!
       if (inherits(data_out, "shiny.silent.error") && identical(data_out$message, "")) {
@@ -116,9 +117,10 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
             need(
               FALSE,
               paste(
-                strip_style(data_out$message),
+                "Shiny error when executing the `data` module:",
+                strip_style(paste(data_out$message, collapse = "\n")),
                 "Check your inputs or contact app developer if error persists.",
-                sep = ifelse(identical(data_out$message, ""), "", "\n")
+                collapse = "\n"
               )
             )
           )
@@ -130,10 +132,11 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
         validate(
           need(
             FALSE,
-            paste(
-              "Error when executing `teal_data_module` passed to `data`:\n ",
+            paste0(
+              "Error when executing the `data` module:",
               strip_style(paste(data_out$message, collapse = "\n")),
-              "\n Check your inputs or contact app developer if error persists."
+              "Check your inputs or contact app developer if error persists.",
+              collapse = "\n"
             )
           )
         )
@@ -141,12 +144,12 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 
       validate(
         need(
-          inherits(data_out, "teal_data"),
-          paste(
-            "Error: `teal_data_module` passed to `data` failed to return `teal_data` object, returned",
-            strip_style(toString(sQuote(class(data_out)))),
-            "instead.",
-            "\n Check your inputs or contact app developer if error persists."
+          checkmate::test_class(data_out, "teal_data"),
+          paste0(
+            "Assertion on return value from the 'data' module failed:",
+            checkmate::test_class(data_out, "teal_data"),
+            "Check your inputs or contact app developer if error persists.",
+            collapse = "\n"
           )
         )
       )
@@ -160,7 +163,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     })
 
     output$shiny_warnings <- renderUI({
-      if (inherits(data_out_rv(), "teal_data")) {
+      if (inherits(data_out_r(), "teal_data")) {
         is_modules_ok <- check_modules_datanames(modules = modules, datanames = .teal_data_ls(data_validated()))
         if (!isTRUE(is_modules_ok)) {
           tags$div(
@@ -191,8 +194,8 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 #' @return `reactive` `teal_data`
 #' @keywords internal
 .fallback_on_failure <- function(this, that, label) {
-  checkmate::assert_class(this, "reactive")
-  checkmate::assert_class(that, "reactive")
+  assert_reactive(this)
+  assert_reactive(that)
   checkmate::assert_string(label)
 
   reactive({
