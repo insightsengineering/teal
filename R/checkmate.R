@@ -19,7 +19,7 @@
 #' assert_reactive(1)
 #' assert_reactive(reactive(NULL))
 #' }
-check_reactive <- function(x, null.ok = FALSE) {
+check_reactive <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
   if (!isTRUE(checkmate::test_class(x, classes = "reactive", null.ok = null.ok))) {
     cl <- class(x)
     return(sprintf(
@@ -31,7 +31,7 @@ check_reactive <- function(x, null.ok = FALSE) {
   return(TRUE)
 }
 #' @rdname check_reactive
-test_reactive <- function(x, null.ok = FALSE) {
+test_reactive <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
   isTRUE(check_reactive(x, null.ok = null.ok))
 }
 #' @rdname check_reactive
