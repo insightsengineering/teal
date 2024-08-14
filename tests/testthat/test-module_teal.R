@@ -79,6 +79,30 @@ transform_list <<- list(
   )
 )
 
+testthat::describe("srv_teal lockfile", {
+  testthat::it("process is invoked and snapshot is created after relevant time the session ends", {
+    renv_file_name <- "teal_app.lock"
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(example_module())
+      ),
+      expr = {
+        iter <- 1
+        while (!file.exists(renv_file_name) && iter <= 100) {
+          Sys.sleep(0.25)
+          iter <- iter + 1 # max wait time is 25 seconds
+        }
+        testthat::expect_true(file.exists(renv_file_name))
+      }
+    )
+    testthat::expect_false(file.exists(renv_file_name))
+  })
+})
+
+
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
     testthat::expect_no_error(

@@ -62,19 +62,19 @@ srv_teal_lockfile <- function(id) {
       }
     })
 
+    # run renv::snapshot only once per app. Once calculated available for all users
     lockfile_path <- "teal_app.lock"
-    user_lockfile <- getOption("teal.renv.lockfile", "")
-    # run renv::snapshot only once per app
     if (file.exists(lockfile_path)) {
-      logger::log_debug("Lockfile is already created - skipping automatic creation.")
+      logger::log_debug("Lockfile have been already created - skipping automatic creation.")
       enable_lockfile_download()
       return(NULL)
     }
 
     # don't run renv::snapshot when option is set
+    user_lockfile <- getOption("teal.renv.lockfile", "")
     if (!identical(user_lockfile, "")) {
       if (file.exists(user_lockfile)) {
-        file.copy(getOption("teal.renv.lockfile", ""), lockfile_path)
+        file.copy(user_lockfile, lockfile_path)
         logger::log_debug('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
         enable_lockfile_download()
         return(NULL)
@@ -83,8 +83,11 @@ srv_teal_lockfile <- function(id) {
       }
     }
 
-    # should be run only if the lockfile doesn't exist
-    process <- .teal_lockfile_process_invoke(lockfile_path)
+    # - Will be run only if the lockfile doesn't exist (see the if-s above)
+    # - We render to the tempfile because the process might last after session is closed and we don't
+    #   want to make a "teal_app.renv" then. This is why we copy only during active session.
+    temp_lockfile_path <- tempfile()
+    process <- .teal_lockfile_process_invoke(temp_lockfile_path)
     observeEvent(process$status(), {
       if (process$status() %in% c("initial", "running")) {
         shinyjs::html("lockFileStatus", "Creating lockfile...")
@@ -98,6 +101,7 @@ srv_teal_lockfile <- function(id) {
               warning(i, call. = FALSE)
             }
           }
+          file.copy(temp_lockfile_path, lockfile_path)
           enable_lockfile_download()
         } else {
           disable_lockfile_download()
@@ -118,7 +122,6 @@ srv_teal_lockfile <- function(id) {
       contentType = "application/json"
     )
 
-
     NULL
   })
 }
@@ -126,25 +129,29 @@ srv_teal_lockfile <- function(id) {
 utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "run")) # needed for mirai call
 #' @rdname module_teal_lockfile
 .teal_lockfile_process_invoke <- function(lockfile_path) {
-  process <- ExtendedTask$new(
-    function() {
-      mirai::mirai(
-        {
-          options(opts)
-          do.call(Sys.setenv, sysenv)
-          .libPaths(libpaths)
-          setwd(wd)
-          run(lockfile_path = lockfile_path)
-        },
-        run = .renv_snapshot,
-        lockfile_path = lockfile_path,
-        opts = options(),
-        libpaths = .libPaths(),
-        sysenv = as.list(Sys.getenv()),
-        wd = getwd()
-      )
-    }
+  # to ignore running mirai process after app is closed
+  mirai_obj <- mirai::mirai(
+    {
+      options(opts)
+      do.call(Sys.setenv, sysenv)
+      .libPaths(libpaths)
+      setwd(wd)
+      run(lockfile_path = lockfile_path)
+    },
+    run = .renv_snapshot,
+    lockfile_path = lockfile_path,
+    opts = options(),
+    libpaths = .libPaths(),
+    sysenv = as.list(Sys.getenv()),
+    wd = getwd()
   )
+  shiny::onStop(function() {
+    if (mirai::unresolved(mirai_obj)) {
+      logger::log_debug("Terminating a running lockfile process...")
+      mirai::stop_mirai(mirai_obj) # this doesn't stop running - renv will be created even if session is closed
+    }
+  })
+  process <- ExtendedTask$new(function() mirai_obj)
 
   suppressWarnings({ # 'package:stats' may not be available when loading
     process$invoke()
