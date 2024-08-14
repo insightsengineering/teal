@@ -31,12 +31,11 @@ get_teal_bs_theme <- function() {
   }
 
   if (!checkmate::test_class(bs_theme, "bs_theme")) {
-    msg <- paste0(
+    warning(
       "Assertion on 'teal.bs_theme' option value failed: ",
       checkmate::check_class(bs_theme, "bs_theme"),
-      ". The default shiny bootstrap will be used."
+      ". The default Shiny Bootstrap theme will be used."
     )
-    warning(msg)
     return(NULL)
   }
 
