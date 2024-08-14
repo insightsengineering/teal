@@ -2,29 +2,27 @@
 % Please edit documentation in R/teal_lockfile.R
 \name{teal_lockfile}
 \alias{teal_lockfile}
+\alias{ui_teal_lockfile}
+\alias{srv_teal_lockfile}
 \alias{teal_lockfile_external}
 \alias{teal_lockfile_process_invoke}
 \alias{renv_snapshot}
-\alias{teal_lockfile_process_tracker}
-\alias{teal_lockfile_downloadhandler}
 \title{Generate lockfile for application's environment reproducibility}
 \usage{
-teal_lockfile()
+ui_teal_lockfile(id)
 
-teal_lockfile_external()
+srv_teal_lockfile(id)
 
-teal_lockfile_process_invoke()
+teal_lockfile(lockfile_path)
+
+teal_lockfile_external(lockfile_path)
+
+teal_lockfile_process_invoke(lockfile_path)
 
 renv_snapshot(lockfile_path)
-
-teal_lockfile_process_tracker(process)
-
-teal_lockfile_downloadhandler()
 }
 \arguments{
 \item{lockfile_path}{(\code{character}) path to the lockfile (\code{"teal_app.lock"}).}
-
-\item{process}{(\code{mirai}) process to track the status of the lockfile creation.}
 }
 \value{
 \code{ExtendedTask} processing \code{renv} lockfile or \code{NULL} if lockfile has been provided through options

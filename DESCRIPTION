@@ -45,7 +45,7 @@ Imports:
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
     methods,
-    mirai,
+    mirai (>= 1.1.1),
     renv (>= 1.0.7),
     rlang (>= 1.0.0),
     shinyjs,
