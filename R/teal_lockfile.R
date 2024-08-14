@@ -45,34 +45,65 @@ ui_teal_lockfile <- function(id) {
 srv_teal_lockfile <- function(id) {
   moduleServer(id, function(input, output, session) {
     logger::log_debug("Initialize srv_teal_lockfile.")
-    lockfile_path <- "teal_app.lock"
-    process <- .teal_lockfile(lockfile_path)
+    enable_lockfile_download <- function() {
+      shinyjs::html("lockFileStatus", "Application lockfile ready.")
+      shinyjs::hide("lockFileStatus", anim = TRUE)
+      shinyjs::enable("lockFileLink")
+    }
+    disable_lockfile_download <- function() {
+      warning("Lockfile creation failed.", call. = FALSE)
+      shinyjs::html("lockFileStatus", "Lockfile creation failed.")
+      shinyjs::disable("lockFileLink")
+    }
+    shiny::onStop(function() {
+      if (file.exists(lockfile_path) && !shiny::isRunning()) {
+        logger::log_debug("Removing lockfile after shutting down the app")
+        file.remove(lockfile_path)
+      }
+    })
 
+    lockfile_path <- "teal_app.lock"
+    user_lockfile <- getOption("teal.renv.lockfile", "")
+    # run renv::snapshot only once per app
+    if (file.exists(lockfile_path)) {
+      logger::log_debug("Lockfile is already created - skipping automatic creation.")
+      enable_lockfile_download()
+      return(NULL)
+    }
+
+    # don't run renv::snapshot when option is set
+    if (!identical(user_lockfile, "")) {
+      if (file.exists(user_lockfile)) {
+        file.copy(getOption("teal.renv.lockfile", ""), lockfile_path)
+        logger::log_debug('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
+        enable_lockfile_download()
+        return(NULL)
+      } else {
+        warning("lockfile provided through options('teal.renv.lockfile') does not exist.", call. = FALSE)
+      }
+    }
+
+    # should be run only if the lockfile doesn't exist
+    process <- .teal_lockfile_process_invoke(lockfile_path)
     observeEvent(process$status(), {
-      if (process$status() == "initial" || process$status() == "running") {
+      if (process$status() %in% c("initial", "running")) {
         shinyjs::html("lockFileStatus", "Creating lockfile...")
       } else if (process$status() == "success") {
         result <- process$result()
         if (any(grepl("Lockfile written to", result$out))) {
           logger::log_debug("Lockfile {result$path} containing { length(result$res$Packages) } packages created.")
-          if (any(grepl("WARNING:", result$out)) || any(grepl("ERROR:", result$out))) {
-            warning("Lockfile created with warning(s) or error(s):")
+          if (any(grepl("(WARNING|ERROR):", result$out))) {
+            warning("Lockfile created with warning(s) or error(s):", call. = FALSE)
             for (i in result$out) {
-              warning(i)
+              warning(i, call. = FALSE)
             }
           }
-          shinyjs::html("lockFileStatus", "Application lockfile ready.")
-          shinyjs::hide("lockFileStatus", anim = TRUE)
-          shinyjs::enable("lockFileLink")
+          enable_lockfile_download()
         } else {
-          warning("Lockfile creation failed.")
-          shinyjs::html("lockFileStatus", "Lockfile creation failed.")
-          shinyjs::disable("lockFileLink")
+          disable_lockfile_download()
         }
       } else if (process$status() == "error") {
-        warning("Lockfile creation failed.")
-        shinyjs::html("lockFileStatus", "Lockfile creation failed.")
-        shinyjs::disable("lockFileLink")
+        disable_lockfile_download()
       }
     })
 
@@ -87,38 +118,9 @@ srv_teal_lockfile <- function(id) {
       contentType = "application/json"
     )
 
+
     NULL
   })
-}
-
-#' @rdname module_teal_lockfile
-.teal_lockfile <- function(lockfile_path) {
-  shiny::onStop(function() {
-    if (file.exists(lockfile_path)) {
-      file.remove(lockfile_path)
-    }
-  })
-
-  user_lockfile <- getOption("teal.renv.lockfile", "")
-  if (!identical(user_lockfile, "")) {
-    .teal_lockfile_external(lockfile_path)
-  } else {
-    .teal_lockfile_process_invoke(lockfile_path)
-  }
-}
-
-#' @rdname module_teal_lockfile
-.teal_lockfile_external <- function(lockfile_path) {
-  user_lockfile <- getOption("teal.renv.lockfile", "")
-
-  if (file.exists(user_lockfile)) {
-    file.copy(user_lockfile, lockfile_path)
-    shinyjs::enable("lockFileLink")
-    logger::log_debug('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
-    return(NULL)
-  } else {
-    stop("lockfile provided through options('teal.renv.lockfile') does not exist.")
-  }
 }
 
 utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "run")) # needed for mirai call
@@ -159,8 +161,8 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
     res <- renv::snapshot(
       lockfile = lockfile_path,
       prompt = FALSE,
-      force = TRUE
-      # default type argument is taken from renv::settings$snapshot.type()
+      force = TRUE,
+      type = renv::settings$snapshot.type() # see the section "Different ways of creating lockfile" above here
     )
   )
 

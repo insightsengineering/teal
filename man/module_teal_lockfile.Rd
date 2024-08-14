@@ -4,8 +4,6 @@
 \alias{module_teal_lockfile}
 \alias{ui_teal_lockfile}
 \alias{srv_teal_lockfile}
-\alias{.teal_lockfile}
-\alias{.teal_lockfile_external}
 \alias{.teal_lockfile_process_invoke}
 \alias{.renv_snapshot}
 \title{Generate lockfile for application's environment reproducibility}
@@ -13,10 +11,6 @@
 ui_teal_lockfile(id)
 
 srv_teal_lockfile(id)
-
-.teal_lockfile(lockfile_path)
-
-.teal_lockfile_external(lockfile_path)
 
 .teal_lockfile_process_invoke(lockfile_path)
 
