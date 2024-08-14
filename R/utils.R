@@ -133,7 +133,10 @@ check_modules_datanames <- function(modules, datanames) {
         }
       )
     } else {
-      extra_datanames <- setdiff(modules$datanames, c("all", datanames))
+      extra_datanames <- unique(c(
+        setdiff(modules$datanames, c("all", datanames)),
+        setdiff(unlist(lapply(modules$transformers, function(x) x$datanames)), c("all", datanames))
+      ))
       if (length(extra_datanames)) {
         list(
           string = build_datanames_error_message(
