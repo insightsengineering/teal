@@ -31,7 +31,7 @@
 #' @param id (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
-#' @param landing_popup (`teal_module`) Optionally,
+#' @param landing_popup (`teal_module_landing`) Optionally,
 #'   a `landing_popup_module` to show up as soon as the teal app is initialized.
 #'
 #' @return Named list containing server and UI functions.
