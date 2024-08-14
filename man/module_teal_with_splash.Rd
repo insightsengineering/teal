@@ -17,8 +17,8 @@ ui_teal_with_splash(
 srv_teal_with_splash(id, data, modules, filter = teal_slices())
 }
 \arguments{
-\item{id}{(\code{character}) optional
-string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+\item{id}{(\code{character}) Optionally,
+a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
@@ -27,25 +27,25 @@ The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} 
 \code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
 the reactive data of the enclosing application.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)})
-The browser window title. Defaults to a title "teal app" with the icon of NEST.
+\item{title}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+the browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
 
-\item{header}{(\code{shiny.tag} or \code{character(1)})
-The header of the app.}
+\item{header}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+the header of the app.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)})
-The footer of the app.}
+\item{footer}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+the footer of the app.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
+Nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{filter}{(\code{teal_slices})
-Specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+\item{filter}{(\code{teal_slices}) Optionally,
+specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 Returns a \code{reactive} expression containing a \code{teal_data} object when data is loaded or \code{NULL} when it is not.
