@@ -150,13 +150,13 @@ teal_lockfile_process_tracker <- function(process) {
   checkmate::assert_class(process, "ExtendedTask")
 
   observeEvent(process$status(), {
-    if (process$status() == "initial" || process$status() == "running") {
+    if (process$status() %in% c("initial", "running")) {
       shinyjs::html("teal-lockFileStatus", "Creating lockfile...")
     } else if (process$status() == "success") {
       result <- process$result()
       if (any(grepl("Lockfile written to", result$out))) {
         logger::log_trace("Lockfile {result$path} containing { length(result$res$Packages) } packages created.")
-        if (any(grepl("WARNING:", result$out)) || any(grepl("ERROR:", result$out))) {
+        if (any(grepl("(WARNING|ERROR):", result$out))) {
           logger::log_warn("Lockfile created with warning(s) or error(s):")
           for (i in result$out) {
             logger::log_warn(i)
