@@ -4,10 +4,10 @@ testthat::test_that("get_teal_bs_theme", {
     testthat::expect_s3_class(get_teal_bs_theme(), "bs_theme")
   })
   withr::with_options(list("teal.bs_theme" = 1), {
-    testthat::expect_warning(get_teal_bs_theme(), "the default shiny bootstrap is used")
+    testthat::expect_warning(get_teal_bs_theme(), ".*The default Shiny Bootstrap theme will be used.")
   })
   withr::with_options(list("teal.bs_theme" = "bs_theme"), {
-    testthat::expect_warning(get_teal_bs_theme(), "the default shiny bootstrap is used")
+    testthat::expect_warning(get_teal_bs_theme(), ".*The default Shiny Bootstrap theme will be used.")
   })
 })
 
