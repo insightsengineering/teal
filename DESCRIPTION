@@ -73,8 +73,8 @@ RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate,
-    HenrikBengtsson/future, jeroen/jsonlite, r-lib/lifecycle,
-    daroczig/logger, rstudio/promises, rstudio/renv, r-lib/rlang,
+    jeroen/jsonlite, r-lib/lifecycle,
+    daroczig/logger, rstudio/renv, r-lib/rlang,
     daattali/shinyjs, insightsengineering/teal.code,
     insightsengineering/teal.logger, insightsengineering/teal.reporter,
     insightsengineering/teal.widgets, rstudio/bslib, yihui/knitr,
