@@ -537,7 +537,9 @@ testthat::describe("srv_teal teal_modules", {
                 ui = function(id) NULL,
                 server = function(id, data) {
                   moduleServer(id, function(input, output, session) {
-                    reactive({NULL})
+                    reactive({
+                      NULL
+                    })
                   })
                 }
               )
