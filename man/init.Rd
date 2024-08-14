@@ -58,9 +58,13 @@ End-users: This is the most important function for you to start a
 }
 \examples{
 app <- init(
-  data = teal_data() |>
-    within(new_iris <- transform(iris, id = seq_len(nrow(iris)))) |>
-    within(new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))),
+  data = within(
+    teal_data(),
+    {
+      new_iris <- transform(iris, id = seq_len(nrow(iris)))
+      new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
+    }
+  ),
   modules = modules(
     module(
       label = "data source",
