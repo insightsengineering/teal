@@ -44,7 +44,7 @@ the footer of the app.}
 a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
-\item{landing_popup}{(\code{teal_module}) Optionally,
+\item{landing_popup}{(\code{teal_module_landing}) Optionally,
 a \code{landing_popup_module} to show up as soon as the teal app is initialized.}
 }
 \value{
