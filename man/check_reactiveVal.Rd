@@ -61,8 +61,8 @@ check_reactiveVal(1)
 check_reactiveVal(reactiveVal(NULL))
 
 \dontrun{
-  assert_reactiveVal(1)
-  assert_reactiveVal(reactiveVal(NULL))
+assert_reactiveVal(1)
+assert_reactiveVal(reactiveVal(NULL))
 }
 }
 \seealso{

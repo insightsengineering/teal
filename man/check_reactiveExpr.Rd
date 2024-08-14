@@ -61,8 +61,8 @@ check_reactiveExpr(1)
 check_reactiveExpr(reactive(NULL))
 
 \dontrun{
-  assert_reactiveExpr(1)
-  assert_reactiveExpr(reactive(NULL))
+assert_reactiveExpr(1)
+assert_reactiveExpr(reactive(NULL))
 }
 }
 \seealso{
