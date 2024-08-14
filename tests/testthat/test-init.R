@@ -57,17 +57,19 @@ testthat::test_that("init throws when an empty `data` is used", {
 })
 
 testthat::test_that(
-  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformers", {
-  testthat::local_mocked_bindings(log_warn = warning, .package = "logger")
+  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformers",
+  {
+    testthat::local_mocked_bindings(log_warn = warning, .package = "logger")
 
-  testthat::expect_warning(
-    init(
-      data = teal.data::teal_data(mtcars = mtcars),
-      modules = list(example_module(datanames = "iris"))
-    ),
-    "Dataset \"iris\" is missing for tab 'example teal module'. Dataset available in data: \"mtcars\"."
-  )
-})
+    testthat::expect_warning(
+      init(
+        data = teal.data::teal_data(mtcars = mtcars),
+        modules = list(example_module(datanames = "iris"))
+      ),
+      "Dataset \"iris\" is missing for tab 'example teal module'. Dataset available in data: \"mtcars\"."
+    )
+  }
+)
 
 testthat::test_that(
   "init does not throw warning when datanames in modules incompatible w/ datanames in data and there are transformers",
