@@ -64,12 +64,12 @@ srv_teal_module(
 )
 }
 \arguments{
-\item{id}{(\code{character}) optional
-string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+\item{id}{(\code{character}) Optionally,
+a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
+Nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}

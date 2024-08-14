@@ -10,32 +10,29 @@
 #' End-users: This is the most important function for you to start a
 #' `teal` app that is composed of `teal` modules.
 #'
-#' @details
-#' When initializing the `teal` app, if `datanames` are not set for the `teal_data` object,
-#' defaults from the `teal_data` environment will be used.
-#'
 #' @param data (`teal_data` or `teal_data_module`)
-#' For constructing the data object, refer to [teal_data()] and [teal_data_module()].
+#'   For constructing the data object, refer to [teal_data()] and [teal_data_module()].
+#'   If `datanames` are not set for the `teal_data` object, defaults from the `teal_data` environment will be used.
 #' @param modules (`list` or `teal_modules` or `teal_module`)
-#'   nested list of `teal_modules` or `teal_module` objects or a single
+#'   Nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
-#' @param filter (`teal_slices`)
-#'   Specifies the initial filter using [teal_slices()].
-#' @param title (`shiny.tag` or `character(1)`)
-#'   The browser window title. Defaults to a title "teal app" with the icon of NEST.
+#' @param filter (`teal_slices`) Optionally,
+#'   specifies the initial filter using [teal_slices()].
+#' @param title (`shiny.tag` or `character(1)`) Optionally,
+#'   the browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#' @param header (`shiny.tag` or `character(1)`)
-#'   The header of the app.
-#' @param footer (`shiny.tag` or `character(1)`)
-#'   The footer of the app.
-#' @param id (`character`) optional
-#'   string specifying the `shiny` module id in cases it is used as a `shiny` module
+#' @param header (`shiny.tag` or `character(1)`) Optionally,
+#'   the header of the app.
+#' @param footer (`shiny.tag` or `character(1)`) Optionally,
+#'   the footer of the app.
+#' @param id (`character`) Optionally,
+#'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
-#' @param landing_popup (`teal_module`) optional
-#'   A `landing_popup_module` to show up as soon as the teal app is initialized.
+#' @param landing_popup (`teal_module_landing`) Optionally,
+#'   a `landing_popup_module` to show up as soon as the teal app is initialized.
 #'
 #' @return Named list containing server and UI functions.
 #'
@@ -45,13 +42,12 @@
 #'
 #' @examples
 #' app <- init(
-#'   data = teal_data(
-#'     new_iris = transform(iris, id = seq_len(nrow(iris))),
-#'     new_mtcars = transform(mtcars, id = seq_len(nrow(mtcars))),
-#'     code = "
+#'   data = within(
+#'     teal_data(),
+#'     {
 #'       new_iris <- transform(iris, id = seq_len(nrow(iris)))
 #'       new_mtcars <- transform(mtcars, id = seq_len(nrow(mtcars)))
-#'     "
+#'     }
 #'   ),
 #'   modules = modules(
 #'     module(
@@ -89,7 +85,7 @@
 #'   ),
 #'   title = "App title",
 #'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017 - 2023")
+#'   footer = tags$p("Sample footer")
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
@@ -163,9 +159,8 @@ init <- function(data,
   if (length(landing) == 1L) {
     landing_popup <- landing[[1L]]
     modules <- drop_module(modules, "teal_module_landing")
-    # TODO: verify the version before release.
     lifecycle::deprecate_soft(
-      when = "0.16",
+      when = "0.15.3",
       what = "landing_popup_module()",
       details = paste(
         "Pass `landing_popup_module` to the `landing_popup` argument of the `init` ",
@@ -246,8 +241,12 @@ init <- function(data,
   res <- list(
     ui = function(request) {
       ui_teal(
-        id = ns("teal"), data = if (inherits(data, "teal_data_module")) data,
-        modules = modules, title = title, header = header, footer = footer
+        id = ns("teal"),
+        data = if (inherits(data, "teal_data_module")) data,
+        modules = modules,
+        title = title,
+        header = header,
+        footer = footer
       )
     },
     server = function(input, output, session) {
