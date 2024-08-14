@@ -2,10 +2,6 @@
 #'
 #' @param process (`mirai`) process to track the status of the lockfile creation.
 #' @param lockfile_path (`character`) path to the lockfile (`"teal_app.lock"`).
-#' @param opts (`list`) options to be set in the [mirai::daemon()].
-#' @param sysenv (`list`) system environment variables to be set in the [mirai::daemon()].
-#' @param libpaths (`character`) library paths to be set in the [mirai::daemon()].
-#' @param wd (`character(1)`) working directory to be set in the [mirai::daemon()].
 #'
 #' @section lockfile creation steps:
 #' Process is split into multiple steps.
@@ -88,11 +84,11 @@ teal_lockfile_external <- function() {
   }
 }
 
+utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "run")) # needed for mirai call
 #' @rdname teal_lockfile
 #' @keywords internal
 teal_lockfile_process_invoke <- function() {
   lockfile_path <- "teal_app.lock"
-
   process <- ExtendedTask$new(
     function() {
       mirai::mirai(
@@ -101,7 +97,6 @@ teal_lockfile_process_invoke <- function() {
           do.call(Sys.setenv, sysenv)
           .libPaths(libpaths)
           setwd(wd)
-
           run(lockfile_path = lockfile_path)
         },
         run = renv_snapshot,

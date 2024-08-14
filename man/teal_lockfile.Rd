@@ -25,14 +25,6 @@ teal_lockfile_downloadhandler()
 \item{lockfile_path}{(\code{character}) path to the lockfile (\code{"teal_app.lock"}).}
 
 \item{process}{(\code{mirai}) process to track the status of the lockfile creation.}
-
-\item{opts}{(\code{list}) options to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
-
-\item{sysenv}{(\code{list}) system environment variables to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
-
-\item{libpaths}{(\code{character}) library paths to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
-
-\item{wd}{(\code{character(1)}) working directory to be set in the \code{\link[mirai:daemon]{mirai::daemon()}}.}
 }
 \value{
 \code{ExtendedTask} processing \code{renv} lockfile or \code{NULL} if lockfile has been provided through options
