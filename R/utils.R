@@ -25,14 +25,22 @@ get_client_timezone <- function(ns) {
 #' @keywords internal
 get_teal_bs_theme <- function() {
   bs_theme <- getOption("teal.bs_theme")
+
   if (is.null(bs_theme)) {
-    NULL
-  } else if (!inherits(bs_theme, "bs_theme")) {
-    warning("teal.bs_theme has to be of a bslib::bs_theme class, the default shiny bootstrap is used.")
-    NULL
-  } else {
-    bs_theme
+    return(NULL)
   }
+
+  if (!checkmate::test_class(bs_theme, "bs_theme")) {
+    msg <- paste0(
+      "Assertion on 'teal.bs_theme' option value failed: ",
+      checkmate::check_class(bs_theme, "bs_theme"),
+      ". The default shiny bootstrap will be used."
+    )
+    warning(msg)
+    return(NULL)
+  }
+
+  bs_theme
 }
 
 #' Return parentnames along with datanames.
