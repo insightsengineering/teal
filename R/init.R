@@ -225,7 +225,7 @@ init <- function(data,
 
     is_modules_ok <- check_modules_datanames(modules, .teal_data_datanames(data))
     if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
-lapply(is_modules_ok$string, warning, call. = FALSE)
+      lapply(is_modules_ok$string, warning, call. = FALSE)
     }
 
     is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data))
