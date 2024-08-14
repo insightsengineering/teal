@@ -16,8 +16,8 @@
 #' check_reactive(reactive(NULL))
 #'
 #' \dontrun{
-#'   assert_reactive(1)
-#'   assert_reactive(reactive(NULL))
+#' assert_reactive(1)
+#' assert_reactive(reactive(NULL))
 #' }
 check_reactive <- function(x, null.ok = FALSE) {
   if (!isTRUE(checkmate::test_class(x, classes = "reactive", null.ok = null.ok))) {
@@ -53,8 +53,8 @@ assert_reactive <- checkmate::makeAssertionFunction(check_reactive)
 #' check_reactiveExpr(reactive(NULL))
 #'
 #' \dontrun{
-#'   assert_reactiveExpr(1)
-#'   assert_reactiveExpr(reactive(NULL))
+#' assert_reactiveExpr(1)
+#' assert_reactiveExpr(reactive(NULL))
 #' }
 check_reactiveExpr <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
   if (!isTRUE(checkmate::test_class(x, classes = "reactiveExpr", null.ok = null.ok))) {
@@ -90,8 +90,8 @@ assert_reactiveExpr <- checkmate::makeAssertionFunction(check_reactiveExpr) # no
 #' check_reactiveVal(reactiveVal(NULL))
 #'
 #' \dontrun{
-#'   assert_reactiveVal(1)
-#'   assert_reactiveVal(reactiveVal(NULL))
+#' assert_reactiveVal(1)
+#' assert_reactiveVal(reactiveVal(NULL))
 #' }
 check_reactiveVal <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
   if (!isTRUE(checkmate::test_class(x, classes = "reactiveVal", null.ok = null.ok))) {
