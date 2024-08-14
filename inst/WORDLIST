@@ -20,6 +20,8 @@ omics
 pre
 programmatically
 reactively
+reactiveExpr
+reactiveVal
 repo
 reproducibility
 summarization
