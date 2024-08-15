@@ -79,7 +79,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
-    } else if (test_reactiveVal(data)) {
+    } else if (test_reactive(data)) {
       .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
     }
 

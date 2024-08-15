@@ -163,7 +163,7 @@ testthat::describe("srv_teal arguments", {
           session$flushReact()
         }
       ),
-      "The `teal_data_module` passed to `data` must return a reactive expressio"
+      "Must be a reactive expression"
     )
   })
 })
