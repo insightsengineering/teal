@@ -53,18 +53,6 @@ Depending on the function prefix:
 \description{
 Check that argument is a reactive value.
 }
-\examples{
-test_reactiveVal(1)
-test_reactiveVal(reactiveVal(NULL))
-
-check_reactiveVal(1)
-check_reactiveVal(reactiveVal(NULL))
-
-\dontrun{
-assert_reactiveVal(1)
-assert_reactiveVal(reactiveVal(NULL))
-}
-}
 \seealso{
 check_reactive check_reactiveExpr
 }
