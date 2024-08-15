@@ -32,7 +32,7 @@
 modified \code{teal_data}
 }
 \description{
-In \code{teal} we need to recreate the \code{teal_data} object due to two operations:integer.max
+In \code{teal} we need to recreate the \code{teal_data} object due to two operations:
 \itemize{
 \item we need to append filter-data code and objects which have been evaluated in \code{FilteredData} and
 we want to avoid double-evaluation.

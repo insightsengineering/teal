@@ -6,8 +6,7 @@
 #' @param ns (`function`) namespace function passed from the `session` object in the `shiny` server.
 #'  For `shiny` modules this will allow for proper name spacing of the registered input.
 #'
-#' @return (`shiny`) input variable accessible with `input$tz` which is a (`character`)
-#'  string containing the timezone of the browser/client.
+#' @return `NULL`, invisibly.
 #'
 #' @keywords internal
 #'
