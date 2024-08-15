@@ -28,8 +28,7 @@
 #' @inheritParams module_init_data
 #' @inheritParams init
 #'
-#' @return
-#' `NULL` invisibly
+#' @return `NULL` invisibly
 NULL
 
 #' @rdname module_teal
