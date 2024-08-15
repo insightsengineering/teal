@@ -17,8 +17,8 @@ srv_filter_data(id, datasets, active_datanames, data_rv, is_active)
 .observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
 }
 \arguments{
-\item{id}{(\code{character}) optional
-string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
+\item{id}{(\code{character}) Optionally,
+a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
@@ -30,7 +30,7 @@ which implies in filter-panel to be "global". When \code{NULL} then filter-panel
 \item{data_rv}{(\code{reactive} returning \code{teal_data})}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-nested list of \code{teal_modules} or \code{teal_module} objects or a single
+Nested list of \code{teal_modules} or \code{teal_module} objects or a single
 \code{teal_modules} or \code{teal_module} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
