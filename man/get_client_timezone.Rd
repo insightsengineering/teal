@@ -11,8 +11,7 @@ get_client_timezone(ns)
 For \code{shiny} modules this will allow for proper name spacing of the registered input.}
 }
 \value{
-(\code{shiny}) input variable accessible with \code{input$tz} which is a (\code{character})
-string containing the timezone of the browser/client.
+\code{NULL}, invisibly.
 }
 \description{
 User timezone in the browser may be different to the one on the server.

@@ -51,7 +51,7 @@ include_js_files <- function(pattern = NULL, except = NULL) {
 #'
 #' @param files (`character`) vector of filenames.
 #'
-#' @return returns `NULL`, invisibly.
+#' @return `NULL`, invisibly.
 #' @keywords internal
 run_js_files <- function(files) {
   checkmate::assert_character(files, min.len = 1, any.missing = FALSE)
