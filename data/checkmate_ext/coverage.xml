@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.565505226480836" branch-rate="0" lines-covered="1623" lines-valid="2870" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-08-15 07:30:36.894729">
+<coverage line-rate="0.565505226480836" branch-rate="0" lines-covered="1623" lines-valid="2870" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-08-15 07:48:18.314442">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -11,84 +11,84 @@
           <methods>
             <method name="check_reactive" signature="" line-rate="0.25" branch-rate="0" complexity="0">
               <lines>
-                <line number="23" hits="841" branch="false"/>
-                <line number="24" hits="0" branch="false"/>
-                <line number="25" hits="0" branch="false"/>
-                <line number="26" hits="0" branch="false"/>
-                <line number="27" hits="0" branch="false"/>
-                <line number="28" hits="0" branch="false"/>
-                <line number="29" hits="0" branch="false"/>
-                <line number="31" hits="841" branch="false"/>
+                <line number="11" hits="841" branch="false"/>
+                <line number="12" hits="0" branch="false"/>
+                <line number="13" hits="0" branch="false"/>
+                <line number="14" hits="0" branch="false"/>
+                <line number="15" hits="0" branch="false"/>
+                <line number="16" hits="0" branch="false"/>
+                <line number="17" hits="0" branch="false"/>
+                <line number="19" hits="841" branch="false"/>
               </lines>
             </method>
             <method name="test_reactive" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="35" hits="28" branch="false"/>
+                <line number="23" hits="28" branch="false"/>
               </lines>
             </method>
             <method name="check_reactiveExpr" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="60" hits="160" branch="false"/>
-                <line number="61" hits="3" branch="false"/>
-                <line number="62" hits="3" branch="false"/>
-                <line number="63" hits="3" branch="false"/>
-                <line number="64" hits="3" branch="false"/>
-                <line number="65" hits="3" branch="false"/>
-                <line number="66" hits="3" branch="false"/>
-                <line number="68" hits="157" branch="false"/>
+                <line number="36" hits="160" branch="false"/>
+                <line number="37" hits="3" branch="false"/>
+                <line number="38" hits="3" branch="false"/>
+                <line number="39" hits="3" branch="false"/>
+                <line number="40" hits="3" branch="false"/>
+                <line number="41" hits="3" branch="false"/>
+                <line number="42" hits="3" branch="false"/>
+                <line number="44" hits="157" branch="false"/>
               </lines>
             </method>
             <method name="test_reactiveExpr" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="72" hits="0" branch="false"/>
+                <line number="48" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="check_reactiveVal" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="97" hits="0" branch="false"/>
-                <line number="98" hits="0" branch="false"/>
-                <line number="99" hits="0" branch="false"/>
-                <line number="100" hits="0" branch="false"/>
-                <line number="101" hits="0" branch="false"/>
-                <line number="102" hits="0" branch="false"/>
-                <line number="103" hits="0" branch="false"/>
-                <line number="105" hits="0" branch="false"/>
+                <line number="61" hits="0" branch="false"/>
+                <line number="62" hits="0" branch="false"/>
+                <line number="63" hits="0" branch="false"/>
+                <line number="64" hits="0" branch="false"/>
+                <line number="65" hits="0" branch="false"/>
+                <line number="66" hits="0" branch="false"/>
+                <line number="67" hits="0" branch="false"/>
+                <line number="69" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="test_reactiveVal" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="109" hits="0" branch="false"/>
+                <line number="73" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="23" hits="841" branch="false"/>
-            <line number="24" hits="0" branch="false"/>
-            <line number="25" hits="0" branch="false"/>
-            <line number="26" hits="0" branch="false"/>
-            <line number="27" hits="0" branch="false"/>
-            <line number="28" hits="0" branch="false"/>
-            <line number="29" hits="0" branch="false"/>
-            <line number="31" hits="841" branch="false"/>
-            <line number="35" hits="28" branch="false"/>
-            <line number="60" hits="160" branch="false"/>
-            <line number="61" hits="3" branch="false"/>
-            <line number="62" hits="3" branch="false"/>
-            <line number="63" hits="3" branch="false"/>
-            <line number="64" hits="3" branch="false"/>
-            <line number="65" hits="3" branch="false"/>
-            <line number="66" hits="3" branch="false"/>
-            <line number="68" hits="157" branch="false"/>
-            <line number="72" hits="0" branch="false"/>
-            <line number="97" hits="0" branch="false"/>
-            <line number="98" hits="0" branch="false"/>
-            <line number="99" hits="0" branch="false"/>
-            <line number="100" hits="0" branch="false"/>
-            <line number="101" hits="0" branch="false"/>
-            <line number="102" hits="0" branch="false"/>
-            <line number="103" hits="0" branch="false"/>
-            <line number="105" hits="0" branch="false"/>
-            <line number="109" hits="0" branch="false"/>
+            <line number="11" hits="841" branch="false"/>
+            <line number="12" hits="0" branch="false"/>
+            <line number="13" hits="0" branch="false"/>
+            <line number="14" hits="0" branch="false"/>
+            <line number="15" hits="0" branch="false"/>
+            <line number="16" hits="0" branch="false"/>
+            <line number="17" hits="0" branch="false"/>
+            <line number="19" hits="841" branch="false"/>
+            <line number="23" hits="28" branch="false"/>
+            <line number="36" hits="160" branch="false"/>
+            <line number="37" hits="3" branch="false"/>
+            <line number="38" hits="3" branch="false"/>
+            <line number="39" hits="3" branch="false"/>
+            <line number="40" hits="3" branch="false"/>
+            <line number="41" hits="3" branch="false"/>
+            <line number="42" hits="3" branch="false"/>
+            <line number="44" hits="157" branch="false"/>
+            <line number="48" hits="0" branch="false"/>
+            <line number="61" hits="0" branch="false"/>
+            <line number="62" hits="0" branch="false"/>
+            <line number="63" hits="0" branch="false"/>
+            <line number="64" hits="0" branch="false"/>
+            <line number="65" hits="0" branch="false"/>
+            <line number="66" hits="0" branch="false"/>
+            <line number="67" hits="0" branch="false"/>
+            <line number="69" hits="0" branch="false"/>
+            <line number="73" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="dummy_functions.R" filename="R/dummy_functions.R" line-rate="0.775510204081633" branch-rate="0" complexity="0">
