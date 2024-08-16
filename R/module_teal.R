@@ -249,15 +249,20 @@ srv_teal_body <- function(id, data, modules, filter = teal_slices()) {
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
-    srv_teal_module(
+
+    # `out_test_xyz` are used for testing purposes
+    out_test_modules <- srv_teal_module(
       id = "teal_modules",
       data_rv = data_rv,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global
     )
-    srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
-    srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
+
+    out_test_mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
+
+    out_test_snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
+
     srv_bookmark_panel("bookmark_manager", modules)
   })
 }
