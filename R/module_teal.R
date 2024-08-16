@@ -63,85 +63,24 @@ ui_teal <- function(id,
     validate_app_title_tag(title)
   }
 
-  if (checkmate::test_string(header)) {
-    header <- tags$p(header)
-  }
-
-  if (checkmate::test_string(footer)) {
-    footer <- tags$p(footer)
-  }
-
   ns <- NS(id)
 
-  # show busy icon when `shiny` session is busy computing stuff
-  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
-  shiny_busy_message_panel <- conditionalPanel(
-    condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
-    tags$div(
-      icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
-      "Computing ...",
-      # CSS defined in `custom.css`
-      class = "shinybusymessage"
-    )
-  )
+  header_ui <- ui_teal_header(ns("header"), header)
 
-  bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
-  data_elem <- ui_init_data(ns("data"), data = data)
-  if (!is.null(data)) {
-    modules$children <- c(list(teal_data_module = data_elem), modules$children)
-  }
-  tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
+  body_ui <- ui_teal_body(ns("body"), modules, data)
+
+  footer_ui <- ui_teal_footer("footer")
 
   fluidPage(
     id = id,
     title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(header),
+    header_ui,
     tags$hr(class = "my-2"),
-    shiny_busy_message_panel,
-    tags$div(
-      id = ns("tabpanel_wrapper"),
-      class = "teal-body",
-      tabs_elem
-    ),
-    tags$div(
-      id = ns("options_buttons"),
-      style = "position: absolute; right: 10px;",
-      bookmark_panel_ui,
-      tags$button(
-        class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
-        href = "javascript:void(0)",
-        onclick = sprintf("toggleFilterPanel('%s');", ns("tabpanel_wrapper")),
-        title = "Toggle filter panel",
-        icon("fas fa-bars")
-      ),
-      ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
-      ui_filter_manager_panel(ns("filter_manager_panel"))
-    ),
-    tags$script(
-      HTML(
-        sprintf(
-          "
-            $(document).ready(function() {
-              $('#%s').appendTo('#%s');
-            });
-          ",
-          ns("options_buttons"),
-          ns("teal_modules-active_tab")
-        )
-      )
-    ),
+    body_ui,
     tags$hr(),
-    tags$footer(
-      tags$div(
-        footer,
-        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
-        br(),
-        downloadLink(ns("lockFile"), "Download .lock file"),
-        textOutput(ns("identifier"))
-      )
-    )
+    footer_ui
   )
 }
 
@@ -156,17 +95,32 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
-    output$identifier <- renderText(
-      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
-    )
+    srv_teal_footer("footer")
 
-    teal.widgets::verbatim_popup_srv(
-      "sessionInfo",
-      verbatim_content = utils::capture.output(utils::sessionInfo()),
-      title = "SessionInfo"
-    )
+    srv_teal_body("body", data, modules, filter)
 
-    output$lockFile <- teal_lockfile_downloadhandler()
+    srv_teal_header("header")
+
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+    }
+  })
+
+  invisible(NULL)
+}
+
+ui_teal_header <- function(id, header) {
+  ns <- NS(id)
+
+  if (checkmate::test_string(header)) {
+    header <- tags$p(header)
+  }
+
+  tags$header(header)
+}
+srv_teal_header <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    logger::log_debug("srv_teal_header initializing.")
 
     # `JavaScript` code
     run_js_files(files = "init.js")
@@ -180,9 +134,107 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       once = TRUE,
       handlerExpr = {
         session$userData$timezone <- input$timezone
-        logger::log_debug("srv_teal@1 Timezone set to client's timezone: { input$timezone }.")
+        logger::log_debug("srv_teal_header@1 Timezone set to client's timezone: { input$timezone }.")
       }
     )
+  })
+}
+
+ui_teal_footer <- function(id, footer) {
+  ns <- NS(id)
+  if (checkmate::test_string(footer)) {
+    footer <- tags$p(footer)
+  }
+
+  tags$footer(
+    tags$div(
+      footer,
+      teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
+      br(),
+      downloadLink(ns("lockFile"), "Download .lock file"),
+      textOutput(ns("identifier"))
+    )
+  )
+}
+srv_teal_footer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    logger::log_debug("srv_teal_footer initializing.")
+
+    teal.widgets::verbatim_popup_srv(
+      "sessionInfo",
+      verbatim_content = utils::capture.output(utils::sessionInfo()),
+      title = "SessionInfo"
+    )
+    output$identifier <- renderText(
+      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
+    )
+    output$lockFile <- teal_lockfile_downloadhandler()
+  })
+}
+
+ui_teal_body <- function(id, modules, data = NULL) {
+  ns <- NS(id)
+
+  # show busy icon when `shiny` session is busy computing stuff
+  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
+  shiny_busy_message_ui <- conditionalPanel(
+    condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
+    tags$div(
+      icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
+      "Computing ...",
+      # CSS defined in `custom.css`
+      class = "shinybusymessage"
+    )
+  )
+
+  if (!is.null(data)) {
+    data_ui <- ui_init_data(ns("data"), data = data)
+    modules$children <- c(list(teal_data_module = data_ui), modules$children)
+  }
+  tabs_ui <- tags$div(
+    id = ns("tabpanel_wrapper"),
+    class = "teal-body",
+    ui_teal_module(id = ns("teal_modules"), modules = modules)
+  )
+
+  bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
+  options_buttons_ui <- tags$div(
+    id = ns("options_buttons"),
+    style = "position: absolute; right: 10px;",
+    tags$script(
+      HTML(
+        sprintf(
+          "
+            $(document).ready(function() {
+              $('#%s').appendTo('#%s');
+            });
+          ",
+          ns("options_buttons"),
+          ns("teal_modules-active_tab")
+        )
+      )
+    ),
+    bookmark_panel_ui,
+    tags$button(
+      class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
+      href = "javascript:void(0)",
+      onclick = sprintf("toggleFilterPanel('%s');", ns("tabpanel_wrapper")),
+      title = "Toggle filter panel",
+      icon("fas fa-bars")
+    ),
+    ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
+    ui_filter_manager_panel(ns("filter_manager_panel"))
+  )
+
+  tagList(
+    shiny_busy_message_ui,
+    tabs_ui,
+    options_buttons_ui
+  )
+}
+srv_teal_body <- function(id, data, modules, filter = teal_slices()) {
+  moduleServer(id, function(input, output, session) {
+    logger::log_debug("srv_teal_body initializing.")
 
     data_rv <- srv_init_data("data", data = data, modules = modules, filter = filter)
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
@@ -190,28 +242,22 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         if (!inherits(data_rv(), "teal_data")) {
           stop("data_rv must be teal_data object.")
         }
-        logger::log_debug("srv_teal@1 initializing FilteredData")
+        logger::log_debug("srv_teal_body@1 initializing FilteredData")
         teal_data_to_filtered_data(data_rv())
       })
     }
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
-    modules_output <- srv_teal_module(
+    srv_teal_module(
       id = "teal_modules",
       data_rv = data_rv,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global
     )
-    mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
-    snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
+    srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
+    srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
-
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab"))
-    }
   })
-
-  invisible(NULL)
 }
