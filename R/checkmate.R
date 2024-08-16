@@ -74,3 +74,33 @@ test_reactiveVal <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
 }
 #' @rdname check_reactiveVal
 assert_reactiveVal <- checkmate::makeAssertionFunction(check_reactiveVal) # nolint: object_name_linter.
+
+
+#' Capture error and decorate error message.
+#'
+#' @param x object to evaluate
+#' @param prefix (`character(1)`) prefix to error message
+#' @param suffix (`character(1)`) suffix to error message
+#'
+#' @return `x` if no error, otherwise throws error with decorated message
+#'
+#' @keywords internal
+decorate_err_msg <- function(x, prefix = character(0), suffix = character(0)) {
+  tryCatch(
+    x,
+    error = function(e) {
+      stop(
+        paste0(
+          "\n",
+          prefix,
+          "\n",
+          e$message,
+          "\n",
+          suffix
+        ),
+        call. = FALSE
+      )
+    }
+  )
+  x
+}
