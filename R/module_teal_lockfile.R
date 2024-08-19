@@ -94,7 +94,6 @@ srv_teal_lockfile <- function(id) {
     # - Will be run only if the lockfile doesn't exist (see the if-s above)
     # - We render to the tempfile because the process might last after session is closed and we don't
     #   want to make a "teal_app.renv" then. This is why we copy only during active session.
-    temp_lockfile_path <- tempfile()
     process <- .teal_lockfile_process_invoke(lockfile_path)
     observeEvent(process$status(), {
       if (process$status() %in% c("initial", "running")) {
@@ -109,7 +108,6 @@ srv_teal_lockfile <- function(id) {
               warning(i, call. = FALSE)
             }
           }
-          # file.copy(temp_lockfile_path, lockfile_path)
           enable_lockfile_download()
         } else {
           disable_lockfile_download()
@@ -119,7 +117,7 @@ srv_teal_lockfile <- function(id) {
       }
     })
 
-    output$lockFileLink <- downloadHandler(
+    output$lockFileLink <- shiny::downloadHandler(
       filename = function() {
         "renv.lock"
       },
@@ -137,29 +135,33 @@ srv_teal_lockfile <- function(id) {
 utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "run")) # needed for mirai call
 #' @rdname module_teal_lockfile
 .teal_lockfile_process_invoke <- function(lockfile_path) {
-  # to ignore running mirai process after app is closed
-  mirai_obj <- mirai::mirai(
-    {
-      options(opts)
-      do.call(Sys.setenv, sysenv)
-      .libPaths(libpaths)
-      setwd(wd)
-      run(lockfile_path = lockfile_path)
-    },
-    run = .renv_snapshot,
-    lockfile_path = lockfile_path,
-    opts = options(),
-    libpaths = .libPaths(),
-    sysenv = as.list(Sys.getenv()),
-    wd = getwd()
-  )
+  mirai_obj <- NULL
+  process <- shiny::ExtendedTask$new(function() {
+    m <- mirai::mirai(
+      {
+        options(opts)
+        do.call(Sys.setenv, sysenv)
+        .libPaths(libpaths)
+        setwd(wd)
+        run(lockfile_path = lockfile_path)
+      },
+      run = .renv_snapshot,
+      lockfile_path = lockfile_path,
+      opts = options(),
+      libpaths = .libPaths(),
+      sysenv = as.list(Sys.getenv()),
+      wd = getwd()
+    )
+    mirai_obj <<- m
+    m
+  })
+
   shiny::onStop(function() {
     if (mirai::unresolved(mirai_obj)) {
       logger::log_debug("Terminating a running lockfile process...")
       mirai::stop_mirai(mirai_obj) # this doesn't stop running - renv will be created even if session is closed
     }
   })
-  process <- shiny::ExtendedTask$new(function() mirai_obj)
 
   suppressWarnings({ # 'package:stats' may not be available when loading
     process$invoke()

@@ -80,7 +80,7 @@ transform_list <<- list(
 )
 
 testthat::describe("srv_teal lockfile", {
-  testthat::it("creation process is invoked and snapshot is copied to teal_app.lock", {
+  testthat::it("creation process is invoked and snapshot is copied to teal_app.lock and removed after session ended", {
     withr::with_options(
       list(teal.renv.enable = TRUE),
       {
