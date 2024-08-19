@@ -35,6 +35,9 @@ NULL
 #' @rdname module_teal_lockfile
 ui_teal_lockfile <- function(id) {
   ns <- NS(id)
+  if (!isTRUE(getOption("teal.renv.enable"))) {
+    return(NULL)
+  }
   shiny::tagList(
     tags$span("", id = ns("lockFileStatus")),
     shinyjs::disabled(downloadLink(ns("lockFileLink"), "Download lockfile"))
@@ -55,6 +58,12 @@ srv_teal_lockfile <- function(id) {
       shinyjs::html("lockFileStatus", "Lockfile creation failed.")
       shinyjs::disable("lockFileLink")
     }
+
+    if (!isTRUE(getOption("teal.renv.enable"))) {
+      return(NULL)
+    }
+
+    lockfile_path <- "teal_app.lock"
     shiny::onStop(function() {
       if (file.exists(lockfile_path) && !shiny::isRunning()) {
         logger::log_debug("Removing lockfile after shutting down the app")
@@ -63,7 +72,6 @@ srv_teal_lockfile <- function(id) {
     })
 
     # run renv::snapshot only once per app. Once calculated available for all users
-    lockfile_path <- "teal_app.lock"
     if (file.exists(lockfile_path)) {
       logger::log_debug("Lockfile have been already created - skipping automatic creation.")
       enable_lockfile_download()
@@ -87,21 +95,21 @@ srv_teal_lockfile <- function(id) {
     # - We render to the tempfile because the process might last after session is closed and we don't
     #   want to make a "teal_app.renv" then. This is why we copy only during active session.
     temp_lockfile_path <- tempfile()
-    process <- .teal_lockfile_process_invoke(temp_lockfile_path)
+    process <- .teal_lockfile_process_invoke(lockfile_path)
     observeEvent(process$status(), {
       if (process$status() %in% c("initial", "running")) {
         shinyjs::html("lockFileStatus", "Creating lockfile...")
       } else if (process$status() == "success") {
         result <- process$result()
         if (any(grepl("Lockfile written to", result$out))) {
-          logger::log_debug("Lockfile {result$path} containing { length(result$res$Packages) } packages created.")
+          logger::log_debug("Lockfile containing { length(result$res$Packages) } packages created.")
           if (any(grepl("(WARNING|ERROR):", result$out))) {
             warning("Lockfile created with warning(s) or error(s):", call. = FALSE)
             for (i in result$out) {
               warning(i, call. = FALSE)
             }
           }
-          file.copy(temp_lockfile_path, lockfile_path)
+          # file.copy(temp_lockfile_path, lockfile_path)
           enable_lockfile_download()
         } else {
           disable_lockfile_download()
@@ -151,7 +159,7 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
       mirai::stop_mirai(mirai_obj) # this doesn't stop running - renv will be created even if session is closed
     }
   })
-  process <- ExtendedTask$new(function() mirai_obj)
+  process <- shiny::ExtendedTask$new(function() mirai_obj)
 
   suppressWarnings({ # 'package:stats' may not be available when loading
     process$invoke()
@@ -173,9 +181,5 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
     )
   )
 
-  list(
-    out = out,
-    res = res,
-    path = lockfile_path
-  )
+  list(out = out, res = res)
 }

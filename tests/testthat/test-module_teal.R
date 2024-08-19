@@ -80,28 +80,57 @@ transform_list <<- list(
 )
 
 testthat::describe("srv_teal lockfile", {
-  testthat::it("process is invoked and snapshot is created after relevant time the session ends", {
-    renv_file_name <- "teal_app.lock"
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(example_module())
-      ),
-      expr = {
-        iter <- 1
-        while (!file.exists(renv_file_name) && iter <= 100) {
-          Sys.sleep(0.25)
-          iter <- iter + 1 # max wait time is 25 seconds
-        }
-        testthat::expect_true(file.exists(renv_file_name))
+  testthat::it("creation process is invoked and snapshot is copied to teal_app.lock", {
+    withr::with_options(
+      list(teal.renv.enable = TRUE),
+      {
+        renv_filename <- "teal_app.lock"
+        shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(example_module())
+          ),
+          expr = {
+            iter <- 1
+            while (!file.exists(renv_filename) && iter <= 100) {
+              Sys.sleep(0.25)
+              iter <- iter + 1 # max wait time is 25 seconds
+            }
+            testthat::expect_true(file.exists(renv_filename))
+          }
+        )
+        testthat::expect_false(file.exists(renv_filename))
       }
     )
-    testthat::expect_false(file.exists(renv_file_name))
+  })
+  testthat::it("is copied from option-teal.renv.lockfile and then removed from an app directory", {
+    temp_lockfile_mock <- tempfile()
+    writeLines("test", temp_lockfile_mock)
+    withr::with_options(
+      list(
+        teal.renv.enable = TRUE,
+        teal.renv.lockfile = temp_lockfile_mock
+      ),
+      {
+        renv_filename <- "teal_app.lock"
+        shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(example_module())
+          ),
+          expr = {
+            testthat::expect_true(file.exists(renv_filename))
+          }
+        )
+      }
+    )
+    testthat::expect_false(file.exists(renv_filename))
   })
 })
-
 
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
