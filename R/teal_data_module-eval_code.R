@@ -34,9 +34,6 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
     server = function(id) {
       moduleServer(id, function(input, output, session) {
         teal_data_rv <- object$server("mutate_inner")
-
-        assert_reactiveExpr(teal_data_rv, .var.name = "teal_data_module")
-
         td <- eventReactive(teal_data_rv(),
           {
             if (inherits(teal_data_rv(), c("teal_data", "qenv.error"))) {

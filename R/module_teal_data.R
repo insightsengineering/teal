@@ -55,7 +55,6 @@ srv_teal_data <- function(id,
                           modules = NULL,
                           validate_shiny_silent_error = TRUE) {
   checkmate::assert_string(id)
-  assert_reactiveExpr(data)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
@@ -97,7 +96,6 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
                                             modules = NULL,
                                             validate_shiny_silent_error = FALSE) {
   checkmate::assert_string(id)
-  assert_reactiveExpr(data)
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
   checkmate::assert_flag(validate_shiny_silent_error)
 

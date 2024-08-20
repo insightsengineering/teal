@@ -64,7 +64,16 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = "id", nargs = 1)
   structure(
-    list(ui = ui, server = server),
+    list(
+      ui = ui,
+      server = function(id) {
+        data_out <- server(id)
+        decorate_err_msg(
+          prefix = "teal_data_module()",
+          assert_reactiveExpr(data_out, .var.name = "server")
+        )
+      }
+    ),
     label = label,
     class = "teal_data_module",
     once = once
@@ -124,7 +133,16 @@ teal_transform_module <- function(ui, server, label = "transform module") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   structure(
-    list(ui = ui, server = server),
+    list(
+      ui = ui,
+      server = function(id) {
+        data_out <- server(id)
+        decorate_err_msg(
+          prefix = "teal_transform_module()",
+          assert_reactiveExpr(data_out, .var.name = "server")
+        )
+      }
+    ),
     label = label,
     class = c("teal_transform_module", "teal_data_module")
   )
