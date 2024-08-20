@@ -163,7 +163,7 @@ testthat::describe("srv_teal arguments", {
           session$flushReact()
         }
       ),
-      "Must be a reactive expression"
+      "Must be a reactive"
     )
   })
 })
@@ -1644,7 +1644,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         ),
         expr = {}
       ),
-      "Must be a reactive expression"
+      "Must be a reactive"
     )
   })
 
