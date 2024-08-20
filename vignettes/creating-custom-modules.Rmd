@@ -62,9 +62,6 @@ my_module <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data) {
-      assert_reactive(data)
-      checkmate::assert_class(isolate(data()), "teal_data")
-
       moduleServer(id, function(input, output, session) {
         updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
         output$dataset <- renderPrint({
@@ -113,9 +110,6 @@ ui_histogram_example <- function(id) {
 # displays a histogram of the selected variable
 # displays code to reproduce the histogram
 srv_histogram_example <- function(id, data) {
-  assert_reactive(data)
-  checkmate::assert_class(isolate(data()), "teal_data")
-
   moduleServer(id, function(input, output, session) {
     # update dataset and variable choices
     # each selection stored in separate reactive expression

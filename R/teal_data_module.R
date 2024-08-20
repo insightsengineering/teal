@@ -70,7 +70,7 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
         data_out <- server(id)
         decorate_err_msg(
           prefix = "teal_data_module()",
-          assert_reactiveExpr(data_out, .var.name = "server")
+          assert_reactive(data_out, .var.name = "server")
         )
       }
     ),
@@ -139,7 +139,7 @@ teal_transform_module <- function(ui, server, label = "transform module") {
         data_out <- server(id, data)
         decorate_err_msg(
           prefix = "teal_transform_module()",
-          assert_reactiveExpr(data_out, .var.name = "server")
+          assert_reactive(data_out, .var.name = "server")
         )
       }
     ),
