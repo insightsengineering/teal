@@ -135,8 +135,8 @@ teal_transform_module <- function(ui, server, label = "transform module") {
   structure(
     list(
       ui = ui,
-      server = function(id) {
-        data_out <- server(id)
+      server = function(id, data) {
+        data_out <- server(id, data)
         decorate_err_msg(
           prefix = "teal_transform_module()",
           assert_reactiveExpr(data_out, .var.name = "server")
