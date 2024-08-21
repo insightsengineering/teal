@@ -1632,12 +1632,12 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         data = reactive(within(teal.data::teal_data(), {
           iris <- iris
           mtcars <- mtcars
-          CO2 <- CO2
+          co2 <- CO2
         })),
         filter = teal_slices(
           teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
           teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
-          teal_slice(dataname = "CO2", varname = "Treatment", selected = "chilled")
+          teal_slice(dataname = "co2", varname = "Treatment", selected = "chilled")
         ),
         modules = modules(
           module(
@@ -1650,7 +1650,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
                 server = function(id, data) {
                   moduleServer(id, function(input, output, session) {
                     reactive({
-                      within(data(), data_from_transform <- list(iris = iris, mtcars = mtcars, CO2 = CO2))
+                      within(data(), data_from_transform <- list(iris = iris, mtcars = mtcars, co2 = co2))
                     })
                   })
                 },
@@ -1669,7 +1669,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_mtcars <- mtcars[mtcars$cyl == "4", ]
         testthat::expect_identical(data_from_transform$iris, expected_iris)
         testthat::expect_identical(data_from_transform$mtcars, expected_mtcars)
-        testthat::expect_identical(data_from_transform$CO2, CO2)
+        testthat::expect_identical(data_from_transform$co2, CO2)
       }
     )
   })
