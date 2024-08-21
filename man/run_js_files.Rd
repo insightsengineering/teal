@@ -10,7 +10,7 @@ run_js_files(files)
 \item{files}{(\code{character}) vector of filenames.}
 }
 \value{
-returns \code{NULL}, invisibly.
+\code{NULL}, invisibly.
 }
 \description{
 This is triggered from the server to execute on the client
