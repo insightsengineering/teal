@@ -193,7 +193,12 @@ srv_teal_module.teal_module <- function(id,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    active_datanames <- reactive(.resolve_module_datanames(data = data_rv(), modules = modules))
+    active_datanames <- reactive({
+      union(
+        .resolve_sidebar_datanames(data = data_rv(), modules = modules),
+        .resolve_module_datanames(data = data_rv(), modules = modules)
+      )
+    })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
@@ -226,6 +231,17 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
+    summary_teal_data <- reactive({
+      all_teal_data <- transformed_teal_data()
+      module_datanames <- union(
+        .resolve_module_datanames(data = all_teal_data, modules = modules),
+        .resolve_sidebar_datanames(data = all_teal_data, modules = modules)
+      )
+      .subset_teal_data(all_teal_data, module_datanames)
+    })
+
+    summary_table <- srv_data_summary("data_summary", summary_teal_data)
+
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
       module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
@@ -237,8 +253,6 @@ srv_teal_module.teal_module <- function(id,
       data = module_teal_data,
       modules = modules
     )
-
-    summary_table <- srv_data_summary("data_summary", module_teal_data)
 
     # Call modules.
     module_out <- reactiveVal(NULL)
@@ -257,15 +271,6 @@ srv_teal_module.teal_module <- function(id,
       # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
       module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
     }
-
-    # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
-    #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
-    #       Should we insertUI of the ReportPreviewer then?
-    #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
-    if ("report" %in% names(module_out)) {
-      # (reactively) add card to the reporter
-    }
-
     module_out
   })
 }
@@ -298,8 +303,31 @@ srv_teal_module.teal_module <- function(id,
   }
 }
 
+.resolve_sidebar_datanames <- function(data, modules) {
+  checkmate::assert_class(data, "teal_data")
+  checkmate::assert_class(modules, "teal_module")
+  unique(
+    unlist(
+      lapply(
+        modules$transformers,
+        function(t) {
+          if (identical(attr(t, "datanames"), "all")) {
+            .teal_data_datanames(data)
+          } else {
+            intersect(
+              include_parent_datanames(attr(t, "datanames"), teal.data::join_keys(data)),
+              .teal_data_ls(data)
+            )
+          }
+        }
+      )
+    )
+  )
+}
+
 .resolve_module_datanames <- function(data, modules) {
-  stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
+  checkmate::assert_class(data, "teal_data")
+  checkmate::assert_class(modules, "teal_module")
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
     .teal_data_datanames(data)
   } else {

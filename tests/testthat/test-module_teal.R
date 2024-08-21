@@ -1578,7 +1578,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("receives all possible objects while those not specified in module$datanames are unfiltered", {
+  testthat::it("receives all possible objects while those specified in module$datanames are filtered", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1619,6 +1619,57 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_iris <- iris[iris$Species == "versicolor", ]
         rownames(expected_iris) <- NULL
         testthat::expect_identical(data_from_transform$iris, expected_iris)
+        testthat::expect_identical(data_from_transform$mtcars, mtcars)
+      }
+    )
+  })
+
+  testthat::it("receives all possible objects and those specified in transform$datanames are filtered", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal.data::teal_data(), {
+          iris <- iris
+          mtcars <- mtcars
+          CO2 <- CO2
+        })),
+        filter = teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
+          teal_slice(dataname = "mtcars", varname = "cyl", selected = "4"),
+          teal_slice(dataname = "CO2", varname = "Treatment", selected = "chilled")
+        ),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            datanames = c("iris", "data_from_transform"),
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  moduleServer(id, function(input, output, session) {
+                    reactive({
+                      within(data(), data_from_transform <- list(iris = iris, mtcars = mtcars, CO2 = CO2))
+                    })
+                  })
+                },
+                datanames = c("iris", "mtcars")
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+        data_from_transform <- modules_output$module_1()()[["data_from_transform"]]
+        expected_iris <- iris[iris$Species == "versicolor", ]
+        rownames(expected_iris) <- NULL
+        expected_mtcars <- mtcars[mtcars$cyl == "4", ]
+        testthat::expect_identical(data_from_transform$iris, expected_iris)
+        testthat::expect_identical(data_from_transform$mtcars, expected_mtcars)
+        testthat::expect_identical(data_from_transform$CO2, CO2)
       }
     )
   })
@@ -1709,6 +1760,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
   testthat::it("continues when transformer throws qenv error and returns unchanged data", {
     testthat::skip("todo")
   })
+
   testthat::it("upstream data change is updated on transformer fallback", {
     shiny::testServer(
       app = srv_teal,
@@ -2053,6 +2105,41 @@ testthat::describe("srv_teal summary table", {
           data.frame(
             "Data Name" = c("iris"),
             Obs = c("150/150"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("displays transform$datanames also if specified", {
+    data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
+    teal.data::datanames(data) <- c("iris", "mtcars")
+    transformers <- list(
+      mtcars = teal_transform_module(
+        ui = function(id) NULL,
+        server = function(id, data) data,
+        datanames = "mtcars"
+      )
+    )
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = "iris", transformers = transformers)
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_output_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("iris", "mtcars"),
+            Obs = c("150/150", "32/32"),
             check.names = FALSE
           )
         )

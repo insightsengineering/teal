@@ -4,7 +4,12 @@
 \alias{teal_transform_module}
 \title{Data module for \code{teal} transformers.}
 \usage{
-teal_transform_module(ui, server, label = "transform module")
+teal_transform_module(
+  ui,
+  server,
+  label = "transform module",
+  datanames = character(0)
+)
 }
 \arguments{
 \item{ui}{(\verb{function(id)})
@@ -16,6 +21,12 @@ where the \code{id} is the module id and \code{data} is the reactive \code{teal_
 The server function must return reactive expression containing \code{teal_data} object.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
+
+\item{datanames}{(\code{character})
+Determines names of the filtered datasets required for the \code{teal_transform_module} to work. Specified
+\code{datanames} will be displayed in the filter panel. If not specified, \code{teal_transform_module} will receive
+filtered datasets specified in \code{\link[=module]{module()}} \code{datanames} and every other object will remain unfiltered and hidden in
+a filter panel.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

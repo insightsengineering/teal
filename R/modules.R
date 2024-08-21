@@ -39,11 +39,11 @@
 #'  - `...` (optional) When provided, `ui_args` elements will be passed to the module named argument
 #'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
-#' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
-#'   filter panel will automatically update the shown filters to include only
+#' @param datanames (`character`) A vector with `datanames` that are relevant for the item.
+#' `datanames` determines a subset of datasets which are appended to the `data` argument in server function.
+#'  The filter panel will automatically update the shown filters to include only
 #'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `"all"` will show filters of all datasets. `datanames` also determines
-#'   a subset of datasets which are appended to the `data` argument in server function.
+#'   and the keyword `"all"` will show filters of all datasets.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
@@ -242,7 +242,6 @@ module <- function(label = "module",
 
   ## `transformers`
   checkmate::assert_list(transformers, types = "teal_data_module")
-
   structure(
     list(
       label = label,
