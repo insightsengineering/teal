@@ -43,8 +43,7 @@ ui_teal_data <- function(id, data_module) {
   checkmate::assert_class(data_module, "teal_data_module")
   ns <- NS(id)
   shiny::tagList(
-    data_module$ui(id = ns("data")),
-    ui_validate_reactive_teal_data(ns("validate"))
+    data_module$ui(id = ns("data"))
   )
 }
 
@@ -67,142 +66,19 @@ srv_teal_data <- function(id,
     } else {
       data_module$server(id = "data")
     }
+    data_out
 
-    data_validated <- srv_validate_reactive_teal_data(
-      id = "validate",
-      data = data_out,
-      modules = modules,
-      validate_shiny_silent_error = validate_shiny_silent_error
-    )
+    # data_validated <- srv_validate_reactive_teal_data(
+    #   id = "validate",
+    #   data = data_out,
+    #   modules = modules,
+    #   validate_shiny_silent_error = validate_shiny_silent_error
+    # )
 
-    .fallback_on_failure(
-      this = data_validated,
-      that = data,
-      label = sprintf("Data element '%s' for module '%s'", id, modules$label)
-    )
-  })
-}
-
-#' @rdname module_teal_data
-ui_validate_reactive_teal_data <- function(id) {
-  tagList(
-    uiOutput(NS(id, "shiny_errors")),
-    uiOutput(NS(id, "shiny_warnings"))
-  )
-}
-
-#' @rdname module_teal_data
-srv_validate_reactive_teal_data <- function(id, # nolint: object_length
-                                            data,
-                                            modules = NULL,
-                                            validate_shiny_silent_error = FALSE) {
-  moduleServer(id, function(input, output, session) {
-    if (!is.reactive(data)) {
-      stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
-    }
-
-    data_out_rv <- reactive(tryCatch(data(), error = function(e) e))
-
-    data_validated <- reactive({
-      # custom module can return error
-      data_out <- data_out_rv()
-
-      # there is an empty reactive cycle on init!
-      if (inherits(data_out, "shiny.silent.error") && identical(data_out$message, "")) {
-        if (!validate_shiny_silent_error) {
-          return(NULL)
-        } else {
-          validate(
-            need(
-              FALSE,
-              paste(
-                strip_style(data_out$message),
-                "Check your inputs or contact app developer if error persists.",
-                sep = ifelse(identical(data_out$message, ""), "", "\n")
-              )
-            )
-          )
-        }
-      }
-
-      # to handle errors and qenv.error(s)
-      if (inherits(data_out, c("qenv.error", "error"))) {
-        validate(
-          need(
-            FALSE,
-            paste(
-              "Error when executing `teal_data_module` passed to `data`:\n ",
-              strip_style(paste(data_out$message, collapse = "\n")),
-              "\n Check your inputs or contact app developer if error persists."
-            )
-          )
-        )
-      }
-
-      validate(
-        need(
-          inherits(data_out, "teal_data"),
-          paste(
-            "Error: `teal_data_module` passed to `data` failed to return `teal_data` object, returned",
-            strip_style(toString(sQuote(class(data_out)))),
-            "instead.",
-            "\n Check your inputs or contact app developer if error persists."
-          )
-        )
-      )
-
-      data_out
-    })
-
-    output$shiny_errors <- renderUI({
-      data_validated()
-      NULL
-    })
-
-    output$shiny_warnings <- renderUI({
-      if (inherits(data_out_rv(), "teal_data")) {
-        is_modules_ok <- check_modules_datanames(modules = modules, datanames = .teal_data_ls(data_validated()))
-        if (!isTRUE(is_modules_ok)) {
-          tags$div(
-            is_modules_ok$html(
-              # Show modules prefix on message only in teal_data_module tab
-              grepl(sprintf("data-teal_data_module-%s", id), session$ns(NULL), fixed = TRUE)
-            ),
-            class = "teal-output-warning"
-          )
-        }
-      }
-    })
-
-    data_validated
-  })
-}
-
-#' Fallback on failure
-#'
-#' Function returns the previous reactive if the current reactive is invalid (throws error or returns NULL).
-#' Application: In `teal` we try to prevent the error from being thrown and instead we replace failing
-#' transform module data output with data input from the previous module (or from previous `teal` reactive
-#' tree elements).
-#'
-#' @param this (`reactive`) Current reactive.
-#' @param that (`reactive`) Previous reactive.
-#' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
-#' @return `reactive` `teal_data`
-#' @keywords internal
-.fallback_on_failure <- function(this, that, label) {
-  checkmate::assert_class(this, "reactive")
-  checkmate::assert_class(that, "reactive")
-  checkmate::assert_string(label)
-
-  reactive({
-    res <- try(this(), silent = TRUE)
-    if (inherits(res, "teal_data")) {
-      logger::log_debug("{ label } evaluated successfully.")
-      res
-    } else {
-      logger::log_debug("{ label } failed, falling back to previous data.")
-      that()
-    }
+    # .fallback_on_failure(
+    #   this = data_validated,
+    #   that = data,
+    #   label = sprintf("Data element '%s' for module '%s'", id, modules$label)
+    # )
   })
 }

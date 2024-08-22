@@ -235,6 +235,7 @@ srv_teal_module.teal_module <- function(id,
     module_teal_data_validated <- srv_validate_reactive_teal_data(
       "validate_datanames",
       data = module_teal_data,
+      input_data = structure(2, class = "teal_data_module"), # TODO @vedhav - Figure out why we use `srv_validate_reactive_teal_data` here and potentially remove it.
       modules = modules
     )
 
