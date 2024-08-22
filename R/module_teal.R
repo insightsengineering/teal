@@ -150,7 +150,7 @@ ui_teal <- function(id,
 #' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal", "qenv.error"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -289,6 +289,32 @@ srv_validate_reactive_teal_data.default <- function(id, # nolint: object_length
   stop("Unsupported")
 }
 
+#' @rdname module_teal_data
+srv_validate_reactive_teal_data.qenv.error <- function(id, # nolint: object_length
+                                                       data,
+                                                       input_data,
+                                                       modules = NULL,
+                                                       validate_shiny_silent_error = FALSE) {
+  moduleServer(id, function(input, output, session) {
+    if (!is.reactive(data)) {
+      stop("The `teal_data_module` passed to `data` must return a reactive expression.", call. = FALSE)
+    }
+    data_out_rv <- reactive(tryCatch(data(), error = function(e) e))
+
+    output$shiny_errors <- renderUI({
+      validate(
+        need(
+          FALSE,
+          input_data$message
+        )
+      )
+    })
+
+    data_out_rv
+  })
+}
+
+#' @rdname module_teal_data
 srv_validate_reactive_teal_data.teal_data <- function(id, # nolint: object_length
                                                       data,
                                                       input_data,

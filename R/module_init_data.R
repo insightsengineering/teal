@@ -56,7 +56,7 @@ ui_init_data <- function(id, data) {
 #' @rdname module_init_data
 srv_init_data <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
+  checkmate::assert_multi_class(data, c("teal_data", "qenv.error", "teal_data_module", "reactive", "reactiveVal"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -79,8 +79,10 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
-    } else if (inherits(data, c("reactive", "reactiveVal"))) {
+    } else if (inherits(data, "reactive")) {
       .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
+    } else if (inherits(data, "qenv.error")) {
+      reactive(data)
     }
 
     observeEvent(data_validated(), {
