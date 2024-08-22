@@ -53,7 +53,4 @@ Depending on the function prefix:
 \description{
 Check that argument is reactive.
 }
-\seealso{
-check_reactiveExpr check_reactiveVal
-}
 \keyword{internal}
