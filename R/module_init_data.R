@@ -87,6 +87,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 
     observeEvent(data_validated(), {
       showNotification("Data loaded successfully.", duration = 5)
+      # TODO @vedhav - move the filter check logic inside `srv_validate_reactive_teal_data`
       # is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
       # if (!isTRUE(is_filter_ok)) {
       #   showNotification(
