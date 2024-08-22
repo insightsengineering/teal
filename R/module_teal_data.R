@@ -67,19 +67,6 @@ srv_teal_data <- function(id,
       data_module$server(id = "data")
     }
     data_out
-
-    # data_validated <- srv_validate_reactive_teal_data(
-    #   id = "validate",
-    #   data = data_out,
-    #   modules = modules,
-    #   validate_shiny_silent_error = validate_shiny_silent_error
-    # )
-
-    # .fallback_on_failure(
-    #   this = data_validated,
-    #   that = data,
-    #   label = sprintf("Data element '%s' for module '%s'", id, modules$label)
-    # )
   })
 }
 
