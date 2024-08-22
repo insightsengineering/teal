@@ -173,7 +173,6 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 #' @keywords internal
 #'
 .get_hashes_code <- function(data, datanames = .teal_data_datanames(data)) {
-  # todo: this should be based on data_rv object not on datasets
   vapply(
     datanames,
     function(dataname, datasets) {

@@ -35,7 +35,6 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
         logger::log_debug("srv_filter_panel rendering filter panel.")
         if (length(active_datanames())) {
           datasets()$srv_active("filters", active_datanames = active_datanames)
-          # todo: make sure to bump the `teal.slice` version. Please use the branch `669_insertUI@main` in `teal.slice`.
           datasets()$ui_active(session$ns("filters"), active_datanames = active_datanames)
         }
       })

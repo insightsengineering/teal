@@ -388,4 +388,3 @@ methods::setOldClass("reactivevalues")
     }
   )
 )
-# todo: prevent any teal_slices attribute except mapping

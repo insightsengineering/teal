@@ -195,8 +195,8 @@ srv_teal_module.teal_module <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
       union(
-        .resolve_sidebar_datanames(data = data_rv(), modules = modules),
-        .resolve_module_datanames(data = data_rv(), modules = modules)
+        .resolve_module_datanames(data = data_rv(), modules = modules),
+        .resolve_sidebar_datanames(data = data_rv(), modules = modules)
       )
     })
     if (is.null(datasets)) {
@@ -210,11 +210,6 @@ srv_teal_module.teal_module <- function(id,
       })
     }
 
-    # manage module filters on the module level
-    # important:
-    #   filter_manager_module_srv needs to be called before filter_panel_srv
-    #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
-    #   and if it is not set, then it won't be available in the srv_filter_panel
     srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
     filtered_teal_data <- srv_filter_data(
       "filter_panel",
