@@ -225,13 +225,20 @@ srv_teal_module.teal_module <- function(id,
       transforms = modules$transformers,
       modules = modules
     )
+    datanames_added_in_transform <- reactive({
+      setdiff(
+        .teal_data_ls(transformed_teal_data()),
+        .teal_data_ls(filtered_teal_data())
+      )
+    })
 
     summary_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
-      module_datanames <- union(
+      module_datanames <- unique(c(
         .resolve_module_datanames(data = all_teal_data, modules = modules),
-        .resolve_sidebar_datanames(data = all_teal_data, modules = modules)
-      )
+        .resolve_sidebar_datanames(data = all_teal_data, modules = modules),
+        datanames_added_in_transform()
+      ))
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
@@ -239,7 +246,10 @@ srv_teal_module.teal_module <- function(id,
 
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
-      module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
+      module_datanames <- unique(c(
+        .resolve_module_datanames(data = all_teal_data, modules = modules),
+        if (identical(modules$datanames, "all")) datanames_added_in_transform()
+      ))
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
