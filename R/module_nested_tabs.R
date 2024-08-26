@@ -130,9 +130,9 @@ srv_teal_module <- function(id,
                             reporter = teal.reporter::Reporter$new(),
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
-  checkmate::assert_class(data_rv, "reactive")
+  assert_reactive(data_rv)
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
-  checkmate::assert_class(datasets, "reactive", null.ok = TRUE)
+  assert_reactive(datasets, null.ok = TRUE)
   checkmate::assert_class(slices_global, ".slicesGlobal")
   checkmate::assert_class(reporter, "Reporter")
   UseMethod("srv_teal_module", modules)

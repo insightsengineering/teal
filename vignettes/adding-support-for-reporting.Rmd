@@ -1,7 +1,7 @@
 ---
 title: "Adding Support for Reporting to Custom Modules"
 author: "NEST CoreDev"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
@@ -35,7 +35,7 @@ my_module <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data) {
-      checkmate::assert_class(data, "reactive")
+      assert_reactive(data)
       checkmate::assert_class(isolate(data()), "teal_data")
 
       moduleServer(id, function(input, output, session) {
@@ -72,7 +72,7 @@ if (interactive()) shinyApp(app$ui, app$server)
 
 ### Modify the declaration of the server function
 
-The first step is to add an additional argument to the server function declaration - `reporter`. 
+The first step is to add an additional argument to the server function declaration - `reporter`.
 This informs `teal` that the module requires `reporter`, and it will be included when the module is called.
 See below:
 
@@ -173,7 +173,7 @@ The `teal.reporter::simple_reporter_srv` module accepts the `card_fun` argument 
 To explore the content, we can use the `$get_content` method.
 For further details, refer to the documentation of `TealReportCard` and `teal.reporter::ReportCard`.
 
-We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`. 
+We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`.
 The function must return the `card` object, otherwise errors may occur in `teal`.
 
 ```{r}
