@@ -24,23 +24,23 @@ assert_reactive <- checkmate::makeAssertionFunction(check_reactive)
 #' Capture error and decorate error message.
 #'
 #' @param x object to evaluate
-#' @param prefix (`character(1)`) prefix to error message
-#' @param suffix (`character(1)`) suffix to error message
+#' @param pre (`character(1)`) A string to prepend to error message
+#' @param post (`character(1)`) A string to append to error message
 #'
 #' @return `x` if no error, otherwise throws error with decorated message
 #'
 #' @keywords internal
-decorate_err_msg <- function(x, prefix = character(0), suffix = character(0)) {
+decorate_err_msg <- function(x, pre = character(0), post = character(0)) {
   tryCatch(
     x,
     error = function(e) {
       stop(
         "\n",
-        prefix,
+        pre,
         "\n",
         e$message,
         "\n",
-        suffix,
+        post,
         call. = FALSE
       )
     }

@@ -63,14 +63,17 @@
 teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = "id", nargs = 1)
+  checkmate::assert_string(label)
+  checkmate::assert_flag(once)
   structure(
     list(
       ui = ui,
       server = function(id) {
         data_out <- server(id)
         decorate_err_msg(
-          prefix = "teal_data_module()",
-          assert_reactive(data_out, .var.name = "server")
+          assert_reactive(data_out),
+          pre = sprintf("From: 'teal_data_module()':\nA 'teal_data_module' with \"%s\" label:", label),
+          post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
         )
       }
     ),
@@ -132,14 +135,16 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 teal_transform_module <- function(ui, server, label = "transform module") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
+  checkmate::assert_string(label)
   structure(
     list(
       ui = ui,
       server = function(id, data) {
         data_out <- server(id, data)
         decorate_err_msg(
-          prefix = "teal_transform_module()",
-          assert_reactive(data_out, .var.name = "server")
+          assert_reactive(data_out),
+          pre = sprintf("From: 'teal_transform_module()':\nA 'teal_transform_module' with \"%s\" label:", label),
+          post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
         )
       }
     ),

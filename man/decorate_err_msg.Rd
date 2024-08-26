@@ -4,14 +4,14 @@
 \alias{decorate_err_msg}
 \title{Capture error and decorate error message.}
 \usage{
-decorate_err_msg(x, prefix = character(0), suffix = character(0))
+decorate_err_msg(x, pre = character(0), post = character(0))
 }
 \arguments{
 \item{x}{object to evaluate}
 
-\item{prefix}{(\code{character(1)}) prefix to error message}
+\item{pre}{(\code{character(1)}) A string to prepend to error message}
 
-\item{suffix}{(\code{character(1)}) suffix to error message}
+\item{post}{(\code{character(1)}) A string to append to error message}
 }
 \value{
 \code{x} if no error, otherwise throws error with decorated message
