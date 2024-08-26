@@ -115,8 +115,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
             need(
               FALSE,
               paste(
-                "Shiny error when executing the `data` module:",
-                strip_style(paste(data_out$message, collapse = "\n")),
+                "Shiny error when executing the `data` module",
                 "Check your inputs or contact app developer if error persists.",
                 collapse = "\n"
               )
