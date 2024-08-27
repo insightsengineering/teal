@@ -54,7 +54,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
 #' @rdname module_transform_data
 srv_transform_data <- function(id, data, transforms, modules) {
   checkmate::assert_string(id)
-  checkmate::assert_class(data, "reactive")
+  assert_reactive(data)
   checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
   checkmate::assert_class(modules, "teal_module")
 

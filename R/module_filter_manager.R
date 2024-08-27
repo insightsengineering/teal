@@ -173,7 +173,7 @@ srv_filter_manager <- function(id, slices_global) {
 #' @rdname module_filter_manager
 srv_module_filter_manager <- function(id, module_fd, slices_global) {
   checkmate::assert_string(id)
-  checkmate::assert_class(module_fd, "reactive")
+  assert_reactive(module_fd)
   checkmate::assert_class(slices_global, ".slicesGlobal")
 
   moduleServer(id, function(input, output, session) {
