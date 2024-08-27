@@ -97,7 +97,7 @@ testthat::test_that("eval_code.teal_data_module throws error when original teal_
       app = tdm2$server,
       expr = {}
     ),
-    "The `teal_data_module` must return a reactive expression."
+    "Must be a reactive"
   )
 })
 

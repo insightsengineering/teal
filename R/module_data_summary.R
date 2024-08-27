@@ -54,7 +54,7 @@ ui_data_summary <- function(id) {
 
 #' @rdname module_data_summary
 srv_data_summary <- function(id, teal_data) {
-  checkmate::check_class(teal_data, "reactive")
+  assert_reactive(teal_data)
   moduleServer(
     id = id,
     function(input, output, session) {
@@ -142,11 +142,13 @@ get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(
-    datanames, function(name) teal.code::get_env(teal_data())[[name]],
+    datanames,
+    function(name) teal.code::get_env(teal_data())[[name]],
     simplify = FALSE
   )
   unfiltered_data_objs <- sapply(
-    datanames, function(name) teal.code::get_env(teal_data())[[paste0(name, "._raw_")]],
+    datanames,
+    function(name) teal.code::get_env(teal_data())[[paste0(name, "._raw_")]],
     simplify = FALSE
   )
 
