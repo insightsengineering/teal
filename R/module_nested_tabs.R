@@ -237,7 +237,7 @@ srv_teal_module.teal_module <- function(id,
       module_datanames <- unique(c(
         .resolve_module_datanames(data = all_teal_data, modules = modules),
         .resolve_sidebar_datanames(data = all_teal_data, modules = modules),
-        datanames_added_in_transform()
+        if (identical(modules$datanames, "all")) datanames_added_in_transform()
       ))
       .subset_teal_data(all_teal_data, module_datanames)
     })
