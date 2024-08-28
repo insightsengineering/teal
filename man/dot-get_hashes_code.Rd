@@ -4,12 +4,10 @@
 \alias{.get_hashes_code}
 \title{Get code that tests the integrity of the reproducible data}
 \usage{
-.get_hashes_code(data, datanames = .teal_data_datanames(data))
+.get_hashes_code(data)
 }
 \arguments{
 \item{data}{(\code{teal_data}) object holding the data}
-
-\item{datanames}{(\code{character}) names of \code{datasets}}
 }
 \value{
 A character vector with the code lines.
