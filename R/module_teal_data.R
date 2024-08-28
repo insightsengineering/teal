@@ -70,7 +70,6 @@ srv_teal_data <- function(id,
               "Empty `teal_data` object."
             )
           )
-          return(teal_data())
         }
       }
       data()

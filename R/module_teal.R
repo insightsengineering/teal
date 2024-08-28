@@ -153,7 +153,7 @@ ui_teal <- function(id,
 #' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -227,6 +227,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     observeEvent(data_rv(), {
       if (!.is_empty_teal_data(data_rv())) {
+        showNotification("Data loaded successfully.", duration = 5)
         enable_teal_tabs(session$ns)
       }
     })
