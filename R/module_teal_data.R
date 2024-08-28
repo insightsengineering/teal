@@ -67,14 +67,14 @@ srv_teal_data <- function(id,
       data_module$server(id = "data")
     }
 
-    data <- srv_validate_reactive_teal_data(
+    data_validated <- srv_validate_reactive_teal_data(
       id = "validate",
       data = data_out,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error
     )
 
-    data_catch <- reactive(tryCatch(data(), error = function(e) e))
+    data_catch <- reactive(tryCatch(data_validated(), error = function(e) e))
     data_rv <- reactive({
       if (inherits(data_catch(), "shiny.silent.error")) {
         return(teal_data())
@@ -102,7 +102,6 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
-
     data_out_r <- reactive(tryCatch(data(), error = function(e) e))
 
     data_validated <- reactive({
@@ -178,34 +177,5 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     })
 
     data_validated
-  })
-}
-
-#' Fallback on failure
-#'
-#' Function returns the previous reactive if the current reactive is invalid (throws error or returns NULL).
-#' Application: In `teal` we try to prevent the error from being thrown and instead we replace failing
-#' transform module data output with data input from the previous module (or from previous `teal` reactive
-#' tree elements).
-#'
-#' @param this (`reactive`) Current reactive.
-#' @param that (`reactive`) Previous reactive.
-#' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
-#' @return `reactive` `teal_data`
-#' @keywords internal
-.fallback_on_failure <- function(this, that, label) {
-  assert_reactive(this)
-  assert_reactive(that)
-  checkmate::assert_string(label)
-
-  reactive({
-    res <- try(this(), silent = TRUE)
-    if (inherits(res, "teal_data")) {
-      logger::log_debug("{ label } evaluated successfully.")
-      res
-    } else {
-      logger::log_debug("{ label } failed, falling back to previous data.")
-      that()
-    }
   })
 }
