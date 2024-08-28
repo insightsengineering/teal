@@ -61,34 +61,15 @@ srv_teal_data <- function(id,
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
 
-    validated_data <- reactive(tryCatch(data(), error = function(e) e))
-
-    final_data <- reactive({
-      data <- validated_data()
-      if (inherits(data, "shiny.silent.error")) {
-        return(teal_data())
-      }
-      data
-    })
-
-    data_out <- tryCatch(
-      {
-        if (is_arg_used(data_module$server, "data")) {
-          data_module$server(id = "data", data = final_data)
-        } else {
-          data_module$server(id = "data")
-        }
-      },
-      error = function(e) e
-    )
-
-    data_out_rv <- reactive({
-      data <- data_out()
-    })
+    data_out <- if (is_arg_used(data_module$server, "data")) {
+      data_module$server(id = "data", data = data)
+    } else {
+      data_module$server(id = "data")
+    }
 
     data <- srv_validate_reactive_teal_data(
       id = "validate",
-      data = data_out_rv,
+      data = data_out,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error
     )
