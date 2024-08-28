@@ -187,7 +187,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     init_data <- srv_init_data("data", data = data, modules = modules, filter = filter)
-    data_validate <- reactive(tryCatch(init_data(), error = function(e) e))
     data_rv <- reactive({
       if (inherits(init_data(), "qenv.error")) {
         teal_data()
