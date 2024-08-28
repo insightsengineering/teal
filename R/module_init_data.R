@@ -90,36 +90,36 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
     observeEvent(data_validated(), {
       # showNotification("Data loaded successfully.", duration = 5)
 
-      if (inherits(data_validated(), "teal_data")) {
-        if (isTRUE(attr(data, "once")) && !.is_empty_teal_data(data_validated())) {
-          # Hiding the data module tab.
-          shinyjs::hide(
-            selector = sprintf(
-              ".teal-body:has('#%s') a[data-value='teal_data_module']",
-              session$ns("content")
-            )
-          )
-          # Clicking the second tab, which is the first module.
-          shinyjs::runjs(
-            sprintf(
-              "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
-              session$ns("content")
-            )
-          )
-        }
+      req(inherits(data_validated(), "teal_data"))
 
-        if (.is_empty_teal_data(data_validated())) {
-          shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-        }
-        is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
-        if (!isTRUE(is_filter_ok)) {
-          showNotification(
-            "Some filters were not applied because of incompatibility with data. Contact app developer.",
-            type = "warning",
-            duration = 10
+      if (isTRUE(attr(data, "once")) && !.is_empty_teal_data(data_validated())) {
+        # Hiding the data module tab.
+        shinyjs::hide(
+          selector = sprintf(
+            ".teal-body:has('#%s') a[data-value='teal_data_module']",
+            session$ns("content")
           )
-          warning(is_filter_ok)
-        }
+        )
+        # Clicking the second tab, which is the first module.
+        shinyjs::runjs(
+          sprintf(
+            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
+            session$ns("content")
+          )
+        )
+      }
+
+      if (.is_empty_teal_data(data_validated())) {
+        shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+      }
+      is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
+          type = "warning",
+          duration = 10
+        )
+        warning(is_filter_ok)
       }
     })
 
