@@ -214,13 +214,13 @@ init <- function(data,
       stop("The environment of `data` is empty.")
     }
 
-    if (length(teal.data::datanames(data)) == 0) {
+    if (!length(teal.data::datanames(data))) {
       warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
       teal.data::datanames(data) <- .teal_data_ls(data)
     }
 
     is_modules_ok <- check_modules_datanames(modules, teal.data::datanames(data))
-    if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
+    if (!isTRUE(is_modules_ok) && !length(unlist(extract_transformers(modules)))) {
       lapply(is_modules_ok$string, warning, call. = FALSE)
     }
 
