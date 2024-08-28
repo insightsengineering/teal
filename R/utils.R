@@ -127,6 +127,9 @@ check_modules_datanames <- function(modules, datanames) {
     if (inherits(modules, "teal_modules")) {
       result <- lapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
       result <- result[vapply(result, Negate(is.null), logical(1L))]
+      if (length(result) == 0) {
+        return(TRUE)
+      }
       list(
         string = do.call(c, as.list(unname(sapply(result, function(x) x$string)))),
         html = function(with_module_name = TRUE) {
@@ -356,7 +359,6 @@ build_datanames_error_message <- function(label = NULL,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
                                           tagList = shiny::tagList) { # nolint: object_name.
   tags$span(
-    class = "teal-output-warning",
     tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
     tags$span(
