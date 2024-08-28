@@ -56,7 +56,7 @@ ui_init_data <- function(id, data) {
 #' @rdname module_init_data
 srv_init_data <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal", "qenv.error"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
@@ -75,12 +75,15 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         data = reactive(req(FALSE)), # to .fallback_on_failure to shiny.silent.error
         data_module = data,
         modules = modules,
-        validate_shiny_silent_error = FALSE
+        validate_shiny_silent_error = FALSE,
+        validate_empty_reactive = FALSE
       )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (test_reactive(data)) {
-      .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
+      data
+    } else if (inherits(data, "qenv.error")) {
+      reactive(data)
     }
 
     if (inherits(data, "teal_data_module")) {
@@ -88,33 +91,38 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
     }
 
     observeEvent(data_validated(), {
-      showNotification("Data loaded successfully.", duration = 5)
-      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-      if (isTRUE(attr(data, "once"))) {
-        # Hiding the data module tab.
-        shinyjs::hide(
-          selector = sprintf(
-            ".teal-body:has('#%s') a[data-value='teal_data_module']",
-            session$ns("content")
-          )
-        )
-        # Clicking the second tab, which is the first module.
-        shinyjs::runjs(
-          sprintf(
-            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
-            session$ns("content")
-          )
-        )
-      }
+      # showNotification("Data loaded successfully.", duration = 5)
 
-      is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
-      if (!isTRUE(is_filter_ok)) {
-        showNotification(
-          "Some filters were not applied because of incompatibility with data. Contact app developer.",
-          type = "warning",
-          duration = 10
-        )
-        warning(is_filter_ok)
+      if (inherits(data_validated(), "teal_data")) {
+        if (isTRUE(attr(data, "once")) && !.is_empty_teal_data(data_validated())) {
+          # Hiding the data module tab.
+          shinyjs::hide(
+            selector = sprintf(
+              ".teal-body:has('#%s') a[data-value='teal_data_module']",
+              session$ns("content")
+            )
+          )
+          # Clicking the second tab, which is the first module.
+          shinyjs::runjs(
+            sprintf(
+              "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
+              session$ns("content")
+            )
+          )
+        }
+
+        if (.is_empty_teal_data(data_validated())) {
+          shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+        }
+        is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
+        if (!isTRUE(is_filter_ok)) {
+          showNotification(
+            "Some filters were not applied because of incompatibility with data. Contact app developer.",
+            type = "warning",
+            duration = 10
+          )
+          warning(is_filter_ok)
+        }
       }
     })
 
@@ -133,8 +141,15 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       )
     })
 
-    # Adds signature protection to the datanames in the data
-    reactive(.add_signature_to_data(data_validated()))
+    reactive({
+      if (inherits(data_validated(), "teal_data")) {
+        .add_signature_to_data(data_validated())
+      } else if (inherits(data_validated(), "qenv.error")) {
+        data_validated()
+      } else {
+        teal_data()
+      }
+    })
   })
 }
 

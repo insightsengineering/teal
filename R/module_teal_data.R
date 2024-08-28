@@ -44,7 +44,8 @@ ui_teal_data <- function(id, data_module) {
   ns <- NS(id)
   shiny::tagList(
     data_module$ui(id = ns("data")),
-    ui_validate_reactive_teal_data(ns("validate"))
+    ui_validate_reactive_teal_data(ns("validate")),
+    uiOutput(ns("validation_error"))
   )
 }
 
@@ -53,7 +54,8 @@ srv_teal_data <- function(id,
                           data,
                           data_module,
                           modules = NULL,
-                          validate_shiny_silent_error = TRUE) {
+                          validate_shiny_silent_error = TRUE,
+                          validate_empty_reactive = TRUE) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
@@ -61,24 +63,57 @@ srv_teal_data <- function(id,
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
 
-    data_out <- if (is_arg_used(data_module$server, "data")) {
-      data_module$server(id = "data", data = data)
-    } else {
-      data_module$server(id = "data")
+    validated_data <- reactive(tryCatch(data(), error = function(e) e))
+
+    final_data <- reactive({
+      data <- validated_data()
+      if (inherits(data, "shiny.silent.error")) {
+        return(teal_data())
+      }
+      data
+    })
+
+    if (validate_empty_reactive) {
+      output$validation_error <- renderUI({
+        validate(
+          need(
+            !inherits(validated_data(), "shiny.silent.error") && !.is_empty_teal_data(final_data()),
+            "Error in processing the data in the previous step. Cannot proceed further."
+          )
+        )
+        NULL
+      })
     }
 
-    data_validated <- srv_validate_reactive_teal_data(
+    data_out <- tryCatch(
+      {
+        if (is_arg_used(data_module$server, "data")) {
+          data_module$server(id = "data", data = final_data)
+        } else {
+          data_module$server(id = "data")
+        }
+      },
+      error = function(e) e
+    )
+
+    data_out_rv <- reactive({
+      data <- data_out()
+    })
+
+    data <- srv_validate_reactive_teal_data(
       id = "validate",
-      data = data_out,
+      data = data_out_rv,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error
     )
 
-    .fallback_on_failure(
-      this = data_validated,
-      that = data,
-      label = sprintf("Data element '%s' for module '%s'", id, modules$label)
-    )
+    data_catch <- reactive(tryCatch(data(), error = function(e) e))
+    data_rv <- reactive({
+      if (inherits(data_catch(), "shiny.silent.error")) {
+        return(teal_data())
+      }
+      data_catch()
+    })
   })
 }
 
@@ -109,7 +144,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       # there is an empty reactive cycle on init!
       if (inherits(data_out, "shiny.silent.error") && identical(data_out$message, "")) {
         if (!validate_shiny_silent_error) {
-          return(NULL)
+          return(teal_data())
         } else {
           validate(
             need(
@@ -129,7 +164,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
         validate(
           need(
             FALSE,
-            paste0(
+            paste(
               "Error when executing the `data` module:",
               strip_style(paste(data_out$message, collapse = "\n")),
               "Check your inputs or contact app developer if error persists.",
@@ -142,7 +177,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       validate(
         need(
           checkmate::test_class(data_out, "teal_data"),
-          paste0(
+          paste(
             "Assertion on return value from the 'data' module failed:",
             checkmate::test_class(data_out, "teal_data"),
             "Check your inputs or contact app developer if error persists.",

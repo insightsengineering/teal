@@ -381,3 +381,31 @@ build_datanames_error_message <- function(label = NULL,
     }
   )
 }
+
+disable_teal_tabs <- function(ns, hide_content = TRUE) {
+  shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", ns("options_buttons")))
+  if (hide_content) {
+    shinyjs::runjs(
+      sprintf(
+        '$("#%s .tab-content").hide()',
+        ns("tabpanel_wrapper")
+      )
+    )
+  }
+}
+
+enable_teal_tabs <- function(ns) {
+  shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", ns("options_buttons")))
+  shinyjs::runjs(
+    sprintf(
+      '$("#%s .tab-content").show()',
+      ns("tabpanel_wrapper")
+    )
+  )
+  shinyjs::runjs(
+    sprintf(
+      '$("#%s .tab-content").trigger("shown");',
+      ns("tabpanel_wrapper")
+    )
+  )
+}

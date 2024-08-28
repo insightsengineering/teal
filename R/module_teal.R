@@ -100,6 +100,7 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
+    uiOutput(ns("shiny_error")),
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
@@ -149,12 +150,13 @@ ui_teal <- function(id,
 #' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal", "qenv.error"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
+    disable_teal_tabs(session$ns, hide_content = !inherits(data, "teal_data_module"))
 
     output$identifier <- renderText(
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
@@ -184,7 +186,33 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    data_rv <- srv_init_data("data", data = data, modules = modules, filter = filter)
+    init_data <- srv_init_data("data", data = data, modules = modules, filter = filter)
+    data_validate <- reactive(tryCatch(init_data(), error = function(e) e))
+    data_rv <- reactive({
+      if (inherits(init_data(), "qenv.error")) {
+        teal_data()
+      } else {
+        init_data()
+      }
+    })
+
+    output$shiny_error <- renderUI({
+      if (inherits(init_data(), "qenv.error")) {
+        validate(
+          need(
+            FALSE,
+            paste(
+              "Error when executing the `data` module:",
+              strip_style(paste(init_data()$message, collapse = "\n")),
+              "Check your inputs or contact app developer if error persists.",
+              collapse = "\n"
+            )
+          )
+        )
+      }
+
+      NULL
+    })
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
@@ -194,6 +222,12 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         teal_data_to_filtered_data(data_rv())
       })
     }
+
+    observeEvent(data_rv(), {
+      if (!.is_empty_teal_data(data_rv())) {
+        enable_teal_tabs(session$ns)
+      }
+    })
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)

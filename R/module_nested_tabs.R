@@ -92,7 +92,10 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       class = "teal_validated",
       ui_validate_reactive_teal_data(ns("validate_datanames"))
     ),
-    do.call(modules$ui, args)
+    tags$div(
+      id = ns("teal_module_ui"),
+      do.call(modules$ui, args)
+    )
   )
 
   div(
@@ -103,7 +106,17 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       if (depth >= 2L) tags$div(style = "mt-6"),
       if (!is.null(modules$datanames)) {
         fluidRow(
-          column(width = 9, ui_teal, class = "teal_primary_col"),
+          column(
+            width = 9,
+            div(
+              div(
+                class = "teal_validated",
+                uiOutput(ns("data_input_error"))
+              ),
+              ui_teal
+            ),
+            class = "teal_primary_col"
+          ),
           column(
             width = 3,
             ui_data_summary(ns("data_summary")),
@@ -115,7 +128,13 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
           )
         )
       } else {
-        ui_teal
+        div(
+          div(
+            class = "teal_validated",
+            uiOutput(ns("data_input_error"))
+          ),
+          ui_teal
+        )
       }
     )
   )
@@ -225,6 +244,21 @@ srv_teal_module.teal_module <- function(id,
       transforms = modules$transformers,
       modules = modules
     )
+
+    output$data_input_error <- renderUI({
+      if (inherits(transformed_teal_data(), "teal_data")) {
+        validate(
+          need(
+            !.is_empty_teal_data(transformed_teal_data()),
+            "The module did not recieve any data."
+          )
+        )
+      }
+    })
+
+    observeEvent(transformed_teal_data(), {
+      shinyjs::toggle("teal_module_ui", condition = !.is_empty_teal_data(transformed_teal_data()))
+    })
 
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
