@@ -317,7 +317,7 @@ srv_teal_module.teal_module <- function(id,
         modules$transformers,
         function(t) {
           if (identical(attr(t, "datanames"), "all")) {
-            .teal_data_datanames(data)
+            teal.data::datanames(data)
           } else {
             intersect(
               include_parent_datanames(attr(t, "datanames"), teal.data::join_keys(data)),
@@ -334,7 +334,7 @@ srv_teal_module.teal_module <- function(id,
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(modules, "teal_module")
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    .teal_data_datanames(data)
+    teal.data::datanames(data)
   } else {
     intersect(
       include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
