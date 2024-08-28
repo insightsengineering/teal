@@ -101,7 +101,8 @@ srv_teal_data <- function(id,
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
-  tagList(
+  div(
+    class = "teal_validated",
     uiOutput(NS(id, "shiny_errors")),
     uiOutput(NS(id, "shiny_warnings"))
   )
@@ -133,7 +134,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
               FALSE,
               paste(
                 "Shiny error when executing the `data` module",
-                "Check your inputs or contact app developer if error persists.",
+                "\nCheck your inputs or contact app developer if error persists.",
                 collapse = "\n"
               )
             )
@@ -149,7 +150,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
             paste(
               "Error when executing the `data` module:",
               strip_style(paste(data_out$message, collapse = "\n")),
-              "Check your inputs or contact app developer if error persists.",
+              "\nCheck your inputs or contact app developer if error persists.",
               collapse = "\n"
             )
           )
@@ -179,8 +180,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
             is_modules_ok$html(
               # Show modules prefix on message only in teal_data_module tab
               grepl(sprintf("data-teal_data_module-%s", id), session$ns(NULL), fixed = TRUE)
-            ),
-            class = "teal-output-warning"
+            )
           )
         }
       }

@@ -356,6 +356,7 @@ build_datanames_error_message <- function(label = NULL,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
                                           tagList = shiny::tagList) { # nolint: object_name.
   tags$span(
+    class = "teal-output-warning",
     tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
     tags$span(

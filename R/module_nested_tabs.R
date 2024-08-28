@@ -118,7 +118,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
 
   ui_teal <- div(
     div(
-      class = "teal_validated",
       ui_validate_reactive_teal_data(ns("validate_datanames"))
     ),
     tags$div(

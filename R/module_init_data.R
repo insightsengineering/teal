@@ -44,7 +44,7 @@ ui_init_data <- function(id, data) {
   ns <- shiny::NS(id)
   shiny::div(
     id = ns("content"),
-    style = "display: inline-block;",
+    style = "display: inline-block; width: 100%;",
     if (inherits(data, "teal_data_module")) {
       ui_teal_data(ns("teal_data_module"), data_module = data)
     } else {

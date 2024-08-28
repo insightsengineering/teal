@@ -100,7 +100,10 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
-    uiOutput(ns("shiny_error")),
+    tags$div(
+      class = "teal_validated",
+      uiOutput(ns("shiny_error"))
+    ),
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
@@ -203,7 +206,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
             paste(
               "Error when executing the `data` module:",
               strip_style(paste(init_data()$message, collapse = "\n")),
-              "Check your inputs or contact app developer if error persists.",
+              "\nCheck your inputs or contact app developer if error persists.",
               collapse = "\n"
             )
           )
