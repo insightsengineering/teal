@@ -159,3 +159,17 @@ teal_transform_module <- function(ui, server, label = "transform module", datana
     class = c("teal_transform_module", "teal_data_module")
   )
 }
+
+
+#' Extract all `transformers` from `modules`.
+#'
+#' @param modules `teal_modules` or `teal_module`
+#' @return A list of `teal_transform_module` nested in the same way as input `modules`.
+#' @keywords internal
+extract_transformers <- function(modules) {
+  if (inherits(modules, "teal_module")) {
+    modules$transformers
+  } else if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, extract_transformers)
+  }
+}
