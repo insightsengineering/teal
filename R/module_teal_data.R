@@ -44,8 +44,7 @@ ui_teal_data <- function(id, data_module) {
   ns <- NS(id)
   shiny::tagList(
     data_module$ui(id = ns("data")),
-    ui_validate_reactive_teal_data(ns("validate")),
-    uiOutput(ns("validation_error"))
+    ui_validate_reactive_teal_data(ns("validate"))
   )
 }
 
@@ -54,8 +53,7 @@ srv_teal_data <- function(id,
                           data,
                           data_module,
                           modules = NULL,
-                          validate_shiny_silent_error = TRUE,
-                          validate_empty_reactive = TRUE) {
+                          validate_shiny_silent_error = TRUE) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
@@ -72,18 +70,6 @@ srv_teal_data <- function(id,
       }
       data
     })
-
-    if (validate_empty_reactive) {
-      output$validation_error <- renderUI({
-        validate(
-          need(
-            !inherits(validated_data(), "shiny.silent.error") && !.is_empty_teal_data(final_data()),
-            "Error in processing the data in the previous step. Cannot proceed further."
-          )
-        )
-        NULL
-      })
-    }
 
     data_out <- tryCatch(
       {
