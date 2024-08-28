@@ -194,7 +194,6 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   assert_reactive(this)
   assert_reactive(that)
   checkmate::assert_string(label)
-
   reactive({
     res <- try(this(), silent = TRUE)
     if (inherits(res, "teal_data")) {

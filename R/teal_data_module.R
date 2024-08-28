@@ -75,6 +75,13 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
           pre = sprintf("From: 'teal_data_module()':\nA 'teal_data_module' with \"%s\" label:", label),
           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
         )
+        reactive({
+          new_data <- data_out()
+          if (inherits(new_data, "teal_data") && !length(teal.data::datanames(new_data))) {
+            teal.data::datanames(new_data) <- .teal_data_ls(new_data)
+          }
+          new_data
+        })
       }
     ),
     label = label,

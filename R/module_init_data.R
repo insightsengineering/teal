@@ -107,7 +107,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         )
       }
 
-      is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
+      is_filter_ok <- check_filter_datanames(filter, teal.data::datanames(data_validated()))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",
@@ -134,7 +134,10 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
     })
 
     # Adds signature protection to the datanames in the data
-    reactive(.add_signature_to_data(data_validated()))
+    reactive({
+      req(data_validated())
+      .add_signature_to_data(data_validated())
+    })
   })
 }
 
@@ -167,12 +170,12 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 #' Get code that tests the integrity of the reproducible data
 #'
 #' @param data (`teal_data`) object holding the data
-#' @param datanames (`character`) names of `datasets`
 #'
 #' @return A character vector with the code lines.
 #' @keywords internal
 #'
-.get_hashes_code <- function(data, datanames = .teal_data_datanames(data)) {
+.get_hashes_code <- function(data) {
+  datanames <- teal.data::datanames(data)
   vapply(
     datanames,
     function(dataname, datasets) {
