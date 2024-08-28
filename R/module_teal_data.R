@@ -61,8 +61,23 @@ srv_teal_data <- function(id,
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
 
+    data_in <- reactive({
+      if (inherits(data(), "teal_data")) {
+        if (.is_empty_teal_data(data())) {
+          validate(
+            need(
+              FALSE,
+              "Empty `teal_data` object."
+            )
+          )
+          return(teal_data())
+        }
+      }
+      data()
+    })
+
     data_out <- if (is_arg_used(data_module$server, "data")) {
-      data_module$server(id = "data", data = data)
+      data_module$server(id = "data", data = data_in)
     } else {
       data_module$server(id = "data")
     }
@@ -144,12 +159,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       validate(
         need(
           checkmate::test_class(data_out, "teal_data"),
-          paste(
-            "Assertion on return value from the 'data' module failed:",
-            checkmate::test_class(data_out, "teal_data"),
-            "Check your inputs or contact app developer if error persists.",
-            collapse = "\n"
-          )
+          "Did not recieve a valid `teal_data` object. Cannot proceed further."
         )
       )
 
