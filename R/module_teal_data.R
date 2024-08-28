@@ -102,6 +102,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
+
     data_out_r <- reactive(tryCatch(data(), error = function(e) e))
 
     data_validated <- reactive({
@@ -127,7 +128,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       }
 
       # to handle errors and qenv.error(s)
-      if (inherits(data_out, c("qenv.error", "error"))) {
+      if (inherits(data_out, c("qenv.error"))) {
         validate(
           need(
             FALSE,
