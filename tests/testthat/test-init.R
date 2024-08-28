@@ -56,17 +56,44 @@ testthat::test_that("init throws when an empty `data` is used", {
   )
 })
 
-testthat::test_that("init throws warning when datanames in modules incompatible w/ datanames in data", {
-  testthat::local_mocked_bindings(log_warn = warning, .package = "logger")
+testthat::test_that(
+  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformers",
+  {
+    testthat::expect_warning(
+      init(
+        data = teal.data::teal_data(mtcars = mtcars),
+        modules = list(example_module(datanames = "iris"))
+      ),
+      "Dataset \"iris\" is missing for tab 'example teal module'. Dataset available in data: \"mtcars\"."
+    )
+  }
+)
 
-  testthat::expect_warning(
-    init(
-      data = teal.data::teal_data(mtcars = mtcars),
-      modules = list(example_module(datanames = "iris"))
-    ),
-    "Dataset \"iris\" is missing for tab 'example teal module'. Dataset available in data: \"mtcars\"."
-  )
-})
+testthat::test_that(
+  "init does not throw warning when datanames in modules incompatible w/ datanames in data and there are transformers",
+  {
+    testthat::expect_no_warning(
+      init(
+        data = teal.data::teal_data(mtcars = mtcars),
+        modules = list(
+          example_module(
+            datanames = "iris",
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  moduleServer(id, function(input, output, session) {
+                    NULL
+                  })
+                }
+              )
+            )
+          )
+        )
+      )
+    )
+  }
+)
 
 testthat::test_that("init throws when dataname in filter incompatible w/ datanames in data", {
   testthat::expect_warning(
