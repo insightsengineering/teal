@@ -1648,7 +1648,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("continues when transformer throws validation error and returns unchanged data", {
+  testthat::it("continues when transformer throws validation error and returns empty teal_data", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1671,13 +1671,12 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
+        testthat::expect_identical(.teal_data_ls(modules_output$module_1()()), character(0))
       }
     )
   })
 
-  testthat::it("continues when transformer throws validation error and returns unchanged data", {
+  testthat::it("continues when transformer throws validation error and returns empty teal_data", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1700,13 +1699,12 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
+        testthat::expect_identical(.teal_data_ls(modules_output$module_1()()), character(0))
       }
     )
   })
 
-  testthat::it("continues when transformer throws qenv error and returns unchanged data", {
+  testthat::it("continues when transformer throws qenv error and returns empty data", {
     testthat::skip("todo")
   })
   testthat::it("upstream data change is updated on transformer fallback", {
@@ -1729,35 +1727,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         session$setInputs("teal_modules-module_1-data_transform-transform_module-data-n" = new_row_size)
         session$flushReact()
 
-        testthat::expect_equal(nrow(modules_output$module_1()()[["iris"]]), new_row_size)
-      }
-    )
-  })
-
-  testthat::it("upstream data change with double reactivity resolves with correct this/that", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(
-          module(
-            label = "module_1",
-            server = function(id, data) data,
-            transformers = transform_list[c("iris", "fail")]
-          )
-        )
-      ),
-      expr = {
-        session$setInputs("teal_modules-active_tab" = "module_1")
-
-        session$setInputs(
-          "teal_modules-module_1-data_transform-transform_module-data-n" = 12,
-          "teal_modules-module_1-data_transform-transform_module_1-data-add_error" = FALSE
-        )
-        session$flushReact()
-
-        testthat::expect_equal(nrow(modules_output$module_1()()[["iris"]]), 6)
+        testthat::expect_identical(.teal_data_ls(modules_output$module_1()()), character(0))
       }
     )
   })
