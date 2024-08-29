@@ -188,7 +188,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected and data is `teal_data`", {
+  testthat::it("are called no matter if their tab is selected and data is `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -203,7 +203,7 @@ testthat::describe("srv_teal teal_modules", {
         testthat::expect_s4_class(data_rv(), "teal_data")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
-        testthat::expect_null(modules_output$module_2())
+        testthat::expect_identical(modules_output$module_2(), 102L)
         session$setInputs(`teal_modules-active_tab` = "module_2")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_identical(modules_output$module_2(), 102L)
@@ -211,7 +211,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected and data returns reactive `teal_data`", {
+  testthat::it("are called no matter if their tab is selected and data returns reactive `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -226,7 +226,7 @@ testthat::describe("srv_teal teal_modules", {
         testthat::expect_s4_class(data_rv(), "teal_data")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
-        testthat::expect_null(modules_output$module_2())
+        testthat::expect_identical(modules_output$module_2(), 102L)
 
         session$setInputs(`teal_modules-active_tab` = "module_2")
         testthat::expect_identical(modules_output$module_1(), 101L)
@@ -235,7 +235,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected and teal_data_module returns reactive `teal_data`", {
+  testthat::it("are called no matter if their tab is selected and teal_data_module returns reactive `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -257,7 +257,7 @@ testthat::describe("srv_teal teal_modules", {
         testthat::expect_s4_class(data_rv(), "teal_data")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
-        testthat::expect_null(modules_output$module_2())
+        testthat::expect_identical(modules_output$module_2(), 102L)
 
         session$setInputs(`teal_modules-active_tab` = "module_2")
         testthat::expect_identical(modules_output$module_1(), 101L)
@@ -284,7 +284,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called when the teal_data_module doesn't return teal_data", {
+  testthat::it("are called when teal_data_module doesn't return teal_data", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -304,14 +304,17 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_identical(
+          ls(teal.code::get_env(data_rv())),
+          character(0)
+        )
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module returns validation error", {
+  testthat::it("are called when teal_data_module returns validation error and any tab is selected", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -331,13 +334,13 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        session$setInputs(`teal_modules-active_tab` = "module_2")
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module throw en error", {
+  testthat::it("are called when teal_data_module throw en error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -357,9 +360,12 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_identical(
+          ls(teal.code::get_env(data_rv())),
+          character(0)
+        )
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
