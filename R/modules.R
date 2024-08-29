@@ -42,18 +42,18 @@ setOldClass("teal_modules")
 #'  - `...` (optional) When provided, `ui_args` elements will be passed to the module named argument
 #'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
-#' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
-#'   filter panel will automatically update the shown filters to include only
-#'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `"all"` will show filters of all datasets. `datanames` also determines
-#'   a subset of datasets which are appended to the `data` argument in server function.
+#' @param datanames (`character`) Names of the datasets that are relevant for the item. The
+#'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
+#'  filters of all datasets. `NULL` will hide the filter panel. `datanames` also determines a subset
+#'  of datasets which are appended to the `data` argument in server function.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
 #' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
 #' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself.
+#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformers`
+#' will be added to the `datanames`.
 #'
 #' When the transformation does not have sufficient input data, the resulting data will fallback
 #' to the last successful transform or, in case there are none, to the filtered data.
@@ -245,13 +245,14 @@ module <- function(label = "module",
 
   ## `transformers`
   checkmate::assert_list(transformers, types = "teal_data_module")
+  transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
 
   structure(
     list(
       label = label,
       server = server,
       ui = ui,
-      datanames = unique(datanames),
+      datanames = union(datanames, transformer_datanames),
       server_args = server_args,
       ui_args = ui_args,
       transformers = transformers

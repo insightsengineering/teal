@@ -104,6 +104,10 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' `shiny` module server function; that takes `id` and `data` argument,
 #' where the `id` is the module id and `data` is the reactive `teal_data` input.
 #' The server function must return reactive expression containing `teal_data` object.
+#' @param datanames (`character`)
+#'  Names of the datasets that are relevant for the item. The
+#'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
+#'  filters of all datasets. `datanames` will be automatically appended to the [modules()] `danames`.
 #' @examples
 #' my_transformers <- list(
 #'   teal_transform_module(
@@ -132,7 +136,7 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' @name teal_transform_module
 #'
 #' @export
-teal_transform_module <- function(ui, server, label = "transform module") {
+teal_transform_module <- function(ui, server, label = "transform module", datanames = character(0)) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   checkmate::assert_string(label)
@@ -149,6 +153,7 @@ teal_transform_module <- function(ui, server, label = "transform module") {
       }
     ),
     label = label,
+    datanames = datanames,
     class = c("teal_transform_module", "teal_data_module")
   )
 }
