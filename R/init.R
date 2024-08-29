@@ -215,7 +215,6 @@ init <- function(data,
     }
 
     if (!length(teal.data::datanames(data))) {
-      warning("`data` object has no datanames. Default datanames are set using `teal_data`'s environment.")
       teal.data::datanames(data) <- .teal_data_ls(data)
     }
 

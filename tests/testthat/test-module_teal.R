@@ -540,7 +540,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from @env except `DATA._raw_` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
+  testthat::it("receives @datanames derived from @env when module$datanames = \"all\" and @datanames is empty", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -642,7 +642,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives extra transform datasets if module$datanames == 'all' and @datanames empty", {
+  testthat::it("doesn't receive extra transform datasets if module$datanames == 'all' and @datanames empty", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -674,49 +674,56 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars"))
       }
     )
   })
 
-  testthat::it("receives extra transform datasets if module$datanames == 'all' and @datanames not empty", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive({
-          data_obj <- within(teal_data(), {
-            iris <- iris
-            mtcars <- mtcars
-          })
-          teal.data::datanames(data_obj) <- c("iris", "mtcars")
-          data_obj
-        }),
-        modules = modules(
-          module(
-            label = "module_1",
-            server = function(id, data) data,
-            transformers = list(
-              teal_transform_module(
-                label = "Dummy",
-                ui = function(id) div("(does nothing)"),
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), swiss <- swiss))
-                  })
-                }
-              )
-            ),
-            datanames = "all"
+  testthat::it(
+    "receives extra transform datasets if module$datanames == 'all' only when added to@datanames in transform",
+    {
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive({
+            data_obj <- within(teal_data(), {
+              iris <- iris
+              mtcars <- mtcars
+            })
+            teal.data::datanames(data_obj) <- c("iris", "mtcars")
+            data_obj
+          }),
+          modules = modules(
+            module(
+              label = "module_1",
+              server = function(id, data) data,
+              transformers = list(
+                teal_transform_module(
+                  label = "Dummy",
+                  ui = function(id) div("(does nothing)"),
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive({
+                        data_obj <- within(data(), swiss <- swiss)
+                        teal.data::datanames(data_obj) <- c(teal.data::datanames(data_obj), "swiss")
+                        data_obj
+                      })
+                    })
+                  }
+                )
+              ),
+              datanames = "all"
+            )
           )
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
-      }
-    )
-  })
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        }
+      )
+    }
+  )
 
   testthat::it("doesn't receive extra datanames in a transform if not specified in module$datanames", {
     shiny::testServer(

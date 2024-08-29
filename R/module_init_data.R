@@ -80,7 +80,13 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (test_reactive(data)) {
-      .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")
+      reactive({
+        data_obj <- .fallback_on_failure(this = data, that = reactive(req(FALSE)), label = "Reactive data")()
+        if (!length(teal.data::datanames(data_obj))) {
+          teal.data::datanames(data_obj) <- .teal_data_ls(data_obj)
+        }
+        data_obj
+      })
     }
 
     if (inherits(data, "teal_data_module")) {
