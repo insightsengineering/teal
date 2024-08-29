@@ -540,14 +540,13 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from @env except `DATA._raw_` when `DATA` is present in the @env and module$datanames = \"all\" and @datanames is empty", { # nolint: line_length.
+  testthat::it("receives all objects from @env excluding .<dataname>_raw_ when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
         id = "test",
         data = reactive({
           td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss, iris_raw = iris)
-          teal.data::datanames(td) <- character(0)
           td
         }),
         modules = modules(
@@ -560,27 +559,6 @@ testthat::describe("srv_teal teal_modules", {
           teal.data::datanames(modules_output$module_1()()),
           c("iris", "iris_raw", "mtcars", "swiss")
         )
-      }
-    )
-  })
-
-  testthat::it("receives @datanames when module$datanames = \"all\"", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive({
-          td <- teal_data(iris = iris, mtcars = mtcars, swiss = swiss)
-          teal.data::datanames(td) <- c("iris", "mtcars")
-          td
-        }),
-        modules = modules(
-          module("module_1", server = function(id, data) data, datanames = "all")
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars"))
       }
     )
   })
@@ -642,7 +620,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("doesn't receive extra transform datasets not set in @datanames if module$datanames == 'all'", {
+  testthat::it("receives extra transform datasets if module$datanames == 'all'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -652,45 +630,7 @@ testthat::describe("srv_teal teal_modules", {
             iris <- iris
             mtcars <- mtcars
           })
-          teal.data::datanames(td) <- c("mtcars", "iris")
           td
-        }),
-        modules = modules(
-          module(
-            label = "module_1",
-            server = function(id, data) data,
-            transformers = list(
-              teal_transform_module(
-                label = "Dummy",
-                ui = function(id) div("(does nothing)"),
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), swiss <- swiss))
-                  })
-                }
-              )
-            ),
-            datanames = "all"
-          )
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("mtcars", "iris"))
-      }
-    )
-  })
-
-  testthat::it("receives extra transform datasets if module$datanames == 'all' and @datanames empty", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = reactive({
-          within(teal_data(), {
-            iris <- iris
-            mtcars <- mtcars
-          })
         }),
         modules = modules(
           module(
@@ -2061,10 +2001,10 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays parent before child when join_keys are provided", {
-    data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+    data <- teal.data::teal_data(parent = mtcars, child = data.frame(am = c(0, 1), test = c("a", "b")))
 
     teal.data::join_keys(data) <- teal.data::join_keys(
-      teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
+      teal.data::join_key("parent", "child", keys = c("am"))
     )
 
     shiny::testServer(
@@ -2079,7 +2019,7 @@ testthat::describe("srv_teal summary table", {
         session$flushReact()
         testthat::expect_identical(
           module_output_table(output, "module_1")[["Data Name"]],
-          c("mtcars2", "mtcars1")
+          c("parent", "child")
         )
       }
     )

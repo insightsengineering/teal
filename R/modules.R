@@ -1,3 +1,6 @@
+setOldClass("teal_module")
+setOldClass("teal_modules")
+
 #' Create `teal_module` and `teal_modules` objects
 #'
 #' @description
@@ -312,6 +315,30 @@ format.teal_modules <- function(x, indent = 0, ...) {
     collapse = ""
   )
 }
+
+#' @rdname teal_modules
+#' @export
+set_datanames <- function(modules, datanames) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  if (inherits(modules, "teal_modules")) {
+    modules$children <- lapply(modules$children, set_datanames, datanames)
+  } else {
+    modules$datanames <- datanames
+  }
+  modules
+}
+
+#' @rdname teal_modules
+#' @export
+setMethod("datanames<-", signature = c("teal_module", "character"), definition = function(x, value) {
+  set_datanames(x, value)
+})
+
+#' @rdname teal_modules
+#' @export
+setMethod("datanames<-", signature = c("teal_modules", "character"), definition = function(x, value) {
+  set_datanames(x, value)
+})
 
 
 #' @rdname teal_modules

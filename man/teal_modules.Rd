@@ -8,6 +8,9 @@
 \alias{format.teal_module}
 \alias{print.teal_module}
 \alias{format.teal_modules}
+\alias{set_datanames}
+\alias{datanames<-,teal_module,character-method}
+\alias{datanames<-,teal_modules,character-method}
 \alias{print.teal_modules}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
@@ -29,6 +32,12 @@ modules(..., label = "root")
 \method{print}{teal_module}(x, ...)
 
 \method{format}{teal_modules}(x, indent = 0, ...)
+
+set_datanames(modules, datanames)
+
+\S4method{datanames}{teal_module,character}(x) <- value
+
+\S4method{datanames}{teal_modules,character}(x) <- value
 
 \method{print}{teal_modules}(x, ...)
 }

@@ -65,6 +65,7 @@ NULL
     )
   )
   new_data@verified <- data@verified
+  teal.data::datanames(new_data) <- datanames
   new_data
 }
 

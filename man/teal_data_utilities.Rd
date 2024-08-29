@@ -5,7 +5,6 @@
 \alias{.append_evaluated_code}
 \alias{.append_modified_data}
 \alias{.subset_teal_data}
-\alias{.teal_data_datanames}
 \alias{.teal_data_ls}
 \title{\code{teal_data} utils}
 \usage{
@@ -14,8 +13,6 @@
 .append_modified_data(data, objects)
 
 .subset_teal_data(data, datanames)
-
-.teal_data_datanames(data)
 
 .teal_data_ls(data)
 }
