@@ -1,7 +1,7 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
-testthat::test_that("e2e: the module server logic is only triggered when the teal module becomes active", {
+testthat::test_that("e2e: the module server logic is triggered no matter when the teal module becomes active", {
   skip_if_too_deep(5)
   value_export_module <- function(label = "custom module") {
     module(
@@ -30,7 +30,7 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
 
   test_exports <- app$get_values()$export
 
-  expect_equal(length(test_exports), 1)
+  expect_equal(length(test_exports), 2)
 
   app$navigate_teal_tab("Module 2")
   test_exports <- app$get_values()$export
