@@ -63,7 +63,7 @@ srv_data_summary <- function(id, teal_data) {
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
 
-        if (length(teal.data::datanames(teal_data())) == 0) {
+        if (!length(.teal_data_ls(teal_data()))) {
           return(NULL)
         }
 
@@ -139,7 +139,7 @@ srv_data_summary <- function(id, teal_data) {
 
 #' @rdname module_data_summary
 get_filter_overview <- function(teal_data) {
-  datanames <- teal.data::datanames(teal_data())
+  datanames <- .teal_data_ls(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(
     datanames,
