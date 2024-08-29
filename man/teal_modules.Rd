@@ -72,11 +72,10 @@ or to the \code{...}.
 
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
-\item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item. The
-filter panel will automatically update the shown filters to include only
-filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{"all"} will show filters of all datasets. \code{datanames} also determines
-a subset of datasets which are appended to the \code{data} argument in server function.}
+\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item. The
+filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
+filters of all datasets. \code{NULL} will hide the filter panel. \code{datanames} also determines a subset
+of datasets which are appended to the \code{data} argument in server function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
@@ -84,7 +83,8 @@ a subset of datasets which are appended to the \code{data} argument in server fu
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself.
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformers}
+will be added to the \code{datanames}.
 
 When the transformation does not have sufficient input data, the resulting data will fallback
 to the last successful transform or, in case there are none, to the filtered data.}
