@@ -9,14 +9,13 @@
 \alias{print.teal_module}
 \alias{format.teal_modules}
 \alias{set_datanames}
-\alias{datanames<-,teal_module,character-method}
-\alias{datanames<-,teal_modules,character-method}
 \alias{print.teal_modules}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
   label = "module",
-  server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+  server = function(id, data, ...) moduleServer(id, function(input, output, session)
+    NULL),
   ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
   filters,
   datanames = "all",
@@ -34,10 +33,6 @@ modules(..., label = "root")
 \method{format}{teal_modules}(x, indent = 0, ...)
 
 set_datanames(modules, datanames)
-
-\S4method{datanames}{teal_module,character}(x) <- value
-
-\S4method{datanames}{teal_modules,character}(x) <- value
 
 \method{print}{teal_modules}(x, ...)
 }
@@ -97,6 +92,8 @@ to the last successful transform or, in case there are none, to the filtered dat
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
 \item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
+
+\item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.

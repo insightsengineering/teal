@@ -130,7 +130,7 @@ setOldClass("teal_modules")
 #' @export
 #'
 module <- function(label = "module",
-                   server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+                   server = function(id, data, ...) moduleServer(id, function(input, output, session) NULL),
                    ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
                    filters,
                    datanames = "all",
@@ -244,15 +244,23 @@ module <- function(label = "module",
   }
 
   ## `transformers`
-  checkmate::assert_list(transformers, types = "teal_data_module")
+  if (inherits(transformers, "teal_transform_module")) {
+    transformers <- list(transformers)
+  }
+  checkmate::assert_list(transformers, types = "teal_transform_module")
   transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
+  combined_datanames <- if (identical(datanames, "all") || identical(transformer_datanames, "all")) {
+    "all"
+  } else {
+    union(datanames, transformer_datanames)
+  }
 
   structure(
     list(
       label = label,
       server = server,
       ui = ui,
-      datanames = union(datanames, transformer_datanames),
+      datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
       transformers = transformers
@@ -317,6 +325,7 @@ format.teal_modules <- function(x, indent = 0, ...) {
   )
 }
 
+#' @param modules (`teal_module` or `teal_modules`)
 #' @rdname teal_modules
 #' @export
 set_datanames <- function(modules, datanames) {
@@ -328,19 +337,6 @@ set_datanames <- function(modules, datanames) {
   }
   modules
 }
-
-#' @rdname teal_modules
-#' @export
-setMethod("datanames<-", signature = c("teal_module", "character"), definition = function(x, value) {
-  set_datanames(x, value)
-})
-
-#' @rdname teal_modules
-#' @export
-setMethod("datanames<-", signature = c("teal_modules", "character"), definition = function(x, value) {
-  set_datanames(x, value)
-})
-
 
 #' @rdname teal_modules
 #' @export

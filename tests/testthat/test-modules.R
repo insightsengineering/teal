@@ -512,3 +512,64 @@ testthat::test_that("format.teal_modules returns proper structure", {
     "+ c\n + a\n + c\n + c\n"
   )
 })
+
+
+testthat::test_that("module datanames is appended by its transformers datanames", {
+  transformer_w_datanames <- teal_transform_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          new_data <- within(data(), {
+            new_dataset <- data.frame(a = 1:3, b = 4:6)
+          })
+          new_data
+        })
+      })
+    },
+    datanames = c("a", "b")
+  )
+
+  out <- module(datanames = "c", transformers = list(transformer_w_datanames))
+  testthat::expect_identical(out$datanames, c("c", "a", "b"))
+})
+
+testthat::test_that("module datanames is set to 'all' if transformer $datanames is 'all'", {
+  transformer_w_datanames <- teal_transform_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          new_data <- within(data(), {
+            new_dataset <- data.frame(a = 1:3, b = 4:6)
+          })
+          new_data
+        })
+      })
+    },
+    datanames = "all"
+  )
+
+  out <- module(datanames = "c", transformers = list(transformer_w_datanames))
+  testthat::expect_identical(out$datanames, "all")
+})
+
+testthat::test_that("module datanames stays 'all' regardless of transformers", {
+  transformer_w_datanames <- teal_transform_module(
+    ui = function(id) NULL,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          new_data <- within(data(), {
+            new_dataset <- data.frame(a = 1:3, b = 4:6)
+          })
+          new_data
+        })
+      })
+    },
+    datanames = c("a", "b")
+  )
+
+  out <- module(datanames = "all", transformers = list(transformer_w_datanames))
+  testthat::expect_identical(out$datanames, "all")
+})

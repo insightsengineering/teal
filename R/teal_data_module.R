@@ -112,6 +112,7 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' my_transformers <- list(
 #'   teal_transform_module(
 #'     label = "Custom transform for iris",
+#'     datanames = "iris",
 #'     ui = function(id) {
 #'       ns <- NS(id)
 #'       tags$div(
@@ -136,7 +137,10 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' @name teal_transform_module
 #'
 #' @export
-teal_transform_module <- function(ui, server, label = "transform module", datanames = character(0)) {
+teal_transform_module <- function(ui = function(id) NULL,
+                                  server = function(id, data) data,
+                                  label = "transform module",
+                                  datanames = "all") {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   checkmate::assert_string(label)

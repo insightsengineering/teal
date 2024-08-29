@@ -5,10 +5,10 @@
 \title{Data module for \code{teal} transformers.}
 \usage{
 teal_transform_module(
-  ui,
-  server,
+  ui = function(id) NULL,
+  server = function(id, data) data,
   label = "transform module",
-  datanames = character(0)
+  datanames = "all"
 )
 }
 \arguments{
@@ -44,6 +44,7 @@ See vignette \code{vignette("data-transform-as-shiny-module", package = "teal")}
 my_transformers <- list(
   teal_transform_module(
     label = "Custom transform for iris",
+    datanames = "iris",
     ui = function(id) {
       ns <- NS(id)
       tags$div(
