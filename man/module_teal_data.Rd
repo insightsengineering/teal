@@ -65,8 +65,8 @@ Output \code{data} is invalid if:
 \code{teal} (observers in \code{srv_teal}) always waits to render an app until \code{reactive} \code{teal_data} is
 returned. If error 2-4 occurs, relevant error message is displayed to app user and after issue is
 resolved app will continue to run. \code{teal} guarantees that errors in a data don't crash an app
-(except error 1). This is possible thanks to \code{.fallback_on_failure} which returns input-data
-when output-data fails
+(except error 1). This is possible by catching the error and returning an empty \code{teal_data} object.
+The error message is displayed in the app and the module will eventually get an empty \code{teal_data}.
 }
 
 \keyword{internal}

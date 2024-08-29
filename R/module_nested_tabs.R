@@ -80,36 +80,6 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 ui_teal_module.shiny.tag <- function(id, modules, depth = 0L) {
   modules
 }
-
-#' @keywords internal
-ui_validate_teal_data <- function(id) {
-  ns <- NS(id)
-  uiOutput(ns("validation_error"))
-}
-
-#' @keywords internal
-srv_validate_teal_data <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    output$validation_error <- renderUI({
-      if (inherits(data(), "teal_data")) {
-        validate(
-          need(
-            !.is_empty_teal_data(data()),
-            "The module did not recieve any data"
-          )
-        )
-      } else {
-        validate(
-          need(
-            FALSE,
-            "The module did not recieve `teal_data`"
-          )
-        )
-      }
-    })
-  })
-}
-
 #' @rdname module_teal_module
 #' @export
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
@@ -322,6 +292,36 @@ srv_teal_module.teal_module <- function(id,
     module_out
   })
 }
+
+#' @keywords internal
+ui_validate_teal_data <- function(id) {
+  ns <- NS(id)
+  uiOutput(ns("validation_error"))
+}
+
+#' @keywords internal
+srv_validate_teal_data <- function(id, data) {
+  moduleServer(id, function(input, output, session) {
+    output$validation_error <- renderUI({
+      if (inherits(data(), "teal_data")) {
+        validate(
+          need(
+            !.is_empty_teal_data(data()),
+            "The module did not recieve any data"
+          )
+        )
+      } else {
+        validate(
+          need(
+            FALSE,
+            "The module did not recieve `teal_data`"
+          )
+        )
+      }
+    })
+  })
+}
+
 
 # This function calls a module server function.
 .call_teal_module <- function(modules, datasets, filtered_teal_data, reporter) {

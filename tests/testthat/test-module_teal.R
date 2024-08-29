@@ -146,7 +146,7 @@ testthat::describe("srv_teal arguments", {
         ),
         expr = NULL
       ),
-      "Must inherit from class 'teal_data'/'teal_data_module'/'reactive'/'reactiveVal'"
+      "Assertion on 'data' failed: Must inherit from class 'teal_data'/'teal_data_module'/'reactive', but has class 'data.frame'." # nolint: line_length
     )
   })
 
