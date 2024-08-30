@@ -299,13 +299,13 @@ srv_teal_module.teal_module <- function(id,
 }
 
 .resolve_module_datanames <- function(data, modules) {
-  stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
+  checkmate::assert_class(data, "teal_data")
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    .teal_data_ls(data)
+    grep("._raw_", teal.data::datanames(data), invert = TRUE, value = TRUE)
   } else {
     intersect(
-      include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      .teal_data_ls(data)
+      teal.data::datanames(data),
+      include_parent_datanames(modules$datanames, teal.data::join_keys(data))
     )
   }
 }
