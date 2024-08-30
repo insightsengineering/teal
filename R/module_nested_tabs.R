@@ -261,6 +261,12 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
+    trigger_module <- reactive({
+      req(module_teal_data_validated())
+      req(filtered_teal_data())
+      TRUE
+    })
+
     summary_table <- srv_data_summary("data_summary", module_teal_data)
 
     # Call modules.
@@ -270,7 +276,7 @@ srv_teal_module.teal_module <- function(id,
         # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = module_teal_data_validated(),
+        eventExpr = trigger_module(),
         handlerExpr = {
           module_out(.call_teal_module(modules, datasets, module_teal_data_validated, reporter))
         }
