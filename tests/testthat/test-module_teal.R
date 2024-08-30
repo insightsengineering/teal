@@ -284,7 +284,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called when the teal_data_module doesn't return teal_data", {
+  testthat::it("are called with empty teal data when the teal_data_module doesn't return teal_data", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -304,14 +304,14 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_identical(ls(teal.code::get_env(data_rv())), character(0))
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module returns validation error", {
+  testthat::it("are called with empty teal data when the teal_data_module returns validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -331,13 +331,14 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(ls(teal.code::get_env(data_rv())), character(0))
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module throw en error", {
+  testthat::it("are called with empty teal data when the teal_data_module throw error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -357,14 +358,14 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_identical(ls(teal.code::get_env(data_rv())), character(0))
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module returns qenv.error", {
+  testthat::it("are called with empty teal data when the teal_data_module returns qenv.error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -384,9 +385,9 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_identical(ls(teal.code::get_env(data_rv())), character(0))
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_null(modules_output$module_1())
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
