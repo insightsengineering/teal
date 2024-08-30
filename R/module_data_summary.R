@@ -139,7 +139,7 @@ srv_data_summary <- function(id, teal_data) {
 
 #' @rdname module_data_summary
 get_filter_overview <- function(teal_data) {
-  datanames <- .teal_data_ls(teal_data())
+  datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
   filtered_data_objs <- sapply(
     datanames,

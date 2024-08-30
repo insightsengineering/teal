@@ -45,16 +45,17 @@ get_teal_bs_theme <- function() {
 #' @noRd
 #' @keywords internal
 include_parent_datanames <- function(dataname, join_keys) {
-  parents <- character(0)
+  ordered_datanames <- dataname
   for (i in dataname) {
+    parents <- character(0)
     while (length(i) > 0) {
       parent_i <- teal.data::parent(join_keys, i)
       parents <- c(parent_i, parents)
       i <- parent_i
     }
+    ordered_datanames <- c(parents, dataname, ordered_datanames)
   }
-
-  unique(c(parents, dataname))
+  unique(ordered_datanames)
 }
 
 #' Create a `FilteredData`
