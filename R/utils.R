@@ -128,7 +128,7 @@ check_modules_datanames <- function(modules, datanames) {
       result <- lapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
       result <- result[vapply(result, Negate(is.null), logical(1L))]
       if (length(result) == 0) {
-        return(TRUE)
+        return(NULL)
       }
       list(
         string = do.call(c, as.list(unname(sapply(result, function(x) x$string)))),
