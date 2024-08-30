@@ -194,10 +194,7 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
-      union(
-        .resolve_module_datanames(data = data_rv(), modules = modules),
-        .resolve_sidebar_datanames(data = data_rv(), modules = modules)
-      )
+      .resolve_module_datanames(data = data_rv(), modules = modules)
     })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
@@ -228,10 +225,7 @@ srv_teal_module.teal_module <- function(id,
 
     summary_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
-      module_datanames <- unique(c(
-        .resolve_module_datanames(data = all_teal_data, modules = modules),
-        .resolve_sidebar_datanames(data = all_teal_data, modules = modules)
-      ))
+      module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
@@ -239,9 +233,7 @@ srv_teal_module.teal_module <- function(id,
 
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
-      module_datanames <- unique(c(
-        .resolve_module_datanames(data = all_teal_data, modules = modules)
-      ))
+      module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
@@ -298,28 +290,6 @@ srv_teal_module.teal_module <- function(id,
   } else {
     do.call(callModule, c(args, list(module = modules$server)))
   }
-}
-
-.resolve_sidebar_datanames <- function(data, modules) {
-  checkmate::assert_class(data, "teal_data")
-  checkmate::assert_class(modules, "teal_module")
-  unique(
-    unlist(
-      lapply(
-        modules$transformers,
-        function(t) {
-          if (identical(attr(t, "datanames"), "all")) {
-            teal.data::datanames(data)
-          } else {
-            intersect(
-              include_parent_datanames(attr(t, "datanames"), teal.data::join_keys(data)),
-              .teal_data_ls(data)
-            )
-          }
-        }
-      )
-    )
-  )
 }
 
 .resolve_module_datanames <- function(data, modules) {
