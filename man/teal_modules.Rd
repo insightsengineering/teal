@@ -8,12 +8,14 @@
 \alias{format.teal_module}
 \alias{print.teal_module}
 \alias{format.teal_modules}
+\alias{set_datanames}
 \alias{print.teal_modules}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
   label = "module",
-  server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+  server = function(id, data, ...) moduleServer(id, function(input, output, session)
+    NULL),
   ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
   filters,
   datanames = "all",
@@ -29,6 +31,8 @@ modules(..., label = "root")
 \method{print}{teal_module}(x, ...)
 
 \method{format}{teal_modules}(x, indent = 0, ...)
+
+set_datanames(modules, datanames)
 
 \method{print}{teal_modules}(x, ...)
 }
@@ -63,11 +67,10 @@ or to the \code{...}.
 
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
-\item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item.
-\code{datanames} determines a subset of datasets which are appended to the \code{data} argument in server function.
-The filter panel will automatically update the shown filters to include only
-filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{"all"} will show filters of all datasets.}
+\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item. The
+filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
+filters of all datasets. \code{NULL} will hide the filter panel. \code{datanames} also determines a subset
+of datasets which are appended to the \code{data} argument in server function.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
@@ -75,7 +78,8 @@ and the keyword \code{"all"} will show filters of all datasets.}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself.
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformers}
+will be added to the \code{datanames}.
 
 When the transformation does not have sufficient input data, the resulting data will fallback
 to the last successful transform or, in case there are none, to the filtered data.}
@@ -88,6 +92,8 @@ to the last successful transform or, in case there are none, to the filtered dat
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
 \item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
+
+\item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.

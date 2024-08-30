@@ -14,15 +14,15 @@ example_module(
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
 For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
-\item{datanames}{(\code{character}) A vector with \code{datanames} that are relevant for the item.
-\code{datanames} determines a subset of datasets which are appended to the \code{data} argument in server function.
-The filter panel will automatically update the shown filters to include only
-filters in the listed datasets. \code{NULL} will hide the filter panel,
-and the keyword \code{"all"} will show filters of all datasets.}
+\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item. The
+filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
+filters of all datasets. \code{NULL} will hide the filter panel. \code{datanames} also determines a subset
+of datasets which are appended to the \code{data} argument in server function.}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself.
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformers}
+will be added to the \code{datanames}.
 
 When the transformation does not have sufficient input data, the resulting data will fallback
 to the last successful transform or, in case there are none, to the filtered data.}
