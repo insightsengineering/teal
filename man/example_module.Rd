@@ -15,7 +15,7 @@ example_module(
 For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
 \item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
-The keyword \code{"all"} provides all datanames available in \code{data} passed to \code{teal} application.
+The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
 \code{NULL} will hide the filter panel.}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.

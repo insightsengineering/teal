@@ -68,7 +68,7 @@ or to the \code{...}.
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
 \item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
-The keyword \code{"all"} provides all datanames available in \code{data} passed to \code{teal} application.
+The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
 \code{NULL} will hide the filter panel.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
@@ -121,7 +121,7 @@ The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
 because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
-\section{datanames}{
+\section{\code{datanames}}{
 
 Module's \code{datanames} attribute determines a subset of datasets which are appended to the \code{data}
 argument in server function. Datasets displayed in the filter-panel will also be limited to the \code{datanames}.

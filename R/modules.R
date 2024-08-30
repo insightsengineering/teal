@@ -43,7 +43,7 @@ setOldClass("teal_modules")
 #'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) Names of the datasets that are relevant for the item.
-#' The keyword `"all"` provides all datanames available in `data` passed to `teal` application.
+#' The keyword `"all"` provides all datasets available in `data` passed to `teal` application.
 #' `NULL` will hide the filter panel.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
@@ -60,7 +60,7 @@ setOldClass("teal_modules")
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
 #'
-#' @section datanames:
+#' @section `datanames`:
 #' Module's `datanames` attribute determines a subset of datasets which are appended to the `data`
 #' argument in server function. Datasets displayed in the filter-panel will also be limited to the `datanames`.
 #' When `datanames` is set to  `"all"`, all available datasets are considered as relevant for the module.
