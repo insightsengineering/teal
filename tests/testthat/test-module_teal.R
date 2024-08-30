@@ -520,6 +520,42 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("does not throw a warning when datanames are insufficient but transformers are provided", {
+    testthat::skip_if_not_installed("rvest")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(mtcars = mtcars),
+        modules = modules(
+          module(
+            "module_1",
+            server = function(id, data) data,
+            datanames = c("iris"),
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  moduleServer(id, function(input, output, session) {
+                    reactive({
+                      NULL
+                    })
+                  })
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(
+          output[["teal_modules-module_1-validate_datanames-shiny_warnings"]]
+        )
+      }
+    )
+  })
+
   testthat::it("is called and receives data even if datanames in `teal_data` are not sufficient", {
     data <- teal_data(iris = iris)
     teal.data::datanames(data) <- "iris"
