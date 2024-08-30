@@ -193,9 +193,7 @@ srv_teal_module.teal_module <- function(id,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    active_datanames <- reactive({
-      .resolve_module_datanames(data = data_rv(), modules = modules)
-    })
+    active_datanames <- reactive(.resolve_module_datanames(data = data_rv(), modules = modules))
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
@@ -223,19 +221,13 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
-    summary_teal_data <- reactive({
-      all_teal_data <- transformed_teal_data()
-      module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
-      .subset_teal_data(all_teal_data, module_datanames)
-    })
-
-    summary_table <- srv_data_summary("data_summary", summary_teal_data)
-
     module_teal_data <- reactive({
       all_teal_data <- transformed_teal_data()
       module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
       .subset_teal_data(all_teal_data, module_datanames)
     })
+
+    summary_table <- srv_data_summary("data_summary", module_teal_data)
 
     module_teal_data_validated <- srv_validate_reactive_teal_data(
       "validate_datanames",

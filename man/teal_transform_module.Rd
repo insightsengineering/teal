@@ -23,10 +23,9 @@ The server function must return reactive expression containing \code{teal_data} 
 \item{label}{(\code{character(1)}) Label of the module.}
 
 \item{datanames}{(\code{character})
-Determines names of the filtered datasets required for the \code{teal_transform_module} to work. Specified
-\code{datanames} will be displayed in the filter panel. If not specified, \code{teal_transform_module} will receive
-filtered datasets specified in \code{\link[=module]{module()}} \code{datanames} and every other object will remain unfiltered and hidden in
-a filter panel.}
+Names of the datasets that are relevant for the item. The filter panel will only display filters
+for specified \code{datanames}. The keyword \code{"all"} will show filters of all datasets. \code{datanames}
+will be automatically appended to the \code{\link[=modules]{modules()}} \code{datanames}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -45,6 +44,7 @@ See vignette \code{vignette("data-transform-as-shiny-module", package = "teal")}
 my_transformers <- list(
   teal_transform_module(
     label = "Custom transform for iris",
+    datanames = "iris",
     ui = function(id) {
       ns <- NS(id)
       tags$div(

@@ -8,7 +8,6 @@
 \alias{format.teal_module}
 \alias{print.teal_module}
 \alias{format.teal_modules}
-\alias{set_datanames}
 \alias{print.teal_modules}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
@@ -31,8 +30,6 @@ modules(..., label = "root")
 \method{print}{teal_module}(x, ...)
 
 \method{format}{teal_modules}(x, indent = 0, ...)
-
-set_datanames(modules, datanames)
 
 \method{print}{teal_modules}(x, ...)
 }
@@ -92,8 +89,6 @@ to the last successful transform or, in case there are none, to the filtered dat
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
 \item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
-
-\item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.

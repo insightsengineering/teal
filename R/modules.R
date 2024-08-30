@@ -322,19 +322,6 @@ format.teal_modules <- function(x, indent = 0, ...) {
   )
 }
 
-#' @param modules (`teal_module` or `teal_modules`)
-#' @rdname teal_modules
-#' @export
-set_datanames <- function(modules, datanames) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
-  if (inherits(modules, "teal_modules")) {
-    modules$children <- lapply(modules$children, set_datanames, datanames)
-  } else {
-    modules$datanames <- datanames
-  }
-  modules
-}
-
 #' @rdname teal_modules
 #' @export
 print.teal_modules <- print.teal_module
