@@ -1699,7 +1699,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(length(modules_output$module_1()()@env), 0L)
+        testthat::expect_identical(ls(teal.code::get_env(modules_output$module_1()())), character(0))
       }
     )
   })
