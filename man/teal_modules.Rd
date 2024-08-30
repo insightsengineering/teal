@@ -67,10 +67,9 @@ or to the \code{...}.
 
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
-\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item. The
-filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
-filters of all datasets. \code{NULL} will hide the filter panel. \code{datanames} also determines a subset
-of datasets which are appended to the \code{data} argument in server function.}
+\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
+The keyword \code{"all"} provides all datanames available in \code{data} passed to \code{teal} application.
+\code{NULL} will hide the filter panel.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
@@ -122,6 +121,23 @@ The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
 because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
+\section{datanames}{
+
+Module's \code{datanames} attribute determines a subset of datasets which are appended to the \code{data}
+argument in server function. Datasets displayed in the filter-panel will also be limited to the \code{datanames}.
+When \code{datanames} is set to  \code{"all"}, all available datasets are considered as relevant for the module.
+Sometimes, \code{data} handed over to \code{teal} application might contain datasets which are irrelevant for the module
+if it has a \code{datanames} property set to `"all". These objects usually are:
+\itemize{
+\item proxy variables used to modify column etc.
+\item modified copies of datasets used to create a final dataset.
+\item connection objects
+In order to disable these dataset from showing up in the module one should use \code{set_datanames} function on the
+\link{module} or \code{\link[=modules]{modules()}} to set \code{datanames} from \code{"all"} to some specific names. Trying to change \code{datanames}
+which are not \code{"all"} using \code{set_datanames} will be ignored with warning.
+}
+}
+
 \examples{
 library(shiny)
 
@@ -176,4 +192,15 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+# change the module's datanames
+set_datanames(module(datanames = "all"), "a")
+
+# change modules' datanames
+set_datanames(
+  modules(
+    module(datanames = "all"),
+    module(datanames = "a")
+  ),
+  "b"
+)
 }

@@ -42,10 +42,9 @@ setOldClass("teal_modules")
 #'  - `...` (optional) When provided, `ui_args` elements will be passed to the module named argument
 #'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
-#' @param datanames (`character`) Names of the datasets that are relevant for the item. The
-#'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
-#'  filters of all datasets. `NULL` will hide the filter panel. `datanames` also determines a subset
-#'  of datasets which are appended to the `data` argument in server function.
+#' @param datanames (`character`) Names of the datasets that are relevant for the item.
+#' The keyword `"all"` provides all datanames available in `data` passed to `teal` application.
+#' `NULL` will hide the filter panel.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
@@ -60,6 +59,20 @@ setOldClass("teal_modules")
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
+#'
+#' @section datanames:
+#' Module's `datanames` attribute determines a subset of datasets which are appended to the `data`
+#' argument in server function. Datasets displayed in the filter-panel will also be limited to the `datanames`.
+#' When `datanames` is set to  `"all"`, all available datasets are considered as relevant for the module.
+#' Sometimes, `data` handed over to `teal` application might contain datasets which are irrelevant for the module
+#' if it has a `datanames` property set to `"all". These objects usually are:
+#' - proxy variables used to modify column etc.
+#' - modified copies of datasets used to create a final dataset.
+#' - connection objects
+#' In order to disable these dataset from showing up in the module one should use `set_datanames` function on the
+#' [module] or [modules()] to set `datanames` from `"all"` to some specific names. Trying to change `datanames`
+#' which are not `"all"` using `set_datanames` will be ignored with warning.
+#'
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.
@@ -327,13 +340,33 @@ format.teal_modules <- function(x, indent = 0, ...) {
 
 #' @param modules (`teal_module` or `teal_modules`)
 #' @rdname teal_modules
+#' @examples
+#' # change the module's datanames
+#' set_datanames(module(datanames = "all"), "a")
+#'
+#' # change modules' datanames
+#' set_datanames(
+#'   modules(
+#'     module(datanames = "all"),
+#'     module(datanames = "a")
+#'   ),
+#'   "b"
+#' )
 #' @export
 set_datanames <- function(modules, datanames) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   if (inherits(modules, "teal_modules")) {
     modules$children <- lapply(modules$children, set_datanames, datanames)
   } else {
-    modules$datanames <- datanames
+    if (identical(modules$datanames, "all")) {
+      modules$datanames <- datanames
+    } else {
+      warning(
+        "Not possible to modify datanames of the module ", modules$label,
+        ". set_datanames() can only change datanames if it was set to \"all\".",
+        call. = FALSE
+      )
+    }
   }
   modules
 }
