@@ -199,20 +199,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     output$shiny_error <- renderUI({
-      if (inherits(init_data(), "qenv.error")) {
-        validate(
-          need(
-            FALSE,
-            paste(
-              "Error when executing the `data` module:",
-              strip_style(paste(init_data()$message, collapse = "\n")),
-              "\nCheck your inputs or contact app developer if error persists.",
-              collapse = "\n"
-            )
-          )
-        )
-      }
-
+      srv_validate_qenv_error("validate_qenv_error", init_data())
       NULL
     })
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {

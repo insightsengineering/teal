@@ -307,27 +307,17 @@ ui_validate_teal_data <- function(id) {
 
 #' @keywords internal
 srv_validate_teal_data <- function(id, data) {
+  checkmate::assert_string(id)
   moduleServer(id, function(input, output, session) {
     output$validation_error <- renderUI({
       if (inherits(data(), "teal_data")) {
-        validate(
-          need(
-            !.is_empty_teal_data(data()),
-            "The module did not recieve any data"
-          )
-        )
+        srv_is_empty_teal_data("is_empty_teal_data", data())
       } else {
-        validate(
-          need(
-            FALSE,
-            "The module did not recieve `teal_data`"
-          )
-        )
+        srv_check_class_teal_data("check_class_teal_data", data())
       }
     })
   })
 }
-
 
 # This function calls a module server function.
 .call_teal_module <- function(modules, datasets, filtered_teal_data, reporter) {
