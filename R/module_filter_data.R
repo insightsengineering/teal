@@ -25,7 +25,7 @@ ui_filter_data <- function(id) {
 
 #' @rdname module_filter_data
 srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) {
-  checkmate::assert_class(datasets, "reactive")
+  assert_reactive(datasets)
   moduleServer(id, function(input, output, session) {
     output$panel <- renderUI({
       req(inherits(datasets(), "FilteredData"))
