@@ -302,20 +302,18 @@ srv_teal_module.teal_module <- function(id,
 #' @keywords internal
 ui_validate_teal_data <- function(id) {
   ns <- NS(id)
-  uiOutput(ns("validation_error"))
+  div(
+    ui_check_class_teal_data(ns("class_teal_data")),
+    ui_is_empty_teal_data(ns("is_empty_teal_data"))
+  )
 }
 
 #' @keywords internal
 srv_validate_teal_data <- function(id, data) {
   checkmate::assert_string(id)
   moduleServer(id, function(input, output, session) {
-    output$validation_error <- renderUI({
-      if (inherits(data(), "teal_data")) {
-        srv_is_empty_teal_data("is_empty_teal_data", data())
-      } else {
-        srv_check_class_teal_data("check_class_teal_data", data())
-      }
-    })
+    srv_check_class_teal_data("check_class_teal_data", data())
+    srv_is_empty_teal_data("is_empty_teal_data", data())
   })
 }
 
