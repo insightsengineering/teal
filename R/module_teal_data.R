@@ -61,11 +61,10 @@ srv_teal_data <- function(id,
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
 
-    data_in <- reactive(data())
-    srv_is_empty_teal_data("is_empty_teal_data", data_in(), "The module did not receive any data")
+    srv_is_empty_teal_data("is_empty_teal_data", data, "The module did not receive any data")
 
     data_out <- if (is_arg_used(data_module$server, "data")) {
-      data_module$server(id = "data", data = data_in)
+      data_module$server(id = "data", data = data)
     } else {
       data_module$server(id = "data")
     }
