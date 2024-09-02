@@ -69,9 +69,6 @@ if (interactive()) {
 
 _See `?qenv` for a detailed explanation of how to use the `within` method._ 
 
-Note: It is recommended to return `reactive()` `teal_data()` in `server` of `teal_data_module`
-as this is more robust for maintaining the reactivity of Shiny. Try avoiding using `eventReactive()`, or make them react to `data()` at least. More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
-
 ## Modification of data in-app
 
 Another reason to postpone data operations is to involve the application user in the preprocessing stage.
