@@ -504,7 +504,6 @@ testthat::describe("srv_teal teal_modules", {
           module("module_1", server = function(id, data) data, datanames = c("iris"))
         )
       ),
-
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
 
