@@ -74,14 +74,14 @@ RdMacros:
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate,
     jeroen/jsonlite, r-lib/lifecycle,
-    daroczig/logger, rstudio/renv, r-lib/rlang,
+    daroczig/logger, shikokuchuo/mirai, shikokuchuo/nanonext
+    rstudio/renv, r-lib/rlang,
     daattali/shinyjs, insightsengineering/teal.code,
     insightsengineering/teal.logger, insightsengineering/teal.reporter,
     insightsengineering/teal.widgets, rstudio/bslib, yihui/knitr,
     bioc::MultiAssayExperiment, r-lib/R6, rstudio/rmarkdown,
     tidyverse/rvest, rstudio/shinytest2, rstudio/shinyvalidate,
     r-lib/testthat, r-lib/withr, yaml=vubiostat/r-yaml
-    daroczig/logger, tidyverse/magrittr, shikokuchuo/mirai, shikokuchuo/nanonext, rstudio/renv,
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US

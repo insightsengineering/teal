@@ -1,6 +1,6 @@
-# we should't run lockfile process multiple times in tests as it starts background process which is not
-# possible to kill once run. It means that background R sessions are being cumulated
 withr::local_options(
+  # we should't run lockfile process multiple times in tests as it starts background process which is not
+  # possible to kill once run. It means that background R sessions are being cumulated
   list(teal.renv.enable = FALSE),
   .local_envir = testthat::teardown_env()
 )
@@ -14,6 +14,7 @@ opts_partial_match_old <- list(
   warnPartialMatchAttr = getOption("warnPartialMatchAttr")
 )
 opts_partial_match_new <- list(
+  teal.renv.enable = FALSE,
   warnPartialMatchDollar = TRUE,
   warnPartialMatchArgs = TRUE,
   warnPartialMatchAttr = TRUE
