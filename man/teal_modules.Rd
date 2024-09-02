@@ -132,9 +132,10 @@ if it has a \code{datanames} property set to `"all". These objects usually are:
 \item proxy variables used to modify column etc.
 \item modified copies of datasets used to create a final dataset.
 \item connection objects
-In order to disable these dataset from showing up in the module one should use \code{set_datanames} function on the
+In order to disable these dataset from showing up in a module one should use \code{set_datanames} function on the
 \link{module} or \code{\link[=modules]{modules()}} to set \code{datanames} from \code{"all"} to some specific names. Trying to change \code{datanames}
 which are not \code{"all"} using \code{set_datanames} will be ignored with warning.
+Datasets which name starts with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
 }
 }
 

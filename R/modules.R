@@ -69,9 +69,10 @@ setOldClass("teal_modules")
 #' - proxy variables used to modify column etc.
 #' - modified copies of datasets used to create a final dataset.
 #' - connection objects
-#' In order to disable these dataset from showing up in the module one should use `set_datanames` function on the
+#' In order to disable these dataset from showing up in a module one should use `set_datanames` function on the
 #' [module] or [modules()] to set `datanames` from `"all"` to some specific names. Trying to change `datanames`
 #' which are not `"all"` using `set_datanames` will be ignored with warning.
+#' Datasets which name starts with `.` are ignored when `datanames` is set to `"all"`.
 #'
 #'
 #' @return
