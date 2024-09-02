@@ -312,8 +312,8 @@ ui_validate_teal_data <- function(id) {
 srv_validate_teal_data <- function(id, data) {
   checkmate::assert_string(id)
   moduleServer(id, function(input, output, session) {
-    srv_check_class_teal_data("check_class_teal_data", data())
-    srv_is_empty_teal_data("is_empty_teal_data", data())
+    srv_check_class_teal_data("check_class_teal_data", data)
+    srv_is_empty_teal_data("is_empty_teal_data", data, "Empty `teal_data` object.")
   })
 }
 
