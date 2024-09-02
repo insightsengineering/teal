@@ -73,7 +73,7 @@ srv_teal_lockfile <- function(id) {
 
     # run renv::snapshot only once per app. Once calculated available for all users
     if (file.exists(lockfile_path)) {
-      logger::log_debug("Lockfile have been already created - skipping automatic creation.")
+      logger::log_debug("Lockfile has been already created - skipping automatic creation.")
       enable_lockfile_download()
       return(NULL)
     }
@@ -87,7 +87,7 @@ srv_teal_lockfile <- function(id) {
         enable_lockfile_download()
         return(NULL)
       } else {
-        warning("lockfile provided through options('teal.renv.lockfile') does not exist.", call. = FALSE)
+        warning("Lockfile provided through options('teal.renv.lockfile') does not exist.", call. = FALSE)
       }
     }
 
