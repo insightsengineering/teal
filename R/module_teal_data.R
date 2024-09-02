@@ -149,7 +149,6 @@ srv_validate_silent_error <- function(id, data, validate_shiny_silent_error) {
         }
       }
     })
-
   })
 }
 
