@@ -102,7 +102,7 @@ ui_teal <- function(id,
     shiny_busy_message_panel,
     tags$div(
       class = "teal_validated",
-      uiOutput(ns("shiny_error"))
+      ui_validate_qenv_error(ns("qenv_error"))
     ),
     tags$div(
       id = ns("tabpanel_wrapper"),
@@ -198,10 +198,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     })
 
-    output$shiny_error <- renderUI({
-      srv_validate_qenv_error("validate_qenv_error", init_data())
-      NULL
-    })
+    srv_validate_qenv_error("qenv_error", init_data)
+
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
         if (!inherits(data_rv(), "teal_data")) {
