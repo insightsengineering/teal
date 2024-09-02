@@ -111,19 +111,12 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     data_rv <- reactive(tryCatch(data(), error = function(e) e))
 
     # there is an empty reactive cycle on init!
-    data_validated <-
-      srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
+    srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
+    srv_validate_qenv_error("qenv_error", data_rv)
+    srv_check_class_teal_data("class_teal_data", data_rv)
+    srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
 
-    if (identical(data_validated, teal_data())) {
-      teal_data()
-    } else {
-      srv_validate_qenv_error("qenv_error", data_rv)
-
-      srv_check_class_teal_data("class_teal_data", data_rv)
-
-      srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
-      data_rv
-    }
+    data_rv
   })
 }
 
@@ -141,7 +134,7 @@ srv_validate_silent_error <- function(id, data, validate_shiny_silent_error) {
     output$error <- renderUI({
       if (inherits(data(), "shiny.silent.error") && identical(data()$message, "")) {
         if (!validate_shiny_silent_error) {
-          return(teal_data())
+          return(NULL)
         } else {
           validate(
             need(
@@ -156,6 +149,7 @@ srv_validate_silent_error <- function(id, data, validate_shiny_silent_error) {
         }
       }
     })
+
   })
 }
 
