@@ -209,7 +209,7 @@ srv_check_class_teal_data <- function(id, data) {
 }
 
 #' @keywords internal
-srv_is_empty_teal_data <- function(id, data){
+srv_is_empty_teal_data <- function(id, data) {
   checkmate::assert_string(id)
   moduleServer(id, function(input, output, session) {
     validate(
