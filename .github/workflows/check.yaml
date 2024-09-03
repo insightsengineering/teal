@@ -10,6 +10,7 @@ on:
       - ready_for_review
     branches:
       - main
+      - 1304-handle-data-inputs@main
   push:
     branches:
       - main

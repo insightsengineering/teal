@@ -511,7 +511,7 @@ testthat::describe("srv_teal teal_modules", {
           trimws(
             rvest::html_text2(
               rvest::read_html(
-                output[["teal_modules-module_1-validate_datanames-shiny_warnings"]]$html
+                output[["teal_modules-module_1-validate_datanames-shiny_warnings-warnings"]]$html
               )
             )
           ),
