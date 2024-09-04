@@ -102,10 +102,12 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 
     # there is an empty reactive cycle on init!
     srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
-    srv_validate_qenv_error("qenv_error", data_rv)
-    srv_check_class_teal_data("class_teal_data", data_rv)
-    srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
 
+    if (!inherits(isolate(data_rv()), "shiny.silent.error")) {
+      srv_validate_qenv_error("qenv_error", data_rv)
+      srv_check_class_teal_data("class_teal_data", data_rv)
+      srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
+    }
     data_rv
   })
 }
@@ -215,5 +217,35 @@ srv_check_shiny_warnings <- function(id, data, modules) {
         }
       }
     })
+  })
+}
+
+
+#' Fallback on failure
+#'
+#' Function returns the previous reactive if the current reactive is invalid (throws error or returns NULL).
+#' Application: In `teal` we try to prevent the error from being thrown and instead we replace failing
+#' transform module data output with data input from the previous module (or from previous `teal` reactive
+#' tree elements).
+#'
+#' @param this (`reactive`) Current reactive.
+#' @param that (`reactive`) Previous reactive.
+#' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
+#' @return `reactive` `teal_data`
+#' @keywords internal
+.fallback_on_failure <- function(this, that, label) {
+  assert_reactive(this)
+  assert_reactive(that)
+  checkmate::assert_string(label)
+
+  reactive({
+    res <- try(this(), silent = TRUE)
+    if (inherits(res, "teal_data")) {
+      logger::log_debug("{ label } evaluated successfully.")
+      res
+    } else {
+      logger::log_debug("{ label } failed, falling back to previous data.")
+      that()
+    }
   })
 }
