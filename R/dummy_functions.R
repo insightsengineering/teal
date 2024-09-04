@@ -23,7 +23,7 @@ example_module <- function(label = "example teal module", datanames = "all", tra
       moduleServer(id, function(input, output, session) {
         datanames_rv <- reactive({
           req(data())
-          datanames <- teal.data::datanames(data())
+          teal.data::datanames(data())
         })
 
         observeEvent(datanames_rv(), {
