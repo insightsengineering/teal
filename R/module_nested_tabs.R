@@ -108,8 +108,8 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             width = 9,
             div(
               div(
-                class = "teal_validated",
-                ui_validate_teal_data(ns("module_input_error")),
+                class = "teal_validated"
+                # todo: should error message be displayed here?
               ),
               ui_teal
             ),
@@ -210,14 +210,14 @@ srv_teal_module.teal_module <- function(id,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    active_datanames <- reactive(.resolve_module_datanames(data = data_rv(), modules = modules))
+    active_datanames <- reactive({
+      req(inherits(data_rv(), "teal_data"))
+      .resolve_module_datanames(data = data_rv(), modules = modules)
+    })
     if (is.null(datasets)) {
       datasets <- eventReactive(data_rv(), {
-        if (!inherits(data_rv(), "teal_data")) {
-          stop("data_rv must be teal_data object.")
-        }
+        req(inherits(data_rv(), "teal_data"))
         logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
-
         teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
       })
     }
@@ -243,13 +243,12 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
-    srv_validate_teal_data("module_input_error", transformed_teal_data)
-
     observeEvent(transformed_teal_data(), {
-      shinyjs::toggle("teal_module_ui", condition = !.is_empty_teal_data(transformed_teal_data()))
+      shinyjs::toggle("teal_module_ui", condition = inherits(transformed_teal_data(), "teal_data"))
     })
 
     module_teal_data <- reactive({
+      req(inherits(transformed_teal_data(), "teal_data"))
       all_teal_data <- transformed_teal_data()
       module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
       .subset_teal_data(all_teal_data, module_datanames)
@@ -296,24 +295,6 @@ srv_teal_module.teal_module <- function(id,
     }
 
     module_out
-  })
-}
-
-#' @keywords internal
-ui_validate_teal_data <- function(id) {
-  ns <- NS(id)
-  div(
-    ui_check_class_teal_data(ns("class_teal_data")),
-    ui_is_empty_teal_data(ns("is_empty_teal_data"))
-  )
-}
-
-#' @keywords internal
-srv_validate_teal_data <- function(id, data) {
-  checkmate::assert_string(id)
-  moduleServer(id, function(input, output, session) {
-    srv_check_class_teal_data("check_class_teal_data", data)
-    srv_is_empty_teal_data("is_empty_teal_data", data, "Empty `teal_data` object.")
   })
 }
 

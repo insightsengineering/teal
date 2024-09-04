@@ -84,9 +84,3 @@ NULL
 .teal_data_ls <- function(data) {
   grep("._raw_", ls(teal.code::get_env(data), all.names = TRUE), value = TRUE, invert = TRUE)
 }
-
-#' @rdname teal_data_utilities
-.is_empty_teal_data <- function(data) {
-  checkmate::assert_class(data, "teal_data")
-  length(.teal_data_ls(data)) == 0
-}

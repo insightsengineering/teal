@@ -60,9 +60,6 @@ srv_teal_data <- function(id,
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
-
-    srv_is_empty_teal_data("is_empty_teal_data", data, "The module did not receive any data")
-
     data_out <- if (is_arg_used(data_module$server, "data")) {
       data_module$server(id = "data", data = data)
     } else {
@@ -75,14 +72,7 @@ srv_teal_data <- function(id,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error
     )
-
-    data_catch <- reactive(tryCatch(data_validated(), error = function(e) e))
-    data_rv <- reactive({
-      if (inherits(data_catch(), "shiny.silent.error")) {
-        return(teal_data())
-      }
-      data_catch()
-    })
+    reactive(tryCatch(data_validated(), error = function(e) e))
   })
 }
 
@@ -108,7 +98,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
-    data_rv <- reactive(tryCatch(data(), error = function(e) e))
+    data_rv <- reactive(tryCatch(data(), error = function(e) e)) # todo: can be removed as data is already try-catched
 
     # there is an empty reactive cycle on init!
     srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
@@ -193,33 +183,10 @@ srv_check_class_teal_data <- function(id, data) {
     output$check <- renderUI({
       validate(
         need(
-          checkmate::test_class(data(), "teal_data"),
+          inherits(data(), "teal_data"),
           "Did not recieve a valid `teal_data` object. Cannot proceed further."
         )
       )
-    })
-  })
-}
-
-#' @keywords internal
-ui_is_empty_teal_data <- function(id) {
-  ns <- NS(id)
-  uiOutput(ns("is_empty"))
-}
-
-#' @keywords internal
-srv_is_empty_teal_data <- function(id, data, message) {
-  checkmate::assert_string(id)
-  moduleServer(id, function(input, output, session) {
-    output$is_empty <- renderUI({
-      if (inherits(data(), "teal_data")) {
-        validate(
-          need(
-            !.is_empty_teal_data(data()),
-            message
-          )
-        )
-      }
     })
   })
 }

@@ -19,9 +19,11 @@ example_module <- function(label = "example teal module", datanames = "all", tra
     label,
     server = function(id, data) {
       checkmate::assert_class(isolate(data()), "teal_data")
+      # data(): teal_data, qenv.error, error, stop()
       moduleServer(id, function(input, output, session) {
         datanames_rv <- reactive({
-          teal.data::datanames(req(data()))
+          req(data())
+          datanames <- teal.data::datanames(data())
         })
 
         observeEvent(datanames_rv(), {

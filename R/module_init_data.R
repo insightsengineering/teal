@@ -85,9 +85,12 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
     }
 
     observeEvent(data_validated(), {
-      req(inherits(data_validated(), "teal_data"))
+      if (!inherits(data_validated(), "teal_data")) {
+        shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+        return(NULL)
+      }
 
-      if (isTRUE(attr(data, "once")) && !.is_empty_teal_data(data_validated())) {
+      if (isTRUE(attr(data, "once")) && inherits(data_validated(), "teal_data")) {
         # Hiding the data module tab.
         shinyjs::hide(
           selector = sprintf(
@@ -102,10 +105,6 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
             session$ns("content")
           )
         )
-      }
-
-      if (.is_empty_teal_data(data_validated())) {
-        shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
       }
       is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
       if (!isTRUE(is_filter_ok)) {
@@ -136,10 +135,8 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
     reactive({
       if (inherits(data_validated(), "teal_data")) {
         .add_signature_to_data(data_validated())
-      } else if (inherits(data_validated(), "qenv.error")) {
-        data_validated()
       } else {
-        teal_data()
+        data_validated() # error, qenv.error, shiny.silent.error, validate-error
       }
     })
   })

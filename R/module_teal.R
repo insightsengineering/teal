@@ -190,28 +190,19 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     init_data <- srv_init_data("data", data = data, modules = modules, filter = filter)
-    data_rv <- reactive({
-      if (inherits(init_data(), "qenv.error")) {
-        teal_data()
-      } else {
-        init_data()
-      }
-    })
-
     srv_validate_qenv_error("qenv_error", init_data)
+    # we missed other types of errors because SRV_init_daTA already replaced error with teal_data()
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(data_rv(), {
-        if (!inherits(data_rv(), "teal_data")) {
-          stop("data_rv must be teal_data object.")
-        }
+      eventReactive(init_data(), {
+        req(inherits(init_data(), "teal_data"))
         logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(data_rv())
+        teal_data_to_filtered_data(init_data())
       })
     }
 
-    observeEvent(data_rv(), {
-      if (!.is_empty_teal_data(data_rv())) {
+    observeEvent(init_data(), {
+      if (inherits(init_data(), "teal_data")) {
         showNotification("Data loaded successfully.", duration = 5)
         enable_teal_tabs(session$ns)
       }
@@ -221,7 +212,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
-      data_rv = data_rv,
+      data_rv = init_data,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global
