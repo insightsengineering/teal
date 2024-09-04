@@ -7,7 +7,6 @@
 \alias{.subset_teal_data}
 \alias{.teal_data_datanames}
 \alias{.teal_data_ls}
-\alias{.is_empty_teal_data}
 \title{\code{teal_data} utils}
 \usage{
 .append_evaluated_code(data, code)
@@ -19,8 +18,6 @@
 .teal_data_datanames(data)
 
 .teal_data_ls(data)
-
-.is_empty_teal_data(data)
 }
 \arguments{
 \item{data}{(\code{teal_data})}
