@@ -45,25 +45,6 @@ test_that("teal_data_to_filtered_data return FilteredData class", {
   testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
 })
 
-test_that("teal_data_datanames returns names of the @env's objects when datanames not set", {
-  teal_data <- teal.data::teal_data()
-  teal_data <- within(teal_data, {
-    iris <- head(iris)
-    mtcars <- head(mtcars)
-  })
-  testthat::expect_setequal(.teal_data_datanames(teal_data), c("mtcars", "iris"))
-})
-
-test_that("teal_data_datanames returns datanames which are set by teal.data::datanames", {
-  teal_data <- teal.data::teal_data()
-  teal_data <- within(teal_data, {
-    iris <- head(iris)
-    mtcars <- head(mtcars)
-  })
-  datanames(teal_data) <- "iris"
-  testthat::expect_equal(.teal_data_datanames(teal_data), "iris")
-})
-
 test_that("validate_app_title_tag works on validating the title tag", {
   valid_title <- tags$head(
     tags$title("title"),

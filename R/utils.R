@@ -45,16 +45,17 @@ get_teal_bs_theme <- function() {
 #' @noRd
 #' @keywords internal
 include_parent_datanames <- function(dataname, join_keys) {
-  parents <- character(0)
+  ordered_datanames <- dataname
   for (i in dataname) {
+    parents <- character(0)
     while (length(i) > 0) {
       parent_i <- teal.data::parent(join_keys, i)
       parents <- c(parent_i, parents)
       i <- parent_i
     }
+    ordered_datanames <- c(parents, dataname, ordered_datanames)
   }
-
-  unique(c(parents, dataname))
+  unique(ordered_datanames)
 }
 
 #' Create a `FilteredData`
@@ -65,13 +66,15 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = .teal_data_datanames(x)) {
+teal_data_to_filtered_data <- function(x, datanames = .teal_data_ls(x)) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
-
   # Otherwise, FilteredData will be created in the modules' scope later
   teal.slice::init_filtered_data(
-    x = sapply(datanames, function(dn) x[[dn]], simplify = FALSE),
+    x = Filter(
+      length,
+      sapply(datanames, function(dn) x[[dn]], simplify = FALSE)
+    ),
     join_keys = teal.data::join_keys(x)
   )
 }
