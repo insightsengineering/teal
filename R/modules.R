@@ -62,9 +62,11 @@ setOldClass("teal_modules")
 #'
 #' @section `datanames`:
 #' The module's `datanames` argument determines a subset of datasets from the `data` object, as specified in the server function argument, to be presented in the module.
-#' Datasets displayed in the filter panel will be limited to this subset.
-#' When `datanames` is set to `"all"`, all available datasets in the `data` object are considered relevant for the module.
-#' However, setting `datanames` argument to `"all"` might include datasets that are irrelevant for the module. For example:
+#' Datasets displayed in the filter panel will be limited to this subset. When `datanames` is set to `"all"`, all
+#' available datasets in the `data` object are considered relevant for
+#' the module.
+#' However, setting `datanames` argument to `"all"` might include datasets that are irrelevant for the module.
+#' For example:
 #' - Proxy variables used for modifying columns.
 #' - Modified copies of datasets used to create a final dataset.
 #' - Connection objects.

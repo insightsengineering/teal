@@ -124,9 +124,11 @@ and the report previewer module \code{\link[=reporter_previewer_module]{reporter
 \section{\code{datanames}}{
 
 The module's \code{datanames} argument determines a subset of datasets from the \code{data} object, as specified in the server function argument, to be presented in the module.
-Datasets displayed in the filter panel will be limited to this subset.
-When \code{datanames} is set to \code{"all"}, all available datasets in the \code{data} object are considered relevant for the module.
-However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module. For example:
+Datasets displayed in the filter panel will be limited to this subset. When \code{datanames} is set to \code{"all"}, all
+available datasets in the \code{data} object are considered relevant for
+the module.
+However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module.
+For example:
 \itemize{
 \item Proxy variables used for modifying columns.
 \item Modified copies of datasets used to create a final dataset.
