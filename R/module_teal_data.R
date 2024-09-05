@@ -66,13 +66,14 @@ srv_teal_data <- function(id,
       data_module$server(id = "data")
     }
 
-    data_validated <- srv_validate_reactive_teal_data(
+    srv_validate_reactive_teal_data(
       id = "validate",
       data = data_out,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error
     )
-    reactive(tryCatch(data_validated(), error = function(e) e))
+
+    .fallback_on_failure(data_out, label = "data validation in srv_teal_data")
   })
 }
 
@@ -98,7 +99,8 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
-    data_rv <- reactive(tryCatch(data(), error = function(e) e)) # todo: can be removed as data is already try-catched
+    # tryCatch can not be removed since in srv_teal_data this module works on non tryCatch-ed data
+    data_rv <- reactive(tryCatch(data(), error = function(e) e))
 
     # there is an empty reactive cycle on init!
     srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
@@ -108,7 +110,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       srv_check_class_teal_data("class_teal_data", data_rv)
       srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
     }
-    data_rv
+
   })
 }
 
@@ -223,29 +225,23 @@ srv_check_shiny_warnings <- function(id, data, modules) {
 
 #' Fallback on failure
 #'
-#' Function returns the previous reactive if the current reactive is invalid (throws error or returns NULL).
-#' Application: In `teal` we try to prevent the error from being thrown and instead we replace failing
-#' transform module data output with data input from the previous module (or from previous `teal` reactive
-#' tree elements).
+#' Function returns the reactive if the current input reactive contains a valid `teal_data` object.
+#' Application: In `teal` we try to prevent the error from being propagated into modules and instead we replace failing
+#' output with previous input.
 #'
-#' @param this (`reactive`) Current reactive.
-#' @param that (`reactive`) Previous reactive.
-#' @param label (`character`) Label for identifying problematic `teal_data_module` transform in logging.
-#' @return `reactive` `teal_data`
+#' @param reactive_input (`reactive`) The reactive to be verified.
+#' @param label (`character`) Label for identifying problematic reactive inputs in logging.
+#' @return `reactive()` `NULL` or `teal_data`.
 #' @keywords internal
-.fallback_on_failure <- function(this, that, label) {
-  assert_reactive(this)
-  assert_reactive(that)
+.fallback_on_failure <- function(reactive_input, label) {
+  assert_reactive(reactive_input)
   checkmate::assert_string(label)
-
-  reactive({
-    res <- try(this(), silent = TRUE)
-    if (inherits(res, "teal_data")) {
+  out <- reactiveVal()
+  observeEvent(reactive_input(), {
+    if (inherits(reactive_input(), "teal_data") && !identical(reactive_input(), shiny::isolate(out()))) {
       logger::log_debug("{ label } evaluated successfully.")
-      res
-    } else {
-      logger::log_debug("{ label } failed, falling back to previous data.")
-      that()
+      shiny::isolate(out(reactive_input()))
     }
   })
+  out
 }

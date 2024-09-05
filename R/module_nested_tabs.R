@@ -243,9 +243,7 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
-
-    # 1. display errors from transformed_teal_data
-    # 2. and hide module content (observer below)
+    # 1. hide module content (observer below)
     observeEvent(transformed_teal_data(), {
       shinyjs::toggle("teal_module_ui", condition = inherits(transformed_teal_data(), "teal_data"))
     })
@@ -257,7 +255,8 @@ srv_teal_module.teal_module <- function(id,
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
-    module_teal_data_validated <- srv_validate_reactive_teal_data(
+    # 2. display errors from transformed_teal_data/module_teal_data
+    srv_validate_reactive_teal_data(
       "validate_datanames",
       data = module_teal_data,
       modules = modules
@@ -265,7 +264,7 @@ srv_teal_module.teal_module <- function(id,
 
     trigger_module <- reactive({
       req(filtered_teal_data())
-      req(module_teal_data_validated())
+      req(module_teal_data())
       TRUE
     })
 
@@ -280,10 +279,7 @@ srv_teal_module.teal_module <- function(id,
         once = TRUE,
         eventExpr = trigger_module(),
         handlerExpr = {
-          # module_teal_data_validated can be reactive(error)
-          module_data <- .fallback_on_failure(module_teal_data_validated, module_teal_data, label = "Validated data")
-          module_out(.call_teal_module(modules, datasets, module_data, reporter))
-          # module_out(.call_teal_module(modules, datasets, module_teal_data_validated, reporter))
+          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
         }
       )
     } else {

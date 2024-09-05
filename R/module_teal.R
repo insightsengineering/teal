@@ -190,7 +190,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     init_data <- srv_init_data("data", data = data, modules = modules, filter = filter)
-    srv_validate_qenv_error("qenv_error", init_data)
+    # srv_validate_qenv_error("qenv_error", init_data) # init_data is always fallbacked
     # we missed other types of errors because SRV_init_daTA already replaced error with teal_data()
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
