@@ -74,7 +74,7 @@ RdMacros:
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate,
     jeroen/jsonlite, r-lib/lifecycle,
-    daroczig/logger, shikokuchuo/mirai, shikokuchuo/nanonext
+    daroczig/logger, shikokuchuo/mirai, shikokuchuo/nanonext,
     rstudio/renv, r-lib/rlang,
     daattali/shinyjs, insightsengineering/teal.code,
     insightsengineering/teal.logger, insightsengineering/teal.reporter,
