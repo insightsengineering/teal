@@ -4,22 +4,19 @@
 \alias{.fallback_on_failure}
 \title{Fallback on failure}
 \usage{
-.fallback_on_failure(this, that, label)
+.fallback_on_failure(reactive_input, label)
 }
 \arguments{
-\item{this}{(\code{reactive}) Current reactive.}
+\item{reactive_input}{(\code{reactive}) The reactive to be verified.}
 
-\item{that}{(\code{reactive}) Previous reactive.}
-
-\item{label}{(\code{character}) Label for identifying problematic \code{teal_data_module} transform in logging.}
+\item{label}{(\code{character}) Label for identifying problematic reactive inputs in logging.}
 }
 \value{
-\code{reactive} \code{teal_data}
+\code{reactive()} \code{NULL} or \code{teal_data}.
 }
 \description{
-Function returns the previous reactive if the current reactive is invalid (throws error or returns NULL).
-Application: In \code{teal} we try to prevent the error from being thrown and instead we replace failing
-transform module data output with data input from the previous module (or from previous \code{teal} reactive
-tree elements).
+Function returns the reactive if the current input reactive contains a valid \code{teal_data} object.
+Application: In \code{teal} we try to prevent the error from being propagated into modules and instead we replace failing
+output with previous input.
 }
 \keyword{internal}
