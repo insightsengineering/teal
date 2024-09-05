@@ -34,6 +34,11 @@ NULL
 
 #' @rdname module_teal_lockfile
 ui_teal_lockfile <- function(id) {
+  if (!requireNamespace("mirai", quietly = TRUE) || !requireNamespace("renv", quietly = TRUE)) {
+    warning("lockfile feature disabled. `mirai` and `renv` packages must be installed.")
+    return(NULL)
+  }
+
   ns <- NS(id)
   if (!isTRUE(getOption("teal.renv.enable"))) {
     return(NULL)
@@ -46,6 +51,9 @@ ui_teal_lockfile <- function(id) {
 
 #' @rdname module_teal_lockfile
 srv_teal_lockfile <- function(id) {
+  if (!requireNamespace(c("mirai", "renv"), quietly = TRUE)) {
+    return(NULL)
+  }
   moduleServer(id, function(input, output, session) {
     logger::log_debug("Initialize srv_teal_lockfile.")
     enable_lockfile_download <- function() {
