@@ -123,19 +123,19 @@ and the report previewer module \code{\link[=reporter_previewer_module]{reporter
 }
 \section{\code{datanames}}{
 
-Module's \code{datanames} attribute determines a subset of datasets which are appended to the \code{data}
-argument in server function. Datasets displayed in the filter-panel will also be limited to the \code{datanames}.
-When \code{datanames} is set to  \code{"all"}, all available datasets are considered as relevant for the module.
-Sometimes, \code{data} handed over to \code{teal} application might contain datasets which are irrelevant for the module
-if it has a \code{datanames} property set to `"all". These objects usually are:
+The module's \code{datanames} argument determines a subset of datasets from the \code{data} object, as specified in the server function argument, to be presented in the module.
+Datasets displayed in the filter panel will be limited to this subset.
+When \code{datanames} is set to \code{"all"}, all available datasets in the \code{data} object are considered relevant for the module.
+However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module. For example:
 \itemize{
-\item proxy variables used to modify column etc.
-\item modified copies of datasets used to create a final dataset.
-\item connection objects
-In order to disable these dataset from showing up in a module one should use \code{set_datanames} function on the
-\link{module} or \code{\link[=modules]{modules()}} to set \code{datanames} from \code{"all"} to some specific names. Trying to change \code{datanames}
-which are not \code{"all"} using \code{set_datanames} will be ignored with warning.
-Datasets which name starts with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
+\item Proxy variables used for modifying columns.
+\item Modified copies of datasets used to create a final dataset.
+\item Connection objects.
+To prevent these irrelevant datasets from appearing in the module, use the \code{\link[=set_datanames]{set_datanames()}} function on the
+\link{module} or \code{\link[=modules]{modules()}} to change the \code{datanames} from \code{"all"} to specific dataset names. Attempting to change
+\code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored
+with a warning.
+Additionally, datasets with names starting with \code{.} are ignored when datanames is set to \code{"all"}.
 }
 }
 

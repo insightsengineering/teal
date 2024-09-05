@@ -105,9 +105,9 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' where the `id` is the module id and `data` is the reactive `teal_data` input.
 #' The server function must return reactive expression containing `teal_data` object.
 #' @param datanames (`character`)
-#'  Names of the datasets that are relevant for the item. The
+#'  Names of the datasets that are relevant for the module. The
 #'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
-#'  filters of all datasets. `datanames` will be automatically appended to the [modules()] `danames`.
+#'  filters of all datasets. `datanames` will be automatically appended to the [modules()] `datanames`.
 #' @examples
 #' my_transformers <- list(
 #'   teal_transform_module(

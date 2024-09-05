@@ -23,9 +23,9 @@ The server function must return reactive expression containing \code{teal_data} 
 \item{label}{(\code{character(1)}) Label of the module.}
 
 \item{datanames}{(\code{character})
-Names of the datasets that are relevant for the item. The
+Names of the datasets that are relevant for the module. The
 filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
-filters of all datasets. \code{datanames} will be automatically appended to the \code{\link[=modules]{modules()}} \code{danames}.}
+filters of all datasets. \code{datanames} will be automatically appended to the \code{\link[=modules]{modules()}} \code{datanames}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
