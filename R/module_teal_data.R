@@ -110,7 +110,6 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       srv_check_class_teal_data("class_teal_data", data_rv)
       srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
     }
-
   })
 }
 
