@@ -9,7 +9,7 @@ Create a nested tab structure to embed modules in a teal application."><link rel
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9058</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9059</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,23 +56,6 @@ Create a nested tab structure to embed modules in a teal application."><link rel
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-reports"><li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
     <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
@@ -103,7 +86,8 @@ Create a nested tab structure to embed modules in a <code>teal</code> applicatio
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">module</span><span class="op">(</span></span>
 <span>  label <span class="op">=</span> <span class="st">"module"</span>,</span>
-<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span></span>
+<span>    <span class="cn">NULL</span><span class="op">)</span>,</span>
 <span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"This module has no UI (id: "</span>, <span class="va">id</span>, <span class="st">" )"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="va">filters</span>,</span>
 <span>  datanames <span class="op">=</span> <span class="st">"all"</span>,</span>
@@ -122,6 +106,8 @@ Create a nested tab structure to embed modules in a <code>teal</code> applicatio
 <span></span>
 <span><span class="co"># S3 method for class 'teal_modules'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">x</span>, indent <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">set_datanames</span><span class="op">(</span><span class="va">modules</span>, <span class="va">datanames</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'teal_modules'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -166,11 +152,9 @@ or to the <code>...</code>.</p></li>
 
 
 <dt id="arg-datanames">datanames<a class="anchor" aria-label="anchor" href="#arg-datanames"></a></dt>
-<dd><p>(<code>character</code>) A vector with <code>datanames</code> that are relevant for the item. The
-filter panel will automatically update the shown filters to include only
-filters in the listed datasets. <code>NULL</code> will hide the filter panel,
-and the keyword <code>"all"</code> will show filters of all datasets. <code>datanames</code> also determines
-a subset of datasets which are appended to the <code>data</code> argument in server function.</p></dd>
+<dd><p>(<code>character</code>) Names of the datasets that are relevant for the item.
+The keyword <code>"all"</code> provides all datasets available in <code>data</code> passed to <code>teal</code> application.
+<code>NULL</code> will hide the filter panel.</p></dd>
 
 
 <dt id="arg-server-args">server_args<a class="anchor" aria-label="anchor" href="#arg-server-args"></a></dt>
@@ -184,7 +168,8 @@ a subset of datasets which are appended to the <code>data</code> argument in ser
 <dt id="arg-transformers">transformers<a class="anchor" aria-label="anchor" href="#arg-transformers"></a></dt>
 <dd><p>(<code>list</code> of <code>teal_data_module</code>) that will be applied to transform the data.
 Each transform module UI will appear in the <code>teal</code> application, unless the <code>custom_ui</code> attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself.</p>
+If so, the module developer is responsible to display the UI in the module itself. <code>datanames</code> of the <code>transformers</code>
+will be added to the <code>datanames</code>.</p>
 <p>When the transformation does not have sufficient input data, the resulting data will fallback
 to the last successful transform or, in case there are none, to the filtered data.</p></dd>
 
@@ -201,6 +186,10 @@ to the last successful transform or, in case there are none, to the filtered dat
 
 <dt id="arg-indent">indent<a class="anchor" aria-label="anchor" href="#arg-indent"></a></dt>
 <dd><p>(<code>integer(1)</code>) Indention level; each nested element is indented one level more.</p></dd>
+
+
+<dt id="arg-modules">modules<a class="anchor" aria-label="anchor" href="#arg-modules"></a></dt>
+<dd><p>(<code>teal_module</code> or <code>teal_modules</code>)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -221,6 +210,23 @@ otherwise it will be captured by <code>...</code>.</p>
 <p>The labels <code>"global_filters"</code> and <code>"Report previewer"</code> are reserved
 because they are used by the <code>mapping</code> argument of <code><a href="teal_slices.html">teal_slices()</a></code>
 and the report previewer module <code><a href="reporter_previewer_module.html">reporter_previewer_module()</a></code>, respectively.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="datanames"><code>datanames</code><a class="anchor" aria-label="anchor" href="#datanames"></a></h2>
+
+
+<p>The module's <code>datanames</code> argument determines a subset of datasets from the <code>data</code> object, as specified in the
+server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
+to this subset.
+When <code>datanames</code> is set to <code>"all"</code>, all available datasets in the <code>data</code> object are considered relevant for the
+module. However, setting <code>datanames</code> argument to <code>"all"</code> might include datasets that are irrelevant for the module,
+for example:</p><ul><li><p>Proxy variables used for modifying columns.</p></li>
+<li><p>Modified copies of datasets used to create a final dataset.</p></li>
+<li><p>Connection objects.
+To prevent these irrelevant datasets from appearing in the module, use the <code>set_datanames()</code> function on the
+module or <code>modules()</code> to change the <code>datanames</code> from <code>"all"</code> to specific dataset names. Attempting to change
+<code>datanames</code> values that was not set to <code>"all"</code> using <code>set_datanames()</code> will be ignored with a warning.</p></li>
+</ul><p>Additionally, datasets with names starting with <code>.</code> are ignored when <code>datanames</code> is set to <code>"all"</code>.</p>
     </div>
 
     <div class="section level2">
@@ -278,6 +284,22 @@ and the report previewer module <code><a href="reporter_previewer_module.html">r
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># change the module's datanames</span></span></span>
+<span class="r-in"><span><span class="fu">set_datanames</span><span class="op">(</span><span class="fu">module</span><span class="op">(</span>datanames <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>, <span class="st">"a"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> + module</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># change modules' datanames</span></span></span>
+<span class="r-in"><span><span class="fu">set_datanames</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">modules</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">module</span><span class="op">(</span>datanames <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">module</span><span class="op">(</span>datanames <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"b"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Not possible to modify datanames of the module module. set_datanames() can only change datanames if it was set to "all".</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> + root</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  + module</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  + module</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
