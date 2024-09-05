@@ -123,22 +123,22 @@ and the report previewer module \code{\link[=reporter_previewer_module]{reporter
 }
 \section{\code{datanames}}{
 
-The module's \code{datanames} argument determines a subset of datasets from the \code{data} object, as specified in the server function argument, to be presented in the module.
-Datasets displayed in the filter panel will be limited to this subset. When \code{datanames} is set to \code{"all"}, all
-available datasets in the \code{data} object are considered relevant for
-the module.
-However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module.
-For example:
+The module's \code{datanames} argument determines a subset of datasets from the \code{data} object, as specified in the
+server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
+to this subset.
+When \code{datanames} is set to \code{"all"}, all available datasets in the \code{data} object are considered relevant for the
+module. However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module,
+for example:
 \itemize{
 \item Proxy variables used for modifying columns.
 \item Modified copies of datasets used to create a final dataset.
 \item Connection objects.
 To prevent these irrelevant datasets from appearing in the module, use the \code{\link[=set_datanames]{set_datanames()}} function on the
 \link{module} or \code{\link[=modules]{modules()}} to change the \code{datanames} from \code{"all"} to specific dataset names. Attempting to change
-\code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored
-with a warning.
-Additionally, datasets with names starting with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
+\code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored with a warning.
 }
+
+Additionally, datasets with names starting with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
 }
 
 \examples{
