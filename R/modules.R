@@ -61,18 +61,17 @@ setOldClass("teal_modules")
 #' - For `format()` and `print()`: Arguments passed to other methods.
 #'
 #' @section `datanames`:
-#' Module's `datanames` attribute determines a subset of datasets which are appended to the `data`
-#' argument in server function. Datasets displayed in the filter-panel will also be limited to the `datanames`.
-#' When `datanames` is set to  `"all"`, all available datasets are considered as relevant for the module.
-#' Sometimes, `data` handed over to `teal` application might contain datasets which are irrelevant for the module
-#' if it has a `datanames` property set to `"all". These objects usually are:
-#' - proxy variables used to modify column etc.
-#' - modified copies of datasets used to create a final dataset.
-#' - connection objects
-#' In order to disable these dataset from showing up in a module one should use `set_datanames` function on the
-#' [module] or [modules()] to set `datanames` from `"all"` to some specific names. Trying to change `datanames`
-#' which are not `"all"` using `set_datanames` will be ignored with warning.
-#' Datasets which name starts with `.` are ignored when `datanames` is set to `"all"`.
+#' The module's `datanames` argument determines a subset of datasets from the `data` object, as specified in the server function argument, to be presented in the module.
+#' Datasets displayed in the filter panel will be limited to this subset.
+#' When `datanames` is set to `"all"`, all available datasets in the `data` object are considered relevant for the module.
+#' However, setting `datanames` argument to `"all"` might include datasets that are irrelevant for the module. For example:
+#' - Proxy variables used for modifying columns.
+#' - Modified copies of datasets used to create a final dataset.
+#' - Connection objects.
+#' To prevent these irrelevant datasets from appearing in the module, use the set_datanames function on the 
+#' [module] or [modules()] to change the `datanames` from `"all"` to specific dataset names. Attempting to change `datanames` values 
+#' that was not set to `"all"` using `set_datanames` will be ignored with a warning.
+#' Additionally, datasets with names starting with `.` are ignored when datanames is set to `"all"`.
 #'
 #'
 #' @return
