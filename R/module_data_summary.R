@@ -148,7 +148,7 @@ get_filter_overview <- function(teal_data) {
   )
   unfiltered_data_objs <- sapply(
     datanames,
-    function(name) teal.code::get_env(teal_data())[[paste0(name, "._raw_")]],
+    function(name) teal.code::get_env(teal_data())[[sprintf(".%s_raw", name)]],
     simplify = FALSE
   )
 
