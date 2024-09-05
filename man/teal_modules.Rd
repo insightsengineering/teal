@@ -135,7 +135,7 @@ To prevent these irrelevant datasets from appearing in the module, use the \code
 \link{module} or \code{\link[=modules]{modules()}} to change the \code{datanames} from \code{"all"} to specific dataset names. Attempting to change
 \code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored
 with a warning.
-Additionally, datasets with names starting with \code{.} are ignored when datanames is set to \code{"all"}.
+Additionally, datasets with names starting with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
 }
 }
 

@@ -72,7 +72,7 @@ setOldClass("teal_modules")
 #' [module] or [modules()] to change the `datanames` from `"all"` to specific dataset names. Attempting to change
 #' `datanames` values that was not set to `"all"` using [set_datanames()] will be ignored
 #' with a warning.
-#' Additionally, datasets with names starting with `.` are ignored when datanames is set to `"all"`.
+#' Additionally, datasets with names starting with `.` are ignored when `datanames` is set to `"all"`.
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.
