@@ -179,38 +179,6 @@ The filter panel supports MAEs out of the box.
 
 ## `teal_data` properties
 
-##### `datanames`
-
-The `datanames` property lists the objects stored in the `teal_data` environment that constitute datasets of interest.
-Objects passed to `teal_data` become automatically listed in the `datanames` property of the resulting object.
-Objects created in `teal_data` by evaluating code need not be data objects of interest and as such they are not automatically added to `datanames`.
-For convenience, an empty `datanames` property is considered to mean "all objects in the container".
-`datanames` can be read or modified with the `datanames` function.
-
-```{r}
-data_with_objects <- teal_data(iris = iris, cars = mtcars)
-data_with_code <- within(teal_data(), {
-  iris <- iris
-  cars <- mtcars
-  not_a_dataset <- "data source credits"
-})
-datanames(data_with_objects)
-datanames(data_with_code)
-datanames(data_with_code) <- c("iris", "cars")
-datanames(data_with_code)
-```
-
-The `datanames` property serves as a communication bridge between the data container and modules in a `teal` application.
-In `teal` all modules are called with a `datanames` argument that determines which of the variables in the `teal_data` object they are to access.
-Only variables enumerated in the `datanames` property are eligible for use in modules.
-
-Note that specifying `datanames` in `teal_data` is optional; if the property is empty, all objects are considered eligible.
-Likewise, the `datanames` argument in the module call defaults to `"all"`, which means that module will attempt to access all eligible variables in the `teal_data` object.
-
-For a detailed explanation of `datanames`, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
-
-[(back to General Data)](#general-data)
-
 ##### `join_keys`
 
 Using relational data requires specifying joining keys for each pair of datasets.
