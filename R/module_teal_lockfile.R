@@ -34,15 +34,14 @@ NULL
 
 #' @rdname module_teal_lockfile
 ui_teal_lockfile <- function(id) {
-  if (!requireNamespace("mirai", quietly = TRUE) || !requireNamespace("renv", quietly = TRUE)) {
-    warning("lockfile feature disabled. `mirai` and `renv` packages must be installed.")
+  if (!isTRUE(getOption("teal.renv.enable"))) {
+    return(NULL)
+  } else if (!.is_lockfile_deps_installed()) {
+    warning("Lockfile feature disabled. `mirai` and `renv` packages must be installed.")
     return(NULL)
   }
 
   ns <- NS(id)
-  if (!isTRUE(getOption("teal.renv.enable"))) {
-    return(NULL)
-  }
   shiny::tagList(
     tags$span("", id = ns("lockFileStatus")),
     shinyjs::disabled(downloadLink(ns("lockFileLink"), "Download lockfile"))
@@ -51,7 +50,7 @@ ui_teal_lockfile <- function(id) {
 
 #' @rdname module_teal_lockfile
 srv_teal_lockfile <- function(id) {
-  if (!requireNamespace(c("mirai", "renv"), quietly = TRUE)) {
+  if (!isTRUE(getOption("teal.renv.enable")) || !.is_lockfile_deps_installed()) {
     return(NULL)
   }
   moduleServer(id, function(input, output, session) {
@@ -65,10 +64,6 @@ srv_teal_lockfile <- function(id) {
       warning("Lockfile creation failed.", call. = FALSE)
       shinyjs::html("lockFileStatus", "Lockfile creation failed.")
       shinyjs::disable("lockFileLink")
-    }
-
-    if (!isTRUE(getOption("teal.renv.enable"))) {
-      return(NULL)
     }
 
     lockfile_path <- "teal_app.lock"
@@ -192,4 +187,9 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
   )
 
   list(out = out, res = res)
+}
+
+#' @rdname module_teal_lockfile
+.is_lockfile_deps_installed <- function() {
+  requireNamespace("mirai", quietly = TRUE) && requireNamespace("renv", quietly = TRUE)
 }

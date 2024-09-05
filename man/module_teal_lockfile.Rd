@@ -6,6 +6,7 @@
 \alias{srv_teal_lockfile}
 \alias{.teal_lockfile_process_invoke}
 \alias{.renv_snapshot}
+\alias{.is_lockfile_deps_installed}
 \title{Generate lockfile for application's environment reproducibility}
 \usage{
 ui_teal_lockfile(id)
@@ -15,6 +16,8 @@ srv_teal_lockfile(id)
 .teal_lockfile_process_invoke(lockfile_path)
 
 .renv_snapshot(lockfile_path)
+
+.is_lockfile_deps_installed()
 }
 \arguments{
 \item{lockfile_path}{(\code{character}) path to the lockfile (\code{"teal_app.lock"}).}
