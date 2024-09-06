@@ -84,10 +84,16 @@ This indicates whether to print the `JavaScript` console logs to the `R` console
 
 Default: `FALSE`.
 
-### `teal.renv.lockfile` (`character`)
+### `teal.lockfile.enable` (`logical`)
 
-The path to the pre-computed `renv` lockfile that will be shared through teal app. To read more about lockfile usage creation check `?teal::teal_lockfile`.
+This enables app users to download `renv` lockfile by clicking "download lockfile" in the footer. If 
+`teal.lockfile.path` is not specified then lockfile is created automatically by `teal`. To read more about 
+lockfile usage creation check `?teal::teal_lockfile`.
 
+### `teal.lockfile.path` (`character`)
+
+The path to the pre-computed `renv` lockfile linked by app developer. Lockfile will be available to download if 
+`teal.lockfile.enable` is set to `TRUE`.
 
 # Deprecated options
 

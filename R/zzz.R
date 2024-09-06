@@ -2,9 +2,7 @@
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
   teal_default_options <- list(
     teal.show_js_log = FALSE,
-    # todo: make below teal.renv.enable = FALSE during run_examples, test_package, r cmd check
-    #       run_examples probably doesn't set any sysvars but maybe detecting run_examples in sys.calls() helps
-    teal.renv.enable = TRUE,
+    teal.lockfile.enable = TRUE,
     shiny.sanitize.errors = FALSE
   )
 

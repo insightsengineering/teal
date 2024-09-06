@@ -7,9 +7,9 @@
 #'
 #' - User-specified:
 #'     - **Pre-computed lockfile**: Users can provide their own pre-computed lockfile by specifying the path via
-#'     `teal.renv.lockfile` option. Automatic lockfile computation is skipped in such case.
+#'     `teal.lockfile.path` option. Automatic lockfile computation is skipped in such case.
 #' - Automatically computed:
-#'     - **Working directory lockfile**: If `teal.renv.lockfile` is not set, `teal` will, by default, create an
+#'     - **Working directory lockfile**: If `teal.lockfile.path` is not set, `teal` will, by default, create an
 #'      `implicit` type lockfile that uses `renv::dependencies()` to detect all R packages in the current project's
 #'      working directory.
 #'     - **`DESCRIPTION`-based lockfile**: To generate a lockfile based on a `DESCRIPTION` file in your working
@@ -34,13 +34,6 @@ NULL
 
 #' @rdname module_teal_lockfile
 ui_teal_lockfile <- function(id) {
-  if (!isTRUE(getOption("teal.renv.enable"))) {
-    return(NULL)
-  } else if (!.is_lockfile_deps_installed()) {
-    warning("Lockfile feature disabled. `mirai` and `renv` packages must be installed.")
-    return(NULL)
-  }
-
   ns <- NS(id)
   shiny::tagList(
     tags$span("", id = ns("lockFileStatus")),
@@ -50,15 +43,22 @@ ui_teal_lockfile <- function(id) {
 
 #' @rdname module_teal_lockfile
 srv_teal_lockfile <- function(id) {
-  if (!isTRUE(getOption("teal.renv.enable")) || !.is_lockfile_deps_installed()) {
-    return(NULL)
-  }
   moduleServer(id, function(input, output, session) {
     logger::log_debug("Initialize srv_teal_lockfile.")
     enable_lockfile_download <- function() {
       shinyjs::html("lockFileStatus", "Application lockfile ready.")
       shinyjs::hide("lockFileStatus", anim = TRUE)
       shinyjs::enable("lockFileLink")
+      output$lockFileLink <- shiny::downloadHandler(
+        filename = function() {
+          "renv.lock"
+        },
+        content = function(file) {
+          file.copy(lockfile_path, file)
+          file
+        },
+        contentType = "application/json"
+      )
     }
     disable_lockfile_download <- function() {
       warning("Lockfile creation failed.", call. = FALSE)
@@ -66,7 +66,20 @@ srv_teal_lockfile <- function(id) {
       shinyjs::disable("lockFileLink")
     }
 
+    is_lockfile_enabled <- isTRUE(getOption("teal.lockfile.enable"))
+    user_lockfile <- getOption("teal.lockfile.path", "")
     lockfile_path <- "teal_app.lock"
+
+    if (!is_lockfile_enabled) {
+      logger::log_debug("'teal.lockfile.enable' option is set to false. Hiding a lockfile download button.")
+      shinyjs::hide("lockFileLink")
+      return(NULL)
+    } else if (identical(user_lockfile, "") && !.is_lockfile_deps_installed()) {
+      warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
+      shinyjs::hide("lockFileLink")
+      return(NULL)
+    }
+
     shiny::onStop(function() {
       if (file.exists(lockfile_path) && !shiny::isRunning()) {
         logger::log_debug("Removing lockfile after shutting down the app")
@@ -81,16 +94,15 @@ srv_teal_lockfile <- function(id) {
       return(NULL)
     }
 
+
     # don't run renv::snapshot when option is set
-    user_lockfile <- getOption("teal.renv.lockfile", "")
     if (!identical(user_lockfile, "")) {
       if (file.exists(user_lockfile)) {
         file.copy(user_lockfile, lockfile_path)
-        logger::log_debug('Lockfile set using option "teal.renv.lockfile" - skipping automatic creation.')
+        logger::log_debug('Lockfile set using option "teal.lockfile.path" - skipping automatic creation.')
         enable_lockfile_download()
-        return(NULL)
       } else {
-        warning("Lockfile provided through options('teal.renv.lockfile') does not exist.", call. = FALSE)
+        warning("Lockfile provided through options('teal.lockfile.path') does not exist.", call. = FALSE)
       }
     }
 
@@ -119,17 +131,6 @@ srv_teal_lockfile <- function(id) {
         disable_lockfile_download()
       }
     })
-
-    output$lockFileLink <- shiny::downloadHandler(
-      filename = function() {
-        "renv.lock"
-      },
-      content = function(file) {
-        file.copy(lockfile_path, file)
-        file
-      },
-      contentType = "application/json"
-    )
 
     NULL
   })

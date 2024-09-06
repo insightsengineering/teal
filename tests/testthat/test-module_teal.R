@@ -68,7 +68,7 @@ transform_list <<- list(
 testthat::describe("srv_teal lockfile", {
   testthat::it("creation process is invoked and snapshot is copied to teal_app.lock and removed after session ended", {
     withr::with_options(
-      list(teal.renv.enable = TRUE),
+      list(teal.lockfile.enable = TRUE),
       {
         renv_filename <- "teal_app.lock"
         shiny::testServer(
@@ -91,13 +91,13 @@ testthat::describe("srv_teal lockfile", {
       }
     )
   })
-  testthat::it("is copied from option-teal.renv.lockfile and then removed from an app directory", {
+  testthat::it("is copied from option-teal.lockfile.path and then removed from an app directory", {
     temp_lockfile_mock <- tempfile()
     writeLines("test", temp_lockfile_mock)
     withr::with_options(
       list(
-        teal.renv.enable = TRUE,
-        teal.renv.lockfile = temp_lockfile_mock
+        teal.lockfile.enable = TRUE,
+        teal.lockfile.path = temp_lockfile_mock
       ),
       {
         renv_filename <- "teal_app.lock"
