@@ -240,13 +240,26 @@ srv_teal_module.teal_module <- function(id,
       "data_transform",
       data = filtered_teal_data,
       transforms = modules$transformers,
-      modules = modules
-    )
+      modules = modules,
+      failure_callback = function(data) {
+        if (inherits(data(), "teal_data")) {
+          shinyjs::enable(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::show(selector = sprintf("#%s", paste0(session$ns("teal_module_ui"), " > div > div.col-md-9")))
+        } else {
 
-    # 1. hide module content (observer below)
-    observeEvent(transformed_teal_data(), {
-      shinyjs::toggle("teal_module_ui", condition = inherits(transformed_teal_data(), "teal_data"))
-    })
+          # Maybe you can use runjs
+          # shinyjs::runjs(
+          #   sprintf(
+          #     '$("#%s .tab-content").hide()',
+          #     session$ns("teal_module_ui")
+          #   )
+          # )
+
+          shinyjs::disable(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::hide(selector = sprintf("#%s", paste0(session$ns("teal_module_ui"), " > div > div.col-md-9")))
+        }
+      }
+    )
 
     module_teal_data <- reactive({
       req(inherits(transformed_teal_data(), "teal_data"))
@@ -255,7 +268,6 @@ srv_teal_module.teal_module <- function(id,
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
-    # 2. display errors from transformed_teal_data/module_teal_data
     srv_validate_reactive_teal_data(
       "validate_datanames",
       data = module_teal_data,

@@ -52,7 +52,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
 }
 
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transforms, modules) {
+srv_transform_data <- function(id, data, transforms, modules, failure_callback = function(data) {invisible(NULL)}) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
@@ -68,14 +68,25 @@ srv_transform_data <- function(id, data, transforms, modules) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_modules initializing.")
+    hide <- reactiveVal(FALSE)
     Reduce(
       function(previous_result, name) {
-        srv_teal_data(
-          id = name,
-          data = previous_result,
-          data_module = transforms[[name]],
-          modules = modules
-        )
+
+          current_result <-
+            srv_teal_data(
+              id = name,
+              data = previous_result,
+              data_module = transforms[[name]],
+              modules = modules,
+              failure_callback = failure_callback,
+              hide = reactive(FALSE)
+            )
+
+          # if (identical(isolate(previous_result()), isolate(current_result()))) {
+          #   hide(TRUE)
+          # }
+
+          current_result
       },
       x = names(transforms),
       init = data

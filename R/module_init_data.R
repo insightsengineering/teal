@@ -69,6 +69,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
+
     data_validated <- if (inherits(data, "teal_data_module")) {
       shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
       srv_teal_data(
@@ -76,7 +77,14 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         data = reactive(teal_data()),
         data_module = data,
         modules = modules,
-        validate_shiny_silent_error = FALSE
+        validate_shiny_silent_error = FALSE,
+        failure_callback = function(data) {
+          if (inherits(data(), "teal_data")) {
+            shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+          } else {
+            shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+          }
+        }
       )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)

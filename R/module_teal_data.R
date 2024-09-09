@@ -53,7 +53,9 @@ srv_teal_data <- function(id,
                           data,
                           data_module,
                           modules = NULL,
-                          validate_shiny_silent_error = TRUE) {
+                          validate_shiny_silent_error = TRUE,
+                          failure_callback = function(data) {invisible(NULL)},
+                          hide = reactive(FALSE)) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
@@ -66,14 +68,30 @@ srv_teal_data <- function(id,
       data_module$server(id = "data")
     }
 
-    srv_validate_reactive_teal_data(
-      id = "validate",
-      data = data_out,
-      modules = modules,
-      validate_shiny_silent_error = validate_shiny_silent_error
-    )
+    # if (isolate(hide())) {
+    #   cat('\nhide', sprintf("#%s", session$ns("")), '\n')
+    #   shinyjs::hide(selector = sprintf("#%s", session$ns("")))
+    #   return(data_out)
+    # } else {
+    #   cat('\nshow', sprintf("#%s", session$ns("")), '\n')
+    #   shinyjs::show(selector = sprintf("#%s", session$ns("")))
+      srv_validate_reactive_teal_data(
+        id = "validate",
+        data = data_out,
+        modules = modules,
+        validate_shiny_silent_error = validate_shiny_silent_error
+      )
 
-    .fallback_on_failure(data_out, label = "data validation in srv_teal_data")
+      out <- reactiveVal(NULL)
+      observeEvent(data_out(), {
+        if (inherits(data_out(), "teal_data") && !identical(data_out(), out())) {
+          out(data_out())
+        }
+        failure_callback(data_out)
+      })
+      return(out)
+    #}
+
   })
 }
 
@@ -105,11 +123,11 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     # there is an empty reactive cycle on init!
     srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
 
-    if (!inherits(isolate(data_rv()), "shiny.silent.error")) {
+    #if (!inherits(isolate(data_rv()), "shiny.silent.error")) {
       srv_validate_qenv_error("qenv_error", data_rv)
       srv_check_class_teal_data("class_teal_data", data_rv)
       srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
-    }
+    #}
   })
 }
 
@@ -219,28 +237,4 @@ srv_check_shiny_warnings <- function(id, data, modules) {
       }
     })
   })
-}
-
-
-#' Fallback on failure
-#'
-#' Function returns the reactive if the current input reactive contains a valid `teal_data` object.
-#' Application: In `teal` we try to prevent the error from being propagated into modules and instead we replace failing
-#' output with previous input.
-#'
-#' @param reactive_input (`reactive`) The reactive to be verified.
-#' @param label (`character`) Label for identifying problematic reactive inputs in logging.
-#' @return `reactive()` `NULL` or `teal_data`.
-#' @keywords internal
-.fallback_on_failure <- function(reactive_input, label) {
-  assert_reactive(reactive_input)
-  checkmate::assert_string(label)
-  out <- reactiveVal()
-  observeEvent(reactive_input(), {
-    if (inherits(reactive_input(), "teal_data") && !identical(reactive_input(), shiny::isolate(out()))) {
-      logger::log_debug("{ label } evaluated successfully.")
-      shiny::isolate(out(reactive_input()))
-    }
-  })
-  out
 }
