@@ -66,20 +66,6 @@ srv_teal_lockfile <- function(id) {
       shinyjs::disable("lockFileLink")
     }
 
-    is_lockfile_enabled <- isTRUE(getOption("teal.lockfile.enable"))
-    user_lockfile <- getOption("teal.lockfile.path", "")
-    lockfile_path <- "teal_app.lock"
-
-    if (!is_lockfile_enabled) {
-      logger::log_debug("'teal.lockfile.enable' option is set to false. Hiding a lockfile download button.")
-      shinyjs::hide("lockFileLink")
-      return(NULL)
-    } else if (identical(user_lockfile, "") && !.is_lockfile_deps_installed()) {
-      warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
-      shinyjs::hide("lockFileLink")
-      return(NULL)
-    }
-
     shiny::onStop(function() {
       if (file.exists(lockfile_path) && !shiny::isRunning()) {
         logger::log_debug("Removing lockfile after shutting down the app")
@@ -87,18 +73,32 @@ srv_teal_lockfile <- function(id) {
       }
     })
 
-    # run renv::snapshot only once per app. Once calculated available for all users
+    lockfile_path <- "teal_app.lock"
+    is_lockfile_enabled <- isTRUE(getOption("teal.lockfile.enable"))
+    user_lockfile_path <- getOption("teal.lockfile.path", default = "")
+    is_user_lockfile_set <- !identical(user_lockfile_path, "")
+
+    if (!is_lockfile_enabled) {
+      logger::log_debug("'teal.lockfile.enable' option is set to false. Hiding a lockfile download button.")
+      shinyjs::hide("lockFileLink")
+      return(NULL)
+    }
+
     if (file.exists(lockfile_path)) {
-      logger::log_debug("Lockfile has been already created - skipping automatic creation.")
+      logger::log_debug("Lockfile has already been created for this app - skipping automatic creation.")
       enable_lockfile_download()
       return(NULL)
     }
 
+    if (!is_user_lockfile_set && !.is_lockfile_deps_installed()) {
+      warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
+      shinyjs::hide("lockFileLink")
+      return(NULL)
+    }
 
-    # don't run renv::snapshot when option is set
-    if (!identical(user_lockfile, "")) {
-      if (file.exists(user_lockfile)) {
-        file.copy(user_lockfile, lockfile_path)
+    if (is_user_lockfile_set) {
+      if (file.exists(user_lockfile_path)) {
+        file.copy(user_lockfile_path, lockfile_path)
         logger::log_debug('Lockfile set using option "teal.lockfile.path" - skipping automatic creation.')
         enable_lockfile_download()
       } else {
