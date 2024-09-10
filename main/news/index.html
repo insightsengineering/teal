@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9059</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9060</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,9 +75,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.15.2.9059" id="teal-01529059">teal 0.15.2.9059<a class="anchor" aria-label="anchor" href="#teal-01529059"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.15.2.9060" id="teal-01529060">teal 0.15.2.9060<a class="anchor" aria-label="anchor" href="#teal-01529060"></a></h2>
 <div class="section level4">
-<h4 id="new-features-0-15-2-9059">New features<a class="anchor" aria-label="anchor" href="#new-features-0-15-2-9059"></a></h4>
+<h4 id="new-features-0-15-2-9060">New features<a class="anchor" aria-label="anchor" href="#new-features-0-15-2-9060"></a></h4>
 <ul><li>Possible to call <code>ui_teal</code> and <code>srv_teal</code> directly in any application by delivering <code>data</code> argument as a <code>reactive</code> returning <code>teal_data</code> object. <a href="https://github.com/insightsengineering/teal/issues/669" class="external-link">#669</a></li>
 <li>Introduced <code>teal_transform_module</code> to provide a way to interactively modify data delivered to <code>teal_module</code>’s <code>server</code>. <a href="https://github.com/insightsengineering/teal/issues/1228" class="external-link">#1228</a></li>
 <li>Introduced a new argument <code>once = FALSE</code> in <code>teal_data_module</code> to possibly reload data during a run time.</li>
@@ -86,14 +86,14 @@
 <li>Datasets which name starts with <code>.</code> are ignored when <code>module</code>’s <code>datanames</code> is set as <code>"all"</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-0-15-2-9059">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-15-2-9059"></a></h4>
+<h4 id="breaking-changes-0-15-2-9060">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-15-2-9060"></a></h4>
 <ul><li>Setting <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames()</a></code> on <code>data</code> passed to teal application no longer has effect. In order to change <code>teal_module</code>’s <code>datanames</code> one should modify <code>module$datanames</code>.</li>
 <li>The <code><a href="../reference/landing_popup_module.html">landing_popup_module()</a></code> needs to be passed as the <code>landing_popup</code> argument of <code>init</code> instead of being passed as a module of the <code>modules</code> argument of <code>init</code>.</li>
 <li>
 <code>teal</code> no longer re-export <code>%&gt;%</code>. Please load <code><a href="https://magrittr.tidyverse.org" class="external-link">library(magrittr)</a></code> instead or use <code>|&gt;</code> from <code>base</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="enhancement-0-15-2-9059">Enhancement<a class="anchor" aria-label="anchor" href="#enhancement-0-15-2-9059"></a></h4>
+<h4 id="enhancement-0-15-2-9060">Enhancement<a class="anchor" aria-label="anchor" href="#enhancement-0-15-2-9060"></a></h4>
 <ul><li>Enhanced a system of data validation and a display of error messages.</li>
 <li>Easier way of to call <code>javascript</code> events by setting <code>$(document).ready(function() { ... })</code>. <a href="https://github.com/insightsengineering/teal/issues/1114" class="external-link">#1114</a></li>
 <li>Provided progress bar for modules loading and data filtering during teal app startup.</li>
