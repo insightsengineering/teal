@@ -55,12 +55,13 @@ srv_teal_data <- function(id,
                           modules = NULL,
                           validate_shiny_silent_error = TRUE,
                           failure_callback = function(data) {invisible(NULL)},
-                          hide = reactive(FALSE)) {
+                          is_transformer_failed = reactiveValues()) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
   moduleServer(id, function(input, output, session) {
+
     logger::log_debug("srv_teal_data initializing.")
     data_out <- if (is_arg_used(data_module$server, "data")) {
       data_module$server(id = "data", data = data)
@@ -68,29 +69,58 @@ srv_teal_data <- function(id,
       data_module$server(id = "data")
     }
 
-    # if (isolate(hide())) {
-    #   cat('\nhide', sprintf("#%s", session$ns("")), '\n')
-    #   shinyjs::hide(selector = sprintf("#%s", session$ns("")))
-    #   return(data_out)
-    # } else {
-    #   cat('\nshow', sprintf("#%s", session$ns("")), '\n')
-    #   shinyjs::show(selector = sprintf("#%s", session$ns("")))
-      srv_validate_reactive_teal_data(
-        id = "validate",
-        data = data_out,
-        modules = modules,
-        validate_shiny_silent_error = validate_shiny_silent_error
-      )
+    is_transformer_failed[[id]] <- FALSE
 
-      out <- reactiveVal(NULL)
-      observeEvent(data_out(), {
-        if (inherits(data_out(), "teal_data") && !identical(data_out(), out())) {
+    srv_validate_reactive_teal_data(
+      id = "validate",
+      data = data_out,
+      modules = modules,
+      validate_shiny_silent_error = validate_shiny_silent_error
+    )
+
+    out <- reactiveVal(NULL)
+
+    observeEvent(data_out(), {
+      if (inherits(data_out(), "teal_data") ) {
+        is_transformer_failed[[id]] <- FALSE
+        if (!identical(data_out(), out())) {
           out(data_out())
         }
-        failure_callback(data_out)
-      })
-      return(out)
-    #}
+      } else {
+        is_transformer_failed[[id]] <- TRUE
+      }
+      failure_callback(data_out)
+    })
+
+    #if (id != 'teal_data_module')
+
+    # observeEvent(data_out(), {
+    #
+    #   cat('\nid::::', id, '\n')
+    #
+    #   #browser()
+    #
+    #   is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
+    #   transformers_till_now <- which(names(is_transformer_failed_list) == id)-1
+    #
+    #   if (transformers_till_now > 0) {
+    #     #previous_transformer_names <- names(is_transformer_failed_list)[1:transformers_till_now]
+    #
+    #     anything_failed_before <- any(unlist(is_transformer_failed_list[transformers_till_now]))
+    #     element <- gsub("data_transform-", "data_transform-wrapper_", sprintf("#%s", session$ns(character(0))))
+    #     if (anything_failed_before) {
+    #
+    #       cat('\nhide', element, '\n')
+    #       shinyjs::hide(selector = element)
+    #     } else {
+    #       cat('\nshow', element, '\n')
+    #       #teal-teal_modules-mod_2-data_transform-wrapper_transform_module_1
+    #       shinyjs::show(selector = element)
+    #     }
+    #   }
+    # })
+
+    out
 
   })
 }

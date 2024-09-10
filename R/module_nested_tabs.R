@@ -236,6 +236,7 @@ srv_teal_module.teal_module <- function(id,
       is_active = is_active
     )
 
+    is_transformer_failed <- reactiveValues()
     transformed_teal_data <- srv_transform_data(
       "data_transform",
       data = filtered_teal_data,
@@ -243,7 +244,7 @@ srv_teal_module.teal_module <- function(id,
       modules = modules,
       failure_callback = function(data) {
         if (inherits(data(), "teal_data")) {
-          shinyjs::enable(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          #shinyjs::enable(selector = sprintf("#%s", session$ns("teal_module_ui")))
           shinyjs::show(selector = sprintf("#%s", paste0(session$ns("teal_module_ui"), " > div > div.col-md-9")))
         } else {
 
@@ -255,10 +256,11 @@ srv_teal_module.teal_module <- function(id,
           #   )
           # )
 
-          shinyjs::disable(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          #shinyjs::disable(selector = sprintf("#%s", session$ns("teal_module_ui")))
           shinyjs::hide(selector = sprintf("#%s", paste0(session$ns("teal_module_ui"), " > div > div.col-md-9")))
         }
-      }
+      },
+      is_transformer_failed = is_transformer_failed
     )
 
     module_teal_data <- reactive({
