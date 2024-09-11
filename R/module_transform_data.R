@@ -84,11 +84,22 @@ srv_transform_data <- function(id, data, transforms, modules, failure_callback =
       init = data
     )
 
-    observeEvent(data(), {
+    is_previous_failed <- reactive({
+      #browser()
+      idx_this <- which(names(is_transformer_failed) == id)
+
+      is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
+      idx_failures <- which(unlist(is_transformer_failed_list))
+
+      any(idx_failures < idx_this)
+    })
+
+    observeEvent(is_previous_failed(), {
       # this hides transformers only on the first opening of the module
       # need to move it somewhere else where it reacts to changes to transformers input
       # - maybe failure_callback of srv_transform_data
-      hide_transformers(is_transformer_failed, session)
+      #hide_transformers(is_transformer_failed, session)
+      cat('\n', session$ns(is_previous_failed()), '\n')
     })
 
     transformed_data
@@ -104,6 +115,7 @@ hide_transformers <- function(is_transformer_failed, session) {
 
     which_first_to_hide <- which_is_failing[1]+1
     transformers_to_hide <- which_first_to_hide:length(is_transformer_failed_list)
+
     sapply(transformers_to_hide, function(x){
       selector <-
         paste0("#", gsub("-data_transform", "", session$ns(character(0))),
