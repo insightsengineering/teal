@@ -27,6 +27,8 @@
 #' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
+#' @param failure_callback (`function` that takes `data`) to be called if data evaluation bring errors
+#' @param is_transformer_failed (`reactiveValues`) that hosts `logical` flags of which transformers failed
 #' error message is displayed.
 #' Default is `FALSE` to handle empty reactive cycle on `init`.
 #'

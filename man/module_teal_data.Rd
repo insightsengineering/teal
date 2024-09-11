@@ -15,7 +15,11 @@ srv_teal_data(
   data,
   data_module,
   modules = NULL,
-  validate_shiny_silent_error = TRUE
+  validate_shiny_silent_error = TRUE,
+  failure_callback = function(data) {
+     invisible(NULL)
+ },
+  is_transformer_failed = reactiveValues()
 )
 
 ui_validate_reactive_teal_data(id)
@@ -36,7 +40,11 @@ srv_validate_reactive_teal_data(
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
-\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and
+\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and}
+
+\item{failure_callback}{(\code{function} that takes \code{data}) to be called if data evaluation bring errors}
+
+\item{is_transformer_failed}{(\code{reactiveValues}) that hosts \code{logical} flags of which transformers failed
 error message is displayed.
 Default is \code{FALSE} to handle empty reactive cycle on \code{init}.}
 }
