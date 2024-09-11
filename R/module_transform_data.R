@@ -52,8 +52,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
 }
 
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transforms, modules, failure_callback = function(data) {invisible(NULL)},
-                               is_transformer_failed = reactiveValues()) {
+srv_transform_data <- function(id, data, transforms, modules, failure_callback = function(data) invisible(NULL)) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
@@ -69,6 +68,7 @@ srv_transform_data <- function(id, data, transforms, modules, failure_callback =
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_modules initializing.")
+    is_transformer_failed <- reactiveValues()
     transformed_data <- Reduce(
       function(previous_result, name) {
         srv_teal_data(
@@ -84,55 +84,6 @@ srv_transform_data <- function(id, data, transforms, modules, failure_callback =
       init = data
     )
 
-    is_previous_failed <- reactive({
-      #browser()
-      idx_this <- which(names(is_transformer_failed) == id)
-
-      is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
-      idx_failures <- which(unlist(is_transformer_failed_list))
-
-      any(idx_failures < idx_this)
-    })
-
-    observeEvent(is_previous_failed(), {
-      # this hides transformers only on the first opening of the module
-      # need to move it somewhere else where it reacts to changes to transformers input
-      # - maybe failure_callback of srv_transform_data
-      #hide_transformers(is_transformer_failed, session)
-      cat('\n', session$ns(is_previous_failed()), '\n')
-    })
-
     transformed_data
-  })
-}
-
-hide_transformers <- function(is_transformer_failed, session) {
-  is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
-
-  which_is_failing <- which(unlist(is_transformer_failed_list))
-
-  if (length(which_is_failing) && length(is_transformer_failed_list) > 2) {
-
-    which_first_to_hide <- which_is_failing[1]+1
-    transformers_to_hide <- which_first_to_hide:length(is_transformer_failed_list)
-
-    sapply(transformers_to_hide, function(x){
-      selector <-
-        paste0("#", gsub("-data_transform", "", session$ns(character(0))),
-               " > div > div.col-sm-3.teal_secondary_col > div:nth-child(", 2+x,")")
-      #cat('\nhide', selector, '\n')
-      shinyjs::hide(selector = selector)
-    })
-    transformers_to_show <- 1:which_is_failing[1]
-  } else {
-    transformers_to_show <- 1:length(is_transformer_failed_list)
-  }
-
-  sapply(transformers_to_show, function(x){
-    selector <-
-      paste0("#", gsub("-data_transform", "", session$ns(character(0))),
-             " > div > div.col-sm-3.teal_secondary_col > div:nth-child(", 2+x,")")
-    #cat('\nshow', selector, '\n')
-    shinyjs::show(selector = selector)
   })
 }

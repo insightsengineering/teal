@@ -43,7 +43,15 @@ ui_teal_data <- function(id, data_module) {
   checkmate::assert_class(data_module, "teal_data_module")
   ns <- NS(id)
   shiny::tagList(
-    data_module$ui(id = ns("data")),
+    div(
+      id = ns("wrapper"),
+      data_module$ui(id = ns("data"))
+    ),
+    div(
+      id = ns("input_error"),
+      class = "teal_validated",
+      uiOutput(ns("error"))
+    ),
     ui_validate_reactive_teal_data(ns("validate"))
   )
 }
@@ -54,24 +62,24 @@ srv_teal_data <- function(id,
                           data_module,
                           modules = NULL,
                           validate_shiny_silent_error = TRUE,
-                          failure_callback = function(data) {invisible(NULL)},
+                          failure_callback = function(data) {
+                            invisible(NULL)
+                          },
                           is_transformer_failed = reactiveValues()) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
 
   moduleServer(id, function(input, output, session) {
-
     logger::log_debug("srv_teal_data initializing.")
+    is_transformer_failed[[id]] <- FALSE
     data_out <- if (is_arg_used(data_module$server, "data")) {
       data_module$server(id = "data", data = data)
     } else {
       data_module$server(id = "data")
     }
 
-    is_transformer_failed[[id]] <- FALSE
-
-    srv_validate_reactive_teal_data(
+    data_validated <- srv_validate_reactive_teal_data(
       id = "validate",
       data = data_out,
       modules = modules,
@@ -79,51 +87,44 @@ srv_teal_data <- function(id,
     )
 
     out <- reactiveVal(NULL)
-
-    observeEvent(data_out(), {
-      if (inherits(data_out(), "teal_data") ) {
+    observeEvent(data_validated(), {
+      if (inherits(data_validated(), "teal_data")) {
         is_transformer_failed[[id]] <- FALSE
-        if (!identical(data_out(), out())) {
-          out(data_out())
+        if (!identical(data_validated(), out())) {
+          out(data_validated())
         }
       } else {
         is_transformer_failed[[id]] <- TRUE
       }
-      failure_callback(data_out)
+      failure_callback(data_validated)
     })
 
-    #if (id != 'teal_data_module')
 
-    # observeEvent(data_out(), {
-    #
-    #   cat('\nid::::', id, '\n')
-    #
-    #   #browser()
-    #
-    #   is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
-    #   transformers_till_now <- which(names(is_transformer_failed_list) == id)-1
-    #
-    #   if (transformers_till_now > 0) {
-    #     #previous_transformer_names <- names(is_transformer_failed_list)[1:transformers_till_now]
-    #
-    #     anything_failed_before <- any(unlist(is_transformer_failed_list[transformers_till_now]))
-    #     element <- gsub("data_transform-", "data_transform-wrapper_", sprintf("#%s", session$ns(character(0))))
-    #     if (anything_failed_before) {
-    #
-    #       cat('\nhide', element, '\n')
-    #       shinyjs::hide(selector = element)
-    #     } else {
-    #       cat('\nshow', element, '\n')
-    #       #teal-teal_modules-mod_2-data_transform-wrapper_transform_module_1
-    #       shinyjs::show(selector = element)
-    #     }
-    #   }
-    # })
+    is_previous_failed <- reactive({
+      idx_this <- which(names(is_transformer_failed) == id)
+      is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
+      idx_failures <- which(unlist(is_transformer_failed_list))
+      any(idx_failures < idx_this)
+    })
+
+    output$error <- renderUI({
+      if (is_previous_failed()) {
+        shinyjs::disable("wrapper")
+        tags$div(
+          class = "teal-output-warning",
+          "One of the previous transformers failed. Please fix and continue"
+        )
+      } else {
+        shinyjs::enable("wrapper")
+        NULL
+      }
+    })
+
 
     out
-
   })
 }
+
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
@@ -149,15 +150,13 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   moduleServer(id, function(input, output, session) {
     # tryCatch can not be removed since in srv_teal_data this module works on non tryCatch-ed data
     data_rv <- reactive(tryCatch(data(), error = function(e) e))
-
     # there is an empty reactive cycle on init!
     srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
+    srv_validate_qenv_error("qenv_error", data_rv)
+    srv_check_class_teal_data("class_teal_data", data_rv)
+    srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
 
-    #if (!inherits(isolate(data_rv()), "shiny.silent.error")) {
-      srv_validate_qenv_error("qenv_error", data_rv)
-      srv_check_class_teal_data("class_teal_data", data_rv)
-      srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
-    #}
+    data_rv
   })
 }
 
