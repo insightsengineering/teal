@@ -88,7 +88,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
 
   ui_teal <- div(
     div(
+      id = ns("validate_datanames"),
       ui_validate_reactive_teal_data(ns("validate_datanames"))
+    ),
+    shinyjs::hidden(
+      tags$div(
+        id = ns("transformer_failure_info"),
+        class = "teal_validated",
+        div(
+          class = "teal-output-warning",
+          "One of transformers failed. Please fix and continue."
+        )
+      )
     ),
     tags$div(
       id = ns("teal_module_ui"),
@@ -241,10 +252,15 @@ srv_teal_module.teal_module <- function(id,
       transforms = modules$transformers,
       modules = modules,
       failure_callback = function(data) {
+
         if (inherits(data(), "teal_data")) {
           shinyjs::show(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::show(selector = sprintf("#%s", session$ns("validate_datanames")))
+          shinyjs::hide(selector = sprintf("#%s", session$ns("transformer_failure_info")))
         } else {
           shinyjs::hide(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::hide(selector = sprintf("#%s", session$ns("validate_datanames")))
+          shinyjs::show(selector = sprintf("#%s", session$ns("transformer_failure_info")))
         }
       }
     )
