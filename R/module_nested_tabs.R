@@ -252,7 +252,6 @@ srv_teal_module.teal_module <- function(id,
       transforms = modules$transformers,
       modules = modules,
       failure_callback = function(data) {
-
         if (inherits(data(), "teal_data")) {
           shinyjs::show(selector = sprintf("#%s", session$ns("teal_module_ui")))
           shinyjs::show(selector = sprintf("#%s", session$ns("validate_datanames")))
