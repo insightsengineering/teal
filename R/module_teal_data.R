@@ -242,7 +242,7 @@ srv_check_class_teal_data <- function(id, data) {
       validate(
         need(
           inherits(data(), c("teal_data", "error")),
-          "Did not recieve a valid `teal_data` object. Cannot proceed further."
+          "Did not receive `teal_data` object. Cannot proceed further."
         )
       )
     })
