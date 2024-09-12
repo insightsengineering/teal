@@ -92,6 +92,26 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       data
     }
 
+    observeEvent(data_validated(), {
+      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+      if (isTRUE(attr(data, "once"))) {
+        # Hiding the data module tab.
+        shinyjs::hide(
+          selector = sprintf(
+            ".teal-body:has('#%s') a[data-value='teal_data_module']",
+            session$ns("content")
+          )
+        )
+        # Clicking the second tab, which is the first module.
+        shinyjs::runjs(
+          sprintf(
+            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
+            session$ns("content")
+          )
+        )
+      }
+    })
+
     observeEvent(data_validated(), once = TRUE, {
       # Excluding the ids from teal_data_module using full namespace and global shiny app session.
       app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
