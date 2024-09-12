@@ -497,7 +497,7 @@ testthat::describe("srv_teal teal_modules", {
           trimws(
             rvest::html_text2(
               rvest::read_html(
-                output[["teal_modules-module_1-validate_datanames-shiny_warnings-warnings"]]$html
+                output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
               )
             )
           ),
@@ -1559,7 +1559,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("continues when transformer throws validation error and returns empty teal_data", {
+  testthat::it("pauses when transformer throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1582,12 +1582,12 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(teal.code::get_env(modules_output$module_1()())), character(0))
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("continues when transformer throws validation error and returns empty teal_data", {
+  testthat::it("pauses when transformer throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1610,21 +1610,67 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(teal.code::get_env(modules_output$module_1()())), character(0))
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("continues when transformer throws qenv error and returns empty data", {
-    testthat::skip("todo")
+  testthat::it("pauses when transformer throws qenv error", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  reactive(within(data(), stop("my error")))
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(modules_output$module_1())
+      }
+    )
   })
-
-  testthat::it("continues when transformer throws qenv error and returns unchanged data")
 
   testthat::it("isn't called when `data` is not teal_data", {
-    testthat::skip("todo")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  reactive(data.frame())
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(modules_output$module_1())
+      }
+    )
   })
-  # when reactive returned teal_data_module is not triggered (for example when button isn't clicked)
+
 })
 
 testthat::describe("srv_teal summary table", {
