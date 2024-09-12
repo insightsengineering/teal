@@ -193,7 +193,7 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
         validate(
           need(
             FALSE,
-            sprintf("Shiny error when executing the `data` module\n%s", msg)
+            sprintf("Shiny error when executing the `data` module.\n%s", msg)
           )
         )
       }
