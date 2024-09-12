@@ -70,7 +70,7 @@ srv_transform_data <- function(id, data, transforms, modules, failure_callback =
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_modules initializing.")
     is_transformer_failed <- reactiveValues()
-    transformed_data <- Reduce(
+    Reduce(
       function(previous_result, name) {
         srv_teal_data(
           id = name,
