@@ -84,7 +84,5 @@ srv_transform_data <- function(id, data, transforms, modules, failure_callback =
       x = names(transforms),
       init = data
     )
-
-    transformed_data
   })
 }
