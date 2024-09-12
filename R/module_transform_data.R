@@ -57,6 +57,7 @@ srv_transform_data <- function(id, data, transforms, modules, failure_callback =
   assert_reactive(data)
   checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
   checkmate::assert_class(modules, "teal_module")
+  checkmate::assert_function(failure_callback)
 
   if (length(transforms) == 0L) {
     return(data)

@@ -72,6 +72,8 @@ srv_teal_data <- function(id,
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
+  checkmate::assert_function(failure_callback)
+  checkmate::assert_class(is_transformer_failed, "reactivevalues")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
