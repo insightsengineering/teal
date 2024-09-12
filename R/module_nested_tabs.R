@@ -115,17 +115,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       if (depth >= 2L) tags$div(style = "mt-6"),
       if (!is.null(modules$datanames)) {
         fluidRow(
-          column(
-            width = 9,
-            div(
-              div(
-                class = "teal_validated"
-                # todo: should error message be displayed here?
-              ),
-              ui_teal
-            ),
-            class = "teal_primary_col"
-          ),
+          column(width = 9, ui_teal, class = "teal_primary_col"),
           column(
             width = 3,
             ui_data_summary(ns("data_summary")),
