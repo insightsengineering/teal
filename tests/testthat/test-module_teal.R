@@ -1670,7 +1670,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       }
     )
   })
-
 })
 
 testthat::describe("srv_teal summary table", {
