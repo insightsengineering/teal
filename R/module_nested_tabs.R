@@ -88,7 +88,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
 
   ui_teal <- div(
     div(
+      id = ns("validate_datanames"),
       ui_validate_reactive_teal_data(ns("validate_datanames"))
+    ),
+    shinyjs::hidden(
+      tags$div(
+        id = ns("transformer_failure_info"),
+        class = "teal_validated",
+        div(
+          class = "teal-output-warning",
+          "One of transformers failed. Please fix and continue."
+        )
+      )
     ),
     tags$div(
       id = ns("teal_module_ui"),
@@ -235,18 +246,24 @@ srv_teal_module.teal_module <- function(id,
       data_rv = data_rv,
       is_active = is_active
     )
-
     transformed_teal_data <- srv_transform_data(
       "data_transform",
       data = filtered_teal_data,
       transforms = modules$transformers,
-      modules = modules
-    )
+      modules = modules,
+      failure_callback = function(data) {
 
-    # 1. hide module content (observer below)
-    observeEvent(transformed_teal_data(), {
-      shinyjs::toggle("teal_module_ui", condition = inherits(transformed_teal_data(), "teal_data"))
-    })
+        if (inherits(data(), "teal_data")) {
+          shinyjs::show(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::show(selector = sprintf("#%s", session$ns("validate_datanames")))
+          shinyjs::hide(selector = sprintf("#%s", session$ns("transformer_failure_info")))
+        } else {
+          shinyjs::hide(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::hide(selector = sprintf("#%s", session$ns("validate_datanames")))
+          shinyjs::show(selector = sprintf("#%s", session$ns("transformer_failure_info")))
+        }
+      }
+    )
 
     module_teal_data <- reactive({
       req(inherits(transformed_teal_data(), "teal_data"))
@@ -255,7 +272,6 @@ srv_teal_module.teal_module <- function(id,
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
-    # 2. display errors from transformed_teal_data/module_teal_data
     srv_validate_reactive_teal_data(
       "validate_datanames",
       data = module_teal_data,

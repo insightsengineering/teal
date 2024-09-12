@@ -69,6 +69,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
+
     data_validated <- if (inherits(data, "teal_data_module")) {
       shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
       srv_teal_data(
@@ -76,46 +77,20 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         data = reactive(teal_data()),
         data_module = data,
         modules = modules,
-        validate_shiny_silent_error = FALSE
+        validate_shiny_silent_error = FALSE,
+        failure_callback = function(data) {
+          if (inherits(data(), "teal_data")) {
+            shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+          } else {
+            shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+          }
+        }
       )
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)
     } else if (test_reactive(data)) {
       data
     }
-
-    observeEvent(data_validated(), {
-      if (!inherits(data_validated(), "teal_data")) {
-        shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-        return(NULL)
-      }
-
-      if (isTRUE(attr(data, "once")) && inherits(data_validated(), "teal_data")) {
-        # Hiding the data module tab.
-        shinyjs::hide(
-          selector = sprintf(
-            ".teal-body:has('#%s') a[data-value='teal_data_module']",
-            session$ns("content")
-          )
-        )
-        # Clicking the second tab, which is the first module.
-        shinyjs::runjs(
-          sprintf(
-            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
-            session$ns("content")
-          )
-        )
-      }
-      is_filter_ok <- check_filter_datanames(filter, .teal_data_datanames(data_validated()))
-      if (!isTRUE(is_filter_ok)) {
-        showNotification(
-          "Some filters were not applied because of incompatibility with data. Contact app developer.",
-          type = "warning",
-          duration = 10
-        )
-        warning(is_filter_ok)
-      }
-    })
 
     observeEvent(data_validated(), once = TRUE, {
       # Excluding the ids from teal_data_module using full namespace and global shiny app session.

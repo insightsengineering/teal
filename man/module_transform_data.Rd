@@ -8,7 +8,13 @@
 \usage{
 ui_transform_data(id, transforms, class = "well")
 
-srv_transform_data(id, data, transforms, modules)
+srv_transform_data(
+  id,
+  data,
+  transforms,
+  modules,
+  failure_callback = function(data) invisible(NULL)
+)
 }
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
@@ -16,6 +22,8 @@ srv_transform_data(id, data, transforms, modules)
 \item{data}{(\verb{reactive teal_data})}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
+
+\item{failure_callback}{(\code{function} that takes \code{data}) to be called if data evaluation bring errors}
 }
 \value{
 \code{reactive} \code{teal_data}
