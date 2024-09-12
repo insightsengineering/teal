@@ -131,7 +131,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       if (inherits(data_validated(), "teal_data")) {
         .add_signature_to_data(data_validated())
       } else {
-        data_validated() # error, qenv.error, shiny.silent.error, validate-error
+        data_validated()
       }
     })
   })
