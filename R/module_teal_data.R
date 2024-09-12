@@ -54,7 +54,10 @@ ui_teal_data <- function(id, data_module) {
       class = "teal_validated",
       uiOutput(ns("error"))
     ),
-    ui_validate_reactive_teal_data(ns("validate"))
+    div(
+      id = ns("wrapper_validate"),
+      ui_validate_reactive_teal_data(ns("validate"))
+    )
   )
 }
 
@@ -110,11 +113,9 @@ srv_teal_data <- function(id,
     })
 
     output$error <- renderUI({
-      validation_ids <-
-        paste0("validate-", c("shiny_warnings", "class_teal_data", "qenv_error", "silent_error"), "-message")
       if (is_previous_failed()) {
         shinyjs::disable("wrapper")
-        sapply(validation_ids, shinyjs::hide)
+        shinyjs::hide("wrapper_validate")
 
         tags$div(
           class = "teal-output-warning",
@@ -122,7 +123,7 @@ srv_teal_data <- function(id,
         )
       } else {
         shinyjs::enable("wrapper")
-        sapply(validation_ids, shinyjs::show)
+        shinyjs::show("wrapper_validate")
         NULL
       }
     })
@@ -138,7 +139,7 @@ ui_validate_reactive_teal_data <- function(id) {
   ns <- NS(id)
   div(
     class = "teal_validated",
-    ui_validate_silent_error(ns("silent_error")),
+    ui_validate_error(ns("silent_error")),
     ui_validate_qenv_error(ns("qenv_error")),
     ui_check_class_teal_data(ns("class_teal_data")),
     ui_check_shiny_warnings(ns("shiny_warnings"))
@@ -158,11 +159,9 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     # tryCatch can not be removed since in srv_teal_data this module works on non tryCatch-ed data
     data_rv <- reactive(tryCatch(data(), error = function(e) e))
     # there is an empty reactive cycle on init!
-    srv_validate_silent_error("silent_error", data_rv, validate_shiny_silent_error)
+    srv_validate_error("silent_error", data_rv, validate_shiny_silent_error)
     srv_validate_qenv_error("qenv_error", data_rv)
-    if (!inherits(isolate(data_rv()), "shiny.silent.error")) {
-      srv_check_class_teal_data("class_teal_data", data_rv)
-    }
+    srv_check_class_teal_data("class_teal_data", data_rv)
     srv_check_shiny_warnings("shiny_warnings", data_rv, modules)
 
     data_rv
@@ -170,32 +169,33 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 }
 
 #' @keywords internal
-ui_validate_silent_error <- function(id) {
+ui_validate_error <- function(id) {
   ns <- NS(id)
   uiOutput(ns("message"))
 }
 
 #' @keywords internal
-srv_validate_silent_error <- function(id, data, validate_shiny_silent_error) {
+srv_validate_error <- function(id, data, validate_shiny_silent_error) {
   checkmate::assert_string(id)
   checkmate::assert_flag(validate_shiny_silent_error)
   moduleServer(id, function(input, output, session) {
     output$message <- renderUI({
-      if (inherits(data(), "shiny.silent.error") && identical(data()$message, "")) {
-        if (!validate_shiny_silent_error) {
+      is_shiny_silent_error <- inherits(data(), "shiny.silent.error") && identical(data()$message, "")
+      if (inherits(data(), "error")) {
+        if (is_shiny_silent_error && !validate_shiny_silent_error) {
           return(NULL)
-        } else {
-          validate(
-            need(
-              FALSE,
-              paste(
-                "Shiny error when executing the `data` module",
-                "\nCheck your inputs or contact app developer if error persists.",
-                collapse = "\n"
-              )
-            )
-          )
         }
+        msg <- if (is_shiny_silent_error) {
+          "Check your inputs or contact app developer if error persists."
+        } else {
+          data()$message
+        }
+        validate(
+          need(
+            FALSE,
+            sprintf("Shiny error when executing the `data` module\n%s", msg)
+          )
+        )
       }
     })
   })
@@ -242,7 +242,7 @@ srv_check_class_teal_data <- function(id, data) {
     output$message <- renderUI({
       validate(
         need(
-          inherits(data(), "teal_data"),
+          inherits(data(), c("teal_data", "error")),
           "Did not recieve a valid `teal_data` object. Cannot proceed further."
         )
       )
