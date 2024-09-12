@@ -156,9 +156,8 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
-    # tryCatch can not be removed since in srv_teal_data this module works on non tryCatch-ed data
     data_rv <- reactive(tryCatch(data(), error = function(e) e))
-    # there is an empty reactive cycle on init!
+    # there is an empty reactive cycle on `init` and `data_rv` has `shiny.silent.error` class
     srv_validate_error("silent_error", data_rv, validate_shiny_silent_error)
     srv_validate_qenv_error("qenv_error", data_rv)
     srv_check_class_teal_data("class_teal_data", data_rv)
@@ -193,7 +192,7 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
         validate(
           need(
             FALSE,
-            sprintf("Shiny error when executing the `data` module\n%s", msg)
+            sprintf("Shiny error when executing the `data` module.\n%s", msg)
           )
         )
       }
