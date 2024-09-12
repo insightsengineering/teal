@@ -16,11 +16,9 @@
 #' 5. [teal_data()] object lacks any `datanames` specified in the `modules` argument.
 #'
 #' `teal` (observers in `srv_teal`) always waits to render an app until `reactive` `teal_data` is
-#' returned. If error 2-4 occurs, relevant error message is displayed to app user and after issue is
-#' resolved app will continue to run. `teal` guarantees that errors in a data don't crash an app
-#' (except error 1). This is possible by catching the error and returning an empty `teal_data` object.
-#' The error message is displayed in the app and the module will eventually get an empty `teal_data`.
-#'
+#' returned. If error 2-4 occurs, relevant error message is displayed to the app user. Once the issue is
+#' resolved, the app will continue to run. `teal` guarantees that errors in data don't crash the app
+#' (except error 1).
 #'
 #' @param id (`character(1)`) Module id
 #' @param data (`reactive teal_data`)
