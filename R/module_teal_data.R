@@ -68,7 +68,7 @@ srv_teal_data <- function(id,
                           failure_callback = function(data) {
                             invisible(NULL)
                           },
-                          is_transformer_failed = reactiveValues()) {
+                          is_transformer_failed = reactiveValues(FALSE)) {
   checkmate::assert_string(id)
   checkmate::assert_class(data_module, "teal_data_module")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
