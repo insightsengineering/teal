@@ -13,7 +13,7 @@ srv_transform_data(
   data,
   transforms,
   modules,
-  failure_callback = function(data) invisible(NULL)
+  is_transformer_failed = reactiveValues()
 )
 }
 \arguments{
@@ -23,7 +23,9 @@ srv_transform_data(
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
-\item{failure_callback}{(\code{function} that takes \code{data}) to be called if data evaluation bring errors}
+\item{is_transformer_failed}{(\code{reactiveValues}) that hosts \code{logical} flags of which transformers failed
+error message is displayed.
+Default is \code{FALSE} to handle empty reactive cycle on \code{init}.}
 }
 \value{
 \code{reactive} \code{teal_data}
