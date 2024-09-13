@@ -19,7 +19,7 @@ srv_teal_data(
   failure_callback = function(data) {
      invisible(NULL)
  },
-  is_transformer_failed = reactiveValues(FALSE)
+  is_transformer_failed = reactiveValues()
 )
 
 ui_validate_reactive_teal_data(id)
