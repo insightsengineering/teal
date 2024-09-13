@@ -152,7 +152,6 @@ module <- function(label = "module",
                    server_args = NULL,
                    ui_args = NULL,
                    transformers = list()) {
-
   # argument checking (independent)
   ## `label`
   checkmate::assert_string(label)
@@ -278,7 +277,7 @@ module <- function(label = "module",
   # combined_datanames = "all" was returned only for cases where datanames = "all" & length(transformers) == 1.
   combined_datanames <- if (identical(datanames, "all")) {
     "all"
-   } else {
+  } else {
     union(datanames, transformer_datanames)
   }
 
