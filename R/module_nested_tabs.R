@@ -241,15 +241,15 @@ srv_teal_module.teal_module <- function(id,
       data = filtered_teal_data,
       transforms = modules$transformers,
       modules = modules,
-      failure_callback = function(data) {
-        if (inherits(data(), "teal_data")) {
-          shinyjs::show(selector = sprintf("#%s", session$ns("teal_module_ui")))
-          shinyjs::show(selector = sprintf("#%s", session$ns("validate_datanames")))
-          shinyjs::hide(selector = sprintf("#%s", session$ns("transformer_failure_info")))
-        } else {
+      failure_callback = function(is_any_failed) {
+        if (is_any_failed) {
           shinyjs::hide(selector = sprintf("#%s", session$ns("teal_module_ui")))
           shinyjs::hide(selector = sprintf("#%s", session$ns("validate_datanames")))
           shinyjs::show(selector = sprintf("#%s", session$ns("transformer_failure_info")))
+        } else {
+          shinyjs::show(selector = sprintf("#%s", session$ns("teal_module_ui")))
+          shinyjs::show(selector = sprintf("#%s", session$ns("validate_datanames")))
+          shinyjs::hide(selector = sprintf("#%s", session$ns("transformer_failure_info")))
         }
       }
     )

@@ -78,11 +78,11 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         data_module = data,
         modules = modules,
         validate_shiny_silent_error = FALSE,
-        failure_callback = function(data) {
-          if (inherits(data(), "teal_data")) {
-            shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-          } else {
+        failure_callback = function(is_any_failed) {
+          if (is_any_failed) {
             shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+          } else {
+            shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
           }
         }
       )

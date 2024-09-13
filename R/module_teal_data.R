@@ -101,15 +101,21 @@ srv_teal_data <- function(id,
       } else {
         is_transformer_failed[[id]] <- TRUE
       }
-      failure_callback(data_validated)
     })
-
 
     is_previous_failed <- reactive({
       idx_this <- which(names(is_transformer_failed) == id)
       is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
       idx_failures <- which(unlist(is_transformer_failed_list))
       any(idx_failures < idx_this)
+    })
+
+    is_any_failed <- reactive({
+      any(unlist(reactiveValuesToList(is_transformer_failed)))
+    })
+
+    observeEvent(is_any_failed(), {
+      failure_callback(is_any_failed())
     })
 
     output$error <- renderUI({
