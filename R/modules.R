@@ -265,17 +265,7 @@ module <- function(label = "module",
   checkmate::assert_list(transformers, types = "teal_transform_module")
   transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
 
-  # This check was wrong anyway.
-  # identical(datanames, "all") || identical(transformer_datanames, "all")
-  # For no datanames specified in teal_transform_module for transformers
-  # If you had 0 transformers then transformer_datanames = NULL
-  # If you had 1 transformer  then transformer_datanames = "all"
-  # If you had 2 transformers then transformer_datanames = c("all", "all")
-  # If you had n transformers then transformer_datanames = c("all", "all", ...) n times (rep("all", n))
-  # So below condition was only checked for length(transformers) == 1
-  # Most of the times c(datanames, "all") was returned.
-  # combined_datanames = "all" was returned only for cases where datanames = "all" & length(transformers) == 1.
-  combined_datanames <- if (identical(datanames, "all")) {
+  combined_datanames <- if (identical(datanames, "all") || identical(transformer_datanames, "all")) {
     "all"
   } else {
     union(datanames, transformer_datanames)
