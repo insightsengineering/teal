@@ -90,6 +90,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       validate_shiny_silent_error = FALSE,
       is_transformer_failed = is_transformer_failed
     )
+    # todo: disable/enable tabs when data_validated is not teal_data
 
     observeEvent(data_validated(), {
       shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
