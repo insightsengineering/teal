@@ -45,11 +45,14 @@ ui_init_data <- function(id, data) {
   shiny::div(
     id = ns("content"),
     style = "display: inline-block; width: 100%;",
-    if (inherits(data, "teal_data_module")) {
-      ui_teal_data(ns("teal_data_module"), data_module = data)
-    } else {
-      NULL
-    }
+    ui_teal_data(
+      ns("teal_data_module"),
+      data_module = if (inherits(data, "teal_data_module")) {
+        data$ui
+      } else {
+        function(id) NULL
+      }
+    )
   )
 }
 
@@ -69,28 +72,24 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
-
-    data_validated <- if (inherits(data, "teal_data_module")) {
-      shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-      srv_teal_data(
-        "teal_data_module",
-        data = reactive(teal_data()),
-        data_module = data,
-        modules = modules,
-        validate_shiny_silent_error = FALSE,
-        failure_callback = function(is_any_failed) {
-          if (is_any_failed) {
-            shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-          } else {
-            shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-          }
-        }
-      )
+    data_module <- if (inherits(data, "teal_data_module")) {
+      data$server
     } else if (inherits(data, "teal_data")) {
-      reactiveVal(data)
+      function(id) reactiveVal(data)
     } else if (test_reactive(data)) {
-      data
+      function(id) data
     }
+
+    shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+
+    is_transformer_failed <- reactiveValues()
+    data_validated <- srv_teal_data(
+      "teal_data_module",
+      data_module = data_module,
+      modules = modules,
+      validate_shiny_silent_error = FALSE,
+      is_transformer_failed = is_transformer_failed
+    )
 
     observeEvent(data_validated(), {
       shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))

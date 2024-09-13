@@ -101,10 +101,6 @@ ui_teal <- function(id,
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
-      class = "teal_validated",
-      ui_validate_qenv_error(ns("qenv_error"))
-    ),
-    tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
       tabs_elem

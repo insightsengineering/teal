@@ -86,7 +86,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
 
-  ui_teal <- div(
+  ui_teal <- tagList(
     div(
       id = ns("validate_datanames"),
       ui_validate_reactive_teal_data(ns("validate_datanames"))
@@ -236,23 +236,29 @@ srv_teal_module.teal_module <- function(id,
       data_rv = data_rv,
       is_active = is_active
     )
+
+    is_transformer_failed <- reactiveValues()
     transformed_teal_data <- srv_transform_data(
       "data_transform",
       data = filtered_teal_data,
       transforms = modules$transformers,
       modules = modules,
-      failure_callback = function(is_any_failed) {
-        if (is_any_failed) {
-          shinyjs::hide(selector = sprintf("#%s", session$ns("teal_module_ui")))
-          shinyjs::hide(selector = sprintf("#%s", session$ns("validate_datanames")))
-          shinyjs::show(selector = sprintf("#%s", session$ns("transformer_failure_info")))
-        } else {
-          shinyjs::show(selector = sprintf("#%s", session$ns("teal_module_ui")))
-          shinyjs::show(selector = sprintf("#%s", session$ns("validate_datanames")))
-          shinyjs::hide(selector = sprintf("#%s", session$ns("transformer_failure_info")))
-        }
-      }
+      is_transformer_failed = is_transformer_failed
     )
+    any_transformer_failed <- reactive({
+      any(unlist(reactiveValuesToList(is_transformer_failed)))
+    })
+    observeEvent(any_transformer_failed(), {
+      if (isTRUE(any_transformer_failed())) {
+        shinyjs::hide("teal_module_ui")
+        shinyjs::hide("validate_datanames")
+        shinyjs::show("transformer_failure_info")
+      } else {
+        shinyjs::show("teal_module_ui")
+        shinyjs::show("validate_datanames")
+        shinyjs::hide("transformer_failure_info")
+      }
+    })
 
     module_teal_data <- reactive({
       req(inherits(transformed_teal_data(), "teal_data"))
