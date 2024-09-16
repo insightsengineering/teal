@@ -31,7 +31,7 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal-data-teal_data_module-data-submit")
+  app$click("teal-data-teal_data_module-submit")
   app$navigate_teal_tab("Example Module")
   testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
@@ -67,7 +67,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal-data-teal_data_module-data-submit")
+  app$click("teal-data-teal_data_module-submit")
 
   app$expect_validation_error()
 
@@ -111,8 +111,8 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
     modules = example_module(label = "Example Module")
   )
 
-  app$set_input("teal-data-teal_data_module-data-new_column", "A_New_Column")
-  app$click("teal-data-teal_data_module-data-submit")
+  app$set_input("teal-data-teal_data_module-new_column", "A_New_Column")
+  app$click("teal-data-teal_data_module-submit")
   app$navigate_teal_tab("Example Module")
 
   # This may fail if teal_data_module does not perform the transformation
@@ -157,7 +157,7 @@ testthat::test_that("e2e: teal_data_module gets removed after successful data lo
     modules = example_module(label = "Example Module")
   )
 
-  submit <- "teal-data-teal_data_module-data-submit"
+  submit <- "teal-data-teal_data_module-submit"
   app$click(submit)
 
   testthat::expect_false(
@@ -202,7 +202,7 @@ testthat::test_that("e2e: teal_data_module is still visible after successful dat
     modules = example_module(label = "Example Module")
   )
 
-  app$click("teal-data-teal_data_module-data-submit")
+  app$click("teal-data-teal_data_module-submit")
 
   testthat::expect_true(
     app$is_visible('#teal-teal_modules-active_tab a[data-value="teal_data_module"]')
@@ -256,7 +256,7 @@ testthat::test_that("e2e: teal_data_module will make other tabs inactive before 
     c("disabled", "disabled")
   )
 
-  app$click("teal-data-teal_data_module-data-submit")
+  app$click("teal-data-teal_data_module-submit")
 
   testthat::expect_true(
     is.na(

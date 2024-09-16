@@ -63,18 +63,36 @@ srv_init_data <- function(id, data) {
 
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
-    data_module <- if (inherits(data, "teal_data_module")) {
-      data$server
+    data_out <- if (inherits(data, "teal_data_module")) {
+      data$server("teal_data_module")
     } else if (inherits(data, "teal_data")) {
-      function(id) reactiveVal(data)
+      reactiveVal(data)
     } else if (test_reactive(data)) {
-      function(id) data
+      data
     }
 
-    data_out <- data_module("teal_data_module")
-    reactive({
+    data_handled <- reactive({
       tryCatch(data_out(), error = function(e) e)
     })
+
+    # We want to exclude teal_data_module elements from bookmarking as they might have some secrets
+    observeEvent(data_handled(), {
+      if (inherits(data_handled(), "teal_data")) {
+        app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+        setBookmarkExclude(
+          session$ns(
+            grep(
+              pattern = "teal_data_module-",
+              x = names(reactiveValuesToList(input)),
+              value = TRUE
+            )
+          ),
+          session = app_session
+        )
+      }
+    })
+
+    data_handled
   })
 }
 

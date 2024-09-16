@@ -87,7 +87,10 @@ ui_teal <- function(id,
 
   bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
   if (!is.null(data)) {
-    data_module <- ui_init_data(ns("data"), data = data)
+    data_module <- div(
+      ui_init_data(ns("data"), data = data),
+      ui_validate_reactive_teal_data(ns("validate"))
+    )
     modules$children <- c(list(teal_data_module = data_module), modules$children)
   }
   tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
@@ -100,7 +103,7 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
-    ui_validate_reactive_teal_data(ns("validate")), # to display validation of the input data
+    if (is.null(data)) ui_validate_reactive_teal_data(ns("validate")), # to display validation of the input data
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
@@ -218,10 +221,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     observeEvent(data_validated(), once = TRUE, {
+      # when once = TRUE we pull data once and then hide data tab
       if (isTRUE(attr(data, "once"))) {
-        # Hiding the data module tab.
         shinyjs::hide(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("tabpanel_wrapper")))
-        # Clicking the second tab, which is the first module.
         shinyjs::runjs(
           sprintf(
             "document.querySelector('#%s .nav li:nth-child(2) a').click();",
@@ -229,23 +231,20 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           )
         )
       }
-
-      # Excluding the ids from teal_data_module using full namespace and global shiny app session.
-      app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-      setBookmarkExclude(
-        session$ns(
-          grep(
-            pattern = "teal_data_module-",
-            x = names(reactiveValuesToList(input)),
-            value = TRUE
-          )
-        ),
-        session = app_session
-      )
     })
 
     data_init <- reactive({
       if (inherits(data_validated(), "teal_data")) {
+        is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data_validated()))
+        if (!isTRUE(is_filter_ok)) {
+          showNotification(
+            "Some filters were not applied because of incompatibility with data. Contact app developer.",
+            type = "warning",
+            duration = 10
+          )
+          warning(is_filter_ok)
+        }
+
         .add_signature_to_data(data_validated())
       } else {
         data_validated()
