@@ -93,7 +93,7 @@ srv_teal_data <- function(id,
       validate_shiny_silent_error = validate_shiny_silent_error,
       hide_validation_error = is_previous_failed
     )
-    .fallback_on_failure(data_handled)
+    .trigger_on_success(data_handled)
   })
 }
 
@@ -239,7 +239,7 @@ srv_check_shiny_warnings <- function(id, data, modules) {
 }
 
 
-.fallback_on_failure <- function(data) {
+.trigger_on_success <- function(data) {
   out <- reactiveVal(NULL)
   observeEvent(data(), {
     if (inherits(data(), "teal_data")) {
