@@ -105,6 +105,7 @@ ui_teal <- function(id,
       class = "teal-body",
       tabs_elem
     ),
+    if (is.null(data)) data_elem, # to display validation of the input data
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
@@ -185,7 +186,33 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    init_data <- srv_init_data("data", data = data, modules = modules, filter = filter)
+    is_data_failed <- reactiveValues()
+    init_data <- srv_init_data(
+      "data",
+      data = data,
+      modules = modules,
+      filter = filter,
+      is_data_failed = is_data_failed
+    )
+    is_failed <- reactive({
+      isTRUE(unlist(reactiveValuesToList(is_data_failed)))
+    })
+    observeEvent(is_failed(), {
+      if (is_failed()) {
+        if (inherits(data, "teal_data_module")) {
+          shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+        } else {
+          shinyjs::hide("tabpanel_wrapper")
+        }
+      } else {
+        if (inherits(data, "teal_data_module")) {
+          shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+        } else {
+          shinyjs::show("tabpanel_wrapper")
+        }
+      }
+    })
+
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(init_data(), {

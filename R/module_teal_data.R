@@ -93,7 +93,6 @@ srv_teal_data <- function(id,
       validate_shiny_silent_error = validate_shiny_silent_error,
       hide_validation_error = is_previous_failed
     )
-
     .fallback_on_failure(data_handled)
   })
 }

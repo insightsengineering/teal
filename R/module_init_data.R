@@ -40,7 +40,7 @@
 NULL
 
 #' @rdname module_init_data
-ui_init_data <- function(id, data) {
+ui_init_data <- function(id, data = NULL) {
   ns <- shiny::NS(id)
   shiny::div(
     id = ns("content"),
@@ -57,7 +57,7 @@ ui_init_data <- function(id, data) {
 }
 
 #' @rdname module_init_data
-srv_init_data <- function(id, data, modules, filter = teal_slices()) {
+srv_init_data <- function(id, data, modules, filter = teal_slices(), is_data_failed = reactiveValues()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
@@ -80,27 +80,19 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       function(id) data
     }
 
-    shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
-
-    is_transformer_failed <- reactiveValues()
     data_validated <- srv_teal_data(
       "teal_data_module",
       data_module = data_module,
       modules = modules,
       validate_shiny_silent_error = FALSE,
-      is_transformer_failed = is_transformer_failed
+      is_transformer_failed = is_data_failed
     )
-    # todo: disable/enable tabs when data_validated is not teal_data
 
-    observeEvent(data_validated(), {
-      shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+    observeEvent(data_validated(), once = TRUE, {
       if (isTRUE(attr(data, "once"))) {
         # Hiding the data module tab.
         shinyjs::hide(
-          selector = sprintf(
-            ".teal-body:has('#%s') a[data-value='teal_data_module']",
-            session$ns("content")
-          )
+          selector = sprintf(".teal-body:has('#%s') a[data-value='teal_data_module']", session$ns("content"))
         )
         # Clicking the second tab, which is the first module.
         shinyjs::runjs(
@@ -110,9 +102,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
           )
         )
       }
-    })
 
-    observeEvent(data_validated(), once = TRUE, {
       # Excluding the ids from teal_data_module using full namespace and global shiny app session.
       app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
       setBookmarkExclude(
