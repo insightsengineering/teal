@@ -8,13 +8,7 @@
 \usage{
 ui_init_data(id, data = NULL)
 
-srv_init_data(
-  id,
-  data,
-  modules,
-  filter = teal_slices(),
-  is_data_failed = reactiveValues()
-)
+srv_init_data(id, data)
 }
 \arguments{
 \item{id}{(\code{character}) Optionally,
@@ -26,15 +20,6 @@ The \code{ui} component of this module does not require \code{data} if \code{tea
 The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
 \code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
 the reactive data of the enclosing application.}
-
-\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-Nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
-will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
-more details.}
-
-\item{filter}{(\code{teal_slices}) Optionally,
-specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \value{
 A \code{reactive} object that returns:
