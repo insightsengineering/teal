@@ -256,7 +256,6 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     active_datanames <- reactive({
-      req(inherits(data_rv(), "teal_data"))
       .resolve_module_datanames(data = data_rv(), modules = modules)
     })
     if (is.null(datasets)) {
@@ -317,12 +316,6 @@ srv_teal_module.teal_module <- function(id,
       modules = modules
     )
 
-    trigger_module <- reactive({
-      req(filtered_teal_data())
-      req(module_teal_data())
-      TRUE
-    })
-
     summary_table <- srv_data_summary("data_summary", module_teal_data)
 
     # Call modules.
@@ -332,7 +325,7 @@ srv_teal_module.teal_module <- function(id,
         # wait for module_teal_data() to be not NULL but only once:
         ignoreNULL = TRUE,
         once = TRUE,
-        eventExpr = trigger_module(),
+        eventExpr = module_teal_data(),
         handlerExpr = {
           module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
         }
