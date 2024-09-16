@@ -6,7 +6,7 @@
 \alias{srv_init_data}
 \title{Data Module for teal}
 \usage{
-ui_init_data(id, data = NULL)
+ui_init_data(id)
 
 srv_init_data(id, data)
 }
@@ -16,17 +16,12 @@ a string specifying the \code{shiny} module id in cases it is used as a \code{sh
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
-The \code{ui} component of this module does not require \code{data} if \code{teal_data_module} is not provided.
-The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
-\code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
-the reactive data of the enclosing application.}
+The data which application will depend on.}
 }
 \value{
 A \code{reactive} object that returns:
-\itemize{
-\item \code{teal_data} when the object is validated
-\item \code{shiny.silent.error} when not validated.
-}
+Output of the \code{data}. If \code{data} fails then returned error is handled (after \code{\link[=tryCatch]{tryCatch()}}) so that
+rest of the application can respond to this respectively.
 }
 \description{
 This module manages the \code{data} argument for \code{srv_teal}. The \code{teal} framework uses \code{\link[=teal_data]{teal_data()}},
