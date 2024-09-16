@@ -25,14 +25,11 @@
 #' @inheritParams init
 #'
 #' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
-#' The `ui` component of this module does not require `data` if `teal_data_module` is not provided.
-#' The `data` argument in the `ui` is included solely for the `$ui` function of the
-#' `teal_data_module`. Otherwise, it can be disregarded, ensuring that `ui_teal` does not depend on
-#' the reactive data of the enclosing application.
+#' The data which application will depend on.
 #'
 #' @return A `reactive` object that returns:
-#' - `teal_data` when the object is validated
-#' - `shiny.silent.error` when not validated.
+#' Output of the `data`. If `data` fails then returned error is handled (after [tryCatch()]) so that
+#' rest of the application can respond to this respectively.
 #'
 #' @rdname module_init_data
 #' @name module_init_data
@@ -40,16 +37,12 @@
 NULL
 
 #' @rdname module_init_data
-ui_init_data <- function(id, data = NULL) {
+ui_init_data <- function(id) {
   ns <- shiny::NS(id)
   shiny::div(
     id = ns("content"),
     style = "display: inline-block; width: 100%;",
-    if (inherits(data, "teal_data_module")) {
-      data$ui(ns("teal_data_module"))
-    } else {
-      shinyjs::hidden()
-    }
+    uiOutput(ns("data"))
   )
 }
 
@@ -60,10 +53,12 @@ srv_init_data <- function(id, data) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_data initializing.")
-
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     data_out <- if (inherits(data, "teal_data_module")) {
+      output$data <- renderUI({
+        data$ui(id = session$ns("teal_data_module"))
+      })
       data$server("teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)

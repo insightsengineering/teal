@@ -22,6 +22,13 @@
 #' - data filtering in [`module_filter_data`]
 #' - data transformation in [`module_transform_data`]
 #'
+#' ## Fallback on failure
+#'
+#' `teal` is designed in such way that app will never crash if the error is introduced in any
+#' custom module provided by app developer (e.g. [teal_data_module()], [teal_transform_module()]).
+#' If any module returns a failing object, the app will halt the evaluation and display a warning message.
+#' App user should always have a chance to fix wrong input and continue to avoid session's restart.
+#'
 #' @rdname module_teal
 #' @name module_teal
 #'
@@ -35,7 +42,6 @@ NULL
 #' @export
 ui_teal <- function(id,
                     modules,
-                    data = NULL,
                     title = build_app_title(),
                     header = tags$p(),
                     footer = tags$p()) {
@@ -85,15 +91,10 @@ ui_teal <- function(id,
     )
   )
 
-  bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
-  if (!is.null(data)) {
-    data_module <- div(
-      ui_init_data(ns("data"), data = data),
-      ui_validate_reactive_teal_data(ns("validate"))
-    )
-    modules$children <- c(list(teal_data_module = data_module), modules$children)
-  }
-  tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
+  data_elem <- ui_init_data(ns("data"))
+  validate_elem <- ui_validate_reactive_teal_data(ns("validate"))
+  modules_with_data <- modules
+  modules_with_data$children <- c(list(teal_data_module = data_elem), modules$children)
 
   fluidPage(
     id = id,
@@ -103,16 +104,16 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
-    if (is.null(data)) ui_validate_reactive_teal_data(ns("validate")), # to display validation of the input data
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
-      tabs_elem
+      ui_teal_module(id = ns("teal_modules"), modules = modules_with_data)
     ),
+    validate_elem,
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
-      bookmark_panel_ui,
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
       tags$button(
         class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
         href = "javascript:void(0)",
@@ -199,8 +200,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       validate_shiny_silent_error = FALSE
     )
+
     is_failed <- reactive(!inherits(data_pulled(), "teal_data"))
     if (inherits(data, "teal_data_module")) {
+      # don't display is data_tab is active
       observeEvent(is_failed(), {
         if (is_failed()) {
           shinyjs::disable(selector = ".nav li a:not(.active)")
@@ -209,7 +212,16 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           shinyjs::enable(selector = ".nav li a:not(.active)")
         }
       })
-    } else {
+      if (isTRUE(attr(data, "once"))) {
+        observeEvent(data_validated(), once = TRUE, {
+          # when once = TRUE we pull data once and then remove data tab
+          removeUI(selector = .data_tab_selector(session$ns))
+          .click_first_module_tab(session$ns)
+        })
+      }
+    }
+
+    if (inherits(data, "reactive")) {
       observeEvent(is_failed(), {
         if (is_failed()) {
           shinyjs::hide("tabpanel_wrapper")
@@ -218,37 +230,24 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           shinyjs::show("tabpanel_wrapper")
         }
       })
+      removeUI(selector = .data_tab_selector(session$ns))
+      .click_first_module_tab(session$ns)
     }
 
-    observeEvent(data_validated(), once = TRUE, {
-      # when once = TRUE we pull data once and then hide data tab
-      if (isTRUE(attr(data, "once"))) {
-        shinyjs::hide(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("tabpanel_wrapper")))
-        shinyjs::runjs(
-          sprintf(
-            "document.querySelector('#%s .nav li:nth-child(2) a').click();",
-            session$ns("tabpanel_wrapper")
-          )
-        )
-      }
-    })
 
     data_init <- reactive({
-      if (inherits(data_validated(), "teal_data")) {
-        is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data_validated()))
-        if (!isTRUE(is_filter_ok)) {
-          showNotification(
-            "Some filters were not applied because of incompatibility with data. Contact app developer.",
-            type = "warning",
-            duration = 10
-          )
-          warning(is_filter_ok)
-        }
-
-        .add_signature_to_data(data_validated())
-      } else {
-        data_validated()
+      req(inherits(data_validated(), "teal_data"))
+      is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data_validated()))
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
+          type = "warning",
+          duration = 10
+        )
+        warning(is_filter_ok)
       }
+
+      .add_signature_to_data(data_validated())
     })
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
@@ -279,4 +278,16 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   })
 
   invisible(NULL)
+}
+
+
+.data_tab_selector <- function(ns) {
+  sprintf("#%s a[data-value='teal_data_module']", ns("tabpanel_wrapper"))
+}
+
+.click_first_module_tab <- function(ns) {
+  shinyjs::runjs(sprintf(
+    "document.querySelector('#%s .nav li:nth-child(2) a').click();",
+    ns("tabpanel_wrapper")
+  ))
 }

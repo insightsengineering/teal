@@ -241,7 +241,6 @@ init <- function(data,
     ui = function(request) {
       ui_teal(
         id = ns("teal"),
-        data = if (inherits(data, "teal_data_module")) data,
         modules = modules,
         title = title,
         header = header,
