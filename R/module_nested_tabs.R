@@ -29,7 +29,7 @@
 #'
 #' @param once (`logical(1)`)
 #'  if [teal_data_module()] has a flag `once = TRUE` then data tab is removed when data is loaded
-#'  succesfully.
+#'  successfully.
 #'
 #' @return
 #' output of currently active module.

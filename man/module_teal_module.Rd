@@ -105,7 +105,7 @@ content.
 
 \item{once}{(\code{logical(1)})
 if \code{\link[=teal_data_module]{teal_data_module()}} has a flag \code{once = TRUE} then data tab is removed when data is loaded
-succesfully.}
+successfully.}
 }
 \value{
 output of currently active module.
