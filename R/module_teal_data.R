@@ -93,10 +93,8 @@ srv_teal_data <- function(id,
       validate_shiny_silent_error = validate_shiny_silent_error,
       hide_validation_error = is_previous_failed
     )
-    .trigger_on_success(data_handled)
   })
 }
-
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
@@ -141,7 +139,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       }
     })
 
-    NULL
+    .trigger_on_success(data)
   })
 }
 
@@ -237,7 +235,6 @@ srv_check_shiny_warnings <- function(id, data, modules) {
     })
   })
 }
-
 
 .trigger_on_success <- function(data) {
   out <- reactiveVal(NULL)

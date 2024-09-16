@@ -86,9 +86,9 @@ ui_teal <- function(id,
   )
 
   bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
-  data_elem <- ui_init_data(ns("data"), data = data)
   if (!is.null(data)) {
-    modules$children <- c(list(teal_data_module = data_elem), modules$children)
+    data_module <- ui_init_data(ns("data"), data = data)
+    modules$children <- c(list(teal_data_module = data_module), modules$children)
   }
   tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
 
@@ -100,12 +100,12 @@ ui_teal <- function(id,
     tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
+    ui_validate_reactive_teal_data(ns("validate")), # to display validation of the input data
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
       tabs_elem
     ),
-    if (is.null(data)) data_elem, # to display validation of the input data
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
@@ -156,7 +156,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
-    disable_teal_tabs(session$ns, hide_content = !inherits(data, "teal_data_module"))
 
     output$identifier <- renderText(
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
@@ -169,6 +168,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     output$lockFile <- teal_lockfile_downloadhandler()
+
+    if (getOption("teal.show_js_log", default = FALSE)) {
+      shinyjs::showLog()
+    }
 
     # `JavaScript` code
     run_js_files(files = "init.js")
@@ -186,54 +189,83 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    is_data_failed <- reactiveValues()
-    init_data <- srv_init_data(
-      "data",
-      data = data,
+    data_pulled <- srv_init_data("data", data = data)
+    data_validated <- srv_validate_reactive_teal_data(
+      "validate",
+      data = data_pulled,
       modules = modules,
-      filter = filter,
-      is_data_failed = is_data_failed
+      validate_shiny_silent_error = FALSE
     )
-    is_failed <- reactive({
-      isTRUE(unlist(reactiveValuesToList(is_data_failed)))
-    })
-    observeEvent(is_failed(), {
-      if (is_failed()) {
-        if (inherits(data, "teal_data_module")) {
-          shinyjs::disable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+    is_failed <- reactive(!inherits(data_pulled(), "teal_data"))
+    if (inherits(data, "teal_data_module")) {
+      observeEvent(is_failed(), {
+        if (is_failed()) {
+          shinyjs::disable(selector = ".nav li a:not(.active)")
         } else {
-          shinyjs::hide("tabpanel_wrapper")
+          showNotification("Data loaded successfully.", duration = 5)
+          shinyjs::enable(selector = ".nav li a:not(.active)")
         }
-      } else {
-        if (inherits(data, "teal_data_module")) {
-          shinyjs::enable(selector = sprintf(".teal-body:has('#%s') .nav li a", session$ns("content")))
+      })
+    } else {
+      observeEvent(is_failed(), {
+        if (is_failed()) {
+          shinyjs::hide("tabpanel_wrapper")
         } else {
+          showNotification("Data loaded successfully.", duration = 5)
           shinyjs::show("tabpanel_wrapper")
         }
-      }
-    })
-
-
-    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(init_data(), {
-        req(inherits(init_data(), "teal_data"))
-        logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(init_data())
       })
     }
 
-    observeEvent(init_data(), {
-      if (inherits(init_data(), "teal_data")) {
-        showNotification("Data loaded successfully.", duration = 5)
-        enable_teal_tabs(session$ns)
+    observeEvent(data_validated(), once = TRUE, {
+      if (isTRUE(attr(data, "once"))) {
+        # Hiding the data module tab.
+        shinyjs::hide(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("tabpanel_wrapper")))
+        # Clicking the second tab, which is the first module.
+        shinyjs::runjs(
+          sprintf(
+            "document.querySelector('#%s .nav li:nth-child(2) a').click();",
+            session$ns("tabpanel_wrapper")
+          )
+        )
+      }
+
+      # Excluding the ids from teal_data_module using full namespace and global shiny app session.
+      app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+      setBookmarkExclude(
+        session$ns(
+          grep(
+            pattern = "teal_data_module-",
+            x = names(reactiveValuesToList(input)),
+            value = TRUE
+          )
+        ),
+        session = app_session
+      )
+    })
+
+    data_init <- reactive({
+      if (inherits(data_validated(), "teal_data")) {
+        .add_signature_to_data(data_validated())
+      } else {
+        data_validated()
       }
     })
+
+    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
+      eventReactive(data_init(), {
+        req(inherits(data_init(), "teal_data"))
+        logger::log_debug("srv_teal@1 initializing FilteredData")
+        teal_data_to_filtered_data(data_init())
+      })
+    }
+
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
-      data_rv = init_data,
+      data_rv = data_init,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global

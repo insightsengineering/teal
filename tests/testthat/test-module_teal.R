@@ -167,7 +167,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(init_data(), "teal_data")
+        testthat::expect_null(data_init(), NULL)
         testthat::expect_null(modules_output$module_1())
         testthat::expect_null(modules_output$module_2())
       }
@@ -186,7 +186,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(init_data(), "teal_data")
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -209,7 +209,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(init_data(), "teal_data")
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -240,7 +240,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_null(init_data())
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -263,7 +263,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(init_data(), "teal_data")
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_s4_class(modules_output$module_1()(), "teal_data")
       }
@@ -290,7 +290,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(init_data())
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -317,7 +317,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(init_data())
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -344,7 +344,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(init_data())
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -371,7 +371,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(init_data())
+        testthat::expect_null(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -404,8 +404,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-
-        session$setInputs(`data-teal_data_module-data-dataset` = "iris", `teal_modules-active_tab` = "module_1")
+        session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
           ls(teal.code::get_env(modules_output$module_1()())),
           c("iris", "iris._raw_")
@@ -414,7 +413,7 @@ testthat::describe("srv_teal teal_modules", {
         # comment: can't trigger reactivity in testServer - the change in a reactive input data
         #          is not propagated to the teal_module(data). Instead we test if the modified data
         #          is sent to another teal_module
-        session$setInputs(`data-teal_data_module-data-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
+        session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
         session$flushReact()
         testthat::expect_identical(
           ls(teal.code::get_env(modules_output$module_2()())),
@@ -450,12 +449,12 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(
-          `data-teal_data_module-data-dataset` = "iris",
+          `data-teal_data_module-dataset` = "iris",
           `teal_modules-active_tab` = "module_1"
         )
         out <- modules_output$module_1()
         testthat::expect_true(!is.null(out))
-        session$setInputs(`data-teal_data_module-data-dataset` = "mtcars")
+        session$setInputs(`data-teal_data_module-dataset` = "mtcars")
         testthat::expect_identical(out, modules_output$module_1())
       }
     )

@@ -45,30 +45,21 @@ ui_init_data <- function(id, data = NULL) {
   shiny::div(
     id = ns("content"),
     style = "display: inline-block; width: 100%;",
-    ui_teal_data(
-      ns("teal_data_module"),
-      data_module = if (inherits(data, "teal_data_module")) {
-        data$ui
-      } else {
-        function(id) NULL
-      }
-    )
+    if (inherits(data, "teal_data_module")) {
+      data$ui(ns("teal_data_module"))
+    } else {
+      shinyjs::hidden()
+    }
   )
 }
 
 #' @rdname module_init_data
-srv_init_data <- function(id, data, modules, filter = teal_slices(), is_data_failed = reactiveValues()) {
+srv_init_data <- function(id, data) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
-  checkmate::assert_class(modules, "teal_modules")
-  checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_data initializing.")
-
-    if (getOption("teal.show_js_log", default = FALSE)) {
-      shinyjs::showLog()
-    }
 
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
@@ -80,49 +71,9 @@ srv_init_data <- function(id, data, modules, filter = teal_slices(), is_data_fai
       function(id) data
     }
 
-    data_validated <- srv_teal_data(
-      "teal_data_module",
-      data_module = data_module,
-      modules = modules,
-      validate_shiny_silent_error = FALSE,
-      is_transformer_failed = is_data_failed
-    )
-
-    observeEvent(data_validated(), once = TRUE, {
-      if (isTRUE(attr(data, "once"))) {
-        # Hiding the data module tab.
-        shinyjs::hide(
-          selector = sprintf(".teal-body:has('#%s') a[data-value='teal_data_module']", session$ns("content"))
-        )
-        # Clicking the second tab, which is the first module.
-        shinyjs::runjs(
-          sprintf(
-            "document.querySelector('.teal-body:has(#%s) .nav li:nth-child(2) a').click();",
-            session$ns("content")
-          )
-        )
-      }
-
-      # Excluding the ids from teal_data_module using full namespace and global shiny app session.
-      app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-      setBookmarkExclude(
-        session$ns(
-          grep(
-            pattern = "teal_data_module-",
-            x = names(reactiveValuesToList(input)),
-            value = TRUE
-          )
-        ),
-        session = app_session
-      )
-    })
-
+    data_out <- data_module("teal_data_module")
     reactive({
-      if (inherits(data_validated(), "teal_data")) {
-        .add_signature_to_data(data_validated())
-      } else {
-        data_validated()
-      }
+      tryCatch(data_out(), error = function(e) e)
     })
   })
 }
