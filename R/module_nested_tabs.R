@@ -20,6 +20,17 @@
 #'  When `datasets` is passed from the parent module (`srv_teal`) then `dataset` is a singleton
 #'  which implies in filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
 #'
+#' @param status (`reactive` returning `character`)
+#'  Determines action dependent on a data loading status:
+#'  - `"ok"` when `teal_data` is returned from a data loading.
+#'  - `"disable"` when [teal_data_module()] didn't returned a `teal_data`. Disables tabs buttons
+#'  - `"hide"` when a `reactive` passed to `srv_teal(data)` didn't returned a `teal_data`. Hides the whole tabs
+#'    content.
+#'
+#' @param once (`logical(1)`)
+#'  if [teal_data_module()] has a flag `once = TRUE` then data tab is removed when data is loaded
+#'  succesfully.
+#'
 #' @return
 #' output of currently active module.
 #' - `srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
@@ -45,31 +56,34 @@ ui_teal_module.default <- function(id, modules, depth = 0L) {
 #' @export
 ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-  do.call(
-    tabsetPanel,
-    c(
-      # by giving an id, we can reactively respond to tab changes
-      list(
-        id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs"
-      ),
-      lapply(
-        names(modules$children),
-        function(module_id) {
-          module_label <- modules$children[[module_id]]$label
-          if (is.null(module_label)) {
-            module_label <- icon("fas fa-database")
-          }
-          tabPanel(
-            title = module_label,
-            value = module_id, # when clicked this tab value changes input$<tabset panel id>
-            ui_teal_module(
-              id = ns(module_id),
-              modules = modules$children[[module_id]],
-              depth = depth + 1L
+  tags$div(
+    id = ns("wrapper"),
+    do.call(
+      tabsetPanel,
+      c(
+        # by giving an id, we can reactively respond to tab changes
+        list(
+          id = ns("active_tab"),
+          type = if (modules$label == "root") "pills" else "tabs"
+        ),
+        lapply(
+          names(modules$children),
+          function(module_id) {
+            module_label <- modules$children[[module_id]]$label
+            if (is.null(module_label)) {
+              module_label <- icon("fas fa-database")
+            }
+            tabPanel(
+              title = module_label,
+              value = module_id, # when clicked this tab value changes input$<tabset panel id>
+              ui_teal_module(
+                id = ns(module_id),
+                modules = modules$children[[module_id]],
+                depth = depth + 1L
+              )
             )
-          )
-        }
+          }
+        )
       )
     )
   )
@@ -146,6 +160,8 @@ srv_teal_module <- function(id,
                             datasets = NULL,
                             slices_global,
                             reporter = teal.reporter::Reporter$new(),
+                            status = reactive("ok"),
+                            once = FALSE,
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
   assert_reactive(data_rv)
@@ -164,6 +180,8 @@ srv_teal_module.default <- function(id,
                                     datasets = NULL,
                                     slices_global,
                                     reporter = teal.reporter::Reporter$new(),
+                                    status = reactive("ok"),
+                                    once = FALSE,
                                     is_active = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
@@ -176,12 +194,36 @@ srv_teal_module.teal_modules <- function(id,
                                          datasets = NULL,
                                          slices_global,
                                          reporter = teal.reporter::Reporter$new(),
+                                         status = reactive("ok"),
+                                         once = FALSE,
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
+    observeEvent(status(), {
+      tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
+      if (identical(status(), "ok")) {
+        shinyjs::show("wrapper")
+        shinyjs::enable(selector = tabs_selector)
+      } else if (identical(status(), "hide")) {
+        shinyjs::hide("wrapper")
+      } else if (identical(status(), "disable")) {
+        shinyjs::disable(selector = tabs_selector)
+      }
+    })
+
+    module_ids <- names(modules$children)
+
+    if (once) {
+      observeEvent(data_rv(), once = TRUE, {
+        # when once = TRUE we pull data once and then remove data tab
+        removeUI(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("wrapper")))
+        updateTabsetPanel(inputId = "active_tab", selected = module_ids[1])
+      })
+    }
+
     modules_output <- sapply(
-      names(modules$children),
+      module_ids,
       function(module_id) {
         srv_teal_module(
           id = module_id,
@@ -208,6 +250,8 @@ srv_teal_module.teal_module <- function(id,
                                         datasets = NULL,
                                         slices_global,
                                         reporter = teal.reporter::Reporter$new(),
+                                        status = reactive("ok"),
+                                        once = FALSE,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {

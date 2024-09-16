@@ -167,7 +167,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_null(data_init(), NULL)
+        testthat::expect_error(data_init(), NULL)
         testthat::expect_null(modules_output$module_1())
         testthat::expect_null(modules_output$module_2())
       }
@@ -186,7 +186,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -209,7 +209,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -240,7 +240,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -263,7 +263,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_s4_class(modules_output$module_1()(), "teal_data")
       }
@@ -290,7 +290,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -317,7 +317,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -344,7 +344,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -371,7 +371,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_null(data_init())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }

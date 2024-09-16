@@ -46,7 +46,6 @@ ui_teal <- function(id,
                     header = tags$p(),
                     footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, "teal_data_module", null.ok = TRUE)
   checkmate::assert(
     .var.name = "title",
     checkmate::check_string(title),
@@ -200,41 +199,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       validate_shiny_silent_error = FALSE
     )
-
-    is_failed <- reactive(!inherits(data_pulled(), "teal_data"))
-    if (inherits(data, "teal_data_module")) {
-      # don't display is data_tab is active
-      observeEvent(is_failed(), {
-        if (is_failed()) {
-          shinyjs::disable(selector = ".nav li a:not(.active)")
-        } else {
-          showNotification("Data loaded successfully.", duration = 5)
-          shinyjs::enable(selector = ".nav li a:not(.active)")
-        }
-      })
-      if (isTRUE(attr(data, "once"))) {
-        observeEvent(data_validated(), once = TRUE, {
-          # when once = TRUE we pull data once and then remove data tab
-          removeUI(selector = .data_tab_selector(session$ns))
-          .click_first_module_tab(session$ns)
-        })
-      }
-    }
-
-    if (inherits(data, "reactive")) {
-      observeEvent(is_failed(), {
-        if (is_failed()) {
-          shinyjs::hide("tabpanel_wrapper")
-        } else {
-          showNotification("Data loaded successfully.", duration = 5)
-          shinyjs::show("tabpanel_wrapper")
-        }
-      })
-      removeUI(selector = .data_tab_selector(session$ns))
-      .click_first_module_tab(session$ns)
-    }
-
-
     data_init <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data_validated()))
@@ -246,8 +210,17 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         )
         warning(is_filter_ok)
       }
-
       .add_signature_to_data(data_validated())
+    })
+
+    status <- reactive({
+      if (inherits(data_pulled(), "teal_data")) {
+        "ok"
+      } else if (inherits(data, "teal_data_module")) {
+        "disable"
+      } else {
+        "hide"
+      }
     })
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
@@ -266,7 +239,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       data_rv = data_init,
       datasets = datasets_rv,
       modules = modules,
-      slices_global = slices_global
+      slices_global = slices_global,
+      status = status,
+      once = isTRUE(attr(data, "once")) || test_reactive(data)
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
@@ -278,16 +253,4 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   })
 
   invisible(NULL)
-}
-
-
-.data_tab_selector <- function(ns) {
-  sprintf("#%s a[data-value='teal_data_module']", ns("tabpanel_wrapper"))
-}
-
-.click_first_module_tab <- function(ns) {
-  shinyjs::runjs(sprintf(
-    "document.querySelector('#%s .nav li:nth-child(2) a').click();",
-    ns("tabpanel_wrapper")
-  ))
 }
