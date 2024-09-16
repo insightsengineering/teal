@@ -6,9 +6,15 @@
 \alias{srv_init_data}
 \title{Data Module for teal}
 \usage{
-ui_init_data(id, data)
+ui_init_data(id, data = NULL)
 
-srv_init_data(id, data, modules, filter = teal_slices())
+srv_init_data(
+  id,
+  data,
+  modules,
+  filter = teal_slices(),
+  is_data_failed = reactiveValues()
+)
 }
 \arguments{
 \item{id}{(\code{character}) Optionally,
