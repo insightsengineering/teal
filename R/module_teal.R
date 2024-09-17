@@ -188,6 +188,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
       shiny::insertTab(
         inputId = "teal_modules-active_tab",
         position = "before",
@@ -239,7 +240,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
-
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
@@ -249,15 +249,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       slices_global = slices_global,
       status = status,
-      remove_when_data_ready = isTRUE(attr(data, "once")) || !inherits(data, "teal_data_module")
+      remove_when_data_ready = isTRUE(attr(data, "once"))
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
-
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab"))
-    }
   })
 
   invisible(NULL)
