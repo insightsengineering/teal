@@ -47,7 +47,7 @@ NULL
     datanames_corrected,
     intersect(
       sprintf(".%s_raw", datanames_corrected),
-      ls(data@env, all.names = TRUE)
+      ls(teal.code::get_env(data), all.names = TRUE)
     )
   )
 
