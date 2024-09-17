@@ -1,9 +1,3 @@
-withr::local_options(
-  # we should't run lockfile process multiple times in tests as it starts background process which is not
-  # possible to kill once run. It means that background R sessions are being cumulated
-  list(teal.lockfile.enable = FALSE),
-  .local_envir = testthat::teardown_env()
-)
 
 # `opts_partial_match_old` is left for exclusions due to partial matching in dependent packages (i.e. not fixable here)
 # it might happen that it is not used right now, but it is left for possible future use

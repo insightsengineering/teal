@@ -1,8 +1,18 @@
 .onLoad <- function(libname, pkgname) {
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
+
+  lockfile_flag <-
+    !(
+      identical(Sys.getenv("CALLR_IS_RUNNING"), "true") || # inside callr process
+      identical(Sys.getenv("TESTTHAT"), "true") || # inside devtools::test
+      (
+        ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+      ) # inside R CMD CHECK
+    )
+
   teal_default_options <- list(
     teal.show_js_log = FALSE,
-    teal.lockfile.enable = TRUE,
+    teal.lockfile.enable = lockfile_flag,
     shiny.sanitize.errors = FALSE
   )
 
