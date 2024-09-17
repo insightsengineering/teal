@@ -80,8 +80,10 @@ ui_teal <- function(id,
     tags$div(
       icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
       "Computing ...",
-      # CSS defined in `custom.css`
-      class = "shinybusymessage"
+      style = "position: fixed; bottom: 0; right: 0;
+      width: 140px; margin: 15px; padding: 5px 0 5px 10px;
+      text-align: left; font-weight: bold; font-size: 100%;
+      color: #ffffff; background-color: #347ab7; z-index: 105;"
     )
   )
 
@@ -92,13 +94,13 @@ ui_teal <- function(id,
   }
   tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
 
-  fluidPage(
+  bslib::page_fluid(
     id = id,
     title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     tags$header(header),
-    tags$hr(class = "my-2"),
+    tags$hr(style = "margin-top: 0.5rem; margin-bottom: 0.5rem;"),
     shiny_busy_message_panel,
     tags$div(
       id = ns("tabpanel_wrapper"),
@@ -109,13 +111,6 @@ ui_teal <- function(id,
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
       bookmark_panel_ui,
-      tags$button(
-        class = "btn action-button filter_hamburger", # see sidebar.css for style filter_hamburger
-        href = "javascript:void(0)",
-        onclick = sprintf("toggleFilterPanel('%s');", ns("tabpanel_wrapper")),
-        title = "Toggle filter panel",
-        icon("fas fa-bars")
-      ),
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
     ),

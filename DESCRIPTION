@@ -40,6 +40,7 @@ Depends:
     teal.data (> 0.6.0.9007),
     teal.slice (>= 0.5.1.9009)
 Imports:
+    bslib (>= 0.8.0),
     checkmate (>= 2.1.0),
     future (>= 1.33.2),
     jsonlite,
@@ -57,7 +58,6 @@ Imports:
     teal.widgets (>= 0.4.0),
     utils
 Suggests:
-    bslib,
     knitr (>= 1.42),
     MultiAssayExperiment,
     R6,

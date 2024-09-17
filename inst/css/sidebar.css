@@ -1,15 +1,10 @@
 /* teal sidebar css */
 
-
 .filter_hamburger,
 .wunder_bar_button {
   font-size: 16px;
   padding: 8px !important;
   background-color: transparent !important;
-}
-
-.filter_hamburger {
-  float: right !important;
 }
 
 .badge-count {
@@ -19,7 +14,7 @@
   -moz-border-radius: 1em;
   border-radius: 1em;
   font-size: 0.7em;
-  padding: 0 .5em;
+  padding: 0 0.5em;
   vertical-align: top;
   margin-left: -1em;
 }
@@ -47,11 +42,42 @@ a.disabled {
   flex: 1 1 80%;
 }
 
-.manager_table_row *+* {
+.manager_table_row * + * {
   flex: 0 0 0px;
   padding: 0em 1.5em;
 }
 
 .manager_placeholder {
   margin-top: 1em;
+}
+
+.teal-sidebar {
+  --_padding: 0px;
+}
+
+.teal-sidebar .accordion-button {
+  --bs-accordion-btn-bg: #ededed;
+  --bs-accordion-active-bg: #ededed;
+  --bs-accordion-btn-padding-x: 1rem;
+  --bs-accordion-btn-padding-y: 0.8rem;
+}
+
+.teal-sidebar .accordion {
+  --bs-accordion-body-padding-x: 1rem;
+  --bs-accordion-body-padding-y: 0.5rem;
+}
+
+.teal-sidebar .accordion-button:hover {
+  --bs-accordion-btn-bg: #c5c5c5;
+  --bs-accordion-active-bg: #c5c5c5;
+}
+
+.teal-transform-accordian .accordion-button {
+  --bs-accordion-btn-padding-y: 0.5rem;
+  --bs-accordion-btn-padding-x: 0.5rem;
+}
+
+.teal-transform-accordian .accordion-button:not(.collapsed)::after,
+.teal-transform-accordian .accordion-button::after {
+  display: none;
 }

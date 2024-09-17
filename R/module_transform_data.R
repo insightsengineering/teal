@@ -26,25 +26,15 @@ ui_transform_data <- function(id, transforms, class = "well") {
     function(name) {
       data_mod <- transforms[[name]]
       wrapper_id <- ns(sprintf("wrapper_%s", name))
-      div( # todo: accordion?
-        # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
-        #   For details see tealValidate.js file.
-        class = c(class, "teal_validated"),
-        title = attr(data_mod, "label"),
-        tags$span(
-          class = "text-primary mb-4",
-          icon("fas fa-square-pen"),
-          attr(data_mod, "label")
-        ),
-        tags$i(
-          class = "remove pull-right fa fa-angle-down",
-          style = "cursor: pointer;",
-          title = "fold/expand transform panel",
-          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", wrapper_id)
-        ),
-        div(
-          id = wrapper_id,
-          ui_teal_data(id = ns(name), data_module = transforms[[name]])
+      bslib::accordion(
+        class = "teal-transform-accordian", # todo: make transform accordian
+        bslib::accordion_panel(
+          attr(data_mod, "label"),
+          icon = icon("fas fa-square-pen"),
+          div(
+            id = wrapper_id,
+            ui_teal_data(id = ns(name), data_module = transforms[[name]])
+          )
         )
       )
     }

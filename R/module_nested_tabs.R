@@ -58,7 +58,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
         function(module_id) {
           module_label <- modules$children[[module_id]]$label
           if (is.null(module_label)) {
-            module_label <- icon("fas fa-database")
+            module_label <- icon("fas fa-list")
           }
           tabPanel(
             title = module_label,
@@ -100,18 +100,28 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      if (depth >= 2L) tags$div(style = "mt-6"),
+      if (depth >= 2L) tags$div(),
       if (!is.null(modules$datanames)) {
-        fluidRow(
-          column(width = 9, ui_teal, class = "teal_primary_col"),
-          column(
-            width = 3,
-            ui_data_summary(ns("data_summary")),
-            ui_filter_data(ns("filter_panel")),
-            if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
-              ui_transform_data(ns("data_transform"), transforms = modules$transformers, class = "well")
-            },
-            class = "teal_secondary_col"
+        div(
+          bslib::layout_sidebar(
+            sidebar = bslib::sidebar(
+              class = "teal-sidebar",
+              width = 350,
+              tags$div(
+                ui_data_summary(ns("data_summary")),
+                ui_filter_data(ns("filter_panel")),
+                if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
+                  bslib::accordion(
+                    bslib::accordion_panel(
+                      "Transform Data",
+                      icon = icon("fas fa-pen-to-square"),
+                      ui_transform_data(ns("data_transform"), transforms = modules$transformers)
+                    )
+                  )
+                }
+              )
+            ),
+            ui_teal
           )
         )
       } else {

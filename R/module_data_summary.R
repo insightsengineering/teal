@@ -23,31 +23,11 @@ NULL
 ui_data_summary <- function(id) {
   ns <- NS(id)
   content_id <- ns("filters_overview_contents")
-  tags$div(
-    id = id,
-    class = "well",
-    tags$div(
-      class = "row",
-      tags$div(
-        class = "col-sm-9",
-        tags$label("Active Filter Summary", class = "text-primary mb-4")
-      ),
-      tags$div(
-        class = "col-sm-3",
-        tags$i(
-          class = "remove pull-right fa fa-angle-down",
-          style = "cursor: pointer;",
-          title = "fold/expand data summary panel",
-          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
-        )
-      )
-    ),
-    tags$div(
-      id = content_id,
-      tags$div(
-        class = "teal_active_summary_filter_panel",
-        tableOutput(ns("table"))
-      )
+  bslib::accordion(
+    bslib::accordion_panel(
+      "Active Filter Summary",
+      icon = icon("fas fa-list"),
+      tableOutput(ns("table"))
     )
   )
 }
