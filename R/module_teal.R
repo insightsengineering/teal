@@ -187,20 +187,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab"))
-      shiny::insertTab(
-        inputId = "teal_modules-active_tab",
-        position = "before",
-        select = TRUE,
-        tabPanel(
-          title = icon("fas fa-database"),
-          value = "teal_data_module",
-          ui_init_data(session$ns("data"))
-        )
-      )
-    }
-
     data_pulled <- srv_init_data("data", data = data)
     data_validated <- srv_validate_reactive_teal_data(
       "validate",
@@ -240,6 +226,29 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+      shiny::insertTab(
+        inputId = "teal_modules-active_tab",
+        position = "before",
+        select = TRUE,
+        tabPanel(
+          title = icon("fas fa-database"),
+          value = "teal_data_module",
+          ui_init_data(session$ns("data"))
+        )
+      )
+
+      if (attr(data, "once")) {
+        observeEvent(data_init(), once = TRUE, {
+          logger::log_debug("srv_teal@2 removing data tab.")
+          # when once = TRUE we pull data once and then remove data tab
+          removeUI(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("teal_modules-wrapper")))
+          updateTabsetPanel(inputId = "teal_modules-active_tab", selected = names(modules$children)[1])
+        })
+      }
+    }
+
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
@@ -248,8 +257,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
-      status = status,
-      remove_when_data_ready = isTRUE(attr(data, "once"))
+      status = status
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)

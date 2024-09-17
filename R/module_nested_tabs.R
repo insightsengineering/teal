@@ -27,10 +27,6 @@
 #'  - `"hide"` when a `reactive` passed to `srv_teal(data)` didn't returned a `teal_data`. Hides the whole tabs
 #'    content.
 #'
-#' @param remove_when_data_ready (`logical(1)`)
-#'  if [teal_data_module()] has a flag `once = TRUE` then data tab is removed when data is loaded
-#'  successfully.
-#'
 #' @return
 #' output of currently active module.
 #' - `srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
@@ -156,7 +152,6 @@ srv_teal_module <- function(id,
                             slices_global,
                             reporter = teal.reporter::Reporter$new(),
                             status = reactive("ok"),
-                            remove_when_data_ready = FALSE,
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
   assert_reactive(data_rv)
@@ -165,7 +160,6 @@ srv_teal_module <- function(id,
   checkmate::assert_class(slices_global, ".slicesGlobal")
   checkmate::assert_class(reporter, "Reporter")
   assert_reactive(status)
-  checkmate::assert_flag(remove_when_data_ready)
   UseMethod("srv_teal_module", modules)
 }
 
@@ -178,7 +172,6 @@ srv_teal_module.default <- function(id,
                                     slices_global,
                                     reporter = teal.reporter::Reporter$new(),
                                     status = reactive("ok"),
-                                    remove_when_data_ready = FALSE,
                                     is_active = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
@@ -192,7 +185,6 @@ srv_teal_module.teal_modules <- function(id,
                                          slices_global,
                                          reporter = teal.reporter::Reporter$new(),
                                          status = reactive("ok"),
-                                         remove_when_data_ready = FALSE,
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
@@ -212,19 +204,8 @@ srv_teal_module.teal_modules <- function(id,
       }
     })
 
-    module_ids <- names(modules$children)
-
-    if (remove_when_data_ready) {
-      observeEvent(data_rv(), once = TRUE, {
-        logger::log_debug("srv_teal_module@2 removing data tab.")
-        # when once = TRUE we pull data once and then remove data tab
-        removeUI(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("wrapper")))
-        updateTabsetPanel(inputId = "active_tab", selected = module_ids[1])
-      })
-    }
-
     modules_output <- sapply(
-      module_ids,
+      names(modules$children),
       function(module_id) {
         srv_teal_module(
           id = module_id,
@@ -252,7 +233,6 @@ srv_teal_module.teal_module <- function(id,
                                         slices_global,
                                         reporter = teal.reporter::Reporter$new(),
                                         status = reactive("ok"),
-                                        remove_when_data_ready = FALSE,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {

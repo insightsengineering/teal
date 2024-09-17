@@ -28,7 +28,6 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   status = reactive("ok"),
-  remove_when_data_ready = FALSE,
   is_active = reactive(TRUE)
 )
 
@@ -40,7 +39,6 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   status = reactive("ok"),
-  remove_when_data_ready = FALSE,
   is_active = reactive(TRUE)
 )
 
@@ -52,7 +50,6 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   status = reactive("ok"),
-  remove_when_data_ready = FALSE,
   is_active = reactive(TRUE)
 )
 
@@ -64,7 +61,6 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   status = reactive("ok"),
-  remove_when_data_ready = FALSE,
   is_active = reactive(TRUE)
 )
 }
@@ -99,10 +95,6 @@ Determines action dependent on a data loading status:
 \item \code{"hide"} when a \code{reactive} passed to \code{srv_teal(data)} didn't returned a \code{teal_data}. Hides the whole tabs
 content.
 }}
-
-\item{remove_when_data_ready}{(\code{logical(1)})
-if \code{\link[=teal_data_module]{teal_data_module()}} has a flag \code{once = TRUE} then data tab is removed when data is loaded
-successfully.}
 }
 \value{
 output of currently active module.
