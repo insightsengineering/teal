@@ -52,6 +52,9 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      additional-env-vars: |
+        NOT_CRAN=true
   wasm:
     name: Build WASM packages 🧑‍🏭
     needs: release

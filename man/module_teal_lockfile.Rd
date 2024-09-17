@@ -20,7 +20,7 @@ srv_teal_lockfile(id)
 .is_lockfile_deps_installed()
 }
 \arguments{
-\item{lockfile_path}{(\code{character}) path to the lockfile (\code{"teal_app.lock"}).}
+\item{lockfile_path}{(\code{character}) path to the lockfile.}
 }
 \value{
 \code{NULL}

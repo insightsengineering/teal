@@ -1,6 +1,6 @@
 #' Generate lockfile for application's environment reproducibility
 #'
-#' @param lockfile_path (`character`) path to the lockfile (`"teal_app.lock"`).
+#' @param lockfile_path (`character`) path to the lockfile.
 #'
 #' @section Different ways of creating lockfile:
 #' `teal` leverages [renv::snapshot()], which offers multiple methods for lockfile creation.

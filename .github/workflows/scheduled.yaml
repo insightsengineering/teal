@@ -5,9 +5,26 @@ on:
   schedule:
     - cron: '45 3 * * 0'
   workflow_dispatch:
+    inputs:
+      chosen-workflow:
+        description: |
+          Select which workflow you'd like to run
+        required: true
+        type: choice
+        default: rhub
+        options:
+          - rhub
+          - dependency-test
+          - branch-cleanup
+          - revdepcheck
 
 jobs:
   dependency-test:
+    if: >
+      github.event_name == 'schedule' || (
+        github.event_name == 'workflow_dispatch' &&
+        inputs.chosen-workflow == 'dependency-test'
+      )
     strategy:
       fail-fast: false
       matrix:
@@ -22,14 +39,29 @@ jobs:
       additional-env-vars: |
         PKG_SYSREQS_DRY_RUN=true
   branch-cleanup:
+    if: >
+      github.event_name == 'schedule' || (
+        github.event_name == 'workflow_dispatch' &&
+        inputs.chosen-workflow == 'branch-cleanup'
+      )
     name: Branch Cleanup 🧹
     uses: insightsengineering/r.pkg.template/.github/workflows/branch-cleanup.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   revdepcheck:
+    if: >
+      github.event_name == 'schedule' || (
+        github.event_name == 'workflow_dispatch' &&
+        inputs.chosen-workflow == 'revdepcheck'
+      )
     name: revdepcheck ↩️
     uses: insightsengineering/r.pkg.template/.github/workflows/revdepcheck.yaml@main
   rhub:
+    if: >
+      github.event_name == 'schedule' || (
+        github.event_name == 'workflow_dispatch' &&
+        inputs.chosen-workflow == 'rhub'
+      )
     name: R-hub 🌐
     uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@main
     with:
