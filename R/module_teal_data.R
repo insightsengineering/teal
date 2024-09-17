@@ -41,8 +41,9 @@ ui_teal_data <- function(id, data_module = function(id) NULL) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
   ns <- NS(id)
+
   shiny::tagList(
-    div(id = ns("wrapper"), data_module(id = ns("data"))),
+    tags$div(id = ns("wrapper"), data_module(id = ns("data"))),
     ui_validate_reactive_teal_data(ns("validate"))
   )
 }

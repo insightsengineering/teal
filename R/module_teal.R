@@ -90,11 +90,6 @@ ui_teal <- function(id,
     )
   )
 
-  data_elem <- ui_init_data(ns("data"))
-  validate_elem <- ui_validate_reactive_teal_data(ns("validate"))
-  modules_with_data <- modules
-  modules_with_data$children <- c(list(teal_data_module = data_elem), modules$children)
-
   fluidPage(
     id = id,
     title = title,
@@ -106,9 +101,9 @@ ui_teal <- function(id,
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
-      ui_teal_module(id = ns("teal_modules"), modules = modules_with_data)
+      ui_teal_module(id = ns("teal_modules"), modules = modules)
     ),
-    validate_elem,
+    ui_validate_reactive_teal_data(ns("validate")),
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
@@ -191,6 +186,19 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         logger::log_debug("srv_teal@1 Timezone set to client's timezone: { input$timezone }.")
       }
     )
+
+    if (inherits(data, "teal_data_module")) {
+      shiny::insertTab(
+        inputId = "teal_modules-active_tab",
+        position = "before",
+        select = TRUE,
+        tabPanel(
+          title = icon("fas fa-database"),
+          value = "teal_data_module",
+          ui_init_data(session$ns("data"))
+        )
+      )
+    }
 
     data_pulled <- srv_init_data("data", data = data)
     data_validated <- srv_validate_reactive_teal_data(

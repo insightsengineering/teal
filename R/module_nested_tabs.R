@@ -91,11 +91,6 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.shiny.tag <- function(id, modules, depth = 0L) {
-  modules
-}
-#' @rdname module_teal_module
-#' @export
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
