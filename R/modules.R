@@ -264,7 +264,7 @@ module <- function(label = "module",
   }
   checkmate::assert_list(transformers, types = "teal_transform_module")
   transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
-  combined_datanames <- if (identical(datanames, "all") || identical(transformer_datanames, "all")) {
+  combined_datanames <- if (identical(datanames, "all") || any(sapply(transformer_datanames, identical, "all"))) {
     "all"
   } else {
     union(datanames, transformer_datanames)
