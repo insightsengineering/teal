@@ -534,7 +534,7 @@ testthat::test_that("module datanames is appended by its transformers datanames"
   testthat::expect_identical(out$datanames, c("c", "a", "b"))
 })
 
-testthat::test_that("module datanames is set to union(datanames, 'all') if transformer $datanames is 'all'", {
+testthat::test_that("module datanames is set to 'all' if any transformer $datanames is 'all'", {
   transformer_w_datanames <- teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
