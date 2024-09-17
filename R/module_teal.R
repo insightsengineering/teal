@@ -241,7 +241,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       slices_global = slices_global,
       status = status,
-      once = isTRUE(attr(data, "once")) || test_reactive(data)
+      remove_when_data_ready = isTRUE(attr(data, "once")) || !inherits(data, "teal_data_module")
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
