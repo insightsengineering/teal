@@ -551,7 +551,7 @@ testthat::test_that("module datanames is set to union(datanames, 'all') if trans
   )
 
   out <- module(datanames = "c", transformers = list(transformer_w_datanames))
-  testthat::expect_identical(out$datanames, c("c", "all"))
+  testthat::expect_identical(out$datanames, "all")
 })
 
 testthat::test_that("module datanames stays 'all' regardless of transformers", {
