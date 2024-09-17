@@ -71,7 +71,7 @@ NULL
     )
   )
   new_data@verified <- data@verified
-  teal.data::datanames(new_data) <- datanames
+  teal.data::datanames(new_data) <- datanames_corrected
   new_data
 }
 
