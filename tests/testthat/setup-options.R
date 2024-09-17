@@ -14,7 +14,6 @@ opts_partial_match_old <- list(
   warnPartialMatchAttr = getOption("warnPartialMatchAttr")
 )
 opts_partial_match_new <- list(
-  teal.lockfile.enable = FALSE,
   warnPartialMatchDollar = TRUE,
   warnPartialMatchArgs = TRUE,
   warnPartialMatchAttr = TRUE
