@@ -75,8 +75,6 @@ srv_teal_lockfile <- function(id) {
 
     lockfile_path <- "teal_app.lock"
     is_lockfile_enabled <- .is_lockfile_enabled()
-    cat('\n is_lockfile_enabled', is_lockfile_enabled, '\n')
-    cat('\n identical(Sys.getenv("TESTTHAT"), "true")', identical(Sys.getenv("TESTTHAT"), "true"), '\n')
     user_lockfile_path <- getOption("teal.lockfile.path", default = "")
     is_user_lockfile_set <- !identical(user_lockfile_path, "")
 
