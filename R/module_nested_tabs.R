@@ -22,9 +22,9 @@
 #'
 #' @param status (`reactive` returning `character`)
 #'  Determines action dependent on a data loading status:
-#'  - `"ok"` when `teal_data` is returned from a data loading.
-#'  - `"disable"` when [teal_data_module()] didn't returned a `teal_data`. Disables tabs buttons
-#'  - `"hide"` when a `reactive` passed to `srv_teal(data)` didn't returned a `teal_data`. Hides the whole tabs
+#'  - `"ok"` when `teal_data` is returned from the data loading.
+#'  - `"disable"` when [teal_data_module()] didn't return  `teal_data`. Disables tabs buttons.
+#'  - `"hide"` when a `reactive` passed to `srv_teal(data)` didn't return `teal_data`. Hides the whole tabs
 #'    content.
 #'
 #' @return
