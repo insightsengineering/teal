@@ -62,7 +62,6 @@ srv_data_summary <- function(id, teal_data) {
 
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
-
         if (!length(.teal_data_ls(teal_data()))) {
           return(NULL)
         }
@@ -141,16 +140,13 @@ srv_data_summary <- function(id, teal_data) {
 get_filter_overview <- function(teal_data) {
   datanames <- teal.data::datanames(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
+
   filtered_data_objs <- sapply(
     datanames,
     function(name) teal.code::get_env(teal_data())[[name]],
     simplify = FALSE
   )
-  unfiltered_data_objs <- sapply(
-    datanames,
-    function(name) teal.code::get_env(teal_data())[[sprintf(".%s_raw", name)]],
-    simplify = FALSE
-  )
+  unfiltered_data_objs <- teal.code::get_env(teal_data())[[".raw_data"]]
 
   rows <- lapply(
     datanames,

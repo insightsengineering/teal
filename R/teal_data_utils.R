@@ -33,7 +33,7 @@ NULL
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(objects, "list")
   new_env <- list2env(objects, parent = .GlobalEnv)
-  rlang::env_coalesce(new_env, data@env)
+  rlang::env_coalesce(new_env, teal.code::get_env(data))
   data@env <- new_env
   data
 }
@@ -43,14 +43,7 @@ NULL
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(datanames, "character")
   datanames_corrected <- intersect(datanames, .teal_data_ls(data))
-  dataname_corrected_with_raw <- c(
-    datanames_corrected,
-    intersect(
-      sprintf(".%s_raw", datanames_corrected),
-      ls(teal.code::get_env(data), all.names = TRUE)
-    )
-  )
-
+  datanames_corrected_with_raw <- c(datanames_corrected, ".raw_data")
   if (!length(datanames)) {
     return(teal_data())
   }
@@ -58,12 +51,12 @@ NULL
   new_data <- do.call(
     teal.data::teal_data,
     args = c(
-      mget(x = dataname_corrected_with_raw, envir = data@env),
+      mget(x = datanames_corrected_with_raw, envir = teal.code::get_env(data)),
       list(
         code = gsub(
           "warning('Code was not verified for reproducibility.')\n",
           "",
-          teal.data::get_code(data, datanames = dataname_corrected_with_raw),
+          teal.data::get_code(data, datanames = datanames_corrected_with_raw),
           fixed = TRUE
         ),
         join_keys = teal.data::join_keys(data)[datanames_corrected]
