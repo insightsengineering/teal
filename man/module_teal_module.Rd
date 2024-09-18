@@ -90,9 +90,9 @@ see \code{\link{module_filter_manager}}}
 \item{status}{(\code{reactive} returning \code{character})
 Determines action dependent on a data loading status:
 \itemize{
-\item \code{"ok"} when \code{teal_data} is returned from a data loading.
-\item \code{"disable"} when \code{\link[=teal_data_module]{teal_data_module()}} didn't returned a \code{teal_data}. Disables tabs buttons
-\item \code{"hide"} when a \code{reactive} passed to \code{srv_teal(data)} didn't returned a \code{teal_data}. Hides the whole tabs
+\item \code{"ok"} when \code{teal_data} is returned from the data loading.
+\item \code{"disable"} when \code{\link[=teal_data_module]{teal_data_module()}} didn't return  \code{teal_data}. Disables tabs buttons.
+\item \code{"hide"} when a \code{reactive} passed to \code{srv_teal(data)} didn't return \code{teal_data}. Hides the whole tabs
 content.
 }}
 }
