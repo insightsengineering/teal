@@ -54,7 +54,7 @@ directory, set \code{renv::settings$snapshot.type("explicit")}. The naming conve
 
 \section{lockfile usage}{
 
-After creating the lockfile, you can restore the application environment using \code{renv::restore()}.
+After creating the lockfile, you can restore the application's environment using \code{renv::restore()}.
 }
 
 \seealso{
