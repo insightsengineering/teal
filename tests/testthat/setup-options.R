@@ -19,3 +19,7 @@ if (isFALSE(getFromNamespace("on_cran", "testthat")()) && requireNamespace("with
     .local_envir = testthat::teardown_env()
   )
 }
+
+cat('\nIS_TESTING', Sys.getenv("TESTTHAT"), '\n')
+cat('\n teal.lockfile.enable: ',
+    getOption('teal.lockfile.enable'), '\n')
