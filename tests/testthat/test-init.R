@@ -1,7 +1,5 @@
 # data ----
 testthat::test_that("init data accepts teal_data object", {
-  cat('\n teal.lockfile.enable: ',
-      getOption('teal.lockfile.enable'), '\n')
   testthat::expect_no_error(
     init(
       data = teal.data::teal_data(iris = iris),
