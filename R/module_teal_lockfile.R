@@ -20,7 +20,7 @@
 #'     `renv::settings$snapshot.type("custom")` and configure the `renv.snapshot.filter` option.
 #'
 #' @section lockfile usage:
-#' After creating the lockfile, you can restore the application environment using `renv::restore()`.
+#' After creating the lockfile, you can restore the application's environment using `renv::restore()`.
 #'
 #' @seealso [renv::snapshot()], [renv::restore()].
 #'
@@ -79,7 +79,7 @@ srv_teal_lockfile <- function(id) {
     is_user_lockfile_set <- !identical(user_lockfile_path, "")
 
     if (!is_lockfile_enabled) {
-      logger::log_debug("'teal.lockfile.enable' option is set to false. Hiding a lockfile download button.")
+      logger::log_debug("'teal.lockfile.enable' option is set to FALSE. Hiding a lockfile download button.")
       shinyjs::hide("lockFileLink")
       return(NULL)
     }
