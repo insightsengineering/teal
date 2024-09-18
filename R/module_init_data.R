@@ -56,9 +56,7 @@ srv_init_data <- function(id, data) {
     # data_rv contains teal_data object
     # either passed to teal::init or returned from teal_data_module
     data_out <- if (inherits(data, "teal_data_module")) {
-      output$data <- renderUI({
-        data$ui(id = session$ns("teal_data_module"))
-      })
+      output$data <- renderUI(data$ui(id = session$ns("teal_data_module")))
       data$server("teal_data_module")
     } else if (inherits(data, "teal_data")) {
       reactiveVal(data)

@@ -103,7 +103,6 @@ ui_teal <- function(id,
       class = "teal-body",
       ui_teal_module(id = ns("teal_modules"), modules = modules)
     ),
-    ui_validate_reactive_teal_data(ns("validate")),
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
@@ -194,7 +193,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       modules = modules,
       validate_shiny_silent_error = FALSE
     )
-    data_init <- reactive({
+    data_rv <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data_validated()))
       if (!isTRUE(is_filter_ok)) {
@@ -219,10 +218,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(data_init(), {
-        req(inherits(data_init(), "teal_data"))
+      eventReactive(data_rv(), {
+        req(inherits(data_rv(), "teal_data"))
         logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(data_init())
+        teal_data_to_filtered_data(data_rv())
       })
     }
 
@@ -235,25 +234,35 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         tabPanel(
           title = icon("fas fa-database"),
           value = "teal_data_module",
-          ui_init_data(session$ns("data"))
+          tags$div(
+            ui_init_data(session$ns("data")),
+            ui_validate_reactive_teal_data(session$ns("validate"))
+          )
         )
       )
 
       if (attr(data, "once")) {
-        observeEvent(data_init(), once = TRUE, {
+        observeEvent(data_rv(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
           removeUI(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("teal_modules-wrapper")))
           updateTabsetPanel(inputId = "teal_modules-active_tab", selected = names(modules$children)[1])
         })
       }
+    } else {
+      # when no teal_data_module then we want to display messages above tabsetPanel (because there is no data-tab)
+      insertUI(
+        selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
+        where = "beforeBegin",
+        ui = tags$div(ui_validate_reactive_teal_data(session$ns("validate")), tags$br())
+      )
     }
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
-      data_rv = data_init,
+      data_rv = data_rv,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
