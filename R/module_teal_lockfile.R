@@ -75,7 +75,6 @@ srv_teal_lockfile <- function(id) {
 
     lockfile_path <- "teal_app.lock"
     mode <- getOption("teal.lockfile.mode", default = "")
-    user_lockfile_path <- getOption("teal.lockfile.path", default = "")
 
     if (!(mode %in% c("auto", "true", "false", "user"))) {
       stop("'teal.lockfile.mode' option can only be one of \"auto\", \"true\", \"false\", or \"user\". ")
@@ -88,6 +87,7 @@ srv_teal_lockfile <- function(id) {
     }
 
     if (mode == "user") {
+      user_lockfile_path <- getOption("teal.lockfile.path", default = "")
       if (file.exists(user_lockfile_path)) {
         file.copy(user_lockfile_path, lockfile_path)
         logger::log_debug('Lockfile set using option "teal.lockfile.path" - skipping automatic creation.')
