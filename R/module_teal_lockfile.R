@@ -74,12 +74,15 @@ srv_teal_lockfile <- function(id) {
     })
 
     lockfile_path <- "teal_app.lock"
-    is_lockfile_enabled <- .is_lockfile_enabled()
+    mode <- getOption("teal.lockfile.mode", default = "")
     user_lockfile_path <- getOption("teal.lockfile.path", default = "")
-    is_user_lockfile_set <- !identical(user_lockfile_path, "")
 
-    if (!is_lockfile_enabled) {
-      logger::log_debug("'teal.lockfile.enable' option is set to FALSE. Hiding a lockfile download button.")
+    if (!(mode %in% c("auto", "true", "false", "user"))) {
+      stop("'teal.lockfile.mode' option can only be one of \"auto\", \"true\", \"false\", or \"user\". ")
+    }
+
+    if (mode == "false") {
+      logger::log_debug("'teal.lockfile.mode' option is set to 'false'. Hiding lockfile download button.")
       shinyjs::hide("lockFileLink")
       return(NULL)
     }
@@ -90,20 +93,30 @@ srv_teal_lockfile <- function(id) {
       return(NULL)
     }
 
-    if (!is_user_lockfile_set && !.is_lockfile_deps_installed()) {
+    if (mode %in% c("auto", "true") && !.is_lockfile_deps_installed()) {
       warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
       shinyjs::hide("lockFileLink")
       return(NULL)
     }
 
-    if (is_user_lockfile_set) {
+    if (mode == "auto" && .is_disabled_lockfile_scenario()) {
+      logger::log_debug(
+        "Automatic lockfile creation disabled. Execution scenario satisfies teal:::.is_disabled_lockfile_scenario()."
+      )
+      shinyjs::hide("lockFileLink")
+      return(NULL)
+    }
+
+    if (mode == "user") {
       if (file.exists(user_lockfile_path)) {
         file.copy(user_lockfile_path, lockfile_path)
         logger::log_debug('Lockfile set using option "teal.lockfile.path" - skipping automatic creation.')
         enable_lockfile_download()
       } else {
         warning("Lockfile provided through options('teal.lockfile.path') does not exist.", call. = FALSE)
+        shinyjs::hide("lockFileLink")
       }
+      return(NULL)
     }
 
     # - Will be run only if the lockfile doesn't exist (see the if-s above)
@@ -196,17 +209,11 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
 }
 
 #' @rdname module_teal_lockfile
-.is_lockfile_enabled <- function() {
-  if (isTRUE(getOption("teal.lockfile.enable"))) {
-    return(TRUE)
-  } else {
-    !(
-      identical(Sys.getenv("CALLR_IS_RUNNING"), "true") || # inside callr process
-        identical(Sys.getenv("TESTTHAT"), "true") || # inside devtools::test
-        !identical(Sys.getenv("QUARTO_PROJECT_ROOT"), "") || # inside Quarto process
-        (
-          ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
-        ) # inside R CMD CHECK
-    )
-  }
+.is_disabled_lockfile_scenario <- function() {
+  identical(Sys.getenv("CALLR_IS_RUNNING"), "true") || # inside callr process
+  identical(Sys.getenv("TESTTHAT"), "true") || # inside devtools::test
+  !identical(Sys.getenv("QUARTO_PROJECT_ROOT"), "") || # inside Quarto process
+  (
+    ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+  ) # inside R CMD CHECK
 }

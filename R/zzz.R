@@ -3,6 +3,7 @@
 
   teal_default_options <- list(
     teal.show_js_log = FALSE,
+    teal.lockfile.mode = "auto",
     shiny.sanitize.errors = FALSE
   )
 

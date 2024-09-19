@@ -84,17 +84,27 @@ This indicates whether to print the `JavaScript` console logs to the `R` console
 
 Default: `FALSE`.
 
-### `teal.lockfile.enable` (`logical`)
+### `teal.lockfile.mode` (`character`)
 
-This enables app users to download `renv` lockfile by clicking "download lockfile" in the footer. 
-If `teal.lockfile.path` is not specified then lockfile is created automatically by `teal`. 
+This enables app users to download `renv` lockfile by clicking `"download lockfile"` in the footer. 
+
+Values:
+
+* `"auto"` - auto detect whether to compute `lockfile`
+* `"true"` - compute `lockfile` and show `"download lockfile"` in the footer
+* `"false"` - do not compute `lockfile` and do not show `"download lockfile"` in the footer
+* `"user"` - use pre-computed `lockfile` specified in `teal.lockfile.path` and show `"download lockfile"` in the footer
+
+
+Default: `"auto"`.
 
 To read more about lockfile usage creation check `?teal::module_teal_lockfile`.
 
 ### `teal.lockfile.path` (`character`)
 
 The path to the pre-computed `renv` lockfile linked by app developer. 
-Lockfile will be available to download if `teal.lockfile.enable` is set to `TRUE`. 
+Used when `teal.lockfile.enable` is set to `"user"`. 
+If files does not exist, the warning is thrown and `"download lockfile"` in the footer is not shown.
 
 To read more about lockfile usage creation check `?teal::module_teal_lockfile`.
 
