@@ -74,7 +74,7 @@ srv_teal_lockfile <- function(id) {
     })
 
     lockfile_path <- "teal_app.lock"
-    is_lockfile_enabled <- isTRUE(getOption("teal.lockfile.enable"))
+    is_lockfile_enabled <- .is_lockfile_enabled()
     user_lockfile_path <- getOption("teal.lockfile.path", default = "")
     is_user_lockfile_set <- !identical(user_lockfile_path, "")
 
@@ -193,4 +193,20 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
 #' @rdname module_teal_lockfile
 .is_lockfile_deps_installed <- function() {
   requireNamespace("mirai", quietly = TRUE) && requireNamespace("renv", quietly = TRUE)
+}
+
+#' @rdname module_teal_lockfile
+.is_lockfile_enabled <- function() {
+  if (isTRUE(getOption("teal.lockfile.enable"))) {
+    return(TRUE)
+  } else {
+    !(
+      identical(Sys.getenv("CALLR_IS_RUNNING"), "true") || # inside callr process
+      identical(Sys.getenv("TESTTHAT"), "true") || # inside devtools::test
+      !identical(Sys.getenv("QUARTO_PROJECT_ROOT"), "") || # inside Quarto process
+      (
+        ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+      ) # inside R CMD CHECK
+    )
+  }
 }

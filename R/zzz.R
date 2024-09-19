@@ -1,8 +1,8 @@
 .onLoad <- function(libname, pkgname) {
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
+
   teal_default_options <- list(
     teal.show_js_log = FALSE,
-    teal.lockfile.enable = TRUE,
     shiny.sanitize.errors = FALSE
   )
 
