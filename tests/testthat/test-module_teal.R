@@ -96,7 +96,7 @@ testthat::describe("srv_teal lockfile", {
     writeLines("test", temp_lockfile_mock)
     withr::with_options(
       list(
-        teal.lockfile.mode = "auto",
+        teal.lockfile.mode = "user",
         teal.lockfile.path = temp_lockfile_mock
       ),
       {
