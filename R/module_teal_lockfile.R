@@ -63,7 +63,7 @@ srv_teal_lockfile <- function(id) {
     disable_lockfile_download <- function() {
       warning("Lockfile creation failed.", call. = FALSE)
       shinyjs::html("lockFileStatus", "Lockfile creation failed.")
-      shinyjs::disable("lockFileLink")
+      shinyjs::hide("lockFileLink")
     }
 
     shiny::onStop(function() {
@@ -87,15 +87,21 @@ srv_teal_lockfile <- function(id) {
       return(NULL)
     }
 
-    if (file.exists(lockfile_path)) {
-      logger::log_debug("Lockfile has already been created for this app - skipping automatic creation.")
-      enable_lockfile_download()
+    if (mode == "user") {
+      if (file.exists(user_lockfile_path)) {
+        file.copy(user_lockfile_path, lockfile_path)
+        logger::log_debug('Lockfile set using option "teal.lockfile.path" - skipping automatic creation.')
+        enable_lockfile_download()
+      } else {
+        warning("Lockfile provided through options('teal.lockfile.path') does not exist.", call. = FALSE)
+        shinyjs::hide("lockFileLink")
+      }
       return(NULL)
     }
 
-    if (mode %in% c("auto", "true") && !.is_lockfile_deps_installed()) {
-      warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
-      shinyjs::hide("lockFileLink")
+    if (file.exists(lockfile_path)) {
+      logger::log_debug("Lockfile has already been created for this app - skipping automatic creation.")
+      enable_lockfile_download()
       return(NULL)
     }
 
@@ -107,15 +113,9 @@ srv_teal_lockfile <- function(id) {
       return(NULL)
     }
 
-    if (mode == "user") {
-      if (file.exists(user_lockfile_path)) {
-        file.copy(user_lockfile_path, lockfile_path)
-        logger::log_debug('Lockfile set using option "teal.lockfile.path" - skipping automatic creation.')
-        enable_lockfile_download()
-      } else {
-        warning("Lockfile provided through options('teal.lockfile.path') does not exist.", call. = FALSE)
-        shinyjs::hide("lockFileLink")
-      }
+    if (.is_lockfile_deps_installed()) {
+      warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
+      shinyjs::hide("lockFileLink")
       return(NULL)
     }
 
