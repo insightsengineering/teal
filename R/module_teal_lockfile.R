@@ -113,7 +113,7 @@ srv_teal_lockfile <- function(id) {
       return(NULL)
     }
 
-    if (.is_lockfile_deps_installed()) {
+    if (!.is_lockfile_deps_installed()) {
       warning("Automatic lockfile creation disabled. `mirai` and `renv` packages must be installed.")
       shinyjs::hide("lockFileLink")
       return(NULL)
