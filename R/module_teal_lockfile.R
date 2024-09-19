@@ -211,9 +211,9 @@ utils::globalVariables(c("opts", "sysenv", "libpaths", "wd", "lockfilepath", "ru
 #' @rdname module_teal_lockfile
 .is_disabled_lockfile_scenario <- function() {
   identical(Sys.getenv("CALLR_IS_RUNNING"), "true") || # inside callr process
-  identical(Sys.getenv("TESTTHAT"), "true") || # inside devtools::test
-  !identical(Sys.getenv("QUARTO_PROJECT_ROOT"), "") || # inside Quarto process
-  (
-    ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
-  ) # inside R CMD CHECK
+    identical(Sys.getenv("TESTTHAT"), "true") || # inside devtools::test
+    !identical(Sys.getenv("QUARTO_PROJECT_ROOT"), "") || # inside Quarto process
+    (
+      ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_", "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+    ) # inside R CMD CHECK
 }
