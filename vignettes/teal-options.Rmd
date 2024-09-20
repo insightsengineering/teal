@@ -86,7 +86,7 @@ Default: `FALSE`.
 
 ### `teal.lockfile.mode` (`character`)
 
-This enables app users to download `renv` lockfile by clicking `"download lockfile"` in the footer. 
+This enables to compute `renv` lockfile and shows a button to `"download lockfile"` in the footer. 
 
 Values:
 
