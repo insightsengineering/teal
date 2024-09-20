@@ -67,11 +67,11 @@ transform_list <<- list(
 
 testthat::describe("srv_teal lockfile", {
   testthat::it(paste0(
-    "creation process is invoked for teal.lockfile.mode = \"true\" ",
+    "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
     "and snapshot is copied to teal_app.lock and removed after session ended"
     ), {
     withr::with_options(
-      list(teal.lockfile.mode = "true"),
+      list(teal.lockfile.mode = "enabled"),
       {
         renv_filename <- "teal_app.lock"
         shiny::testServer(
@@ -94,9 +94,9 @@ testthat::describe("srv_teal lockfile", {
       }
     )
   })
-  testthat::it("creation process is not invoked for teal.lockfile.mode = \"false\"", {
+  testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
     withr::with_options(
-      list(teal.lockfile.mode = "false"),
+      list(teal.lockfile.mode = "disabled"),
       {
         renv_filename <- "teal_app.lock"
         shiny::testServer(

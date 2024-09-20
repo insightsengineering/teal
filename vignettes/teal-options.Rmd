@@ -91,8 +91,8 @@ This enables app users to download `renv` lockfile by clicking `"download lockfi
 Values:
 
 * `"auto"` - auto detect whether to compute `lockfile`
-* `"true"` - compute `lockfile` and show `"download lockfile"` in the footer
-* `"false"` - do not compute `lockfile` and do not show `"download lockfile"` in the footer
+* `"enabled"` - compute `lockfile` and show `"download lockfile"` in the footer
+* `"disabled"` - do not compute `lockfile` and do not show `"download lockfile"` in the footer
 
 Default: `"auto"`.
 

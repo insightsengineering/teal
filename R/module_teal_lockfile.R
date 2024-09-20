@@ -76,12 +76,12 @@ srv_teal_lockfile <- function(id) {
     lockfile_path <- "teal_app.lock"
     mode <- getOption("teal.lockfile.mode", default = "")
 
-    if (!(mode %in% c("auto", "true", "false"))) {
-      stop("'teal.lockfile.mode' option can only be one of \"auto\", \"true\" or \"false\". ")
+    if (!(mode %in% c("auto", "enabled", "disabled"))) {
+      stop("'teal.lockfile.mode' option can only be one of \"auto\", \"disabled\" or \"disabled\". ")
     }
 
-    if (mode == "false") {
-      logger::log_debug("'teal.lockfile.mode' option is set to 'false'. Hiding lockfile download button.")
+    if (mode == "disabled") {
+      logger::log_debug("'teal.lockfile.mode' option is set to 'disabled'. Hiding lockfile download button.")
       shinyjs::hide("lockFileLink")
       return(NULL)
     }
