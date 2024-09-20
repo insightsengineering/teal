@@ -69,7 +69,7 @@ testthat::describe("srv_teal lockfile", {
   testthat::it(paste0(
     "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
     "and snapshot is copied to teal_app.lock and removed after session ended"
-    ), {
+  ), {
     withr::with_options(
       list(teal.lockfile.mode = "enabled"),
       {
