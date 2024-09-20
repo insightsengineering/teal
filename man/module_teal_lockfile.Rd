@@ -35,23 +35,14 @@ Generate lockfile for application's environment reproducibility
 
 \code{teal} leverages \code{\link[renv:snapshot]{renv::snapshot()}}, which offers multiple methods for lockfile creation.
 \itemize{
-\item User-specified:
-\itemize{
-\item \strong{Pre-computed lockfile}: Users can provide their own pre-computed lockfile by specifying the path via
-\code{teal.lockfile.path} option. Automatic lockfile computation is skipped in such case.
-}
-\item Automatically computed:
-\itemize{
-\item \strong{Working directory lockfile}: If \code{teal.lockfile.path} is not set, \code{teal} will, by default, create an
-\code{implicit} type lockfile that uses \code{renv::dependencies()} to detect all R packages in the current project's
-working directory.
+\item \strong{Working directory lockfile}: \code{teal}, by default, will create an \code{implicit} type lockfile that uses
+\code{renv::dependencies()} to detect all R packages in the current project's working directory.
 \item \strong{\code{DESCRIPTION}-based lockfile}: To generate a lockfile based on a \code{DESCRIPTION} file in your working
 directory, set \code{renv::settings$snapshot.type("explicit")}. The naming convention for \code{type} follows
 \code{renv::snapshot()}. For the \code{"explicit"} type, refer to \code{renv::settings$package.dependency.fields()} for the
 \code{DESCRIPTION} fields included in the lockfile.
 \item \strong{Custom files-based lockfile}: To specify custom files as the basis for the lockfile, set
 \code{renv::settings$snapshot.type("custom")} and configure the \code{renv.snapshot.filter} option.
-}
 }
 }
 

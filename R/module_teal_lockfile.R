@@ -5,19 +5,14 @@
 #' @section Different ways of creating lockfile:
 #' `teal` leverages [renv::snapshot()], which offers multiple methods for lockfile creation.
 #'
-#' - User-specified:
-#'     - **Pre-computed lockfile**: Users can provide their own pre-computed lockfile by specifying the path via
-#'     `teal.lockfile.path` option. Automatic lockfile computation is skipped in such case.
-#' - Automatically computed:
-#'     - **Working directory lockfile**: If `teal.lockfile.path` is not set, `teal` will, by default, create an
-#'      `implicit` type lockfile that uses `renv::dependencies()` to detect all R packages in the current project's
-#'      working directory.
-#'     - **`DESCRIPTION`-based lockfile**: To generate a lockfile based on a `DESCRIPTION` file in your working
-#'     directory, set `renv::settings$snapshot.type("explicit")`. The naming convention for `type` follows
-#'     `renv::snapshot()`. For the `"explicit"` type, refer to `renv::settings$package.dependency.fields()` for the
-#'     `DESCRIPTION` fields included in the lockfile.
-#'     - **Custom files-based lockfile**: To specify custom files as the basis for the lockfile, set
-#'     `renv::settings$snapshot.type("custom")` and configure the `renv.snapshot.filter` option.
+#' - **Working directory lockfile**: `teal`, by default, will create an `implicit` type lockfile that uses
+#' `renv::dependencies()` to detect all R packages in the current project's working directory.
+#' - **`DESCRIPTION`-based lockfile**: To generate a lockfile based on a `DESCRIPTION` file in your working
+#' directory, set `renv::settings$snapshot.type("explicit")`. The naming convention for `type` follows
+#' `renv::snapshot()`. For the `"explicit"` type, refer to `renv::settings$package.dependency.fields()` for the
+#' `DESCRIPTION` fields included in the lockfile.
+#' - **Custom files-based lockfile**: To specify custom files as the basis for the lockfile, set
+#' `renv::settings$snapshot.type("custom")` and configure the `renv.snapshot.filter` option.
 #'
 #' @section lockfile usage:
 #' After creating the lockfile, you can restore the application's environment using `renv::restore()`.
