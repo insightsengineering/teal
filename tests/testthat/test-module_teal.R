@@ -66,7 +66,10 @@ transform_list <<- list(
 )
 
 testthat::describe("srv_teal lockfile", {
-  testthat::it("creation process is invoked and snapshot is copied to teal_app.lock and removed after session ended", {
+  testthat::it(paste0(
+    "creation process is invoked for teal.lockfile.mode = \"true\" ",
+    "and snapshot is copied to teal_app.lock and removed after session ended"
+    ), {
     withr::with_options(
       list(teal.lockfile.mode = "true"),
       {
@@ -91,14 +94,9 @@ testthat::describe("srv_teal lockfile", {
       }
     )
   })
-  testthat::it("is copied from option-teal.lockfile.path and then removed from an app directory", {
-    temp_lockfile_mock <- tempfile()
-    writeLines("test", temp_lockfile_mock)
+  testthat::it("creation process is not invoked for teal.lockfile.mode = \"false\"", {
     withr::with_options(
-      list(
-        teal.lockfile.mode = "user",
-        teal.lockfile.path = temp_lockfile_mock
-      ),
+      list(teal.lockfile.mode = "false"),
       {
         renv_filename <- "teal_app.lock"
         shiny::testServer(
@@ -109,12 +107,11 @@ testthat::describe("srv_teal lockfile", {
             modules = modules(example_module())
           ),
           expr = {
-            testthat::expect_true(file.exists(renv_filename))
+            testthat::expect_false(file.exists(renv_filename))
           }
         )
       }
     )
-    testthat::expect_false(file.exists(renv_filename))
   })
 })
 
