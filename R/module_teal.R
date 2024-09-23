@@ -154,6 +154,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
+    if (getOption("teal.show_js_log", default = FALSE)) {
+      shinyjs::showLog()
+    }
+
     srv_teal_lockfile("lockfile")
 
     output$identifier <- renderText(
