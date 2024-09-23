@@ -207,13 +207,13 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       .add_signature_to_data(data_validated())
     })
 
-    status <- reactive({
+    data_load_status <- reactive({
       if (inherits(data_pulled(), "teal_data")) {
         "ok"
       } else if (inherits(data, "teal_data_module")) {
-        "disable"
+        "teal_data_module failed"
       } else {
-        "hide"
+        "external failed"
       }
     })
 
@@ -266,7 +266,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
-      status = status
+      data_load_status = data_load_status
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)

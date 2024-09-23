@@ -20,12 +20,12 @@
 #'  When `datasets` is passed from the parent module (`srv_teal`) then `dataset` is a singleton
 #'  which implies in filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
 #'
-#' @param status (`reactive` returning `character`)
+#' @param data_load_status (`reactive` returning `character`)
 #'  Determines action dependent on a data loading status:
 #'  - `"ok"` when `teal_data` is returned from the data loading.
-#'  - `"disable"` when [teal_data_module()] didn't return  `teal_data`. Disables tabs buttons.
-#'  - `"hide"` when a `reactive` passed to `srv_teal(data)` didn't return `teal_data`. Hides the whole tabs
-#'    content.
+#'  - `"teal_data_module failed"` when [teal_data_module()] didn't return  `teal_data`. Disables tabs buttons.
+#'  - `"external failed"` when a `reactive` passed to `srv_teal(data)` didn't return `teal_data`. Hides the whole tab
+#'    panel.
 #'
 #' @return
 #' output of currently active module.
@@ -151,7 +151,7 @@ srv_teal_module <- function(id,
                             datasets = NULL,
                             slices_global,
                             reporter = teal.reporter::Reporter$new(),
-                            status = reactive("ok"),
+                            data_load_status = reactive("ok"),
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
   assert_reactive(data_rv)
@@ -159,7 +159,7 @@ srv_teal_module <- function(id,
   assert_reactive(datasets, null.ok = TRUE)
   checkmate::assert_class(slices_global, ".slicesGlobal")
   checkmate::assert_class(reporter, "Reporter")
-  assert_reactive(status)
+  assert_reactive(data_load_status)
   UseMethod("srv_teal_module", modules)
 }
 
@@ -171,7 +171,7 @@ srv_teal_module.default <- function(id,
                                     datasets = NULL,
                                     slices_global,
                                     reporter = teal.reporter::Reporter$new(),
-                                    status = reactive("ok"),
+                                    data_load_status = reactive("ok"),
                                     is_active = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
@@ -184,23 +184,23 @@ srv_teal_module.teal_modules <- function(id,
                                          datasets = NULL,
                                          slices_global,
                                          reporter = teal.reporter::Reporter$new(),
-                                         status = reactive("ok"),
+                                         data_load_status = reactive("ok"),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
-    observeEvent(status(), {
+    observeEvent(data_load_status(), {
       tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
-      if (identical(status(), "ok")) {
+      if (identical(data_load_status(), "ok")) {
         logger::log_debug("srv_teal_module@1 enabling modules tabs.")
         shinyjs::show("wrapper")
         shinyjs::enable(selector = tabs_selector)
-      } else if (identical(status(), "hide")) {
-        logger::log_debug("srv_teal_module@1 hiding modules tabs.")
-        shinyjs::hide("wrapper")
-      } else if (identical(status(), "disable")) {
+      } else if (identical(data_load_status(), "teal_data_module failed")) {
         logger::log_debug("srv_teal_module@1 disabling modules tabs.")
         shinyjs::disable(selector = tabs_selector)
+      } else if (identical(data_load_status(), "external failed")) {
+        logger::log_debug("srv_teal_module@1 hiding modules tabs.")
+        shinyjs::hide("wrapper")
       }
     })
 
@@ -232,7 +232,7 @@ srv_teal_module.teal_module <- function(id,
                                         datasets = NULL,
                                         slices_global,
                                         reporter = teal.reporter::Reporter$new(),
-                                        status = reactive("ok"),
+                                        data_load_status = reactive("ok"),
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
