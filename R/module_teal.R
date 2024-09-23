@@ -136,7 +136,7 @@ ui_teal <- function(id,
         footer,
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
-        downloadLink(ns("lockFile"), "Download .lock file"),
+        ui_teal_lockfile(ns("lockfile")),
         textOutput(ns("identifier"))
       )
     )
@@ -154,6 +154,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
+    srv_teal_lockfile("lockfile")
+
     output$identifier <- renderText(
       paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
     )
@@ -163,12 +165,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       verbatim_content = utils::capture.output(utils::sessionInfo()),
       title = "SessionInfo"
     )
-
-    output$lockFile <- teal_lockfile_downloadhandler()
-
-    if (getOption("teal.show_js_log", default = FALSE)) {
-      shinyjs::showLog()
-    }
 
     # `JavaScript` code
     run_js_files(files = "init.js")
