@@ -63,6 +63,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/module_snapshot_manager.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_teal_lockfile.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_with_splash.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_transform_data.html</loc></url>
@@ -79,7 +80,6 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_utilities.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/teal_lockfile.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_modules.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_transform_module.html</loc></url>
