@@ -62,7 +62,7 @@ srv_data_summary <- function(id, teal_data) {
 
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
-        if (!length(.teal_data_ls(teal_data()))) {
+        if (!length(ls(teal.code::get_env(teal_data())))) {
           return(NULL)
         }
 
@@ -143,16 +143,15 @@ get_filter_overview <- function(teal_data) {
 
   filtered_data_objs <- sapply(
     datanames,
-    function(name) teal.code::get_env(teal_data())[[name]],
+    function(name) teal.code::get_var(teal_data(), name),
     simplify = FALSE
   )
-  unfiltered_data_objs <- teal.code::get_env(teal_data())[[".raw_data"]]
+  unfiltered_data_objs <- teal.code::get_var(teal_data(), ".raw_data")
 
   rows <- lapply(
     datanames,
     function(dataname) {
       parent <- teal.data::parent(joinkeys, dataname)
-
       # todo: what should we display for a parent dataset?
       #     - Obs and Subjects
       #     - Obs only

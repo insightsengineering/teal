@@ -42,9 +42,9 @@ NULL
 .subset_teal_data <- function(data, datanames) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(datanames, "character")
-  datanames_corrected <- intersect(datanames, .teal_data_ls(data))
+  datanames_corrected <- intersect(datanames, ls(teal.code::get_env(data)))
   datanames_corrected_with_raw <- c(datanames_corrected, ".raw_data")
-  if (!length(datanames)) {
+  if (!length(datanames_corrected)) {
     return(teal_data())
   }
 
@@ -66,13 +66,4 @@ NULL
   new_data@verified <- data@verified
   teal.data::datanames(new_data) <- datanames_corrected
   new_data
-}
-
-#' @rdname teal_data_utilities
-.teal_data_ls <- function(data) {
-  datanames <- ls(
-    teal.code::get_env(data),
-    all.names = FALSE # doesn't consider objects prefixed by `.` as datanames (including filtered datanames)
-  )
-  include_parent_datanames(datanames, teal.data::join_keys(data)) # for topological sort
 }

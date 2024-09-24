@@ -107,7 +107,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
         )
       }
 
-      is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data_validated()))
+      is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data_validated())))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",
@@ -154,7 +154,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
       list(code = trimws(c(teal.code::get_code(data), hashes), which = "right")),
       list(join_keys = teal.data::join_keys(data)),
       sapply(
-        .teal_data_ls(data),
+        ls(teal.code::get_env(data)),
         teal.code::get_var,
         object = data,
         simplify = FALSE
@@ -174,7 +174,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 #' @return A character vector with the code lines.
 #' @keywords internal
 #'
-.get_hashes_code <- function(data, datanames = .teal_data_ls(data)) {
+.get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
   vapply(
     datanames,
     function(dataname, datasets) {
