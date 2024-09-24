@@ -65,6 +65,56 @@ transform_list <<- list(
   )
 )
 
+testthat::describe("srv_teal lockfile", {
+  testthat::it(paste0(
+    "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
+    "and snapshot is copied to teal_app.lock and removed after session ended"
+  ), {
+    withr::with_options(
+      list(teal.lockfile.mode = "enabled"),
+      {
+        renv_filename <- "teal_app.lock"
+        shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(example_module())
+          ),
+          expr = {
+            iter <- 1
+            while (!file.exists(renv_filename) && iter <= 100) {
+              Sys.sleep(0.25)
+              iter <- iter + 1 # max wait time is 25 seconds
+            }
+            testthat::expect_true(file.exists(renv_filename))
+          }
+        )
+        testthat::expect_false(file.exists(renv_filename))
+      }
+    )
+  })
+  testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
+    withr::with_options(
+      list(teal.lockfile.mode = "disabled"),
+      {
+        renv_filename <- "teal_app.lock"
+        shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(example_module())
+          ),
+          expr = {
+            testthat::expect_false(file.exists(renv_filename))
+          }
+        )
+      }
+    )
+  })
+})
+
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
     testthat::expect_no_error(
