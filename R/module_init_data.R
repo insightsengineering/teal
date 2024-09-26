@@ -172,6 +172,12 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 #' @keywords internal
 #'
 .get_hashes_code <- function(data, datanames = .teal_data_ls(data)) {
+  # The existence of functions cause problems when calculating hashes
+  # because they have environments that have parents on the search list.
+  vars <- ls(get_env(data))
+  for (qvar in ls(get_env(data))) {
+    data <- within(data, qvar <- defunction(qvar), qvar = as.symbol(qvar))
+  }
   vapply(
     datanames,
     function(dataname, datasets) {
