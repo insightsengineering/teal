@@ -122,7 +122,7 @@ srv_init_data <- function(id, data) {
 #' @return A character vector with the code lines.
 #' @keywords internal
 #'
-.get_hashes_code <- function(data, datanames = .teal_data_ls(data)) {
+.get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
   vapply(
     datanames,
     function(dataname, datasets) {

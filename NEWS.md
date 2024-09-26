@@ -1,4 +1,4 @@
-# teal 0.15.2.9064
+# teal 0.15.2.9065
 
 ### New features
 
@@ -22,6 +22,7 @@
 * Easier way of to call `javascript` events by setting `$(document).ready(function() { ... })`. #1114
 * Provided progress bar for modules loading and data filtering during teal app startup.
 * Filter mapping display has a separate icon in the tab.
+* Environment of the `data` passed to the `teal_module`'s server consists unfiltered datasets contained in `.raw_data`.
 
 # teal 0.15.2
 
