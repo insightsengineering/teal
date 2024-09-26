@@ -17,4 +17,10 @@ A character vector with the code lines.
 \description{
 Get code that tests the integrity of the reproducible data
 }
+\section{Functions}{
+
+Data objects that are functions are converted to strings represencting their body
+in order to strip their enclosing environments.
+}
+
 \keyword{internal}

@@ -22,4 +22,10 @@ Calculate app ID that will be used to stamp filter state snapshots.
 App ID is a hash of the app's data and modules.
 See "transferring snapshots" section in ?snapshot.
 }
+\section{Functions}{
+
+Data objects that are functions are converted to strings represencting their body
+in order to strip their enclosing environments.
+}
+
 \keyword{internal}
