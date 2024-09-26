@@ -1,0 +1,73 @@
+---
+title: "Decorate modules output"
+author: "NEST CoreDev"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Decorate modules output}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```r
+tm_decorated_plot <- function(label = "module", decorator = identity_decorator) {
+  # decorator can be "decorate_module", "expr", "function"
+  decorator_obj <- new_decorator(decorator, output_name = "plot")
+
+  module(
+    label = label,
+    ui = function(id, decorator) {
+      ns <- NS(id)
+      div(
+        selectInput(ns("dataname"), label = "select dataname", choices = NULL),
+        selectInput(ns("x"), label = "select x", choices = NULL),
+        selectInput(ns("y"), label = "select y", choices = NULL),
+        decorator$ui(ns("decorate")),
+        plotOutput(ns("plot")),
+        verbatimTextOutput(ns("text"))
+      )
+    },
+    server = function(id, data, decorator) {
+      moduleServer(id, function(input, output, session) {
+        observeEvent(data(), {
+          updateSelectInput(inputId = "dataname", choices = teal.data::datanames(data()))
+        })
+
+        observeEvent(input$dataname, {
+          updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
+          updateSelectInput(inputId = "y", label = "select y", choices = colnames(data()[[input$dataname]]))
+        })
+
+        q1 <- reactive({
+          req(input$dataname, input$x, input$y)
+          data() |>
+            within(
+              {
+                plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                  ggplot2::geom_point()
+              },
+              dataname = as.name(input$dataname),
+              x = as.name(input$x),
+              y = as.name(input$y)
+            )
+        })
+
+        q2 <- decorator$server("decorate", data = q1)
+
+        plot_r <- reactive({
+          req(q2())
+          q2()[["plot"]]
+        })
+
+        output$plot <- renderPlot(plot_r())
+        output$text <- renderText({
+          teal.code::get_code(q2())
+        })
+      })
+    },
+    ui_args = list(decorator = decorator),
+    server_args = list(decorator = decorator)
+  )
+}
+```
