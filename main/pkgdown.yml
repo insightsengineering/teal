@@ -1,5 +1,5 @@
 pandoc: '3.3'
-pkgdown: 2.1.1
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   blueprint/actors: blueprint/actors.html
@@ -20,7 +20,7 @@ articles:
   blueprint/module_encapsulation: blueprint/module_encapsulation.html
   blueprint/product_map: blueprint/product_map.html
   teal-options: teal-options.html
-last_built: 2024-09-23T04:51Z
+last_built: 2024-09-26T12:34Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
