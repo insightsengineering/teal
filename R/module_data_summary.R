@@ -22,14 +22,7 @@ NULL
 #' @rdname module_data_summary
 ui_data_summary <- function(id) {
   ns <- NS(id)
-  content_id <- ns("filters_overview_contents")
-  bslib::accordion(
-    bslib::accordion_panel(
-      "Active Filter Summary",
-      icon = icon("fas fa-list"),
-      tableOutput(ns("table"))
-    )
-  )
+  tableOutput(ns("table"))
 }
 
 #' @rdname module_data_summary

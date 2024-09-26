@@ -81,3 +81,31 @@ a.disabled {
 .teal-transform-accordian .accordion-button::after {
   display: none;
 }
+
+.bslib-sidebar-layout > .sidebar-toggle-buttons {
+  grid-column: 1 / 2;
+  z-index: 1000;
+  display: inline-flex;
+  position: absolute;
+  right: calc(var(--_icon-size) + 3rem);
+  top: calc(var(--_icon-size, 1rem) / 2);
+  height: var(--_icon-button-size, 2rem);
+  width: 80%;
+  align-items: center;
+  justify-content: space-between;
+  transition: width 0.3s ease, top 0.3s ease, right 0.3s ease;
+}
+
+.bslib-sidebar-layout > .sidebar-toggle-buttons > button {
+  width: 80%;
+}
+
+.bslib-sidebar-layout.sidebar-collapsed > .sidebar-toggle-buttons {
+  width: 3rem;
+  top: 3rem;
+  right: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  transition: width 0.3s ease, top 0.3s ease, right 0.3s ease;
+}

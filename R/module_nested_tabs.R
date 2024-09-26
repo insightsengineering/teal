@@ -46,12 +46,11 @@ ui_teal_module.default <- function(id, modules, depth = 0L) {
 ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   do.call(
-    tabsetPanel,
+    ifelse(modules$label == "root", navset_card_pill, navset_card_underline),
     c(
       # by giving an id, we can reactively respond to tab changes
       list(
-        id = ns("active_tab"),
-        type = if (modules$label == "root") "pills" else "tabs"
+        id = ns("active_tab")
       ),
       lapply(
         names(modules$children),
@@ -60,7 +59,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
           if (is.null(module_label)) {
             module_label <- icon("fas fa-list")
           }
-          tabPanel(
+          nav_panel(
             title = module_label,
             value = module_id, # when clicked this tab value changes input$<tabset panel id>
             ui_teal_module(
@@ -105,13 +104,22 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         div(
           bslib::layout_sidebar(
             sidebar = bslib::sidebar(
+              id = ns("teal_module_sidebar"),
               class = "teal-sidebar",
               width = 350,
               tags$div(
-                ui_data_summary(ns("data_summary")),
+                bslib::accordion(
+                  id = ns("data_summary_accordion"),
+                  bslib::accordion_panel(
+                    "Active Filter Summary",
+                    icon = icon("fas fa-list"),
+                    ui_data_summary(ns("data_summary"))
+                  )
+                ),
                 ui_filter_data(ns("filter_panel")),
                 if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
                   bslib::accordion(
+                    id = ns("data_transform_accordion"),
                     bslib::accordion_panel(
                       "Transform Data",
                       icon = icon("fas fa-pen-to-square"),
@@ -122,6 +130,37 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
               )
             ),
             ui_teal
+          ),
+          div(
+            id = ns("sidebar_toggle_buttons"),
+            class = "sidebar-toggle-buttons",
+            actionButton(
+              ns("data_summary_toggle"),
+              icon("fas fa-list")
+            ),
+            actionButton(
+              ns("data_filters_toggle"),
+              icon("fas fa-filter")
+            ),
+            if (length(modules$transformers) > 0) {
+              actionButton(
+                ns("data_transforms_toggle"),
+                icon("fas fa-pen-to-square")
+              )
+            }
+          ),
+          tags$script(
+            HTML(
+              sprintf(
+                "
+                  $(document).ready(function() {
+                    $('#%s').insertAfter('#%s button.collapse-toggle');
+                  });
+                ",
+                ns("sidebar_toggle_buttons"),
+                id
+              )
+            )
           )
         )
       } else {
@@ -249,6 +288,27 @@ srv_teal_module.teal_module <- function(id,
     )
 
     summary_table <- srv_data_summary("data_summary", module_teal_data)
+
+    observeEvent(input$data_summary_toggle, {
+      bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
+      bslib::accordion_panel_open(id = "data_summary_accordion", values = TRUE)
+      bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+      bslib::accordion_panel_close(id = "data_transform_accordion", values = TRUE)
+    })
+
+    observeEvent(input$data_filters_toggle, {
+      bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
+      bslib::accordion_panel_close(id = "data_summary_accordion", values = TRUE)
+      bslib::accordion_panel_open(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+      bslib::accordion_panel_close(id = "data_transform_accordion", values = TRUE)
+    })
+
+    observeEvent(input$data_transforms_toggle, {
+      bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
+      bslib::accordion_panel_close(id = "data_summary_accordion", values = TRUE)
+      bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+      bslib::accordion_panel_open(id = "data_transform_accordion", values = TRUE)
+    })
 
     # Call modules.
     module_out <- reactiveVal(NULL)
