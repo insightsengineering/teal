@@ -45,8 +45,13 @@ ui_teal_module.default <- function(id, modules, depth = 0L) {
 #' @export
 ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   ns <- NS(id)
+  first_level_modules <- sapply(modules$children, \(x) x$label)
   do.call(
-    ifelse(modules$label == "root", navset_card_pill, navset_card_underline),
+    switch(as.character(depth),
+      "0" = navset_card_pill,
+      "1" = navset_card_tab,
+      navset_card_underline
+    ),
     c(
       # by giving an id, we can reactively respond to tab changes
       list(
