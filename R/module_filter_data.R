@@ -61,7 +61,7 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
       "lockEnvironment(.raw_data) #@linksto .raw_data" # this is environment and it is shared by qenvs. CAN'T MODIFY!
     )
   )
-  filtered_code <- teal.slice::get_filter_expr(datasets = datasets, datanames = datanames)
+  filtered_code <- .get_filter_expr(datasets = datasets, datanames = datanames)
   filtered_teal_data <- .append_evaluated_code(data, filtered_code)
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
   filtered_teal_data <- .append_modified_data(filtered_teal_data, filtered_datasets)

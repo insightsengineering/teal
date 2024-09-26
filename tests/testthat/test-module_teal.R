@@ -454,9 +454,9 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        session$setInputs(`data-teal_data_module-data-dataset` = "iris", `teal_modules-active_tab` = "module_1")
+        session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
         testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_1()())), "iris")
-        session$setInputs(`data-teal_data_module-data-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
+        session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
         testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_2()())), "mtcars")
       }
     )
@@ -1578,7 +1578,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        session$flushReact()
         data_from_transform <- modules_output$module_1()()[["data_from_transform"]]
         testthat::expect_identical(data_from_transform$mtcars, mtcars)
         expected_iris <- iris[iris$Species == "versicolor", ]
@@ -1636,7 +1635,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
@@ -1664,7 +1663,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
@@ -1740,7 +1739,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1771,7 +1769,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1804,7 +1801,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1838,7 +1834,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1873,7 +1868,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1907,9 +1901,7 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        slices_global$slices_set(
-          teal_slices(teal_slice("a", "name", selected = "a"))
-        )
+        slices_global$slices_set(teal_slices(teal_slice("a", "name", selected = "a")))
         session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
@@ -1950,7 +1942,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1980,7 +1971,6 @@ testthat::describe("srv_teal summary table", {
         ),
         expr = {
           session$setInputs("teal_modules-active_tab" = "module_1")
-          session$flushReact()
           testthat::expect_identical(
             module_summary_table(output, "module_1"),
             data.frame(
@@ -2005,7 +1995,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(

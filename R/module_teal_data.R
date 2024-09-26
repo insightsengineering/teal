@@ -222,7 +222,7 @@ srv_check_shiny_warnings <- function(id, data, modules) {
   moduleServer(id, function(input, output, session) {
     output$message <- renderUI({
       if (inherits(data(), "teal_data")) {
-        is_modules_ok <- check_modules_datanames(modules = modules, datanames = .teal_data_ls(data()))
+        is_modules_ok <- check_modules_datanames(modules = modules, datanames = ls(teal.code::get_env(data())))
         if (!isTRUE(is_modules_ok)) {
           tags$div(
             class = "teal-output-warning",
