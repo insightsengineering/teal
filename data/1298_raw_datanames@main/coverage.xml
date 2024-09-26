@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.577154308617234" branch-rate="0" lines-covered="1728" lines-valid="2994" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-09-24 17:17:24.148584">
+<coverage line-rate="0.576446972231516" branch-rate="0" lines-covered="1723" lines-valid="2989" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-09-26 10:46:38.873541">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.577154308617234" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.576446972231516" branch-rate="0" complexity="0">
       <classes>
         <class name="checkmate.R" filename="R/checkmate.R" line-rate="1" branch-rate="0" complexity="0">
           <methods>
@@ -4959,11 +4959,6 @@
                 <line number="61" hits="77" branch="false"/>
                 <line number="62" hits="77" branch="false"/>
                 <line number="63" hits="77" branch="false"/>
-                <line number="64" hits="77" branch="false"/>
-                <line number="65" hits="77" branch="false"/>
-                <line number="66" hits="77" branch="false"/>
-                <line number="67" hits="77" branch="false"/>
-                <line number="68" hits="77" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -5000,11 +4995,6 @@
             <line number="61" hits="77" branch="false"/>
             <line number="62" hits="77" branch="false"/>
             <line number="63" hits="77" branch="false"/>
-            <line number="64" hits="77" branch="false"/>
-            <line number="65" hits="77" branch="false"/>
-            <line number="66" hits="77" branch="false"/>
-            <line number="67" hits="77" branch="false"/>
-            <line number="68" hits="77" branch="false"/>
           </lines>
         </class>
         <class name="teal_reporter.R" filename="R/teal_reporter.R" line-rate="0.911764705882353" branch-rate="0" complexity="0">
