@@ -48,9 +48,9 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   first_level_modules <- sapply(modules$children, \(x) x$label)
   do.call(
     switch(as.character(depth),
-      "0" = navset_card_pill,
-      "1" = navset_card_tab,
-      navset_card_underline
+      "0" = bslib::navset_card_pill,
+      "1" = bslib::navset_card_tab,
+      bslib:: navset_card_underline
     ),
     c(
       # by giving an id, we can reactively respond to tab changes
@@ -64,7 +64,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
           if (is.null(module_label)) {
             module_label <- icon("fas fa-list")
           }
-          nav_panel(
+          bslib::nav_panel(
             title = module_label,
             value = module_id, # when clicked this tab value changes input$<tabset panel id>
             ui_teal_module(
