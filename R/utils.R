@@ -44,18 +44,26 @@ get_teal_bs_theme <- function() {
 #' Return parentnames along with datanames.
 #' @noRd
 #' @keywords internal
-include_parent_datanames <- function(dataname, join_keys) {
-  ordered_datanames <- dataname
-  for (i in dataname) {
+.include_parent_datanames <- function(datanames, join_keys) {
+  ordered_datanames <- datanames
+  for (i in datanames) {
     parents <- character(0)
     while (length(i) > 0) {
       parent_i <- teal.data::parent(join_keys, i)
       parents <- c(parent_i, parents)
       i <- parent_i
     }
-    ordered_datanames <- c(parents, dataname, ordered_datanames)
+    ordered_datanames <- c(parents, ordered_datanames)
   }
   unique(ordered_datanames)
+}
+
+#' Return topologicaly sorted datanames
+#' @noRd
+#' @keywords internal
+.topologically_sort_datanames <- function(datanames, join_keys) {
+  datanames_with_parents <- .include_parent_datanames(datanames, join_keys)
+  intersect(datanames, datanames_with_parents)
 }
 
 #' Create a `FilteredData`
@@ -66,7 +74,7 @@ include_parent_datanames <- function(dataname, join_keys) {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = .teal_data_ls(x)) {
+teal_data_to_filtered_data <- function(x, datanames = ls(teal.code::get_env(x))) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
   # Otherwise, FilteredData will be created in the modules' scope later
@@ -78,6 +86,7 @@ teal_data_to_filtered_data <- function(x, datanames = .teal_data_ls(x)) {
     join_keys = teal.data::join_keys(x)
   )
 }
+
 
 #' Template function for `TealReportCard` creation and customization
 #'

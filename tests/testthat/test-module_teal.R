@@ -1,6 +1,6 @@
 # comment: srv_teal is exported so the tests here are extensive and cover srv_data as well.
 #          testing of srv_data is not needed.
-module_output_table <<- function(output, id) {
+module_summary_table <<- function(output, id) {
   testthat::skip_if_not_installed("rvest")
   table_id <- sprintf("teal_modules-%s-data_summary-table", id)
   html <- output[[table_id]]$html
@@ -453,22 +453,10 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-
         session$setInputs(`data-teal_data_module-data-dataset` = "iris", `teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(
-          ls(teal.code::get_env(modules_output$module_1()())),
-          c("iris", "iris._raw_")
-        )
-
-        # comment: can't trigger reactivity in testServer - the change in a reactive input data
-        #          is not propagated to the teal_module(data). Instead we test if the modified data
-        #          is sent to another teal_module
+        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_1()())), "iris")
         session$setInputs(`data-teal_data_module-data-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
-        session$flushReact()
-        testthat::expect_identical(
-          ls(teal.code::get_env(modules_output$module_2()())),
-          c("mtcars", "mtcars._raw_")
-        )
+        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_2()())), "mtcars")
       }
     )
   })
@@ -574,7 +562,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from @env excluding .<dataname>_raw_ when module$datanames = \"all\"", {
+  testthat::it("receives all objects from @env when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -692,6 +680,34 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+      }
+    )
+  })
+
+  testthat::it("receives all raw datasets based on module$datanames", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive({
+          td <- within(teal_data(), {
+            iris <- iris
+            mtcars <- mtcars
+            swiss <- swiss
+          })
+          td
+        }),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            datanames = c("iris", "swiss")
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_setequal(ls(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
       }
     )
   })
@@ -1278,20 +1294,17 @@ testthat::describe("srv_teal filters", {
           session$flushReact()
           # iris is not active
           testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-          testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
           # mtcars has been modified
           expected_mtcars <- subset(mtcars, cyl == 4)
           testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
-          testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
-
           expected_code <- paste0(
             c(
               "iris <- iris",
               "mtcars <- mtcars",
               sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
               sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-              "iris._raw_ <- iris",
-              "mtcars._raw_ <- mtcars",
+              ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
+              "lockEnvironment(.raw_data)",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1413,7 +1426,7 @@ testthat::describe("srv_teal data reload", {
 })
 
 testthat::describe("srv_teal teal_module(s) transformer", {
-  testthat::it("evaluates custom qenv call and pass update teal_data to the module", {
+  testthat::it("evaluates custom qenv call and pass updated teal_data to the module", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1430,9 +1443,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(mtcars))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
       }
     )
   })
@@ -1460,22 +1471,18 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-
         expected_iris <- subset(iris, Species == "versicolor")
         rownames(expected_iris) <- NULL
         expected_iris <- head(expected_iris)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 6)))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
-
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
           sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-          "iris._raw_ <- iris",
-          "mtcars._raw_ <- mtcars",
+          ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
+          "lockEnvironment(.raw_data)",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
@@ -1514,17 +1521,14 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         session$flushReact()
 
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 4)))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars._raw_"]], mtcars)
-
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
           sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
-          "iris._raw_ <- iris",
-          "mtcars._raw_ <- mtcars",
+          ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
+          "lockEnvironment(.raw_data)",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
@@ -1632,7 +1636,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
       }
     )
   })
@@ -1661,7 +1664,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
-        testthat::expect_identical(modules_output$module_1()()[["iris._raw_"]], iris)
       }
     )
   })
@@ -1746,7 +1748,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("iris", "mtcars"),
             Obs = c("150/150", "32/32"),
@@ -1777,7 +1779,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("a", "b"),
             Obs = c("3/3", "6/6"),
@@ -1810,7 +1812,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("a", "b"),
             Obs = c("3/3", "6/6"),
@@ -1844,7 +1846,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("a", "b"),
             Obs = c("3/3", "6/6"),
@@ -1879,7 +1881,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("a", "b"),
             Obs = c("1/3", "2/6"),
@@ -1916,7 +1918,7 @@ testthat::describe("srv_teal summary table", {
         )
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("a", "b"),
             Obs = c("1/3", "2/6"),
@@ -1956,7 +1958,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("iris", "new_dataset"),
             Obs = c("150/150", "3"),
@@ -1986,7 +1988,7 @@ testthat::describe("srv_teal summary table", {
           session$setInputs("teal_modules-active_tab" = "module_1")
           session$flushReact()
           testthat::expect_identical(
-            module_output_table(output, "module_1"),
+            module_summary_table(output, "module_1"),
             data.frame(
               "Data Name" = c("iris"),
               Obs = c("6/150"),
@@ -2011,7 +2013,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("iris"),
             Obs = c("150/150"),
@@ -2028,7 +2030,6 @@ testthat::describe("srv_teal summary table", {
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("parent", "child", keys = c("am"))
     )
-
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2040,7 +2041,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1")[["Data Name"]],
+          module_summary_table(output, "module_1")[["Data Name"]],
           c("parent", "child")
         )
       }
@@ -2060,7 +2061,7 @@ testthat::describe("srv_teal summary table", {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
         testthat::expect_identical(
-          module_output_table(output, "module_1"),
+          module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c("iris"),
             Obs = c("150/150"),

@@ -301,11 +301,11 @@ srv_teal_module.teal_module <- function(id,
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    .teal_data_ls(data)
+    .topologically_sort_datanames(ls(teal.code::get_env(data)), teal.data::join_keys(data))
   } else {
     intersect(
-      include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      .teal_data_ls(data)
+      .include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
+      ls(teal.code::get_env(data))
     )
   }
 }
