@@ -10,11 +10,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```r
-tm_decorated_plot <- function(label = "module", decorator = identity_decorator) {
-  # decorator can be "decorate_module", "expr", "function"
-  decorator_obj <- new_decorator(decorator, output_name = "plot")
-
+```{r}
+library(ggplot2)
+tm_decorated_plot <- function(label = "module", decorator = decorate_teal_data()) {
   module(
     label = label,
     ui = function(id, decorator) {
@@ -69,5 +67,78 @@ tm_decorated_plot <- function(label = "module", decorator = identity_decorator) 
     ui_args = list(decorator = decorator),
     server_args = list(decorator = decorator)
   )
+}
+```
+
+
+Decorator without `ui`.
+```{r}
+static_decorator <- decorate_teal_data(
+  ui = function(id) NULL,
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        data() |> within({
+          plot <- plot +
+            ggtitle("This is title") +
+            xlab("x axis")
+        })
+      })
+    })
+  }
+)
+```
+
+Static decorator simplified constructor.
+```{r}
+static_decorator_from_expr <- decorate_teal_data(
+  expr = quote(plot <- plot +
+    ggtitle("This is title") +
+    xlab("x axis title"))
+)
+```
+
+
+Interactive decorator
+```{r}
+interactive_decorator <- decorate_teal_data(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        data() |> within(
+          {
+            plot <- plot +
+              ggtitle("This is title") +
+              xlab(x_axis_title)
+          },
+          x_axis_title = input$x_axis_title
+        )
+      })
+    })
+  }
+)
+```
+
+```{r}
+app <- init(
+  data = teal_data(iris = iris, mtcars = mtcars),
+  modules = modules(
+    tm_decorated_plot("identity", decorator = decorate_teal_data()),
+    tm_decorated_plot("static", decorator = static_decorator),
+    tm_decorated_plot("static", decorator = static_decorator_from_expr),
+    tm_decorated_plot("interactive", decorator = interactive_decorator)
+  )
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
 }
 ```
