@@ -52,7 +52,15 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
 
 #' @rdname module_filter_data
 .make_filtered_teal_data <- function(modules, data, datasets = NULL, datanames) {
-  data <- eval_code(data, sprintf("%1$s._raw_ <- %1$s", datanames))
+  data <- eval_code(
+    data,
+    paste0(
+      ".raw_data <- list2env(list(",
+      toString(sprintf("%1$s = %1$s", datanames)),
+      "))\n",
+      "lockEnvironment(.raw_data) #@linksto .raw_data" # this is environment and it is shared by qenvs. CAN'T MODIFY!
+    )
+  )
   filtered_code <- teal.slice::get_filter_expr(datasets = datasets, datanames = datanames)
   filtered_teal_data <- .append_evaluated_code(data, filtered_code)
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
