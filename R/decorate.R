@@ -2,60 +2,47 @@
 #' @export
 setGeneric(
   "decorate_teal_data",
-  function(ui = function(id) NULL, server, expr) {
+  function(x, output_name) {
     standardGeneric("decorate_teal_data")
   }
 )
 
 setMethod(
   "decorate_teal_data",
-  signature = list(server = "missing", expr = "missing"),
-  function(ui = function(id) NULL, server, expr) {
-    teal_transform_module(ui, server = function(id, data) data)
+  signature = list(x = "teal_transform_module"),
+  function(x, output_name) x
+)
+
+setMethod(
+  "decorate_teal_data",
+  signature = list(x = "language"),
+  function(x, output_name) {
+    teal_transform_module(
+      server = function(id, data) {
+        moduleServer(id, function(input, output, session) {
+          reactive({
+            req(data())
+            eval_code(data(), code = x)
+          })
+        })
+      }
+    )
   }
 )
 
 setMethod(
   "decorate_teal_data",
-  signature = list(server = "function"),
-  function(ui = function(id) NULL, server, expr) {
-    if (!missing(expr)) {
-      stop("expr argument ignored when ui and server are specified")
-    }
-    teal_transform_module(ui, server)
-  }
-)
-
-setMethod( # comment: this could be teal_transform_module method
-  "decorate_teal_data",
-  signature = list(expr = "language"),
-  function(ui = function(id) NULL, server, expr) {
-    decorate_teal_data(
-      server = function(id, data) {
-        moduleServer(id, function(input, output, session) {
-          reactive({
-            req(data())
-            data() |> eval_code(expr)
-          })
-        })
-      }
+  signature = list(x = "function"),
+  function(x, output_name) {
+    checkmate::check_string(output_name)
+    formal_args <- names(formals(x)) # how the args are named is here
+    expr <- do.call(
+      substitute,
+      list(
+        expr = body(x),
+        env = setNames(list(as.name(output_name)), formal_args[[1]])
+      )
     )
-  }
-)
-
-setMethod( # comment: this could be teal_transform_module method
-  "decorate_teal_data",
-  signature = list(expr = "language"),
-  function(ui = function(id) NULL, server, expr) {
-    decorate_teal_data(
-      server = function(id, data) {
-        moduleServer(id, function(input, output, session) {
-          reactive({
-            req(data())
-            data() |> eval_code(expr)
-          })
-        })
-      }
-    )
+    decorate_teal_data(x = expr)
   }
 )

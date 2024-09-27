@@ -12,7 +12,10 @@ vignette: >
 
 ```{r}
 library(ggplot2)
-tm_decorated_plot <- function(label = "module", decorator = decorate_teal_data()) {
+tm_decorated_plot <- function(label = "module", decorator = teal_transform_module()) {
+  # decorator: teal_transform_module, language, function
+  decorator_obj <- decorate_teal_data(x = decorator, output_name = "plot") # ouputs teal_transform_module
+
   module(
     label = label,
     ui = function(id, decorator) {
@@ -21,7 +24,7 @@ tm_decorated_plot <- function(label = "module", decorator = decorate_teal_data()
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        decorator$ui(ns("decorate")),
+        ui_teal_data(ns("decorate"), data_module = decorator),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -51,7 +54,7 @@ tm_decorated_plot <- function(label = "module", decorator = decorate_teal_data()
             )
         })
 
-        q2 <- decorator$server("decorate", data = q1)
+        q2 <- srv_teal_data("decorate", data = q1, data_module = decorator, modules = module())
 
         plot_r <- reactive({
           req(q2())
@@ -64,8 +67,8 @@ tm_decorated_plot <- function(label = "module", decorator = decorate_teal_data()
         })
       })
     },
-    ui_args = list(decorator = decorator),
-    server_args = list(decorator = decorator)
+    ui_args = list(decorator = decorator_obj),
+    server_args = list(decorator = decorator_obj)
   )
 }
 ```
@@ -73,7 +76,7 @@ tm_decorated_plot <- function(label = "module", decorator = decorate_teal_data()
 
 Decorator without `ui`.
 ```{r}
-static_decorator <- decorate_teal_data(
+static_decorator <- teal_transform_module(
   ui = function(id) NULL,
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
@@ -92,17 +95,15 @@ static_decorator <- decorate_teal_data(
 
 Static decorator simplified constructor.
 ```{r}
-static_decorator_from_expr <- decorate_teal_data(
-  expr = quote(plot <- plot +
-    ggtitle("This is title") +
-    xlab("x axis title"))
-)
+static_decorator_lang <- quote(plot <- plot +
+  ggtitle("This is title") +
+  xlab("x axis title"))
 ```
 
 
 Interactive decorator
 ```{r}
-interactive_decorator <- decorate_teal_data(
+interactive_decorator <- teal_transform_module(
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -127,14 +128,42 @@ interactive_decorator <- decorate_teal_data(
 )
 ```
 
+Static decorator avoiding internal object name.
+
+```{r}
+fun_decorator <- function(x) {
+  x <- x + ggtitle("This is title") + xlab("x_axis_title")
+}
+```
+
+
+failing decorator
+```{r}
+failing_decorator <- teal_transform_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive(stop("Hihi"))
+    })
+  }
+)
+```
+
 ```{r}
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
-    tm_decorated_plot("identity", decorator = decorate_teal_data()),
-    tm_decorated_plot("static", decorator = static_decorator),
-    tm_decorated_plot("static", decorator = static_decorator_from_expr),
-    tm_decorated_plot("interactive", decorator = interactive_decorator)
+    tm_decorated_plot("identity"),
+    tm_decorated_plot("no-ui", decorator = static_decorator),
+    tm_decorated_plot("lang", decorator = static_decorator_lang),
+    tm_decorated_plot("fun", decorator = fun_decorator),
+    tm_decorated_plot("interactive", decorator = interactive_decorator),
+    tm_decorated_plot("failing", decorator = failing_decorator)
   )
 )
 

@@ -4,7 +4,7 @@
 \alias{decorate_teal_data}
 \title{Modify object in teal_data environment}
 \usage{
-decorate_teal_data(ui = function(id) NULL, server, expr)
+decorate_teal_data(x, output_name)
 }
 \description{
 Modify object in teal_data environment
