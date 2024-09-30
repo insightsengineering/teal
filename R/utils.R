@@ -303,7 +303,7 @@ create_app_id <- function(data, modules) {
 #' @keywords internal
 #' @noRd
 defunction <- function(x) {
-  if (is.list(x)) {
+  if (checkmate::test_list(x)) {
     lapply(x, defunction)
   } else if (is.function(x)) {
     deparse1(body(x))
