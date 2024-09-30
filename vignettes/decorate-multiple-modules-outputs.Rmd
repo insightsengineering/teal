@@ -1,0 +1,196 @@
+---
+title: "Decorate modules output"
+author: "NEST CoreDev"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Decorate modules output}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# ui, server, expr
+
+```{r}
+library(ggplot2)
+tm_decorated_plot <- function(label = "module",
+                              decorator = list(plot_1 = teal_transform_module(), plot_2 = teal_transform_module())) {
+  # decorator: teal_transform_module, language, function
+  decorator_objs <- list(
+    plot_1 = decorate_teal_data(x = decorator[["plot_1"]], output_name = "plot_1"),
+    plot_2 = decorate_teal_data(x = decorator[["plot_2"]], output_name = "plot_2")
+  )
+  # ouputs teal_transform_module
+
+  module(
+    label = label,
+    ui = function(id, decorator_objs) {
+      ns <- NS(id)
+      div(
+        selectInput(ns("dataname"), label = "select dataname", choices = NULL),
+        selectInput(ns("x"), label = "select x", choices = NULL),
+        selectInput(ns("y"), label = "select y", choices = NULL),
+        selectInput(ns("plot_type"), "plot type", choices = c("plot 1", "plot 2"), selected = "plot 1"),
+        div(
+          id = ns("decorate_1_wrapper"),
+          ui_teal_data(ns("decorate_1"), data_module = decorator_objs[[1]])
+        ),
+        div(
+          id = ns("decorate_2_wrapper"),
+          ui_teal_data(ns("decorate_2"), data_module = decorator_objs[[2]])
+        ),
+        plotOutput(ns("plot")),
+        verbatimTextOutput(ns("text"))
+      )
+    },
+    server = function(id, data, decorator_objs) {
+      moduleServer(id, function(input, output, session) {
+        observeEvent(data(), {
+          updateSelectInput(inputId = "dataname", choices = teal.data::datanames(data()))
+        })
+
+        observeEvent(input$dataname, {
+          updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
+          updateSelectInput(inputId = "y", label = "select y", choices = colnames(data()[[input$dataname]]))
+        })
+
+        observeEvent(input$plot_type, {
+          if (input$plot_type == "plot 1") {
+            shinyjs::hide("decorate_2_wrapper")
+            shinyjs::show("decorate_1_wrapper")
+          } else {
+            shinyjs::show("decorate_2_wrapper")
+            shinyjs::hide("decorate_1_wrapper")
+          }
+        })
+
+        q1_1 <- reactive({
+          req(input$dataname, input$x, input$y)
+          data() |>
+            within(
+              {
+                plot_1 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                  ggplot2::geom_point() +
+                  ggtitle("plot 1")
+              },
+              dataname = as.name(input$dataname),
+              x = as.name(input$x),
+              y = as.name(input$y)
+            )
+        })
+
+        q2_1 <- reactive({
+          req(input$dataname, input$x, input$y)
+          data() |>
+            within(
+              {
+                plot_2 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                  ggplot2::geom_point() +
+                  ggtitle("plot 2")
+              },
+              dataname = as.name(input$dataname),
+              x = as.name(input$x),
+              y = as.name(input$y)
+            )
+        })
+
+        q1_2 <- srv_teal_data("decorate_1", data = q1_1, data_module = decorator_objs[[1]], modules = module())
+        q2_2 <- srv_teal_data("decorate_2", data = q2_1, data_module = decorator_objs[[2]], modules = module())
+
+
+        plot_r <- reactive({
+          req(input$plot_type)
+          if (input$plot_type == "plot 1") {
+            req(q1_2())
+            q1_2()[["plot_1"]]
+          } else if (input$plot_type == "plot 2") {
+            req(q2_2())
+            q2_2()[["plot_2"]]
+          }
+        })
+
+        output$plot <- renderPlot(plot_r())
+        output$text <- renderText({
+          if (input$plot_type == "plot 1") {
+            teal.code::get_code(q1_2())
+          } else if (input$plot_type == "plot 2") {
+            teal.code::get_code(q2_2())
+          }
+        })
+      })
+    },
+    ui_args = list(decorator_objs = decorator_objs),
+    server_args = list(decorator_objs = decorator_objs)
+  )
+}
+```
+
+
+Interactive decorator
+```{r}
+interactive_decorator_1 <- teal_transform_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis 1")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        data() |> within(
+          {
+            plot_1 <- plot_1 +
+              xlab(x_axis_title)
+          },
+          x_axis_title = input$x_axis_title
+        )
+      })
+    })
+  }
+)
+
+interactive_decorator_2 <- teal_transform_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis 2")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        data() |> within(
+          {
+            plot_2 <- plot_2 +
+              xlab(x_axis_title)
+          },
+          x_axis_title = input$x_axis_title
+        )
+      })
+    })
+  }
+)
+```
+
+
+
+```{r}
+app <- init(
+  data = teal_data(iris = iris, mtcars = mtcars),
+  modules = modules(
+    tm_decorated_plot("identity"),
+    tm_decorated_plot(
+      "interactive",
+      decorator = list(plot_1 = interactive_decorator_1, plot_2 = interactive_decorator_2)
+    )
+  )
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
