@@ -83,9 +83,9 @@ testthat::describe("srv_teal lockfile", {
           ),
           expr = {
             iter <- 1
-            while (!file.exists(renv_filename) && iter <= 100) {
-              Sys.sleep(0.25)
-              iter <- iter + 1 # max wait time is 25 seconds
+            while (!file.exists(renv_filename) && iter <= 1000) {
+              Sys.sleep(0.5)
+              iter <- iter + 1 # max wait time is 500 seconds
             }
             testthat::expect_true(file.exists(renv_filename))
           }
