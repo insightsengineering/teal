@@ -24,7 +24,7 @@ See "transferring snapshots" section in ?snapshot.
 }
 \section{Functions}{
 
-Data objects that are functions are converted to strings represencting their body
+Data objects that are functions are converted to strings representing their body
 in order to strip their enclosing environments.
 }
 

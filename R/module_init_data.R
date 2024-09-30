@@ -169,7 +169,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 #' Get code that tests the integrity of the reproducible data
 #'
 #' @section Functions:
-#' Data objects that are functions are converted to strings represencting their body
+#' Data objects that are functions are converted to strings representing their body
 #' in order to strip their enclosing environments.
 #'
 #' @param data (`teal_data`) object holding the data
