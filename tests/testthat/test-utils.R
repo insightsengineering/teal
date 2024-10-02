@@ -176,3 +176,16 @@ testthat::test_that("defunction recursively goes down a list", {
     y
   )
 })
+
+testthat::test_that("defunction leaves lists with other classes intact", {
+  # styler: off
+  x <- list(
+    "character" = "character",
+    "data.frame" = head(mtcars)
+  )
+
+  testthat::expect_identical(
+    defunction(x),
+    x
+  )
+})
