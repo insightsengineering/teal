@@ -25,9 +25,9 @@
 #' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
-#' @param is_transformer_failed (`reactiveValues`) that hosts `logical` flags of which transformers failed
-#' error message is displayed.
-#' Default is `FALSE` to handle empty reactive cycle on `init`.
+#' @param is_transformer_failed (`reactiveValues`) contains `logical` flags named after each transformer.
+#' Help to determine if any previous transformer failed, so that following transformers can be disabled
+#' and display a generic failure message.
 #'
 #' @return `reactive` `teal_data`
 #'
@@ -244,7 +244,6 @@ srv_check_shiny_warnings <- function(id, data, modules) {
       if (!identical(data(), out())) {
         out(data())
       }
-    } else {
     }
   })
 

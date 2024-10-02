@@ -164,7 +164,7 @@ testthat::test_that("e2e: teal_data_module gets removed after successful data lo
     app$get_html('#teal-teal_modules-active_tab a[data-value="teal_data_module"]')
   )
 
-  testthat::expect_false(
+  testthat::expect_null(
     app$is_visible(sprintf("#%s", submit))
   )
 

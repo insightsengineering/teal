@@ -37,9 +37,9 @@ srv_validate_reactive_teal_data(
 
 \item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and}
 
-\item{is_transformer_failed}{(\code{reactiveValues}) that hosts \code{logical} flags of which transformers failed
-error message is displayed.
-Default is \code{FALSE} to handle empty reactive cycle on \code{init}.}
+\item{is_transformer_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformer.
+Help to determine if any previous transformer failed, so that following transformers can be disabled
+and display a generic failure message.}
 
 \item{data}{(\verb{reactive teal_data})}
 }

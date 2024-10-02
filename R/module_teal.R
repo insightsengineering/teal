@@ -25,7 +25,7 @@
 #' ## Fallback on failure
 #'
 #' `teal` is designed in such way that app will never crash if the error is introduced in any
-#' custom module provided by app developer (e.g. [teal_data_module()], [teal_transform_module()]).
+#' custom `shiny` module provided by app developer (e.g. [teal_data_module()], [teal_transform_module()]).
 #' If any module returns a failing object, the app will halt the evaluation and display a warning message.
 #' App user should always have a chance to fix the improper input and continue without restarting the session.
 #'
@@ -245,8 +245,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         observeEvent(data_rv(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
-          removeUI(selector = sprintf("#%s a[data-value='teal_data_module']", session$ns("teal_modules-wrapper")))
-          updateTabsetPanel(inputId = "teal_modules-active_tab", selected = names(modules$children)[1])
+          removeTab("teal_modules-active_tab", target = "teal_data_module")
         })
       }
     } else {
