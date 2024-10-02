@@ -182,9 +182,8 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
   # Functions cause problems when calculating hashes
   # because they have environments that have parents on the search list.
   for (d in datanames) {
-    data <- within(data, d <- defunction(d), d = as.symbol(d))
+    data <- within(data, var <- defunction(val), var = d, val = as.symbol(d))
   }
-
   vapply(
     datanames,
     function(dataname, datasets) {
