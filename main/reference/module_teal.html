@@ -13,7 +13,7 @@ automatically, which is not a case when calling ui/srv_teal directly."><link rel
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9064</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9066</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,23 +60,6 @@ automatically, which is not a case when calling ui/srv_teal directly."><link rel
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-reports"><li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
     <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
@@ -110,7 +93,6 @@ automatically, which is not a case when calling <code>ui/srv_teal</code> directl
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ui_teal</span><span class="op">(</span></span>
 <span>  <span class="va">id</span>,</span>
 <span>  <span class="va">modules</span>,</span>
-<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="fu"><a href="build_app_title.html">build_app_title</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  header <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  footer <span class="op">=</span> <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span></span>
@@ -137,14 +119,6 @@ will be displayed in the <code>teal</code> application. See <code><a href="teal_
 more details.</p></dd>
 
 
-<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>(<code>teal_data</code>, <code>teal_data_module</code>, or <code>reactive</code> returning <code>teal_data</code>)
-The <code>ui</code> component of this module does not require <code>data</code> if <code>teal_data_module</code> is not provided.
-The <code>data</code> argument in the <code>ui</code> is included solely for the <code>$ui</code> function of the
-<code>teal_data_module</code>. Otherwise, it can be disregarded, ensuring that <code>ui_teal</code> does not depend on
-the reactive data of the enclosing application.</p></dd>
-
-
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
 <dd><p>(<code>shiny.tag</code> or <code>character(1)</code>) Optionally,
 the browser window title. Defaults to a title "teal app" with the icon of NEST.
@@ -160,6 +134,11 @@ the header of the app.</p></dd>
 <dt id="arg-footer">footer<a class="anchor" aria-label="anchor" href="#arg-footer"></a></dt>
 <dd><p>(<code>shiny.tag</code> or <code>character(1)</code>) Optionally,
 the footer of the app.</p></dd>
+
+
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dd><p>(<code>teal_data</code>, <code>teal_data_module</code>, or <code>reactive</code> returning <code>teal_data</code>)
+The data which application will depend on.</p></dd>
 
 
 <dt id="arg-filter">filter<a class="anchor" aria-label="anchor" href="#arg-filter"></a></dt>
@@ -186,6 +165,16 @@ performed:</p><ul><li><p>data loading in <code><a href="module_init_data.html">m
 <li><p>data filtering in <code><a href="module_filter_data.html">module_filter_data</a></code></p></li>
 <li><p>data transformation in <code><a href="module_transform_data.html">module_transform_data</a></code></p></li>
 </ul></div>
+
+<div class="section">
+<h3 id="fallback-on-failure">Fallback on failure<a class="anchor" aria-label="anchor" href="#fallback-on-failure"></a></h3>
+
+
+<p><code>teal</code> is designed in such way that app will never crash if the error is introduced in any
+custom <code>shiny</code> module provided by app developer (e.g. <code><a href="teal_data_module.html">teal_data_module()</a></code>, <code><a href="teal_transform_module.html">teal_transform_module()</a></code>).
+If any module returns a failing object, the app will halt the evaluation and display a warning message.
+App user should always have a chance to fix the improper input and continue without restarting the session.</p>
+</div>
 
     </div>
 

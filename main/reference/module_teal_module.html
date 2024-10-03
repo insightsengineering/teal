@@ -11,7 +11,7 @@ reflect nested structure of modules argument."><link rel="stylesheet" href="../c
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9064</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9066</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,23 +58,6 @@ reflect nested structure of modules argument."><link rel="stylesheet" href="../c
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-reports"><li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
     <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
@@ -112,9 +95,6 @@ reflect nested structure of <code>modules</code> argument.</p>
 <span><span class="co"># S3 method for class 'teal_modules'</span></span>
 <span><span class="fu">ui_teal_module</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, depth <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'shiny.tag'</span></span>
-<span><span class="fu">ui_teal_module</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, depth <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># S3 method for class 'teal_module'</span></span>
 <span><span class="fu">ui_teal_module</span><span class="op">(</span><span class="va">id</span>, <span class="va">modules</span>, depth <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span>
 <span></span>
@@ -125,6 +105,7 @@ reflect nested structure of <code>modules</code> argument.</p>
 <span>  datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">slices_global</span>,</span>
 <span>  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  data_load_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="st">"ok"</span><span class="op">)</span>,</span>
 <span>  is_active <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -136,6 +117,7 @@ reflect nested structure of <code>modules</code> argument.</p>
 <span>  datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">slices_global</span>,</span>
 <span>  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  data_load_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="st">"ok"</span><span class="op">)</span>,</span>
 <span>  is_active <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -147,6 +129,7 @@ reflect nested structure of <code>modules</code> argument.</p>
 <span>  datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">slices_global</span>,</span>
 <span>  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  data_load_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="st">"ok"</span><span class="op">)</span>,</span>
 <span>  is_active <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -158,6 +141,7 @@ reflect nested structure of <code>modules</code> argument.</p>
 <span>  datasets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">slices_global</span>,</span>
 <span>  reporter <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  data_load_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="st">"ok"</span><span class="op">)</span>,</span>
 <span>  is_active <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -198,6 +182,15 @@ which implies in filter-panel to be "global". When <code>NULL</code> then filter
 <dt id="arg-slices-global">slices_global<a class="anchor" aria-label="anchor" href="#arg-slices-global"></a></dt>
 <dd><p>(<code>reactiveVal</code> returning <code>modules_teal_slices</code>)
 see <code><a href="module_filter_manager.html">module_filter_manager</a></code></p></dd>
+
+
+<dt id="arg-data-load-status">data_load_status<a class="anchor" aria-label="anchor" href="#arg-data-load-status"></a></dt>
+<dd><p>(<code>reactive</code> returning <code>character</code>)
+Determines action dependent on a data loading status:</p><ul><li><p><code>"ok"</code> when <code>teal_data</code> is returned from the data loading.</p></li>
+<li><p><code>"teal_data_module failed"</code> when <code><a href="teal_data_module.html">teal_data_module()</a></code> didn't return  <code>teal_data</code>. Disables tabs buttons.</p></li>
+<li><p><code>"external failed"</code> when a <code>reactive</code> passed to <code>srv_teal(data)</code> didn't return <code>teal_data</code>. Hides the whole tab
+panel.</p></li>
+</ul></dd>
 
 </dl></div>
     <div class="section level2">
