@@ -22,10 +22,7 @@ a string specifying the \code{shiny} module id in cases it is used as a \code{sh
 rather than a standalone \code{shiny} app. This is a legacy feature.}
 
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
-The \code{ui} component of this module does not require \code{data} if \code{teal_data_module} is not provided.
-The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
-\code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
-the reactive data of the enclosing application.}
+The data which application will depend on.}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)}) Optionally,
 the browser window title. Defaults to a title "teal app" with the icon of NEST.

@@ -139,6 +139,9 @@ check_modules_datanames <- function(modules, datanames) {
     if (inherits(modules, "teal_modules")) {
       result <- lapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
       result <- result[vapply(result, Negate(is.null), logical(1L))]
+      if (length(result) == 0) {
+        return(NULL)
+      }
       list(
         string = do.call(c, as.list(unname(sapply(result, function(x) x$string)))),
         html = function(with_module_name = TRUE) {

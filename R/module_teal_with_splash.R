@@ -24,7 +24,7 @@ ui_teal_with_splash <- function(id,
     what = "ui_teal_with_splash()",
     details = "Deprecated, please use `ui_teal` instead"
   )
-  ui_teal(id = id, data = data, title = title, header = header, footer = footer)
+  ui_teal(id = id, title = title, header = header, footer = footer)
 }
 
 #' @export

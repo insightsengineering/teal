@@ -6,6 +6,7 @@
 \alias{srv_filter_data}
 \alias{.make_filtered_teal_data}
 \alias{.observe_active_filter_changed}
+\alias{.get_filter_expr}
 \title{Filter panel module in teal}
 \usage{
 ui_filter_data(id)
@@ -15,6 +16,8 @@ srv_filter_data(id, datasets, active_datanames, data_rv, is_active)
 .make_filtered_teal_data(modules, data, datasets = NULL, datanames)
 
 .observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
+
+.get_filter_expr(datasets, datanames)
 }
 \arguments{
 \item{id}{(\code{character}) Optionally,
