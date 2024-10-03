@@ -22,6 +22,13 @@
 #' - data filtering in [`module_filter_data`]
 #' - data transformation in [`module_transform_data`]
 #'
+#' ## Fallback on failure
+#'
+#' `teal` is designed in such way that app will never crash if the error is introduced in any
+#' custom `shiny` module provided by app developer (e.g. [teal_data_module()], [teal_transform_module()]).
+#' If any module returns a failing object, the app will halt the evaluation and display a warning message.
+#' App user should always have a chance to fix the improper input and continue without restarting the session.
+#'
 #' @rdname module_teal
 #' @name module_teal
 #'
@@ -35,12 +42,10 @@ NULL
 #' @export
 ui_teal <- function(id,
                     modules,
-                    data = NULL,
                     title = build_app_title(),
                     header = tags$p(),
                     footer = tags$p()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, "teal_data_module", null.ok = TRUE)
   checkmate::assert(
     .var.name = "title",
     checkmate::check_string(title),
@@ -87,13 +92,6 @@ ui_teal <- function(id,
     )
   )
 
-  bookmark_panel_ui <- ui_bookmark_panel(ns("bookmark_manager"), modules)
-  data_elem <- ui_init_data(ns("data"), data = data)
-  if (!is.null(data)) {
-    modules$children <- c(list(teal_data_module = data_elem), modules$children)
-  }
-  tabs_elem <- ui_teal_module(id = ns("teal_modules"), modules = modules)
-
   bslib::page_fluid(
     id = id,
     title = title,
@@ -105,12 +103,12 @@ ui_teal <- function(id,
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
-      tabs_elem
+      ui_teal_module(id = ns("teal_modules"), modules = modules)
     ),
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
-      bookmark_panel_ui,
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
     ),
@@ -144,12 +142,16 @@ ui_teal <- function(id,
 #' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive", "reactiveVal"))
+  checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
+
+    if (getOption("teal.show_js_log", default = FALSE)) {
+      shinyjs::showLog()
+    }
 
     srv_teal_lockfile("lockfile")
 
@@ -179,15 +181,75 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    data_rv <- srv_init_data("data", data = data, modules = modules, filter = filter)
+    data_pulled <- srv_init_data("data", data = data)
+    data_validated <- srv_validate_reactive_teal_data(
+      "validate",
+      data = data_pulled,
+      modules = modules,
+      validate_shiny_silent_error = FALSE
+    )
+    data_rv <- reactive({
+      req(inherits(data_validated(), "teal_data"))
+      is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data_validated())))
+      if (!isTRUE(is_filter_ok)) {
+        showNotification(
+          "Some filters were not applied because of incompatibility with data. Contact app developer.",
+          type = "warning",
+          duration = 10
+        )
+        warning(is_filter_ok)
+      }
+      .add_signature_to_data(data_validated())
+    })
+
+    data_load_status <- reactive({
+      if (inherits(data_pulled(), "teal_data")) {
+        "ok"
+      } else if (inherits(data, "teal_data_module")) {
+        "teal_data_module failed"
+      } else {
+        "external failed"
+      }
+    })
+
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_rv(), {
-        if (!inherits(data_rv(), "teal_data")) {
-          stop("data_rv must be teal_data object.")
-        }
+        req(inherits(data_rv(), "teal_data"))
         logger::log_debug("srv_teal@1 initializing FilteredData")
         teal_data_to_filtered_data(data_rv())
       })
+    }
+
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+      shiny::insertTab(
+        inputId = "teal_modules-active_tab",
+        position = "before",
+        select = TRUE,
+        tabPanel(
+          title = icon("fas fa-database"),
+          value = "teal_data_module",
+          tags$div(
+            ui_init_data(session$ns("data")),
+            ui_validate_reactive_teal_data(session$ns("validate"))
+          )
+        )
+      )
+
+      if (attr(data, "once")) {
+        observeEvent(data_rv(), once = TRUE, {
+          logger::log_debug("srv_teal@2 removing data tab.")
+          # when once = TRUE we pull data once and then remove data tab
+          removeTab("teal_modules-active_tab", target = "teal_data_module")
+        })
+      }
+    } else {
+      # when no teal_data_module then we want to display messages above tabsetPanel (because there is no data-tab)
+      insertUI(
+        selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
+        where = "beforeBegin",
+        ui = tags$div(ui_validate_reactive_teal_data(session$ns("validate")), tags$br())
+      )
     }
 
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
@@ -197,15 +259,12 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       data_rv = data_rv,
       datasets = datasets_rv,
       modules = modules,
-      slices_global = slices_global
+      slices_global = slices_global,
+      data_load_status = data_load_status
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
-
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab"))
-    }
   })
 
   invisible(NULL)

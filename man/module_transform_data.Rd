@@ -8,7 +8,13 @@
 \usage{
 ui_transform_data(id, transforms, class = "well")
 
-srv_transform_data(id, data, transforms, modules)
+srv_transform_data(
+  id,
+  data,
+  transforms,
+  modules,
+  is_transformer_failed = reactiveValues()
+)
 }
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
@@ -16,6 +22,10 @@ srv_transform_data(id, data, transforms, modules)
 \item{data}{(\verb{reactive teal_data})}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
+
+\item{is_transformer_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformer.
+Help to determine if any previous transformer failed, so that following transformers can be disabled
+and display a generic failure message.}
 }
 \value{
 \code{reactive} \code{teal_data}

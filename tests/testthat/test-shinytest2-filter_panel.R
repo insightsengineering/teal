@@ -1,7 +1,7 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
-testthat::test_that("e2e: module content is updated when a data is filtered in filter panel", {
+testthat::test_that("e2e: module content is updated when data is filtered in filter panel", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
