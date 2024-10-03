@@ -181,13 +181,10 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
 .get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
   # Functions cause problems when calculating hashes
   # because they have environments that have parents on the search list.
-  for (d in datanames) {
-    data <- within(data, var <- defunction(val), var = d, val = as.symbol(d))
-  }
   vapply(
     datanames,
     function(dataname, datasets) {
-      hash <- rlang::hash(data[[dataname]])
+      hash <- rlang::hash(defunction(data[[dataname]]))
       sprintf(
         "stopifnot(%s == %s) # @linksto %s",
         deparse1(bquote(rlang::hash(.(as.name(dataname))))),
