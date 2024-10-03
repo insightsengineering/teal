@@ -9,7 +9,6 @@
 ui_teal(
   id,
   modules,
-  data = NULL,
   title = build_app_title(),
   header = tags$p(),
   footer = tags$p()
@@ -28,12 +27,6 @@ Nested list of \code{teal_modules} or \code{teal_module} objects or a single
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
-The \code{ui} component of this module does not require \code{data} if \code{teal_data_module} is not provided.
-The \code{data} argument in the \code{ui} is included solely for the \verb{$ui} function of the
-\code{teal_data_module}. Otherwise, it can be disregarded, ensuring that \code{ui_teal} does not depend on
-the reactive data of the enclosing application.}
-
 \item{title}{(\code{shiny.tag} or \code{character(1)}) Optionally,
 the browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
@@ -44,6 +37,9 @@ the header of the app.}
 
 \item{footer}{(\code{shiny.tag} or \code{character(1)}) Optionally,
 the footer of the app.}
+
+\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
+The data which application will depend on.}
 
 \item{filter}{(\code{teal_slices}) Optionally,
 specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
@@ -72,5 +68,13 @@ performed:
 \item data filtering in \code{\link{module_filter_data}}
 \item data transformation in \code{\link{module_transform_data}}
 }
+}
+
+\subsection{Fallback on failure}{
+
+\code{teal} is designed in such way that app will never crash if the error is introduced in any
+custom \code{shiny} module provided by app developer (e.g. \code{\link[=teal_data_module]{teal_data_module()}}, \code{\link[=teal_transform_module]{teal_transform_module()}}).
+If any module returns a failing object, the app will halt the evaluation and display a warning message.
+App user should always have a chance to fix the improper input and continue without restarting the session.
 }
 }

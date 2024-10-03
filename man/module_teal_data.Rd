@@ -8,14 +8,14 @@
 \alias{srv_validate_reactive_teal_data}
 \title{Execute and validate \code{teal_data_module}}
 \usage{
-ui_teal_data(id, data_module)
+ui_teal_data(id, data_module = function(id) NULL)
 
 srv_teal_data(
   id,
-  data,
-  data_module,
+  data_module = function(id) NULL,
   modules = NULL,
-  validate_shiny_silent_error = TRUE
+  validate_shiny_silent_error = TRUE,
+  is_transformer_failed = reactiveValues()
 )
 
 ui_validate_reactive_teal_data(id)
@@ -24,7 +24,8 @@ srv_validate_reactive_teal_data(
   id,
   data,
   modules = NULL,
-  validate_shiny_silent_error = FALSE
+  validate_shiny_silent_error = FALSE,
+  hide_validation_error = reactive(FALSE)
 )
 }
 \arguments{
@@ -32,13 +33,15 @@ srv_validate_reactive_teal_data(
 
 \item{data_module}{(\code{teal_data_module})}
 
-\item{data}{(\verb{reactive teal_data})}
-
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
-\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and
-error message is displayed.
-Default is \code{FALSE} to handle empty reactive cycle on \code{init}.}
+\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and}
+
+\item{is_transformer_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformer.
+Help to determine if any previous transformer failed, so that following transformers can be disabled
+and display a generic failure message.}
+
+\item{data}{(\verb{reactive teal_data})}
 }
 \value{
 \code{reactive} \code{teal_data}
@@ -63,10 +66,9 @@ Output \code{data} is invalid if:
 }
 
 \code{teal} (observers in \code{srv_teal}) always waits to render an app until \code{reactive} \code{teal_data} is
-returned. If error 2-4 occurs, relevant error message is displayed to app user and after issue is
-resolved app will continue to run. \code{teal} guarantees that errors in a data don't crash an app
-(except error 1). This is possible thanks to \code{.fallback_on_failure} which returns input-data
-when output-data fails
+returned. If error 2-4 occurs, relevant error message is displayed to the app user. Once the issue is
+resolved, the app will continue to run. \code{teal} guarantees that errors in data don't crash the app
+(except error 1).
 }
 
 \keyword{internal}

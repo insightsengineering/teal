@@ -182,7 +182,7 @@ testthat::describe("srv_teal arguments", {
         ),
         expr = NULL
       ),
-      "Must inherit from class 'teal_data'/'teal_data_module'/'reactive'/'reactiveVal'"
+      "Assertion on 'data' failed: Must inherit from class 'teal_data'/'teal_data_module'/'reactive', but has class 'data.frame'." # nolint: line_length
     )
   })
 
@@ -217,7 +217,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(data_rv(), "teal_data")
+        testthat::expect_error(data_init(), NULL)
         testthat::expect_null(modules_output$module_1())
         testthat::expect_null(modules_output$module_2())
       }
@@ -236,7 +236,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(data_rv(), "teal_data")
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -259,7 +259,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(data_rv(), "teal_data")
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -290,7 +290,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(data_rv(), "teal_data")
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -313,7 +313,7 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_s4_class(data_rv(), "teal_data")
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_s4_class(modules_output$module_1()(), "teal_data")
       }
@@ -340,14 +340,14 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module returns validation error", {
+  testthat::it("are not called when teal_data_module returns validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -367,13 +367,14 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module throw en error", {
+  testthat::it("are not called when teal_data_module throws an error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -393,14 +394,14 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("are not called when the teal_data_module returns qenv.error", {
+  testthat::it("are not called when teal_data_module returns qenv.error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -420,7 +421,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_rv())
+        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -453,9 +454,9 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        session$setInputs(`data-teal_data_module-data-dataset` = "iris", `teal_modules-active_tab` = "module_1")
+        session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
         testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_1()())), "iris")
-        session$setInputs(`data-teal_data_module-data-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
+        session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
         testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_2()())), "mtcars")
       }
     )
@@ -487,12 +488,12 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(
-          `data-teal_data_module-data-dataset` = "iris",
+          `data-teal_data_module-dataset` = "iris",
           `teal_modules-active_tab` = "module_1"
         )
         out <- modules_output$module_1()
         testthat::expect_true(!is.null(out))
-        session$setInputs(`data-teal_data_module-data-dataset` = "mtcars")
+        session$setInputs(`data-teal_data_module-dataset` = "mtcars")
         testthat::expect_identical(out, modules_output$module_1())
       }
     )
@@ -534,7 +535,7 @@ testthat::describe("srv_teal teal_modules", {
           trimws(
             rvest::html_text2(
               rvest::read_html(
-                output[["teal_modules-module_1-validate_datanames-shiny_warnings"]]$html
+                output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
               )
             )
           ),
@@ -1577,7 +1578,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        session$flushReact()
         data_from_transform <- modules_output$module_1()()[["data_from_transform"]]
         testthat::expect_identical(data_from_transform$mtcars, mtcars)
         expected_iris <- iris[iris$Species == "versicolor", ]
@@ -1612,7 +1612,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("continues when transformer throws validation error and returns unchanged data", {
+  testthat::it("pauses when transformer throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1635,12 +1635,12 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("continues when transformer throws validation error and returns unchanged data", {
+  testthat::it("pauses when transformer throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1663,73 +1663,66 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
 
-  testthat::it("continues when transformer throws qenv error and returns unchanged data", {
-    testthat::skip("todo")
-  })
-  testthat::it("upstream data change is updated on transformer fallback", {
+  testthat::it("pauses when transformer throws qenv error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
         id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        data = teal.data::teal_data(iris = iris),
         modules = modules(
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "fail")]
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  reactive(within(data(), stop("my error")))
+                }
+              )
+            )
           )
         )
       ),
       expr = {
-        session$setInputs("teal_modules-active_tab" = "module_1")
-        new_row_size <- 14
-        session$setInputs("teal_modules-module_1-data_transform-transform_module-data-n" = new_row_size)
-        session$flushReact()
-
-        testthat::expect_equal(nrow(modules_output$module_1()()[["iris"]]), new_row_size)
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(modules_output$module_1())
       }
     )
   })
-
-  testthat::it("upstream data change with double reactivity resolves with correct this/that", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(
-          module(
-            label = "module_1",
-            server = function(id, data) data,
-            transformers = transform_list[c("iris", "fail")]
-          )
-        )
-      ),
-      expr = {
-        session$setInputs("teal_modules-active_tab" = "module_1")
-
-        session$setInputs(
-          "teal_modules-module_1-data_transform-transform_module-data-n" = 12,
-          "teal_modules-module_1-data_transform-transform_module_1-data-add_error" = FALSE
-        )
-        session$flushReact()
-
-        testthat::expect_equal(nrow(modules_output$module_1()()[["iris"]]), 6)
-      }
-    )
-  })
-
-  testthat::it("continues when transformer throws qenv error and returns unchanged data")
 
   testthat::it("isn't called when `data` is not teal_data", {
-    testthat::skip("todo")
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module(
+            label = "module_1",
+            server = function(id, data) data,
+            transformers = list(
+              teal_transform_module(
+                ui = function(id) NULL,
+                server = function(id, data) {
+                  reactive(data.frame())
+                }
+              )
+            )
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_null(modules_output$module_1())
+      }
+    )
   })
-  # when reactive returned teal_data_module is not triggered (for example when button isn't clicked)
 })
 
 testthat::describe("srv_teal summary table", {
@@ -1746,7 +1739,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1777,7 +1769,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1810,7 +1801,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1844,7 +1834,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1879,7 +1868,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1913,9 +1901,7 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        slices_global$slices_set(
-          teal_slices(teal_slice("a", "name", selected = "a"))
-        )
+        slices_global$slices_set(teal_slices(teal_slice("a", "name", selected = "a")))
         session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
@@ -1956,7 +1942,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -1986,7 +1971,6 @@ testthat::describe("srv_teal summary table", {
         ),
         expr = {
           session$setInputs("teal_modules-active_tab" = "module_1")
-          session$flushReact()
           testthat::expect_identical(
             module_summary_table(output, "module_1"),
             data.frame(
@@ -2011,7 +1995,6 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
-        session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
