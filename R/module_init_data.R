@@ -183,7 +183,7 @@ srv_init_data <- function(id, data, modules, filter = teal_slices()) {
   # because they have environments that have parents on the search list.
   vapply(
     datanames,
-    function(dataname, datasets) {
+    function(dataname) {
       hash <- rlang::hash(defunction(data[[dataname]]))
       sprintf(
         "stopifnot(%s == %s) # @linksto %s",
