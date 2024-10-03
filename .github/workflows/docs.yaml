@@ -42,3 +42,4 @@ jobs:
     with:
       default-landing-page: latest-tag
       additional-unit-test-report-directories: unit-test-report-non-cran
+      deps-installation-method: setup-r-dependencies
