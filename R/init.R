@@ -153,9 +153,6 @@ init <- function(data,
   # log
   teal.logger::log_system_info()
 
-  # invoke lockfile creation
-  teal_lockfile()
-
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
@@ -210,16 +207,16 @@ init <- function(data,
 
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
-    if (length(.teal_data_ls(data)) == 0) {
+    if (length(ls(teal.code::get_env(data))) == 0) {
       stop("The environment of `data` is empty.")
     }
 
-    is_modules_ok <- check_modules_datanames(modules, .teal_data_ls(data))
+    is_modules_ok <- check_modules_datanames(modules, ls(teal.code::get_env(data)))
     if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
       lapply(is_modules_ok$string, warning, call. = FALSE)
     }
 
-    is_filter_ok <- check_filter_datanames(filter, .teal_data_ls(data))
+    is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data)))
     if (!isTRUE(is_filter_ok)) {
       warning(is_filter_ok)
       # we allow app to continue if applied filters are outside
@@ -241,7 +238,6 @@ init <- function(data,
     ui = function(request) {
       ui_teal(
         id = ns("teal"),
-        data = if (inherits(data, "teal_data_module")) data,
         modules = modules,
         title = title,
         header = header,

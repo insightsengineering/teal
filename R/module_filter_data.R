@@ -52,8 +52,16 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
 
 #' @rdname module_filter_data
 .make_filtered_teal_data <- function(modules, data, datasets = NULL, datanames) {
-  data <- eval_code(data, sprintf("%1$s._raw_ <- %1$s", datanames))
-  filtered_code <- teal.slice::get_filter_expr(datasets = datasets, datanames = datanames)
+  data <- eval_code(
+    data,
+    paste0(
+      ".raw_data <- list2env(list(",
+      toString(sprintf("%1$s = %1$s", datanames)),
+      "))\n",
+      "lockEnvironment(.raw_data) #@linksto .raw_data" # this is environment and it is shared by qenvs. CAN'T MODIFY!
+    )
+  )
+  filtered_code <- .get_filter_expr(datasets = datasets, datanames = datanames)
   filtered_teal_data <- .append_evaluated_code(data, filtered_code)
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
   filtered_teal_data <- .append_modified_data(filtered_teal_data, filtered_datasets)
@@ -67,7 +75,7 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
     req(inherits(datasets(), "FilteredData"))
     new_signature <- c(
       teal.data::get_code(data_rv()),
-      teal.slice::get_filter_expr(datasets = datasets(), datanames = active_datanames())
+      .get_filter_expr(datasets = datasets(), datanames = active_datanames())
     )
     if (!identical(previous_signature(), new_signature)) {
       previous_signature(new_signature)
@@ -91,4 +99,13 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
   })
 
   trigger_data
+}
+
+#' @rdname module_filter_data
+.get_filter_expr <- function(datasets, datanames) {
+  if (length(datanames)) {
+    teal.slice::get_filter_expr(datasets = datasets, datanames = datanames)
+  } else {
+    NULL
+  }
 }

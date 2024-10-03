@@ -5,7 +5,6 @@
 \alias{ui_teal_module}
 \alias{ui_teal_module.default}
 \alias{ui_teal_module.teal_modules}
-\alias{ui_teal_module.shiny.tag}
 \alias{ui_teal_module.teal_module}
 \alias{srv_teal_module}
 \alias{srv_teal_module.default}
@@ -19,8 +18,6 @@ ui_teal_module(id, modules, depth = 0L)
 
 \method{ui_teal_module}{teal_modules}(id, modules, depth = 0L)
 
-\method{ui_teal_module}{shiny.tag}(id, modules, depth = 0L)
-
 \method{ui_teal_module}{teal_module}(id, modules, depth = 0L)
 
 srv_teal_module(
@@ -30,6 +27,7 @@ srv_teal_module(
   datasets = NULL,
   slices_global,
   reporter = teal.reporter::Reporter$new(),
+  data_load_status = reactive("ok"),
   is_active = reactive(TRUE)
 )
 
@@ -40,6 +38,7 @@ srv_teal_module(
   datasets = NULL,
   slices_global,
   reporter = teal.reporter::Reporter$new(),
+  data_load_status = reactive("ok"),
   is_active = reactive(TRUE)
 )
 
@@ -50,6 +49,7 @@ srv_teal_module(
   datasets = NULL,
   slices_global,
   reporter = teal.reporter::Reporter$new(),
+  data_load_status = reactive("ok"),
   is_active = reactive(TRUE)
 )
 
@@ -60,6 +60,7 @@ srv_teal_module(
   datasets = NULL,
   slices_global,
   reporter = teal.reporter::Reporter$new(),
+  data_load_status = reactive("ok"),
   is_active = reactive(TRUE)
 )
 }
@@ -85,6 +86,15 @@ which implies in filter-panel to be "global". When \code{NULL} then filter-panel
 
 \item{slices_global}{(\code{reactiveVal} returning \code{modules_teal_slices})
 see \code{\link{module_filter_manager}}}
+
+\item{data_load_status}{(\code{reactive} returning \code{character})
+Determines action dependent on a data loading status:
+\itemize{
+\item \code{"ok"} when \code{teal_data} is returned from the data loading.
+\item \code{"teal_data_module failed"} when \code{\link[=teal_data_module]{teal_data_module()}} didn't return  \code{teal_data}. Disables tabs buttons.
+\item \code{"external failed"} when a \code{reactive} passed to \code{srv_teal(data)} didn't return \code{teal_data}. Hides the whole tab
+panel.
+}}
 }
 \value{
 output of currently active module.
