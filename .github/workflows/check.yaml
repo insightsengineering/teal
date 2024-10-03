@@ -42,6 +42,14 @@ jobs:
         checking top-level files .* NOTE
       unit-test-report-brand: >-
         https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
+      deps-installation-method: setup-r-dependencies
+      lookup-refs: |
+        insightsengineering/teal.data
+        insightsengineering/teal.slice
+        insightsengineering/teal.code
+        insightsengineering/teal.logger
+        insightsengineering/teal.reporter
+        insightsengineering/teal.widgets
   r-cmd-non-cran:
     name: R CMD Check (non-CRAN) 🧬
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
@@ -63,11 +71,30 @@ jobs:
         checking Rd .usage sections .* NOTE
         checking for unstated dependencies in vignettes .* NOTE
         checking top-level files .* NOTE
+      deps-installation-method: setup-r-dependencies
+      lookup-refs: |
+        insightsengineering/teal.data
+        insightsengineering/teal.slice
+        insightsengineering/teal.code
+        insightsengineering/teal.logger
+        insightsengineering/teal.reporter
+        insightsengineering/teal.widgets
   coverage:
     name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    with:
+      additional-env-vars: |
+        NOT_CRAN=true
+      deps-installation-method: setup-r-dependencies
+      lookup-refs: |
+        insightsengineering/teal.data
+        insightsengineering/teal.slice
+        insightsengineering/teal.code
+        insightsengineering/teal.logger
+        insightsengineering/teal.reporter
+        insightsengineering/teal.widgets
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
@@ -79,6 +106,14 @@ jobs:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       auto-update: true
+      deps-installation-method: setup-r-dependencies
+      lookup-refs: |
+        insightsengineering/teal.data
+        insightsengineering/teal.slice
+        insightsengineering/teal.code
+        insightsengineering/teal.logger
+        insightsengineering/teal.reporter
+        insightsengineering/teal.widgets
   gitleaks:
     name: gitleaks 💧
     uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main

@@ -41,7 +41,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   )
   # Module is created with a placeholder label and the label is changed later.
   # This is to prevent another module being labeled "Report previewer".
-  class(module) <- c("teal_module_previewer", class(module))
+  class(module) <- c(class(module), "teal_module_previewer")
   module$label <- label
   attr(module, "teal_bookmarkable") <- TRUE
   module

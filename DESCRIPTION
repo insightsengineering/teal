@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9059
-Date: 2024-08-28
+Version: 0.15.2.9067
+Date: 2024-10-03
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -41,26 +41,25 @@ Depends:
     teal.slice (>= 0.5.1.9009)
 Imports:
     checkmate (>= 2.1.0),
-    future (>= 1.33.2),
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
     methods,
-    promises (>= 1.3.0),
-    renv (>= 1.0.7),
     rlang (>= 1.0.0),
     shinyjs,
     stats,
     teal.code (>= 0.5.0),
-    teal.logger (>= 0.1.3.9013),
+    teal.logger (>= 0.2.0),
     teal.reporter (>= 0.3.1.9004),
     teal.widgets (>= 0.4.0),
     utils
 Suggests:
     bslib,
     knitr (>= 1.42),
+    mirai (>= 1.1.1),
     MultiAssayExperiment,
     R6,
+    renv (>= 1.0.7),
     rmarkdown (>= 2.23),
     rvest (>= 1.0.0),
     shinytest2,
@@ -73,15 +72,15 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
-    insightsengineering/teal.slice, mllg/checkmate,
-    HenrikBengtsson/future, jeroen/jsonlite, r-lib/lifecycle,
-    daroczig/logger, rstudio/promises, rstudio/renv, r-lib/rlang,
-    daattali/shinyjs, insightsengineering/teal.code,
-    insightsengineering/teal.logger, insightsengineering/teal.reporter,
-    insightsengineering/teal.widgets, rstudio/bslib, yihui/knitr,
-    bioc::MultiAssayExperiment, r-lib/R6, rstudio/rmarkdown,
-    tidyverse/rvest, rstudio/shinytest2, rstudio/shinyvalidate,
-    r-lib/testthat, r-lib/withr, yaml=vubiostat/r-yaml
+    insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
+    r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai,
+    shikokuchuo/nanonext, rstudio/renv, r-lib/rlang, daattali/shinyjs,
+    insightsengineering/teal.code, insightsengineering/teal.logger,
+    insightsengineering/teal.reporter, insightsengineering/teal.widgets,
+    rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
+    rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
+    rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
+    yaml=vubiostat/r-yaml
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
@@ -106,6 +105,7 @@ Collate:
     'module_snapshot_manager.R'
     'module_teal.R'
     'module_teal_data.R'
+    'module_teal_lockfile.R'
     'module_teal_with_splash.R'
     'module_transform_data.R'
     'reporter_previewer_module.R'
@@ -116,7 +116,6 @@ Collate:
     'teal_data_module-eval_code.R'
     'teal_data_module-within.R'
     'teal_data_utils.R'
-    'teal_lockfile.R'
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'

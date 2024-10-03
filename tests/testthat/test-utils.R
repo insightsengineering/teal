@@ -45,25 +45,6 @@ test_that("teal_data_to_filtered_data return FilteredData class", {
   testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
 })
 
-test_that("teal_data_datanames returns names of the @env's objects when datanames not set", {
-  teal_data <- teal.data::teal_data()
-  teal_data <- within(teal_data, {
-    iris <- head(iris)
-    mtcars <- head(mtcars)
-  })
-  testthat::expect_setequal(.teal_data_datanames(teal_data), c("mtcars", "iris"))
-})
-
-test_that("teal_data_datanames returns datanames which are set by teal.data::datanames", {
-  teal_data <- teal.data::teal_data()
-  teal_data <- within(teal_data, {
-    iris <- head(iris)
-    mtcars <- head(mtcars)
-  })
-  datanames(teal_data) <- "iris"
-  testthat::expect_equal(.teal_data_datanames(teal_data), "iris")
-})
-
 test_that("validate_app_title_tag works on validating the title tag", {
   valid_title <- tags$head(
     tags$title("title"),
@@ -193,33 +174,5 @@ testthat::test_that("defunction recursively goes down a list", {
   testthat::expect_identical(
     defunction(x),
     y
-  )
-})
-
-testthat::test_that("create_renv_lockfile creates a lock file during the execution", {
-  old_plan <- future::plan(future::sequential)
-  withr::defer(future::plan(old_plan))
-
-  renv_file_name <- "teal_app.lock"
-  withr::defer(file.remove(renv_file_name))
-  promise <- create_renv_lockfile(TRUE, renv_file_name)
-
-  testthat::expect_true(file.exists(renv_file_name))
-})
-
-testthat::test_that("check_modules_datanames message is the same in html tags and in string", {
-  testthat::skip_if_not_installed("rvest")
-  modules <- module(datanames = c("iris", "mtcars"), ui = function(id) NULL, server = function(id, data) NULL)
-
-  message <- check_modules_datanames(modules, "missing")
-
-  # Compares 2 strings (removes quotations and empty space surrounding tags)
-  testthat::expect_identical(
-    gsub("\"", "", message$string),
-    trimws(
-      rvest::html_text2(
-        rvest::read_html(as.character(message$html(with_module_name = TRUE)))
-      )
-    )
   )
 })

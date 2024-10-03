@@ -1,3 +1,6 @@
+setOldClass("teal_module")
+setOldClass("teal_modules")
+
 #' Create `teal_module` and `teal_modules` objects
 #'
 #' @description
@@ -39,24 +42,39 @@
 #'  - `...` (optional) When provided, `ui_args` elements will be passed to the module named argument
 #'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
-#' @param datanames (`character`) A vector with `datanames` that are relevant for the item. The
-#'   filter panel will automatically update the shown filters to include only
-#'   filters in the listed datasets. `NULL` will hide the filter panel,
-#'   and the keyword `"all"` will show filters of all datasets. `datanames` also determines
-#'   a subset of datasets which are appended to the `data` argument in server function.
+#' @param datanames (`character`) Names of the datasets that are relevant for the item.
+#' The keyword `"all"` provides all datasets available in `data` passed to `teal` application.
+#' `NULL` will hide the filter panel.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
 #' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
 #' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself.
+#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformers`
+#' will be added to the `datanames`.
 #'
 #' When the transformation does not have sufficient input data, the resulting data will fallback
 #' to the last successful transform or, in case there are none, to the filtered data.
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
+#'
+#' @section `datanames`:
+#' The module's `datanames` argument determines a subset of datasets from the `data` object, as specified in the
+#' server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
+#' to this subset.
+#' When `datanames` is set to `"all"`, all available datasets in the `data` object are considered relevant for the
+#' module. However, setting `datanames` argument to `"all"` might include datasets that are irrelevant for the module,
+#' for example:
+#' - Proxy variables used for modifying columns.
+#' - Modified copies of datasets used to create a final dataset.
+#' - Connection objects.
+#' To prevent these irrelevant datasets from appearing in the module, use the [set_datanames()] function on the
+#' [module] or [modules()] to change the `datanames` from `"all"` to specific dataset names. Attempting to change
+#' `datanames` values that was not set to `"all"` using [set_datanames()] will be ignored with a warning.
+#'
+#' Additionally, datasets with names starting with `.` are ignored when `datanames` is set to `"all"`.
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.
@@ -127,7 +145,7 @@
 #' @export
 #'
 module <- function(label = "module",
-                   server = function(id, ...) moduleServer(id, function(input, output, session) NULL),
+                   server = function(id, data, ...) moduleServer(id, function(input, output, session) NULL),
                    ui = function(id, ...) tags$p(paste0("This module has no UI (id: ", id, " )")),
                    filters,
                    datanames = "all",
@@ -241,14 +259,23 @@ module <- function(label = "module",
   }
 
   ## `transformers`
-  checkmate::assert_list(transformers, types = "teal_data_module")
+  if (inherits(transformers, "teal_transform_module")) {
+    transformers <- list(transformers)
+  }
+  checkmate::assert_list(transformers, types = "teal_transform_module")
+  transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
+  combined_datanames <- if (identical(datanames, "all") || any(sapply(transformer_datanames, identical, "all"))) {
+    "all"
+  } else {
+    union(datanames, transformer_datanames)
+  }
 
   structure(
     list(
       label = label,
       server = server,
       ui = ui,
-      datanames = unique(datanames),
+      datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
       transformers = transformers
@@ -313,6 +340,38 @@ format.teal_modules <- function(x, indent = 0, ...) {
   )
 }
 
+#' @param modules (`teal_module` or `teal_modules`)
+#' @rdname teal_modules
+#' @examples
+#' # change the module's datanames
+#' set_datanames(module(datanames = "all"), "a")
+#'
+#' # change modules' datanames
+#' set_datanames(
+#'   modules(
+#'     module(datanames = "all"),
+#'     module(datanames = "a")
+#'   ),
+#'   "b"
+#' )
+#' @export
+set_datanames <- function(modules, datanames) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+  if (inherits(modules, "teal_modules")) {
+    modules$children <- lapply(modules$children, set_datanames, datanames)
+  } else {
+    if (identical(modules$datanames, "all")) {
+      modules$datanames <- datanames
+    } else {
+      warning(
+        "Not possible to modify datanames of the module ", modules$label,
+        ". set_datanames() can only change datanames if it was set to \"all\".",
+        call. = FALSE
+      )
+    }
+  }
+  modules
+}
 
 #' @rdname teal_modules
 #' @export
