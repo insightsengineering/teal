@@ -94,7 +94,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
 
-  ui_teal <- tagList(
+  ui_teal <- tags$div(
     div(
       id = ns("validate_datanames"),
       ui_validate_reactive_teal_data(ns("validate_datanames"))

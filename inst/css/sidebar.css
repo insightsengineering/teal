@@ -120,6 +120,10 @@ a.disabled {
   padding-right: 0;
 }
 
+.bslib-sidebar-layout > .main {
+  padding: 0;
+}
+
 .teal-sidebar-layout > div > .container-fluid {
   padding-right: 0;
 }
