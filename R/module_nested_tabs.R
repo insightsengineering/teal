@@ -48,9 +48,9 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   first_level_modules <- sapply(modules$children, \(x) x$label)
   do.call(
     switch(as.character(depth),
-      "0" = bslib::navset_card_pill,
-      "1" = bslib::navset_card_tab,
-      bslib:: navset_card_underline
+      "0" = bslib::navset_pill,
+      "1" = bslib::navset_tab,
+      bslib::navset_underline
     ),
     c(
       # by giving an id, we can reactively respond to tab changes
@@ -106,18 +106,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     tagList(
       if (depth >= 2L) tags$div(),
       if (!is.null(modules$datanames)) {
-        div(
+        tagList(
           bslib::layout_sidebar(
+            class = "teal-sidebar-layout",
             sidebar = bslib::sidebar(
               id = ns("teal_module_sidebar"),
               class = "teal-sidebar",
-              width = 350,
+              width = 250,
               tags$div(
                 bslib::accordion(
                   id = ns("data_summary_accordion"),
                   bslib::accordion_panel(
                     "Active Filter Summary",
-                    icon = icon("fas fa-list"),
                     ui_data_summary(ns("data_summary"))
                   )
                 ),
@@ -127,7 +127,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
                     id = ns("data_transform_accordion"),
                     bslib::accordion_panel(
                       "Transform Data",
-                      icon = icon("fas fa-pen-to-square"),
                       ui_transform_data(ns("data_transform"), transforms = modules$transformers)
                     )
                   )
@@ -159,7 +158,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
               sprintf(
                 "
                   $(document).ready(function() {
-                    $('#%s').insertAfter('#%s button.collapse-toggle');
+                    $('#%s').insertAfter('#%s > .bslib-sidebar-layout > button.collapse-toggle');
                   });
                 ",
                 ns("sidebar_toggle_buttons"),

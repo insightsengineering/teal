@@ -56,6 +56,7 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button {
+  height: 2.5rem;
   --bs-accordion-btn-bg: #ededed;
   --bs-accordion-active-bg: #ededed;
   --bs-accordion-btn-padding-x: 1rem;
@@ -84,8 +85,8 @@ a.disabled {
 
 .bslib-sidebar-layout > .sidebar-toggle-buttons {
   grid-column: 1 / 2;
-  z-index: 1000;
-  display: inline-flex;
+  z-index: -1;
+  opacity: 0;
   position: absolute;
   right: calc(var(--_icon-size) + 3rem);
   top: calc(var(--_icon-size, 1rem) / 2);
@@ -93,7 +94,6 @@ a.disabled {
   width: 80%;
   align-items: center;
   justify-content: space-between;
-  transition: width 0.3s ease, top 0.3s ease, right 0.3s ease;
 }
 
 .bslib-sidebar-layout > .sidebar-toggle-buttons > button {
@@ -101,11 +101,33 @@ a.disabled {
 }
 
 .bslib-sidebar-layout.sidebar-collapsed > .sidebar-toggle-buttons {
+  z-index: 1000;
   width: 3rem;
   top: 3rem;
+  opacity: 1;
   right: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  transition: width 0.3s ease, top 0.3s ease, right 0.3s ease;
+  transition: 0.3s ease, top 0.3s ease, right 0.3s ease;
+}
+
+.teal_module > .bslib-sidebar-layout > .main {
+  --_padding: 0;
+}
+
+.bslib-sidebar-layout.sidebar-collapsed > .main {
+  padding-right: 0;
+}
+
+.teal-sidebar-layout > div > .container-fluid {
+  padding-right: 0;
+}
+
+.teal-sidebar-layout > div > .container-fluid > .bslib-sidebar-layout > .main {
+  padding: 0;
+}
+
+a.remove {
+  padding: 0;
 }

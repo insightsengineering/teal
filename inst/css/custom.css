@@ -36,3 +36,11 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   --bs-btn-padding-x: 0.7em;
   --bs-btn-padding-y: 0.4em;
 }
+
+:root {
+  --bs-body-font-size: 0.875rem;
+}
+
+.accordion-button {
+  font-size: 0.875rem;
+}
