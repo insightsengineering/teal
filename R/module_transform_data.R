@@ -44,7 +44,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
         ),
         div(
           id = wrapper_id,
-          ui_teal_data(id = ns(name), data_module = transforms[[name]])
+          ui_teal_data(id = ns(name), data_module = transforms[[name]]$ui)
         )
       )
     }
@@ -52,29 +52,26 @@ ui_transform_data <- function(id, transforms, class = "well") {
 }
 
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transforms, modules) {
+srv_transform_data <- function(id, data, transforms, modules, is_transformer_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
   checkmate::assert_class(modules, "teal_module")
-
   if (length(transforms) == 0L) {
     return(data)
   }
-
   labels <- lapply(transforms, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
   names(transforms) <- ids
-
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_modules initializing.")
     Reduce(
       function(previous_result, name) {
         srv_teal_data(
           id = name,
-          data = previous_result,
-          data_module = transforms[[name]],
-          modules = modules
+          data_module = function(id) transforms[[name]]$server(id, previous_result),
+          modules = modules,
+          is_transformer_failed = is_transformer_failed
         )
       },
       x = names(transforms),
