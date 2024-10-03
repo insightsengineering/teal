@@ -99,18 +99,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       id = ns("validate_datanames"),
       ui_validate_reactive_teal_data(ns("validate_datanames"))
     ),
-    shinyjs::hidden(
-      tags$div(
-        id = ns("transformer_failure_info"),
-        class = "teal_validated",
-        div(
-          class = "teal-output-warning",
-          "One of transformers failed. Please fix and continue."
-        )
-      )
-    ),
     tags$div(
       id = ns("teal_module_ui"),
+      shinyjs::hidden(
+        tags$div(
+          id = ns("transformer_failure_info"),
+          class = "teal_validated",
+          div(
+            class = "teal-output-warning",
+            "One of transformers failed. Please fix and continue."
+          )
+        )
+      ),
       do.call(modules$ui, args)
     )
   )
