@@ -128,7 +128,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             sidebar = bslib::sidebar(
               id = ns("teal_module_sidebar"),
               class = "teal-sidebar",
-              width = 250,
+              width = getOption("teal.sidebar.width", 250),
               tags$div(
                 bslib::accordion(
                   id = ns("data_summary_accordion"),

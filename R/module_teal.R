@@ -248,7 +248,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
         where = "beforeBegin",
-        ui = tags$div(ui_validate_reactive_teal_data(session$ns("validate")), tags$br())
+        ui = tags$div(ui_validate_reactive_teal_data(session$ns("validate")))
       )
     }
 
