@@ -92,10 +92,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   args <- c(list(id = ns("module")), modules$ui_args)
 
   ui_teal <- tagList(
-    div(
-      id = ns("validate_datanames"),
-      ui_validate_reactive_teal_data(ns("validate_datanames"))
-    ),
     shinyjs::hidden(
       tags$div(
         id = ns("transformer_failure_info"),
@@ -108,6 +104,10 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     ),
     tags$div(
       id = ns("teal_module_ui"),
+      tags$div(
+        class = "teal_validated",
+        ui_check_module_datanames(ns("validate_datanames"))
+      ),
       do.call(modules$ui, args)
     )
   )
@@ -132,13 +132,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
           )
         )
       } else {
-        div(
-          div(
-            class = "teal_validated",
-            uiOutput(ns("data_input_error"))
-          ),
-          ui_teal
-        )
+        ui_teal
       }
     )
   )
@@ -275,11 +269,9 @@ srv_teal_module.teal_module <- function(id,
     observeEvent(any_transformer_failed(), {
       if (isTRUE(any_transformer_failed())) {
         shinyjs::hide("teal_module_ui")
-        shinyjs::hide("validate_datanames")
         shinyjs::show("transformer_failure_info")
       } else {
         shinyjs::show("teal_module_ui")
-        shinyjs::show("validate_datanames")
         shinyjs::hide("transformer_failure_info")
       }
     })
@@ -291,7 +283,7 @@ srv_teal_module.teal_module <- function(id,
       .subset_teal_data(all_teal_data, module_datanames)
     })
 
-    srv_validate_reactive_teal_data(
+    srv_check_module_datanames(
       "validate_datanames",
       data = module_teal_data,
       modules = modules

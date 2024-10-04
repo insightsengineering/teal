@@ -1,3 +1,5 @@
+setOldClass("teal_transform_module")
+
 #' Modify object in teal_data environment
 #' @export
 setGeneric(
