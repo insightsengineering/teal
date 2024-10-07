@@ -236,94 +236,97 @@ srv_teal_module.teal_module <- function(id,
                                         is_active = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
-    active_datanames <- reactive({
-      .resolve_module_datanames(data = data_rv(), modules = modules)
-    })
-    if (is.null(datasets)) {
-      datasets <- eventReactive(data_rv(), {
-        req(inherits(data_rv(), "teal_data"))
-        logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
-        teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
+    module_out <- reactiveVal()
+    activate <- reactive(if (is_active()) TRUE) # else NULL
+    observeEvent(activate(), once = TRUE, { # todo: use call_once_when(is_active())
+      active_datanames <- reactive({
+        .resolve_module_datanames(data = data_rv(), modules = modules)
       })
-    }
+      if (is.null(datasets)) {
+        datasets <- eventReactive(data_rv(), {
+          req(inherits(data_rv(), "teal_data"))
+          logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
+          teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
+        })
+      }
 
-    # manage module filters on the module level
-    # important:
-    #   filter_manager_module_srv needs to be called before filter_panel_srv
-    #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
-    #   and if it is not set, then it won't be available in the srv_filter_panel
-    srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
-    filtered_teal_data <- srv_filter_data(
-      "filter_panel",
-      datasets = datasets,
-      active_datanames = active_datanames,
-      data_rv = data_rv,
-      is_active = is_active
-    )
+      # manage module filters on the module level
+      # important:
+      #   filter_manager_module_srv needs to be called before filter_panel_srv
+      #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
+      #   and if it is not set, then it won't be available in the srv_filter_panel
+      srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
+      filtered_teal_data <- srv_filter_data(
+        "filter_panel",
+        datasets = datasets,
+        active_datanames = active_datanames,
+        data_rv = data_rv,
+        is_active = is_active
+      )
 
-    is_transformer_failed <- reactiveValues()
-    transformed_teal_data <- srv_transform_data(
-      "data_transform",
-      data = filtered_teal_data,
-      transforms = modules$transformers,
-      modules = modules,
-      is_transformer_failed = is_transformer_failed
-    )
-    any_transformer_failed <- reactive({
-      any(unlist(reactiveValuesToList(is_transformer_failed)))
-    })
-    observeEvent(any_transformer_failed(), {
-      if (isTRUE(any_transformer_failed())) {
-        shinyjs::hide("teal_module_ui")
-        shinyjs::hide("validate_datanames")
-        shinyjs::show("transformer_failure_info")
+      is_transformer_failed <- reactiveValues()
+      transformed_teal_data <- srv_transform_data(
+        "data_transform",
+        data = filtered_teal_data,
+        transforms = modules$transformers,
+        modules = modules,
+        is_transformer_failed = is_transformer_failed
+      )
+      any_transformer_failed <- reactive({
+        any(unlist(reactiveValuesToList(is_transformer_failed)))
+      })
+      observeEvent(any_transformer_failed(), {
+        if (isTRUE(any_transformer_failed())) {
+          shinyjs::hide("teal_module_ui")
+          shinyjs::hide("validate_datanames")
+          shinyjs::show("transformer_failure_info")
+        } else {
+          shinyjs::show("teal_module_ui")
+          shinyjs::show("validate_datanames")
+          shinyjs::hide("transformer_failure_info")
+        }
+      })
+
+      module_teal_data <- reactive({
+        req(inherits(transformed_teal_data(), "teal_data"))
+        all_teal_data <- transformed_teal_data()
+        module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
+        .subset_teal_data(all_teal_data, module_datanames)
+      })
+
+      srv_validate_reactive_teal_data(
+        "validate_datanames",
+        data = module_teal_data,
+        modules = modules
+      )
+
+      summary_table <- srv_data_summary("data_summary", module_teal_data)
+
+      # Call modules.
+      if (!inherits(modules, "teal_module_previewer")) {
+        obs_module <- observeEvent( # todo: use call_once_when(!is.null(module_teal_data()))
+          # wait for module_teal_data() to be not NULL but only once:
+          ignoreNULL = TRUE,
+          once = TRUE,
+          eventExpr = module_teal_data(),
+          handlerExpr = {
+            module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+          }
+        )
       } else {
-        shinyjs::show("teal_module_ui")
-        shinyjs::show("validate_datanames")
-        shinyjs::hide("transformer_failure_info")
+        # Report previewer must be initiated on app start for report cards to be included in bookmarks.
+        # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
+        module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+      }
+
+      # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
+      #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
+      #       Should we insertUI of the ReportPreviewer then?
+      #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
+      if ("report" %in% names(module_out)) {
+        # (reactively) add card to the reporter
       }
     })
-
-    module_teal_data <- reactive({
-      req(inherits(transformed_teal_data(), "teal_data"))
-      all_teal_data <- transformed_teal_data()
-      module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
-      .subset_teal_data(all_teal_data, module_datanames)
-    })
-
-    srv_validate_reactive_teal_data(
-      "validate_datanames",
-      data = module_teal_data,
-      modules = modules
-    )
-
-    summary_table <- srv_data_summary("data_summary", module_teal_data)
-
-    # Call modules.
-    module_out <- reactiveVal(NULL)
-    if (!inherits(modules, "teal_module_previewer")) {
-      obs_module <- observeEvent(
-        # wait for module_teal_data() to be not NULL but only once:
-        ignoreNULL = TRUE,
-        once = TRUE,
-        eventExpr = module_teal_data(),
-        handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-        }
-      )
-    } else {
-      # Report previewer must be initiated on app start for report cards to be included in bookmarks.
-      # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-      module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-    }
-
-    # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
-    #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
-    #       Should we insertUI of the ReportPreviewer then?
-    #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
-    if ("report" %in% names(module_out)) {
-      # (reactively) add card to the reporter
-    }
 
     module_out
   })
@@ -367,4 +370,27 @@ srv_teal_module.teal_module <- function(id,
       ls(teal.code::get_env(data))
     )
   }
+}
+
+#' Calls expression when condition is met
+#'
+#' Function postpones `handlerExpr` to the moment when `eventExpr` (condition) returns `TRUE`,
+#' otherwise nothing happens.
+#' @param condExpr logical expression determining moment when `handlerExpr` should be evaluated
+#' @inheritParams observeEvent
+#'
+#'
+call_once_when <- function(condExpr, handlerExpr) {
+  event_quo <- new_quosure(substitute(condExpr))
+  handler_quo <- new_quosure(substitute(handlerExpr))
+
+  activator <- reactive({
+    if (isTRUE(condExpr)) {
+      TRUE
+    }
+  })
+
+  observeEvent(activator(), once = TRUE, {
+    handlerExpr
+  })
 }
