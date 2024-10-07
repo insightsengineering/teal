@@ -238,6 +238,7 @@ srv_teal_module.teal_module <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
     activate <- reactive(if (is_active()) TRUE) # else NULL
+
     observeEvent(activate(), once = TRUE, { # todo: use call_once_when(is_active())
       active_datanames <- reactive({
         .resolve_module_datanames(data = data_rv(), modules = modules)
@@ -304,8 +305,7 @@ srv_teal_module.teal_module <- function(id,
 
       # Call modules.
       if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- observeEvent( # todo: use call_once_when(!is.null(module_teal_data()))
-          # wait for module_teal_data() to be not NULL but only once:
+        obs_module <- observeEvent( # todo: use call_once_when(!is.null(module_teal_data()), ...)
           ignoreNULL = TRUE,
           once = TRUE,
           eventExpr = module_teal_data(),
@@ -391,6 +391,6 @@ call_once_when <- function(condExpr, handlerExpr) {
   })
 
   observeEvent(activator(), once = TRUE, {
-    handlerExpr
+    handlerExpr # evaluate in a parent.frame()
   })
 }
