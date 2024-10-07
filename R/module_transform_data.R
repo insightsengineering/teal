@@ -53,7 +53,11 @@ ui_transform_data <- function(id, transforms, class = "well") {
         ),
         tags$div(
           id = transform_wrapper_id,
-          data_mod$ui(id = ns(name)),
+          if (is.null(data_mod$ui)) {
+            return(NULL)
+          } else {
+            data_mod$ui(id = ns(name))
+          },
           div(
             id = ns("validate_messages"),
             class = "teal_validated",
