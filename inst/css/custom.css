@@ -49,3 +49,7 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 .teal-body .tabbable > .nav-pills {
   width: calc(100% - 5rem);
 }
+
+.teal.bookmark-popup .modal-body {
+  padding: 0 1.5rem;
+}

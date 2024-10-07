@@ -135,3 +135,8 @@ a.disabled {
 a.remove {
   padding: 0;
 }
+
+.teal-sidebar-layout .accordion-button:not(.collapsed)::after,
+.accordion-button::after {
+  scale: 0.8;
+}
