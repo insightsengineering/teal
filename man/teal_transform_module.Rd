@@ -5,7 +5,7 @@
 \title{Data module for \code{teal} transformers.}
 \usage{
 teal_transform_module(
-  ui = function(id) NULL,
+  ui = NULL,
   server = function(id, data) data,
   label = "transform module",
   datanames = "all"
@@ -15,10 +15,12 @@ teal_transform_module(
 \item{ui}{(\verb{function(id)})
 \code{shiny} module UI function; must only take \code{id} argument}
 
-\item{server}{(\verb{function(id, data)})
+\item{server}{(\verb{function(id, data)} or \code{language})
 \code{shiny} module server function; that takes \code{id} and \code{data} argument,
 where the \code{id} is the module id and \code{data} is the reactive \code{teal_data} input.
-The server function must return reactive expression containing \code{teal_data} object.}
+The server function must return reactive expression containing \code{teal_data} object.
+Alternatively, \code{language} object is a simplified version of the \code{server} where \verb{input$<input_name>}
+can be used to link interactive value with the \code{teal_data} code.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 
@@ -43,7 +45,20 @@ See vignette \code{vignette("data-transform-as-shiny-module", package = "teal")}
 \examples{
 my_transformers <- list(
   teal_transform_module(
-    label = "Custom transform for iris",
+    label = "Static transform for iris",
+    datanames = "iris",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          within(data(), {
+            iris <- head(iris, 5)
+          })
+        })
+      })
+    }
+  ),
+  teal_transform_module(
+    label = "Interactive transform for iris",
     datanames = "iris",
     ui = function(id) {
       ns <- NS(id)
@@ -63,6 +78,17 @@ my_transformers <- list(
         })
       })
     }
+  ),
+  teal_transform_module(
+    label = "Simplified interactive transform for iris",
+    datanames = "iris",
+    ui = function(id) {
+      ns <- NS(id)
+      tags$div(
+        numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
+      )
+    },
+    server = expression(iris <- head(iris, n_rows))
   )
 )
 

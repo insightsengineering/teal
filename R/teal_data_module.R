@@ -100,10 +100,12 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #'
 #'
 #' @inheritParams teal_data_module
-#' @param server (`function(id, data)`)
+#' @param server (`function(id, data)` or `language`)
 #' `shiny` module server function; that takes `id` and `data` argument,
 #' where the `id` is the module id and `data` is the reactive `teal_data` input.
 #' The server function must return reactive expression containing `teal_data` object.
+#' Alternatively, `language` object is a simplified version of the `server` where `input$<input_name>`
+#' can be used to link interactive value with the `teal_data` code.
 #' @param datanames (`character`)
 #'  Names of the datasets that are relevant for the module. The
 #'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
@@ -111,7 +113,20 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' @examples
 #' my_transformers <- list(
 #'   teal_transform_module(
-#'     label = "Custom transform for iris",
+#'     label = "Static transform for iris",
+#'     datanames = "iris",
+#'     server = function(id, data) {
+#'       moduleServer(id, function(input, output, session) {
+#'         reactive({
+#'           within(data(), {
+#'             iris <- head(iris, 5)
+#'           })
+#'         })
+#'       })
+#'     }
+#'   ),
+#'   teal_transform_module(
+#'     label = "Interactive transform for iris",
 #'     datanames = "iris",
 #'     ui = function(id) {
 #'       ns <- NS(id)
@@ -131,36 +146,114 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #'         })
 #'       })
 #'     }
+#'   ),
+#'   teal_transform_module(
+#'     label = "Simplified interactive transform for iris",
+#'     datanames = "iris",
+#'     ui = function(id) {
+#'       ns <- NS(id)
+#'       tags$div(
+#'         numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
+#'       )
+#'     },
+#'     server = expression(iris <- head(iris, n_rows))
 #'   )
 #' )
 #'
 #' @name teal_transform_module
 #'
 #' @export
-teal_transform_module <- function(ui = NULL,
-                                  server = function(id, data) data,
-                                  label = "transform module",
-                                  datanames = "all") {
-  checkmate::assert_function(ui, args = "id", nargs = 1, null.ok = TRUE)
-  checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
-  checkmate::assert_string(label)
-  structure(
-    list(
+setGeneric(
+  "teal_transform_module",
+  function(ui = NULL,
+           server = function(id, data) data,
+           label = "transform module",
+           datanames = "all") {
+    standardGeneric("teal_transform_module")
+  }
+)
+
+setMethod(
+  "teal_transform_module",
+  signature = c(server = "function"),
+  function(ui = NULL,
+           server = function(id, data) data,
+           label = "transform module",
+           datanames = "all") {
+    structure(
+      list(
+        ui = ui,
+        server = function(id, data) {
+          data_out <- server(id, data)
+          decorate_err_msg(
+            assert_reactive(data_out),
+            pre = sprintf("From: 'teal_transform_module()':\nA 'teal_transform_module' with \"%s\" label:", label),
+            post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
+          )
+        }
+      ),
+      label = label,
+      datanames = datanames,
+      class = c("teal_transform_module", "teal_data_module")
+    )
+  }
+)
+
+setMethod(
+  "teal_transform_module",
+  signature = c(server = "missing"),
+  function(ui = NULL,
+           server = function(id, data) data,
+           label = "transform module",
+           datanames = "all") {
+    teal_transform_module(
+      ui = ui,
+      server = function(id, data) data,
+      label = label,
+      datanames = datanames
+    )
+  }
+)
+
+# todo: instead there should be transform_server(expr = )
+setMethod(
+  "teal_transform_module",
+  signature = c(server = "expression"),
+  function(ui = NULL,
+           server = function(id, data) data,
+           label = "transform module",
+           datanames = "all") {
+    teal_transform_module(
       ui = ui,
       server = function(id, data) {
-        data_out <- server(id, data)
-        decorate_err_msg(
-          assert_reactive(data_out),
-          pre = sprintf("From: 'teal_transform_module()':\nA 'teal_transform_module' with \"%s\" label:", label),
-          post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
-        )
-      }
-    ),
-    label = label,
-    datanames = datanames,
-    class = c("teal_transform_module", "teal_data_module")
-  )
-}
+        moduleServer(id, function(input, output, session) {
+          reactive({
+            call_with_inputs <- lapply(server, function(x) {
+              do.call(
+                what = substitute,
+                args = list(expr = x, env = reactiveValuesToList(input))
+              )
+            })
+            eval_code(object = data(), code = as.expression(call_with_inputs))
+          })
+        })
+      },
+      label = label,
+      datanames = datanames
+    )
+  }
+)
+
+setMethod(
+  "teal_transform_module",
+  signature = c(server = "language"),
+  function(ui = NULL,
+           server = function(id, data) data,
+           label = "transform module",
+           datanames = "all") {
+    teal_transform_module(ui = ui, server = as.expression(server), label = label, datanames = datanames)
+  }
+)
 
 
 #' Extract all `transformers` from `modules`.
