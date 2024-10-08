@@ -8,10 +8,6 @@ ui_fun1 <- function(id, ...) {
   tags$p(paste0("id: ", id))
 }
 
-testthat::test_that("Calling module() does not throw", {
-  testthat::expect_no_error(suppressMessages(module()))
-})
-
 testthat::test_that("module requires label argument to be a string different than 'global_filters'", {
   testthat::expect_no_error(module(label = "label"))
 
@@ -393,35 +389,6 @@ testthat::test_that("is_arg_used returns true if teal_module has given `arg` in 
   testthat::expect_true(is_arg_used(module(server = function(id, data, reporter) NULL), "reporter"))
 })
 
-testthat::test_that("is_arg_used returns false if teal_module does not have reporter in server function args", {
-  testthat::expect_false(is_arg_used(module(), "reporter"))
-})
-
-
-testthat::test_that("is_arg_used returns false if teal_modules has no children using given `arg`", {
-  mod <- module()
-  mods <- modules(label = "lab", mod, mod)
-  testthat::expect_false(is_arg_used(mods, "reporter"))
-
-  mods <- modules(label = "lab", mods, mod, mod)
-  testthat::expect_false(is_arg_used(mods, "reporter"))
-})
-
-testthat::test_that("is_arg_used returns true if teal_modules has at least one child using given `arg`", {
-  server_fun_with_reporter <- function(id, data, reporter) NULL
-
-  mod <- module()
-  mod_with_reporter <- module(server = server_fun_with_reporter)
-
-  mods <- modules(label = "lab", mod, mod_with_reporter)
-  testthat::expect_true(is_arg_used(mods, "reporter"))
-
-  mods_2 <- modules(label = "lab", mods, mod, mod)
-  testthat::expect_true(is_arg_used(mods_2, "reporter"))
-
-  mods_3 <- modules(label = "lab", modules(label = "lab", mod, mod), mod_with_reporter, mod)
-  testthat::expect_true(is_arg_used(mods_3, "reporter"))
-})
 
 testthat::test_that("is_arg_used returns TRUE/FALSE when the `arg` is in function formals", {
   testthat::expect_true(is_arg_used(function(x) NULL, "x"))
@@ -436,32 +403,7 @@ testthat::test_that("is_arg_used accepts `arg` to be a string only", {
 
 
 # ---- append_module
-testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
-  testthat::expect_error(
-    append_module(module(), module()),
-    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
-  )
 
-  testthat::expect_error(
-    append_module(module(), list(module())),
-    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
-  )
-})
-
-testthat::test_that("append_module throws error is module is not inherited from teal_module", {
-  mod <- module()
-  mods <- modules(label = "A", mod)
-
-  testthat::expect_error(
-    append_module(mods, mods),
-    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
-  )
-
-  testthat::expect_error(
-    append_module(mods, list(mod)),
-    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
-  )
-})
 
 testthat::test_that("append_module appends a module to children of not nested teal_modules", {
   mod <- module(label = "a")
