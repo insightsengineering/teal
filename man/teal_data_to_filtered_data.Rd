@@ -4,7 +4,7 @@
 \alias{teal_data_to_filtered_data}
 \title{Create a \code{FilteredData}}
 \usage{
-teal_data_to_filtered_data(x, datanames = teal.data::datanames(data))
+teal_data_to_filtered_data(x, datanames = teal.data::datanames(x))
 }
 \arguments{
 \item{x}{(\code{teal_data}) object}
