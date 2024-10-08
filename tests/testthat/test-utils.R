@@ -45,6 +45,20 @@ test_that("teal_data_to_filtered_data return FilteredData class", {
   testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
 })
 
+test_that("teal_data_to_filtered_data creates FilterData class with datanames that are passed", {
+  teal_data <- within(
+    teal.data::teal_data(),
+    {
+      iris <- head(iris)
+      mtcars <- head(mtcars)
+    }
+  )
+  teal.data::datanames(teal_data) <- "iris"
+
+  fd <- teal_data_to_filtered_data(teal_data)
+  testthat::expect_equal(fd$datanames(), "iris")
+})
+
 test_that("validate_app_title_tag works on validating the title tag", {
   valid_title <- tags$head(
     tags$title("title"),
