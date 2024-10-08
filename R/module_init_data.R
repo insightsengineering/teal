@@ -111,6 +111,9 @@ srv_init_data <- function(id, data) {
   )
 
   tdata@verified <- data@verified
+  if (length(datanames(data))) {
+    datanames(tdata) <- datanames(data)
+  }
   tdata
 }
 
