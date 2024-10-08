@@ -9,7 +9,7 @@ ui_fun1 <- function(id, ...) {
 }
 
 testthat::test_that("Calling module() does not throw", {
-  testthat::expect_no_error(suppressMessages(module()))
+  testthat::expect_no_error(suppressMessages(module(label = "module")))
 })
 
 testthat::test_that("module requires label argument to be a string different than 'global_filters'", {
@@ -394,12 +394,12 @@ testthat::test_that("is_arg_used returns true if teal_module has given `arg` in 
 })
 
 testthat::test_that("is_arg_used returns false if teal_module does not have reporter in server function args", {
-  testthat::expect_false(is_arg_used(module(), "reporter"))
+  testthat::expect_false(is_arg_used(module(label = "module"), "reporter"))
 })
 
 
 testthat::test_that("is_arg_used returns false if teal_modules has no children using given `arg`", {
-  mod <- module()
+  mod <- module(label = "module")
   mods <- modules(label = "lab", mod, mod)
   testthat::expect_false(is_arg_used(mods, "reporter"))
 
@@ -410,7 +410,7 @@ testthat::test_that("is_arg_used returns false if teal_modules has no children u
 testthat::test_that("is_arg_used returns true if teal_modules has at least one child using given `arg`", {
   server_fun_with_reporter <- function(id, data, reporter) NULL
 
-  mod <- module()
+  mod <- module(label = "module")
   mod_with_reporter <- module(server = server_fun_with_reporter)
 
   mods <- modules(label = "lab", mod, mod_with_reporter)
@@ -438,18 +438,18 @@ testthat::test_that("is_arg_used accepts `arg` to be a string only", {
 # ---- append_module
 testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
   testthat::expect_error(
-    append_module(module(), module()),
+    append_module(module(label = "module"), module(label = "module")),
     "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
   )
 
   testthat::expect_error(
-    append_module(module(), list(module())),
+    append_module(module(label = "module"), list(module(label = "module"))),
     "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
   )
 })
 
 testthat::test_that("append_module throws error is module is not inherited from teal_module", {
-  mod <- module()
+  mod <- module(label = "module")
   mods <- modules(label = "A", mod)
 
   testthat::expect_error(
