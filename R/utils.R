@@ -74,10 +74,13 @@ get_teal_bs_theme <- function() {
 #' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = ls(teal.code::get_env(x))) {
+teal_data_to_filtered_data <- function(x, datanames = teal.data::datanames(data)) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
   # Otherwise, FilteredData will be created in the modules' scope later
+  if (!length(datanames)) {
+    datanames <- ls(teal.code::get_env(x))
+  }
   teal.slice::init_filtered_data(
     x = Filter(
       length,
