@@ -19,8 +19,7 @@ teal_transform_module(
 \code{shiny} module server function; that takes \code{id} and \code{data} argument,
 where the \code{id} is the module id and \code{data} is the reactive \code{teal_data} input.
 The server function must return reactive expression containing \code{teal_data} object.
-Alternatively, \code{language} object is a simplified version of the \code{server} where \verb{input$<input_name>}
-can be used to link interactive value with the \code{teal_data} code.}
+To simplify use \code{\link[=make_teal_transform_server]{make_teal_transform_server()}}.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 
@@ -32,16 +31,50 @@ filters of all datasets. \code{datanames} will be automatically appended to the 
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Create a \code{teal_data_module} object for custom transformation of data for pre-processing
-before passing the data into the module.
+\code{teal_transform_module} creates a shiny-module to transform data in a \code{teal} application.
 }
-\details{
-\code{teal_transform_module} creates a \code{\link{teal_data_module}} object to transform data in a \code{teal}
-application. This transformation happens after the data has passed through the filtering activity
-in teal. The transformed data is then sent to the server of the \code{\link[=teal_module]{teal_module()}}.
+\section{Transforming \code{teal} module's input}{
+This transformation happens after the data has passed through the filtering activity in teal. The
+transformed data is then sent to the server of the \code{\link[=teal_module]{teal_module()}}. Process is handled by \code{teal}
+internals.
 
 See vignette \code{vignette("data-transform-as-shiny-module", package = "teal")} for more details.
 }
+
+\section{Decorating \code{teal} module's output}{
+\code{teal_transform_module}'s purpose is to modify any object created in \code{\link[teal.data:teal_data]{teal.data::teal_data}}. It means that an
+app-developer can use \code{teal_transform_module} to modify data but also outputted tables, listings and graphs.
+Some \code{\link{teal_modules}} enables app developer to inject custom shiny module to modify displayed output.
+To handle these \code{decorators} inside of your module use \code{\link[=ui_teal_transform_module]{ui_teal_transform_module()}} and \link{srv_teal_transform_module}.
+(todo: write more about how to handle decorators: they need to go through ui_args/srv_args and then be consumed by
+ui/srv_teal_transform_module()... . Alternatively, decorators could be a \code{\link[=module]{module()}}'s argument)
+}
+
+\section{\code{server} as a language}{
+Server function in \code{teal_transform_module} must return \code{reactive} containing \link[teal.data:teal_data]{teal.data::teal_data} object.
+Consider sinmple transformer which doesn't require any advanced reactivity, example \code{server} might have a
+following form:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{function(id, data) \{
+  moduleServer(id, function(input, output, session) \{
+    reactive(\{
+      within(
+        data(),
+        expr = x <- subset(x, col == level),
+        level = input$level
+      )
+    \})
+  \})
+\}
+}\if{html}{\out{</div>}}
+
+Above can be simplified to presented below, where \code{level} will be automatically substituted with
+respective input matched by its name.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{make_teal_transform_module(expr = expression(x <- subset(x, col == level)))
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 my_transformers <- list(
   teal_transform_module(
@@ -78,17 +111,6 @@ my_transformers <- list(
         })
       })
     }
-  ),
-  teal_transform_module(
-    label = "Simplified interactive transform for iris",
-    datanames = "iris",
-    ui = function(id) {
-      ns <- NS(id)
-      tags$div(
-        numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
-      )
-    },
-    server = expression(iris <- head(iris, n_rows))
   )
 )
 

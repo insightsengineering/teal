@@ -1,6 +1,6 @@
 #' Module to transform `reactive` `teal_data`
 #'
-#' Module calls multiple [`module_teal_data`] in sequence so that `reactive teal_data` output
+#' Module calls [teal_transform_module()] in sequence so that `reactive teal_data` output
 #' from one module is handed over to the following module's input.
 #'
 #' @inheritParams module_teal_data
@@ -8,12 +8,12 @@
 #' @return `reactive` `teal_data`
 #'
 #'
-#' @name module_transform_data
-#' @keywords internal
+#' @name module_teal_transform_module
 NULL
 
-#' @rdname module_transform_data
-ui_transform_data <- function(id, transforms, class = "well") {
+#' @export
+#' @rdname module_teal_transform_module
+ui_teal_transform_module <- function(id, transforms, class = "well") {
   checkmate::assert_string(id)
   if (length(transforms) == 0L) {
     return(NULL)
@@ -69,8 +69,9 @@ ui_transform_data <- function(id, transforms, class = "well") {
   )
 }
 
-#' @rdname module_transform_data
-srv_transform_data <- function(id, data, transforms, modules = NULL, is_transformer_failed = reactiveValues()) {
+#' @export
+#' @rdname module_teal_transform_module
+srv_teal_transform_module <- function(id, data, transforms, modules = NULL, is_transformer_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
@@ -89,7 +90,7 @@ srv_transform_data <- function(id, data, transforms, modules = NULL, is_transfor
     Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
-          logger::log_debug("srv_transform_data initializing for { name }.")
+          logger::log_debug("srv_teal_transform_module initializing for { name }.")
           is_transformer_failed[[name]] <- FALSE
           data_out <- transforms[[name]]$server(name, data = data_previous)
           data_handled <- reactive(tryCatch(data_out(), error = function(e) e))

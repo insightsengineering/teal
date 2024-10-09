@@ -20,7 +20,7 @@
 #' performed:
 #' - data loading in [`module_init_data`]
 #' - data filtering in [`module_filter_data`]
-#' - data transformation in [`module_transform_data`]
+#' - data transformation in [`module_teal_transform_module`]
 #'
 #' ## Fallback on failure
 #'

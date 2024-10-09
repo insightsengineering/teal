@@ -15,7 +15,8 @@ vignette: >
 
 `teal_transform_module` without `ui`. Nothing will be displayed, only server code will be executed.
 
-    ```{r}
+```{r}
+library(teal)
 static_decorator <- teal_transform_module(
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
@@ -30,20 +31,24 @@ static_decorator <- teal_transform_module(
     })
   }
 )
-    ```
+```
 
+Use `make_teal_transform_server(expr)` to create a transformer without repeating a boiler plate code (`function(id, data)`, `moduleServer`, `reactive`, `within(data, ...)`)
 
-Using language will result in `teal_transform_module` without `ui`.
-
-    ```{r}
-static_decorator_lang <- quote(plot <- plot +
-  ggtitle("This is title") +
-  xlab("x axis title"))
-    ```
-
+```{r}
+static_decorator_lang <- teal_transform_module(
+  server = make_teal_transform_server(
+    expression(
+      plot <- plot +
+        ggtitle("This is title") +
+        xlab("x axis title")
+    )
+  )
+)
+```
 
 Adding interactivity requires creating a proper shiny module.
-    ```{r}
+```{r}
 interactive_decorator <- teal_transform_module(
   ui = function(id) {
     ns <- NS(id)
@@ -67,23 +72,68 @@ interactive_decorator <- teal_transform_module(
     })
   }
 )
-    ```
+```
 
-
-Thanks to the function-constructor app developer doesn't need to know what is the object name inside of the module's 
-`server`. One can create any single argument function. Mapping `x` -> `plot` happens in `decorate_teal_data` and 
-requires to specify `output_name = "plot"` (modules' developer duty).
+There is `make_teal_transform_server(expr)` which simplifies a creation of `teal_transform_module`'s server. One can 
+simply specify `expression` within which object names can be replaced with respective input.
 
 ```{r}
-fun_decorator <- function(x) {
-  x <- x + ggtitle("This is title") + xlab("x_axis_title")
+interactive_decorator_lang <- teal_transform_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+    )
+  },
+  server = make_teal_transform_server(
+    expression(
+      plot <- plot +
+        ggtitle("This is title") +
+        xlab(x_axis_title)
+    )
+  )
+)
+```
+
+
+Since `teal_transform_module` when created has constant object names it means that it is hard to robustly reuse
+transformer in any `tm_` module. It is recomended for external parties to collect library of "decorators" as functions
+to potentially adjust the content of the evaluated expression to `teal_modules`'s internals. See the following example
+and focus on `output_name`.
+
+```{r}
+gg_xlab_decorator <- function(output_name) {
+  teal_transform_module(
+    ui = function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          req(data())
+          data() |> within(
+            {
+              output_name <- output_name +
+                xlab(x_axis_title)
+            },
+            x_axis_title = input$x_axis_title,
+            output_name = as.name(output_name)
+          )
+        })
+      })
+    }
+  )
 }
 ```
+
 
 Failures in decorators are handled by internal `teal` mechanism called `trigger_on_success`, which will never 
 break `data` object inside of the module. Instead decorator will be ignored and relevant error message will be shown.
 
-    ```{r}
+```{r}
 failing_decorator <- teal_transform_module(
   ui = function(id) {
     ns <- NS(id)
@@ -101,33 +151,26 @@ failing_decorator <- teal_transform_module(
 
 ## Example module
 
-To include decorator to the `teal_module` one needs to add an extra argument to the module-constructor function `tm_`.
-Decorator passed to the constructor needs to go through `decorate_teal_data()` in order to cast `language`  or `function` object into `teal_transform_module`. _`decorate_teal_data()` wouldn't be necessary if an app developer 
-always provides `teal_transform_module`. We could extend `teal_transform_module()` constructor by `expr` argument instead but using `function` would be impossible then._
-
-Decorators should be passed via `ui_args` and `server_args` to the module's `ui` and `server`, where they should be 
-consumed by `ui/srv_transform_data`.
+To include decorators to the `teal_module` one needs to add an extra argument to the module-constructor function `tm_`. Decorators should be passed via `ui_args` and `server_args` to the module's `ui` and `server`, where they should be 
+consumed by `ui/srv_teal_transform_module`.
 
 
 ```{r}
-library(ggplot2)
-tm_decorated_plot <- function(label = "module", decorator = teal_transform_module()) {
-  decorator_obj <- decorate_teal_data(x = decorator, output_name = "plot")
-
+tm_decorated_plot <- function(label = "module", transforms = list(), decorators = teal_transform_module()) {
   module(
     label = label,
-    ui = function(id, decorator) {
+    ui = function(id, decorators) {
       ns <- NS(id)
       div(
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_transform_data(ns("decorate"), transforms = decorator),
+        ui_teal_transform_module(ns("decorate"), transforms = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
     },
-    server = function(id, data, decorator) {
+    server = function(id, data, decorators) {
       moduleServer(id, function(input, output, session) {
         observeEvent(data(), {
           updateSelectInput(inputId = "dataname", choices = teal.data::datanames(data()))
@@ -152,7 +195,7 @@ tm_decorated_plot <- function(label = "module", decorator = teal_transform_modul
             )
         })
 
-        q2 <- srv_transform_data("decorate", data = q1, transforms = decorator)
+        q2 <- srv_teal_transform_module("decorate", data = q1, transforms = decorators)
 
         plot_r <- reactive({
           req(q2())
@@ -165,8 +208,8 @@ tm_decorated_plot <- function(label = "module", decorator = teal_transform_modul
         })
       })
     },
-    ui_args = list(decorator = decorator_obj),
-    server_args = list(decorator = decorator_obj)
+    ui_args = list(decorators = decorators),
+    server_args = list(decorators = decorators)
   )
 }
 ```
@@ -174,14 +217,16 @@ tm_decorated_plot <- function(label = "module", decorator = teal_transform_modul
 ## Example app
 
 ```{r}
+library(ggplot2)
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
     tm_decorated_plot("identity"),
     tm_decorated_plot("no-ui", decorator = static_decorator),
     tm_decorated_plot("lang", decorator = static_decorator_lang),
-    tm_decorated_plot("fun", decorator = fun_decorator),
     tm_decorated_plot("interactive", decorator = interactive_decorator),
+    tm_decorated_plot("interactive-from lang", decorator = interactive_decorator_lang),
+    tm_decorated_plot("from-fun", decorator = gg_xlab_decorator("plot")),
     tm_decorated_plot("failing", decorator = failing_decorator)
   )
 )

@@ -26,11 +26,11 @@ module(
 
 modules(..., label = "root")
 
-\method{format}{teal_module}(x, indent = 0, ...)
+\method{format}{teal_module}(x, ...)
 
 \method{print}{teal_module}(x, ...)
 
-\method{format}{teal_modules}(x, indent = 0, ...)
+\method{format}{teal_modules}(x, ...)
 
 set_datanames(modules, datanames)
 
@@ -75,13 +75,10 @@ The keyword \code{"all"} provides all datasets available in \code{data} passed t
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
+\item{transformers}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
 If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformers}
-will be added to the \code{datanames}.
-
-When the transformation does not have sufficient input data, the resulting data will fallback
-to the last successful transform or, in case there are none, to the filtered data.}
+will be added to the \code{datanames}.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -89,8 +86,6 @@ to the last successful transform or, in case there are none, to the filtered dat
 }}
 
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
-
-\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})}
 }

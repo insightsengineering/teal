@@ -39,7 +39,7 @@ App user will be able to interact and change the data output from the module mul
 
 \item{data}{(\code{teal_data_module}) object}
 
-\item{expr}{(\code{expression}) to evaluate. Must be inline code. See}
+\item{expr}{(\code{expression}) to evaluate. Must be inline code. See \code{\link[=within]{within()}}}
 
 \item{...}{See \code{Details}.}
 }

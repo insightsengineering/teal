@@ -90,7 +90,6 @@ RoxygenNote: 7.3.2
 Collate:
     'TealAppDriver.R'
     'checkmate.R'
-    'decorate.R'
     'dummy_functions.R'
     'get_rcode_utils.R'
     'include_css_js.R'

@@ -66,7 +66,7 @@ performed:
 \itemize{
 \item data loading in \code{\link{module_init_data}}
 \item data filtering in \code{\link{module_filter_data}}
-\item data transformation in \code{\link{module_transform_data}}
+\item data transformation in \code{\link{module_teal_transform_module}}
 }
 }
 
