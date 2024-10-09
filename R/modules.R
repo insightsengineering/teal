@@ -48,14 +48,12 @@ setOldClass("teal_modules")
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
-#' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
-#' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
+#' @param transformers (`list` of `teal_transform_module`) that will be applied to transform module's data input.
 #' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
 #' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformers`
 #' will be added to the `datanames`.
 #'
-#' When the transformation does not have sufficient input data, the resulting data will fallback
-#' to the last successful transform or, in case there are none, to the filtered data.
+#'
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
@@ -315,7 +313,12 @@ modules <- function(..., label = "root") {
 
 #' @rdname teal_modules
 #' @export
-format.teal_module <- function(x, indent = 0, ...) {
+format.teal_module <- function(x, ...) {
+  if (is.null(list(...)$indent)) {
+    indent <- 0L
+  } else {
+    indent <- list(...)$indent
+  }
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, "\n", collapse = "")
 }
 
@@ -330,7 +333,13 @@ print.teal_module <- function(x, ...) {
 
 #' @rdname teal_modules
 #' @export
-format.teal_modules <- function(x, indent = 0, ...) {
+format.teal_modules <- function(x, ...) {
+  if (is.null(list(...)$indent)) {
+    indent <- 0L
+  } else {
+    indent <- list(...)$indent
+  }
+
   paste(
     c(
       paste0(rep(" ", indent), "+ ", x$label, "\n"),

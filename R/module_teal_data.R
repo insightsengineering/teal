@@ -106,7 +106,7 @@ ui_validate_reactive_teal_data <- function(id) {
       class = "teal_validated",
       ui_validate_error(ns("silent_error")),
       ui_check_class_teal_data(ns("class_teal_data")),
-      ui_check_shiny_warnings(ns("shiny_warnings"))
+      ui_check_module_datanames(ns("shiny_warnings"))
     ),
     div(
       class = "teal_validated",
@@ -129,7 +129,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     # there is an empty reactive cycle on `init` and `data_rv` has `shiny.silent.error` class
     srv_validate_error("silent_error", data, validate_shiny_silent_error)
     srv_check_class_teal_data("class_teal_data", data)
-    srv_check_shiny_warnings("shiny_warnings", data, modules)
+    srv_check_module_datanames("shiny_warnings", data, modules)
     output$previous_failed <- renderUI({
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
@@ -211,13 +211,13 @@ srv_check_class_teal_data <- function(id, data) {
 }
 
 #' @keywords internal
-ui_check_shiny_warnings <- function(id) {
+ui_check_module_datanames <- function(id) {
   ns <- NS(id)
   uiOutput(NS(id, "message"))
 }
 
 #' @keywords internal
-srv_check_shiny_warnings <- function(id, data, modules) {
+srv_check_module_datanames <- function(id, data, modules) {
   checkmate::assert_string(id)
   moduleServer(id, function(input, output, session) {
     output$message <- renderUI({
