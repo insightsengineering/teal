@@ -101,7 +101,7 @@ transformer in any `tm_` module. It is recomended for external parties to collec
 to potentially adjust the content of the evaluated expression to `teal_modules`'s internals. See the following example
 and focus on `output_name`.
 
-```{r}
+    ```{r}
 gg_xlab_decorator <- function(output_name) {
   teal_transform_module(
     ui = function(id) {
@@ -127,7 +127,7 @@ gg_xlab_decorator <- function(output_name) {
     }
   )
 }
-```
+    ```
 
 
 Failures in decorators are handled by internal `teal` mechanism called `trigger_on_success`, which will never 
