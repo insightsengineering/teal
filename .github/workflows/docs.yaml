@@ -50,4 +50,3 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
-        rstudio/renv
