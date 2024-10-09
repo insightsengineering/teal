@@ -24,6 +24,7 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        rstudio/renv
   validation:
     name: R Package Validation report 📃
     needs: release
@@ -39,6 +40,7 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        rstudio/renv
   release:
     name: Create release 🎉
     uses: insightsengineering/r.pkg.template/.github/workflows/release.yaml@main
@@ -71,6 +73,7 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        rstudio/renv
   coverage:
     name: Coverage 📔
     needs: [release, docs]
@@ -88,6 +91,7 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        rstudio/renv
   wasm:
     name: Build WASM packages 🧑‍🏭
     needs: release
