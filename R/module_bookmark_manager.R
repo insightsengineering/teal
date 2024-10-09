@@ -128,12 +128,16 @@ srv_bookmark_panel <- function(id, modules) {
         )
       }
 
+
       showModal(
-        modalDialog(
-          id = ns("bookmark_modal"),
-          title = "Bookmarked teal app url",
-          modal_content,
-          easyClose = TRUE
+        div(
+          class = "teal bookmark-popup",
+          modalDialog(
+            id = ns("bookmark_modal"),
+            title = "Bookmarked teal app url",
+            modal_content,
+            easyClose = TRUE
+          )
         )
       )
     })
