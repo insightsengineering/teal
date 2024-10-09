@@ -237,9 +237,8 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-    activate <- reactive(if (is_active()) TRUE) # else NULL
 
-    observeEvent(activate(), once = TRUE, { # todo: use call_once_when(is_active())
+    call_once_when(is_active(), {
       active_datanames <- reactive({
         .resolve_module_datanames(data = data_rv(), modules = modules)
       })
@@ -264,7 +263,6 @@ srv_teal_module.teal_module <- function(id,
         data_rv = data_rv,
         is_active = is_active
       )
-
       is_transformer_failed <- reactiveValues()
       transformed_teal_data <- srv_transform_data(
         "data_transform",
@@ -276,6 +274,7 @@ srv_teal_module.teal_module <- function(id,
       any_transformer_failed <- reactive({
         any(unlist(reactiveValuesToList(is_transformer_failed)))
       })
+
       observeEvent(any_transformer_failed(), {
         if (isTRUE(any_transformer_failed())) {
           shinyjs::hide("teal_module_ui")
@@ -305,10 +304,9 @@ srv_teal_module.teal_module <- function(id,
 
       # Call modules.
       if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- observeEvent( # todo: use call_once_when(!is.null(module_teal_data()), ...)
+        obs_module <- call_once_when(
+          !is.null(module_teal_data()),
           ignoreNULL = TRUE,
-          once = TRUE,
-          eventExpr = module_teal_data(),
           handlerExpr = {
             module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
           }
@@ -376,21 +374,36 @@ srv_teal_module.teal_module <- function(id,
 #'
 #' Function postpones `handlerExpr` to the moment when `eventExpr` (condition) returns `TRUE`,
 #' otherwise nothing happens.
-#' @param condExpr logical expression determining moment when `handlerExpr` should be evaluated
-#' @inheritParams observeEvent
+#' @param condExpr logical expression determining moment when `handlerExpr` should be evaluated.
+#' @param ... additional arguments passed to `observeEvent` with the exception of `eventExpr` that is not allowed.
+#' @inheritParams shiny::observeEvent
 #'
+#' @return An observer.
 #'
-call_once_when <- function(condExpr, handlerExpr) {
-  event_quo <- new_quosure(substitute(condExpr))
-  handler_quo <- new_quosure(substitute(handlerExpr))
+#' @keywords internal
+call_once_when <- function(condExpr,
+                           handlerExpr,
+                           event.env = parent.frame(),
+                           handler.env = parent.frame(),
+                           ...) {
+  if ("eventExpr" %in% names(rlang::list2(...))) {
+    stop("eventExpr is not allowed in call_once_when.")
+  }
 
+  event_quo <- rlang::new_quosure(substitute(condExpr), env = event.env)
+  handler_quo <- rlang::new_quosure(substitute(handlerExpr), env = handler.env)
+
+  # When `condExpr` is TRUE, then `handlerExpr` is evaluated once.
   activator <- reactive({
-    if (isTRUE(condExpr)) {
+    if (isTRUE(rlang::eval_tidy(event_quo))) {
       TRUE
     }
   })
 
-  observeEvent(activator(), once = TRUE, {
-    handlerExpr # evaluate in a parent.frame()
-  })
+  observeEvent(
+    eventExpr = activator(),
+    once = TRUE,
+    handlerExpr = rlang::eval_tidy(handler_quo),
+    ...
+  )
 }
