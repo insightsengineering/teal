@@ -214,7 +214,11 @@ srv_teal_module.teal_modules <- function(id,
           datasets = datasets,
           slices_global = slices_global,
           reporter = reporter,
-          is_active = reactive(is_active() && input$active_tab == module_id)
+          is_active = reactive(
+            is_active() &&
+              input$active_tab == module_id &&
+              identical(data_load_status(), "ok")
+          )
         )
       },
       simplify = FALSE
