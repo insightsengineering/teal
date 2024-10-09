@@ -59,7 +59,7 @@ Suggests:
     mirai (>= 1.1.1),
     MultiAssayExperiment,
     R6,
-    renv (>= 1.0.7),
+    renv (>= 1.0.10.9000),
     rmarkdown (>= 2.23),
     rvest (>= 1.0.0),
     shinytest2,
@@ -81,6 +81,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
     yaml=vubiostat/r-yaml
+Remotes: rstudio/renv
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
