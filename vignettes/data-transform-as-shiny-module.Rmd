@@ -94,8 +94,9 @@ if (interactive()) {
 }
 ```
 
-Note: It is recommended to return `reactive()` `teal_data()` in `server` of `teal_transform_module`
-as this is more robust for maintaining the reactivity of Shiny. If you are planning on using `eventReactive()` make it react to `data()`. More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
+_Note_: It is recommended to return `reactive()` with `teal_data()` in `server` of `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
+If you are planning on using `eventReactive()` in the server it needs to be reactive on to `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
+More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
 ### Multiple Transformers
 

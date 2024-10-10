@@ -72,7 +72,8 @@ srv_teal_data <- function(id,
             "srv_teal_data",
             "please avoid using eventReactive in transformations as it",
             "may lead to unexpected behavior if it does not depend on `data()`.",
-            " See the vignettes for more information."
+            "See the vignettes for more information ",
+            "(`vignette(\"data-transform-as-shiny-module\", package = \"teal\")`)."
           )
         )
       }
