@@ -65,6 +65,18 @@ srv_teal_data <- function(id,
     data_out <- data_module(id = "data")
     data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
     observeEvent(data_handled(), {
+      if (inherits(data_out, "reactive.event")) {
+        # This warning message partially detects when `eventReactive` is used in `data_module`.
+        logger::log_warn(
+          paste(
+            "srv_teal_data",
+            "please avoid using eventReactive in transformations as it",
+            "may lead to unexpected behavior if it does not depend on `data()`.",
+            " See the vignettes for more information."
+          )
+        )
+      }
+
       if (!inherits(data_handled(), "teal_data")) {
         is_transformer_failed[[id]] <- TRUE
       } else {
