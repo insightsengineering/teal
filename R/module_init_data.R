@@ -116,6 +116,10 @@ srv_init_data <- function(id, data) {
 
 #' Get code that tests the integrity of the reproducible data
 #'
+#' @section Functions:
+#' Data objects that are functions are converted to strings representing their body
+#' in order to strip their enclosing environments.
+#'
 #' @param data (`teal_data`) object holding the data
 #' @param datanames (`character`) names of `datasets`
 #'
@@ -123,10 +127,12 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 #'
 .get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
+  # Functions cause problems when calculating hashes
+  # because they have environments that have parents on the search list.
   vapply(
     datanames,
-    function(dataname, datasets) {
-      hash <- rlang::hash(data[[dataname]])
+    function(dataname) {
+      hash <- rlang::hash(defunction(data[[dataname]]))
       sprintf(
         "stopifnot(%s == %s) # @linksto %s",
         deparse1(bquote(rlang::hash(.(as.name(dataname))))),
