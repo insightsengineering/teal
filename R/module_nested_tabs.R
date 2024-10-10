@@ -242,24 +242,25 @@ srv_teal_module.teal_module <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
 
-    call_once_when(is_active(), {
-      active_datanames <- reactive({
-        .resolve_module_datanames(data = data_rv(), modules = modules)
+    active_datanames <- reactive({
+      .resolve_module_datanames(data = data_rv(), modules = modules)
+    })
+    if (is.null(datasets)) {
+      datasets <- eventReactive(data_rv(), {
+        req(inherits(data_rv(), "teal_data"))
+        logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
+        teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
       })
-      if (is.null(datasets)) {
-        datasets <- eventReactive(data_rv(), {
-          req(inherits(data_rv(), "teal_data"))
-          logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
-          teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
-        })
-      }
+    }
 
-      # manage module filters on the module level
-      # important:
-      #   filter_manager_module_srv needs to be called before filter_panel_srv
-      #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
-      #   and if it is not set, then it won't be available in the srv_filter_panel
-      srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
+    # manage module filters on the module level
+    # important:
+    #   filter_manager_module_srv needs to be called before filter_panel_srv
+    #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
+    #   and if it is not set, then it won't be available in the srv_filter_panel
+    srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
+
+    call_once_when(is_active(), {
       filtered_teal_data <- srv_filter_data(
         "filter_panel",
         datasets = datasets,
