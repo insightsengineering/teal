@@ -67,7 +67,7 @@ srv_teal_data <- function(id,
     observeEvent(data_handled(), {
       if (inherits(data_out, "reactive.event")) {
         # This warning message partially detects when `eventReactive` is used in `data_module`.
-        logger::log_warn(
+        warning(
           paste(
             "srv_teal_data",
             "please avoid using eventReactive in transformations as it",
