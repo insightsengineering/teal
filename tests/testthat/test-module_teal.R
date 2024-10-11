@@ -1588,25 +1588,37 @@ testthat::describe("srv_teal teal_module(s) transformer", {
   })
 
   testthat::it("fails when transformer doesn't return reactive", {
-    testthat::expect_error(
-      testServer(
-        app = srv_teal,
-        args = list(
-          id = "test",
-          data = teal.data::teal_data(iris = iris),
-          modules = modules(
-            module(
-              server = function(id, data) data,
-              transformers = list(
-                teal_transform_module(
-                  ui = function(id) NULL,
-                  server = function(id, data) "whatever"
+    testthat::expect_warning(
+      # error decorator is mocked to avoid showing the trace error during the
+      # test.
+      # This tests works without the mocking, but it's more verbose.
+      testthat::with_mocked_bindings(
+        testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(
+              module(
+                server = function(id, data) data,
+                transformers = list(
+                  teal_transform_module(
+                    ui = function(id) NULL,
+                    server = function(id, data) "whatever"
+                  )
                 )
               )
             )
-          )
+          ),
+          expr = {
+            session$setInputs("teal_modules-active_tab" = "module")
+            session$flushReact()
+          }
         ),
-        expr = {}
+        decorate_err_msg = function(x, ...) {
+          testthat::expect_error(x, "Must be a reactive")
+          warning(tryCatch(x, error = function(e) e$message))
+        },
       ),
       "Must be a reactive"
     )
