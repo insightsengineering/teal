@@ -131,7 +131,7 @@ srv_filter_manager <- function(id, slices_global) {
             module_labels,
             simplify = FALSE,
             function(module_label) {
-              available_slices_api <- slices_global$module_slices_api[[module_label]]$get_available_teal_slices()
+              available_slices <- slices_global$module_slices_api[[module_label]]$get_available_teal_slices()
               global_ids <- sapply(slices_global$all_slices(), `[[`, "id", simplify = FALSE)
               module_ids <- sapply(slices_global$slices_get(module_label), `[[`, "id", simplify = FALSE)
               allowed_ids <- vapply(available_slices, `[[`, character(1L), "id")
