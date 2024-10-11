@@ -386,15 +386,19 @@ srv_teal_module.teal_module <- function(id,
 #' @return An observer.
 #'
 #' @keywords internal
-call_once_when <- function(eventExpr, # nolint: object_name.
+call_once_when <- function(condExpr, # nolint: object_name.
                            handlerExpr, # nolint: object_name.
                            event.env = parent.frame(), # nolint: object_name.
                            handler.env = parent.frame(), # nolint: object_name.
                            ...) {
-  event_quo <- rlang::new_quosure(substitute(eventExpr), env = event.env)
+  if ("eventExpr" %in% names(rlang::list2(...))) {
+    stop("eventExpr is not allowed in call_once_when.")
+  }
+
+  event_quo <- rlang::new_quosure(substitute(condExpr), env = event.env)
   handler_quo <- rlang::new_quosure(substitute(handlerExpr), env = handler.env)
 
-  # When `eventExpr` is TRUE, then `handlerExpr` is evaluated once.
+  # When `condExpr` is TRUE, then `handlerExpr` is evaluated once.
   activator <- reactive({
     if (isTRUE(rlang::eval_tidy(event_quo))) {
       TRUE
