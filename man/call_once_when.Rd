@@ -5,7 +5,7 @@
 \title{Calls expression when condition is met}
 \usage{
 call_once_when(
-  condExpr,
+  eventExpr,
   handlerExpr,
   event.env = parent.frame(),
   handler.env = parent.frame(),
@@ -13,7 +13,9 @@ call_once_when(
 )
 }
 \arguments{
-\item{condExpr}{logical expression determining moment when \code{handlerExpr} should be evaluated.}
+\item{eventExpr}{A (quoted or unquoted) logical expression that represents the event;
+this can be a simple reactive value like input$click, a call to a reactive expression
+like dataset(), or even a complex expression inside curly braces.}
 
 \item{handlerExpr}{The expression to call whenever \code{eventExpr} is
 invalidated. This should be a side-effect-producing action (the return

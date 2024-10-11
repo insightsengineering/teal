@@ -379,23 +379,21 @@ srv_teal_module.teal_module <- function(id,
 #'
 #' Function postpones `handlerExpr` to the moment when `eventExpr` (condition) returns `TRUE`,
 #' otherwise nothing happens.
-#' @param condExpr logical expression determining moment when `handlerExpr` should be evaluated.
+#' @param eventExpr A (quoted or unquoted) logical expression that represents the event;
+#' this can be a simple reactive value like input$click, a call to a reactive expression
+#' like dataset(), or even a complex expression inside curly braces.
 #' @param ... additional arguments passed to `observeEvent` with the exception of `eventExpr` that is not allowed.
 #' @inheritParams shiny::observeEvent
 #'
 #' @return An observer.
 #'
 #' @keywords internal
-call_once_when <- function(condExpr, # nolint: object_name.
+call_once_when <- function(eventExpr, # nolint: object_name.
                            handlerExpr, # nolint: object_name.
                            event.env = parent.frame(), # nolint: object_name.
                            handler.env = parent.frame(), # nolint: object_name.
                            ...) {
-  if ("eventExpr" %in% names(rlang::list2(...))) {
-    stop("eventExpr is not allowed in call_once_when.")
-  }
-
-  event_quo <- rlang::new_quosure(substitute(condExpr), env = event.env)
+  event_quo <- rlang::new_quosure(substitute(eventExpr), env = event.env)
   handler_quo <- rlang::new_quosure(substitute(handlerExpr), env = handler.env)
 
   # When `condExpr` is TRUE, then `handlerExpr` is evaluated once.
