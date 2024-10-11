@@ -70,9 +70,8 @@ srv_teal_data <- function(id,
         warning(
           paste(
             "srv_teal_data",
-            "please avoid using eventReactive in transformations as it",
-            "may lead to unexpected behavior if it does not depend on `data()`.",
-            "See the vignettes for more information ",
+            "Using eventReactive in teal_transform module server code should be avoided as it",
+            "may lead to unexpected behavior. See the vignettes for more information ",
             "(`vignette(\"data-transform-as-shiny-module\", package = \"teal\")`)."
           )
         )
