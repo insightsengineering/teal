@@ -157,12 +157,11 @@ teal_transform_module <- function(ui = function(id) NULL,
         if (inherits(data_out, "reactive.event")) {
           # This warning message partially detects when `eventReactive` is used in `data_module`.
           warning(
-            paste(
-              "srv_teal_data",
-              "Using eventReactive in teal_transform module server code should be avoided as it",
-              "may lead to unexpected behavior. See the vignettes for more information ",
-              "(`vignette(\"data-transform-as-shiny-module\", package = \"teal\")`)."
-            )
+            "teal_transform_module() ",
+            "Using eventReactive in teal_transform module server code should be avoided as it ",
+            "may lead to unexpected behavior. See the vignettes for more information  ",
+            "(`vignette(\"data-transform-as-shiny-module\", package = \"teal\")`).",
+            call. = FALSE
           )
         }
 
