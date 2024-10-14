@@ -1587,6 +1587,34 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
+  testthat::it("throws warning when transformer return reactive.event", {
+    testthat::expect_warning(
+      testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris),
+          modules = modules(
+            module(
+              server = function(id, data) data,
+              transformers = list(
+                teal_transform_module(
+                  ui = function(id) textInput("a", "an input"),
+                  server = function(id, data) eventReactive(input$a, data())
+                )
+              )
+            )
+          )
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module")
+          session$flushReact()
+        }
+      ),
+      "Using eventReactive in teal_transform module server code should be avoided"
+    )
+  })
+
   testthat::it("fails when transformer doesn't return reactive", {
     testthat::expect_warning(
       # error decorator is mocked to avoid showing the trace error during the
