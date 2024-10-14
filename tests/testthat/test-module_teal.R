@@ -302,6 +302,36 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("are called only after teal_data_module is resolved", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data_module(
+          ui = function(id) actionButton("submit", "click me"),
+          server = function(id) {
+            moduleServer(id, function(input, output, session) {
+              eventReactive(input$submit, teal_data(iris = iris))
+            })
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) 101L)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+        testthat::expect_null(modules_output$module_1())
+
+
+        session$setInputs("data-teal_data_module-submit" = "1")
+        session$flushReact()
+        testthat::expect_identical(modules_output$module_1(), 101L)
+      }
+    )
+  })
+
   testthat::it("are called with data argument being `teal_data`", {
     shiny::testServer(
       app = srv_teal,
