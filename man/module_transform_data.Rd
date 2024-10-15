@@ -6,18 +6,22 @@
 \alias{srv_transform_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
-ui_transform_data(id, transforms, class = "well")
+ui_transform_data(id, transformers, class = "well")
 
 srv_transform_data(
   id,
   data,
-  transforms,
+  transformers,
   modules,
   is_transformer_failed = reactiveValues()
 )
 }
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
+
+\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
+Each transform module UI will appear in the \code{teal}'s sidebar panel.
+Transformers' \code{datanames} are appended added to the \code{datanames}.}
 
 \item{data}{(\verb{reactive teal_data})}
 
