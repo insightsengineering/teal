@@ -45,7 +45,7 @@ setOldClass("teal_modules")
 #' @param datanames (`character`) Names of the datasets that are relevant for the item.
 #' The keyword `"all"` provides all datasets available in `data` passed to `teal` application.
 #' `NULL` will hide the filter panel. In case when `transformers` are specified, then `datanames` will
-#' include `transformers` datanames.
+#' include `transformers`' data names.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.

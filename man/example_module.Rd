@@ -17,7 +17,7 @@ For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 \item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
 The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
 \code{NULL} will hide the filter panel. In case when \code{transformers} are specified, then \code{datanames} will
-include \code{transformers} datanames.}
+include \code{transformers}' data names.}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal}'s sidebar panel.

@@ -70,7 +70,7 @@ or to the \code{...}.
 \item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
 The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
 \code{NULL} will hide the filter panel. In case when \code{transformers} are specified, then \code{datanames} will
-include \code{transformers} datanames.}
+include \code{transformers}' data names.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
