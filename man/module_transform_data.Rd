@@ -11,7 +11,7 @@ ui_transform_data(id, transformers = list(), class = "well")
 srv_transform_data(
   id,
   data,
-  transformers,
+  transformers = list(),
   modules,
   is_transformer_failed = reactiveValues()
 )
