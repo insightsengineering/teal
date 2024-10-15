@@ -6,7 +6,7 @@
 \alias{srv_transform_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
-ui_transform_data(id, transformers, class = "well")
+ui_transform_data(id, transformers = list(), class = "well")
 
 srv_transform_data(
   id,

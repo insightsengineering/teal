@@ -13,9 +13,10 @@
 NULL
 
 #' @rdname module_transform_data
-ui_transform_data <- function(id, transformers, class = "well") {
+ui_transform_data <- function(id, transformers = list(), class = "well") {
   checkmate::assert_string(id)
-  checkmate::assert_list(transformers, "teal_transform_module", null.ok = TRUE)
+  checkmate::assert_list(transformers, "teal_transform_module")
+
   ns <- NS(id)
   labels <- lapply(transformers, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
