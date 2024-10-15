@@ -53,14 +53,11 @@ ui_transform_data <- function(id, transformers = list(), class = "well") {
 }
 
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transformers, modules, is_transformer_failed = reactiveValues()) {
+srv_transform_data <- function(id, data, transformers = list(), modules, is_transformer_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
-  checkmate::assert_list(transformers, "teal_transform_module", null.ok = TRUE)
+  checkmate::assert_list(transformers, "teal_transform_module")
   checkmate::assert_class(modules, "teal_module")
-  if (length(transformers) == 0L) {
-    return(data)
-  }
   labels <- lapply(transformers, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
   names(transformers) <- ids
