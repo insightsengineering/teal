@@ -125,7 +125,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             width = 3,
             ui_data_summary(ns("data_summary")),
             ui_filter_data(ns("filter_panel")),
-            if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
+            if (length(modules$transformers) > 0) {
               ui_transform_data(ns("data_transform"), transforms = modules$transformers, class = "well")
             },
             class = "teal_secondary_col"

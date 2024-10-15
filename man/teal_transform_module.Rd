@@ -8,7 +8,7 @@ teal_transform_module(
   ui = function(id) NULL,
   server = function(id, data) data,
   label = "transform module",
-  datanames = "all"
+  datanames = character(0)
 )
 }
 \arguments{
@@ -27,9 +27,8 @@ See \code{vignettes("data-transform-as-shiny-module")} for more information.}
 \item{label}{(\code{character(1)}) Label of the module.}
 
 \item{datanames}{(\code{character})
-Names of the datasets that are relevant for the module. The
-filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
-filters of all datasets. \code{datanames} will be automatically appended to the \code{\link[=modules]{modules()}} \code{datanames}.}
+Names of the datasets that are relevant for this module to evaluate. If set to \code{character(0)}
+then module would receive \code{\link[=modules]{modules()}} \code{datanames}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

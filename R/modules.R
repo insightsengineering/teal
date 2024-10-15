@@ -44,29 +44,26 @@ setOldClass("teal_modules")
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
 #' @param datanames (`character`) Names of the datasets that are relevant for the item.
 #' The keyword `"all"` provides all datasets available in `data` passed to `teal` application.
-#' `NULL` will hide the filter panel.
+#' `NULL` will hide the filter panel. In case when `transformers` are specified, then `datanames` will
+#' include `transformers` datanames.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
 #' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
-#' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformers`
-#' will be added to the `datanames`.
+#' Each transform module UI will appear in the `teal`'s sidebar panel.
+#' Transformers' `datanames` are appended added to the `datanames`.
 #'
-#' When the transformation does not have sufficient input data, the resulting data will fallback
-#' to the last successful transform or, in case there are none, to the filtered data.
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
 #'
 #' @section `datanames`:
-#' The module's `datanames` argument determines a subset of datasets from the `data` object, as specified in the
-#' server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
-#' to this subset.
-#' When `datanames` is set to `"all"`, all available datasets in the `data` object are considered relevant for the
-#' module. However, setting `datanames` argument to `"all"` might include datasets that are irrelevant for the module,
-#' for example:
+#' The module's `datanames` argument determines dataset names to be passed to the module's server via `data`.
+#' Datasets displayed in the filter panel will be limited to this subset.
+#' When `datanames` is set to `"all"`, then all datasets available in the `data` object are considered relevant for
+#' this module. However, setting `datanames` argument to `"all"` might include datasets that are unnecessary for the
+#' module, for example:
 #' - Proxy variables used for modifying columns.
 #' - Modified copies of datasets used to create a final dataset.
 #' - Connection objects.
@@ -74,7 +71,9 @@ setOldClass("teal_modules")
 #' [module] or [modules()] to change the `datanames` from `"all"` to specific dataset names. Attempting to change
 #' `datanames` values that was not set to `"all"` using [set_datanames()] will be ignored with a warning.
 #'
-#' Additionally, datasets with names starting with `.` are ignored when `datanames` is set to `"all"`.
+#' Note also that:
+#' -  Dataset contained in `data` which name starts with `.` are ignored when `datanames` is set to `"all"`.
+#' - `transformers` `datanames` are appended to the module's `datanames`.
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.
@@ -264,7 +263,7 @@ module <- function(label = "module",
   }
   checkmate::assert_list(transformers, types = "teal_transform_module")
   transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
-  combined_datanames <- if (identical(datanames, "all") || any(sapply(transformer_datanames, identical, "all"))) {
+  combined_datanames <- if (identical(datanames, "all")) {
     "all"
   } else {
     union(datanames, transformer_datanames)

@@ -69,19 +69,16 @@ or to the \code{...}.
 
 \item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
 The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
-\code{NULL} will hide the filter panel.}
+\code{NULL} will hide the filter panel. In case when \code{transformers} are specified, then \code{datanames} will
+include \code{transformers} datanames.}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformers}
-will be added to the \code{datanames}.
-
-When the transformation does not have sufficient input data, the resulting data will fallback
-to the last successful transform or, in case there are none, to the filtered data.}
+Each transform module UI will appear in the \code{teal}'s sidebar panel.
+Transformers' \code{datanames} are appended added to the \code{datanames}.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -123,12 +120,11 @@ and the report previewer module \code{\link[=reporter_previewer_module]{reporter
 }
 \section{\code{datanames}}{
 
-The module's \code{datanames} argument determines a subset of datasets from the \code{data} object, as specified in the
-server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
-to this subset.
-When \code{datanames} is set to \code{"all"}, all available datasets in the \code{data} object are considered relevant for the
-module. However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module,
-for example:
+The module's \code{datanames} argument determines dataset names to be passed to the module's server via \code{data}.
+Datasets displayed in the filter panel will be limited to this subset.
+When \code{datanames} is set to \code{"all"}, then all datasets available in the \code{data} object are considered relevant for
+this module. However, setting \code{datanames} argument to \code{"all"} might include datasets that are unnecessary for the
+module, for example:
 \itemize{
 \item Proxy variables used for modifying columns.
 \item Modified copies of datasets used to create a final dataset.
@@ -138,7 +134,11 @@ To prevent these irrelevant datasets from appearing in the module, use the \code
 \code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored with a warning.
 }
 
-Additionally, datasets with names starting with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
+Note also that:
+\itemize{
+\item Dataset contained in \code{data} which name starts with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
+\item \code{transformers} \code{datanames} are appended to the module's \code{datanames}.
+}
 }
 
 \examples{
