@@ -67,10 +67,13 @@ or to the \code{...}.
 
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
-\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
-The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
-\code{NULL} will hide the filter panel. In case when \code{transformers} are specified, then \code{datanames} will
-include \code{transformers}' data names.}
+\item{datanames}{(\code{character}) Names of the datasets relevant to the item.
+\itemize{
+\item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
+\item \code{NULL} hides the sidebar panel completely.
+\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+argument.
+}}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
@@ -78,7 +81,7 @@ include \code{transformers}' data names.}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are appended added to the \code{datanames}.}
+Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -118,27 +121,25 @@ The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
 because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
-\section{\code{datanames}}{
+\section{Restricting datasetes using by \code{teal_module}}{
 
-The module's \code{datanames} argument determines dataset names to be passed to the module's server via \code{data}.
-Datasets displayed in the filter panel will be limited to this subset.
-When \code{datanames} is set to \code{"all"}, then all datasets available in the \code{data} object are considered relevant for
-this module. However, setting \code{datanames} argument to \code{"all"} might include datasets that are unnecessary for the
-module, for example:
+The \code{datanames} argument controls which datasets are used by the module’s server. These datasets,
+passed via server's \code{data} argument, are the only ones shown in the module's tab.
+
+When \code{datanames} is set to "all", all datasets in the data object are treated as relevant.
+However, this may include unnecessary datasets, such as:
 \itemize{
-\item Proxy variables used for modifying columns.
-\item Modified copies of datasets used to create a final dataset.
-\item Connection objects.
-To prevent these irrelevant datasets from appearing in the module, use the \code{\link[=set_datanames]{set_datanames()}} function on the
-\link{module} or \code{\link[=modules]{modules()}} to change the \code{datanames} from \code{"all"} to specific dataset names. Attempting to change
-\code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored with a warning.
+\item Proxy variables for column modifications
+\item Temporary datasets used to create final versions
+\item Connection objects
 }
 
-Note also that:
-\itemize{
-\item Dataset contained in \code{data} which name starts with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
-\item \code{transformers} \code{datanames} are appended to the module's \code{datanames}.
-}
+To exclude irrelevant datasets, use the \code{\link[=set_datanames]{set_datanames()}} function to change \code{datanames} from
+"all" to specific names. Trying to modify non-"all" values with \code{\link[=set_datanames]{set_datanames()}} will result in
+a warning. Datasets with names starting with . are ignored globally unless explicitly listed in
+\code{datanames}.
+
+If transformers are specified, their datanames are added to the module’s datanames.
 }
 
 \examples{

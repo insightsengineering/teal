@@ -14,14 +14,17 @@ example_module(
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
 For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
-\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
-The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
-\code{NULL} will hide the filter panel. In case when \code{transformers} are specified, then \code{datanames} will
-include \code{transformers}' data names.}
+\item{datanames}{(\code{character}) Names of the datasets relevant to the item.
+\itemize{
+\item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
+\item \code{NULL} hides the sidebar panel completely.
+\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+argument.
+}}
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are appended added to the \code{datanames}.}
+Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.

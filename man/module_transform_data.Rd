@@ -21,7 +21,7 @@ srv_transform_data(
 
 \item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
 Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are appended added to the \code{datanames}.}
+Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
 
 \item{data}{(\verb{reactive teal_data})}
 
