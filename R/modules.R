@@ -59,22 +59,22 @@ setOldClass("teal_modules")
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
 #'
-#' @section Restricting datasetes using by `teal_module`:
+#' @section Restricting datasets using by `teal_module`:
 #' The `datanames` argument controls which datasets are used by the module’s server. These datasets,
 #' passed via server's `data` argument, are the only ones shown in the module's tab.
 #'
-#' When `datanames` is set to "all", all datasets in the data object are treated as relevant.
+#' When `datanames` is set to `"all"`, all datasets in the data object are treated as relevant.
 #' However, this may include unnecessary datasets, such as:
 #' -	Proxy variables for column modifications
 #' -	Temporary datasets used to create final versions
 #' -	Connection objects
 #'
 #' To exclude irrelevant datasets, use the [set_datanames()] function to change `datanames` from
-#' "all" to specific names. Trying to modify non-"all" values with [set_datanames()] will result in
-#' a warning. Datasets with names starting with . are ignored globally unless explicitly listed in
-#' `datanames`.
+#' `"all"` to specific names. Trying to modify non-`"all"` values with [set_datanames()] will result
+#' in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
+#' in `datanames`.
 #'
-#' If transformers are specified, their datanames are added to the module’s datanames.
+#' If transformers are specified, their `datanames` are added to the module’s `datanames`.
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.

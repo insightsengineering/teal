@@ -121,12 +121,12 @@ The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
 because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
-\section{Restricting datasetes using by \code{teal_module}}{
+\section{Restricting datasets using by \code{teal_module}}{
 
 The \code{datanames} argument controls which datasets are used by the module’s server. These datasets,
 passed via server's \code{data} argument, are the only ones shown in the module's tab.
 
-When \code{datanames} is set to "all", all datasets in the data object are treated as relevant.
+When \code{datanames} is set to \code{"all"}, all datasets in the data object are treated as relevant.
 However, this may include unnecessary datasets, such as:
 \itemize{
 \item Proxy variables for column modifications
@@ -135,11 +135,11 @@ However, this may include unnecessary datasets, such as:
 }
 
 To exclude irrelevant datasets, use the \code{\link[=set_datanames]{set_datanames()}} function to change \code{datanames} from
-"all" to specific names. Trying to modify non-"all" values with \code{\link[=set_datanames]{set_datanames()}} will result in
-a warning. Datasets with names starting with . are ignored globally unless explicitly listed in
-\code{datanames}.
+\code{"all"} to specific names. Trying to modify non-\code{"all"} values with \code{\link[=set_datanames]{set_datanames()}} will result
+in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
+in \code{datanames}.
 
-If transformers are specified, their datanames are added to the module’s datanames.
+If transformers are specified, their \code{datanames} are added to the module’s \code{datanames}.
 }
 
 \examples{
