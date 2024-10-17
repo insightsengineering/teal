@@ -281,6 +281,8 @@ build_app_title <- function(
 #' App ID is a hash of the app's data and modules.
 #' See "transferring snapshots" section in ?snapshot.
 #'
+#' @inheritSection .get_hashes_code Functions
+#'
 #' @param data (`teal_data` or `teal_data_module`) as accepted by `init`
 #' @param modules (`teal_modules`) object as accepted by `init`
 #'
@@ -296,16 +298,15 @@ create_app_id <- function(data, modules) {
   } else if (inherits(data, "teal_data_module")) {
     deparse1(body(data$server))
   }
-  modules <- lapply(modules, defunction)
 
-  rlang::hash(list(data = data, modules = modules))
+  rlang::hash(defunction(list(data = data, modules = modules)))
 }
 
 #' Go through list and extract bodies of encountered functions as string, recursively.
 #' @keywords internal
 #' @noRd
 defunction <- function(x) {
-  if (is.list(x)) {
+  if (checkmate::test_list(x)) {
     lapply(x, defunction)
   } else if (is.function(x)) {
     deparse1(body(x))
