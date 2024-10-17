@@ -2,14 +2,6 @@
 
 /* per tag */
 
-#teal_secondary_col .well {
-  margin: 0 0 15px 0;
-}
-
-#shiny-modal:has(> .modal-dialog > .modal-content > #landingpopup) {
-  backdrop-filter: blur(10px);
-}
-
 body:not(.modal-open) {
   padding-right: 0 !important;
   overflow: auto !important;
@@ -52,4 +44,8 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 
 .teal.bookmark-popup .modal-body {
   padding: 0 1.5rem;
+}
+
+.modal-dialog:has(.teal-filter-manager-modal) {
+  width: fit-content;
 }

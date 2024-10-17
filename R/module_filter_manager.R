@@ -74,7 +74,7 @@ srv_filter_manager_panel <- function(id, slices_global) {
       showModal(
         modalDialog(
           ui_filter_manager(session$ns("filter_manager")),
-          class = "filter_manager_modal",
+          class = "teal-filter-manager-modal",
           size = "l",
           footer = NULL,
           easyClose = TRUE
