@@ -104,6 +104,10 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' `shiny` module server function; that takes `id` and `data` argument,
 #' where the `id` is the module id and `data` is the reactive `teal_data` input.
 #' The server function must return reactive expression containing `teal_data` object.
+#'
+#' The server function definition should not use `eventReactive` as it may lead to
+#' unexpected behavior.
+#' See `vignettes("data-transform-as-shiny-module")` for more information.
 #' @param datanames (`character`)
 #'  Names of the datasets that are relevant for the module. The
 #'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
@@ -149,6 +153,18 @@ teal_transform_module <- function(ui = function(id) NULL,
       ui = ui,
       server = function(id, data) {
         data_out <- server(id, data)
+
+        if (inherits(data_out, "reactive.event")) {
+          # This warning message partially detects when `eventReactive` is used in `data_module`.
+          warning(
+            "teal_transform_module() ",
+            "Using eventReactive in teal_transform module server code should be avoided as it ",
+            "may lead to unexpected behavior. See the vignettes for more information  ",
+            "(`vignette(\"data-transform-as-shiny-module\", package = \"teal\")`).",
+            call. = FALSE
+          )
+        }
+
         decorate_err_msg(
           assert_reactive(data_out),
           pre = sprintf("From: 'teal_transform_module()':\nA 'teal_transform_module' with \"%s\" label:", label),

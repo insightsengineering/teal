@@ -18,7 +18,11 @@ teal_transform_module(
 \item{server}{(\verb{function(id, data)})
 \code{shiny} module server function; that takes \code{id} and \code{data} argument,
 where the \code{id} is the module id and \code{data} is the reactive \code{teal_data} input.
-The server function must return reactive expression containing \code{teal_data} object.}
+The server function must return reactive expression containing \code{teal_data} object.
+
+The server function definition should not use \code{eventReactive} as it may lead to
+unexpected behavior.
+See \code{vignettes("data-transform-as-shiny-module")} for more information.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 
