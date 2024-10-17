@@ -15,6 +15,7 @@ example_module(
 For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 
 \item{datanames}{(\code{character}) Names of the datasets relevant to the item.
+There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.

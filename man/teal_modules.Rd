@@ -68,6 +68,7 @@ or to the \code{...}.
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
 \item{datanames}{(\code{character}) Names of the datasets relevant to the item.
+There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
@@ -121,8 +122,7 @@ The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
 because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
-\section{Restricting datasets using by \code{teal_module}}{
-
+\section{Restricting datasets used by \code{teal_module}:}{
 The \code{datanames} argument controls which datasets are used by the module’s server. These datasets,
 passed via server's \code{data} argument, are the only ones shown in the module's tab.
 
@@ -138,8 +138,17 @@ To exclude irrelevant datasets, use the \code{\link[=set_datanames]{set_dataname
 \code{"all"} to specific names. Trying to modify non-\code{"all"} values with \code{\link[=set_datanames]{set_datanames()}} will result
 in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
 in \code{datanames}.
+}
 
-If transformers are specified, their \code{datanames} are added to the module’s \code{datanames}.
+\section{\code{datanames} with \code{transformers}}{
+When transformers are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+changes the behavior as follows:
+\itemize{
+\item If \code{module(datanames)} is \code{NULL} and the \code{transformers} have defined \code{datanames}, the sidebar
+will appear showing the transformers’ datasets, instead of being hidden.
+\item If \code{module(datanames)} is set to specific values and any \code{transformer} has \code{datanames = "all"},
+the module may receive extra datasets that could be unnecessary
+}
 }
 
 \examples{
