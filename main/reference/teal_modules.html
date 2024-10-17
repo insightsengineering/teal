@@ -9,7 +9,7 @@ Create a nested tab structure to embed modules in a teal application."><link rel
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9070</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9071</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,23 +56,6 @@ Create a nested tab structure to embed modules in a teal application."><link rel
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2-rc1">v0.15.2-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1-rc1">v0.15.1-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0-rc1">v0.15.0-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.2">v0.15.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.1">v0.15.1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.15.0">v0.15.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.14.0">v0.14.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.13.0">v0.13.0</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.12.0">v0.12.0</a> </div></li>
-<!-- end dropdown for versions -->
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-reports"><li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
     <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
@@ -169,9 +152,12 @@ or to the <code>...</code>.</p></li>
 
 
 <dt id="arg-datanames">datanames<a class="anchor" aria-label="anchor" href="#arg-datanames"></a></dt>
-<dd><p>(<code>character</code>) Names of the datasets that are relevant for the item.
-The keyword <code>"all"</code> provides all datasets available in <code>data</code> passed to <code>teal</code> application.
-<code>NULL</code> will hide the filter panel.</p></dd>
+<dd><p>(<code>character</code>) Names of the datasets relevant to the item.
+There are 2 reserved values that have specific behaviors:</p><ul><li><p>The keyword <code>"all"</code> includes all datasets available in the data passed to the teal application.</p></li>
+<li><p><code>NULL</code> hides the sidebar panel completely.</p></li>
+<li><p>If <code>transformers</code> are specified, their <code>datanames</code> are automatically added to this <code>datanames</code>
+argument.</p></li>
+</ul></dd>
 
 
 <dt id="arg-server-args">server_args<a class="anchor" aria-label="anchor" href="#arg-server-args"></a></dt>
@@ -184,11 +170,8 @@ The keyword <code>"all"</code> provides all datasets available in <code>data</co
 
 <dt id="arg-transformers">transformers<a class="anchor" aria-label="anchor" href="#arg-transformers"></a></dt>
 <dd><p>(<code>list</code> of <code>teal_data_module</code>) that will be applied to transform the data.
-Each transform module UI will appear in the <code>teal</code> application, unless the <code>custom_ui</code> attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself. <code>datanames</code> of the <code>transformers</code>
-will be added to the <code>datanames</code>.</p>
-<p>When the transformation does not have sufficient input data, the resulting data will fallback
-to the last successful transform or, in case there are none, to the filtered data.</p></dd>
+Each transform module UI will appear in the <code>teal</code>'s sidebar panel.
+Transformers' <code>datanames</code> are added to the <code>datanames</code>. See <code><a href="teal_transform_module.html">teal_transform_module()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -229,22 +212,26 @@ because they are used by the <code>mapping</code> argument of <code><a href="tea
 and the report previewer module <code><a href="reporter_previewer_module.html">reporter_previewer_module()</a></code>, respectively.</p>
     </div>
     <div class="section level2">
-    <h2 id="datanames"><code>datanames</code><a class="anchor" aria-label="anchor" href="#datanames"></a></h2>
-
-
-<p>The module's <code>datanames</code> argument determines a subset of datasets from the <code>data</code> object, as specified in the
-server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
-to this subset.
-When <code>datanames</code> is set to <code>"all"</code>, all available datasets in the <code>data</code> object are considered relevant for the
-module. However, setting <code>datanames</code> argument to <code>"all"</code> might include datasets that are irrelevant for the module,
-for example:</p><ul><li><p>Proxy variables used for modifying columns.</p></li>
-<li><p>Modified copies of datasets used to create a final dataset.</p></li>
-<li><p>Connection objects.
-To prevent these irrelevant datasets from appearing in the module, use the <code>set_datanames()</code> function on the
-module or <code>modules()</code> to change the <code>datanames</code> from <code>"all"</code> to specific dataset names. Attempting to change
-<code>datanames</code> values that was not set to <code>"all"</code> using <code>set_datanames()</code> will be ignored with a warning.</p></li>
-</ul><p>Additionally, datasets with names starting with <code>.</code> are ignored when <code>datanames</code> is set to <code>"all"</code>.</p>
+    <h2 id="restricting-datasets-used-by-teal-module-">Restricting datasets used by <code>teal_module</code>:<a class="anchor" aria-label="anchor" href="#restricting-datasets-used-by-teal-module-"></a></h2>
+    <p>The <code>datanames</code> argument controls which datasets are used by the module’s server. These datasets,
+passed via server's <code>data</code> argument, are the only ones shown in the module's tab.</p>
+<p>When <code>datanames</code> is set to <code>"all"</code>, all datasets in the data object are treated as relevant.
+However, this may include unnecessary datasets, such as:</p><ul><li><p>Proxy variables for column modifications</p></li>
+<li><p>Temporary datasets used to create final versions</p></li>
+<li><p>Connection objects</p></li>
+</ul><p>To exclude irrelevant datasets, use the <code>set_datanames()</code> function to change <code>datanames</code> from
+<code>"all"</code> to specific names. Trying to modify non-<code>"all"</code> values with <code>set_datanames()</code> will result
+in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
+in <code>datanames</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="datanames-with-transformers"><code>datanames</code> with <code>transformers</code><a class="anchor" aria-label="anchor" href="#datanames-with-transformers"></a></h2>
+    <p>When transformers are specified, their <code>datanames</code> are added to the module’s <code>datanames</code>, which
+changes the behavior as follows:</p><ul><li><p>If <code>module(datanames)</code> is <code>NULL</code> and the <code>transformers</code> have defined <code>datanames</code>, the sidebar
+will appear showing the <code>transformers</code>' datasets, instead of being hidden.</p></li>
+<li><p>If <code>module(datanames)</code> is set to specific values and any <code>transformer</code> has <code>datanames = "all"</code>,
+the module may receive extra datasets that could be unnecessary</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
