@@ -98,6 +98,11 @@ Default: `"auto"`.
 
 To read more about lockfile usage creation check `?teal::module_teal_lockfile`.
 
+### `teal.sidebar.width` (`numeric`)
+
+This sets the sidebar width in pixels in the teal app.
+
+Default: `250`
 
 # Deprecated options
 
