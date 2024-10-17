@@ -109,9 +109,8 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 #' unexpected behavior.
 #' See `vignettes("data-transform-as-shiny-module")` for more information.
 #' @param datanames (`character`)
-#'  Names of the datasets that are relevant for the module. The
-#'  filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
-#'  filters of all datasets. `datanames` will be automatically appended to the [modules()] `datanames`.
+#'  Names of the datasets that are relevant for this module to evaluate. If set to `character(0)`
+#'  then module would receive [modules()] `datanames`.
 #' @examples
 #' my_transformers <- list(
 #'   teal_transform_module(
@@ -144,10 +143,17 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
 teal_transform_module <- function(ui = function(id) NULL,
                                   server = function(id, data) data,
                                   label = "transform module",
-                                  datanames = "all") {
+                                  datanames = character(0)) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = c("id", "data"), nargs = 2)
   checkmate::assert_string(label)
+  checkmate::assert_character(datanames)
+  if (identical(datanames, "all")) {
+    stop(
+      "teal_transform_module can't have datanames property equal to 'all'. Set `datanames = character(0)` instead.",
+      call. = FALSE
+    )
+  }
   structure(
     list(
       ui = ui,

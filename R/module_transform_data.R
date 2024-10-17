@@ -13,18 +13,19 @@
 NULL
 
 #' @rdname module_transform_data
-ui_transform_data <- function(id, transforms, class = "well") {
+ui_transform_data <- function(id, transformers = list(), class = "well") {
   checkmate::assert_string(id)
-  checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
+  checkmate::assert_list(transformers, "teal_transform_module")
+
   ns <- NS(id)
-  labels <- lapply(transforms, function(x) attr(x, "label"))
+  labels <- lapply(transformers, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
-  names(transforms) <- ids
+  names(transformers) <- ids
 
   lapply(
-    names(transforms),
+    names(transformers),
     function(name) {
-      data_mod <- transforms[[name]]
+      data_mod <- transformers[[name]]
       wrapper_id <- ns(sprintf("wrapper_%s", name))
       div( # todo: accordion?
         # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
@@ -44,7 +45,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
         ),
         div(
           id = wrapper_id,
-          ui_teal_data(id = ns(name), data_module = transforms[[name]]$ui)
+          ui_teal_data(id = ns(name), data_module = transformers[[name]]$ui)
         )
       )
     }
@@ -52,29 +53,26 @@ ui_transform_data <- function(id, transforms, class = "well") {
 }
 
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transforms, modules, is_transformer_failed = reactiveValues()) {
+srv_transform_data <- function(id, data, transformers = list(), modules, is_transformer_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
-  checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
+  checkmate::assert_list(transformers, "teal_transform_module")
   checkmate::assert_class(modules, "teal_module")
-  if (length(transforms) == 0L) {
-    return(data)
-  }
-  labels <- lapply(transforms, function(x) attr(x, "label"))
+  labels <- lapply(transformers, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
-  names(transforms) <- ids
+  names(transformers) <- ids
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_modules initializing.")
     Reduce(
       function(previous_result, name) {
         srv_teal_data(
           id = name,
-          data_module = function(id) transforms[[name]]$server(id, previous_result),
+          data_module = function(id) transformers[[name]]$server(id, previous_result),
           modules = modules,
           is_transformer_failed = is_transformer_failed
         )
       },
-      x = names(transforms),
+      x = names(transformers),
       init = data
     )
   })
