@@ -145,7 +145,7 @@ When transformers are specified, their \code{datanames} are added to the moduleâ
 changes the behavior as follows:
 \itemize{
 \item If \code{module(datanames)} is \code{NULL} and the \code{transformers} have defined \code{datanames}, the sidebar
-will appear showing the transformersâ€™ datasets, instead of being hidden.
+will appear showing the \code{transformers}' datasets, instead of being hidden.
 \item If \code{module(datanames)} is set to specific values and any \code{transformer} has \code{datanames = "all"},
 the module may receive extra datasets that could be unnecessary
 }

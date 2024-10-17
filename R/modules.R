@@ -39,7 +39,7 @@ setOldClass("teal_modules")
 #' When transformers are specified, their `datanames` are added to the module’s `datanames`, which
 #' changes the behavior as follows:
 #' - If `module(datanames)` is `NULL` and the `transformers` have defined `datanames`, the sidebar
-#'   will appear showing the transformers’ datasets, instead of being hidden.
+#'   will appear showing the `transformers`' datasets, instead of being hidden.
 #' - If `module(datanames)` is set to specific values and any `transformer` has `datanames = "all"`,
 #'   the module may receive extra datasets that could be unnecessary
 #'
