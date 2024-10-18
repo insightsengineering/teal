@@ -2216,3 +2216,106 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 })
+
+testthat::describe("Datanames with special symbols", {
+  testthat::it("are detected as datanames when defined as 'all'", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(
+          iris = iris,
+          `%a_pipe%` = function(lhs, rhs) paste(lhs, rhs)
+        ),
+        modules = modules(module("module_1", server = function(id, data) data)),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          ls(
+            teal.code::get_env(modules_output$module_1()()),
+            all.names = TRUE
+          ),
+          c(".raw_data", "iris", "%a_pipe%")
+        )
+      }
+    )
+  })
+
+  testthat::it("are present in datanames when used in pre-processing code, but not defined in datanames", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `_a variable with spaces_` <- "new_column"
+            iris <- cbind(iris, data.frame(`_a variable with spaces_`))
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = "iris")
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          ls(
+            teal.code::get_env(modules_output$module_1()()),
+            all.names = TRUE
+          ),
+          c(".raw_data", "iris", "_a variable with spaces_")
+        )
+      }
+    )
+  })
+
+  testthat::it("(when used as non-native pipe) are present in datanames in the pre-processing code", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)
+            iris <- iris %cbind% data.frame("new_column")
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, , datanames = c("iris"))
+        ),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_contains(
+          strsplit(
+            x = teal.code::get_code(modules_output$module_1()()),
+            split = "\n"
+          )[[1]],
+          c(
+            "`%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)",
+            ".raw_data <- list2env(list(iris = iris))"
+          )
+        )
+      }
+    )
+  })
+})
