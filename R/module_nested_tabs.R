@@ -130,20 +130,36 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
               class = "teal-sidebar",
               width = getOption("teal.sidebar.width", 250),
               tags$div(
-                bslib::accordion(
-                  id = ns("data_summary_accordion"),
-                  bslib::accordion_panel(
-                    "Active Filter Summary",
-                    ui_data_summary(ns("data_summary"))
+                tags$div(
+                  class = "teal-active-data-summary-panel",
+                  bslib::accordion(
+                    id = ns("data_summary_accordion"),
+                    bslib::accordion_panel(
+                      "Active Data Summary",
+                      tags$div(
+                        class = "teal-active-data-summary",
+                        ui_data_summary(ns("data_summary"))
+                      )
+                    )
                   )
                 ),
-                ui_filter_data(ns("filter_panel")),
+                tags$br(),
+                tags$div(
+                  class = "teal-filter-panel",
+                  ui_filter_data(ns("filter_panel"))
+                ),
                 if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
-                  bslib::accordion(
-                    id = ns("data_transform_accordion"),
-                    bslib::accordion_panel(
-                      "Transform Data",
-                      ui_transform_data(ns("data_transform"), transforms = modules$transformers)
+                  tags$div(
+                    tags$br(),
+                    tags$div(
+                      class = "teal-transform-panel",
+                      bslib::accordion(
+                        id = ns("data_transform_accordion"),
+                        bslib::accordion_panel(
+                          "Transform Data",
+                          ui_transform_data(ns("data_transform"), transforms = modules$transformers)
+                        )
+                      )
                     )
                   )
                 }
@@ -155,15 +171,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             id = ns("sidebar_toggle_buttons"),
             class = "sidebar-toggle-buttons",
             actionButton(
+              class = "data-summary-toggle",
               ns("data_summary_toggle"),
               icon("fas fa-list")
             ),
             actionButton(
+              class = "data-filters-toggle",
               ns("data_filters_toggle"),
               icon("fas fa-filter")
             ),
             if (length(modules$transformers) > 0) {
               actionButton(
+                class = "data-transforms-toggle",
                 ns("data_transforms_toggle"),
                 icon("fas fa-pen-to-square")
               )

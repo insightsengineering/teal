@@ -140,3 +140,75 @@ a.remove {
 .accordion-button::after {
   scale: 0.8;
 }
+
+.teal-active-data-summary {
+  overflow-x: scroll;
+}
+
+.teal-active-data-summary::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.5);
+}
+
+.teal-active-data-summary::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.teal-active-data-summary::-webkit-scrollbar {
+  height: 6px;
+}
+
+.teal-active-data-summary::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.teal-transform-panel .accordion .accordion-button,
+.teal-active-data-summary-panel .accordion .accordion-button {
+  background-color: rgba(var(--bs-primary-rgb), 0.75);
+  color: #fff;
+}
+.teal-transform-panel .accordion-body .accordion .accordion-button {
+  background-color: rgba(var(--bs-primary-rgb), 0.35);
+  color: #000;
+}
+.teal-transform-panel .accordion .accordion-button:hover,
+.teal-active-data-summary-panel .accordion .accordion-button:hover {
+  background-color: rgba(var(--bs-primary-rgb), 1);
+  color: #fff;
+}
+.teal-transform-panel .accordion-body .accordion .accordion-button:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.6);
+  color: #000;
+}
+/* .teal-transform-panel .accordion .accordion-body,
+.teal-active-data-summary-panel .accordion .accordion-body {
+  background-color: rgba(var(--bs-primary-rgb), 0.05);
+} */
+
+/* .teal-transform-panel .accordion-body,
+.teal-active-data-summary-panel .accordion-body {
+  border: solid 1.5px var(--bs-primary);
+}
+
+.teal-filter-panel .accordion-body {
+  border: solid 1.5px var(--bs-gray);
+} */
+
+.sidebar-toggle-buttons .data-summary-toggle {
+  color: rgba(var(--bs-primary-rgb), 1);
+}
+
+.sidebar-toggle-buttons .data-summary-toggle:hover {
+  background: rgba(var(--bs-primary-rgb), 1);
+  color: white;
+}
+
+.sidebar-toggle-buttons .data-transforms-toggle {
+  color: rgba(var(--bs-primary-rgb), 1);
+}
+
+.sidebar-toggle-buttons .data-transforms-toggle:hover {
+  background: rgba(var(--bs-primary-rgb), 1);
+  color: white;
+}

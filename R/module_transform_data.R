@@ -26,14 +26,17 @@ ui_transform_data <- function(id, transforms, class = "well") {
     function(name) {
       data_mod <- transforms[[name]]
       wrapper_id <- ns(sprintf("wrapper_%s", name))
-      bslib::accordion(
-        class = "teal-transform-accordian", # todo: make transform accordian
-        bslib::accordion_panel(
-          attr(data_mod, "label"),
-          icon = icon("fas fa-square-pen"),
-          div(
-            id = wrapper_id,
-            ui_teal_data(id = ns(name), data_module = transforms[[name]]$ui)
+      tags$div(
+        class = "teal-trasform-component",
+        bslib::accordion(
+          class = "teal-transform-accordian", # todo: make transform accordian
+          bslib::accordion_panel(
+            attr(data_mod, "label"),
+            icon = icon("fas fa-square-pen"),
+            div(
+              id = wrapper_id,
+              ui_teal_data(id = ns(name), data_module = transforms[[name]]$ui)
+            )
           )
         )
       )
