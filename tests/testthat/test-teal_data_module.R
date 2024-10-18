@@ -22,3 +22,11 @@ testthat::test_that("teal_data_module throws when server has other formals than 
     ".*formal arguments.*"
   )
 })
+
+
+testthat::test_that("teal_transform_module doesn't accept datanames = 'all'", {
+  testthat::expect_error(
+    teal_transform_module(datanames = "all"),
+    "can't have datanames property equal to 'all'"
+  )
+})
