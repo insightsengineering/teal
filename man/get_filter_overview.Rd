@@ -26,11 +26,12 @@ has multiple entries for a single subject.
 }
 }
 \section{Extending for other data types}{
-\code{teal} supports data summary for \code{data.frame} and \code{MultiAssayExperiment}. Other datasets
-are producing only \code{dataname} and \code{class} informations (they don't fail application).
-To extend the functionality by other data type one need to create \verb{get_filter_overview.<custom class>}.
-New method needs to return a \code{data.frame} containing \code{dataname} column. In general, \code{teal} supports
-any type of the information contained in this \code{data.frame} and results will be merged.
+\code{teal} supports data summary table with observation counts for \code{data.frame} and
+\code{MultiAssayExperiment}. For other datasets teal displays only \code{dataname} and \code{class} information.
+To extend this functionality by other data types one needs to create \verb{get_filter_overview.<custom class>}.
+New method needs to return a \code{data.frame} containing at least \code{dataname} column. In general, \code{teal} supports
+any type of the information contained in this \code{data.frame} and they will be included in combined table.
+Example method for \code{data.frame} could look like this:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{get_filter_overview.data.frame <- function(current_data, initial_data, dataname, subject_keys) \{
   data.frame(

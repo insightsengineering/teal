@@ -142,7 +142,7 @@ srv_data_summary <- function(id, teal_data) {
 
       output$unsupported <- renderTable(unsupported_table())
 
-      filter_overview_table
+      NULL
     }
   )
 }
@@ -193,12 +193,12 @@ get_filter_overview_wrapper <- function(teal_data) {
 #'   has multiple entries for a single subject.
 #'
 #' # Extending for other data types
-#' `teal` supports data summary for `data.frame` and `MultiAssayExperiment`. Other datasets
-#' are producing only `dataname` and `class` informations (they don't fail application).
-#' To extend the functionality by other data type one need to create `get_filter_overview.<custom class>`.
-#' New method needs to return a `data.frame` containing `dataname` column. In general, `teal` supports
-#' any type of the information contained in this `data.frame` and results will be merged.
-#'
+#' `teal` supports data summary table with observation counts for `data.frame` and
+#' `MultiAssayExperiment`. For other datasets teal displays only `dataname` and `class` information.
+#' To extend this functionality by other data types one needs to create `get_filter_overview.<custom class>`.
+#' New method needs to return a `data.frame` containing at least `dataname` column. In general, `teal` supports
+#' any type of the information contained in this `data.frame` and they will be included in combined table.
+#' Example method for `data.frame` could look like this:
 #'
 #' ```
 #' get_filter_overview.data.frame <- function(current_data, initial_data, dataname, subject_keys) {
@@ -326,7 +326,6 @@ get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: obj
   experiment_info <- cbind(experiment_obs_info, experiment_subjects_info)
   smart_rbind(mae_info, experiment_info)
 }
-
 
 #' Smart `rbind`
 #'
