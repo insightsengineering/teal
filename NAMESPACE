@@ -3,6 +3,7 @@
 S3method(c,teal_slices)
 S3method(format,teal_module)
 S3method(format,teal_modules)
+S3method(get_filter_overview,default)
 S3method(join_keys,tdata)
 S3method(print,teal_module)
 S3method(print,teal_modules)
