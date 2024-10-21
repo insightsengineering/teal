@@ -47,9 +47,9 @@ ui_data_summary <- function(id) {
       tags$div(
         class = "teal_active_summary_filter_panel",
         tableOutput(ns("supported")),
-        tags$details(
-          tags$summary("Other datasets"),
-          tableOutput(ns("unsupported"))
+        actionLink(
+          ns("show_unsupported"),
+          label = "Show unsupported"
         )
       )
     )
@@ -72,30 +72,8 @@ srv_data_summary <- function(id, teal_data) {
         get_filter_overview_wrapper(teal_data)
       })
 
-      supported_table <- reactive({
-        filter_overview <- do.call(
-          smart_rbind,
-          Filter(function(x) !inherits(x, "unsupported"), filter_overview_table())
-        )
-        if ("dataname" %in% names(filter_overview)) {
-          names(filter_overview)[names(filter_overview) == "dataname"] <- "Data Name"
-        }
-        if ("obs" %in% names(filter_overview)) {
-          names(filter_overview)[names(filter_overview) == "obs"] <- "Obs"
-        }
-        if ("subjects" %in% names(filter_overview)) {
-          names(filter_overview)[names(filter_overview) == "subjects"] <- "Subjects"
-        }
-        filter_overview[is.na(filter_overview)] <- ""
-        Filter(function(col) !all(col == ""), filter_overview)
-      })
-
-      unsupported_table <- reactive(
-        do.call(rbind, Filter(function(x) inherits(x, "unsupported"), filter_overview_table()))
-      )
-
       output$supported <- renderUI({
-        summary_table_out <- try(supported_table(), silent = TRUE)
+        summary_table_out <- filter_overview_table()
         if (inherits(summary_table_out, "try-error")) {
           # Ignore silent shiny error
           if (!inherits(attr(summary_table_out, "condition"), "shiny.silent.error")) {
@@ -104,22 +82,31 @@ srv_data_summary <- function(id, teal_data) {
         } else if (is.null(summary_table_out)) {
           "no datasets to show"
         } else {
+          any_unsupported <- any(apply(summary_table_out, 1, function(x) all(is.na(x[-1]))))
+          if (any_unsupported) {
+            shinyjs::show("show_unsupported")
+          } else {
+            shinyjs::show("hide_unsupported")
+          }
+
+          summary_table_out[is.na(summary_table_out)] <- ""
+          unsupported_icon <- icon(
+            name = "fas fa-exclamation-triangle",
+            title = "Unsupported dataset",
+            `data-container` = "body",
+            `data-toggle` = "popover",
+            `data-content` = "object not supported by the data_summary module"
+          )
           body_html <- apply(
             summary_table_out,
             1,
             function(x) {
+              is_supported <- !all(x[-1] == "")
               tags$tr(
+                class = if (!is_supported) "summary_row_unsupported",
                 tagList(
                   tags$td(
-                    if (all(x[-1] == "")) {
-                      icon(
-                        name = "fas fa-exclamation-triangle",
-                        title = "Unsupported dataset",
-                        `data-container` = "body",
-                        `data-toggle` = "popover",
-                        `data-content` = "object not supported by the data_summary module"
-                      )
-                    },
+                    if (!is_supported) unsupported_icon,
                     x[1]
                   ),
                   lapply(x[-1], tags$td)
@@ -128,7 +115,7 @@ srv_data_summary <- function(id, teal_data) {
             }
           )
 
-          header_labels <- names(supported_table())
+          header_labels <- names(summary_table_out)
           header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
           table_html <- tags$table(
@@ -140,7 +127,20 @@ srv_data_summary <- function(id, teal_data) {
         }
       })
 
-      output$unsupported <- renderTable(unsupported_table())
+      observeEvent(input$show_unsupported, {
+        state <- if (input$show_unsupported %% 2 == 0) {
+          "hidden"
+        } else {
+          "shown"
+        }
+        if (state == "hidden") {
+          updateActionLink(inputId = "show_unsupported", label = "Show unsupported")
+          shinyjs::hide(selector = ".summary_row_unsupported")
+        } else {
+          updateActionLink(inputId = "show_unsupported", label = "Hide unsupported")
+          shinyjs::show(selector = ".summary_row_unsupported")
+        }
+      })
 
       NULL
     }
@@ -159,7 +159,7 @@ get_filter_overview_wrapper <- function(teal_data) {
   )
   initial_data_objs <- teal.code::get_var(teal_data(), ".raw_data")
 
-  lapply(
+  out <- lapply(
     datanames,
     function(dataname) {
       parent <- teal.data::parent(joinkeys, dataname)
@@ -182,6 +182,8 @@ get_filter_overview_wrapper <- function(teal_data) {
       )
     }
   )
+
+  do.call(smart_rbind, out)
 }
 
 #' Get filter overview
@@ -231,13 +233,7 @@ get_filter_overview.default <- function(current_data, initial_data, dataname, su
   } else if (inherits(current_data, "MultiAssayExperiment")) {
     get_filter_overview_MultiAssayExperiment(current_data, initial_data, dataname)
   } else {
-    structure(
-      data.frame(
-        dataname = dataname,
-        type = class(current_data)
-      ),
-      class = "unsupported"
-    )
+    data.frame(dataname = dataname)
   }
 }
 
@@ -340,6 +336,7 @@ get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: obj
 #' @keywords internal
 smart_rbind <- function(...) {
   checkmate::assert_list(list(...), "data.frame")
+
   Reduce(
     x = list(...),
     function(x, y) {
