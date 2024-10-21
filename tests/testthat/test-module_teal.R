@@ -2257,7 +2257,7 @@ testthat::describe("Datanames with special symbols", {
           {
             iris <- iris
             mtcars <- mtcars
-            `_a variable with spaces_` <- "new_column"
+            `_a variable with spaces_` <- "new_column" # nolint: object_name.
             iris <- cbind(iris, data.frame(`_a variable with spaces_`))
           }
         ),
