@@ -73,10 +73,8 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
   previous_signature <- reactiveVal(NULL)
   filter_changed <- reactive({
     req(inherits(datasets(), "FilteredData"))
-    data_q <- data_rv()
-    class(data_q) <- "qenv"
     new_signature <- c(
-      teal.code::get_code(data_q),
+      teal.code::get_code(data_rv()),
       .get_filter_expr(datasets = datasets(), datanames = active_datanames())
     )
     if (!identical(previous_signature(), new_signature)) {

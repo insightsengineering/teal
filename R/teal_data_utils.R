@@ -48,15 +48,12 @@ NULL
     return(teal_data())
   }
 
-  data_q <- data
-  class(data_q) <- "qenv"
-
   new_data <- do.call(
     teal.data::teal_data,
     args = c(
       mget(x = datanames_corrected_with_raw, envir = teal.code::get_env(data)),
       list(
-        code = teal.code::get_code(data_q, names = datanames_corrected_with_raw),
+        code = teal.code::get_code(data, names = datanames_corrected_with_raw),
         join_keys = teal.data::join_keys(data)[datanames_corrected]
       )
     )
