@@ -12,6 +12,8 @@ get_filter_overview(current_data, initial_data, dataname, subject_keys)
 \item{initial_data}{(\code{object}) initial object.}
 
 \item{dataname}{(\code{character(1)})}
+
+\item{subject_keys}{(\code{character}) names of the columns which determine a single unique subjects}
 }
 \value{
 \code{data.frame}

@@ -46,7 +46,7 @@ ui_data_summary <- function(id) {
       id = content_id,
       tags$div(
         class = "teal_active_summary_filter_panel",
-        tableOutput(ns("supported")),
+        tableOutput(ns("table")),
         actionLink(
           ns("show_unsupported"),
           label = "Show unsupported"
@@ -72,7 +72,17 @@ srv_data_summary <- function(id, teal_data) {
         get_filter_overview_wrapper(teal_data)
       })
 
-      output$supported <- renderUI({
+      is_unsupported_hidden <- reactive({
+        is_hidden <- isTRUE(input$show_unsupported %% 2 == 0)
+        if (is_hidden) {
+          updateActionLink(inputId = "show_unsupported", label = "Show unsupported")
+        } else {
+          updateActionLink(inputId = "show_unsupported", label = "Hide unsupported")
+        }
+        is_hidden
+      })
+
+      output$table <- renderUI({
         summary_table_out <- filter_overview_table()
         if (inherits(summary_table_out, "try-error")) {
           # Ignore silent shiny error
@@ -86,10 +96,11 @@ srv_data_summary <- function(id, teal_data) {
           if (any_unsupported) {
             shinyjs::show("show_unsupported")
           } else {
-            shinyjs::show("hide_unsupported")
+            shinyjs::hide("show_unsupported")
           }
 
           summary_table_out[is.na(summary_table_out)] <- ""
+
           unsupported_icon <- icon(
             name = "fas fa-exclamation-triangle",
             title = "Unsupported dataset",
@@ -102,8 +113,7 @@ srv_data_summary <- function(id, teal_data) {
             1,
             function(x) {
               is_supported <- !all(x[-1] == "")
-              tags$tr(
-                class = if (!is_supported) "summary_row_unsupported",
+              elem <- tags$tr(
                 tagList(
                   tags$td(
                     if (!is_supported) unsupported_icon,
@@ -112,10 +122,17 @@ srv_data_summary <- function(id, teal_data) {
                   lapply(x[-1], tags$td)
                 )
               )
+              if (!is_supported && is_unsupported_hidden()) {
+                shinyjs::hidden(elem)
+              } else {
+                elem
+              }
             }
           )
 
           header_labels <- names(summary_table_out)
+          header_labels[header_labels == "dataname"] <- "Data Name"
+          substring(header_labels, 1, 1) <- toupper(substring(header_labels, 1, 1))
           header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
           table_html <- tags$table(
@@ -124,21 +141,6 @@ srv_data_summary <- function(id, teal_data) {
             tags$tbody(body_html)
           )
           table_html
-        }
-      })
-
-      observeEvent(input$show_unsupported, {
-        state <- if (input$show_unsupported %% 2 == 0) {
-          "hidden"
-        } else {
-          "shown"
-        }
-        if (state == "hidden") {
-          updateActionLink(inputId = "show_unsupported", label = "Show unsupported")
-          shinyjs::hide(selector = ".summary_row_unsupported")
-        } else {
-          updateActionLink(inputId = "show_unsupported", label = "Hide unsupported")
-          shinyjs::show(selector = ".summary_row_unsupported")
         }
       })
 
@@ -221,6 +223,7 @@ get_filter_overview_wrapper <- function(teal_data) {
 #' @param current_data (`object`) current object (after filtering and transforming).
 #' @param initial_data (`object`) initial object.
 #' @param dataname (`character(1)`)
+#' @param subject_keys (`character`) names of the columns which determine a single unique subjects
 #' @return `data.frame`
 get_filter_overview <- function(current_data, initial_data, dataname, subject_keys) {
   UseMethod("get_filter_overview")
@@ -328,11 +331,6 @@ get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: obj
 #' Combine `data.frame` objects which have different columns
 #'
 #' @param ... (`data.frame`)
-#' @examples
-#' df1 <- data.frame(A = 1:3, B = letters[1:3])
-#' df2 <- data.frame(A = 4:5, C = c("x", "y"))
-#' df3 <- data.frame(B = letters[4:5], C = c("u", "v"))
-#' smart_rbind(df1, df2, df3)
 #' @keywords internal
 smart_rbind <- function(...) {
   checkmate::assert_list(list(...), "data.frame")

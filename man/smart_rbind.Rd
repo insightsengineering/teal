@@ -12,10 +12,4 @@ smart_rbind(...)
 \description{
 Combine \code{data.frame} objects which have different columns
 }
-\examples{
-df1 <- data.frame(A = 1:3, B = letters[1:3])
-df2 <- data.frame(A = 4:5, C = c("x", "y"))
-df3 <- data.frame(B = letters[4:5], C = c("u", "v"))
-smart_rbind(df1, df2, df3)
-}
 \keyword{internal}
