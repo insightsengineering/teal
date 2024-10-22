@@ -59,7 +59,7 @@ Suggests:
     mirai (>= 1.1.1),
     MultiAssayExperiment,
     R6,
-    renv (>= 1.0.10.9000),
+    renv (>= 1.0.11),
     rmarkdown (>= 2.23),
     rvest (>= 1.0.0),
     shinytest2,
@@ -71,8 +71,6 @@ VignetteBuilder:
     knitr
 RdMacros:
     lifecycle
-Remotes: 
-    rstudio/renv
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai,
