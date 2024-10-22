@@ -68,13 +68,16 @@ srv_data_summary <- function(id, teal_data) {
         } else if (is.null(summary_table_out)) {
           "no datasets to show"
         } else {
-          body_html <- apply(
-            summary_table_out,
-            1,
-            function(x) {
+          body_html <- lapply(
+            seq_len(nrow(summary_table_out)),
+            function(row_index) {
+              x <- summary_table_out[row_index, ]
+              row_color <- ifelse(row_index %% 2 == 0, "#f2f2f2", "#ffffff")
+
               tags$tr(
                 tagList(
                   tags$td(
+                    style = paste0("background-color:", row_color, ";"),
                     if (all(x[-1] == "")) {
                       icon(
                         name = "fas fa-exclamation-triangle",
@@ -86,7 +89,12 @@ srv_data_summary <- function(id, teal_data) {
                     },
                     x[1]
                   ),
-                  lapply(x[-1], tags$td)
+                  lapply(x[-1], function(cell) {
+                    tags$td(
+                      style = paste0("background-color:", row_color, ";"),
+                      cell
+                    )
+                  })
                 )
               )
             }

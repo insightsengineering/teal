@@ -171,18 +171,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             id = ns("sidebar_toggle_buttons"),
             class = "sidebar-toggle-buttons",
             actionButton(
-              class = "data-summary-toggle",
+              class = "data-summary-toggle btn-outline-primary",
               ns("data_summary_toggle"),
               icon("fas fa-list")
             ),
             actionButton(
-              class = "data-filters-toggle",
+              class = "data-filters-toggle btn-outline-secondary",
               ns("data_filters_toggle"),
               icon("fas fa-filter")
             ),
             if (length(modules$transformers) > 0) {
               actionButton(
-                class = "data-transforms-toggle",
+                class = "data-transforms-toggle btn-outline-primary",
                 ns("data_transforms_toggle"),
                 icon("fas fa-pen-to-square")
               )

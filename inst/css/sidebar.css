@@ -165,21 +165,22 @@ a.remove {
 
 .teal-transform-panel .accordion .accordion-button,
 .teal-active-data-summary-panel .accordion .accordion-button {
-  background-color: rgba(var(--bs-primary-rgb), 0.75);
+  background-color: rgba(var(--bs-primary-rgb), 1);
   color: #fff;
-}
-.teal-transform-panel .accordion-body .accordion .accordion-button {
-  background-color: rgba(var(--bs-primary-rgb), 0.35);
-  color: #000;
 }
 .teal-transform-panel .accordion .accordion-button:hover,
 .teal-active-data-summary-panel .accordion .accordion-button:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.75);
+  color: #fff;
+}
+
+.teal-transform-panel .accordion-body .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
   color: #fff;
 }
 .teal-transform-panel .accordion-body .accordion .accordion-button:hover {
-  background-color: rgba(var(--bs-primary-rgb), 0.6);
-  color: #000;
+  background-color: rgba(var(--bs-primary-rgb), 0.75);
+  color: #fff;
 }
 /* .teal-transform-panel .accordion .accordion-body,
 .teal-active-data-summary-panel .accordion .accordion-body {
