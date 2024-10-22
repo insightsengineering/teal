@@ -5,6 +5,9 @@
 \alias{ui_data_summary}
 \alias{srv_data_summary}
 \alias{get_filter_overview_wrapper}
+\alias{get_filter_overview}
+\alias{get_filter_overview_array}
+\alias{get_filter_overview_MultiAssayExperiment}
 \title{Data summary}
 \usage{
 ui_data_summary(id)
@@ -12,12 +15,25 @@ ui_data_summary(id)
 srv_data_summary(id, teal_data)
 
 get_filter_overview_wrapper(teal_data)
+
+get_filter_overview(current_data, initial_data, dataname, subject_keys)
+
+get_filter_overview_array(current_data, initial_data, dataname, subject_keys)
+
+get_filter_overview_MultiAssayExperiment(current_data, initial_data, dataname)
 }
 \arguments{
-\item{id}{(\code{character(1)})
-\code{shiny} module instance id.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{teal_data}{(\code{reactive} returning \code{teal_data})}
+
+\item{current_data}{(\code{object}) current object (after filtering and transforming).}
+
+\item{initial_data}{(\code{object}) initial object.}
+
+\item{dataname}{(\code{character(1)})}
+
+\item{subject_keys}{(\code{character}) names of the columns which determine a single unique subjects}
 }
 \value{
 \code{NULL}.
@@ -32,6 +48,10 @@ Handling different data classes:
 \item \code{array} (\code{data.frame}, \code{DataFrame}, \code{array}, \code{Matrix} and \code{SummarizedExperiment}): Method variant
 can be applied to any two-dimensional objects on which \code{\link[=ncol]{ncol()}} can be used.
 \item \code{MultiAssayExperiment}: for which summary contains counts for \code{colData} and all \code{experiments}.
+\item For other data types module displays data name with warning icon and no more details.
 }
+
+Module includes also "Show/Hide unsupported" button to toggle rows of the summary table
+containing datasets where number of observations are not calculated.
 }
 \keyword{internal}

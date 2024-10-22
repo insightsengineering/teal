@@ -7,11 +7,13 @@
 #' - `array` (`data.frame`, `DataFrame`, `array`, `Matrix` and `SummarizedExperiment`): Method variant
 #' can be applied to any two-dimensional objects on which [ncol()] can be used.
 #' - `MultiAssayExperiment`: for which summary contains counts for `colData` and all `experiments`.
+#' - For other data types module displays data name with warning icon and no more details.
 #'
-#' @param id (`character(1)`)
-#'  `shiny` module instance id.
+#' Module includes also "Show/Hide unsupported" button to toggle rows of the summary table
+#' containing datasets where number of observations are not calculated.
+#'
+#' @param id (`character(1)`) `shiny` module instance id.
 #' @param teal_data (`reactive` returning `teal_data`)
-#'
 #'
 #' @name module_data_summary
 #' @rdname module_data_summary
@@ -185,52 +187,16 @@ get_filter_overview_wrapper <- function(teal_data) {
     }
   )
 
-  do.call(smart_rbind, out)
+  do.call(.smart_rbind, out)
 }
 
-#' Get filter overview
-#'
-#' Method to create a single entry in [`module_data_summary`]. Method returns `data.frame` containing:
-#' - `dataname`: name of the dataset.
-#' - `obs`: number of observations in form of a text `filtered/initial`.
-#' - `subjects`: number of subjects in form of a text `filtered/initial`. Applicable when a dataset
-#'   has multiple entries for a single subject.
-#'
-#' # Extending for other data types
-#' `teal` supports data summary table with observation counts for `data.frame` and
-#' `MultiAssayExperiment`. For other datasets teal displays only `dataname` and `class` information.
-#' To extend this functionality by other data types one needs to create `get_filter_overview.<custom class>`.
-#' New method needs to return a `data.frame` containing at least `dataname` column. In general, `teal` supports
-#' any type of the information contained in this `data.frame` and they will be included in combined table.
-#' Example method for `data.frame` could look like this:
-#'
-#' ```
-#' get_filter_overview.data.frame <- function(current_data, initial_data, dataname, subject_keys) {
-#'   data.frame(
-#'     dataname = dataname,
-#'     obs = if (!is.null(initial_data)) {
-#'       sprintf("%s/%s", nrow(current_data), nrow(initial_data))
-#'     } else {
-#'       # when dataset is added in transform
-#'       # then only current data is available
-#'       nrow(current_data)
-#'     }
-#'   )
-#' }
-#' ```
-#'
-#'
+
+#' @rdname module_data_summary
 #' @param current_data (`object`) current object (after filtering and transforming).
 #' @param initial_data (`object`) initial object.
 #' @param dataname (`character(1)`)
 #' @param subject_keys (`character`) names of the columns which determine a single unique subjects
-#' @return `data.frame`
 get_filter_overview <- function(current_data, initial_data, dataname, subject_keys) {
-  UseMethod("get_filter_overview")
-}
-
-#' @export
-get_filter_overview.default <- function(current_data, initial_data, dataname, subject_keys) {
   if (inherits(current_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
     get_filter_overview_array(current_data, initial_data, dataname, subject_keys)
   } else if (inherits(current_data, "MultiAssayExperiment")) {
@@ -240,8 +206,7 @@ get_filter_overview.default <- function(current_data, initial_data, dataname, su
   }
 }
 
-# pseudo S3 handled in get_filter_overview.default
-# Reason is to avoid registering S3 method so it is easier for external users to override
+#' @rdname module_data_summary
 get_filter_overview_array <- function(current_data, # nolint: object_length.
                                       initial_data,
                                       dataname,
@@ -272,6 +237,7 @@ get_filter_overview_array <- function(current_data, # nolint: object_length.
   }
 }
 
+#' @rdname module_data_summary
 get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: object_length, object_name.
                                                      initial_data,
                                                      dataname) {
@@ -323,25 +289,5 @@ get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: obj
   ))
 
   experiment_info <- cbind(experiment_obs_info, experiment_subjects_info)
-  smart_rbind(mae_info, experiment_info)
-}
-
-#' Smart `rbind`
-#'
-#' Combine `data.frame` objects which have different columns
-#'
-#' @param ... (`data.frame`)
-#' @keywords internal
-smart_rbind <- function(...) {
-  checkmate::assert_list(list(...), "data.frame")
-
-  Reduce(
-    x = list(...),
-    function(x, y) {
-      all_columns <- union(colnames(x), colnames(y))
-      x[setdiff(all_columns, colnames(x))] <- NA
-      y[setdiff(all_columns, colnames(y))] <- NA
-      rbind(x, y)
-    }
-  )
+  .smart_rbind(mae_info, experiment_info)
 }

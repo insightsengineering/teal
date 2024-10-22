@@ -396,3 +396,22 @@ build_datanames_error_message <- function(label = NULL,
     }
   )
 }
+
+#' Smart `rbind`
+#'
+#' Combine `data.frame` objects which have different columns
+#'
+#' @param ... (`data.frame`)
+#' @keywords internal
+.smart_rbind <- function(...) {
+  checkmate::assert_list(list(...), "data.frame")
+  Reduce(
+    x = list(...),
+    function(x, y) {
+      all_columns <- union(colnames(x), colnames(y))
+      x[setdiff(all_columns, colnames(x))] <- NA
+      y[setdiff(all_columns, colnames(y))] <- NA
+      rbind(x, y)
+    }
+  )
+}
