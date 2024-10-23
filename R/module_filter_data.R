@@ -74,7 +74,7 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
   filter_changed <- reactive({
     req(inherits(datasets(), "FilteredData"))
     new_signature <- c(
-      teal.data::get_code(data_rv()),
+      teal.code::get_code(data_rv()),
       .get_filter_expr(datasets = datasets(), datanames = active_datanames())
     )
     if (!identical(previous_signature(), new_signature)) {

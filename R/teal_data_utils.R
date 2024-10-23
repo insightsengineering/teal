@@ -53,7 +53,7 @@ NULL
     args = c(
       mget(x = datanames_corrected_with_raw, envir = teal.code::get_env(data)),
       list(
-        code = teal.data::get_code(data, datanames = datanames_corrected_with_raw),
+        code = teal.code::get_code(data, names = datanames_corrected_with_raw),
         join_keys = teal.data::join_keys(data)[datanames_corrected]
       )
     )
