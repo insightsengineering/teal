@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9072
-Date: 2024-10-17
+Version: 0.15.2.9074
+Date: 2024-10-23
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -37,7 +37,7 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.0),
     shiny (>= 1.8.1),
-    teal.data (> 0.6.0.9007),
+    teal.data (>= 0.6.0.9014),
     teal.slice (>= 0.5.1.9009)
 Imports:
     checkmate (>= 2.1.0),
@@ -48,7 +48,7 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.code (>= 0.5.0),
+    teal.code (>= 0.5.0.9011),
     teal.logger (>= 0.2.0),
     teal.reporter (>= 0.3.1.9004),
     teal.widgets (>= 0.4.0),
@@ -59,7 +59,7 @@ Suggests:
     mirai (>= 1.1.1),
     MultiAssayExperiment,
     R6,
-    renv (>= 1.0.10.9000),
+    renv (>= 1.0.11),
     rmarkdown (>= 2.23),
     rvest (>= 1.0.0),
     shinytest2,
@@ -71,8 +71,6 @@ VignetteBuilder:
     knitr
 RdMacros:
     lifecycle
-Remotes: 
-    rstudio/renv
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai,
