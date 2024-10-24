@@ -2,17 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{check_modules_datanames}
 \alias{check_modules_datanames}
+\alias{recursive_check_datanames}
 \title{Check \code{datanames} in modules}
 \usage{
-check_modules_datanames(modules, datanames)
+check_modules_datanames(modules, datanames, as_html = FALSE)
+
+recursive_check_datanames(modules, datanames)
 }
 \arguments{
 \item{modules}{(\code{teal_modules}) object}
 
 \item{datanames}{(\code{character}) names of datasets available in the \code{data} object}
+
+\item{as_html}{(\code{logical(1)}) whether message should be returned in form of formatted \code{html}.}
 }
 \value{
-A \code{character(1)} containing error message or \code{TRUE} if validation passes.
+\code{TRUE} if validation passes, otherwise \code{character} or \code{shiny.tag.list}
 }
 \description{
 This function ensures specified \code{datanames} in modules match those in the data object,

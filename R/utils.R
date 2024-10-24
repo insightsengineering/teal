@@ -127,69 +127,75 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #'
 #' @param modules (`teal_modules`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
+#' @param as_html (`logical(1)`) whether message should be returned in form of formatted `html`.
 #'
-#' @return A `character(1)` containing error message or `TRUE` if validation passes.
+#' @return `TRUE` if validation passes, otherwise `character` or `shiny.tag.list`
 #' @keywords internal
-check_modules_datanames <- function(modules, datanames) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
+check_modules_datanames <- function(modules, datanames, as_html = FALSE) {
+  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_character(datanames)
-
-  recursive_check_datanames <- function(modules, datanames) {
-    # check teal_modules against datanames
-    if (inherits(modules, "teal_modules")) {
-      result <- lapply(modules$children, function(module) recursive_check_datanames(module, datanames = datanames))
-      result <- result[vapply(result, Negate(is.null), logical(1L))]
-      if (length(result) == 0) {
-        return(NULL)
-      }
-      list(
-        string = do.call(c, as.list(unname(sapply(result, function(x) x$string)))),
-        html = function(with_module_name = TRUE) {
-          tagList(
-            lapply(
-              result,
-              function(x) x$html(with_module_name = with_module_name)
-            )
-          )
-        }
-      )
-    } else {
-      extra_datanames <- setdiff(modules$datanames, c("all", datanames))
-      if (length(extra_datanames)) {
-        list(
-          string = build_datanames_error_message(
-            modules$label,
-            datanames,
-            extra_datanames,
-            tags = list(
-              span = function(..., .noWS = NULL) { # nolint: object_name
-                trimws(paste(..., sep = ifelse(is.null(.noWS), " ", ""), collapse = " "))
-              },
-              code = function(x) toString(dQuote(x, q = FALSE))
-            ),
-            tagList = function(...) trimws(paste(...))
-          ),
-          # Build HTML representation of the error message with <pre> formatting
-          html = function(with_module_name = TRUE) {
+  check_datanames <- recursive_check_datanames(modules, datanames)
+  if (length(check_datanames)) {
+    if (as_html) {
+      shiny::tagList(
+        lapply(
+          check_datanames,
+          function(mod) {
             tagList(
               build_datanames_error_message(
-                if (with_module_name) modules$label,
-                datanames,
-                extra_datanames
+                label = if (inherits(modules, "teal_modules")) mod$label,
+                datanames = datanames,
+                missing_datanames = mod$missing_datanames
               ),
               tags$br(.noWS = "before")
             )
           }
         )
-      }
+      )
+    } else {
+      modules_msg <- sapply(
+        check_datanames,
+        function(mod) {
+          sprintf(
+            "Dataset(s) (%s) are missing for module %s.",
+            toString(dQuote(mod$missing_datanames, q = FALSE)),
+            toString(dQuote(mod$label, q = FALSE))
+          )
+        }
+      )
+      sprintf(
+        "%s\nDataset(s) available in data: %s",
+        paste(modules_msg, collapse = "\n"),
+        toString(dQuote(datanames, q = FALSE))
+      )
     }
-  }
-  check_datanames <- recursive_check_datanames(modules, datanames)
-  if (length(check_datanames)) {
-    check_datanames
   } else {
     TRUE
   }
+}
+
+#' @rdname check_modules_datanames
+recursive_check_datanames <- function(modules, datanames) {
+  res <- if (inherits(modules, "teal_modules")) {
+    unlist(
+      lapply(
+        modules$children,
+        function(modules) recursive_check_datanames(modules, datanames = datanames)
+      ),
+      recursive = FALSE,
+      use.names = FALSE
+    )
+  } else {
+    missing_datanames <- setdiff(modules$datanames, c("all", datanames))
+    if (length(missing_datanames)) {
+      list(list(
+        label = modules$label,
+        dataname = modules$datanames,
+        missing_datanames = missing_datanames
+      ))
+    }
+  }
+  res
 }
 
 #' Check `datanames` in filters
@@ -367,15 +373,13 @@ paste_datanames_character <- function(x,
 #' @noRd
 build_datanames_error_message <- function(label = NULL,
                                           datanames,
-                                          extra_datanames,
-                                          tags = list(span = shiny::tags$span, code = shiny::tags$code),
-                                          tagList = shiny::tagList) { # nolint: object_name.
+                                          missing_datanames) {
   tags$span(
-    tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
-    paste_datanames_character(extra_datanames, tags, tagList),
+    tags$span(ifelse(length(missing_datanames) > 1, "Datasets", "Dataset")),
+    paste_datanames_character(missing_datanames, tags, tagList),
     tags$span(
       paste0(
-        ifelse(length(extra_datanames) > 1, "are missing", "is missing"),
+        ifelse(length(missing_datanames) > 1, "are missing", "is missing"),
         ifelse(is.null(label), ".", sprintf(" for tab '%s'.", label))
       )
     ),
