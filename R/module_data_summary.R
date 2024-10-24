@@ -50,7 +50,7 @@ ui_data_summary <- function(id) {
         class = "teal_active_summary_filter_panel",
         tableOutput(ns("table")),
         actionLink(
-          ns("show_unsupported"),
+          ns("toggle_unsupported"),
           label = "Show unsupported"
         )
       )
@@ -77,9 +77,9 @@ srv_data_summary <- function(id, teal_data) {
       is_unsupported_hidden <- reactive({
         is_hidden <- isTRUE(input$show_unsupported %% 2 == 0)
         if (is_hidden) {
-          updateActionLink(inputId = "show_unsupported", label = "Show unsupported")
+          updateActionLink(inputId = "toggle_unsupported", label = "Show unsupported")
         } else {
-          updateActionLink(inputId = "show_unsupported", label = "Hide unsupported")
+          updateActionLink(inputId = "toggle_unsupported", label = "Hide unsupported")
         }
         is_hidden
       })
@@ -96,9 +96,9 @@ srv_data_summary <- function(id, teal_data) {
         } else {
           any_unsupported <- any(apply(summary_table_out, 1, function(x) all(is.na(x[-1]))))
           if (any_unsupported) {
-            shinyjs::show("show_unsupported")
+            shinyjs::show("toggle_unsupported")
           } else {
-            shinyjs::hide("show_unsupported")
+            shinyjs::hide("toggle_unsupported")
           }
 
           summary_table_out[is.na(summary_table_out)] <- ""
@@ -132,9 +132,8 @@ srv_data_summary <- function(id, teal_data) {
             }
           )
 
-          header_labels <- names(summary_table_out)
-          header_labels[header_labels == "dataname"] <- "Data Name"
-          substring(header_labels, 1, 1) <- toupper(substring(header_labels, 1, 1))
+          header_labels <- tools::toTitleCase(names(summary_table_out))
+          header_labels[header_labels == "Dataname"] <- "Data Name"
           header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
           table_html <- tags$table(
