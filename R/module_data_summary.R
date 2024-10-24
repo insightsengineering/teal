@@ -66,7 +66,7 @@ srv_data_summary <- function(id, teal_data) {
     function(input, output, session) {
       logger::log_debug("srv_data_summary initializing")
 
-      filter_overview_table <- reactive({
+      summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
         if (!length(ls(teal.code::get_env(teal_data())))) {
           return(NULL)
@@ -85,7 +85,7 @@ srv_data_summary <- function(id, teal_data) {
       })
 
       output$table <- renderUI({
-        summary_table_out <- filter_overview_table()
+        summary_table_out <- summary_table()
         if (inherits(summary_table_out, "try-error")) {
           # Ignore silent shiny error
           if (!inherits(attr(summary_table_out, "condition"), "shiny.silent.error")) {
