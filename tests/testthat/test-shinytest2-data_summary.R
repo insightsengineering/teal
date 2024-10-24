@@ -86,7 +86,7 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
 })
 
 testthat::test_that(
-  "e2e: data summary is displayed properly if teal_data include data.frames with join keys, MAE objects and vectors",
+  "e2e: data summary contains row count of data.frames, MAE objects and unsupported",
   {
     testthat::skip_if_not_installed("MultiAssayExperiment")
     skip_if_too_deep(5)
@@ -99,16 +99,10 @@ testthat::test_that(
         iris <- iris
         library(MultiAssayExperiment)
         data("miniACC", package = "MultiAssayExperiment", envir = environment())
-        # nolint start: object_name.
-        CO2 <- CO2
-        factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
-        CO2[factors] <- lapply(CO2[factors], as.character)
+        unsupported <- function(x) x
         # nolint end: object_name.
       }
     )
-
-    datanames(data) <- c("CO2", "iris", "miniACC", "mtcars2", "mtcars1", "factors")
-
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
     )
@@ -122,11 +116,11 @@ testthat::test_that(
       as.data.frame(app$get_active_data_summary_table()),
       data.frame(
         `Data Name` = c(
-          "CO2", "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene",
-          "mtcars2", "mtcars1", "factors"
+          "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene",
+          "mtcars2", "mtcars1", "unsupported"
         ),
-        Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "2/2", "32/32", ""),
-        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "2/2", ""),
+        Obs = c("150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "2/2", "32/32", ""),
+        Subjects = c("", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "2/2", ""),
         check.names = FALSE
       )
     )

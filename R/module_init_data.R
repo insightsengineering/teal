@@ -95,7 +95,6 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
-
   tdata <- do.call(
     teal.data::teal_data,
     c(
@@ -123,18 +122,21 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 #'
 .get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
-  vapply(
+  sapply(
     datanames,
-    function(dataname, datasets) {
-      hash <- rlang::hash(data[[dataname]])
-      sprintf(
-        "stopifnot(%s == %s) # @linksto %s",
-        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-        deparse1(hash),
-        dataname
-      )
+    function(dataname) {
+      dataset <- data[[dataname]]
+      if (!inherits(dataset, "function")) {
+        hash <- rlang::hash(dataset)
+        sprintf(
+          "stopifnot(%s == %s) # @linksto %s",
+          deparse1(bquote(rlang::hash(.(as.name(dataname))))),
+          deparse1(hash),
+          dataname
+        )
+      }
     },
-    character(1L),
+    simplify = TRUE,
     USE.NAMES = TRUE
   )
 }

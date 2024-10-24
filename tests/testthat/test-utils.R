@@ -12,7 +12,7 @@ testthat::test_that("get_teal_bs_theme", {
 })
 
 testthat::test_that("report_card_template function returns TealReportCard object with appropriate content and labels", {
-  fd <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
+  fd <- teal.slice::init_filtered_data(list(iris = iris))
   filter_panel_api <- teal.slice::FilterPanelAPI$new(fd)
 
   card <- shiny::isolate(report_card_template(
