@@ -68,7 +68,8 @@ Suggests:
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
 VignetteBuilder:
-    knitr
+    knitr,
+    rmarkdown
 RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
