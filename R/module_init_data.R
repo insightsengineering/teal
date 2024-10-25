@@ -128,7 +128,7 @@ srv_init_data <- function(id, data) {
     function(dataname, datasets) {
       hash <- rlang::hash(data[[dataname]])
       sprintf(
-        "stopifnot(%s == %s) # @linksto %s",
+        "stopifnot(%s == %s) #@linksto %s",
         deparse1(bquote(rlang::hash(.(as.name(dataname))))),
         deparse1(hash),
         dataname
