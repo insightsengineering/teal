@@ -2,27 +2,28 @@
 % Please edit documentation in R/utils.R
 \name{check_modules_datanames}
 \alias{check_modules_datanames}
-\alias{recursive_check_datanames}
+\alias{check_modules_datanames_html}
 \title{Check \code{datanames} in modules}
 \usage{
-check_modules_datanames(modules, datanames, as_html = FALSE)
+check_modules_datanames(modules, datanames)
 
-recursive_check_datanames(modules, datanames)
+check_modules_datanames_html(modules, datanames)
 }
 \arguments{
 \item{modules}{(\code{teal_modules}) object}
 
 \item{datanames}{(\code{character}) names of datasets available in the \code{data} object}
-
-\item{as_html}{(\code{logical(1)}) whether message should be returned in form of formatted \code{html} (\code{shiny.tag.list}).}
 }
 \value{
 \code{TRUE} if validation passes, otherwise \code{character(1)} or \code{shiny.tag.list}
 }
 \description{
-This function ensures specified \code{datanames} in modules match those in the data object,
-returning error messages or \code{TRUE} for successful validation. Function can return error message
-in two forms \code{character(1)} for basic assertion usage and \code{shiny.tag.list} when message is
-displayed in the app.
+These functions check if specified \code{datanames} in modules match those in the data object,
+returning error messages or \code{TRUE} for successful validation. Two functions return error message
+in different forms:
+\itemize{
+\item \code{check_modules_datanames} returns \code{character(1)} for basic assertion usage
+\item \code{check_modules_datanames_html} returns \code{shiny.tag.list} to display it in the app.
+}
 }
 \keyword{internal}
