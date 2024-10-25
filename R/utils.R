@@ -203,7 +203,7 @@ check_modules_datanames_html <- function(modules,
 
 #' Recursively checks modules and returns list for every datanames mismatch between module and data
 #' @noRd
-check_modules_datanames_recursive <- function(modules, datanames) {
+check_modules_datanames_recursive <- function(modules, datanames) { # nolint: object_name_length
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_character(datanames)
   if (inherits(modules, "teal_modules")) {
