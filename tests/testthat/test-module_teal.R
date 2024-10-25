@@ -2284,44 +2284,93 @@ testthat::describe("Datanames with special symbols", {
   })
 
   testthat::it("(when used as non-native pipe) are present in datanames in the pre-processing code", {
-    testthat::expect_warning(
-      shiny::testServer(
-        app = srv_teal,
-        args = list(
-          id = "test",
-          data = within(
-            teal.data::teal_data(),
-            {
-              iris <- iris
-              mtcars <- mtcars
-              `%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)
-              iris <- iris %cbind% data.frame("new_column")
-            }
-          ),
-          modules = modules(
-            module("module_1", server = function(id, data) data, , datanames = c("iris"))
-          ),
-          filter = teal_slices(
-            module_specific = TRUE
-          )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)
+            iris <- iris %cbind% data.frame("new_column")
+          }
         ),
-        expr = {
-          session$setInputs("teal_modules-active_tab" = "module_1")
-          session$flushReact()
-
-          testthat::expect_contains(
-            strsplit(
-              x = teal.code::get_code(modules_output$module_1()()),
-              split = "\n"
-            )[[1]],
-            c(
-              "`%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)",
-              ".raw_data <- list2env(list(iris = iris))"
-            )
-          )
-        }
+        modules = modules(
+          module("module_1", server = function(id, data) data, , datanames = c("iris"))
+        ),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
       ),
-      "'package:teal' may not be available when loading"
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_contains(
+          strsplit(
+            x = teal.code::get_code(modules_output$module_1()()),
+            split = "\n"
+          )[[1]],
+          c(
+            "`%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)",
+            ".raw_data <- list2env(list(iris = iris))"
+          )
+        )
+      }
     )
   })
+})
+
+testthat::test_that("Show R Code is reproducible with a function defined in teal_data", {
+  shiny::testServer(
+    app = srv_teal,
+    args = list(
+      id = "test",
+      data = reactive(within(teal.data::teal_data(), {
+        fun <- function(x) {
+          y <- x + 1
+          y + 3
+        }
+      })),
+      modules = modules(module("module_1", server = function(id, data) data))
+    ), ,
+    expr = {
+      session$setInputs("teal_modules-active_tab" = "module_1")
+      session$flushReact()
+
+      # Need to evaluate characters to preserve indentation
+      fun_env <- new.env(parent = .GlobalEnv)
+      eval(
+        parse(
+          text = paste(
+            sep = "\n",
+            "fun <- function(x) {",
+            "    y <- x + 1",
+            "    y + 3",
+            "}"
+          )
+        ),
+        envir = fun_env
+      )
+      local(hash <- rlang::hash(deparse1(fun_env$fun)), envir = fun_env)
+
+      testthat::expect_setequal(
+        trimws(strsplit(
+          x = teal.code::get_code(modules_output$module_1()()),
+          split = "\n"
+        )[[1]]),
+        c(
+          "fun <- function(x) {",
+          "y <- x + 1",
+          "y + 3",
+          "}",
+          sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\")", fun_env$hash),
+          ".raw_data <- list2env(list(fun = fun))",
+          "lockEnvironment(.raw_data)"
+        )
+      )
+    }
+  )
 })

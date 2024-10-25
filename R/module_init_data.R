@@ -126,11 +126,18 @@ srv_init_data <- function(id, data) {
   vapply(
     datanames,
     function(dataname, datasets) {
-      hash <- rlang::hash(data[[dataname]])
+      x <- data[[dataname]]
+
+      code <- if (is.function(x) && !is.primitive(x)) {
+        x <- deparse1(x)
+        bquote(rlang::hash(deparse1(.(as.name(dataname)))))
+      } else {
+        bquote(rlang::hash(.(as.name(dataname))))
+      }
       sprintf(
         "stopifnot(%s == %s) # @linksto %s",
-        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-        deparse1(hash),
+        deparse1(code),
+        deparse1(rlang::hash(x)),
         dataname
       )
     },
