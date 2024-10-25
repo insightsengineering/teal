@@ -64,7 +64,20 @@ testthat::test_that(
         data = teal.data::teal_data(mtcars = mtcars),
         modules = list(example_module(datanames = "iris"))
       ),
-      'Dataset "iris" are missing for module "example teal module". Datasets available in data: "mtcars"'
+      "Dataset \"iris\" is missing for module \"example teal module\". Datasets available in data: \"mtcars\""
+    )
+  }
+)
+
+testthat::test_that(
+  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformers",
+  {
+    testthat::expect_warning(
+      init(
+        data = teal.data::teal_data(mtcars = mtcars),
+        modules = list(example_module(datanames = c("a", "b")))
+      ),
+      "Datasets \"a\", \"b\" are missing for module \"example teal module\". Datasets available in data: \"mtcars\""
     )
   }
 )
