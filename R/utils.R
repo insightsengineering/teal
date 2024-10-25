@@ -138,7 +138,8 @@ check_modules_datanames <- function(modules, datanames) {
   if (length(check_datanames)) {
     modules_msg <- sapply(check_datanames, function(mod) {
       sprintf(
-        "Datasets %s are missing for module %s.",
+        "%s %s are missing for module %s.",
+        `if`(length(mod$missing_datanames) > 1, "Datasets", "Dataset"),
         toString(dQuote(mod$missing_datanames, q = FALSE)),
         toString(dQuote(mod$label, q = FALSE))
       )

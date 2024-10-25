@@ -226,10 +226,7 @@ srv_check_shiny_warnings <- function(id, data, modules) {
           modules = modules, datanames = ls(teal.code::get_env(data()))
         )
         if (!isTRUE(is_modules_ok)) {
-          tags$div(
-            class = "teal-output-warning",
-            is_modules_ok
-          )
+          tags$div(is_modules_ok, class = "teal-output-warning")
         }
       }
     })
