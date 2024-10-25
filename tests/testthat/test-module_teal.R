@@ -1332,10 +1332,10 @@ testthat::describe("srv_teal filters", {
             c(
               "iris <- iris",
               "mtcars <- mtcars",
-              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
               ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-              "lockEnvironment(.raw_data)",
+              "lockEnvironment(.raw_data) #@linksto .raw_data",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1506,14 +1506,14 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         rownames(expected_iris) <- NULL
         expected_iris <- head(expected_iris)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 6)))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(base::subset(mtcars, cyl == 6)))
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) #@linksto .raw_data",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
@@ -1552,14 +1552,14 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         session$flushReact()
 
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 4)))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(base::subset(mtcars, cyl == 4)))
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) #@linksto .raw_data",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
