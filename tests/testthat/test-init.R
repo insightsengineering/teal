@@ -64,7 +64,7 @@ testthat::test_that(
         data = teal.data::teal_data(mtcars = mtcars),
         modules = list(example_module(datanames = "iris"))
       ),
-      '"Dataset(s) ("iris") are missing for module "example teal module".\nDataset(s) available in data: "mtcars"'
+      'Datasets "iris" are missing for module "example teal module". Datasets available in data: "mtcars"'
     )
   }
 )

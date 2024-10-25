@@ -14,13 +14,15 @@ recursive_check_datanames(modules, datanames)
 
 \item{datanames}{(\code{character}) names of datasets available in the \code{data} object}
 
-\item{as_html}{(\code{logical(1)}) whether message should be returned in form of formatted \code{html}.}
+\item{as_html}{(\code{logical(1)}) whether message should be returned in form of formatted \code{html} (\code{shiny.tag.list}).}
 }
 \value{
-\code{TRUE} if validation passes, otherwise \code{character} or \code{shiny.tag.list}
+\code{TRUE} if validation passes, otherwise \code{character(1)} or \code{shiny.tag.list}
 }
 \description{
 This function ensures specified \code{datanames} in modules match those in the data object,
-returning error messages or \code{TRUE} for successful validation.
+returning error messages or \code{TRUE} for successful validation. Function can return error message
+in two forms \code{character(1)} for basic assertion usage and \code{shiny.tag.list} when message is
+displayed in the app.
 }
 \keyword{internal}

@@ -123,13 +123,15 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' Check `datanames` in modules
 #'
 #' This function ensures specified `datanames` in modules match those in the data object,
-#' returning error messages or `TRUE` for successful validation.
+#' returning error messages or `TRUE` for successful validation. Function can return error message
+#' in two forms `character(1)` for basic assertion usage and `shiny.tag.list` when message is
+#' displayed in the app.
 #'
 #' @param modules (`teal_modules`) object
 #' @param datanames (`character`) names of datasets available in the `data` object
-#' @param as_html (`logical(1)`) whether message should be returned in form of formatted `html`.
+#' @param as_html (`logical(1)`) whether message should be returned in form of formatted `html` (`shiny.tag.list`).
 #'
-#' @return `TRUE` if validation passes, otherwise `character` or `shiny.tag.list`
+#' @return `TRUE` if validation passes, otherwise `character(1)` or `shiny.tag.list`
 #' @keywords internal
 check_modules_datanames <- function(modules, datanames, as_html = FALSE) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
@@ -157,14 +159,14 @@ check_modules_datanames <- function(modules, datanames, as_html = FALSE) {
         check_datanames,
         function(mod) {
           sprintf(
-            "Dataset(s) (%s) are missing for module %s.",
+            "Datasets %s are missing for module %s.",
             toString(dQuote(mod$missing_datanames, q = FALSE)),
             toString(dQuote(mod$label, q = FALSE))
           )
         }
       )
       sprintf(
-        "%s\nDataset(s) available in data: %s",
+        "%s Datasets available in data: %s",
         paste(modules_msg, collapse = "\n"),
         toString(dQuote(datanames, q = FALSE))
       )
