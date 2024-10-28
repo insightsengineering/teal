@@ -124,17 +124,21 @@ srv_init_data <- function(id, data) {
 .get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
   sapply(
     datanames,
-    function(dataname) {
-      dataset <- data[[dataname]]
-      if (!inherits(dataset, "function")) {
-        hash <- rlang::hash(dataset)
-        sprintf(
-          "stopifnot(%s == %s) # @linksto %s",
-          deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-          deparse1(hash),
-          dataname
-        )
+    function(dataname, datasets) {
+      x <- data[[dataname]]
+
+      code <- if (is.function(x) && !is.primitive(x)) {
+        x <- deparse1(x)
+        bquote(rlang::hash(deparse1(.(as.name(dataname)))))
+      } else {
+        bquote(rlang::hash(.(as.name(dataname))))
       }
+      sprintf(
+        "stopifnot(%s == %s) # @linksto %s",
+        deparse1(code),
+        deparse1(rlang::hash(x)),
+        dataname
+      )
     },
     simplify = TRUE,
     USE.NAMES = TRUE
