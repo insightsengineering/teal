@@ -58,7 +58,7 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
       ".raw_data <- list2env(list(",
       toString(sprintf("%1$s = %1$s", sapply(datanames, as.name))),
       "))\n",
-      "lockEnvironment(.raw_data) #@linksto .raw_data" # this is environment and it is shared by qenvs. CAN'T MODIFY!
+      "lockEnvironment(.raw_data) # @linksto .raw_data" # this is environment and it is shared by qenvs. CAN'T MODIFY!
     )
   )
   filtered_code <- .get_filter_expr(datasets = datasets, datanames = datanames)
