@@ -139,9 +139,9 @@ check_modules_datanames <- function(modules, datanames) {
     modules_msg <- sapply(check_datanames, function(mod) {
       sprintf(
         "%s %s %s missing for module %s.",
-        `if`(length(mod$missing_datanames) > 1, "Datasets", "Dataset"),
+        if (length(mod$missing_datanames) > 1) "Datasets" else "Dataset",
         toString(dQuote(mod$missing_datanames, q = FALSE)),
-        `if`(length(mod$missing_datanames) > 1, "are", "is"),
+        if (length(mod$missing_datanames) > 1) "are" else "is",
         toString(dQuote(mod$label, q = FALSE))
       )
     })
@@ -160,45 +160,44 @@ check_modules_datanames_html <- function(modules,
                                          datanames) {
   check_datanames <- check_modules_datanames_recursive(modules, datanames)
   show_module_info <- inherits(modules, "teal_modules")
-  if (length(check_datanames)) {
-    shiny::tagList(
-      lapply(
-        check_datanames,
-        function(mod) {
-          tagList(
+  if (!length(check_datanames)) {
+    return(TRUE)
+  }
+  shiny::tagList(
+    lapply(
+      check_datanames,
+      function(mod) {
+        tagList(
+          tags$span(
+            tags$span(`if`(length(mod$missing_datanames) > 1, "Datasets", "Dataset")),
+            to_html_code_list(mod$missing_datanames),
             tags$span(
-              tags$span(`if`(length(mod$missing_datanames) > 1, "Datasets", "Dataset")),
-              to_html_code_list(mod$missing_datanames),
-              tags$span(
-                paste0(
-                  `if`(length(mod$missing_datanames) > 1, "are missing", "is missing"),
-                  `if`(show_module_info, sprintf(" for tab '%s'.", mod$label), ".")
-                )
-              ),
-              if (length(mod$datanames) >= 1) {
+              paste0(
+                `if`(length(mod$missing_datanames) > 1, "are missing", "is missing"),
+                `if`(show_module_info, sprintf(" for tab '%s'.", mod$label), ".")
+              )
+            ),
+            if (length(mod$datanames) >= 1) {
+              tagList(
+                tags$span(`if`(length(mod$datanames) > 1, "Datasets", "Dataset")),
+                tags$span("available in data:"),
                 tagList(
-                  tags$span(`if`(length(mod$datanames) > 1, "Datasets", "Dataset")),
-                  tags$span("available in data:"),
-                  tagList(
-                    tags$span(
-                      to_html_code_list(mod$datanames),
-                      tags$span(".", .noWS = "outside"),
-                      .noWS = c("outside")
-                    )
+                  tags$span(
+                    to_html_code_list(mod$datanames),
+                    tags$span(".", .noWS = "outside"),
+                    .noWS = c("outside")
                   )
                 )
-              } else {
-                tags$span("No datasets are available in data.")
-              }
-            ),
-            tags$br(.noWS = "before")
-          )
-        }
-      )
+              )
+            } else {
+              tags$span("No datasets are available in data.")
+            }
+          ),
+          tags$br(.noWS = "before")
+        )
+      }
     )
-  } else {
-    TRUE
-  }
+  )
 }
 
 #' Recursively checks modules and returns list for every datanames mismatch between module and data
@@ -208,7 +207,7 @@ check_modules_datanames_recursive <- function(modules, datanames) { # nolint: ob
   checkmate::assert_character(datanames)
   if (inherits(modules, "teal_modules")) {
     unlist(
-      lapply(modules$children, function(mod) check_modules_datanames_recursive(mod, datanames)),
+      lapply(modules$children, check_modules_datanames_recursive, datanames = datanames),
       recursive = FALSE
     )
   } else {
@@ -225,7 +224,7 @@ check_modules_datanames_recursive <- function(modules, datanames) { # nolint: ob
 
 #' Convert character vector to html code separated with commas and "and"
 #' @noRd
-to_html_code_list <- function(x) { # nolint: object_name.
+to_html_code_list <- function(x) {
   checkmate::assert_character(x)
   do.call(
     tagList,
