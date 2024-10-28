@@ -1506,7 +1506,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         rownames(expected_iris) <- NULL
         expected_iris <- head(expected_iris)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(base::subset(mtcars, cyl == 6)))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 6)))
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
@@ -1552,7 +1552,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         session$flushReact()
 
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
-        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(base::subset(mtcars, cyl == 4)))
+        testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 4)))
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
