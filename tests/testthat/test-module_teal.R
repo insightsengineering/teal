@@ -1335,7 +1335,7 @@ testthat::describe("srv_teal filters", {
               sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
               sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
               ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-              "lockEnvironment(.raw_data) #@linksto .raw_data",
+              "lockEnvironment(.raw_data) # @linksto .raw_data",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1513,7 +1513,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data) #@linksto .raw_data",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
@@ -1559,7 +1559,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
           sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data) #@linksto .raw_data",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
