@@ -122,7 +122,7 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 #'
 .get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
-  sapply(
+  vapply(
     datanames,
     function(dataname, datasets) {
       x <- data[[dataname]]
@@ -140,7 +140,7 @@ srv_init_data <- function(id, data) {
         dataname
       )
     },
-    simplify = TRUE,
+    character(1)
     USE.NAMES = TRUE
   )
 }
