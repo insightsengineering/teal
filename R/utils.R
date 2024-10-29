@@ -137,8 +137,8 @@ check_modules_datanames <- function(modules, datanames) {
   out <- check_modules_datanames_html(modules, datanames)
   if (inherits(out, "shiny.tag.list")) {
     out_with_ticks <- gsub("<code>|</code>", "`", toString(out))
-    out_text <- trimws(gsub("<[^<>]+>", "", toString(out_with_ticks)))
-    gsub("[[:space:]]+", " ", out_text)
+    out_text <- gsub("<[^<>]+>", "", toString(out_with_ticks))
+    trimws(gsub("[[:space:]]+", " ", out_text))
   } else {
     out
   }
@@ -148,7 +148,7 @@ check_modules_datanames <- function(modules, datanames) {
 check_modules_datanames_html <- function(modules,
                                          datanames) {
   check_datanames <- check_modules_datanames_recursive(modules, datanames)
-  show_module_info <- inherits(modules, "teal_modules")
+  show_module_info <- inherits(modules, "teal_modules") # used in two contexts - module and app
   if (!length(check_datanames)) {
     return(TRUE)
   }
