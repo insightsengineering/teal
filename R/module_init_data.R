@@ -140,7 +140,7 @@ srv_init_data <- function(id, data) {
         dataname
       )
     },
-    character(1)
+    character(1L),
     USE.NAMES = TRUE
   )
 }
