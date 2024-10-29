@@ -64,7 +64,7 @@ testthat::test_that(
         data = teal.data::teal_data(mtcars = mtcars),
         modules = list(example_module(datanames = "iris"))
       ),
-      "Dataset \"iris\" is missing for module \"example teal module\". Datasets available in data: \"mtcars\""
+      "Dataset `iris` is missing for module 'example teal module'. Dataset available in data: `mtcars`."
     )
   }
 )
@@ -77,7 +77,7 @@ testthat::test_that(
         data = teal.data::teal_data(mtcars = mtcars),
         modules = list(example_module(datanames = c("a", "b")))
       ),
-      "Datasets \"a\", \"b\" are missing for module \"example teal module\". Datasets available in data: \"mtcars\""
+      "Datasets `a` and `b` are missing for module 'example teal module'. Dataset available in data: `mtcars`."
     )
   }
 )

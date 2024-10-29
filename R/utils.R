@@ -134,24 +134,13 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' @return `TRUE` if validation passes, otherwise `character(1)` or `shiny.tag.list`
 #' @keywords internal
 check_modules_datanames <- function(modules, datanames) {
-  check_datanames <- check_modules_datanames_recursive(modules, datanames)
-  if (length(check_datanames)) {
-    modules_msg <- sapply(check_datanames, function(mod) {
-      sprintf(
-        "%s %s %s missing for module %s.",
-        if (length(mod$missing_datanames) > 1) "Datasets" else "Dataset",
-        toString(dQuote(mod$missing_datanames, q = FALSE)),
-        if (length(mod$missing_datanames) > 1) "are" else "is",
-        toString(dQuote(mod$label, q = FALSE))
-      )
-    })
-    sprintf(
-      "%s Datasets available in data: %s",
-      paste(modules_msg, collapse = "\n"),
-      toString(dQuote(datanames, q = FALSE))
-    )
+  out <- check_modules_datanames_html(modules, datanames)
+  if (inherits(out, "shiny.tag.list")) {
+    out_with_ticks <- gsub("<code>|</code>", "`", toString(out))
+    out_text <- trimws(gsub("<[^<>]+>", "", toString(out_with_ticks)))
+    gsub("[[:space:]]+", " ", out_text)
   } else {
-    TRUE
+    out
   }
 }
 
@@ -174,7 +163,7 @@ check_modules_datanames_html <- function(modules,
             tags$span(
               paste0(
                 if (length(mod$missing_datanames) > 1) "are missing" else "is missing",
-                if (show_module_info) sprintf(" for tab '%s'.", mod$label) else "."
+                if (show_module_info) sprintf(" for module '%s'.", mod$label) else "."
               )
             )
           ),

@@ -655,7 +655,7 @@ testthat::describe("srv_teal teal_modules", {
                 )
               )
             ),
-            "Datasets missing1 and missing2 are missing for tab 'module_1'. Dataset available in data: mtcars."
+            "Datasets missing1 and missing2 are missing for module 'module_1'. Dataset available in data: mtcars."
           )
         }
       )
