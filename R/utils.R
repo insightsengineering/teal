@@ -220,7 +220,7 @@ to_html_code_list <- function(x) {
       tagList(
         tags$code(x[.ix]),
         if (.ix != length(x)) {
-          tags$span(ifelse(.ix == length(x) - 1, " and ", ", "))
+          if (.ix == length(x) - 1) tags$span(" and ") else tags$span(", ", .noWS = "before")
         }
       )
     })
