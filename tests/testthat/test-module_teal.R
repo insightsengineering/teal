@@ -551,32 +551,115 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("throws warning when dataname is not available", {
-    testthat::skip_if_not_installed("rvest")
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal_data(mtcars = mtcars),
-        modules = modules(
-          module("module_1", server = function(id, data) data, datanames = c("iris"))
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
-
-        testthat::expect_equal(
-          trimws(
-            rvest::html_text2(
-              rvest::read_html(
-                output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+  testthat::describe("warnings on missing datanames", {
+    testthat::it("warns when dataname is not available", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(iris = iris),
+          modules = modules(
+            module("module_1", server = function(id, data) data, datanames = c("iris", "missing"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                )
               )
-            )
-          ),
-          "Dataset iris is missing. No datasets are available in data."
-        )
-      }
-    )
+            ),
+            "Dataset missing is missing. Dataset available in data: iris."
+          )
+        }
+      )
+    })
+
+    testthat::it("warns when datanames are not available", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(mtcars = mtcars, iris = iris),
+          modules = modules(
+            module("module_1", datanames = c("mtcars", "iris", "missing1", "missing2"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                )
+              )
+            ),
+            "Datasets missing1 and missing2 are missing. Datasets available in data: iris and mtcars."
+          )
+        }
+      )
+    })
+
+    testthat::it("warns about empty data when none of module$datanames is available (even if data is not empty)", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(mtcars = mtcars),
+          modules = modules(
+            module("module_1", datanames = c("missing1", "missing2"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                )
+              )
+            ),
+            "Datasets missing1 and missing2 are missing. No datasets are available in data."
+          )
+        }
+      )
+    })
+
+    testthat::it("warns about empty data when none of module$datanames is available", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(teal_data(mtcars = mtcars)),
+          modules = modules(
+            module("module_1", datanames = c("missing1", "missing2"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["validate-shiny_warnings-message"]]$html
+                )
+              )
+            ),
+            "Datasets missing1 and missing2 are missing for tab 'module_1'. Dataset available in data: mtcars."
+          )
+        }
+      )
+    })
   })
 
   testthat::it("is called and receives data even if datanames in `teal_data` are not sufficient", {

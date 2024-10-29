@@ -169,30 +169,30 @@ check_modules_datanames_html <- function(modules,
       function(mod) {
         tagList(
           tags$span(
-            tags$span(`if`(length(mod$missing_datanames) > 1, "Datasets", "Dataset")),
+            tags$span(if (length(mod$missing_datanames) == 1) "Dataset" else "Datasets"),
             to_html_code_list(mod$missing_datanames),
             tags$span(
               paste0(
-                `if`(length(mod$missing_datanames) > 1, "are missing", "is missing"),
-                `if`(show_module_info, sprintf(" for tab '%s'.", mod$label), ".")
+                if (length(mod$missing_datanames) > 1) "are missing" else "is missing",
+                if (show_module_info) sprintf(" for tab '%s'.", mod$label) else "."
               )
-            ),
-            if (length(mod$datanames) >= 1) {
+            )
+          ),
+          if (length(datanames) >= 1) {
+            tagList(
+              tags$span(if (length(datanames) == 1) "Dataset" else "Datasets"),
+              tags$span("available in data:"),
               tagList(
-                tags$span(`if`(length(mod$datanames) > 1, "Datasets", "Dataset")),
-                tags$span("available in data:"),
-                tagList(
-                  tags$span(
-                    to_html_code_list(mod$datanames),
-                    tags$span(".", .noWS = "outside"),
-                    .noWS = c("outside")
-                  )
+                tags$span(
+                  to_html_code_list(datanames),
+                  tags$span(".", .noWS = "outside"),
+                  .noWS = c("outside")
                 )
               )
-            } else {
-              tags$span("No datasets are available in data.")
-            }
-          ),
+            )
+          } else {
+            tags$span("No datasets are available in data.")
+          },
           tags$br(.noWS = "before")
         )
       }
@@ -215,7 +215,6 @@ check_modules_datanames_recursive <- function(modules, datanames) { # nolint: ob
     if (length(missing_datanames)) {
       list(list(
         label = modules$label,
-        dataname = modules$datanames,
         missing_datanames = missing_datanames
       ))
     }
