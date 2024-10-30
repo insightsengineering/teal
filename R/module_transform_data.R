@@ -25,10 +25,10 @@ ui_teal_transform_module <- function(id, transforms, class = "well") {
 
   labels <- lapply(transforms, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
-  names(transforms) <- ids
+  names(transformers) <- ids
 
   lapply(
-    names(transforms),
+    names(transformers),
     function(name) {
       child_id <- NS(id)(name)
       ns <- NS(child_id)
@@ -133,7 +133,7 @@ srv_teal_transform_module <- function(id, data, transforms, modules = NULL, is_t
           .trigger_on_success(data_handled)
         })
       },
-      x = names(transforms),
+      x = names(transformers),
       init = data
     )
   })

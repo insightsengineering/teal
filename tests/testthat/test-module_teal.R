@@ -70,6 +70,8 @@ testthat::describe("srv_teal lockfile", {
     "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
     "and snapshot is copied to teal_app.lock and removed after session ended"
   ), {
+    testthat::skip_if_not_installed("mirai")
+    testthat::skip_if_not_installed("renv")
     withr::with_options(
       list(teal.lockfile.mode = "enabled"),
       {
@@ -95,6 +97,8 @@ testthat::describe("srv_teal lockfile", {
     )
   })
   testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
+    testthat::skip_if_not_installed("mirai")
+    testthat::skip_if_not_installed("renv")
     withr::with_options(
       list(teal.lockfile.mode = "disabled"),
       {
@@ -298,6 +302,36 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_tab` = "module_2")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_identical(modules_output$module_2(), 102L)
+      }
+    )
+  })
+
+  testthat::it("are called only after teal_data_module is resolved", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data_module(
+          ui = function(id) actionButton("submit", "click me"),
+          server = function(id) {
+            moduleServer(id, function(input, output, session) {
+              eventReactive(input$submit, teal_data(iris = iris))
+            })
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) 101L)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+        testthat::expect_null(modules_output$module_1())
+
+
+        session$setInputs("data-teal_data_module-submit" = "1")
+        session$flushReact()
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
@@ -1587,8 +1621,8 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("fails when transformer doesn't return reactive", {
-    testthat::expect_error(
+  testthat::it("throws warning when transformer return reactive.event", {
+    testthat::expect_warning(
       testServer(
         app = srv_teal,
         args = list(
@@ -1599,14 +1633,54 @@ testthat::describe("srv_teal teal_module(s) transformer", {
               server = function(id, data) data,
               transformers = list(
                 teal_transform_module(
-                  ui = function(id) NULL,
-                  server = function(id, data) "whatever"
+                  ui = function(id) textInput("a", "an input"),
+                  server = function(id, data) eventReactive(input$a, data())
                 )
               )
             )
           )
         ),
-        expr = {}
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module")
+          session$flushReact()
+        }
+      ),
+      "Using eventReactive in teal_transform module server code should be avoided"
+    )
+  })
+
+  testthat::it("fails when transformer doesn't return reactive", {
+    testthat::expect_warning(
+      # error decorator is mocked to avoid showing the trace error during the
+      # test.
+      # This tests works without the mocking, but it's more verbose.
+      testthat::with_mocked_bindings(
+        testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(
+              module(
+                server = function(id, data) data,
+                transformers = list(
+                  teal_transform_module(
+                    ui = function(id) NULL,
+                    server = function(id, data) "whatever"
+                  )
+                )
+              )
+            )
+          ),
+          expr = {
+            session$setInputs("teal_modules-active_tab" = "module")
+            session$flushReact()
+          }
+        ),
+        decorate_err_msg = function(x, ...) {
+          testthat::expect_error(x, "Must be a reactive")
+          warning(tryCatch(x, error = function(e) e$message))
+        },
       ),
       "Must be a reactive"
     )
@@ -2140,6 +2214,194 @@ testthat::describe("srv_teal snapshot manager", {
             slices_global$module_slices_api[["module_2"]]$get_filter_state(),
             initial_slices[2],
             with_attrs = FALSE
+          )
+        )
+      }
+    )
+  })
+})
+
+testthat::describe("Datanames with special symbols", {
+  testthat::it("are detected as datanames when defined as 'all'", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(
+          iris = iris,
+          `%a_pipe%` = function(lhs, rhs) paste(lhs, rhs)
+        ),
+        modules = modules(module("module_1", server = function(id, data) data)),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          ls(
+            teal.code::get_env(modules_output$module_1()()),
+            all.names = TRUE
+          ),
+          c(".raw_data", "iris", "%a_pipe%")
+        )
+      }
+    )
+  })
+
+  testthat::it("are present in datanames when used in pre-processing code", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `_a variable with spaces_` <- "new_column" # nolint: object_name.
+            iris <- cbind(iris, data.frame(`_a variable with spaces_`))
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c("iris", "_a variable with spaces_"))
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_setequal(
+          ls(
+            teal.code::get_env(modules_output$module_1()()),
+            all.names = TRUE
+          ),
+          c(".raw_data", "iris", "_a variable with spaces_")
+        )
+      }
+    )
+  })
+
+  testthat::it("(when used as non-native pipe) are present in datanames in the pre-processing code", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)
+            iris <- iris %cbind% data.frame("new_column")
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, , datanames = c("iris"))
+        ),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_contains(
+          strsplit(
+            x = teal.code::get_code(modules_output$module_1()()),
+            split = "\n"
+          )[[1]],
+          c(
+            "`%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)",
+            ".raw_data <- list2env(list(iris = iris))"
+          )
+        )
+      }
+    )
+  })
+})
+
+testthat::describe("teal.data code with a function defined", {
+  testthat::it("is fully reproducible", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal.data::teal_data(), {
+          fun <- function(x) {
+            y <- x + 1
+            y + 3
+          }
+        })),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ), ,
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        # Need to evaluate characters to preserve indentation
+        local_env <- new.env(parent = .GlobalEnv)
+        dat <- modules_output$module_1()()
+
+        eval(
+          parse(text = teal.code::get_code(dat)),
+          envir = local_env
+        )
+
+        testthat::expect_identical(local_env$fun(1), 5)
+        testthat::expect_identical(local_env$fun(1), dat[["fun"]](1))
+      }
+    )
+  })
+
+  testthat::it("has the correct code (with hash)", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal.data::teal_data(), {
+          fun <- function(x) {
+            y <- x + 1
+            y + 3
+          }
+        })),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ), ,
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        # Need to evaluate characters to preserve indentation
+        local_env <- new.env(parent = .GlobalEnv)
+        eval(
+          parse(
+            text = paste(
+              sep = "\n",
+              "fun <- function(x) {",
+              "    y <- x + 1",
+              "    y + 3",
+              "}"
+            )
+          ),
+          envir = local_env
+        )
+        local(hash <- rlang::hash(deparse1(fun)), envir = local_env)
+
+        testthat::expect_setequal(
+          trimws(strsplit(
+            x = teal.code::get_code(modules_output$module_1()()),
+            split = "\n"
+          )[[1]]),
+          c(
+            "fun <- function(x) {",
+            "y <- x + 1",
+            "y + 3",
+            "}",
+            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\")", local_env$hash),
+            ".raw_data <- list2env(list(fun = fun))",
+            "lockEnvironment(.raw_data)"
           )
         )
       }

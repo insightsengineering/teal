@@ -8,7 +8,7 @@ teal_transform_module(
   ui = NULL,
   server = function(id, data) data,
   label = "transform module",
-  datanames = "all"
+  datanames = character(0)
 )
 }
 \arguments{
@@ -19,14 +19,16 @@ teal_transform_module(
 \code{shiny} module server function; that takes \code{id} and \code{data} argument,
 where the \code{id} is the module id and \code{data} is the reactive \code{teal_data} input.
 The server function must return reactive expression containing \code{teal_data} object.
-To simplify use \code{\link[=make_teal_transform_server]{make_teal_transform_server()}}.}
+
+The server function definition should not use \code{eventReactive} as it may lead to
+unexpected behavior.
+See \code{vignettes("data-transform-as-shiny-module")} for more information.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 
 \item{datanames}{(\code{character})
-Names of the datasets that are relevant for the module. The
-filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
-filters of all datasets. \code{datanames} will be automatically appended to the \code{\link[=modules]{modules()}} \code{datanames}.}
+Names of the datasets that are relevant for this module to evaluate. If set to \code{character(0)}
+then module would receive \code{\link[=modules]{modules()}} \code{datanames}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
