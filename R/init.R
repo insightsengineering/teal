@@ -213,7 +213,7 @@ init <- function(data,
 
     is_modules_ok <- check_modules_datanames(modules, ls(teal.code::get_env(data)))
     if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
-      lapply(is_modules_ok$string, warning, call. = FALSE)
+      warning(is_modules_ok, call. = FALSE)
     }
 
     is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data)))
