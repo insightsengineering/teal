@@ -75,7 +75,7 @@ srv_data_summary <- function(id, teal_data) {
       })
 
       is_unsupported_hidden <- reactive({
-        is_hidden <- isTRUE(input$show_unsupported %% 2 == 0)
+        is_hidden <- isTRUE(input$toggle_unsupported %% 2 == 0)
         if (is_hidden) {
           updateActionLink(inputId = "toggle_unsupported", label = "Show unsupported")
         } else {
@@ -206,7 +206,7 @@ get_filter_overview <- function(current_data, initial_data, dataname, subject_ke
 }
 
 #' @rdname module_data_summary
-get_filter_overview_array <- function(current_data, # nolint: object_length.
+get_filter_overview_array <- function(current_data,
                                       initial_data,
                                       dataname,
                                       subject_keys) {
@@ -240,7 +240,7 @@ get_filter_overview_array <- function(current_data, # nolint: object_length.
 get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: object_length, object_name.
                                                      initial_data,
                                                      dataname) {
-  experiment_names <- names(initial_data)
+  experiment_names <- names(current_data)
   mae_info <- data.frame(
     dataname = dataname,
     subjects = if (!is.null(initial_data)) {

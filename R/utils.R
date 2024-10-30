@@ -440,9 +440,10 @@ build_datanames_error_message <- function(label = NULL,
 #' @param ... (`data.frame`)
 #' @keywords internal
 .smart_rbind <- function(...) {
-  checkmate::assert_list(list(...), "data.frame")
+  dots <- list(...)
+  checkmate::assert_list(dots, "data.frame", .var.name = "...")
   Reduce(
-    x = list(...),
+    x = dots,
     function(x, y) {
       all_columns <- union(colnames(x), colnames(y))
       x[setdiff(all_columns, colnames(x))] <- NA
