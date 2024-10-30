@@ -7,7 +7,7 @@
 example_module(
   label = "example teal module",
   datanames = "all",
-  transformers = list()
+  transforms = list()
 )
 }
 \arguments{
@@ -19,13 +19,14 @@ There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
-\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+\item If \code{transforms} are specified, their \code{datanames} are automatically added to this \code{datanames}
 argument.
 }}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
+\item{transforms}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transforms}
+will be added to the \code{datanames}.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.

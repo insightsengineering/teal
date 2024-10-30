@@ -21,7 +21,7 @@ module(
   datanames = "all",
   server_args = NULL,
   ui_args = NULL,
-  transformers = list()
+  transforms = list()
 )
 
 modules(..., label = "root")
@@ -72,7 +72,7 @@ There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
-\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+\item If \code{transforms} are specified, their \code{datanames} are automatically added to this \code{datanames}
 argument.
 }}
 
@@ -80,9 +80,10 @@ argument.
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
+\item{transforms}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transforms}
+will be added to the \code{datanames}.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -138,13 +139,13 @@ in a warning. Datasets with names starting with . are ignored globally unless ex
 in \code{datanames}.
 }
 
-\section{\code{datanames} with \code{transformers}}{
-When transformers are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+\section{\code{datanames} with \code{transforms}}{
+When transforms are specified, their \code{datanames} are added to the module’s \code{datanames}, which
 changes the behavior as follows:
 \itemize{
-\item If \code{module(datanames)} is \code{NULL} and the \code{transformers} have defined \code{datanames}, the sidebar
-will appear showing the \code{transformers}' datasets, instead of being hidden.
-\item If \code{module(datanames)} is set to specific values and any \code{transformer} has \code{datanames = "all"},
+\item If \code{module(datanames)} is \code{NULL} and the \code{transforms} have defined \code{datanames}, the sidebar
+will appear showing the \code{transforms}' datasets, instead of being hidden.
+\item If \code{module(datanames)} is set to specific values and any \code{transform} has \code{datanames = "all"},
 the module may receive extra datasets that could be unnecessary
 }
 }

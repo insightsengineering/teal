@@ -13,7 +13,7 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", datanames = "all", transformers = list()) {
+example_module <- function(label = "example teal module", datanames = "all", transforms = list()) {
   checkmate::assert_string(label)
   ans <- module(
     label,
@@ -59,7 +59,7 @@ example_module <- function(label = "example teal module", datanames = "all", tra
       )
     },
     datanames = datanames,
-    transformers = transformers
+    transforms = transforms
   )
   attr(ans, "teal_bookmarkable") <- TRUE
   ans

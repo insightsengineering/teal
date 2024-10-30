@@ -2,13 +2,13 @@
 % Please edit documentation in R/teal_transform_module.R
 \name{teal_transform_module}
 \alias{teal_transform_module}
-\title{Data module for \code{teal} transformers.}
+\title{Data module for \code{teal} transforms.}
 \usage{
 teal_transform_module(
   ui = NULL,
   server = function(id, data) data,
   label = "transform module",
-  datanames = character(0)
+  datanames = "all"
 )
 }
 \arguments{
@@ -19,16 +19,14 @@ teal_transform_module(
 \code{shiny} module server function; that takes \code{id} and \code{data} argument,
 where the \code{id} is the module id and \code{data} is the reactive \code{teal_data} input.
 The server function must return reactive expression containing \code{teal_data} object.
-
-The server function definition should not use \code{eventReactive} as it may lead to
-unexpected behavior.
-See \code{vignettes("data-transform-as-shiny-module")} for more information.}
+To simplify use \code{\link[=make_teal_transform_server]{make_teal_transform_server()}}.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 
 \item{datanames}{(\code{character})
-Names of the datasets that are relevant for this module to evaluate. If set to \code{character(0)}
-then module would receive \code{\link[=modules]{modules()}} \code{datanames}.}
+Names of the datasets that are relevant for the module. The
+filter panel will only display filters for specified \code{datanames}. The keyword \code{"all"} will show
+filters of all datasets. \code{datanames} will be automatically appended to the \code{\link[=modules]{modules()}} \code{datanames}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -47,14 +45,14 @@ See vignette \code{vignette("data-transform-as-shiny-module", package = "teal")}
 \code{teal_transform_module}'s purpose is to modify any object created in \code{\link[teal.data:teal_data]{teal.data::teal_data}}. It means that an
 app-developer can use \code{teal_transform_module} to modify data but also outputted tables, listings and graphs.
 Some \code{\link{teal_modules}} enables app developer to inject custom shiny module to modify displayed output.
-To handle these \code{decorators} inside of your module use \code{\link[=ui_teal_transform_module]{ui_teal_transform_module()}} and \link{srv_teal_transform_module}.
+To handle these \code{decorators} inside of your module use \code{\link[=ui_transform_data]{ui_transform_data()}} and \link{srv_transform_data}.
 (todo: write more about how to handle decorators: they need to go through ui_args/srv_args and then be consumed by
-ui/srv_teal_transform_module()... . Alternatively, decorators could be a \code{\link[=module]{module()}}'s argument)
+ui/srv_transform_data()... . Alternatively, decorators could be a \code{\link[=module]{module()}}'s argument)
 }
 
 \section{\code{server} as a language}{
 Server function in \code{teal_transform_module} must return \code{reactive} containing \link[teal.data:teal_data]{teal.data::teal_data} object.
-Consider sinmple transformer which doesn't require any advanced reactivity, example \code{server} might have a
+Consider sinmple transform which doesn't require any advanced reactivity, example \code{server} might have a
 following form:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{function(id, data) \{
@@ -73,12 +71,12 @@ following form:
 Above can be simplified to presented below, where \code{level} will be automatically substituted with
 respective input matched by its name.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{make_teal_transform_module(expr = expression(x <- subset(x, col == level)))
+\if{html}{\out{<div class="sourceCode">}}\preformatted{make_transform_data(expr = expression(x <- subset(x, col == level)))
 }\if{html}{\out{</div>}}
 }
 
 \examples{
-my_transformers <- list(
+my_transforms <- list(
   teal_transform_module(
     label = "Static transform for iris",
     datanames = "iris",

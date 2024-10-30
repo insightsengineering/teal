@@ -25,8 +25,8 @@
 #' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
-#' @param is_transformer_failed (`reactiveValues`) contains `logical` flags named after each transformer.
-#' Help to determine if any previous transformer failed, so that following transformers can be disabled
+#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transform.
+#' Help to determine if any previous transform failed, so that following transforms can be disabled
 #' and display a generic failure message.
 #'
 #' @return `reactive` `teal_data`
@@ -53,29 +53,29 @@ srv_teal_data <- function(id,
                           data_module = function(id) NULL,
                           modules = NULL,
                           validate_shiny_silent_error = TRUE,
-                          is_transformer_failed = reactiveValues()) {
+                          is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
-  checkmate::assert_class(is_transformer_failed, "reactivevalues")
+  checkmate::assert_class(is_transform_failed, "reactivevalues")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
-    is_transformer_failed[[id]] <- FALSE
+    is_transform_failed[[id]] <- FALSE
     data_out <- data_module(id = "data")
     data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
     observeEvent(data_handled(), {
       if (!inherits(data_handled(), "teal_data")) {
-        is_transformer_failed[[id]] <- TRUE
+        is_transform_failed[[id]] <- TRUE
       } else {
-        is_transformer_failed[[id]] <- FALSE
+        is_transform_failed[[id]] <- FALSE
       }
     })
 
     is_previous_failed <- reactive({
-      idx_this <- which(names(is_transformer_failed) == id)
-      is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
-      idx_failures <- which(unlist(is_transformer_failed_list))
+      idx_this <- which(names(is_transform_failed) == id)
+      is_transform_failed_list <- reactiveValuesToList(is_transform_failed)
+      idx_failures <- which(unlist(is_transform_failed_list))
       any(idx_failures < idx_this)
     })
 
@@ -133,7 +133,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     output$previous_failed <- renderUI({
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
-        tags$div("One of previous transformers failed. Please fix and continue.", class = "teal-output-warning")
+        tags$div("One of previous transforms failed. Please fix and continue.", class = "teal-output-warning")
       } else {
         shinyjs::show("validate_messages")
         NULL

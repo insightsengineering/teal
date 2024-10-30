@@ -8,12 +8,12 @@
 #' @return `reactive` `teal_data`
 #'
 #'
-#' @name module_teal_transform_module
+#' @name module_transform_data
 NULL
 
 #' @export
-#' @rdname module_teal_transform_module
-ui_teal_transform_module <- function(id, transforms, class = "well") {
+#' @rdname module_transform_data
+ui_transform_data <- function(id, transforms, class = "well") {
   checkmate::assert_string(id)
   if (length(transforms) == 0L) {
     return(NULL)
@@ -25,10 +25,10 @@ ui_teal_transform_module <- function(id, transforms, class = "well") {
 
   labels <- lapply(transforms, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
-  names(transformers) <- ids
+  names(transforms) <- ids
 
   lapply(
-    names(transformers),
+    names(transforms),
     function(name) {
       child_id <- NS(id)(name)
       ns <- NS(child_id)
@@ -70,8 +70,8 @@ ui_teal_transform_module <- function(id, transforms, class = "well") {
 }
 
 #' @export
-#' @rdname module_teal_transform_module
-srv_teal_transform_module <- function(id, data, transforms, modules = NULL, is_transformer_failed = reactiveValues()) {
+#' @rdname module_transform_data
+srv_transform_data <- function(id, data, transforms, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
@@ -90,22 +90,22 @@ srv_teal_transform_module <- function(id, data, transforms, modules = NULL, is_t
     Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
-          logger::log_debug("srv_teal_transform_module initializing for { name }.")
-          is_transformer_failed[[name]] <- FALSE
+          logger::log_debug("srv_transform_data initializing for { name }.")
+          is_transform_failed[[name]] <- FALSE
           data_out <- transforms[[name]]$server(name, data = data_previous)
           data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
           observeEvent(data_handled(), {
             if (inherits(data_handled(), "teal_data")) {
-              is_transformer_failed[[name]] <- FALSE
+              is_transform_failed[[name]] <- FALSE
             } else {
-              is_transformer_failed[[name]] <- TRUE
+              is_transform_failed[[name]] <- TRUE
             }
           })
 
           is_previous_failed <- reactive({
-            idx_this <- which(names(is_transformer_failed) == name)
-            is_transformer_failed_list <- reactiveValuesToList(is_transformer_failed)
-            idx_failures <- which(unlist(is_transformer_failed_list))
+            idx_this <- which(names(is_transform_failed) == name)
+            is_transform_failed_list <- reactiveValuesToList(is_transform_failed)
+            idx_failures <- which(unlist(is_transform_failed_list))
             any(idx_failures < idx_this)
           })
 
@@ -119,7 +119,7 @@ srv_teal_transform_module <- function(id, data, transforms, modules = NULL, is_t
           output$error_wrapper <- renderUI({
             if (is_previous_failed()) {
               shinyjs::disable(transform_wrapper_id)
-              tags$div("One of previous transformers failed. Please fix and continue.", class = "teal-output-warning")
+              tags$div("One of previous transforms failed. Please fix and continue.", class = "teal-output-warning")
             } else {
               shinyjs::enable(transform_wrapper_id)
               shiny::tagList(
@@ -133,7 +133,7 @@ srv_teal_transform_module <- function(id, data, transforms, modules = NULL, is_t
           .trigger_on_success(data_handled)
         })
       },
-      x = names(transformers),
+      x = names(transforms),
       init = data
     )
   })

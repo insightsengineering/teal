@@ -1,4 +1,4 @@
-#' Data module for `teal` transformers.
+#' Data module for `teal` transforms.
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -18,14 +18,14 @@
 #' `teal_transform_module`'s purpose is to modify any object created in [`teal.data::teal_data`]. It means that an
 #' app-developer can use `teal_transform_module` to modify data but also outputted tables, listings and graphs.
 #' Some [`teal_modules`] enables app developer to inject custom shiny module to modify displayed output.
-#' To handle these `decorators` inside of your module use [ui_teal_transform_module()] and [srv_teal_transform_module].
+#' To handle these `decorators` inside of your module use [ui_transform_data()] and [srv_transform_data].
 #' (todo: write more about how to handle decorators: they need to go through ui_args/srv_args and then be consumed by
-#' ui/srv_teal_transform_module()... . Alternatively, decorators could be a [module()]'s argument)
+#' ui/srv_transform_data()... . Alternatively, decorators could be a [module()]'s argument)
 #'
 #' # `server` as a language
 #'
 #' Server function in `teal_transform_module` must return `reactive` containing [teal.data::teal_data] object.
-#' Consider sinmple transformer which doesn't require any advanced reactivity, example `server` might have a
+#' Consider sinmple transform which doesn't require any advanced reactivity, example `server` might have a
 #' following form:
 #'
 #' ```
@@ -46,7 +46,7 @@
 #' respective input matched by its name.
 #'
 #' ```
-#' make_teal_transform_module(expr = expression(x <- subset(x, col == level)))
+#' make_transform_data(expr = expression(x <- subset(x, col == level)))
 #' ```
 #' @inheritParams teal_data_module
 #' @param server (`function(id, data)` or `language`)
@@ -61,7 +61,7 @@
 #'
 #'
 #' @examples
-#' my_transformers <- list(
+#' my_transforms <- list(
 #'   teal_transform_module(
 #'     label = "Static transform for iris",
 #'     datanames = "iris",
@@ -165,15 +165,15 @@ make_teal_transform_server <- function(expr) {
   }
 }
 
-#' Extract all `transformers` from `modules`.
+#' Extract all `transforms` from `modules`.
 #'
 #' @param modules `teal_modules` or `teal_module`
 #' @return A list of `teal_transform_module` nested in the same way as input `modules`.
 #' @keywords internal
-extract_transformers <- function(modules) {
+extract_transforms <- function(modules) {
   if (inherits(modules, "teal_module")) {
-    modules$transformers
+    modules$transforms
   } else if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, extract_transformers)
+    lapply(modules$children, extract_transforms)
   }
 }

@@ -35,12 +35,12 @@ setOldClass("teal_modules")
 #' in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
 #' in `datanames`.
 #'
-#' # `datanames` with `transformers`
-#' When transformers are specified, their `datanames` are added to the module’s `datanames`, which
+#' # `datanames` with `transforms`
+#' When transforms are specified, their `datanames` are added to the module’s `datanames`, which
 #' changes the behavior as follows:
-#' - If `module(datanames)` is `NULL` and the `transformers` have defined `datanames`, the sidebar
-#'   will appear showing the `transformers`' datasets, instead of being hidden.
-#' - If `module(datanames)` is set to specific values and any `transformer` has `datanames = "all"`,
+#' - If `module(datanames)` is `NULL` and the `transforms` have defined `datanames`, the sidebar
+#'   will appear showing the `transforms`' datasets, instead of being hidden.
+#' - If `module(datanames)` is set to specific values and any `transform` has `datanames = "all"`,
 #'   the module may receive extra datasets that could be unnecessary
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module or module group.
@@ -69,14 +69,14 @@ setOldClass("teal_modules")
 #' There are 2 reserved values that have specific behaviors:
 #' - The keyword `"all"` includes all datasets available in the data passed to the teal application.
 #' - `NULL` hides the sidebar panel completely.
-#' - If `transformers` are specified, their `datanames` are automatically added to this `datanames`
+#' - If `transforms` are specified, their `datanames` are automatically added to this `datanames`
 #'   argument.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
-#' @param transformers (`list` of `teal_transform_module`) that will be applied to transform module's data input.
+#' @param transforms (`list` of `teal_transform_module`) that will be applied to transform module's data input.
 #' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformers`
+#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transforms`
 #' will be added to the `datanames`.
 #'
 #'
@@ -159,7 +159,7 @@ module <- function(label = "module",
                    datanames = "all",
                    server_args = NULL,
                    ui_args = NULL,
-                   transformers = list()) {
+                   transforms = list()) {
   # argument checking (independent)
   ## `label`
   checkmate::assert_string(label)
@@ -266,16 +266,16 @@ module <- function(label = "module",
     )
   }
 
-  ## `transformers`
-  if (inherits(transformers, "teal_transform_module")) {
-    transformers <- list(transformers)
+  ## `transforms`
+  if (inherits(transforms, "teal_transform_module")) {
+    transforms <- list(transforms)
   }
-  checkmate::assert_list(transformers, types = "teal_transform_module")
-  transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
+  checkmate::assert_list(transforms, types = "teal_transform_module")
+  transform_datanames <- unlist(lapply(transforms, attr, "datanames"))
   combined_datanames <- if (identical(datanames, "all")) {
     "all"
   } else {
-    union(datanames, transformer_datanames)
+    union(datanames, transform_datanames)
   }
 
   structure(
@@ -286,7 +286,7 @@ module <- function(label = "module",
       datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
-      transformers = transformers
+      transforms = transforms
     ),
     class = "teal_module"
   )
