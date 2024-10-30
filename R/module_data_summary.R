@@ -74,14 +74,22 @@ srv_data_summary <- function(id, teal_data) {
         get_filter_overview_wrapper(teal_data)
       })
 
-      is_unsupported_hidden <- reactive({
-        is_hidden <- isTRUE(input$toggle_unsupported %% 2 == 0)
-        if (is_hidden) {
+      observeEvent(summary_table(), {
+        any_unsupported <- any(apply(summary_table(), 1, function(x) all(is.na(x[-1]))))
+        if (any_unsupported) {
+          shinyjs::show("toggle_unsupported")
+        } else {
+          shinyjs::hide("toggle_unsupported")
+        }
+      })
+
+      hide_unsupported <- reactive(isTRUE(input$toggle_unsupported %% 2 == 0))
+      observeEvent(hide_unsupported(), {
+        if (hide_unsupported()) {
           updateActionLink(inputId = "toggle_unsupported", label = "Show unsupported")
         } else {
           updateActionLink(inputId = "toggle_unsupported", label = "Hide unsupported")
         }
-        is_hidden
       })
 
       output$table <- renderUI({
@@ -94,15 +102,7 @@ srv_data_summary <- function(id, teal_data) {
         } else if (is.null(summary_table_out)) {
           "no datasets to show"
         } else {
-          any_unsupported <- any(apply(summary_table_out, 1, function(x) all(is.na(x[-1]))))
-          if (any_unsupported) {
-            shinyjs::show("toggle_unsupported")
-          } else {
-            shinyjs::hide("toggle_unsupported")
-          }
-
           summary_table_out[is.na(summary_table_out)] <- ""
-
           unsupported_icon <- icon(
             name = "fas fa-exclamation-triangle",
             title = "Unsupported dataset",
@@ -124,7 +124,7 @@ srv_data_summary <- function(id, teal_data) {
                   lapply(x[-1], tags$td)
                 )
               )
-              if (!is_supported && is_unsupported_hidden()) {
+              if (!is_supported && hide_unsupported()) {
                 shinyjs::hidden(elem)
               } else {
                 elem
