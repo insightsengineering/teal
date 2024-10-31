@@ -49,9 +49,10 @@ ui_data_summary <- function(id) {
       tags$div(
         class = "teal_active_summary_filter_panel",
         tableOutput(ns("table")),
-        actionLink(
-          ns("toggle_unsupported"),
-          label = "Show unsupported"
+        checkboxInput(
+          ns("show_unsupported"),
+          label = "Show unsupported",
+          value = FALSE
         )
       )
     )
@@ -77,18 +78,9 @@ srv_data_summary <- function(id, teal_data) {
       observeEvent(summary_table(), {
         any_unsupported <- any(apply(summary_table(), 1, function(x) all(is.na(x[-1]))))
         if (any_unsupported) {
-          shinyjs::show("toggle_unsupported")
+          shinyjs::show("show_unsupported")
         } else {
-          shinyjs::hide("toggle_unsupported")
-        }
-      })
-
-      hide_unsupported <- reactive(isTRUE(input$toggle_unsupported %% 2 == 0))
-      observeEvent(hide_unsupported(), {
-        if (hide_unsupported()) {
-          updateActionLink(inputId = "toggle_unsupported", label = "Show unsupported")
-        } else {
-          updateActionLink(inputId = "toggle_unsupported", label = "Hide unsupported")
+          shinyjs::hide("show_unsupported")
         }
       })
 
@@ -124,7 +116,7 @@ srv_data_summary <- function(id, teal_data) {
                   lapply(x[-1], tags$td)
                 )
               )
-              if (!is_supported && hide_unsupported()) {
+              if (!is_supported && !isTRUE(input$show_unsupported)) {
                 shinyjs::hidden(elem)
               } else {
                 elem
