@@ -2238,11 +2238,11 @@ testthat::describe("srv_teal summary table", {
           module_summary_table(output, "module_1"),
           data.frame(
             "Data Name" = c(
-              "foo", "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+              "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
               "- RPPAArray", "- Mutations", "- miRNASeqGene", "mtcars"
             ),
-            Obs = c("", "150/150", "", "198", "198", "33", "97", "471", "32/32"),
-            Subjects = c(NA_integer_, NA_integer_, 92, 79, 90, 46, 90, 80, NA_integer_),
+            Obs = c("150/150", "", "198", "198", "33", "97", "471", "32/32"),
+            Subjects = c(NA_integer_, 92, 79, 90, 46, 90, 80, NA_integer_),
             check.names = FALSE
           )
         )
@@ -2269,8 +2269,8 @@ testthat::describe("srv_teal summary table", {
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
-            "Data Name" = c("foo", "iris", "mtcars"),
-            Obs = c("", "150/150", "32/32"),
+            "Data Name" = c("iris", "mtcars"),
+            Obs = c("150/150", "32/32"),
             check.names = FALSE
           )
         )
