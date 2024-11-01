@@ -195,7 +195,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
     data_rv <- reactive({
       req(inherits(data_validated(), "teal_data"))
-      is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data_validated())))
+      is_filter_ok <- check_filter_datanames(filter, ls(data_validated()))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",

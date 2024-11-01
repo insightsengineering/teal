@@ -71,10 +71,10 @@ get_teal_bs_theme <- function() {
 #' Create a `FilteredData` object from a `teal_data` object.
 #'
 #' @param x (`teal_data`) object
-#' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
+#' @param datanames (`character`) vector of data set names to include; must be subset of `ls(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = ls(teal.code::get_env(x))) {
+teal_data_to_filtered_data <- function(x, datanames = ls(x)) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
   # Otherwise, FilteredData will be created in the modules' scope later
@@ -328,7 +328,7 @@ create_app_id <- function(data, modules) {
   checkmate::assert_class(modules, "teal_modules")
 
   data <- if (inherits(data, "teal_data")) {
-    as.list(teal.code::get_env(data))
+    as.list(data)
   } else if (inherits(data, "teal_data_module")) {
     deparse1(body(data$server))
   }

@@ -489,9 +489,9 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_1()())), "iris")
+        testthat::expect_setequal(ls(modules_output$module_1()()), "iris")
         session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
-        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_2()())), "mtcars")
+        testthat::expect_setequal(ls(modules_output$module_2()()), "mtcars")
       }
     )
   })
@@ -545,7 +545,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
+        testthat::expect_identical(ls(modules_output$module_1()()), "iris")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
       }
     )
@@ -675,12 +675,12 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
+        testthat::expect_identical(ls(modules_output$module_1()()), "iris")
       }
     )
   })
 
-  testthat::it("receives all objects from @env when module$datanames = \"all\"", {
+  testthat::it("receives all objects from teal_data when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -696,7 +696,7 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
-          teal.data::datanames(modules_output$module_1()()),
+          ls(modules_output$module_1()()),
           c("iris", "iris_raw", "mtcars", "swiss")
         )
       }
@@ -760,7 +760,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -797,7 +797,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -858,7 +858,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -896,7 +896,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars"))
+        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars"))
       }
     )
   })
@@ -2165,7 +2165,10 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays parent before child when join_keys are provided", {
-    data <- teal.data::teal_data(parent = mtcars, child = data.frame(am = c(0, 1), test = c("a", "b")))
+    data <- teal.data::teal_data(
+      parent = mtcars,
+      child = data.frame(am = c(0, 1), test = c("a", "b"))
+    )
 
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("parent", "child", keys = c("am"))
@@ -2324,10 +2327,7 @@ testthat::describe("Datanames with special symbols", {
         session$flushReact()
 
         testthat::expect_setequal(
-          ls(
-            teal.code::get_env(modules_output$module_1()()),
-            all.names = TRUE
-          ),
+          names(modules_output$module_1()()),
           c(".raw_data", "iris", "%a_pipe%")
         )
       }
@@ -2355,11 +2355,9 @@ testthat::describe("Datanames with special symbols", {
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
+
         testthat::expect_setequal(
-          ls(
-            teal.code::get_env(modules_output$module_1()()),
-            all.names = TRUE
-          ),
+          names(modules_output$module_1()()),
           c(".raw_data", "iris", "_a variable with spaces_")
         )
       }
@@ -2451,7 +2449,7 @@ testthat::describe("teal.data code with a function defined", {
           }
         })),
         modules = modules(module("module_1", server = function(id, data) data))
-      ), ,
+      ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
@@ -2471,7 +2469,6 @@ testthat::describe("teal.data code with a function defined", {
           envir = local_env
         )
         local(hash <- rlang::hash(deparse1(fun)), envir = local_env)
-
         testthat::expect_setequal(
           trimws(strsplit(
             x = teal.code::get_code(modules_output$module_1()()),

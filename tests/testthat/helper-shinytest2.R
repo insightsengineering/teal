@@ -3,7 +3,6 @@ simple_teal_data <- function() {
     iris <- iris
     mtcars <- mtcars
   })
-  datanames(data) <- c("iris", "mtcars")
   data
 }
 
@@ -17,7 +16,7 @@ report_module <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = function(card) card
         )
-        updateSelectInput(session, "dataname", choices = isolate(datanames(data())))
+        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
