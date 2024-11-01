@@ -1899,8 +1899,8 @@ testthat::describe("srv_teal summary table", {
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
-            "Data Name" = c("mtcars", "iris"),
-            Obs = c("32/32", "150/150"),
+            "Data Name" = c("iris", "mtcars"),
+            Obs = c("150/150", "32/32"),
             check.names = FALSE
           )
         )
