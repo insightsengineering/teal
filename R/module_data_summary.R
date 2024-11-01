@@ -119,7 +119,10 @@ srv_data_summary <- function(id, teal_data) {
                     collapse = ", ",
                     shQuote(summary_table()[is_unsupported, "dataname"]),
                     " (",
-                    vapply(summary_table()[is_unsupported, "dataname"], function(x) typeof(teal_data()[[x]]), character(1L)),
+                    vapply(
+                      summary_table()[is_unsupported, "dataname"],
+                      function(x) typeof(teal_data()[[x]]), character(1L)
+                    ),
                     ")"
                   )
                 ),
