@@ -48,12 +48,7 @@ ui_data_summary <- function(id) {
       id = content_id,
       tags$div(
         class = "teal_active_summary_filter_panel",
-        tableOutput(ns("table")),
-        checkboxInput(
-          ns("show_unsupported"),
-          label = "Show unsupported",
-          value = FALSE
-        )
+        tableOutput(ns("table"))
       )
     )
   )
@@ -75,15 +70,6 @@ srv_data_summary <- function(id, teal_data) {
         get_filter_overview_wrapper(teal_data)
       })
 
-      observeEvent(summary_table(), {
-        any_unsupported <- any(apply(summary_table(), 1, function(x) all(is.na(x[-1]))))
-        if (any_unsupported) {
-          shinyjs::show("show_unsupported")
-        } else {
-          shinyjs::hide("show_unsupported")
-        }
-      })
-
       output$table <- renderUI({
         summary_table_out <- try(summary_table(), silent = TRUE)
         if (inherits(summary_table_out, "try-error")) {
@@ -94,32 +80,20 @@ srv_data_summary <- function(id, teal_data) {
         } else if (is.null(summary_table_out)) {
           "no datasets to show"
         } else {
+          is_unsupported <- apply(summary_table(), 1, function(x) all(is.na(x[-1])))
           summary_table_out[is.na(summary_table_out)] <- ""
-          unsupported_icon <- icon(
-            name = "fas fa-exclamation-triangle",
-            title = "Unsupported dataset",
-            `data-container` = "body",
-            `data-toggle` = "popover",
-            `data-content` = "object not supported by the data_summary module"
-          )
           body_html <- apply(
             summary_table_out,
             1,
             function(x) {
               is_supported <- !all(x[-1] == "")
-              elem <- tags$tr(
-                tagList(
-                  tags$td(
-                    if (!is_supported) unsupported_icon,
-                    x[1]
-                  ),
-                  lapply(x[-1], tags$td)
+              if (is_supported) {
+                tags$tr(
+                  tagList(
+                    tags$td(x[1]),
+                    lapply(x[-1], tags$td)
+                  )
                 )
-              )
-              if (!is_supported && !isTRUE(input$show_unsupported)) {
-                shinyjs::hidden(elem)
-              } else {
-                elem
               }
             }
           )
@@ -133,7 +107,26 @@ srv_data_summary <- function(id, teal_data) {
             tags$thead(header_html),
             tags$tbody(body_html)
           )
-          table_html
+          div(
+            table_html,
+            if (any(is_unsupported)) {
+              p(
+                class = c("pull-right", "float-right", "text-secondary"),
+                icon(
+                  name = "fas fa-circle-info",
+                  title = paste(
+                    sep = "",
+                    collapse = ", ",
+                    shQuote(summary_table()[is_unsupported, "dataname"]),
+                    " (",
+                    vapply(summary_table()[is_unsupported, "dataname"], function(x) typeof(teal_data()[[x]]), character(1L)),
+                    ")"
+                  )
+                ),
+                sprintf("+%s unfilterable dataset(s)", sum(is_unsupported))
+              )
+            }
+          )
         }
       })
 
