@@ -123,7 +123,7 @@ srv_data_summary <- function(id, teal_data) {
                     " (",
                     vapply(
                       summary_table()[is_unsupported, "dataname"],
-                      function(x) typeof(teal_data()[[x]]), character(1L)
+                      function(x) class(teal_data()[[x]])[1], character(1L)
                     ),
                     ")"
                   )
