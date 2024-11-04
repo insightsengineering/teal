@@ -323,17 +323,25 @@ modules <- function(..., label = "root") {
 #' @rdname teal_modules
 #' @export
 format.teal_module <- function(x, indent = 0, ...) {
-  paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, "\n", collapse = "")
+  indent_str <- paste(rep("  ", indent), collapse = "")
+  bookmarkable <- ifelse(isTRUE(attr(x, "teal_bookmarkable")), "Yes", "No")
+  reportable <- ifelse("reporter" %in% names(formals(x$server)), "Yes", "No")
+  transformers <- if (length(x$transformers) > 0) {
+    paste0("Transformers: ", paste(sapply(x$transformers, function(t) t$label), collapse = ", "))
+  } else {
+    "Transformers: None"
+  }
+  paste0(
+    indent_str, "+ ", x$label, "\n",
+    indent_str, "  - datanames: ", paste(x$datanames, collapse = ", "), "\n",
+    indent_str, "  - bookmarkable: ", bookmarkable, "\n",
+    indent_str, "  - reportable: ", reportable, "\n",
+    indent_str, "  - ui_args: ", ifelse(is.null(x$ui_args), "None", paste(names(x$ui_args), collapse = ", ")), "\n",
+    indent_str, "  - server_args: ", ifelse(is.null(x$server_args), "None", paste(names(x$server_args), collapse = ", ")), "\n",
+    indent_str, "  - ", transformers, "\n",
+    collapse = ""
+  )
 }
-
-
-#' @rdname teal_modules
-#' @export
-print.teal_module <- function(x, ...) {
-  cat(format(x, ...))
-  invisible(x)
-}
-
 
 #' @rdname teal_modules
 #' @export
@@ -345,6 +353,20 @@ format.teal_modules <- function(x, indent = 0, ...) {
     ),
     collapse = ""
   )
+}
+
+#' @rdname teal_modules
+#' @export
+print.teal_module <- function(x, ...) {
+  cat(format(x, ...))
+  invisible(x)
+}
+
+#' @rdname teal_modules
+#' @export
+print.teal_modules <- function(x, ...) {
+  cat(format(x, ...))
+  invisible(x)
 }
 
 #' @param modules (`teal_module` or `teal_modules`)
@@ -379,11 +401,6 @@ set_datanames <- function(modules, datanames) {
   }
   modules
 }
-
-#' @rdname teal_modules
-#' @export
-print.teal_modules <- print.teal_module
-
 
 # utilities ----
 ## subset or modify modules ----
