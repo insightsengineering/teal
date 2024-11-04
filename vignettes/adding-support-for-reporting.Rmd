@@ -39,7 +39,7 @@ my_module <- function(label = "example teal module") {
       checkmate::assert_class(isolate(data()), "teal_data")
 
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
@@ -82,7 +82,7 @@ my_module_with_reporting <- function(label = "example teal module") {
     label = label,
     server = function(id, data, reporter) {
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
@@ -130,7 +130,7 @@ my_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = function(card) card
         )
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
@@ -192,7 +192,7 @@ my_module_with_reporting <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = custom_function
         )
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
@@ -265,7 +265,7 @@ example_reporter_module <- function(label = "Example") {
     server = function(id, data, reporter, filter_panel_api) {
       with_filter <- !missing(filter_panel_api) && inherits(filter_panel_api, "FilterPanelApi")
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         dat <- reactive(data()[[input$dataname]])
         observe({
           req(dat())

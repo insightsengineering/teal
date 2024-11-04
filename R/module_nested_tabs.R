@@ -364,14 +364,11 @@ srv_teal_module.teal_module <- function(id,
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    .topologically_sort_datanames(
-      intersect(names(data), ls(data)),
-      teal.data::join_keys(data)
-    )
+    names(data) # TODO: Reviewer: Check that previous code does nothing.
   } else {
     intersect(
-      .include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      ls(data)
+      names(data), # Keep topological order from teal.data::names()
+      .include_parent_datanames(modules$datanames, teal.data::join_keys(data))
     )
   }
 }

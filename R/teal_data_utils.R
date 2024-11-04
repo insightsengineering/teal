@@ -42,7 +42,7 @@ NULL
 .subset_teal_data <- function(data, datanames) {
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(datanames, "character")
-  datanames_corrected <- intersect(datanames, ls(data))
+  datanames_corrected <- intersect(datanames, names(data))
   datanames_corrected_with_raw <- c(datanames_corrected, ".raw_data")
   if (!length(datanames_corrected)) {
     return(teal_data())

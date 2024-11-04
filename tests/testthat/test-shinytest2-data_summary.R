@@ -133,7 +133,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("e2e: data summary displays datasets by ls() order if no join_keys", {
+testthat::test_that("e2e: data summary displays datasets by names() order if no join_keys", {
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))

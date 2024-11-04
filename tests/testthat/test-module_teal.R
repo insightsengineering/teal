@@ -489,9 +489,9 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(modules_output$module_1()()), "iris")
+        testthat::expect_setequal(names(modules_output$module_1()()), "iris")
         session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
-        testthat::expect_setequal(ls(modules_output$module_2()()), "mtcars")
+        testthat::expect_setequal(names(modules_output$module_2()()), "mtcars")
       }
     )
   })
@@ -545,7 +545,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(modules_output$module_1()()), "iris")
+        testthat::expect_identical(names(modules_output$module_1()()), "iris")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
       }
     )
@@ -675,7 +675,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(modules_output$module_1()()), "iris")
+        testthat::expect_identical(names(modules_output$module_1()()), "iris")
       }
     )
   })
@@ -696,7 +696,7 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
-          ls(modules_output$module_1()()),
+          names(modules_output$module_1()()),
           c("iris", "iris_raw", "mtcars", "swiss")
         )
       }
@@ -760,7 +760,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -797,7 +797,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -825,7 +825,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
+        testthat::expect_setequal(names(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
       }
     )
   })
@@ -858,7 +858,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -896,7 +896,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(ls(modules_output$module_1()()), c("iris", "mtcars"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars"))
       }
     )
   })
@@ -2328,7 +2328,7 @@ testthat::describe("Datanames with special symbols", {
 
         testthat::expect_setequal(
           names(modules_output$module_1()()),
-          c(".raw_data", "iris", "%a_pipe%")
+          c("iris", "%a_pipe%")
         )
       }
     )
@@ -2358,7 +2358,7 @@ testthat::describe("Datanames with special symbols", {
 
         testthat::expect_setequal(
           names(modules_output$module_1()()),
-          c(".raw_data", "iris", "_a variable with spaces_")
+          c("iris", "_a variable with spaces_")
         )
       }
     )

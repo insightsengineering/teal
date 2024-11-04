@@ -4,12 +4,12 @@
 \alias{teal_data_to_filtered_data}
 \title{Create a \code{FilteredData}}
 \usage{
-teal_data_to_filtered_data(x, datanames = ls(x))
+teal_data_to_filtered_data(x, datanames = names(x))
 }
 \arguments{
 \item{x}{(\code{teal_data}) object}
 
-\item{datanames}{(\code{character}) vector of data set names to include; must be subset of \code{ls(x)}}
+\item{datanames}{(\code{character}) vector of data set names to include; must be subset of \code{names(x)}}
 }
 \value{
 A \code{FilteredData} object.

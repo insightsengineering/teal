@@ -207,16 +207,16 @@ init <- function(data,
 
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
-    if (length(ls(data)) == 0) {
+    if (length(data) == 0) {
       stop("The environment of `data` is empty.")
     }
 
-    is_modules_ok <- check_modules_datanames(modules, ls(data))
+    is_modules_ok <- check_modules_datanames(modules, names(data))
     if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
       warning(is_modules_ok, call. = FALSE)
     }
 
-    is_filter_ok <- check_filter_datanames(filter, ls(data))
+    is_filter_ok <- check_filter_datanames(filter, names(data))
     if (!isTRUE(is_filter_ok)) {
       warning(is_filter_ok)
       # we allow app to continue if applied filters are outside

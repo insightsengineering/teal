@@ -16,7 +16,7 @@ report_module <- function(label = "example teal module") {
           reporter = reporter,
           card_fun = function(card) card
         )
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]

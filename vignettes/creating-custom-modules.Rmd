@@ -63,7 +63,7 @@ my_module <- function(label = "example teal module") {
     label = label,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(ls(data())))
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
         output$dataset <- renderPrint({
           req(input$dataname)
           data()[[input$dataname]]
@@ -113,7 +113,7 @@ srv_histogram_example <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     # update dataset and variable choices
     # each selection stored in separate reactive expression
-    updateSelectInput(inputId = "datasets", choices = isolate(ls(data())))
+    updateSelectInput(inputId = "datasets", choices = isolate(names(data())))
     observe({
       req(dataset())
       nums <- vapply(data()[[dataset()]], is.numeric, logical(1L))

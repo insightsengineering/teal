@@ -102,7 +102,7 @@ srv_init_data <- function(id, data) {
       list(code = trimws(c(teal.code::get_code(data), hashes), which = "right")),
       list(join_keys = teal.data::join_keys(data)),
       sapply(
-        ls(data),
+        names(data),
         teal.code::get_var,
         object = data,
         simplify = FALSE
@@ -122,7 +122,7 @@ srv_init_data <- function(id, data) {
 #' @return A character vector with the code lines.
 #' @keywords internal
 #'
-.get_hashes_code <- function(data, datanames = ls(data)) {
+.get_hashes_code <- function(data, datanames = names(data)) {
   vapply(
     datanames,
     function(dataname, datasets) {
