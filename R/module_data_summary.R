@@ -112,11 +112,13 @@ srv_data_summary <- function(id, teal_data) {
             if (any(is_unsupported)) {
               p(
                 class = c("pull-right", "float-right", "text-secondary"),
+                style = "scale: 0.8;",
+                sprintf("And %s more unfilterable object(s)", sum(is_unsupported)),
                 icon(
                   name = "fas fa-circle-info",
                   title = paste(
                     sep = "",
-                    collapse = ", ",
+                    collapse = "\n",
                     shQuote(summary_table()[is_unsupported, "dataname"]),
                     " (",
                     vapply(
@@ -125,8 +127,7 @@ srv_data_summary <- function(id, teal_data) {
                     ),
                     ")"
                   )
-                ),
-                sprintf("+%s unfilterable dataset(s)", sum(is_unsupported))
+                )
               )
             }
           )
