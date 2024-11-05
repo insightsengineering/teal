@@ -338,8 +338,8 @@ format.teal_module <- function(x, indent = 0, is_last = FALSE, parent_prefix = "
     }
   }
 
-  bookmarkable <- ifelse(isTRUE(attr(x, "teal_bookmarkable")), "Yes", "No")
-  reportable <- ifelse("reporter" %in% names(formals(x$server)), "Yes", "No")
+  bookmarkable <- isTRUE(attr(x, "teal_bookmarkable"))
+  reportable <- "reporter" %in% names(formals(x$server))
 
   transformers <- if (length(x$transformers) > 0) {
     paste(sapply(x$transformers, function(t) attr(t, "label")), collapse = ", ")
