@@ -352,7 +352,7 @@ format.teal_module <- function(x, indent = 0, is_last = FALSE, parent_prefix = "
   if ("data_sources" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::blue("Data Sources:"), " ", paste(x$datanames, collapse = ", "), "\n"
+      content_prefix, "├─ ", crayon::blue("Datasets:"), " ", paste(x$datanames, collapse = ", "), "\n"
     )
   }
   if ("properties" %in% what) {
