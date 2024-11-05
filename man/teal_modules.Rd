@@ -6,10 +6,10 @@
 \alias{teal_module}
 \alias{modules}
 \alias{format.teal_module}
-\alias{print.teal_module}
 \alias{format.teal_modules}
-\alias{set_datanames}
+\alias{print.teal_module}
 \alias{print.teal_modules}
+\alias{set_datanames}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
@@ -26,15 +26,22 @@ module(
 
 modules(..., label = "root")
 
-\method{format}{teal_module}(x, indent = 0, ...)
+\method{format}{teal_module}(
+  x,
+  indent = 0,
+  is_last = FALSE,
+  parent_prefix = "",
+  what = c("data_sources", "properties", "ui_args", "server_args", "transformers"),
+  ...
+)
+
+\method{format}{teal_modules}(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 
-\method{format}{teal_modules}(x, indent = 0, ...)
+\method{print}{teal_modules}(x, ...)
 
 set_datanames(modules, datanames)
-
-\method{print}{teal_modules}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -92,6 +99,9 @@ Transformers' \code{datanames} are added to the \code{datanames}. See \code{\lin
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
 \item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
+
+\item{what}{character vector specifying which metadata to display.
+Possible values: "data_sources", "properties", "ui_args", "server_args", "transformers"}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})}
 }

@@ -321,8 +321,10 @@ modules <- function(..., label = "root") {
 # printing methods ----
 
 #' @rdname teal_modules
+#' @param what character vector specifying which metadata to display. 
+#'   Possible values: "data_sources", "properties", "ui_args", "server_args", "transformers"
 #' @export
-format.teal_module <- function(x, indent = 0, is_last = FALSE, parent_prefix = "", ...) {
+format.teal_module <- function(x, indent = 0, is_last = FALSE, parent_prefix = "", what = c("data_sources", "properties", "ui_args", "server_args", "transformers"), ...) {
   empty_text <- "─ none"
   branch <- if (is_last) "└─" else "├─"
   current_prefix <- paste0(parent_prefix, branch, " ")
@@ -345,16 +347,42 @@ format.teal_module <- function(x, indent = 0, is_last = FALSE, parent_prefix = "
     empty_text
   }
 
-  paste0(
-    current_prefix, crayon::bold(x$label), "\n",
-    content_prefix, "├─ ", crayon::blue("Data Sources:"), " ", paste(x$datanames, collapse = ", "), "\n",
-    content_prefix, "├─ ", crayon::yellow("Properties:"), "\n",
-    content_prefix, "│  ├─ Bookmarkable: ", bookmarkable, "\n",
-    content_prefix, "│  └─ Reportable: ", reportable, "\n",
-    content_prefix, "├─ ", crayon::green("UI Arguments:"), " ", format_list(x$ui_args), "\n",
-    content_prefix, "├─ ", crayon::green("Server Arguments:"), " ", format_list(x$server_args), "\n",
-    content_prefix, "└─ ", crayon::magenta("Transformers:"), " ", transformers, "\n"
-  )
+  output <- paste0(current_prefix, crayon::bold(x$label), "\n")
+  
+  if ("data_sources" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "├─ ", crayon::blue("Data Sources:"), " ", paste(x$datanames, collapse = ", "), "\n"
+    )
+  }
+  if ("properties" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "├─ ", crayon::yellow("Properties:"), "\n",
+      content_prefix, "│  ├─ Bookmarkable: ", bookmarkable, "\n",
+      content_prefix, "│  └─ Reportable: ", reportable, "\n"
+    )
+  }
+  if ("ui_args" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "├─ ", crayon::green("UI Arguments:"), " ", format_list(x$ui_args), "\n"
+    )
+  }
+  if ("server_args" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "├─ ", crayon::green("Server Arguments:"), " ", format_list(x$server_args), "\n"
+    )
+  }
+  if ("transformers" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "└─ ", crayon::magenta("Transformers:"), " ", transformers, "\n"
+    )
+  }
+  
+  output
 }
 
 #' @rdname teal_modules
