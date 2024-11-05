@@ -41,6 +41,7 @@ Depends:
     teal.slice (>= 0.5.1.9009)
 Imports:
     checkmate (>= 2.1.0),
+    crayon,
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),

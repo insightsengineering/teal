@@ -322,37 +322,94 @@ modules <- function(..., label = "root") {
 
 #' @rdname teal_modules
 #' @export
-format.teal_module <- function(x, indent = 0, ...) {
-  indent_str <- paste(rep("  ", indent), collapse = "")
+format.teal_module <- function(x, indent = 0, is_last = FALSE, parent_prefix = "", ...) {
+  empty_text <- "─ none"
+  branch <- if (is_last) "└─" else "├─"
+  current_prefix <- paste0(parent_prefix, branch, " ")
+  content_prefix <- paste0(parent_prefix, if (is_last) "   " else "│  ")
+
+  format_list <- function(lst, empty = empty_text) {
+    if (is.null(lst) || length(lst) == 0) {
+      empty
+    } else {
+      paste(names(lst), collapse = ", ")
+    }
+  }
+
   bookmarkable <- ifelse(isTRUE(attr(x, "teal_bookmarkable")), "Yes", "No")
   reportable <- ifelse("reporter" %in% names(formals(x$server)), "Yes", "No")
+
   transformers <- if (length(x$transformers) > 0) {
-    paste0("Transformers: ", paste(sapply(x$transformers, function(t) t$label), collapse = ", "))
+    paste(sapply(x$transformers, function(t) attr(t, "label")), collapse = ", ")
   } else {
-    "Transformers: None"
+    empty_text
   }
+
   paste0(
-    indent_str, "+ ", x$label, "\n",
-    indent_str, "  - datanames: ", paste(x$datanames, collapse = ", "), "\n",
-    indent_str, "  - bookmarkable: ", bookmarkable, "\n",
-    indent_str, "  - reportable: ", reportable, "\n",
-    indent_str, "  - ui_args: ", ifelse(is.null(x$ui_args), "None", paste(names(x$ui_args), collapse = ", ")), "\n",
-    indent_str, "  - server_args: ", ifelse(is.null(x$server_args), "None", paste(names(x$server_args), collapse = ", ")), "\n",
-    indent_str, "  - ", transformers, "\n",
-    collapse = ""
+    current_prefix, crayon::bold(x$label), "\n",
+    content_prefix, "├─ ", crayon::blue("Data Sources:"), " ", paste(x$datanames, collapse = ", "), "\n",
+    content_prefix, "├─ ", crayon::yellow("Properties:"), "\n",
+    content_prefix, "│  ├─ Bookmarkable: ", bookmarkable, "\n",
+    content_prefix, "│  └─ Reportable: ", reportable, "\n",
+    content_prefix, "├─ ", crayon::green("UI Arguments:"), " ", format_list(x$ui_args), "\n",
+    content_prefix, "├─ ", crayon::green("Server Arguments:"), " ", format_list(x$server_args), "\n",
+    content_prefix, "└─ ", crayon::magenta("Transformers:"), " ", transformers, "\n"
   )
 }
 
 #' @rdname teal_modules
 #' @export
-format.teal_modules <- function(x, indent = 0, ...) {
-  paste(
-    c(
-      paste0(rep(" ", indent), "+ ", x$label, "\n"),
-      unlist(lapply(x$children, format, indent = indent + 1, ...))
-    ),
-    collapse = ""
-  )
+format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
+  if (is_root) {
+    header <- paste0(crayon::bold("TEAL ROOT"), "\n")
+    new_parent_prefix <- "  " # Initial indent for root level
+  } else {
+    if (!is.null(x$label)) {
+      branch <- if (is_last) "└─" else "├─"
+      header <- paste0(parent_prefix, branch, " ", crayon::bold(x$label), "\n")
+      new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "│  ")
+    } else {
+      header <- ""
+      new_parent_prefix <- parent_prefix
+    }
+  }
+
+  if (length(x$children) > 0) {
+    children_output <- character(0)
+    n_children <- length(x$children)
+
+    for (i in seq_along(x$children)) {
+      child <- x$children[[i]]
+      is_last_child <- (i == n_children)
+
+      if (inherits(child, "teal_modules")) {
+        children_output <- c(
+          children_output,
+          format(child,
+            indent = indent,
+            is_root = FALSE,
+            is_last = is_last_child,
+            parent_prefix = new_parent_prefix,
+            ...
+          )
+        )
+      } else {
+        children_output <- c(
+          children_output,
+          format(child,
+            indent = indent,
+            is_last = is_last_child,
+            parent_prefix = new_parent_prefix,
+            ...
+          )
+        )
+      }
+    }
+
+    paste0(header, paste(children_output, collapse = ""))
+  } else {
+    header
+  }
 }
 
 #' @rdname teal_modules
