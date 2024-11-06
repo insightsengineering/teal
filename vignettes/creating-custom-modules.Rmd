@@ -17,7 +17,14 @@ However, it is also possible to create your own modules using the `module` funct
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
 ```r
-hist(dataset[, selected], las = 1)
+my_plot <- hist(
+  dataset[[vars]],
+  las = 1,
+  main = paste("Histogram of", vars),
+  xlab = vars,
+  col = "lightblue",
+  border = "black"
+)
 ```
 This module will allow users to dynamically select datasets and variables to create histograms within a `teal` application.
 We will cover best practices, including setting up dynamic inputs, structuring server logic, and using the `teal_data` object to ensure reactivity and reproducibility.
