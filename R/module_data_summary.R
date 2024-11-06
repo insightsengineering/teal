@@ -112,10 +112,10 @@ srv_data_summary <- function(id, teal_data) {
             if (any(is_unsupported)) {
               p(
                 class = c("pull-right", "float-right", "text-secondary"),
-                style = "scale: 0.8;",
+                style = "font-size: 0.8em;",
                 sprintf("And %s more unfilterable object(s)", sum(is_unsupported)),
                 icon(
-                  name = "fas fa-circle-info",
+                  name = "far fa-circle-question",
                   title = paste(
                     sep = "",
                     collapse = "\n",
@@ -123,7 +123,8 @@ srv_data_summary <- function(id, teal_data) {
                     " (",
                     vapply(
                       summary_table()[is_unsupported, "dataname"],
-                      function(x) class(teal_data()[[x]])[1], character(1L)
+                      function(x) class(teal_data()[[x]])[1],
+                      character(1L)
                     ),
                     ")"
                   )
