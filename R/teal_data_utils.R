@@ -37,28 +37,3 @@ NULL
   data@env <- new_env
   data
 }
-
-#' @rdname teal_data_utilities
-.subset_teal_data <- function(data, datanames) {
-  checkmate::assert_class(data, "teal_data")
-  checkmate::assert_class(datanames, "character")
-  datanames_corrected <- intersect(datanames, ls(teal.code::get_env(data)))
-  datanames_corrected_with_raw <- c(datanames_corrected, ".raw_data")
-  if (!length(datanames_corrected)) {
-    return(teal_data())
-  }
-
-  new_data <- do.call(
-    teal.data::teal_data,
-    args = c(
-      mget(x = datanames_corrected_with_raw, envir = teal.code::get_env(data)),
-      list(
-        code = teal.code::get_code(data, names = datanames_corrected_with_raw),
-        join_keys = teal.data::join_keys(data)[datanames_corrected]
-      )
-    )
-  )
-  new_data@verified <- data@verified
-  teal.data::datanames(new_data) <- datanames_corrected
-  new_data
-}
