@@ -349,7 +349,7 @@ format.teal_module <- function(
     empty_text
   }
 
-  output <- paste0(current_prefix, crayon::bgWhite(x$label), "\n")
+  output <- pasten(current_prefix, crayon::bgWhite(x$label))
 
   if ("data_sources" %in% what) {
     output <- paste0(
@@ -391,12 +391,12 @@ format.teal_module <- function(
 #' @export
 format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
   if (is_root) {
-    header <- paste0(crayon::bold("TEAL ROOT"), "\n")
+    header <- pasten(crayon::bold("TEAL ROOT"))
     new_parent_prefix <- "  " # Initial indent for root level
   } else {
     if (!is.null(x$label)) {
       branch <- if (is_last) "└─" else "├─"
-      header <- paste0(parent_prefix, branch, " ", crayon::bold(x$label), "\n")
+      header <- pasten(parent_prefix, branch, " ", crayon::bold(x$label))
       new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "│  ")
     } else {
       header <- ""

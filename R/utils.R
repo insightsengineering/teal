@@ -376,3 +376,7 @@ strip_style <- function(string) {
     useBytes = TRUE
   )
 }
+
+#' @keywords internal
+#' @noRd
+pasten <- function(...) paste0(..., "\n")
