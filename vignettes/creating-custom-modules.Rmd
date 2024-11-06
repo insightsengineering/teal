@@ -27,6 +27,7 @@ my_plot <- hist(
   border = "black"
 )
 ```
+
 This module will allow users to dynamically select datasets and variables to create histograms within a `teal` application.
 We will cover best practices, including setting up dynamic inputs, structuring server logic, and using the `teal_data` object to ensure reactivity and reproducibility.
 
@@ -35,7 +36,7 @@ We will cover best practices, including setting up dynamic inputs, structuring s
 When developing a custom `teal` module for visualizations, we will first identify the primary inputs that users will interact with:
 
 * **Dataset Input** (`dataset`): Allows users to select which dataset to explore.
-* **Variable Input** (`selected`): Allows users to choose a specific numeric variable from the chosen dataset, ensuring only appropriate columns are available for plotting.
+* **Variable Input** (`vars`): Allows users to choose a specific numeric variable from the chosen dataset, ensuring only appropriate columns are available for plotting.
 
 These inputs are dynamically populated based on the available datasets and variables in the `teal_data` object, which we will cover later.
 
@@ -100,18 +101,22 @@ This syntax triggers reactivity, ensuring that the data within `teal_data` stays
 ### Using `datanames()` to Access Dataset Names in `teal_data` object
 
 The `teal_data` object can contain multiple datasets. To retrieve the names of these datasets, use the `datanames()` function:
+
 ```r
 datanames(data())
 ```
+
 This will return a character vector of the dataset names contained in `teal_data`. 
 You can then use these names to dynamically populate input controls, like a dataset selection drop-down.
 
 ### Accessing Specific Datasets with Double Brackets (`[[ ]])`
 
 To access an individual dataset from `teal_data`, use double brackets (`[[ ]]`) along with the dataset name. This allows you to extract the specific dataset as a data frame:
+
 ```r
 data()[[input$dataset]]
 ```
+
 Here, `input$dataset` represents the name of the dataset selected by the user. This syntax is highly flexible because it dynamically references whichever dataset the user has chosen. You can further subset or manipulate this extracted data frame as needed.
 
 ### Setting Up Server Logic Using `teal_data` and Dynamic Variable Injection
@@ -232,9 +237,7 @@ app <- init(
 )
 
 # Run the app
-if (interactive()) {
-  shiny::shinyApp(ui = app$ui, server = app$server)
-}
+shiny::shinyApp(ui = app$ui, server = app$server)
 ```
 
 **Congratulations! You just created a custom teal module and used it in a teal app!**
