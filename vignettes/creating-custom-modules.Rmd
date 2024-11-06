@@ -24,7 +24,7 @@ We will cover best practices, including setting up dynamic inputs, structuring s
 
 ## Understanding the Inputs and Requirements
 
-When developing a custom `teal` module for visualizations, identify the primary inputs that users will interact with:
+When developing a custom `teal` module for visualizations, we will first identify the primary inputs that users will interact with:
 
 * **Dataset Input** (`dataset`): Allows users to select which dataset to explore.
 * **Variable Input** (`selected`): Allows users to choose a specific numeric variable from the chosen dataset, ensuring only appropriate columns are available for plotting.
@@ -39,7 +39,7 @@ For this module, we will use:
 - **`selectInput` for Dataset**: Enables users to select a dataset from the list of available datasets.
 - **`selectInput` for Variable**: Allows users to choose a numeric variable from the chosen dataset, dynamically filtering out any non-numeric columns.
 - **`plotOutput` for Histogram**: Displays the histogram once both dataset and variable inputs are selected.
-- **`verbatimTextOutput` for Code**: Automatically displays the generated plot code based on user input.
+- **`verbatimTextOutput` for Code**: Automatically displays code that generated the plot based on user input.
 
 Here’s the code for the `histogram_module_ui` function:
 
@@ -65,7 +65,7 @@ For our histogram module, the server function will handle user interactions and 
 
 To begin, it’s essential to include the `data` argument in the server function definition. 
 
-This `data` argument holds the reactive `teal_data` object, which contains your datasets and any filters applied. Including `data` ensures:
+This `data` argument holds the reactive `teal_data` object, which contains your datasets and any filters applied. By including `data`, we can ensure:
 
 - The server function receives a reactive version of `teal_data`, allowing it to automatically respond to changes.
 - The server can access the filtered datasets directly.
