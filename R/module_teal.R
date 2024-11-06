@@ -218,6 +218,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     data_load_status <- reactive({
       if (inherits(data_pulled(), "teal_data")) {
         "ok"
+        # todo: should we hide warnings on top for a data?
       } else if (inherits(data, "teal_data_module")) {
         "teal_data_module failed"
       } else {

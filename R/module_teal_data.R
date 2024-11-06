@@ -222,15 +222,11 @@ srv_check_module_datanames <- function(id, data, modules) {
   moduleServer(id, function(input, output, session) {
     output$message <- renderUI({
       if (inherits(data(), "teal_data")) {
-        is_modules_ok <- check_modules_datanames(modules = modules, datanames = ls(teal.code::get_env(data())))
+        is_modules_ok <- check_modules_datanames_html(
+          modules = modules, datanames = ls(teal.code::get_env(data()))
+        )
         if (!isTRUE(is_modules_ok)) {
-          tags$div(
-            class = "teal-output-warning",
-            is_modules_ok$html(
-              # Show modules prefix on message only in teal_data_module tab
-              grepl(sprintf("data-teal_data_module-%s", id), session$ns(NULL), fixed = TRUE)
-            )
-          )
+          tags$div(is_modules_ok, class = "teal-output-warning")
         }
       }
     })
