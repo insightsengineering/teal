@@ -16,6 +16,7 @@ The `teal` framework provides a large catalog of plug-in-ready analysis modules 
 However, it is also possible to create your own modules using the `module` function.
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
+
 ```r
 my_plot <- hist(
   dataset[[vars]],
@@ -213,21 +214,21 @@ create_histogram_module <- function(label = "Histogram Module") {
 ## Integrating the Custom `teal` Module into a `teal` App
 
 With the custom `teal` module set up, it can now be integrated into a `teal` app. 
-We’ll use `teal::init()` to specify the datasets and modules used in the app, then run the app to test functionality.
+We’ll use `init()` from `teal` to specify the datasets and modules used in the app, then run the app to test the newly created module.
 
 ```r
 library(teal)
 
 # Define datasets in `teal_data`
-data_obj <- teal.data::teal_data(
+data_obj <- teal_data(
   iris = iris,
   mtcars = mtcars
 )
 
 # Initialize the teal app
-app <- teal::init(
+app <- init(
   data = data_obj,
-  modules = teal::modules(create_histogram_module())
+  modules = modules(create_histogram_module())
 )
 
 # Run the app
@@ -241,10 +242,12 @@ if (interactive()) {
 This setup provides a fully dynamic, user-controlled `teal` module that allows for interactive data exploration and code visibility, enhancing both usability and transparency.
 
 ## What's next?
+
 Now that you’ve mastered the essentials of building and integrating modules in `teal`, you’re ready to explore more advanced features. 
 `teal` offers a wide range of capabilities to enhance your module’s functionality and user experience. 
 
 ### Adding reporting to a module
+
 Enhance your custom `teal` module with reporting features! Dive into [this vignette](adding-support-for-reporting.html) to see just how simple it is to add powerful reporting capabilities and elevate your module’s impact.
 
 ### Using standard widgets in your custom module
