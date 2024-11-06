@@ -90,6 +90,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Collate:
     'TealAppDriver.R'
+    'brush_filter.R'
     'checkmate.R'
     'dummy_functions.R'
     'get_rcode_utils.R'
