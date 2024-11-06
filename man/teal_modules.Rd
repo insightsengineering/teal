@@ -31,7 +31,7 @@ modules(..., label = "root")
   indent = 0,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("data_sources", "properties", "ui_args", "server_args", "transformers"),
+  what = c("data", "properties", "ui_args", "server_args", "transformers"),
   ...
 )
 
@@ -100,8 +100,17 @@ Transformers' \code{datanames} are added to the \code{datanames}. See \code{\lin
 
 \item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
 
-\item{what}{character vector specifying which metadata to display.
-Possible values: "data_sources", "properties", "ui_args", "server_args", "transformers"}
+\item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
+Affects the tree branch character used (└─ vs ├─)}
+
+\item{parent_prefix}{(\code{character(1)}) The prefix inherited from parent nodes,
+used to maintain the tree structure in nested levels}
+
+\item{what}{(\code{character}) Specifes which metadata to display.
+Possible values: "data", "properties", "ui_args", "server_args", "transformers"}
+
+\item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
+format.teal_modules(). Determines whether to show "TEAL ROOT" header}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})}
 }

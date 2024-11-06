@@ -321,12 +321,18 @@ modules <- function(..., label = "root") {
 # printing methods ----
 
 #' @rdname teal_modules
-#' @param what character vector specifying which metadata to display.
-#'   Possible values: "data_sources", "properties", "ui_args", "server_args", "transformers"
+#' @param is_last (`logical(1)`) Whether this is the last item in its parent's children list.
+#'   Affects the tree branch character used (└─ vs ├─)
+#' @param parent_prefix (`character(1)`) The prefix inherited from parent nodes,
+#'   used to maintain the tree structure in nested levels
+#' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
+#'   format.teal_modules(). Determines whether to show "TEAL ROOT" header
+#' @param what (`character`) Specifes which metadata to display.
+#'   Possible values: "data", "properties", "ui_args", "server_args", "transformers"
 #' @export
 format.teal_module <- function(
     x, indent = 0, is_last = FALSE, parent_prefix = "",
-    what = c("data_sources", "properties", "ui_args", "server_args", "transformers"), ...) {
+    what = c("data", "properties", "ui_args", "server_args", "transformers"), ...) {
   empty_text <- "NULL"
   branch <- if (is_last) "└─" else "├─"
   current_prefix <- paste0(parent_prefix, branch, " ")
@@ -351,7 +357,7 @@ format.teal_module <- function(
 
   output <- pasten(current_prefix, crayon::bgWhite(x$label))
 
-  if ("data_sources" %in% what) {
+  if ("data" %in% what) {
     output <- paste0(
       output,
       content_prefix, "├─ ", crayon::yellow("Datasets:"), " ", paste(x$datanames, collapse = ", "), "\n"
