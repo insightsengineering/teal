@@ -221,7 +221,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init(), NULL)
         testthat::expect_null(modules_output$module_1())
         testthat::expect_null(modules_output$module_2())
       }
@@ -240,7 +239,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -263,7 +261,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -294,7 +291,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -347,7 +343,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_s4_class(modules_output$module_1()(), "teal_data")
       }
@@ -374,7 +369,6 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -401,7 +395,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
+        testthat::expect_s3_class(data_pulled(), "shiny.silent.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -417,7 +411,7 @@ testthat::describe("srv_teal teal_modules", {
           ui = function(id) NULL,
           server = function(id) {
             moduleServer(id, function(input, output, session) {
-              reactive(validate(need(FALSE, "my error")))
+              reactive(stop("my error"))
             })
           }
         ),
@@ -428,7 +422,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
+        testthat::expect_s3_class(data_pulled(), "simpleError")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -455,7 +449,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
+        testthat::expect_s3_class(data_pulled(), "qenv.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -2208,6 +2202,78 @@ testthat::describe("srv_teal summary table", {
           data.frame(
             "Data Name" = c("iris"),
             Obs = c("150/150"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::test_that("summary table displays MAE dataset added in transforms", {
+    data <- within(teal.data::teal_data(), {
+      iris <- iris
+      mtcars <- mtcars
+      foo <- identity
+    })
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transformers = list(
+          teal_transform_module(
+            server = function(id, data) {
+              reactive({
+                within(data(), {
+                  withr::with_package("MultiAssayExperiment", {
+                    data("miniACC", package = "MultiAssayExperiment", envir = environment())
+                  })
+                })
+              })
+            }
+          )
+        )))
+      ),
+      expr = {
+        # throws warning as data("miniACC") hasn't been detected as miniACC dependency
+        suppressWarnings(session$setInputs("teal_modules-active_tab" = "module_1"))
+        testthat::expect_equal(
+          module_summary_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c(
+              "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+              "- RPPAArray", "- Mutations", "- miRNASeqGene", "mtcars"
+            ),
+            Obs = c("150/150", "", "198", "198", "33", "97", "471", "32/32"),
+            Subjects = c(NA_integer_, 92, 79, 90, 46, 90, 80, NA_integer_),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("displays unsupported datasets", {
+    data <- within(teal.data::teal_data(), {
+      iris <- iris
+      mtcars <- mtcars
+      foo <- identity
+    })
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "all"))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_summary_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("iris", "mtcars"),
+            Obs = c("150/150", "32/32"),
             check.names = FALSE
           )
         )
