@@ -106,7 +106,7 @@ Affects the tree branch character used (└─ vs ├─)}
 \item{parent_prefix}{(\code{character(1)}) The prefix inherited from parent nodes,
 used to maintain the tree structure in nested levels}
 
-\item{what}{(\code{character}) Specifes which metadata to display.
+\item{what}{(\code{character}) Specifies which metadata to display.
 Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"}
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in

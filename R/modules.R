@@ -327,7 +327,7 @@ modules <- function(..., label = "root") {
 #'   used to maintain the tree structure in nested levels
 #' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
 #'   format.teal_modules(). Determines whether to show "TEAL ROOT" header
-#' @param what (`character`) Specifes which metadata to display.
+#' @param what (`character`) Specifies which metadata to display.
 #'   Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"
 #' @examples
 #' mod <- module(
