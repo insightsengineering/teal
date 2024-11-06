@@ -95,7 +95,6 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
-
   tdata <- do.call(
     teal.data::teal_data,
     c(
