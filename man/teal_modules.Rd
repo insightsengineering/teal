@@ -31,7 +31,7 @@ modules(..., label = "root")
   indent = 0,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("data", "properties", "ui_args", "server_args", "transformers"),
+  what = c("datasets", "properties", "ui_args", "server_args", "transformers"),
   ...
 )
 
@@ -107,7 +107,7 @@ Affects the tree branch character used (└─ vs ├─)}
 used to maintain the tree structure in nested levels}
 
 \item{what}{(\code{character}) Specifes which metadata to display.
-Possible values: "data", "properties", "ui_args", "server_args", "transformers"}
+Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"}
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
 format.teal_modules(). Determines whether to show "TEAL ROOT" header}
