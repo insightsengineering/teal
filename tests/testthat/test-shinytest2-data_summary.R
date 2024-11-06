@@ -1,23 +1,20 @@
-testthat::test_that("e2e: data summary list only data names if there is no MAE or data.frames in teal_data", {
+testthat::test_that("e2e: data summary just list the unfilterable objects at the bottom when provided", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = teal.data::teal_data(x = 1),
+    data = teal.data::teal_data(x = 1, y = "z", foo = function() NULL),
     modules = example_module()
   )
 
-  testthat::expect_identical(
-    as.data.frame(app$get_active_data_summary_table()),
-    data.frame(
-      `Data Name` = c("x"),
-      check.names = FALSE
-    )
+  testthat::expect_match(
+    app$get_text(sprintf("#%s", app$active_data_summary_ns())),
+    "\\And 3 more unfilterable object\\(s\\)"
   )
 
   app$stop()
 })
 
 
-testthat::test_that("e2e: data summary is displayed with 2 columns data without keys", {
+testthat::test_that("e2e: data summary table is displayed with 2 columns data without keys", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(), # iris, mtcars
@@ -36,7 +33,7 @@ testthat::test_that("e2e: data summary is displayed with 2 columns data without 
   app$stop()
 })
 
-testthat::test_that("e2e: data summary displays datasets by topological_sort of join_keys", {
+testthat::test_that("e2e: data summary table displays datasets by topological_sort of join_keys", {
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
@@ -58,7 +55,7 @@ testthat::test_that("e2e: data summary displays datasets by topological_sort of 
   app$stop()
 })
 
-testthat::test_that("e2e: data summary is displayed with 3 columns for data with join keys", {
+testthat::test_that("e2e: data summary table is displayed with 3 columns for data with join keys", {
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
@@ -86,7 +83,7 @@ testthat::test_that("e2e: data summary is displayed with 3 columns for data with
 })
 
 testthat::test_that(
-  "e2e: data summary is displayed properly if teal_data include data.frames with join keys, MAE objects and vectors",
+  "e2e: data summary table does not list unsupported objects",
   {
     testthat::skip_if_not_installed("MultiAssayExperiment")
     skip_if_too_deep(5)
@@ -99,16 +96,10 @@ testthat::test_that(
         iris <- iris
         library(MultiAssayExperiment)
         data("miniACC", package = "MultiAssayExperiment", envir = environment())
-        # nolint start: object_name.
-        CO2 <- CO2
-        factors <- names(Filter(isTRUE, vapply(CO2, is.factor, logical(1L))))
-        CO2[factors] <- lapply(CO2[factors], as.character)
+        unsupported <- function(x) x
         # nolint end: object_name.
       }
     )
-
-    datanames(data) <- c("CO2", "iris", "miniACC", "mtcars2", "mtcars1", "factors")
-
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
     )
@@ -122,11 +113,11 @@ testthat::test_that(
       as.data.frame(app$get_active_data_summary_table()),
       data.frame(
         `Data Name` = c(
-          "CO2", "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene",
-          "mtcars2", "mtcars1", "factors"
+          "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene",
+          "mtcars2", "mtcars1"
         ),
-        Obs = c("84/84", "150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "2/2", "32/32", ""),
-        Subjects = c("", "", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "2/2", ""),
+        Obs = c("150/150", "", "198/198", "198/198", "33/33", "97/97", "471/471", "2/2", "32/32"),
+        Subjects = c("", "92/92", "79/79", "90/90", "46/46", "90/90", "80/80", "", "2/2"),
         check.names = FALSE
       )
     )
@@ -135,7 +126,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("e2e: data summary displays datasets by datanames() order if no join_keys", {
+testthat::test_that("e2e: data summary table displays datasets by datanames() order if no join_keys", {
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
