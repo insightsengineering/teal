@@ -15,7 +15,7 @@ vignette: >
 The `teal` framework provides a large catalog of plug-in-ready analysis modules to be incorporated into `teal` applications.
 However, it is also possible to create your own modules using the `module` function.
 
-In this guide, we will convert a simple histogram formula into a robust `teal` module:
+In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
 ```r
 hist(dataset[, selected], las = 1)
 ```
