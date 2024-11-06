@@ -360,33 +360,33 @@ format.teal_module <- function(
   if ("data" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::yellow("Datasets:"), "         ", paste(x$datanames, collapse = ", "), "\n"
+      content_prefix, "├─ ", crayon::yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
     )
   }
   if ("properties" %in% what) {
     output <- paste0(
       output,
       content_prefix, "├─ ", crayon::blue("Properties:"), "\n",
-      content_prefix, "│  ├─ ", crayon::cyan("Bookmarkable:  "), bookmarkable, "\n",
-      content_prefix, "│  └─ ", crayon::cyan("Reportable:    "), reportable, "\n"
+      content_prefix, "│  ├─ ", crayon::cyan("Bookmarkable  : "), bookmarkable, "\n",
+      content_prefix, "│  └─ ", crayon::cyan("Reportable    : "), reportable, "\n"
     )
   }
   if ("ui_args" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::green("UI Arguments:    "), " ", format_list(x$ui_args), "\n"
+      content_prefix, "├─ ", crayon::green("UI Arguments     : "), format_list(x$ui_args), "\n"
     )
   }
   if ("server_args" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::green("Server Arguments:"), " ", format_list(x$server_args), "\n"
+      content_prefix, "├─ ", crayon::green("Server Arguments : "), format_list(x$server_args), "\n"
     )
   }
   if ("transformers" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "└─ ", crayon::magenta("Transformers:    "), " ", transformers, "\n"
+      content_prefix, "└─ ", crayon::magenta("Transformers     : "), transformers, "\n"
     )
   }
 
