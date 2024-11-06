@@ -364,7 +364,7 @@ srv_teal_module.teal_module <- function(id,
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    names(data) # TODO: Reviewer: Check that previous code does nothing.
+    names(data)
   } else {
     intersect(
       names(data), # Keep topological order from teal.data::names()
