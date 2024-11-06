@@ -48,7 +48,7 @@ get_teal_bs_theme <- function() {
   ordered_datanames <- datanames
   for (current in datanames) {
     parents <- character(0L)
-    while (length(current) > 0 && !current %in% parents[-1]) {
+    while (length(current) > 0) {
       current <- teal.data::parent(join_keys, current)
       parents <- c(current, parents)
     }
