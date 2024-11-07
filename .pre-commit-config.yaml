@@ -10,8 +10,8 @@ repos:
     hooks:
       - id: style-files
         name: Style code with `styler`
-        args: [--style_pkg=styler, --style_fun=tidyverse_style,
-              --cache-root=styler]
+        args:
+          [--style_pkg=styler, --style_fun=tidyverse_style, --cache-root=styler]
       - id: roxygenize
         name: Regenerate package documentation
         additional_dependencies:
@@ -19,6 +19,7 @@ repos:
           - davidgohel/gdtools # for flextable
           - mirai
           - checkmate
+          - crayon
           - jsonlite
           - lifecycle
           - logger

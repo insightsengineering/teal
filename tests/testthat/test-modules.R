@@ -508,8 +508,8 @@ testthat::test_that("format.teal_modules returns proper structure", {
   appended_mods <- append_module(mods, mod3)
 
   testthat::expect_equal(
-    format(appended_mods),
-    "+ c\n + a\n + c\n + c\n"
+    gsub("\033\\[[0-9;]*m", "", format(appended_mods)),
+    "TEAL ROOT\n  |- a\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- Transformers     : \n  |- c\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- Transformers     : \n  L- c\n     |- Datasets         : all\n     |- Properties:\n     |  |- Bookmarkable  : FALSE\n     |  L- Reportable    : FALSE\n     |- UI Arguments     : \n     |- Server Arguments : \n     L- Transformers     : \n" # nolint: line_length
   )
 })
 
