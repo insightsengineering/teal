@@ -349,11 +349,31 @@ format.teal_module <- function(
   current_prefix <- paste0(parent_prefix, branch, " ")
   content_prefix <- paste0(parent_prefix, if (is_last) "   " else "│  ")
 
-  format_list <- function(lst, empty = empty_text) {
+  format_list <- function(lst, empty = empty_text, label_width = 0) {
     if (is.null(lst) || length(lst) == 0) {
       empty
     } else {
-      paste(sprintf("%s (%s)", names(lst), sapply(lst, class)), collapse = ", ")
+      colon_space <- paste(rep(" ", label_width), collapse = "")
+
+      first_item <- sprintf("%s (%s)", names(lst)[1], crayon::silver(class(lst[[1]])[1]))
+      rest_items <- if (length(lst) > 1) {
+        paste(
+          vapply(
+            names(lst)[-1],
+            function(name) {
+              sprintf(
+                "%s%s (%s)",
+                paste0(content_prefix, "│  ", colon_space),
+                name,
+                crayon::silver(class(lst[[name]])[1])
+              )
+            },
+            character(1)
+          ),
+          collapse = "\n"
+        )
+      }
+      if (length(lst) > 1) paste0(first_item, "\n", rest_items) else first_item
     }
   }
 
@@ -383,15 +403,17 @@ format.teal_module <- function(
     )
   }
   if ("ui_args" %in% what) {
+    ui_args_formatted <- format_list(x$ui_args, label_width = 19)
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::green("UI Arguments     : "), format_list(x$ui_args), "\n"
+      content_prefix, "├─ ", crayon::green("UI Arguments     : "), ui_args_formatted, "\n"
     )
   }
   if ("server_args" %in% what) {
+    server_args_formatted <- format_list(x$server_args, label_width = 19)
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::green("Server Arguments : "), format_list(x$server_args), "\n"
+      content_prefix, "├─ ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
     )
   }
   if ("transformers" %in% what) {
