@@ -41,6 +41,7 @@ Depends:
     teal.slice (>= 0.5.1.9009)
 Imports:
     checkmate (>= 2.1.0),
+    crayon,
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
@@ -75,7 +76,7 @@ RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
-    r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai,
+    r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/crayon,
     shikokuchuo/nanonext, rstudio/renv, r-lib/rlang, daattali/shinyjs,
     insightsengineering/teal.code, insightsengineering/teal.logger,
     insightsengineering/teal.reporter, insightsengineering/teal.widgets,

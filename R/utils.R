@@ -377,6 +377,10 @@ strip_style <- function(string) {
   )
 }
 
+#' @keywords internal
+#' @noRd
+pasten <- function(...) paste0(..., "\n")
+
 #' Convert character list to human readable html with commas and "and"
 #' @noRd
 paste_datanames_character <- function(x,
