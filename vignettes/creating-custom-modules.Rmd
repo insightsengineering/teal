@@ -12,8 +12,10 @@ vignette: >
 
 ## Introduction
 
-The `teal` framework provides a large catalog of plug-in-ready analysis modules to be incorporated into `teal` applications.
-However, it is also possible to create your own modules using the `module` function.
+The `teal` framework provides a large catalog of plug-in-ready analysis modules that can be incorporated into `teal` applications. 
+However, it is also possible to create your own modules using the module function, which leverages Shiny modules. 
+Each custom teal module is built as a Shiny module, combining Shiny's reactive capabilities with modularized UI and server logic to encapsulate functionality. 
+This design enables a structured and reusable approach to creating interactive components that integrate seamlessly within the teal ecosystem.
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
 
@@ -29,7 +31,11 @@ my_plot <- hist(
 ```
 
 This module will allow users to dynamically select datasets and variables to create histograms within a `teal` application.
-We will cover best practices, including setting up dynamic inputs, structuring server logic, and using the `teal_data` object to ensure reactivity and reproducibility.
+We will cover best practices, including:
+
+* Setting up dynamic inputs.
+* Structuring server logic.
+* Using the `teal_data` object to ensure reactivity and reproducibility.
 
 ## Understanding the Inputs and Requirements
 
@@ -89,6 +95,8 @@ histogram_module_server <- function(id, data) {
 }
 ```
 
+If you need a refresher on the `teal_data` object, please visit the [teal.data package documentation](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
+
 ### Understanding `teal_data` as a Reactive Object in Server Logic
 
 When used in the server logic of a `teal` module, the `teal_data` object becomes a **reactive data container**.
@@ -98,12 +106,12 @@ This syntax triggers reactivity, ensuring that the data within `teal_data` stays
 
 > **Note**: The `teal_data` object behaves as a reactive data container only when used within the server logic. If accessed outside of the server, it will not be reactive.
 
-### Using `datanames()` to Access Dataset Names in `teal_data` object
+### Using `names()` to Access Dataset Names in `teal_data` object
 
-The `teal_data` object can contain multiple datasets. To retrieve the names of these datasets, use the `datanames()` function:
+The `teal_data` object can contain multiple datasets. To retrieve the names of these datasets, use the `names()` function:
 
 ```r
-datanames(data())
+names(data())
 ```
 
 This will return a character vector of the dataset names contained in `teal_data`. 
