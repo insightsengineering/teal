@@ -376,3 +376,83 @@ strip_style <- function(string) {
     useBytes = TRUE
   )
 }
+
+#' @keywords internal
+#' @noRd
+pasten <- function(...) paste0(..., "\n")
+
+#' Convert character list to human readable html with commas and "and"
+#' @noRd
+paste_datanames_character <- function(x,
+                                      tags = list(span = shiny::tags$span, code = shiny::tags$code),
+                                      tagList = shiny::tagList) { # nolint: object_name.
+  checkmate::assert_character(x)
+  do.call(
+    tagList,
+    lapply(seq_along(x), function(.ix) {
+      tagList(
+        tags$code(x[.ix]),
+        if (.ix != length(x)) {
+          tags$span(ifelse(.ix == length(x) - 1, " and ", ", "))
+        }
+      )
+    })
+  )
+}
+
+#' Build datanames error string for error message
+#'
+#' tags and tagList are overwritten in arguments allowing to create strings for
+#' logging purposes
+#' @noRd
+build_datanames_error_message <- function(label = NULL,
+                                          datanames,
+                                          extra_datanames,
+                                          tags = list(span = shiny::tags$span, code = shiny::tags$code),
+                                          tagList = shiny::tagList) { # nolint: object_name.
+  tags$span(
+    tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
+    paste_datanames_character(extra_datanames, tags, tagList),
+    tags$span(
+      paste0(
+        ifelse(length(extra_datanames) > 1, "are missing", "is missing"),
+        ifelse(is.null(label), ".", sprintf(" for tab '%s'.", label))
+      )
+    ),
+    if (length(datanames) >= 1) {
+      tagList(
+        tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
+        tags$span("available in data:"),
+        tagList(
+          tags$span(
+            paste_datanames_character(datanames, tags, tagList),
+            tags$span(".", .noWS = "outside"),
+            .noWS = c("outside")
+          )
+        )
+      )
+    } else {
+      tags$span("No datasets are available in data.")
+    }
+  )
+}
+
+#' Smart `rbind`
+#'
+#' Combine `data.frame` objects which have different columns
+#'
+#' @param ... (`data.frame`)
+#' @keywords internal
+.smart_rbind <- function(...) {
+  dots <- list(...)
+  checkmate::assert_list(dots, "data.frame", .var.name = "...")
+  Reduce(
+    x = dots,
+    function(x, y) {
+      all_columns <- union(colnames(x), colnames(y))
+      x[setdiff(all_columns, colnames(x))] <- NA
+      y[setdiff(all_columns, colnames(y))] <- NA
+      rbind(x, y)
+    }
+  )
+}
