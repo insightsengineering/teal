@@ -428,7 +428,9 @@ format.teal_module <- function(
 
 #' @rdname teal_modules
 #' @examples
-#' custom_module <- function(label = "label", ui_args = NULL, server_args = NULL, datanames = "all", transformers = list(), bk = FALSE) { # nolint line_length
+#' custom_module <- function(
+#'     label = "label", ui_args = NULL, server_args = NULL,
+#'     datanames = "all", transformers = list(), bk = FALSE) {
 #'   ans <- module(
 #'     label,
 #'     server = function(id, data, ...) {},

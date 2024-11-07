@@ -234,7 +234,9 @@ mod <- module(
   server_args = list(x = 5, y = list(p = 1))
 )
 cat(format(mod))
-custom_module <- function(label = "label", ui_args = NULL, server_args = NULL, datanames = "all", transformers = list(), bk = FALSE) { # nolint line_length
+custom_module <- function(
+    label = "label", ui_args = NULL, server_args = NULL,
+    datanames = "all", transformers = list(), bk = FALSE) {
   ans <- module(
     label,
     server = function(id, data, ...) {},
