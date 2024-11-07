@@ -6,10 +6,7 @@ ui_brush_filter <- function(id) {
   div(
     tags$h1(id = ns("title"), tags$strong("Selected points:"), class = "text-center font-150p"),
     teal.widgets::get_dt_rows(ns("data_table"), ns("data_table_rows")),
-    div(
-      actionButton(ns("apply_brush_filter"), "Apply filter"),
-      actionButton(ns("remove_brush_filter"), "Remove applied filter")
-    ),
+    actionButton(ns("apply_brush_filter"), "Apply filter"),
     DT::dataTableOutput(ns("data_table"), width = "100%")
   )
 }
@@ -30,6 +27,7 @@ srv_brush_filter <- function(id, brush, dataset, filter_panel_api, selectors = l
     })
 
     brushed_table <- reactive({
+      req(brush())
       if (is.null(brush())) {
         return(NULL)
       }
@@ -83,35 +81,6 @@ srv_brush_filter <- function(id, brush, dataset, filter_panel_api, selectors = l
       ))
       shinyjs::hide("apply_brush_filter")
       set_filter_state(filter_panel_api, slice)
-    })
-
-    states_list <- reactive({
-      as.list(get_filter_state(filter_panel_api))
-    })
-
-    observeEvent(input$remove_brush_filter, {
-      remove_filter_state(
-        filter_panel_api,
-        teal_slices(
-          teal_slice(
-            dataname = "ADSL",
-            varname = "USUBJID",
-            id = "brush_filter"
-          )
-        )
-      )
-    })
-
-    observeEvent(states_list(), {
-      brushed_states <- Filter(
-        function(state) state$id == "brush_filter",
-        states_list()
-      )
-      if (length(brushed_states)) {
-        shinyjs::show("remove_brush_filter")
-      } else {
-        shinyjs::hide("remove_brush_filter")
-      }
     })
   })
 }
