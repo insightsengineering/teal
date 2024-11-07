@@ -344,7 +344,7 @@ modules <- function(..., label = "root") {
 format.teal_module <- function(
     x, indent = 0, is_last = FALSE, parent_prefix = "",
     what = c("datasets", "properties", "ui_args", "server_args", "transformers"), ...) {
-  empty_text <- "NULL"
+  empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
   current_prefix <- paste0(parent_prefix, branch, " ")
   content_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
