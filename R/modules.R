@@ -322,7 +322,7 @@ modules <- function(..., label = "root") {
 
 #' @rdname teal_modules
 #' @param is_last (`logical(1)`) Whether this is the last item in its parent's children list.
-#'   Affects the tree branch character used (└─ vs ├─)
+#'   Affects the tree branch character used (L- vs |-)
 #' @param parent_prefix (`character(1)`) The prefix inherited from parent nodes,
 #'   used to maintain the tree structure in nested levels
 #' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
@@ -345,9 +345,9 @@ format.teal_module <- function(
     x, indent = 0, is_last = FALSE, parent_prefix = "",
     what = c("datasets", "properties", "ui_args", "server_args", "transformers"), ...) {
   empty_text <- "NULL"
-  branch <- if (is_last) "└─" else "├─"
+  branch <- if (is_last) "L-" else "|-"
   current_prefix <- paste0(parent_prefix, branch, " ")
-  content_prefix <- paste0(parent_prefix, if (is_last) "   " else "│  ")
+  content_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
 
   format_list <- function(lst, empty = empty_text, label_width = 0) {
     if (is.null(lst) || length(lst) == 0) {
@@ -363,7 +363,7 @@ format.teal_module <- function(
             function(name) {
               sprintf(
                 "%s%s (%s)",
-                paste0(content_prefix, "│  ", colon_space),
+                paste0(content_prefix, "|  ", colon_space),
                 name,
                 crayon::silver(class(lst[[name]])[1])
               )
@@ -391,35 +391,35 @@ format.teal_module <- function(
   if ("datasets" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
+      content_prefix, "|- ", crayon::yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
     )
   }
   if ("properties" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::blue("Properties:"), "\n",
-      content_prefix, "│  ├─ ", crayon::cyan("Bookmarkable  : "), bookmarkable, "\n",
-      content_prefix, "│  └─ ", crayon::cyan("Reportable    : "), reportable, "\n"
+      content_prefix, "|- ", crayon::blue("Properties:"), "\n",
+      content_prefix, "|  |- ", crayon::cyan("Bookmarkable  : "), bookmarkable, "\n",
+      content_prefix, "|  L- ", crayon::cyan("Reportable    : "), reportable, "\n"
     )
   }
   if ("ui_args" %in% what) {
     ui_args_formatted <- format_list(x$ui_args, label_width = 19)
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::green("UI Arguments     : "), ui_args_formatted, "\n"
+      content_prefix, "|- ", crayon::green("UI Arguments     : "), ui_args_formatted, "\n"
     )
   }
   if ("server_args" %in% what) {
     server_args_formatted <- format_list(x$server_args, label_width = 19)
     output <- paste0(
       output,
-      content_prefix, "├─ ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
+      content_prefix, "|- ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
     )
   }
   if ("transformers" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "└─ ", crayon::magenta("Transformers     : "), transformers, "\n"
+      content_prefix, "L- ", crayon::magenta("Transformers     : "), transformers, "\n"
     )
   }
 
@@ -532,9 +532,9 @@ format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, 
     new_parent_prefix <- "  " #' Initial indent for root level
   } else {
     if (!is.null(x$label)) {
-      branch <- if (is_last) "└─" else "├─"
+      branch <- if (is_last) "L-" else "|-"
       header <- pasten(parent_prefix, branch, " ", crayon::bold(x$label))
-      new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "│  ")
+      new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
     } else {
       header <- ""
       new_parent_prefix <- parent_prefix

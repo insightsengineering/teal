@@ -101,7 +101,7 @@ Transformers' \code{datanames} are added to the \code{datanames}. See \code{\lin
 \item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
 
 \item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
-Affects the tree branch character used (└─ vs ├─)}
+Affects the tree branch character used (L- vs |-)}
 
 \item{parent_prefix}{(\code{character(1)}) The prefix inherited from parent nodes,
 used to maintain the tree structure in nested levels}
