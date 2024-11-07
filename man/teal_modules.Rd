@@ -6,10 +6,10 @@
 \alias{teal_module}
 \alias{modules}
 \alias{format.teal_module}
-\alias{print.teal_module}
 \alias{format.teal_modules}
-\alias{set_datanames}
+\alias{print.teal_module}
 \alias{print.teal_modules}
+\alias{set_datanames}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
@@ -26,15 +26,22 @@ module(
 
 modules(..., label = "root")
 
-\method{format}{teal_module}(x, ...)
+\method{format}{teal_module}(
+  x,
+  indent = 0,
+  is_last = FALSE,
+  parent_prefix = "",
+  what = c("datasets", "properties", "ui_args", "server_args", "transformers"),
+  ...
+)
+
+\method{format}{teal_modules}(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 
-\method{format}{teal_modules}(x, ...)
+\method{print}{teal_modules}(x, ...)
 
 set_datanames(modules, datanames)
-
-\method{print}{teal_modules}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -91,6 +98,20 @@ will be added to the \code{datanames}.}
 }}
 
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
+
+\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
+
+\item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
+Affects the tree branch character used (L- vs |-)}
+
+\item{parent_prefix}{(\code{character(1)}) The prefix inherited from parent nodes,
+used to maintain the tree structure in nested levels}
+
+\item{what}{(\code{character}) Specifies which metadata to display.
+Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"}
+
+\item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
+format.teal_modules(). Determines whether to show "TEAL ROOT" header}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
@@ -204,6 +225,113 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+mod <- module(
+  label = "My Custom Module",
+  server = function(id, data, ...) {},
+  ui = function(id, ...) {},
+  datanames = c("ADSL", "ADTTE"),
+  transformers = list(),
+  ui_args = list(a = 1, b = "b"),
+  server_args = list(x = 5, y = list(p = 1))
+)
+cat(format(mod))
+custom_module <- function(
+    label = "label", ui_args = NULL, server_args = NULL,
+    datanames = "all", transformers = list(), bk = FALSE) {
+  ans <- module(
+    label,
+    server = function(id, data, ...) {},
+    ui = function(id, ...) {
+    },
+    datanames = datanames,
+    transformers = transformers,
+    ui_args = ui_args,
+    server_args = server_args
+  )
+  attr(ans, "teal_bookmarkable") <- bk
+  ans
+}
+
+dummy_transformer <- teal_transform_module(
+  label = "Dummy Transform",
+  ui = function(id) div("(does nothing)"),
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) data)
+  }
+)
+
+plot_transformer <- teal_transform_module(
+  label = "Plot Settings",
+  ui = function(id) div("(does nothing)"),
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) data)
+  }
+)
+
+complete_modules <- modules(
+  custom_module(
+    label = "Data Overview",
+    datanames = c("ADSL", "ADAE", "ADVS"),
+    ui_args = list(
+      view_type = "table",
+      page_size = 10,
+      filters = c("ARM", "SEX", "RACE")
+    ),
+    server_args = list(
+      cache = TRUE,
+      debounce = 1000
+    ),
+    transformers = list(dummy_transformer),
+    bk = TRUE
+  ),
+  modules(
+    label = "Nested 1",
+    custom_module(
+      label = "Interactive Plots",
+      datanames = c("ADSL", "ADVS"),
+      ui_args = list(
+        plot_type = c("scatter", "box", "line"),
+        height = 600,
+        width = 800,
+        color_scheme = "viridis"
+      ),
+      server_args = list(
+        render_type = "svg",
+        cache_plots = TRUE
+      ),
+      transformers = list(dummy_transformer, plot_transformer),
+      bk = TRUE
+    ),
+    modules(
+      label = "Nested 2",
+      custom_module(
+        label = "Summary Statistics",
+        datanames = "ADSL",
+        ui_args = list(
+          stats = c("mean", "median", "sd", "range"),
+          grouping = c("ARM", "SEX")
+        )
+      ),
+      modules(
+        label = "Labeled nested modules",
+        custom_module(
+          label = "Subgroup Analysis",
+          datanames = c("ADSL", "ADAE"),
+          ui_args = list(
+            subgroups = c("AGE", "SEX", "RACE"),
+            analysis_type = "stratified"
+          ),
+          bk = TRUE
+        )
+      ),
+      modules(custom_module(label = "Subgroup Analysis in non-labled modules"))
+    )
+  ),
+  custom_module("Non-nested module")
+)
+
+cat(format(complete_modules))
+cat(format(complete_modules, what = c("ui_args", "server_args", "transformers")))
 # change the module's datanames
 set_datanames(module(datanames = "all"), "a")
 
