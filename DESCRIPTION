@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9080
-Date: 2024-11-06
+Version: 0.15.2.9082
+Date: 2024-11-08
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -37,10 +37,11 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.0),
     shiny (>= 1.8.1),
-    teal.data (>= 0.6.0.9014),
+    teal.data (>= 0.6.0.9015),
     teal.slice (>= 0.5.1.9009)
 Imports:
     checkmate (>= 2.1.0),
+    crayon,
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
@@ -48,7 +49,7 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.code (>= 0.5.0.9011),
+    teal.code (>= 0.5.0.9012),
     teal.logger (>= 0.2.0),
     teal.reporter (>= 0.3.1.9004),
     teal.widgets (>= 0.4.0),
@@ -75,7 +76,7 @@ RdMacros:
     lifecycle
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
-    r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai,
+    r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/crayon,
     shikokuchuo/nanonext, rstudio/renv, r-lib/rlang, daattali/shinyjs,
     insightsengineering/teal.code, insightsengineering/teal.logger,
     insightsengineering/teal.reporter, insightsengineering/teal.widgets,

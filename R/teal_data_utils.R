@@ -9,8 +9,8 @@
 #' `teal.code` and `teal.data` methods.
 #'
 #' @param data (`teal_data`)
-#' @param code (`character`) code to append to `data@code`
-#' @param objects (`list`) objects to append to `data@env`
+#' @param code (`character`) code to append to the object's code slot.
+#' @param objects (`list`) objects to append to object's environment.
 #' @param datanames (`character`) names of the datasets
 #' @return modified `teal_data`
 #' @keywords internal
@@ -30,7 +30,7 @@ NULL
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(objects, "list")
   new_env <- list2env(objects, parent = .GlobalEnv)
-  rlang::env_coalesce(new_env, teal.code::get_env(data))
-  data@env <- new_env
+  rlang::env_coalesce(new_env, as.environment(data))
+  data@.xData <- new_env
   data
 }

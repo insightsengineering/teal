@@ -13,9 +13,9 @@
 \arguments{
 \item{data}{(\code{teal_data})}
 
-\item{code}{(\code{character}) code to append to \code{data@code}}
+\item{code}{(\code{character}) code to append to the object's code slot.}
 
-\item{objects}{(\code{list}) objects to append to \code{data@env}}
+\item{objects}{(\code{list}) objects to append to object's environment.}
 
 \item{datanames}{(\code{character}) names of the datasets}
 }
