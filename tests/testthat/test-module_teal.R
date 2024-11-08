@@ -2445,7 +2445,7 @@ testthat::describe("Datanames with special symbols", {
           }
         ),
         modules = modules(
-          module("module_1", server = function(id, data) data, , datanames = c("iris"))
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
         ),
         filter = teal_slices(
           module_specific = TRUE
@@ -2483,7 +2483,7 @@ testthat::describe("teal.data code with a function defined", {
           }
         })),
         modules = modules(module("module_1", server = function(id, data) data))
-      ), ,
+      ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
@@ -2545,9 +2545,9 @@ testthat::describe("teal.data code with a function defined", {
             "y <- x + 1",
             "y + 3",
             "}",
-            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\")", local_env$hash),
+            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\") # @linksto fun", local_env$hash),
             ".raw_data <- list2env(list(fun = fun))",
-            "lockEnvironment(.raw_data)"
+            "lockEnvironment(.raw_data) # @linksto .raw_data"
           )
         )
       }
