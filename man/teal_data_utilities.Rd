@@ -4,14 +4,11 @@
 \alias{teal_data_utilities}
 \alias{.append_evaluated_code}
 \alias{.append_modified_data}
-\alias{.subset_teal_data}
 \title{\code{teal_data} utils}
 \usage{
 .append_evaluated_code(data, code)
 
 .append_modified_data(data, objects)
-
-.subset_teal_data(data, datanames)
 }
 \arguments{
 \item{data}{(\code{teal_data})}
@@ -19,8 +16,6 @@
 \item{code}{(\code{character}) code to append to the object's code slot.}
 
 \item{objects}{(\code{list}) objects to append to object's environment.}
-
-\item{datanames}{(\code{character}) names of the datasets}
 }
 \value{
 modified \code{teal_data}
