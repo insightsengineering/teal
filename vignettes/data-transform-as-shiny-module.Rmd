@@ -58,7 +58,6 @@ data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
 })
-datanames(data) <- c("iris", "mtcars")
 
 my_transformers <- list(
   teal_transform_module(
@@ -110,7 +109,6 @@ data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
 })
-datanames(data) <- c("iris", "mtcars")
 
 my_transformers <- list(
   teal_transform_module(
