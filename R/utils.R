@@ -46,24 +46,16 @@ get_teal_bs_theme <- function() {
 #' @keywords internal
 .include_parent_datanames <- function(datanames, join_keys) {
   ordered_datanames <- datanames
-  for (i in datanames) {
-    parents <- character(0)
-    while (length(i) > 0) {
-      parent_i <- teal.data::parent(join_keys, i)
-      parents <- c(parent_i, parents)
-      i <- parent_i
+  for (current in datanames) {
+    parents <- character(0L)
+    while (length(current) > 0) {
+      current <- teal.data::parent(join_keys, current)
+      parents <- c(current, parents)
     }
     ordered_datanames <- c(parents, ordered_datanames)
   }
-  unique(ordered_datanames)
-}
 
-#' Return topologicaly sorted datanames
-#' @noRd
-#' @keywords internal
-.topologically_sort_datanames <- function(datanames, join_keys) {
-  datanames_with_parents <- .include_parent_datanames(datanames, join_keys)
-  intersect(datanames, datanames_with_parents)
+  unique(ordered_datanames)
 }
 
 #' Create a `FilteredData`
@@ -71,18 +63,15 @@ get_teal_bs_theme <- function() {
 #' Create a `FilteredData` object from a `teal_data` object.
 #'
 #' @param x (`teal_data`) object
-#' @param datanames (`character`) vector of data set names to include; must be subset of `datanames(x)`
+#' @param datanames (`character`) vector of data set names to include; must be subset of `names(x)`
 #' @return A `FilteredData` object.
 #' @keywords internal
-teal_data_to_filtered_data <- function(x, datanames = ls(teal.code::get_env(x))) {
+teal_data_to_filtered_data <- function(x, datanames = names(x)) {
   checkmate::assert_class(x, "teal_data")
   checkmate::assert_character(datanames, min.chars = 1L, any.missing = FALSE)
   # Otherwise, FilteredData will be created in the modules' scope later
   teal.slice::init_filtered_data(
-    x = Filter(
-      length,
-      sapply(datanames, function(dn) x[[dn]], simplify = FALSE)
-    ),
+    x = Filter(length, sapply(datanames, function(dn) x[[dn]], simplify = FALSE)),
     join_keys = teal.data::join_keys(x)
   )
 }
@@ -328,7 +317,7 @@ create_app_id <- function(data, modules) {
   checkmate::assert_class(modules, "teal_modules")
 
   data <- if (inherits(data, "teal_data")) {
-    as.list(teal.code::get_env(data))
+    as.list(data)
   } else if (inherits(data, "teal_data_module")) {
     deparse1(body(data$server))
   }
