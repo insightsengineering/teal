@@ -20,10 +20,7 @@ NULL
 #' @rdname teal_data_utilities
 .append_evaluated_code <- function(data, code) {
   checkmate::assert_class(data, "teal_data")
-  data@code <- c(data@code, code)
-  data@id <- c(data@id, max(data@id) + 1L + seq_along(code))
-  data@messages <- c(data@messages, rep("", length(code)))
-  data@warnings <- c(data@warnings, rep("", length(code)))
+  data@code <- c(data@code, code2list(code))
   methods::validObject(data)
   data
 }
