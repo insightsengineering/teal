@@ -100,6 +100,7 @@ testthat::test_that(
         # nolint end: object_name.
       }
     )
+
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
     )
@@ -126,7 +127,7 @@ testthat::test_that(
   }
 )
 
-testthat::test_that("e2e: data summary table displays datasets by datanames() order if no join_keys", {
+testthat::test_that("e2e: data summary table displays datasets by names() order if no join_keys", {
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
