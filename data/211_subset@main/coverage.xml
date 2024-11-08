@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.596165739022882" branch-rate="0" lines-covered="1928" lines-valid="3234" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-11-08 14:35:01.697077">
+<coverage line-rate="0.596165739022882" branch-rate="0" lines-covered="1928" lines-valid="3234" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-11-08 16:26:12.030446">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -5435,34 +5435,34 @@
           <methods>
             <method name=".append_evaluated_code" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
+                <line number="21" hits="84" branch="false"/>
                 <line number="22" hits="84" branch="false"/>
                 <line number="23" hits="84" branch="false"/>
                 <line number="24" hits="84" branch="false"/>
-                <line number="25" hits="84" branch="false"/>
               </lines>
             </method>
             <method name=".append_modified_data" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
+                <line number="29" hits="84" branch="false"/>
                 <line number="30" hits="84" branch="false"/>
                 <line number="31" hits="84" branch="false"/>
                 <line number="32" hits="84" branch="false"/>
                 <line number="33" hits="84" branch="false"/>
                 <line number="34" hits="84" branch="false"/>
-                <line number="35" hits="84" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
+            <line number="21" hits="84" branch="false"/>
             <line number="22" hits="84" branch="false"/>
             <line number="23" hits="84" branch="false"/>
             <line number="24" hits="84" branch="false"/>
-            <line number="25" hits="84" branch="false"/>
+            <line number="29" hits="84" branch="false"/>
             <line number="30" hits="84" branch="false"/>
             <line number="31" hits="84" branch="false"/>
             <line number="32" hits="84" branch="false"/>
             <line number="33" hits="84" branch="false"/>
             <line number="34" hits="84" branch="false"/>
-            <line number="35" hits="84" branch="false"/>
           </lines>
         </class>
         <class name="teal_reporter.R" filename="R/teal_reporter.R" line-rate="0.911764705882353" branch-rate="0" complexity="0">
