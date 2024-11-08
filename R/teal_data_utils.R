@@ -11,7 +11,6 @@
 #' @param data (`teal_data`)
 #' @param code (`character`) code to append to the object's code slot.
 #' @param objects (`list`) objects to append to object's environment.
-#' @param datanames (`character`) names of the datasets
 #' @return modified `teal_data`
 #' @keywords internal
 #' @name teal_data_utilities
