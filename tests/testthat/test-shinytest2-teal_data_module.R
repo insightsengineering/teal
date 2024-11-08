@@ -18,7 +18,6 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
               dataset2 <- mtcars
             }
           )
-          datanames(data) <- c("dataset1", "dataset2")
 
           data
         })
@@ -55,7 +54,6 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
             shiny::need(input$new_column, "Please provide a new column name")
           )
           data <- within(teal_data(), dataset1 <- iris)
-          datanames(data) <- c("dataset1")
           data
         })
       })
@@ -98,7 +96,6 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
             },
             new_column = input$new_column
           )
-          datanames(data) <- c("dataset1")
 
           data
         })
@@ -143,7 +140,6 @@ testthat::test_that("e2e: teal_data_module gets removed after successful data lo
               dataset2 <- mtcars
             }
           )
-          datanames(data) <- c("dataset1", "dataset2")
 
           data
         })
@@ -188,7 +184,6 @@ testthat::test_that("e2e: teal_data_module is still visible after successful dat
               dataset2 <- mtcars
             }
           )
-          datanames(data) <- c("dataset1", "dataset2")
 
           data
         })
@@ -228,7 +223,6 @@ testthat::test_that("e2e: teal_data_module will make other tabs inactive before 
               dataset2 <- mtcars
             }
           )
-          datanames(data) <- c("dataset1", "dataset2")
 
           data
         })

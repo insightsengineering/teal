@@ -135,7 +135,7 @@ In the example below, two standard `ADaM` datasets (`ADSL` and `ADTTE`) are pass
 # create cdisc_data
 data_cdisc <- cdisc_data(ADSL = teal.data::rADSL, ADTTE = teal.data::rADSL)
 
-datanames(data_cdisc)
+names(data_cdisc)
 join_keys(data_cdisc)
 ```
 

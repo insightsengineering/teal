@@ -37,6 +37,9 @@ repos:
           - insightsengineering/teal.slice
           - insightsengineering/teal.widgets
           - utils
+          - shinytest2 # Necessary for documentation
+          - shinyvalidate # Necessary for documentation
+          - rvest # Necessary for documentation
       - id: spell-check
         name: Check spelling with `spelling`
         exclude: >

@@ -41,7 +41,6 @@ testthat::test_that("report_card_template function returns TealReportCard object
 test_that("teal_data_to_filtered_data return FilteredData class", {
   teal_data <- teal.data::teal_data()
   teal_data <- within(teal_data, iris <- head(iris))
-  datanames(teal_data) <- "iris"
 
   testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
 })

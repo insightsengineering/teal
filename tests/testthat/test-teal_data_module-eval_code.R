@@ -107,7 +107,7 @@ testthat::test_that("eval_code.teal_data_module propagates qenv error from the o
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         reactive(
-          within(teal.data::teal_data(IRIS = iris), "non_existing_var + 1")
+          within(teal.data::teal_data(IRIS = iris), non_existing_var + 1)
         )
       })
     }
