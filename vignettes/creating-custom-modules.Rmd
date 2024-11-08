@@ -12,9 +12,9 @@ vignette: >
 
 ## Introduction
 
-The `teal` framework provides a large catalog of plug-in-ready analysis modules that can be incorporated into `teal` applications. 
-However, it is also possible to create your own modules using the module function, which leverages Shiny modules. 
-Each custom teal module is built as a Shiny module, combining Shiny's reactive capabilities with modularized UI and server logic to encapsulate functionality. 
+The `teal` framework provides a large catalog of plug-in-ready analysis modules that can be incorporated into `teal` applications.
+However, it is also possible to create your own modules using the module function, which leverages Shiny modules.
+Each custom teal module is built as a Shiny module, combining Shiny's reactive capabilities with modularized UI and server logic to encapsulate functionality.
 This design enables a structured and reusable approach to creating interactive components that integrate seamlessly within the teal ecosystem.
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
@@ -48,7 +48,7 @@ These inputs are dynamically populated based on the available datasets and varia
 
 ## Setting Up the `teal` Module UI
 
-The UI function defines the controls and display area for the histogram. 
+The UI function defines the controls and display area for the histogram.
 For this module, we will use:
 
 - **`selectInput` for Dataset**: Enables users to select a dataset from the list of available datasets.
@@ -73,12 +73,12 @@ histogram_module_ui <- function(id) {
 
 ## Setting Up the `teal` Module Server
 
-The server function is where the main logic of a `teal` module is handled. 
+The server function is where the main logic of a `teal` module is handled.
 For our histogram module, the server function will handle user interactions and manage the reactive `teal_data` object, which allows the module to dynamically respond to user inputs.
 
 ### Passing the `data` Argument to the Server Function
 
-To begin, it’s essential to include the `data` argument in the server function definition. 
+To begin, it’s essential to include the `data` argument in the server function definition.
 
 This `data` argument holds the reactive `teal_data` object, which contains your datasets and any filters applied. By including `data`, we can ensure:
 
@@ -114,7 +114,7 @@ The `teal_data` object can contain multiple datasets. To retrieve the names of t
 names(data())
 ```
 
-This will return a character vector of the dataset names contained in `teal_data`. 
+This will return a character vector of the dataset names contained in `teal_data`.
 You can then use these names to dynamically populate input controls, like a dataset selection drop-down.
 
 ### Accessing Specific Datasets with Double Brackets (`[[ ]])`
@@ -146,7 +146,7 @@ histogram_module_server <- function(id, data) {
       shiny::updateSelectInput(
         session,
         "dataset",
-        choices = teal.data::datanames(data())
+        choices = names(data())
       )
     })
 
@@ -166,16 +166,16 @@ histogram_module_server <- function(id, data) {
         data(),
         {
           my_plot <- hist(
-            input_dataset[[input_vars]],  
-            las = 1,                       
-            main = paste("Histogram of", input_vars), 
-            xlab = input_vars,         
-            col = "lightblue",             
-            border = "black"               
+            input_dataset[[input_vars]],
+            las = 1,
+            main = paste("Histogram of", input_vars),
+            xlab = input_vars,
+            col = "lightblue",
+            border = "black"
           )
         },
         input_dataset = as.name(input$dataset),  # Replace `input_dataset` with input$dataset
-        input_vars = input$variable              # Replace `input_vars` with input$variable 
+        input_vars = input$variable              # Replace `input_vars` with input$variable
       )
       new_data
     })
@@ -226,7 +226,7 @@ create_histogram_module <- function(label = "Histogram Module") {
 
 ## Integrating the Custom `teal` Module into a `teal` App
 
-With the custom `teal` module set up, it can now be integrated into a `teal` app. 
+With the custom `teal` module set up, it can now be integrated into a `teal` app.
 We’ll use `init()` from `teal` to specify the datasets and modules used in the app, then run the app to test the newly created module.
 
 ```r
@@ -254,8 +254,8 @@ This setup provides a fully dynamic, user-controlled `teal` module that allows f
 
 ## What's next?
 
-Now that you’ve mastered the essentials of building and integrating modules in `teal`, you’re ready to explore more advanced features. 
-`teal` offers a wide range of capabilities to enhance your module’s functionality and user experience. 
+Now that you’ve mastered the essentials of building and integrating modules in `teal`, you’re ready to explore more advanced features.
+`teal` offers a wide range of capabilities to enhance your module’s functionality and user experience.
 
 ### Adding reporting to a module
 
