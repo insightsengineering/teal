@@ -1,27 +1,33 @@
 ---
-title: "Decorate modules output"
+title: "Customizing Multiple Modules Outputs"
 author: "NEST CoreDev"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Decorate modules output}
+  %\VignetteIndexEntry{Customizing Multiple Modules Outputs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# ui, server, expr
+Below document contains example code presenting how you can change multiple objects inside one module.
+This is an extension of `Customizing Module Output` vignette.
 
 ```{r}
 library(ggplot2)
-tm_decorated_plot <- function(label = "module",
-                              decorator = list(plot_1 = teal_transform_module(), plot_2 = teal_transform_module())) {
+tm_decorated_plot <- function(
+    label = "module",
+    decorator = list(
+      plot_1 = teal_transform_module(), 
+      plot_2 = teal_transform_module()
+    )
+  ) {
   # decorator: teal_transform_module, language, function
   decorator_objs <- list(
     plot_1 = decorate_teal_data(x = decorator[["plot_1"]], output_name = "plot_1"),
     plot_2 = decorate_teal_data(x = decorator[["plot_2"]], output_name = "plot_2")
   )
-  # ouputs teal_transform_module
+  # outputs teal_transform_module
 
   module(
     label = label,
@@ -127,7 +133,6 @@ tm_decorated_plot <- function(label = "module",
 ```
 
 
-Interactive decorator
 ```{r}
 interactive_decorator_1 <- teal_transform_module(
   ui = function(id) {
@@ -185,7 +190,10 @@ app <- init(
     tm_decorated_plot("identity"),
     tm_decorated_plot(
       "interactive",
-      decorator = list(plot_1 = interactive_decorator_1, plot_2 = interactive_decorator_2)
+      decorator = list(
+        plot_1 = interactive_decorator_1, 
+        plot_2 = interactive_decorator_2
+      )
     )
   )
 )
