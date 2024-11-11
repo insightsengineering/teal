@@ -76,7 +76,7 @@ the respective input matched by its name.
 }
 
 \examples{
-my_transforms <- list(
+data_transformers <- list(
   teal_transform_module(
     label = "Static transform for iris",
     datanames = "iris",
@@ -96,22 +96,30 @@ my_transforms <- list(
     ui = function(id) {
       ns <- NS(id)
       tags$div(
-        numericInput(ns("n_rows"), "Subset n rows", value = 6, min = 1, max = 150, step = 1)
+        numericInput(ns("n_cols"), "Show n columns", value = 5, min = 1, max = 5, step = 1)
       )
     },
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         reactive({
           within(data(),
-            {
-              iris <- head(iris, num_rows)
-            },
-            num_rows = input$n_rows
+                 {
+                   iris <- iris[, 1:n_cols]
+                 },
+                 n_cols = input$n_cols
           )
         })
       })
     }
   )
 )
+
+app <- init(
+  data = teal_data(iris = iris),
+  modules = example_module(transforms = data_transformers)
+)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 
 }

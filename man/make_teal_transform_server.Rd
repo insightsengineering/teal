@@ -24,7 +24,7 @@ with the value of the respective input (matched by the name) - for example in
 }
 \examples{
 
-teal_transform_module(
+trim_iris <- teal_transform_module(
   label = "Simplified interactive transform for iris",
   datanames = "iris",
   ui = function(id) {
@@ -33,5 +33,13 @@ teal_transform_module(
   },
   server = make_teal_transform_server(expression(iris <- head(iris, n_rows)))
 )
+
+app <- init(
+  data = teal_data(iris = iris),
+  modules = example_module(transforms = trim_iris)
+)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 
 }
