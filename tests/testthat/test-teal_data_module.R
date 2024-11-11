@@ -22,4 +22,3 @@ testthat::test_that("teal_data_module throws when server has other formals than 
     ".*formal arguments.*"
   )
 })
-
