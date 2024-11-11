@@ -156,7 +156,7 @@ gg_xlab_decorator <- function(output_name) {
     }
   )
 }
-    ```
+```
 
 Decorator failures are managed by an internal `teal` mechanism called `trigger_on_success`, which ensures that the `data`
 object within the module remains intact. If a decorator fails, it will be ignored, and an appropriate error message will be displayed.
