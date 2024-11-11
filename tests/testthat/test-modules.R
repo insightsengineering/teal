@@ -509,7 +509,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
 
   testthat::expect_equal(
     gsub("\033\\[[0-9;]*m", "", format(appended_mods)),
-    "TEAL ROOT\n  |- a\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- transforms     : \n  |- c\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- transforms     : \n  L- c\n     |- Datasets         : all\n     |- Properties:\n     |  |- Bookmarkable  : FALSE\n     |  L- Reportable    : FALSE\n     |- UI Arguments     : \n     |- Server Arguments : \n     L- transforms     : \n" # nolint: line_length
+    "TEAL ROOT\n  |- a\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- Transforms       : \n  |- c\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- Transforms       : \n  L- c\n     |- Datasets         : all\n     |- Properties:\n     |  |- Bookmarkable  : FALSE\n     |  L- Reportable    : FALSE\n     |- UI Arguments     : \n     |- Server Arguments : \n     L- Transforms       : \n" # nolint: line_length
   )
 })
 
