@@ -99,8 +99,6 @@ will be added to the \code{datanames}.}
 
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
-\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
-
 \item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
 Affects the tree branch character used (L- vs |-)}
 
