@@ -592,7 +592,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -619,7 +619,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -641,7 +641,6 @@ testthat::describe("srv_teal teal_modules", {
           )
         ),
         expr = {
-          browser()
           session$setInputs(`teal_modules-active_tab` = "module_1")
           testthat::expect_equal(
             trimws(
