@@ -286,7 +286,7 @@ srv_teal_module.teal_module <- function(id,
         req(inherits(transformed_teal_data(), "teal_data"))
         all_teal_data <- transformed_teal_data()
         module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
-        .subset_teal_data(all_teal_data, module_datanames)
+        all_teal_data[c(module_datanames, ".raw_data")]
       })
 
       srv_check_module_datanames(
@@ -356,11 +356,11 @@ srv_teal_module.teal_module <- function(id,
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    .topologically_sort_datanames(ls(teal.code::get_env(data)), teal.data::join_keys(data))
+    names(data)
   } else {
     intersect(
-      .include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      ls(teal.code::get_env(data))
+      names(data), # Keep topological order from teal.data::names()
+      .include_parent_datanames(modules$datanames, teal.data::join_keys(data))
     )
   }
 }

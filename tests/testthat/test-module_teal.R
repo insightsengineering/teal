@@ -483,9 +483,9 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_1()())), "iris")
+        testthat::expect_setequal(names(modules_output$module_1()()), "iris")
         session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
-        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_2()())), "mtcars")
+        testthat::expect_setequal(names(modules_output$module_2()()), "mtcars")
       }
     )
   })
@@ -539,7 +539,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
+        testthat::expect_identical(names(modules_output$module_1()()), "iris")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
       }
     )
@@ -669,12 +669,12 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
+        testthat::expect_identical(names(modules_output$module_1()()), "iris")
       }
     )
   })
 
-  testthat::it("receives all objects from @env when module$datanames = \"all\"", {
+  testthat::it("receives all objects from teal_data when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -690,7 +690,7 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
-          teal.data::datanames(modules_output$module_1()()),
+          names(modules_output$module_1()()),
           c("iris", "iris_raw", "mtcars", "swiss")
         )
       }
@@ -754,7 +754,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -791,7 +791,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -819,7 +819,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
+        testthat::expect_setequal(names(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
       }
     )
   })
@@ -852,7 +852,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -890,7 +890,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars"))
       }
     )
   })
@@ -1413,10 +1413,10 @@ testthat::describe("srv_teal filters", {
             c(
               "iris <- iris",
               "mtcars <- mtcars",
-              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
               ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-              "lockEnvironment(.raw_data)",
+              "lockEnvironment(.raw_data) # @linksto .raw_data",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1591,10 +1591,10 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
@@ -1637,10 +1637,10 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
@@ -2159,7 +2159,10 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays parent before child when join_keys are provided", {
-    data <- teal.data::teal_data(parent = mtcars, child = data.frame(am = c(0, 1), test = c("a", "b")))
+    data <- teal.data::teal_data(
+      parent = mtcars,
+      child = data.frame(am = c(0, 1), test = c("a", "b"))
+    )
 
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("parent", "child", keys = c("am"))
@@ -2390,11 +2393,8 @@ testthat::describe("Datanames with special symbols", {
         session$flushReact()
 
         testthat::expect_setequal(
-          ls(
-            teal.code::get_env(modules_output$module_1()()),
-            all.names = TRUE
-          ),
-          c(".raw_data", "iris", "%a_pipe%")
+          names(modules_output$module_1()()),
+          c("iris", "%a_pipe%")
         )
       }
     )
@@ -2421,12 +2421,10 @@ testthat::describe("Datanames with special symbols", {
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
+
         testthat::expect_setequal(
-          ls(
-            teal.code::get_env(modules_output$module_1()()),
-            all.names = TRUE
-          ),
-          c(".raw_data", "iris", "_a variable with spaces_")
+          names(modules_output$module_1()()),
+          c("iris", "_a variable with spaces_")
         )
       }
     )
@@ -2447,7 +2445,7 @@ testthat::describe("Datanames with special symbols", {
           }
         ),
         modules = modules(
-          module("module_1", server = function(id, data) data, , datanames = c("iris"))
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
         ),
         filter = teal_slices(
           module_specific = TRUE
@@ -2485,7 +2483,7 @@ testthat::describe("teal.data code with a function defined", {
           }
         })),
         modules = modules(module("module_1", server = function(id, data) data))
-      ), ,
+      ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
@@ -2517,7 +2515,7 @@ testthat::describe("teal.data code with a function defined", {
           }
         })),
         modules = modules(module("module_1", server = function(id, data) data))
-      ), ,
+      ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
@@ -2537,7 +2535,6 @@ testthat::describe("teal.data code with a function defined", {
           envir = local_env
         )
         local(hash <- rlang::hash(deparse1(fun)), envir = local_env)
-
         testthat::expect_setequal(
           trimws(strsplit(
             x = teal.code::get_code(modules_output$module_1()()),
@@ -2548,9 +2545,9 @@ testthat::describe("teal.data code with a function defined", {
             "y <- x + 1",
             "y + 3",
             "}",
-            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\")", local_env$hash),
+            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\") # @linksto fun", local_env$hash),
             ".raw_data <- list2env(list(fun = fun))",
-            "lockEnvironment(.raw_data)"
+            "lockEnvironment(.raw_data) # @linksto .raw_data"
           )
         )
       }

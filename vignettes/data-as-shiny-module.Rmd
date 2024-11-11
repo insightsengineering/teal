@@ -49,7 +49,6 @@ data_module <- teal_data_module(
             dataset2 <- mtcars
           }
         )
-        datanames(data) <- c("dataset1", "dataset2") # optional
         data
       })
     })
@@ -81,7 +80,6 @@ data <- within(teal_data(), {
   dataset1 <- iris
   dataset2 <- mtcars
 })
-datanames(data) <- c("dataset1", "dataset2")
 
 data_module <- teal_data_module(
   ui = function(id) {
