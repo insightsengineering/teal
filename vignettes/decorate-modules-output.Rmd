@@ -88,7 +88,8 @@ interactive_decorator <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        data() |> within({
+        data() |> within(
+          {
             plot <- plot +
               ggtitle("This is title") +
               xlab(x_axis_title)
