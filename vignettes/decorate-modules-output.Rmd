@@ -130,7 +130,7 @@ Writing a decorator that applies to any module can be challenging because differ
 It is recommended to create a library of decorator functions that can be adapted to the specific object names used in `teal` modules.
 In the following example, focus on the `output_name` parameter to see how decorator can be applied to multiple modules:
 
-    ```{r}
+```{r}
 gg_xlab_decorator <- function(output_name) {
   teal_transform_module(
     ui = function(id) {
@@ -175,7 +175,7 @@ failing_decorator <- teal_transform_module(
     })
   }
 )
-    ```
+```
 
 ## Example Module
 
