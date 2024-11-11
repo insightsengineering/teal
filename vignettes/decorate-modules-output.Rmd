@@ -1,19 +1,40 @@
 ---
-title: "Decorate modules output"
+title: "Customizing module output"
 author: "NEST CoreDev"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Decorate modules output}
+  %\VignetteIndexEntry{Customizing modules output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
+## Introduction
 
-## Create a decoration object
+`teal` is a powerful `shiny`-based framework with built-in modules for interactive data analysis. 
+This document outlines the customization options available for modifying the output of `teal` modules. 
+You will learn how to use `teal_transform_module` to modify and enhance the objects created by `teal` modules, 
+enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
 
-`teal_transform_module` without `ui`. Nothing will be displayed, only server code will be executed.
+Adjusting input data or customizing module outputs in `teal` is accomplished using `transformers` created through 
+`teal_transform_module`. This document will focus on modifying outputs, and for clarity, we will refer to these 
+output-modifying objects as decoration objects or decorators.
+
+Throughout the examples, you will see references to a `data()` object. 
+This reactive object, built with `teal_data()`[https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html],
+holds all the data used `within` the module as well as the generated output objects. 
+`teal_transform_module` operates on this object and can execute custom R code within the `data()` environment using the `within function`. 
+This approach allows you to pass code directly and evaluate it in the `data()` environment.
+
+## Decorators
+
+### Server
+
+The simplest way to create a decorator is to use `teal_transform_module` without specifying a `ui`.
+This approach adds functionality solely to the server code of the `teal` app. 
+In the following example, we assume that the module contains an object (of class ggplot2) named `plot`. 
+We modify the title and x-axis label of plot:
 
 ```{r}
 library(teal)
@@ -33,7 +54,9 @@ static_decorator <- teal_transform_module(
 )
 ```
 
-Use `make_teal_transform_server(expr)` to create a transformer without repeating a boiler plate code (`function(id, data)`, `moduleServer`, `reactive`, `within(data, ...)`)
+To simplify the repetitive elements of writing new decorators 
+(e.g., `function(id, data), moduleServer, reactive, within(data, ...)`), 
+you can use the `make_teal_transform_server(expr)` wrapper, which takes an `expression` as input:
 
 ```{r}
 static_decorator_lang <- teal_transform_module(
@@ -47,7 +70,12 @@ static_decorator_lang <- teal_transform_module(
 )
 ```
 
-Adding interactivity requires creating a proper shiny module.
+### UI
+
+To create a decorator with user interactivity, you can incorporate a `shiny` UI module. 
+In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label. 
+Note how the input parameters are passed to the `within` function (e.g., `x_axis_title`):
+
 ```{r}
 interactive_decorator <- teal_transform_module(
   ui = function(id) {
@@ -60,8 +88,7 @@ interactive_decorator <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        data() |> within(
-          {
+        data() |> within({
             plot <- plot +
               ggtitle("This is title") +
               xlab(x_axis_title)
@@ -74,8 +101,8 @@ interactive_decorator <- teal_transform_module(
 )
 ```
 
-There is `make_teal_transform_server(expr)` which simplifies a creation of `teal_transform_module`'s server. One can 
-simply specify `expression` within which object names can be replaced with respective input.
+As in the earlier examples, `make_teal_transform_server(expr)` can simplify the creation of the server component. 
+This wrapper allows you to use `input` object names directly in the expression:
 
 ```{r}
 interactive_decorator_lang <- teal_transform_module(
@@ -95,11 +122,12 @@ interactive_decorator_lang <- teal_transform_module(
 )
 ```
 
+## Handling Various Object Names
 
-Since `teal_transform_module` when created has constant object names it means that it is hard to robustly reuse
-transformer in any `tm_` module. It is recomended for external parties to collect library of "decorators" as functions
-to potentially adjust the content of the evaluated expression to `teal_modules`'s internals. See the following example
-and focus on `output_name`.
+`teal_transform_module` relies on the names of objects created within a module. 
+Writing a decorator that applies to any module can be challenging because different modules may use different object names.
+It is recommended to create a library of decorator functions that can be adapted to the specific object names used in `teal` modules.
+In the following example, focus on the `output_name` parameter to see how decorator can be applied to multiple modules:
 
     ```{r}
 gg_xlab_decorator <- function(output_name) {
@@ -129,9 +157,8 @@ gg_xlab_decorator <- function(output_name) {
 }
     ```
 
-
-Failures in decorators are handled by internal `teal` mechanism called `trigger_on_success`, which will never 
-break `data` object inside of the module. Instead decorator will be ignored and relevant error message will be shown.
+Decorator failures are managed by an internal `teal` mechanism called `trigger_on_success`, which ensures that the `data`
+object within the module remains intact. If a decorator fails, it will be ignored, and an appropriate error message will be displayed.
 
 ```{r}
 failing_decorator <- teal_transform_module(
@@ -143,16 +170,16 @@ failing_decorator <- teal_transform_module(
   },
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
-      reactive(stop("Hihi"))
+      reactive(stop("This is error"))
     })
   }
 )
     ```
 
-## Example module
+## Example Module
 
-To include decorators to the `teal_module` one needs to add an extra argument to the module-constructor function `tm_`. Decorators should be passed via `ui_args` and `server_args` to the module's `ui` and `server`, where they should be 
-consumed by `ui/srv_teal_transform_module`.
+To include decorators in a `teal` module, pass them as arguments (`ui_args` and `server_args`) to the module’s `ui` and 
+`server` components, where they will be used by `ui/srv_teal_transform_module`:
 
 
 ```{r}
