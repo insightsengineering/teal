@@ -18,10 +18,9 @@ library(ggplot2)
 tm_decorated_plot <- function(
     label = "module",
     decorator = list(
-      plot_1 = teal_transform_module(), 
+      plot_1 = teal_transform_module(),
       plot_2 = teal_transform_module()
-    )
-  ) {
+    )) {
   # decorator: teal_transform_module, language, function
   decorator_objs <- list(
     plot_1 = decorate_teal_data(x = decorator[["plot_1"]], output_name = "plot_1"),
@@ -191,7 +190,7 @@ app <- init(
     tm_decorated_plot(
       "interactive",
       decorator = list(
-        plot_1 = interactive_decorator_1, 
+        plot_1 = interactive_decorator_1,
         plot_2 = interactive_decorator_2
       )
     )
