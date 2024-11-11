@@ -88,10 +88,10 @@
 #'       moduleServer(id, function(input, output, session) {
 #'         reactive({
 #'           within(data(),
-#'                  {
-#'                    iris <- iris[, 1:n_cols]
-#'                  },
-#'                  n_cols = input$n_cols
+#'             {
+#'               iris <- iris[, 1:n_cols]
+#'             },
+#'             n_cols = input$n_cols
 #'           )
 #'         })
 #'       })
