@@ -53,7 +53,7 @@
 #' `shiny` module server function; that takes `id` and `data` argument,
 #' where the `id` is the module id and `data` is the reactive `teal_data` input.
 #' The server function must return reactive expression containing `teal_data` object.
-#' To simplify use [make_teal_transform_server()].
+#' To simplify, use [make_teal_transform_server()].
 #' @param datanames (`character`)
 #' Names of the datasets that are relevant for the module. The
 #' filter panel will only display filters for specified `datanames`. The keyword `"all"` will show
