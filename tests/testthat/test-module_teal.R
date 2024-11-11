@@ -915,26 +915,6 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
-    testthat::expect_warning(
-      shiny::testServer(
-        app = srv_teal,
-        args = list(
-          id = "test",
-          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-          modules = modules(
-            module("module_1", server = function(id, datasets) datasets)
-          )
-        ),
-        expr = {
-          session$setInputs(`teal_modules-active_tab` = "module_1")
-          testthat::expect_s3_class(modules_output$module_1(), "FilteredData")
-        }
-      ),
-      "`datasets` argument in the server is deprecated and will be removed in the next release"
-    )
-  })
-
   testthat::it("srv_teal_module.teal_module passes server_args to the ...", {
     shiny::testServer(
       app = srv_teal,

@@ -24,14 +24,6 @@ testthat::test_that("module requires label argument to be a string different tha
   testthat::expect_error(module(label = "global_filters"), "is reserved in teal")
 })
 
-testthat::test_that("module warns when server contains datasets argument", {
-  testthat::expect_warning(
-    module(server = function(id, datasets) NULL),
-    "`datasets` argument in the server is deprecated"
-  )
-})
-
-
 testthat::test_that("module expects server being a shiny server module with any argument", {
   testthat::expect_no_error(module(server = function(id) NULL))
 
