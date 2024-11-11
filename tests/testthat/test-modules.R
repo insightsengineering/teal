@@ -121,7 +121,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
     ui_args = NULL
   )
   testthat::expect_s3_class(test_module, "teal_module")
-  testthat::expect_named(test_module, c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformers"))
+  testthat::expect_named(test_module, c("label", "server", "ui", "datanames", "server_args", "ui_args", "transforms"))
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
   testthat::expect_identical(test_module$ui, ui_fun1)
@@ -509,12 +509,12 @@ testthat::test_that("format.teal_modules returns proper structure", {
 
   testthat::expect_equal(
     gsub("\033\\[[0-9;]*m", "", format(appended_mods)),
-    "TEAL ROOT\n  |- a\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- Transformers     : \n  |- c\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- Transformers     : \n  L- c\n     |- Datasets         : all\n     |- Properties:\n     |  |- Bookmarkable  : FALSE\n     |  L- Reportable    : FALSE\n     |- UI Arguments     : \n     |- Server Arguments : \n     L- Transformers     : \n" # nolint: line_length
+    "TEAL ROOT\n  |- a\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- transforms     : \n  |- c\n  |  |- Datasets         : all\n  |  |- Properties:\n  |  |  |- Bookmarkable  : FALSE\n  |  |  L- Reportable    : FALSE\n  |  |- UI Arguments     : \n  |  |- Server Arguments : \n  |  L- transforms     : \n  L- c\n     |- Datasets         : all\n     |- Properties:\n     |  |- Bookmarkable  : FALSE\n     |  L- Reportable    : FALSE\n     |- UI Arguments     : \n     |- Server Arguments : \n     L- transforms     : \n" # nolint: line_length
   )
 })
 
 
-testthat::test_that("module datanames is appended by its transformers datanames", {
+testthat::test_that("module datanames is appended by its transforms datanames", {
   transformer_w_datanames <- teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
@@ -530,11 +530,11 @@ testthat::test_that("module datanames is appended by its transformers datanames"
     datanames = c("a", "b")
   )
 
-  out <- module(datanames = "c", transformers = list(transformer_w_datanames))
+  out <- module(datanames = "c", transforms = list(transformer_w_datanames))
   testthat::expect_identical(out$datanames, c("c", "a", "b"))
 })
 
-testthat::test_that("module datanames stays 'all' regardless of transformers", {
+testthat::test_that("module datanames stays 'all' regardless of transforms", {
   transformer_w_datanames <- teal_transform_module(
     ui = function(id) NULL,
     server = function(id, data) {
@@ -550,6 +550,6 @@ testthat::test_that("module datanames stays 'all' regardless of transformers", {
     datanames = c("a", "b")
   )
 
-  out <- module(datanames = "all", transformers = list(transformer_w_datanames))
+  out <- module(datanames = "all", transforms = list(transformer_w_datanames))
   testthat::expect_identical(out$datanames, "all")
 })

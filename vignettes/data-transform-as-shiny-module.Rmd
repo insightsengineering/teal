@@ -12,7 +12,7 @@ vignette: >
 
 ## Introduction
 
-`teal` version `0.16` introduced new argument in `teal::module` called `transformers`. 
+`teal` version `0.16` introduced new argument in `teal::module` called `transforms`. 
 This argument allows to pass a `list` of `teal_data_module` objects that are created using `teal_transform_module()` function.
 
 The main benefit of `teal_transform_module()` is the ability to transform data before passing it 
@@ -59,7 +59,7 @@ data <- within(teal_data(), {
   mtcars <- mtcars
 })
 
-my_transformers <- list(
+my_transforms <- list(
   teal_transform_module(
     label = "Custom transform for iris",
     ui = function(id) {
@@ -85,7 +85,7 @@ my_transformers <- list(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformers = my_transformers)
+  modules = teal::example_module(transformers = my_transforms)
 )
 
 if (interactive()) {
@@ -97,9 +97,9 @@ _Note_: It is recommended to return `reactive()` with `teal_data()` in `server` 
 If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
 More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
-### Multiple Transformers
+### Multiple Transforms
 
-Note that we can add multiple `teal` transformers by including `teal_transform_module` in a list.
+Note that we can add multiple `teal` transforms by including `teal_transform_module` in a list.
 
 Let's add another transformation to the `mtcars` dataset that creates a column with `rownames` of `mtcars`.
 Note that this module does not have interactive UI elements.
@@ -110,7 +110,7 @@ data <- within(teal_data(), {
   mtcars <- mtcars
 })
 
-my_transformers <- list(
+my_transforms <- list(
   teal_transform_module(
     label = "Custom transform for iris",
     ui = function(id) {
@@ -155,7 +155,7 @@ my_transformers <- list(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformers = my_transformers)
+  modules = teal::example_module(transformers = my_transforms)
 )
 
 if (interactive()) {

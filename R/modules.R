@@ -329,14 +329,14 @@ modules <- function(..., label = "root") {
 #' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
 #'   format.teal_modules(). Determines whether to show "TEAL ROOT" header
 #' @param what (`character`) Specifies which metadata to display.
-#'   Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"
+#'   Possible values: "datasets", "properties", "ui_args", "server_args", "transforms"
 #' @examples
 #' mod <- module(
 #'   label = "My Custom Module",
 #'   server = function(id, data, ...) {},
 #'   ui = function(id, ...) {},
 #'   datanames = c("ADSL", "ADTTE"),
-#'   transformers = list(),
+#'   transforms = list(),
 #'   ui_args = list(a = 1, b = "b"),
 #'   server_args = list(x = 5, y = list(p = 1))
 #' )
@@ -344,7 +344,7 @@ modules <- function(..., label = "root") {
 #' @export
 format.teal_module <- function(
     x, indent = 0, is_last = FALSE, parent_prefix = "",
-    what = c("datasets", "properties", "ui_args", "server_args", "transformers"), ...) {
+    what = c("datasets", "properties", "ui_args", "server_args", "transforms"), ...) {
   empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
   current_prefix <- paste0(parent_prefix, branch, " ")
@@ -381,8 +381,8 @@ format.teal_module <- function(
   bookmarkable <- isTRUE(attr(x, "teal_bookmarkable"))
   reportable <- "reporter" %in% names(formals(x$server))
 
-  transformers <- if (length(x$transformers) > 0) {
-    paste(sapply(x$transformers, function(t) attr(t, "label")), collapse = ", ")
+  transforms <- if (length(x$transforms) > 0) {
+    paste(sapply(x$transforms, function(t) attr(t, "label")), collapse = ", ")
   } else {
     empty_text
   }
@@ -417,10 +417,10 @@ format.teal_module <- function(
       content_prefix, "|- ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
     )
   }
-  if ("transformers" %in% what) {
+  if ("transforms" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "L- ", crayon::magenta("Transformers     : "), transformers, "\n"
+      content_prefix, "L- ", crayon::magenta("Transforms       : "), transforms, "\n"
     )
   }
 
@@ -431,14 +431,14 @@ format.teal_module <- function(
 #' @examples
 #' custom_module <- function(
 #'     label = "label", ui_args = NULL, server_args = NULL,
-#'     datanames = "all", transformers = list(), bk = FALSE) {
+#'     datanames = "all", transforms = list(), bk = FALSE) {
 #'   ans <- module(
 #'     label,
 #'     server = function(id, data, ...) {},
 #'     ui = function(id, ...) {
 #'     },
 #'     datanames = datanames,
-#'     transformers = transformers,
+#'     transforms = transforms,
 #'     ui_args = ui_args,
 #'     server_args = server_args
 #'   )
@@ -475,7 +475,7 @@ format.teal_module <- function(
 #'       cache = TRUE,
 #'       debounce = 1000
 #'     ),
-#'     transformers = list(dummy_transformer),
+#'     transforms = list(dummy_transformer),
 #'     bk = TRUE
 #'   ),
 #'   modules(
@@ -493,7 +493,7 @@ format.teal_module <- function(
 #'         render_type = "svg",
 #'         cache_plots = TRUE
 #'       ),
-#'       transformers = list(dummy_transformer, plot_transformer),
+#'       transforms = list(dummy_transformer, plot_transformer),
 #'       bk = TRUE
 #'     ),
 #'     modules(
@@ -525,7 +525,7 @@ format.teal_module <- function(
 #' )
 #'
 #' cat(format(complete_modules))
-#' cat(format(complete_modules, what = c("ui_args", "server_args", "transformers")))
+#' cat(format(complete_modules, what = c("ui_args", "server_args", "transforms")))
 #' @export
 format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
   if (is_root) {

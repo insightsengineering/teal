@@ -61,7 +61,7 @@
 #'
 #'
 #' @examples
-#' data_transformers <- list(
+#' data_transforms <- list(
 #'   teal_transform_module(
 #'     label = "Static transform for iris",
 #'     datanames = "iris",
@@ -101,7 +101,7 @@
 #'
 #' app <- init(
 #'   data = teal_data(iris = iris),
-#'   modules = example_module(transforms = data_transformers)
+#'   modules = example_module(transforms = data_transforms)
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)

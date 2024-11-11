@@ -65,6 +65,8 @@ transform_list <<- list(
   )
 )
 
+decorators <-
+
 testthat::describe("srv_teal lockfile", {
   testthat::it(paste0(
     "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
@@ -738,7 +740,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -775,7 +777,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -834,7 +836,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
@@ -873,7 +875,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -1548,7 +1550,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "mtcars")]
+            transforms = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1577,7 +1579,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "mtcars")]
+            transforms = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1621,7 +1623,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "mtcars")]
+            transforms = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1671,7 +1673,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             label = "module_1",
             server = function(id, data) data,
             datanames = c("iris", "data_from_transform"),
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1708,7 +1710,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           modules = modules(
             module(
               server = function(id, data) data,
-              transformers = list(
+              transforms = list(
                 teal_transform_module(
                   ui = function(id) textInput("a", "an input"),
                   server = function(id, data) eventReactive(input$a, data())
@@ -1740,7 +1742,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             modules = modules(
               module(
                 server = function(id, data) data,
-                transformers = list(
+                transforms = list(
                   teal_transform_module(
                     ui = function(id) NULL,
                     server = function(id, data) "whatever"
@@ -1773,7 +1775,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1801,7 +1803,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1829,7 +1831,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1857,7 +1859,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transforms = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -2077,7 +2079,7 @@ testthat::describe("srv_teal summary table", {
           module(
             "module_1",
             server = function(id, data) data,
-            transformers = teal_transform_module(
+            transforms = teal_transform_module(
               datanames = character(0),
               server = function(id, data) {
                 moduleServer(id, function(input, output, session) {
@@ -2116,7 +2118,7 @@ testthat::describe("srv_teal summary table", {
             module(
               "module_1",
               server = function(id, data) data,
-              transformers = transform_list["iris"]
+              transforms = transform_list["iris"]
             )
           )
         ),
@@ -2220,7 +2222,7 @@ testthat::describe("srv_teal summary table", {
       args = list(
         id = "test",
         data = data,
-        modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transformers = list(
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transforms = list(
           teal_transform_module(
             server = function(id, data) {
               reactive({

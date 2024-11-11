@@ -31,7 +31,7 @@ modules(..., label = "root")
   indent = 0,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "transformers"),
+  what = c("datasets", "properties", "ui_args", "server_args", "transforms"),
   ...
 )
 
@@ -106,7 +106,7 @@ Affects the tree branch character used (L- vs |-)}
 used to maintain the tree structure in nested levels}
 
 \item{what}{(\code{character}) Specifies which metadata to display.
-Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"}
+Possible values: "datasets", "properties", "ui_args", "server_args", "transforms"}
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
 format.teal_modules(). Determines whether to show "TEAL ROOT" header}
@@ -228,21 +228,21 @@ mod <- module(
   server = function(id, data, ...) {},
   ui = function(id, ...) {},
   datanames = c("ADSL", "ADTTE"),
-  transformers = list(),
+  transforms = list(),
   ui_args = list(a = 1, b = "b"),
   server_args = list(x = 5, y = list(p = 1))
 )
 cat(format(mod))
 custom_module <- function(
     label = "label", ui_args = NULL, server_args = NULL,
-    datanames = "all", transformers = list(), bk = FALSE) {
+    datanames = "all", transforms = list(), bk = FALSE) {
   ans <- module(
     label,
     server = function(id, data, ...) {},
     ui = function(id, ...) {
     },
     datanames = datanames,
-    transformers = transformers,
+    transforms = transforms,
     ui_args = ui_args,
     server_args = server_args
   )
@@ -279,7 +279,7 @@ complete_modules <- modules(
       cache = TRUE,
       debounce = 1000
     ),
-    transformers = list(dummy_transformer),
+    transforms = list(dummy_transformer),
     bk = TRUE
   ),
   modules(
@@ -297,7 +297,7 @@ complete_modules <- modules(
         render_type = "svg",
         cache_plots = TRUE
       ),
-      transformers = list(dummy_transformer, plot_transformer),
+      transforms = list(dummy_transformer, plot_transformer),
       bk = TRUE
     ),
     modules(
@@ -329,7 +329,7 @@ complete_modules <- modules(
 )
 
 cat(format(complete_modules))
-cat(format(complete_modules, what = c("ui_args", "server_args", "transformers")))
+cat(format(complete_modules, what = c("ui_args", "server_args", "transforms")))
 # change the module's datanames
 set_datanames(module(datanames = "all"), "a")
 

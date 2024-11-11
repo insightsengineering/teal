@@ -17,7 +17,7 @@ This document outlines the customization options available for modifying the out
 You will learn how to use `teal_transform_module` to modify and enhance the objects created by `teal` modules, 
 enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
 
-Adjusting input data or customizing module outputs in `teal` is accomplished using `transformers` created through 
+Adjusting input data or customizing module outputs in `teal` is accomplished using `transforms` created through 
 `teal_transform_module`. This document will focus on modifying outputs, and for clarity, we will refer to these 
 output-modifying objects as decoration objects or decorators.
 

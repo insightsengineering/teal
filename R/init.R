@@ -212,7 +212,7 @@ init <- function(data,
     }
 
     is_modules_ok <- check_modules_datanames(modules, names(data))
-    if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
+    if (!isTRUE(is_modules_ok) && length(unlist(extract_transforms(modules))) == 0) {
       warning(is_modules_ok, call. = FALSE)
     }
 
