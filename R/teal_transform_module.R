@@ -136,7 +136,7 @@ teal_transform_module <- function(ui = NULL,
 #'
 #' A factory function to simplify creation of a [`teal_transform_module`]'s server. Specified `expr`
 #' is wrapped in a shiny module function and output can be passed to the `server` argument in
-#' [teal_transform_module()] call. Such server function can be linked with ui and values from the
+#' [teal_transform_module()] call. Such a server function can be linked with ui and values from the
 #' inputs can be used in the expression. Object names specified in the expression will be substituted
 #' with the value of the respective input (matched by the name) - for example in
 #' `expression(graph <- graph + ggtitle(title))` object `title` will be replaced with the value of
