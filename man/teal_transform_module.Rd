@@ -19,7 +19,7 @@ teal_transform_module(
 \code{shiny} module server function; that takes \code{id} and \code{data} argument,
 where the \code{id} is the module id and \code{data} is the reactive \code{teal_data} input.
 The server function must return reactive expression containing \code{teal_data} object.
-To simplify use \code{\link[=make_teal_transform_server]{make_teal_transform_server()}}.}
+To simplify, use \code{\link[=make_teal_transform_server]{make_teal_transform_server()}}.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 
@@ -69,7 +69,7 @@ following form:
 }\if{html}{\out{</div>}}
 
 Above can be simplified to presented below, where \code{level} will be automatically substituted with
-respective input matched by its name.
+the respective input matched by its name.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{make_transform_data(expr = expression(x <- subset(x, col == level)))
 }\if{html}{\out{</div>}}
