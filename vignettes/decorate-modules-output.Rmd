@@ -250,12 +250,12 @@ app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
     tm_decorated_plot("identity"),
-    tm_decorated_plot("no-ui", decorator = static_decorator),
-    tm_decorated_plot("lang", decorator = static_decorator_lang),
-    tm_decorated_plot("interactive", decorator = interactive_decorator),
-    tm_decorated_plot("interactive-from lang", decorator = interactive_decorator_lang),
-    tm_decorated_plot("from-fun", decorator = gg_xlab_decorator("plot")),
-    tm_decorated_plot("failing", decorator = failing_decorator)
+    tm_decorated_plot("no-ui", decorators = static_decorator),
+    tm_decorated_plot("lang", decorators = static_decorator_lang),
+    tm_decorated_plot("interactive", decorators = interactive_decorator),
+    tm_decorated_plot("interactive-from lang", decorators = interactive_decorator_lang),
+    tm_decorated_plot("from-fun", decorators = gg_xlab_decorator("plot")),
+    tm_decorated_plot("failing", decorators = failing_decorator)
   )
 )
 
