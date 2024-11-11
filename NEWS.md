@@ -15,6 +15,7 @@
 `datanames` one should modify `module$datanames`.
 * The `landing_popup_module()` needs to be passed as the `landing_popup` argument of `init` instead of being passed as a module of the `modules` argument of `init`.
 * `teal` no longer re-export `%>%`. Please load `library(magrittr)` instead or use `|>` from `base`.
+* `module(server)` argument does not accept the `datasets` argument.
 
 ### Enhancement
 
