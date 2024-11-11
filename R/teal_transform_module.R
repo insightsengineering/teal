@@ -43,7 +43,7 @@
 #' ```
 #'
 #' Above can be simplified to presented below, where `level` will be automatically substituted with
-#' respective input matched by its name.
+#' the respective input matched by its name.
 #'
 #' ```
 #' make_transform_data(expr = expression(x <- subset(x, col == level)))
