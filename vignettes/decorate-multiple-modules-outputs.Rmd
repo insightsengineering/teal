@@ -52,7 +52,7 @@ tm_decorated_plot <- function(
     server = function(id, data, decorator_objs) {
       moduleServer(id, function(input, output, session) {
         observeEvent(data(), {
-          updateSelectInput(inputId = "dataname", choices = teal.data::datanames(data()))
+          updateSelectInput(inputId = "dataname", choices = names(data()))
         })
 
         observeEvent(input$dataname, {
