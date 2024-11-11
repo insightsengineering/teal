@@ -81,3 +81,16 @@ teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
     once = once
   )
 }
+
+#' Extract all `transformers` from `modules`.
+#'
+#' @param modules `teal_modules` or `teal_module`
+#' @return A list of `teal_transform_module` nested in the same way as input `modules`.
+#' @keywords internal
+extract_transformers <- function(modules) {
+  if (inherits(modules, "teal_module")) {
+    modules$transformers
+  } else if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, extract_transformers)
+  }
+}
