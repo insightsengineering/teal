@@ -200,13 +200,28 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
     },
     server = function(id, data, decorators) {
       moduleServer(id, function(input, output, session) {
-        observeEvent(data(), {
-          updateSelectInput(inputId = "dataname", choices = names(data()))
+
+        datasetnames <- reactive({
+          names(data())
+        })
+
+        observeEvent(datasetnames(), {
+          updateSelectInput(
+            session = session,
+            inputId = "dataname",
+            choices = datasetnames(),
+            selected = datasetnames()[1]
+          )
+        }, once = TRUE)
+
+        datacolnames <- reactive({
+          req(input$dataname)
+          colnames(data()[[input$dataname]])
         })
 
         observeEvent(input$dataname, {
-          updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
-          updateSelectInput(inputId = "y", label = "select y", choices = colnames(data()[[input$dataname]]))
+          updateSelectInput(session = session, inputId = "x", choices = datacolnames(), selected = datacolnames()[1])
+          updateSelectInput(session = session, inputId = "y", choices = datacolnames(), selected = datacolnames()[2])
         })
 
         q1 <- reactive({
@@ -221,7 +236,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
               x = as.name(input$x),
               y = as.name(input$y)
             )
-        })
+        }) |> debounce(200)
 
         q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
 
@@ -232,7 +247,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
 
         output$plot <- renderPlot(plot_r())
         output$text <- renderText({
-          teal.code::get_code(q2())
+          teal.code::get_code(req(q2()))
         })
       })
     },
