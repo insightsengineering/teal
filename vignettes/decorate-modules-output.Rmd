@@ -43,7 +43,7 @@ static_decorator <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        data() |> within({
+        within(data(), {
           plot <- plot +
             ggtitle("This is title") +
             xlab("x axis")
@@ -88,7 +88,7 @@ interactive_decorator <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        data() |> within(
+        within(data(), 
           {
             plot <- plot +
               ggtitle("This is title") +
@@ -143,7 +143,7 @@ gg_xlab_decorator <- function(output_name) {
       moduleServer(id, function(input, output, session) {
         reactive({
           req(data())
-          data() |> within(
+          within(data(), 
             {
               output_name <- output_name +
                 xlab(x_axis_title)
@@ -200,30 +200,14 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
     },
     server = function(id, data, decorators) {
       moduleServer(id, function(input, output, session) {
-        datasetnames <- reactive({
-          names(data())
-        })
-
-        observeEvent(datasetnames(),
-          {
-            updateSelectInput(
-              session = session,
-              inputId = "dataname",
-              choices = datasetnames(),
-              selected = datasetnames()[1]
-            )
-          },
-          once = TRUE
-        )
-
-        datacolnames <- reactive({
-          req(input$dataname)
-          colnames(data()[[input$dataname]])
+        observeEvent(data(), {
+          updateSelectInput(inputId = "dataname", choices = names(data()))
         })
 
         observeEvent(input$dataname, {
-          updateSelectInput(session = session, inputId = "x", choices = datacolnames(), selected = datacolnames()[1])
-          updateSelectInput(session = session, inputId = "y", choices = datacolnames(), selected = datacolnames()[2])
+          req(input$dataname)
+          updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
+          updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
 
         q1 <- debounce(

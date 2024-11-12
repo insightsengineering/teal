@@ -1,5 +1,10 @@
 # comment: srv_teal is exported so the tests here are extensive and cover srv_data as well.
 #          testing of srv_data is not needed.
+
+
+# utils -----------------------------------------------------------------------------------------------------------
+
+
 module_summary_table <<- function(output, id) {
   testthat::skip_if_not_installed("rvest")
   table_id <- sprintf("teal_modules-%s-data_summary-table", id)
@@ -18,6 +23,9 @@ is_slices_equivalent <<- function(x, y, with_attrs = TRUE) {
   }
   identical(x_list, y_list)
 }
+
+
+# transforms ------------------------------------------------------------------------------------------------------
 
 transform_list <<- list(
   fail = teal_transform_module(
@@ -65,7 +73,177 @@ transform_list <<- list(
   )
 )
 
-decorators <-
+
+# decorators ------------------------------------------------------------------------------------------------------
+
+
+gg_xlab_decorator <<- function(output_name) {
+  teal_transform_module(
+    ui = function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          req(data())
+          within(data(),
+            {
+              output_name <- output_name +
+                xlab(x_axis_title)
+            },
+            x_axis_title = input$x_axis_title,
+            output_name = as.name(output_name)
+          )
+        })
+      })
+    }
+  )
+}
+
+decorators <<- list(
+  static_decorator = teal_transform_module(
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          req(data())
+          within(data(), {
+            plot <- plot +
+              ggtitle("This is title") +
+              xlab("x axis")
+          })
+        })
+      })
+    }
+  ),
+  static_decorator_lang = teal_transform_module(
+    server = make_teal_transform_server(
+      expression(
+        plot <- plot +
+          ggtitle("This is title") +
+          xlab("x axis title")
+      )
+    )
+  ),
+  interactive_decorator = teal_transform_module(
+    ui = function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          req(data())
+          within(data(),
+            {
+              plot <- plot +
+                ggtitle("This is title") +
+                xlab(x_axis_title)
+            },
+            x_axis_title = input$x_axis_title
+          )
+        })
+      })
+    }
+  ),
+  interactive_decorator_lang = teal_transform_module(
+    ui = function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+      )
+    },
+    server = make_teal_transform_server(
+      expression(
+        plot <- plot +
+          ggtitle("This is title") +
+          xlab(x_axis_title)
+      )
+    )
+  ),
+  gg_xlab_decorator = gg_xlab_decorator("plot"),
+  failing_decorator = teal_transform_module(
+    ui = function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive(stop("This is error"))
+      })
+    }
+  )
+)
+
+tm_decorated_plot <<- function(label = "module", transforms = list(), decorators = teal_transform_module()) {
+  module(
+    label = label,
+    ui = function(id, decorators) {
+      ns <- NS(id)
+      div(
+        selectInput(ns("dataname"), label = "select dataname", choices = NULL),
+        selectInput(ns("x"), label = "select x", choices = NULL),
+        selectInput(ns("y"), label = "select y", choices = NULL),
+        ui_transform_data(ns("decorate"), transforms = decorators),
+        plotOutput(ns("plot")),
+        verbatimTextOutput(ns("text"))
+      )
+    },
+    server = function(id, data, decorators) {
+      moduleServer(id, function(input, output, session) {
+        observeEvent(data(), {
+          updateSelectInput(inputId = "dataname", choices = names(data()))
+        })
+
+        observeEvent(input$dataname, {
+          req(input$dataname)
+          updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
+          updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
+        })
+
+        q1 <- debounce(
+          reactive({
+            req(input$dataname, input$x, input$y)
+            within(data(),
+                   {
+                     plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                       ggplot2::geom_point()
+                   },
+                   dataname = as.name(input$dataname),
+                   x = as.name(input$x),
+                   y = as.name(input$y)
+            )
+          }), 200)
+
+        q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
+
+        plot_r <- reactive({
+          req(q2())
+          q2()[["plot"]]
+        })
+
+        output$plot <- renderPlot(plot_r())
+        output$text <- renderText({
+          teal.code::get_code(req(q2()))
+        })
+      })
+    },
+    ui_args = list(decorators = decorators),
+    server_args = list(decorators = decorators)
+  )
+}
+
+
+# tests -----------------------------------------------------------------------------------------------------------
+
+
+
   testthat::describe("srv_teal lockfile", {
     testthat::it(paste0(
       "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
@@ -1875,6 +2053,111 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       }
     )
   })
+
+  testthat::it("shows the decorator ui when decorator has it", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(tm_decorated_plot("interactive", decorators = decorators[['interactive_decorator']]))
+      ),
+      expr = {
+        # TODO
+      }
+    )
+  })
+
+  testthat::it("applies the decorator ui changes when module has a decorator with ui", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          tm_decorated_plot(
+            "interactive_decorator_lang",
+            decorators = decorators[['interactive_decorator_lang']])
+          )
+      ),
+      expr = {
+        # TODO
+      }
+    )
+  })
+
+  testthat::it("changes module output for a module with a static decorator", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(tm_decorated_plot("static_decorator", decorators = decorators[['static_decorator']]))
+      ),
+      expr = {
+        # TODO
+      }
+    )
+  })
+
+  testthat::it("changes module output for a module with a static decorator that uses expression", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          tm_decorated_plot(
+            "static_decorator_lang",
+            decorators = decorators[['static_decorator_lang']]
+          )
+        )
+      ),
+      expr = {
+        # TODO
+      }
+    )
+  })
+
+  testthat::it("changes module output for a module with a decorator that is a function of object name", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          tm_decorated_plot(
+            "gg_xlab_decorator",
+            decorators = decorators[['gg_xlab_decorator']]
+          )
+        )
+      ),
+      expr = {
+        # TODO
+      }
+    )
+  })
+
+  testthat::it("shows failure message when module with decorator fails", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          tm_decorated_plot(
+            "failing_decorator",
+            decorators = decorators[['failing_decorator']]
+          )
+        )
+      ),
+      expr = {
+        # TODO
+      }
+    )
+  })
+
+
 })
 
 testthat::describe("srv_teal summary table", {
@@ -2210,7 +2493,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::test_that("summary table displays MAE dataset added in transforms", {
+  testthat::it("summary table displays MAE dataset added in transforms", {
     data <- within(teal.data::teal_data(), {
       iris <- iris
       mtcars <- mtcars
