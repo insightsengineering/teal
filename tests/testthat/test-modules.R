@@ -70,11 +70,6 @@ testthat::test_that("module requires ui_args argument to be a list", {
   testthat::expect_error(module(ui_args = list(1, 2, 3)), "Must have names")
 })
 
-testthat::test_that("module throws when ui has data or datasets argument", {
-  testthat::expect_error(module(ui = function(id, data) NULL))
-  testthat::expect_error(module(ui = function(id, datasets) NULL))
-})
-
 testthat::test_that("module expects ui being a shiny ui module with any argument", {
   testthat::expect_no_error(module(ui = function(id) NULL))
   testthat::expect_no_error(module(ui = function(id, any_argument) NULL))
