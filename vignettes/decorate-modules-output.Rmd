@@ -213,16 +213,17 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
         q1 <- debounce(
           reactive({
             req(input$dataname, input$x, input$y)
-              within(data(), 
-                {
-                  plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                    ggplot2::geom_point()
-                },
-                dataname = as.name(input$dataname),
-                x = as.name(input$x),
-                y = as.name(input$y)
-              )
-          }), 200)
+            within(data(),
+              {
+                plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                  ggplot2::geom_point()
+              },
+              dataname = as.name(input$dataname),
+              x = as.name(input$x),
+              y = as.name(input$y)
+            )
+          }), 200
+        )
 
         q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
 
