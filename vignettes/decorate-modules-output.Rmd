@@ -193,7 +193,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_teal_transform_module(ns("decorate"), transforms = decorators),
+        ui_transform_data(ns("decorate"), transforms = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -223,7 +223,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
             )
         })
 
-        q2 <- srv_teal_transform_module("decorate", data = q1, transforms = decorators)
+        q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
 
         plot_r <- reactive({
           req(q2())
