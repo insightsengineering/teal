@@ -211,15 +211,16 @@ tm_decorated_plot <<- function(label = "module", transforms = list(), decorators
           reactive({
             req(input$dataname, input$x, input$y)
             within(data(),
-                   {
-                     plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                       ggplot2::geom_point()
-                   },
-                   dataname = as.name(input$dataname),
-                   x = as.name(input$x),
-                   y = as.name(input$y)
+              {
+                plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                  ggplot2::geom_point()
+              },
+              dataname = as.name(input$dataname),
+              x = as.name(input$x),
+              y = as.name(input$y)
             )
-          }), 200)
+          }), 200
+        )
 
         q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
 
@@ -244,59 +245,59 @@ tm_decorated_plot <<- function(label = "module", transforms = list(), decorators
 
 
 
-  testthat::describe("srv_teal lockfile", {
-    testthat::it(paste0(
-      "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
-      "and snapshot is copied to teal_app.lock and removed after session ended"
-    ), {
-      testthat::skip_if_not_installed("mirai")
-      testthat::skip_if_not_installed("renv")
-      withr::with_options(
-        list(teal.lockfile.mode = "enabled"),
-        {
-          renv_filename <- "teal_app.lock"
-          shiny::testServer(
-            app = srv_teal,
-            args = list(
-              id = "test",
-              data = teal.data::teal_data(iris = iris),
-              modules = modules(example_module())
-            ),
-            expr = {
-              iter <- 1
-              while (!file.exists(renv_filename) && iter <= 1000) {
-                Sys.sleep(0.5)
-                iter <- iter + 1 # max wait time is 500 seconds
-              }
-              testthat::expect_true(file.exists(renv_filename))
+testthat::describe("srv_teal lockfile", {
+  testthat::it(paste0(
+    "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
+    "and snapshot is copied to teal_app.lock and removed after session ended"
+  ), {
+    testthat::skip_if_not_installed("mirai")
+    testthat::skip_if_not_installed("renv")
+    withr::with_options(
+      list(teal.lockfile.mode = "enabled"),
+      {
+        renv_filename <- "teal_app.lock"
+        shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(example_module())
+          ),
+          expr = {
+            iter <- 1
+            while (!file.exists(renv_filename) && iter <= 1000) {
+              Sys.sleep(0.5)
+              iter <- iter + 1 # max wait time is 500 seconds
             }
-          )
-          testthat::expect_false(file.exists(renv_filename))
-        }
-      )
-    })
-    testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
-      testthat::skip_if_not_installed("mirai")
-      testthat::skip_if_not_installed("renv")
-      withr::with_options(
-        list(teal.lockfile.mode = "disabled"),
-        {
-          renv_filename <- "teal_app.lock"
-          shiny::testServer(
-            app = srv_teal,
-            args = list(
-              id = "test",
-              data = teal.data::teal_data(iris = iris),
-              modules = modules(example_module())
-            ),
-            expr = {
-              testthat::expect_false(file.exists(renv_filename))
-            }
-          )
-        }
-      )
-    })
+            testthat::expect_true(file.exists(renv_filename))
+          }
+        )
+        testthat::expect_false(file.exists(renv_filename))
+      }
+    )
   })
+  testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
+    testthat::skip_if_not_installed("mirai")
+    testthat::skip_if_not_installed("renv")
+    withr::with_options(
+      list(teal.lockfile.mode = "disabled"),
+      {
+        renv_filename <- "teal_app.lock"
+        shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris),
+            modules = modules(example_module())
+          ),
+          expr = {
+            testthat::expect_false(file.exists(renv_filename))
+          }
+        )
+      }
+    )
+  })
+})
 
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
@@ -2060,7 +2061,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       args = list(
         id = "test",
         data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(tm_decorated_plot("interactive", decorators = decorators[['interactive_decorator']]))
+        modules = modules(tm_decorated_plot("interactive", decorators = decorators[["interactive_decorator"]]))
       ),
       expr = {
         # TODO
@@ -2077,8 +2078,9 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         modules = modules(
           tm_decorated_plot(
             "interactive_decorator_lang",
-            decorators = decorators[['interactive_decorator_lang']])
+            decorators = decorators[["interactive_decorator_lang"]]
           )
+        )
       ),
       expr = {
         # TODO
@@ -2092,7 +2094,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       args = list(
         id = "test",
         data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(tm_decorated_plot("static_decorator", decorators = decorators[['static_decorator']]))
+        modules = modules(tm_decorated_plot("static_decorator", decorators = decorators[["static_decorator"]]))
       ),
       expr = {
         # TODO
@@ -2109,7 +2111,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         modules = modules(
           tm_decorated_plot(
             "static_decorator_lang",
-            decorators = decorators[['static_decorator_lang']]
+            decorators = decorators[["static_decorator_lang"]]
           )
         )
       ),
@@ -2128,7 +2130,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         modules = modules(
           tm_decorated_plot(
             "gg_xlab_decorator",
-            decorators = decorators[['gg_xlab_decorator']]
+            decorators = decorators[["gg_xlab_decorator"]]
           )
         )
       ),
@@ -2147,7 +2149,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         modules = modules(
           tm_decorated_plot(
             "failing_decorator",
-            decorators = decorators[['failing_decorator']]
+            decorators = decorators[["failing_decorator"]]
           )
         )
       ),
@@ -2156,8 +2158,6 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       }
     )
   })
-
-
 })
 
 testthat::describe("srv_teal summary table", {
