@@ -200,19 +200,21 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
     },
     server = function(id, data, decorators) {
       moduleServer(id, function(input, output, session) {
-
         datasetnames <- reactive({
           names(data())
         })
 
-        observeEvent(datasetnames(), {
-          updateSelectInput(
-            session = session,
-            inputId = "dataname",
-            choices = datasetnames(),
-            selected = datasetnames()[1]
-          )
-        }, once = TRUE)
+        observeEvent(datasetnames(),
+          {
+            updateSelectInput(
+              session = session,
+              inputId = "dataname",
+              choices = datasetnames(),
+              selected = datasetnames()[1]
+            )
+          },
+          once = TRUE
+        )
 
         datacolnames <- reactive({
           req(input$dataname)
