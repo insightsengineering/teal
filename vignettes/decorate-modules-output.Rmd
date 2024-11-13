@@ -177,7 +177,9 @@ failing_decorator <- teal_transform_module(
 )
 ```
 
-## Example Module
+## Decorating Plots
+
+### Example Module
 
 To include decorators in a `teal` module, pass them as arguments (`ui_args` and `server_args`) to the module’s `ui` and 
 `server` components, where they will be used by `ui/srv_teal_transform_module`:
@@ -244,7 +246,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
 }
 ```
 
-## Example app
+### Application
 
 ```{r}
 library(ggplot2)
@@ -266,9 +268,122 @@ if (interactive()) {
 }
 ```
 
-## To improve
+## Decorating Tables
 
-- Error handling when a decorator throws an error.
-- Rewrite modules so that they always have a graph as `graph` (or `plot`, `g`, `p` etc.) and table as 
-  `table` (or `t` etc.) and listings as `listings` (or `l` etc.). This simplifies/standardizes a construction of
-  `teal_transform_module` which can be re-used in multiple modules. 
+### Example Module
+
+```{r, eval=requireNamespace("DT")}
+library(DT)
+
+# Define a decorator module for customizing table appearance
+custom_table_decorator <- teal_transform_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      selectInput(
+        ns("style"), 
+        "Table Style", 
+        choices = c("Default", "Striped", "Hover"), 
+        selected = "Default"
+      )
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(), 
+          {
+            if (style == "Striped") {
+              table <- 
+                formatStyle(
+                  table, 
+                  columns = attr(table$x, "colnames")[-1], 
+                  target = 'row', 
+                  backgroundColor = '#f9f9f9'
+                )
+            } else if (style == "Hover") {
+              table <- 
+                formatStyle(
+                  table, 
+                  columns = attr(table$x, "colnames")[-1], 
+                  target = 'row', 
+                  backgroundColor = '#f0f0f0'
+                )
+            }
+          }, 
+          style = input$style
+        )
+      })
+    })
+  }
+)
+
+# Main module to display the table with the decorator applied
+tm_custom_table <- function(label = "Customized Table Module", decorators = teal_transform_module()) {
+  module(
+    label = label,
+    ui = function(id, decorators) {
+      ns <- NS(id)
+      div(
+        selectInput(ns("dataset"), "Select Dataset", choices = NULL),
+        ui_transform_data(ns("decorate"), transforms = decorators),
+        DT::dataTableOutput(ns("table_output")),
+        verbatimTextOutput(ns("code_output"))
+      )
+    },
+    server = function(id, data, decorators) {
+      moduleServer(id, function(input, output, session) {
+        observeEvent(data(), {
+          updateSelectInput(inputId = "dataset", choices = names(data()))
+        })
+        
+        base_table <- reactive({
+          req(input$dataset)
+          within(data(), 
+            {
+              table <- 
+                DT::datatable(
+                  dataset,
+                  options = list(
+                    dom = "t",
+                    autoWidth = TRUE
+                  )
+                )
+            }, 
+            dataset = as.name(input$dataset)
+          )
+        })
+        
+        decorated_table <- 
+          srv_transform_data("decorate", data = base_table, transforms = decorators)
+        
+        output$table_output <- DT::renderDT({
+          req(decorated_table())
+          decorated_table()[["table"]]
+        })
+        
+        output$code_output <- renderText({
+          teal.code::get_code(req(decorated_table()))
+        })
+      })
+    },
+    ui_args = list(decorators = decorators),
+    server_args = list(decorators = decorators)
+  )
+}
+```
+
+### Application
+
+```{r, eval=requireNamespace("DT")}
+app <- init(
+  data = teal_data(mtcars = mtcars, iris = iris),
+  modules = modules(
+    tm_custom_table("custom_table", decorators = custom_table_decorator)
+  )
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}```

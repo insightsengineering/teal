@@ -57,6 +57,7 @@ Imports:
     utils
 Suggests:
     bslib,
+    DT (>= 0.33),
     knitr (>= 1.42),
     mirai (>= 1.1.1),
     MultiAssayExperiment,
@@ -82,7 +83,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.reporter, insightsengineering/teal.widgets,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
-    rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
+    rstudio/shinyvalidate, r-lib/testthat, r-lib/withr, rstudio/DT,
     yaml=vubiostat/r-yaml
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
