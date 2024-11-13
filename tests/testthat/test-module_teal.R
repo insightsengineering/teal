@@ -545,6 +545,39 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("receives data with code limited to lines needed only for datanames", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(
+          within(teal_data(), {
+            n_iris <- 10
+            mtcars <- mtcars
+            iris <- head(iris, n_iris)
+            mtcars <- head(mtcars)
+          })
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        testthat::expect_identical(
+          teal.code::get_code(modules_output$module_1()()),
+          paste(
+            "n_iris <- 10",
+            "iris <- head(iris, n_iris)",
+            "stopifnot(rlang::hash(iris) == \"3d48747b41945d02625fe9740bf8e98c\") # @linksto iris",
+            ".raw_data <- list2env(list(iris = iris))\nlockEnvironment(.raw_data) # @linksto .raw_data",
+            sep = "\n"
+          )
+        )
+      }
+    )
+  })
+
   testthat::describe("warnings on missing datanames", {
     testthat::it("warns when dataname is not available", {
       testthat::skip_if_not_installed("rvest")
