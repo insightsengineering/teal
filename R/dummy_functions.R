@@ -13,11 +13,12 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", datanames = "all", transforms = list()) {
+example_module <- function(label = "example teal module", datanames = "all", transforms = list(),
+                           decorators = teal_transform_module()) {
   checkmate::assert_string(label)
   ans <- module(
     label,
-    server = function(id, data) {
+    server = function(id, data, decorators) {
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
         datanames_rv <- reactive(names(req(data())))
@@ -36,28 +37,44 @@ example_module <- function(label = "example teal module", datanames = "all", tra
           )
         })
 
+        table_data <- reactive({
+          within(data(),
+            {
+              table <- dataname
+            },
+            dataname = as.name(input$dataname)
+          )
+        })
+
+        table_data_decorated <- srv_transform_data("decorate", data = table_data, transforms = decorators)
+
         output$text <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
+          req(table_data_decorated)
+          table_data_decorated()[['table']]
         })
 
         teal.widgets::verbatim_popup_srv(
           id = "rcode",
-          verbatim_content = reactive(teal.code::get_code(data())),
+          verbatim_content = reactive(teal.code::get_code(req(table_data_decorated()))),
           title = "Example Code"
         )
       })
     },
-    ui = function(id) {
+    ui = function(id, decorators) {
       ns <- NS(id)
-      teal.widgets::standard_layout(
-        output = verbatimTextOutput(ns("text")),
-        encoding = tags$div(
-          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
-          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
-        )
+      div(
+        teal.widgets::standard_layout(
+          output = verbatimTextOutput(ns("text")),
+          encoding = tags$div(
+            selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
+            teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
+          )
+        ),
+        ui_transform_data(ns("decorate"), transforms = decorators)
       )
     },
+    ui_args = list(decorators = decorators),
+    server_args = list(decorators = decorators),
     datanames = datanames,
     transforms = transforms
   )

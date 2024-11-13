@@ -100,9 +100,17 @@
 #'   )
 #' )
 #'
+#' output_decorator <- teal_transform_module(
+#'   server = make_teal_transform_server(
+#'     expression(
+#'       table <- rev(table)
+#'     )
+#'   )
+#' )
+#'
 #' app <- init(
 #'   data = teal_data(iris = iris),
-#'   modules = example_module(transforms = data_transforms)
+#'   modules = example_module(transforms = data_transforms, decorators = output_decorator)
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
