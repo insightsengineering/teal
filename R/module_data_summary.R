@@ -157,12 +157,6 @@ get_filter_overview_wrapper <- function(teal_data) {
     datanames,
     function(dataname) {
       parent <- teal.data::parent(joinkeys, dataname)
-      # todo: what should we display for a parent dataset?
-      #     - Obs and Subjects
-      #     - Obs only
-      #     - Subjects only
-      # todo (for later): summary table should be displayed in a way that child datasets
-      #       are indented under their parent dataset to form a tree structure
       subject_keys <- if (length(parent) > 0) {
         names(joinkeys[dataname, parent])
       } else {
