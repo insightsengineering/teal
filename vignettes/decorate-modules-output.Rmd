@@ -212,7 +212,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
           updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
 
-        q1 <- debounce(
+        plot_data <- debounce(
           reactive({
             req(input$dataname, input$x, input$y)
             within(data(),
@@ -227,16 +227,16 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
           }), 200
         )
 
-        q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
+        plot_data_decorated <- srv_transform_data("decorate", data = plot_data, transforms = decorators)
 
         plot_r <- reactive({
-          req(q2())
-          q2()[["plot"]]
+          req(plot_data_decorated())
+          plot_data_decorated()[["plot"]]
         })
 
         output$plot <- renderPlot(plot_r())
         output$text <- renderText({
-          teal.code::get_code(req(q2()))
+          teal.code::get_code(req(plot_data_decorated()))
         })
       })
     },
