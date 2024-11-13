@@ -18,7 +18,7 @@ on:
 jobs:
   audit:
     name: Audit Dependencies 🕵️‍♂️
-    uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@dependency_resolution*
   r-cmd:
     name: R CMD Check 🧬
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@dependency_resolution*
@@ -81,7 +81,7 @@ jobs:
         insightsengineering/teal.widgets
   coverage:
     name: Coverage 📔
-    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@dependency_resolution*
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -98,10 +98,10 @@ jobs:
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
-    uses: insightsengineering/r.pkg.template/.github/workflows/linter.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/linter.yaml@dependency_resolution*
   roxygen:
     name: Roxygen 🅾
-    uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@dependency_resolution*
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -116,32 +116,32 @@ jobs:
         insightsengineering/teal.widgets
   gitleaks:
     name: gitleaks 💧
-    uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@dependency_resolution*
   spelling:
     name: Spell Check 🆎
-    uses: insightsengineering/r.pkg.template/.github/workflows/spelling.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/spelling.yaml@dependency_resolution*
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   links:
     if: github.event_name != 'push'
     name: Check URLs 🌐
-    uses: insightsengineering/r.pkg.template/.github/workflows/links.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/links.yaml@dependency_resolution*
   vbump:
     name: Version Bump 🤜🤛
     if: github.event_name == 'push'
-    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@dependency_resolution*
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   version:
     name: Version Check 🏁
-    uses: insightsengineering/r.pkg.template/.github/workflows/version.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/version.yaml@dependency_resolution*
   licenses:
     name: License Check 🃏
-    uses: insightsengineering/r.pkg.template/.github/workflows/licenses.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/licenses.yaml@dependency_resolution*
   style:
     if: github.event_name != 'push'
     name: Style Check 👗
-    uses: insightsengineering/r.pkg.template/.github/workflows/style.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/style.yaml@dependency_resolution*
     with:
       auto-update: true
     secrets:
