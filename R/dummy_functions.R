@@ -50,7 +50,7 @@ example_module <- function(label = "example teal module", datanames = "all", tra
 
         output$text <- renderPrint({
           req(table_data_decorated)
-          table_data_decorated()[['table']]
+          table_data_decorated()[["table"]]
         })
 
         teal.widgets::verbatim_popup_srv(
