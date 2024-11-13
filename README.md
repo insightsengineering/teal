@@ -73,6 +73,7 @@ pak::pak("insightsengineering/teal")
 ## Usage
 
 Testing if editing the README triggers the actions to check the package.
+Second attempt
 
 ```r
 library(teal)
