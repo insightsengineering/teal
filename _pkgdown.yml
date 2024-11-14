@@ -73,6 +73,7 @@ articles:
     contents:
       - creating-custom-modules
       - adding-support-for-reporting
+      - decorate-module-output
   - title: 📃 Technical blueprint
     desc: >
       The purpose of the blueprint is to aid new developer’s comprehension of the
@@ -100,6 +101,8 @@ reference:
       - init
       - teal_data_module
       - teal_transform_module
+      - module_transform_data
+      - make_teal_transform_server
       - module_teal_with_splash
       - module_teal
       - module
