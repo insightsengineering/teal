@@ -19,8 +19,8 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", 
-                           datanames = "all", 
+example_module <- function(label = "example teal module",
+                           datanames = "all",
                            transformators = list(),
                            decorators = teal_transform_module()) {
   checkmate::assert_string(label)

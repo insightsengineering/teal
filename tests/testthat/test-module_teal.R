@@ -1915,11 +1915,11 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             reactive({
               req(data())
               within(data(),
-                 {
-                   output_name <- paste0(output_name, append_text)
-                 },
-                 append_text = input$append_text,
-                 output_name = as.name(output_name)
+                {
+                  output_name <- paste0(output_name, append_text)
+                },
+                append_text = input$append_text,
+                output_name = as.name(output_name)
               )
             })
           })
@@ -1932,7 +1932,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       args = list(
         id = "test",
         data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module("module 1", decorators = output_decorator[['object']]))
+        modules = modules(example_module("module 1", decorators = output_decorator[["object"]]))
       ),
       expr = {
         # TODO
@@ -1954,10 +1954,10 @@ testthat::describe("srv_teal teal_module(s) transformator", {
           reactive({
             req(data())
             within(data(),
-                   {
-                     object <- paste0(object, append_text)
-                   },
-                   append_text = input$append_text
+              {
+                object <- paste0(object, append_text)
+              },
+              append_text = input$append_text
             )
           })
         })
@@ -1976,7 +1976,6 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       }
     )
   })
-
 })
 
 testthat::describe("srv_teal summary table", {
