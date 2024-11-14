@@ -25,7 +25,7 @@ with the value of the respective input (matched by the name) - for example in
 \examples{
 
 trim_iris <- teal_transform_module(
-  label = "Simplified interactive transform for iris",
+  label = "Simplified interactive transformator for iris",
   datanames = "iris",
   ui = function(id) {
     ns <- NS(id)

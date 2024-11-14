@@ -19,8 +19,8 @@ srv_teal_transform_data(
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
-Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.
+Each transformator module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
 If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformators}
 will be added to the \code{datanames}.}
 
@@ -28,8 +28,8 @@ will be added to the \code{datanames}.}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
-\item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transform.
-Help to determine if any previous transform failed, so that following transformators can be disabled
+\item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
+Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
 }
 \value{
