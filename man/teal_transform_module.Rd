@@ -79,7 +79,7 @@ corresponding \code{input} parameter:
 \examples{
 data_transformators <- list(
   teal_transform_module(
-    label = "Static transform for iris",
+    label = "Static transformator for iris",
     datanames = "iris",
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
@@ -92,7 +92,7 @@ data_transformators <- list(
     }
   ),
   teal_transform_module(
-    label = "Interactive transform for iris",
+    label = "Interactive transformator for iris",
     datanames = "iris",
     ui = function(id) {
       ns <- NS(id)

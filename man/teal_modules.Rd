@@ -86,8 +86,8 @@ argument.
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
-Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.
+Each transformator module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
 If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformators}
 will be added to the \code{datanames}.}
 
@@ -163,7 +163,7 @@ changes the behavior as follows:
 \itemize{
 \item If \code{module(datanames)} is \code{NULL} and the \code{transformators} have defined \code{datanames}, the sidebar
 will appear showing the \code{transformators}' datasets, instead of being hidden.
-\item If \code{module(datanames)} is set to specific values and any \code{transform} has \code{datanames = "all"},
+\item If \code{module(datanames)} is set to specific values and any \code{transformator} has \code{datanames = "all"},
 the module may receive extra datasets that could be unnecessary
 }
 }
