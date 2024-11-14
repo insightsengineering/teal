@@ -35,6 +35,13 @@ A \code{teal} module which can be included in the \code{modules} argument to \co
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
+\details{
+This module creates an object called \code{object} that can be modified with decorators.
+The \code{object} is determined by what's selected in \verb{Choose a dataset} input in UI.
+The object can be anything that can be handled by \code{renderPrint()}.
+See the \code{vignette("decorate-modules-output", package = "teal")} or \code{\link{teal_transform_module}}
+to read more about decorators.
+}
 \examples{
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
