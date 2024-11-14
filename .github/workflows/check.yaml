@@ -18,10 +18,10 @@ on:
 jobs:
   audit:
     name: Audit Dependencies 🕵️‍♂️
-    uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@main
   r-cmd:
     name: R CMD Check 🧬
-    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -52,7 +52,7 @@ jobs:
         insightsengineering/teal.widgets
   r-cmd-non-cran:
     name: R CMD Check (non-CRAN) 🧬
-    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -81,7 +81,7 @@ jobs:
         insightsengineering/teal.widgets
   coverage:
     name: Coverage 📔
-    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -98,10 +98,10 @@ jobs:
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
-    uses: insightsengineering/r.pkg.template/.github/workflows/linter.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/linter.yaml@main
   roxygen:
     name: Roxygen 🅾
-    uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -116,32 +116,32 @@ jobs:
         insightsengineering/teal.widgets
   gitleaks:
     name: gitleaks 💧
-    uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main
   spelling:
     name: Spell Check 🆎
-    uses: insightsengineering/r.pkg.template/.github/workflows/spelling.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/spelling.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   links:
     if: github.event_name != 'push'
     name: Check URLs 🌐
-    uses: insightsengineering/r.pkg.template/.github/workflows/links.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/links.yaml@main
   vbump:
     name: Version Bump 🤜🤛
     if: github.event_name == 'push'
-    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   version:
     name: Version Check 🏁
-    uses: insightsengineering/r.pkg.template/.github/workflows/version.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/version.yaml@main
   licenses:
     name: License Check 🃏
-    uses: insightsengineering/r.pkg.template/.github/workflows/licenses.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/licenses.yaml@main
   style:
     if: github.event_name != 'push'
     name: Style Check 👗
-    uses: insightsengineering/r.pkg.template/.github/workflows/style.yaml@fd11bcdd25b3d8904e574c2becc3f72df9add7fc
+    uses: insightsengineering/r.pkg.template/.github/workflows/style.yaml@main
     with:
       auto-update: true
     secrets:
