@@ -1878,7 +1878,8 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("does not throw a warning when transformator returns reactive.event", {
+  testthat::it("throws a warning when transformator returns reactive.event", {
+    testthat::expect_warning(
       testServer(
         app = srv_teal,
         args = list(
@@ -1900,7 +1901,9 @@ testthat::describe("srv_teal teal_module(s) transformator", {
           session$setInputs("teal_modules-active_tab" = "module")
           session$flushReact()
         }
-      )
+      ),
+      "Using eventReactive in teal_transform module server code should be avoided"
+    )
   })
 
   testthat::it("fails when transformator doesn't return reactive", {
