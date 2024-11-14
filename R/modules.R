@@ -197,6 +197,15 @@ module <- function(label = "module",
     )
   }
 
+  if ("datasets" %in% server_formals) {
+    stop(
+      sprintf("Called from module(label = \"%s\", ...)\n  ", label),
+      "`datasets` argument in the server is deprecated and will be removed in the next release. ",
+      "Please use `data` instead.",
+      call. = FALSE
+    )
+  }
+
   ## UI
   checkmate::assert_function(ui)
   ui_formals <- names(formals(ui))
@@ -206,6 +215,15 @@ module <- function(label = "module",
       "\n - id - `teal` will set proper `shiny` namespace for this module.",
       "\n\nFollowing arguments can be used optionally:",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
+    )
+  }
+
+  if (any("datasets" %in% ui_formals)) {
+    stop(
+      sprintf("Called from module(label = \"%s\", ...)\n  ", label),
+      "UI with `data` or `datasets` argument is no longer accepted.\n  ",
+      "If some UI inputs depend on data, please move the logic to your server instead.\n  ",
+      "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
 
