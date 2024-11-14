@@ -24,10 +24,7 @@ There are 2 reserved values that have specific behaviors:
 argument.
 }}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.
-Each transformator module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the
-list. If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the
-\code{transformators} will be added to the \code{datanames}.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.
