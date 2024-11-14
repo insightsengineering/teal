@@ -343,7 +343,7 @@ modules <- function(..., label = "root") {
 #' cat(format(mod))
 #' @export
 format.teal_module <- function(
-    x, indent = 0, is_last = FALSE, parent_prefix = "",
+    x, is_last = FALSE, parent_prefix = "",
     what = c("datasets", "properties", "ui_args", "server_args", "transforms"), ...) {
   empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
