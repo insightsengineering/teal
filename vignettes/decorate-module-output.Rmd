@@ -17,15 +17,10 @@ This document outlines the customization options available for modifying the out
 You will learn how to use `teal_transform_module` to modify and enhance the objects created by `teal` modules, 
 enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
 
-Adjusting input data or customizing module outputs in `teal` is accomplished using `transforms` created through 
+Adjusting input data or customizing module outputs in `teal` is accomplished using `transformators` created through 
 `teal_transform_module`. This document will focus on modifying outputs, and for clarity, we will refer to these 
 output-modifying objects as decoration objects or decorators.
 
-Throughout the examples, you will see references to a `data()` object. 
-This reactive object, built with [`teal_data()`](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html),
-holds all the data used `within` the module as well as the generated output objects. 
-`teal_transform_module` operates on this object and can execute custom R code within the `data()` environment using the `within function`. 
-This approach allows you to pass code directly and evaluate it in the `data()` environment.
 
 ## Decorators
 
@@ -158,7 +153,7 @@ gg_xlab_decorator <- function(output_name) {
 }
 ```
 
-Decorator failures are managed by an internal `teal` mechanism called `trigger_on_success`, which ensures that the `data`
+Decorator failures are managed by an internal `teal` mechanism called **trigger on success**, which ensures that the `data`
 object within the module remains intact. If a decorator fails, it will be ignored, and an appropriate error message will be displayed.
 
 ```{r}
@@ -186,7 +181,7 @@ To include decorators in a `teal` module, pass them as arguments (`ui_args` and 
 
 
 ```{r}
-tm_decorated_plot <- function(label = "module", transforms = list(), decorators = teal_transform_module()) {
+tm_decorated_plot <- function(label = "module", transformators = list(), decorators = teal_transform_module()) {
   module(
     label = label,
     ui = function(id, decorators) {
@@ -195,7 +190,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_teal_transform_data(ns("decorate"), transforms = decorators),
+        ui_teal_transform_data(ns("decorate"), transformators = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -227,7 +222,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
           }), 200
         )
 
-        plot_data_decorated <- srv_teal_transform_data("decorate", data = plot_data, transforms = decorators)
+        plot_data_decorated <- srv_teal_transform_data("decorate", data = plot_data, transformators = decorators)
 
         plot_r <- reactive({
           req(plot_data_decorated())
@@ -271,6 +266,9 @@ if (interactive()) {
 ## Decorating Tables
 
 ### Example Module
+
+The next example contains a decorator that formats the background style of `DT::datable`, depending on the selected `Table Style` (`style`)  input.
+
 
 ```{r, eval=requireNamespace("DT")}
 library(DT)
@@ -318,7 +316,11 @@ custom_table_decorator <- teal_transform_module(
     })
   }
 )
+```
 
+
+
+```{r, eval=requireNamespace("DT")}
 # Main module to display the table with the decorator applied
 tm_custom_table <- function(label = "Customized Table Module", decorators = teal_transform_module()) {
   module(
@@ -327,7 +329,7 @@ tm_custom_table <- function(label = "Customized Table Module", decorators = teal
       ns <- NS(id)
       div(
         selectInput(ns("dataset"), "Select Dataset", choices = NULL),
-        ui_teal_transform_data(ns("decorate"), transforms = decorators),
+        ui_teal_transform_data(ns("decorate"), transformators = decorators),
         DT::dataTableOutput(ns("table_output")),
         verbatimTextOutput(ns("code_output"))
       )
@@ -356,7 +358,7 @@ tm_custom_table <- function(label = "Customized Table Module", decorators = teal
         })
 
         decorated_table <-
-          srv_teal_transform_data("decorate", data = base_table, transforms = decorators)
+          srv_teal_transform_data("decorate", data = base_table, transformators = decorators)
 
         output$table_output <- DT::renderDT({
           req(decorated_table())
