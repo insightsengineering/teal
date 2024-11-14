@@ -98,7 +98,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         class = "teal_validated",
         div(
           class = "teal-output-warning",
-          "One of transforms failed. Please fix and continue."
+          "One of transformators failed. Please fix and continue."
         )
       )
     ),
@@ -125,7 +125,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             width = 3,
             ui_data_summary(ns("data_summary")),
             ui_filter_data(ns("filter_panel")),
-            ui_teal_transform_data(ns("data_transform"), transforms = modules$transforms, class = "well"),
+            ui_teal_transform_data(ns("data_transform"), transformators = modules$transformators, class = "well"),
             class = "teal_secondary_col"
           )
         )
@@ -264,7 +264,7 @@ srv_teal_module.teal_module <- function(id,
       transformed_teal_data <- srv_teal_transform_data(
         "data_transform",
         data = filtered_teal_data,
-        transforms = modules$transforms,
+        transformators = modules$transformators,
         modules = modules,
         is_transform_failed = is_transform_failed
       )

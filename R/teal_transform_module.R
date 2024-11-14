@@ -62,9 +62,9 @@
 #'
 #'
 #' @examples
-#' data_transforms <- list(
+#' data_transformators <- list(
 #'   teal_transform_module(
-#'     label = "Static transform for iris",
+#'     label = "Static transformator for iris",
 #'     datanames = "iris",
 #'     server = function(id, data) {
 #'       moduleServer(id, function(input, output, session) {
@@ -77,7 +77,7 @@
 #'     }
 #'   ),
 #'   teal_transform_module(
-#'     label = "Interactive transform for iris",
+#'     label = "Interactive transformator for iris",
 #'     datanames = "iris",
 #'     ui = function(id) {
 #'       ns <- NS(id)
@@ -110,7 +110,7 @@
 #'
 #' app <- init(
 #'   data = teal_data(iris = iris),
-#'   modules = example_module(transforms = data_transforms, decorators = output_decorator)
+#'   modules = example_module(transformators = data_transformators, decorators = output_decorator)
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
@@ -156,7 +156,7 @@ teal_transform_module <- function(ui = NULL,
 #' @examples
 #'
 #' trim_iris <- teal_transform_module(
-#'   label = "Simplified interactive transform for iris",
+#'   label = "Simplified interactive transformator for iris",
 #'   datanames = "iris",
 #'   ui = function(id) {
 #'     ns <- NS(id)
@@ -167,7 +167,7 @@ teal_transform_module <- function(ui = NULL,
 #'
 #' app <- init(
 #'   data = teal_data(iris = iris),
-#'   modules = example_module(transforms = trim_iris)
+#'   modules = example_module(transformators = trim_iris)
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
@@ -190,15 +190,15 @@ make_teal_transform_server <- function(expr) {
   }
 }
 
-#' Extract all `transforms` from `modules`.
+#' Extract all `transformators` from `modules`.
 #'
 #' @param modules `teal_modules` or `teal_module`
 #' @return A list of `teal_transform_module` nested in the same way as input `modules`.
 #' @keywords internal
-extract_transforms <- function(modules) {
+extract_transformators <- function(modules) {
   if (inherits(modules, "teal_module")) {
-    modules$transforms
+    modules$transformators
   } else if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, extract_transforms)
+    lapply(modules$children, extract_transformators)
   }
 }

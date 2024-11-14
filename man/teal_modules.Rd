@@ -21,7 +21,7 @@ module(
   datanames = "all",
   server_args = NULL,
   ui_args = NULL,
-  transforms = list()
+  transformators = list()
 )
 
 modules(..., label = "root")
@@ -30,7 +30,7 @@ modules(..., label = "root")
   x,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "transforms"),
+  what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
   ...
 )
 
@@ -78,7 +78,7 @@ There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
-\item If \code{transforms} are specified, their \code{datanames} are automatically added to this \code{datanames}
+\item If \code{transformators} are specified, their \code{datanames} are automatically added to this \code{datanames}
 argument.
 }}
 
@@ -86,9 +86,9 @@ argument.
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transforms}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transforms}
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformators}
 will be added to the \code{datanames}.}
 
 \item{...}{\itemize{
@@ -105,7 +105,7 @@ Affects the tree branch character used (L- vs |-)}
 used to maintain the tree structure in nested levels}
 
 \item{what}{(\code{character}) Specifies which metadata to display.
-Possible values: "datasets", "properties", "ui_args", "server_args", "transforms"}
+Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"}
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
 format.teal_modules(). Determines whether to show "TEAL ROOT" header}
@@ -157,12 +157,12 @@ in a warning. Datasets with names starting with . are ignored globally unless ex
 in \code{datanames}.
 }
 
-\section{\code{datanames} with \code{transforms}}{
-When transforms are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+\section{\code{datanames} with \code{transformators}}{
+When transformators are specified, their \code{datanames} are added to the module’s \code{datanames}, which
 changes the behavior as follows:
 \itemize{
-\item If \code{module(datanames)} is \code{NULL} and the \code{transforms} have defined \code{datanames}, the sidebar
-will appear showing the \code{transforms}' datasets, instead of being hidden.
+\item If \code{module(datanames)} is \code{NULL} and the \code{transformators} have defined \code{datanames}, the sidebar
+will appear showing the \code{transformators}' datasets, instead of being hidden.
 \item If \code{module(datanames)} is set to specific values and any \code{transform} has \code{datanames = "all"},
 the module may receive extra datasets that could be unnecessary
 }
@@ -227,21 +227,21 @@ mod <- module(
   server = function(id, data, ...) {},
   ui = function(id, ...) {},
   datanames = c("ADSL", "ADTTE"),
-  transforms = list(),
+  transformators = list(),
   ui_args = list(a = 1, b = "b"),
   server_args = list(x = 5, y = list(p = 1))
 )
 cat(format(mod))
 custom_module <- function(
     label = "label", ui_args = NULL, server_args = NULL,
-    datanames = "all", transforms = list(), bk = FALSE) {
+    datanames = "all", transformators = list(), bk = FALSE) {
   ans <- module(
     label,
     server = function(id, data, ...) {},
     ui = function(id, ...) {
     },
     datanames = datanames,
-    transforms = transforms,
+    transformators = transformators,
     ui_args = ui_args,
     server_args = server_args
   )
@@ -249,7 +249,7 @@ custom_module <- function(
   ans
 }
 
-dummy_transformer <- teal_transform_module(
+dummy_transformator <- teal_transform_module(
   label = "Dummy Transform",
   ui = function(id) div("(does nothing)"),
   server = function(id, data) {
@@ -257,7 +257,7 @@ dummy_transformer <- teal_transform_module(
   }
 )
 
-plot_transformer <- teal_transform_module(
+plot_transformator <- teal_transform_module(
   label = "Plot Settings",
   ui = function(id) div("(does nothing)"),
   server = function(id, data) {
@@ -278,7 +278,7 @@ complete_modules <- modules(
       cache = TRUE,
       debounce = 1000
     ),
-    transforms = list(dummy_transformer),
+    transformators = list(dummy_transformator),
     bk = TRUE
   ),
   modules(
@@ -296,7 +296,7 @@ complete_modules <- modules(
         render_type = "svg",
         cache_plots = TRUE
       ),
-      transforms = list(dummy_transformer, plot_transformer),
+      transformators = list(dummy_transformator, plot_transformator),
       bk = TRUE
     ),
     modules(
@@ -328,7 +328,7 @@ complete_modules <- modules(
 )
 
 cat(format(complete_modules))
-cat(format(complete_modules, what = c("ui_args", "server_args", "transforms")))
+cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 # change the module's datanames
 set_datanames(module(datanames = "all"), "a")
 

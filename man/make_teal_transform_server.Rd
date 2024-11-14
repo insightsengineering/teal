@@ -36,7 +36,7 @@ trim_iris <- teal_transform_module(
 
 app <- init(
   data = teal_data(iris = iris),
-  modules = example_module(transforms = trim_iris)
+  modules = example_module(transformators = trim_iris)
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)

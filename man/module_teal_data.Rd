@@ -38,7 +38,7 @@ srv_validate_reactive_teal_data(
 \item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and}
 
 \item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transform.
-Help to determine if any previous transform failed, so that following transforms can be disabled
+Help to determine if any previous transform failed, so that following transformators can be disabled
 and display a generic failure message.}
 
 \item{data}{(\verb{reactive teal_data})}

@@ -25,7 +25,7 @@ is_slices_equivalent <<- function(x, y, with_attrs = TRUE) {
 }
 
 
-# transforms ------------------------------------------------------------------------------------------------------
+# transformators ------------------------------------------------------------------------------------------------------
 
 transform_list <<- list(
   fail = teal_transform_module(
@@ -181,7 +181,7 @@ decorators <<- list(
   )
 )
 
-tm_decorated_plot <<- function(label = "module", transforms = list(), decorators = teal_transform_module()) {
+tm_decorated_plot <<- function(label = "module", transformators = list(), decorators = teal_transform_module()) {
   module(
     label = label,
     ui = function(id, decorators) {
@@ -190,7 +190,7 @@ tm_decorated_plot <<- function(label = "module", transforms = list(), decorators
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_teal_transform_data(ns("decorate"), transforms = decorators),
+        ui_teal_transform_data(ns("decorate"), transformators = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -222,7 +222,7 @@ tm_decorated_plot <<- function(label = "module", transforms = list(), decorators
           }), 200
         )
 
-        q2 <- srv_teal_transform_data("decorate", data = q1, transforms = decorators)
+        q2 <- srv_teal_transform_data("decorate", data = q1, transformators = decorators)
 
         plot_r <- reactive({
           req(q2())
@@ -902,7 +902,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all transform datasets if module$datanames == 'all'", {
+  testthat::it("receives all transformator datasets if module$datanames == 'all'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -918,7 +918,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -955,7 +955,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -1014,7 +1014,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
@@ -1037,7 +1037,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("does not receive transform datasets not specified in transform$datanames nor modue$datanames", {
+  testthat::it("does not receive transformator datasets not specified in transform$datanames nor modue$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1053,7 +1053,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -1717,7 +1717,7 @@ testthat::describe("srv_teal data reload", {
   })
 })
 
-testthat::describe("srv_teal teal_module(s) transformer", {
+testthat::describe("srv_teal teal_module(s) transformator", {
   testthat::it("evaluates custom qenv call and pass updated teal_data to the module", {
     shiny::testServer(
       app = srv_teal,
@@ -1728,7 +1728,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = transform_list[c("iris", "mtcars")]
+            transformators = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1757,7 +1757,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = transform_list[c("iris", "mtcars")]
+            transformators = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1801,7 +1801,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = transform_list[c("iris", "mtcars")]
+            transformators = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1851,7 +1851,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             label = "module_1",
             server = function(id, data) data,
             datanames = c("iris", "data_from_transform"),
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1878,7 +1878,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("throws warning when transformer return reactive.event", {
+  testthat::it("throws warning when transformator return reactive.event", {
     testthat::expect_warning(
       testServer(
         app = srv_teal,
@@ -1888,7 +1888,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           modules = modules(
             module(
               server = function(id, data) data,
-              transforms = list(
+              transformators = list(
                 teal_transform_module(
                   ui = function(id) textInput("a", "an input"),
                   server = function(id, data) eventReactive(input$a, data())
@@ -1906,7 +1906,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("fails when transformer doesn't return reactive", {
+  testthat::it("fails when transformator doesn't return reactive", {
     testthat::expect_warning(
       # error decorator is mocked to avoid showing the trace error during the
       # test.
@@ -1920,7 +1920,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             modules = modules(
               module(
                 server = function(id, data) data,
-                transforms = list(
+                transformators = list(
                   teal_transform_module(
                     ui = function(id) NULL,
                     server = function(id, data) "whatever"
@@ -1943,7 +1943,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("pauses when transformer throws validation error", {
+  testthat::it("pauses when transformator throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1953,7 +1953,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1971,7 +1971,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("pauses when transformer throws validation error", {
+  testthat::it("pauses when transformator throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1981,7 +1981,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1999,7 +1999,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("pauses when transformer throws qenv error", {
+  testthat::it("pauses when transformator throws qenv error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2009,7 +2009,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -2037,7 +2037,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transforms = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -2352,7 +2352,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transform adding new dataset if specified in module", {
+  testthat::it("reflects transformator adding new dataset if specified in module", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2362,7 +2362,7 @@ testthat::describe("srv_teal summary table", {
           module(
             "module_1",
             server = function(id, data) data,
-            transforms = teal_transform_module(
+            transformators = teal_transform_module(
               datanames = character(0),
               server = function(id, data) {
                 moduleServer(id, function(input, output, session) {
@@ -2390,7 +2390,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transform filtering", {
+  testthat::it("reflects transformator filtering", {
     testthat::it("displays parent's Subjects with count based on primary key", {
       shiny::testServer(
         app = srv_teal,
@@ -2401,7 +2401,7 @@ testthat::describe("srv_teal summary table", {
             module(
               "module_1",
               server = function(id, data) data,
-              transforms = transform_list["iris"]
+              transformators = transform_list["iris"]
             )
           )
         ),
@@ -2494,7 +2494,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("summary table displays MAE dataset added in transforms", {
+  testthat::it("summary table displays MAE dataset added in transformators", {
     data <- within(teal.data::teal_data(), {
       iris <- iris
       mtcars <- mtcars
@@ -2505,7 +2505,7 @@ testthat::describe("srv_teal summary table", {
       args = list(
         id = "test",
         data = data,
-        modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transforms = list(
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transformators = list(
           teal_transform_module(
             server = function(id, data) {
               reactive({

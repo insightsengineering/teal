@@ -13,26 +13,26 @@ NULL
 
 #' @export
 #' @rdname module_transform_data
-ui_teal_transform_data <- function(id, transforms, class = "well") {
+ui_teal_transform_data <- function(id, transformators, class = "well") {
   checkmate::assert_string(id)
-  if (length(transforms) == 0L) {
+  if (length(transformators) == 0L) {
     return(NULL)
   }
-  if (inherits(transforms, "teal_transform_module")) {
-    transforms <- list(transforms)
+  if (inherits(transformators, "teal_transform_module")) {
+    transformators <- list(transformators)
   }
-  checkmate::assert_list(transforms, "teal_transform_module")
+  checkmate::assert_list(transformators, "teal_transform_module")
 
-  labels <- lapply(transforms, function(x) attr(x, "label"))
+  labels <- lapply(transformators, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
-  names(transforms) <- ids
+  names(transformators) <- ids
 
   lapply(
-    names(transforms),
+    names(transformators),
     function(name) {
       child_id <- NS(id)(name)
       ns <- NS(child_id)
-      data_mod <- transforms[[name]]
+      data_mod <- transformators[[name]]
       transform_wrapper_id <- ns(sprintf("wrapper_%s", name))
 
       div( # todo: accordion?
@@ -48,7 +48,7 @@ ui_teal_transform_data <- function(id, transforms, class = "well") {
         tags$i(
           class = "remove pull-right fa fa-angle-down",
           style = "cursor: pointer;",
-          title = "fold/expand transform panel",
+          title = "fold/expand transformator panel",
           onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", transform_wrapper_id)
         ),
         tags$div(
@@ -71,20 +71,20 @@ ui_teal_transform_data <- function(id, transforms, class = "well") {
 
 #' @export
 #' @rdname module_transform_data
-srv_teal_transform_data <- function(id, data, transforms, modules = NULL, is_transform_failed = reactiveValues()) {
+srv_teal_transform_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
-  if (length(transforms) == 0L) {
+  if (length(transformators) == 0L) {
     return(data)
   }
-  if (inherits(transforms, "teal_transform_module")) {
-    transforms <- list(transforms)
+  if (inherits(transformators, "teal_transform_module")) {
+    transformators <- list(transformators)
   }
-  checkmate::assert_list(transforms, "teal_transform_module", null.ok = TRUE)
-  labels <- lapply(transforms, function(x) attr(x, "label"))
+  checkmate::assert_list(transformators, "teal_transform_module", null.ok = TRUE)
+  labels <- lapply(transformators, function(x) attr(x, "label"))
   ids <- get_unique_labels(labels)
-  names(transforms) <- ids
+  names(transformators) <- ids
 
   moduleServer(id, function(input, output, session) {
     Reduce(
@@ -92,7 +92,7 @@ srv_teal_transform_data <- function(id, data, transforms, modules = NULL, is_tra
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_teal_transform_data initializing for { name }.")
           is_transform_failed[[name]] <- FALSE
-          data_out <- transforms[[name]]$server(name, data = data_previous)
+          data_out <- transformators[[name]]$server(name, data = data_previous)
           data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
           observeEvent(data_handled(), {
             if (inherits(data_handled(), "teal_data")) {
@@ -119,7 +119,7 @@ srv_teal_transform_data <- function(id, data, transforms, modules = NULL, is_tra
           output$error_wrapper <- renderUI({
             if (is_previous_failed()) {
               shinyjs::disable(transform_wrapper_id)
-              tags$div("One of previous transforms failed. Please fix and continue.", class = "teal-output-warning")
+              tags$div("One of previous transformators failed. Please fix and continue.", class = "teal-output-warning")
             } else {
               shinyjs::enable(transform_wrapper_id)
               shiny::tagList(
@@ -133,7 +133,7 @@ srv_teal_transform_data <- function(id, data, transforms, modules = NULL, is_tra
           .trigger_on_success(data_handled)
         })
       },
-      x = names(transforms),
+      x = names(transformators),
       init = data
     )
   })

@@ -6,12 +6,12 @@
 \alias{srv_teal_transform_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
-ui_teal_transform_data(id, transforms, class = "well")
+ui_teal_transform_data(id, transformators, class = "well")
 
 srv_teal_transform_data(
   id,
   data,
-  transforms,
+  transformators,
   modules = NULL,
   is_transform_failed = reactiveValues()
 )
@@ -19,9 +19,9 @@ srv_teal_transform_data(
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
 
-\item{transforms}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
 Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transforms}
+If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformators}
 will be added to the \code{datanames}.}
 
 \item{data}{(\verb{reactive teal_data})}
@@ -29,7 +29,7 @@ will be added to the \code{datanames}.}
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
 \item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transform.
-Help to determine if any previous transform failed, so that following transforms can be disabled
+Help to determine if any previous transform failed, so that following transformators can be disabled
 and display a generic failure message.}
 }
 \value{

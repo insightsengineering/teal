@@ -35,12 +35,12 @@ setOldClass("teal_modules")
 #' in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
 #' in `datanames`.
 #'
-#' # `datanames` with `transforms`
-#' When transforms are specified, their `datanames` are added to the module’s `datanames`, which
+#' # `datanames` with `transformators`
+#' When transformators are specified, their `datanames` are added to the module’s `datanames`, which
 #' changes the behavior as follows:
-#' - If `module(datanames)` is `NULL` and the `transforms` have defined `datanames`, the sidebar
-#'   will appear showing the `transforms`' datasets, instead of being hidden.
-#' - If `module(datanames)` is set to specific values and any `transform` has `datanames = "all"`,
+#' - If `module(datanames)` is `NULL` and the `transformators` have defined `datanames`, the sidebar
+#'   will appear showing the `transformators`' datasets, instead of being hidden.
+#' - If `module(datanames)` is set to specific values and any `transformator` has `datanames = "all"`,
 #'   the module may receive extra datasets that could be unnecessary
 #'
 #' @param label (`character(1)`) Label shown in the navigation item for the module or module group.
@@ -69,14 +69,14 @@ setOldClass("teal_modules")
 #' There are 2 reserved values that have specific behaviors:
 #' - The keyword `"all"` includes all datasets available in the data passed to the teal application.
 #' - `NULL` hides the sidebar panel completely.
-#' - If `transforms` are specified, their `datanames` are automatically added to this `datanames`
+#' - If `transformators` are specified, their `datanames` are automatically added to this `datanames`
 #'   argument.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
-#' @param transforms (`list` of `teal_transform_module`) that will be applied to transform module's data input.
-#' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transforms`
+#' @param transformators (`list` of `teal_transform_module`) that will be applied to transformator module's data input.
+#' Each transformator module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
+#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformators`
 #' will be added to the `datanames`.
 #'
 #'
@@ -159,7 +159,7 @@ module <- function(label = "module",
                    datanames = "all",
                    server_args = NULL,
                    ui_args = NULL,
-                   transforms = list()) {
+                   transformators = list()) {
   # argument checking (independent)
   ## `label`
   checkmate::assert_string(label)
@@ -266,12 +266,12 @@ module <- function(label = "module",
     )
   }
 
-  ## `transforms`
-  if (inherits(transforms, "teal_transform_module")) {
-    transforms <- list(transforms)
+  ## `transformators`
+  if (inherits(transformators, "teal_transform_module")) {
+    transformators <- list(transformators)
   }
-  checkmate::assert_list(transforms, types = "teal_transform_module")
-  transform_datanames <- unlist(lapply(transforms, attr, "datanames"))
+  checkmate::assert_list(transformators, types = "teal_transform_module")
+  transform_datanames <- unlist(lapply(transformators, attr, "datanames"))
   combined_datanames <- if (identical(datanames, "all")) {
     "all"
   } else {
@@ -286,7 +286,7 @@ module <- function(label = "module",
       datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
-      transforms = transforms
+      transformators = transformators
     ),
     class = "teal_module"
   )
@@ -329,14 +329,14 @@ modules <- function(..., label = "root") {
 #' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
 #'   format.teal_modules(). Determines whether to show "TEAL ROOT" header
 #' @param what (`character`) Specifies which metadata to display.
-#'   Possible values: "datasets", "properties", "ui_args", "server_args", "transforms"
+#'   Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"
 #' @examples
 #' mod <- module(
 #'   label = "My Custom Module",
 #'   server = function(id, data, ...) {},
 #'   ui = function(id, ...) {},
 #'   datanames = c("ADSL", "ADTTE"),
-#'   transforms = list(),
+#'   transformators = list(),
 #'   ui_args = list(a = 1, b = "b"),
 #'   server_args = list(x = 5, y = list(p = 1))
 #' )
@@ -344,7 +344,7 @@ modules <- function(..., label = "root") {
 #' @export
 format.teal_module <- function(
     x, is_last = FALSE, parent_prefix = "",
-    what = c("datasets", "properties", "ui_args", "server_args", "transforms"), ...) {
+    what = c("datasets", "properties", "ui_args", "server_args", "transformators"), ...) {
   empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
   current_prefix <- paste0(parent_prefix, branch, " ")
@@ -381,8 +381,8 @@ format.teal_module <- function(
   bookmarkable <- isTRUE(attr(x, "teal_bookmarkable"))
   reportable <- "reporter" %in% names(formals(x$server))
 
-  transforms <- if (length(x$transforms) > 0) {
-    paste(sapply(x$transforms, function(t) attr(t, "label")), collapse = ", ")
+  transformators <- if (length(x$transformators) > 0) {
+    paste(sapply(x$transformators, function(t) attr(t, "label")), collapse = ", ")
   } else {
     empty_text
   }
@@ -417,10 +417,10 @@ format.teal_module <- function(
       content_prefix, "|- ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
     )
   }
-  if ("transforms" %in% what) {
+  if ("transformators" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "L- ", crayon::magenta("Transforms       : "), transforms, "\n"
+      content_prefix, "L- ", crayon::magenta("transformators       : "), transformators, "\n"
     )
   }
 
@@ -431,14 +431,14 @@ format.teal_module <- function(
 #' @examples
 #' custom_module <- function(
 #'     label = "label", ui_args = NULL, server_args = NULL,
-#'     datanames = "all", transforms = list(), bk = FALSE) {
+#'     datanames = "all", transformators = list(), bk = FALSE) {
 #'   ans <- module(
 #'     label,
 #'     server = function(id, data, ...) {},
 #'     ui = function(id, ...) {
 #'     },
 #'     datanames = datanames,
-#'     transforms = transforms,
+#'     transformators = transformators,
 #'     ui_args = ui_args,
 #'     server_args = server_args
 #'   )
@@ -446,7 +446,7 @@ format.teal_module <- function(
 #'   ans
 #' }
 #'
-#' dummy_transformer <- teal_transform_module(
+#' dummy_transformator <- teal_transform_module(
 #'   label = "Dummy Transform",
 #'   ui = function(id) div("(does nothing)"),
 #'   server = function(id, data) {
@@ -454,7 +454,7 @@ format.teal_module <- function(
 #'   }
 #' )
 #'
-#' plot_transformer <- teal_transform_module(
+#' plot_transformator <- teal_transform_module(
 #'   label = "Plot Settings",
 #'   ui = function(id) div("(does nothing)"),
 #'   server = function(id, data) {
@@ -475,7 +475,7 @@ format.teal_module <- function(
 #'       cache = TRUE,
 #'       debounce = 1000
 #'     ),
-#'     transforms = list(dummy_transformer),
+#'     transformators = list(dummy_transformator),
 #'     bk = TRUE
 #'   ),
 #'   modules(
@@ -493,7 +493,7 @@ format.teal_module <- function(
 #'         render_type = "svg",
 #'         cache_plots = TRUE
 #'       ),
-#'       transforms = list(dummy_transformer, plot_transformer),
+#'       transformators = list(dummy_transformator, plot_transformator),
 #'       bk = TRUE
 #'     ),
 #'     modules(
@@ -525,7 +525,7 @@ format.teal_module <- function(
 #' )
 #'
 #' cat(format(complete_modules))
-#' cat(format(complete_modules, what = c("ui_args", "server_args", "transforms")))
+#' cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 #' @export
 format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
   if (is_root) {

@@ -13,7 +13,7 @@
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-example_module <- function(label = "example teal module", datanames = "all", transforms = list(),
+example_module <- function(label = "example teal module", datanames = "all", transformators = list(),
                            decorators = teal_transform_module()) {
   checkmate::assert_string(label)
   ans <- module(
@@ -46,7 +46,7 @@ example_module <- function(label = "example teal module", datanames = "all", tra
           )
         })
 
-        table_data_decorated <- srv_teal_transform_data("decorate", data = table_data, transforms = decorators)
+        table_data_decorated <- srv_teal_transform_data("decorate", data = table_data, transformators = decorators)
 
         output$text <- renderPrint({
           req(table_data_decorated)
@@ -70,13 +70,13 @@ example_module <- function(label = "example teal module", datanames = "all", tra
             teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
           )
         ),
-        ui_teal_transform_data(ns("decorate"), transforms = decorators)
+        ui_teal_transform_data(ns("decorate"), transformators = decorators)
       )
     },
     ui_args = list(decorators = decorators),
     server_args = list(decorators = decorators),
     datanames = datanames,
-    transforms = transforms
+    transformators = transformators
   )
   attr(ans, "teal_bookmarkable") <- TRUE
   ans

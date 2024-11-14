@@ -25,8 +25,8 @@
 #' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
-#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transform.
-#' Help to determine if any previous transform failed, so that following transforms can be disabled
+#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transformator.
+#' Help to determine if any previous transformator failed, so that following transformators can be disabled
 #' and display a generic failure message.
 #'
 #' @return `reactive` `teal_data`
@@ -133,7 +133,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
     output$previous_failed <- renderUI({
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
-        tags$div("One of previous transforms failed. Please fix and continue.", class = "teal-output-warning")
+        tags$div("One of previous transformators failed. Please fix and continue.", class = "teal-output-warning")
       } else {
         shinyjs::show("validate_messages")
         NULL
