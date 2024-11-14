@@ -281,9 +281,9 @@ custom_table_decorator <- teal_transform_module(
     ns <- NS(id)
     div(
       selectInput(
-        ns("style"), 
-        "Table Style", 
-        choices = c("Default", "Striped", "Hover"), 
+        ns("style"),
+        "Table Style",
+        choices = c("Default", "Striped", "Hover"),
         selected = "Default"
       )
     )
@@ -292,26 +292,26 @@ custom_table_decorator <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        within(data(), 
+        within(data(),
           {
             if (style == "Striped") {
-              table <- 
+              table <-
                 formatStyle(
-                  table, 
-                  columns = attr(table$x, "colnames")[-1], 
-                  target = 'row', 
-                  backgroundColor = '#f9f9f9'
+                  table,
+                  columns = attr(table$x, "colnames")[-1],
+                  target = "row",
+                  backgroundColor = "#f9f9f9"
                 )
             } else if (style == "Hover") {
-              table <- 
+              table <-
                 formatStyle(
-                  table, 
-                  columns = attr(table$x, "colnames")[-1], 
-                  target = 'row', 
-                  backgroundColor = '#f0f0f0'
+                  table,
+                  columns = attr(table$x, "colnames")[-1],
+                  target = "row",
+                  backgroundColor = "#f0f0f0"
                 )
             }
-          }, 
+          },
           style = input$style
         )
       })
@@ -337,12 +337,12 @@ tm_custom_table <- function(label = "Customized Table Module", decorators = teal
         observeEvent(data(), {
           updateSelectInput(inputId = "dataset", choices = names(data()))
         })
-        
+
         base_table <- reactive({
           req(input$dataset)
-          within(data(), 
+          within(data(),
             {
-              table <- 
+              table <-
                 DT::datatable(
                   dataset,
                   options = list(
@@ -350,19 +350,19 @@ tm_custom_table <- function(label = "Customized Table Module", decorators = teal
                     autoWidth = TRUE
                   )
                 )
-            }, 
+            },
             dataset = as.name(input$dataset)
           )
         })
-        
-        decorated_table <- 
+
+        decorated_table <-
           srv_teal_transform_data("decorate", data = base_table, transforms = decorators)
-        
+
         output$table_output <- DT::renderDT({
           req(decorated_table())
           decorated_table()[["table"]]
         })
-        
+
         output$code_output <- renderText({
           teal.code::get_code(req(decorated_table()))
         })
