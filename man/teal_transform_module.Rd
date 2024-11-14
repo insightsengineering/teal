@@ -118,7 +118,7 @@ data_transformators <- list(
 output_decorator <- teal_transform_module(
   server = make_teal_transform_server(
     expression(
-      table <- rev(table)
+      object <- rev(object)
     )
   )
 )

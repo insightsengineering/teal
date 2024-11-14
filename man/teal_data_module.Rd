@@ -35,9 +35,7 @@ App user will be able to interact and change the data output from the module mul
 
 \item{object}{(\code{teal_data_module})}
 
-\item{code}{(\code{character}, \code{language} or \code{expression}) code to evaluate.
-It is possible to preserve original formatting of the \code{code} by providing a \code{character} or an
-\code{expression} being a result of \code{parse(keep.source = TRUE)}.}
+\item{code}{(\code{character} or \code{language}) code to evaluate. If \code{character}, comments are retained.}
 
 \item{data}{(\code{teal_data_module}) object}
 
