@@ -456,7 +456,7 @@ tm_decorated_plot <- function(
             {
               plot_1 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
                 ggplot2::geom_point() +
-                ggtitle("plot 1")
+                ggplot2::ggtitle("plot 1")
             },
             dataname = as.name(input$dataname),
             x = as.name(input$x),
@@ -470,7 +470,7 @@ tm_decorated_plot <- function(
             {
               plot_2 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
                 ggplot2::geom_point() +
-                ggtitle("plot 2")
+                ggplot2::ggtitle("plot 2")
             },
             dataname = as.name(input$dataname),
             x = as.name(input$x),
