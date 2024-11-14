@@ -3,7 +3,7 @@
 ### New features
 
 * Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object. #669
-* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to modify module outputs. #1228 #1384
+* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to decorate module outputs. #1228 #1384
 * Introduced a new argument `once = FALSE` in `teal_data_module` to possibly reload data during a run time.
 * Possibility to download lockfile to restore app session for reproducibility. #479
 * Introduced a function `set_datanames()` to change a `datanames` of the `teal_module`.
