@@ -75,9 +75,9 @@ setOldClass("teal_modules")
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param transformators (`list` of `teal_transform_module`) that will be applied to transformator module's data input.
-#' Each transformator module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformators`
-#' will be added to the `datanames`.
+#' Each transformator module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the
+#' list. If so, the module developer is responsible to display the UI in the module itself. `datanames` of the
+#' `transformators` will be added to the `datanames`.
 #'
 #'
 #' @param ...

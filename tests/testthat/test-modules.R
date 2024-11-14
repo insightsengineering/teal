@@ -121,7 +121,10 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
     ui_args = NULL
   )
   testthat::expect_s3_class(test_module, "teal_module")
-  testthat::expect_named(test_module, c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators"))
+  testthat::expect_named(
+    test_module,
+    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators")
+  )
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
   testthat::expect_identical(test_module$ui, ui_fun1)

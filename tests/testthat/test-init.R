@@ -83,7 +83,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "init does not throw warning when datanames in modules incompatible w/ datanames in data and there are transformators",
+  "init doesn't throw warning when datanames in modules incompatible w/ datanames in data and there are transformators",
   {
     testthat::expect_no_warning(
       init(

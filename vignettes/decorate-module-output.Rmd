@@ -478,8 +478,14 @@ tm_decorated_plot <- function(
           )
         }), 200)
 
-        plot_1_data_decorated <- srv_teal_transform_data("decorate_1", data = plot_1_data, transformators = decorators[[1]])
-        plot_2_data_decorated <- srv_teal_transform_data("decorate_2", data = plot_2_data, transformators = decorators[[2]])
+        plot_1_data_decorated <- 
+          srv_teal_transform_data(
+            "decorate_1", data = plot_1_data, transformators = decorators[[1]]
+          )
+        plot_2_data_decorated <- 
+          srv_teal_transform_data(
+            "decorate_2", data = plot_2_data, transformators = decorators[[2]]
+          )
 
 
         plot_r <- reactive({
