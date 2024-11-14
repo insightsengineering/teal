@@ -33,12 +33,12 @@ testthat::test_that("e2e: module with decorator shows decorator's UI and output 
 
   app$navigate_teal_tab("Example Module")
 
-  input_id <- 'decorate-transform_module-transform_module-append_text'
+  input_id <- "decorate-transform_module-transform_module-append_text"
 
   testthat::expect_true(
     app$is_visible(
       sprintf(
-        '#%s-%s',
+        "#%s-%s",
         app$active_module_ns(),
         input_id
       )
@@ -47,7 +47,7 @@ testthat::test_that("e2e: module with decorator shows decorator's UI and output 
 
   testthat::expect_identical(
     app$active_module_element_text(
-      paste0(input_id, '-label')
+      paste0(input_id, "-label")
     ),
     "Append text"
   )
@@ -58,7 +58,7 @@ testthat::test_that("e2e: module with decorator shows decorator's UI and output 
   )
 
   testthat::expect_identical(
-    app$get_active_module_output('text'),
+    app$get_active_module_output("text"),
     paste0('[1] \"', "Text Input", "random text", '\"'),
     "[1] \"Text Inputrandom text\""
   )
@@ -66,7 +66,7 @@ testthat::test_that("e2e: module with decorator shows decorator's UI and output 
   app$set_active_module_input(input_id, "new text")
 
   testthat::expect_identical(
-    app$get_active_module_output('text'),
+    app$get_active_module_output("text"),
     paste0('[1] \"', "Text Input", "new text", '\"'),
     "[1] \"Text Inputrandom text\""
   )
@@ -96,12 +96,12 @@ testthat::test_that("e2e: module with decorator, where server fails,  shows shin
 
   app$navigate_teal_tab("Example Module")
 
-  input_id <- 'decorate-transform_module-silent_error-message'
+  input_id <- "decorate-transform_module-silent_error-message"
 
   testthat::expect_true(
     app$is_visible(
       sprintf(
-        '#%s-%s',
+        "#%s-%s",
         app$active_module_ns(),
         input_id
       )
@@ -121,7 +121,7 @@ testthat::test_that("e2e: module with decorator, where server fails,  shows shin
   )
 
   testthat::expect_identical(
-    app$get_active_module_output('text'),
+    app$get_active_module_output("text"),
     "NULL"
   )
 
