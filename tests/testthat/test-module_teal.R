@@ -190,7 +190,7 @@ tm_decorated_plot <<- function(label = "module", transforms = list(), decorators
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_transform_data(ns("decorate"), transforms = decorators),
+        ui_teal_transform_data(ns("decorate"), transforms = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -222,7 +222,7 @@ tm_decorated_plot <<- function(label = "module", transforms = list(), decorators
           }), 200
         )
 
-        q2 <- srv_transform_data("decorate", data = q1, transforms = decorators)
+        q2 <- srv_teal_transform_data("decorate", data = q1, transforms = decorators)
 
         plot_r <- reactive({
           req(q2())
@@ -2097,7 +2097,8 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         modules = modules(tm_decorated_plot("static_decorator", decorators = decorators[["static_decorator"]]))
       ),
       expr = {
-        # TODO
+        # session$setInputs(`teal_modules-active_tab` = "static_decorator")
+        # testthat::expect_identical(modules_output$static_decorator()()[["plot"]], TODO)
       }
     )
   })
