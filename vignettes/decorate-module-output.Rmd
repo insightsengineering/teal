@@ -407,7 +407,6 @@ tm_decorated_plot <- function(
       plot_1 = teal_transform_module(),
       plot_2 = teal_transform_module()
     )) {
-
   module(
     label = label,
     ui = function(id, decorators) {
@@ -434,13 +433,13 @@ tm_decorated_plot <- function(
         observeEvent(data(), {
           updateSelectInput(inputId = "dataname", choices = names(data()))
         })
-        
+
         observeEvent(input$dataname, {
           req(input$dataname)
           updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
           updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
-        
+
         observeEvent(input$plot_type, {
           if (input$plot_type == "plot 1") {
             shinyjs::hide("decorate_2_wrapper")
@@ -450,39 +449,39 @@ tm_decorated_plot <- function(
             shinyjs::hide("decorate_1_wrapper")
           }
         })
-        
+
         plot_1_data <- debounce(reactive({
           req(input$dataname, input$x, input$y)
           within(data(),
-                 {
-                   plot_1 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                     ggplot2::geom_point() +
-                     ggtitle("plot 1")
-                 },
-                 dataname = as.name(input$dataname),
-                 x = as.name(input$x),
-                 y = as.name(input$y)
+            {
+              plot_1 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                ggplot2::geom_point() +
+                ggtitle("plot 1")
+            },
+            dataname = as.name(input$dataname),
+            x = as.name(input$x),
+            y = as.name(input$y)
           )
         }), 200)
-        
+
         plot_2_data <- debounce(reactive({
           req(input$dataname, input$x, input$y)
           within(data(),
-                 {
-                   plot_2 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                     ggplot2::geom_point() +
-                     ggtitle("plot 2")
-                 },
-                 dataname = as.name(input$dataname),
-                 x = as.name(input$x),
-                 y = as.name(input$y)
+            {
+              plot_2 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                ggplot2::geom_point() +
+                ggtitle("plot 2")
+            },
+            dataname = as.name(input$dataname),
+            x = as.name(input$x),
+            y = as.name(input$y)
           )
         }), 200)
-        
+
         plot_1_data_decorated <- srv_teal_transform_data("decorate_1", data = plot_1_data, transformators = decorators[[1]])
         plot_2_data_decorated <- srv_teal_transform_data("decorate_2", data = plot_2_data, transformators = decorators[[2]])
-        
-        
+
+
         plot_r <- reactive({
           req(input$plot_type)
           if (input$plot_type == "plot 1") {
@@ -493,7 +492,7 @@ tm_decorated_plot <- function(
             plot_2_data_decorated()[["plot_2"]]
           }
         })
-        
+
         output$plot <- renderPlot(plot_r())
         output$text <- renderText({
           if (input$plot_type == "plot 1") {
