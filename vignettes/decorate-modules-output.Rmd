@@ -22,7 +22,7 @@ Adjusting input data or customizing module outputs in `teal` is accomplished usi
 output-modifying objects as decoration objects or decorators.
 
 Throughout the examples, you will see references to a `data()` object. 
-This reactive object, built with `teal_data()`[https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html],
+This reactive object, built with [`teal_data()`](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html),
 holds all the data used `within` the module as well as the generated output objects. 
 `teal_transform_module` operates on this object and can execute custom R code within the `data()` environment using the `within function`. 
 This approach allows you to pass code directly and evaluate it in the `data()` environment.
@@ -33,7 +33,7 @@ This approach allows you to pass code directly and evaluate it in the `data()` e
 
 The simplest way to create a decorator is to use `teal_transform_module` without specifying a `ui`.
 This approach adds functionality solely to the server code of the `teal` app. 
-In the following example, we assume that the module contains an object (of class ggplot2) named `plot`. 
+In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`. 
 We modify the title and x-axis label of plot:
 
 ```{r}
@@ -195,7 +195,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_transform_data(ns("decorate"), transforms = decorators),
+        ui_teal_transform_data(ns("decorate"), transforms = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -227,7 +227,7 @@ tm_decorated_plot <- function(label = "module", transforms = list(), decorators 
           }), 200
         )
 
-        plot_data_decorated <- srv_transform_data("decorate", data = plot_data, transforms = decorators)
+        plot_data_decorated <- srv_teal_transform_data("decorate", data = plot_data, transforms = decorators)
 
         plot_r <- reactive({
           req(plot_data_decorated())
@@ -327,7 +327,7 @@ tm_custom_table <- function(label = "Customized Table Module", decorators = teal
       ns <- NS(id)
       div(
         selectInput(ns("dataset"), "Select Dataset", choices = NULL),
-        ui_transform_data(ns("decorate"), transforms = decorators),
+        ui_teal_transform_data(ns("decorate"), transforms = decorators),
         DT::dataTableOutput(ns("table_output")),
         verbatimTextOutput(ns("code_output"))
       )
@@ -356,7 +356,7 @@ tm_custom_table <- function(label = "Customized Table Module", decorators = teal
         })
         
         decorated_table <- 
-          srv_transform_data("decorate", data = base_table, transforms = decorators)
+          srv_teal_transform_data("decorate", data = base_table, transforms = decorators)
         
         output$table_output <- DT::renderDT({
           req(decorated_table())
