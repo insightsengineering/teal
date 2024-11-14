@@ -56,6 +56,7 @@ tm_decorated_plot <- function(
         })
 
         observeEvent(input$dataname, {
+          req(input$dataname)
           updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
           updateSelectInput(inputId = "y", label = "select y", choices = colnames(data()[[input$dataname]]))
         })
@@ -72,8 +73,7 @@ tm_decorated_plot <- function(
 
         q1_1 <- reactive({
           req(input$dataname, input$x, input$y)
-          data() |>
-            within(
+          within(data(),
               {
                 plot_1 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
                   ggplot2::geom_point() +
@@ -87,8 +87,7 @@ tm_decorated_plot <- function(
 
         q2_1 <- reactive({
           req(input$dataname, input$x, input$y)
-          data() |>
-            within(
+          within(data(),
               {
                 plot_2 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
                   ggplot2::geom_point() +
@@ -100,8 +99,8 @@ tm_decorated_plot <- function(
             )
         })
 
-        q1_2 <- srv_teal_data("decorate_1", data = q1_1, data_module = decorator_objs[[1]], modules = module())
-        q2_2 <- srv_teal_data("decorate_2", data = q2_1, data_module = decorator_objs[[2]], modules = module())
+        q1_2 <- srv_transform_data("decorate_1", data = q1_1, data_module = decorator_objs[[1]], modules = module())
+        q2_2 <- srv_transform_data("decorate_2", data = q2_1, data_module = decorator_objs[[2]], modules = module())
 
 
         plot_r <- reactive({
@@ -144,7 +143,7 @@ interactive_decorator_1 <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        data() |> within(
+        within(data(),
           {
             plot_1 <- plot_1 +
               xlab(x_axis_title)
@@ -167,7 +166,7 @@ interactive_decorator_2 <- teal_transform_module(
     moduleServer(id, function(input, output, session) {
       reactive({
         req(data())
-        data() |> within(
+        within(data(),
           {
             plot_2 <- plot_2 +
               xlab(x_axis_title)
