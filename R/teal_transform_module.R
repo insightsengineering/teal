@@ -20,7 +20,7 @@
 #' `teal_transform_module` also allows developers to modify any object created within [`teal.data::teal_data`].
 #' This means you can use it to customize not only datasets but also tables, listings, and graphs.
 #' Some [`teal_modules`] permit developers to inject custom `shiny` modules to enhance displayed outputs.
-#' To manage these `decorators` within your module, use [`ui_transform_data()`] and [`srv_transform_data()`].
+#' To manage these `decorators` within your module, use [`ui_teal_transform_data()`] and [`srv_teal_transform_data()`].
 #' (For further guidance on managing decorators, refer to `ui_args` and `srv_args` in the vignette documentation.)
 #'
 #' See the vignette `vignette("decorate-modules-output", package = "teal")` for additional examples.

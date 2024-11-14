@@ -7,7 +7,8 @@
 example_module(
   label = "example teal module",
   datanames = "all",
-  transforms = list()
+  transforms = list(),
+  decorators = teal_transform_module()
 )
 }
 \arguments{

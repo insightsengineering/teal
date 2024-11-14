@@ -46,7 +46,7 @@ For more details, see the vignette: \code{vignette("data-transform-as-shiny-modu
 \code{teal_transform_module} also allows developers to modify any object created within \code{\link[teal.data:teal_data]{teal.data::teal_data}}.
 This means you can use it to customize not only datasets but also tables, listings, and graphs.
 Some \code{\link{teal_modules}} permit developers to inject custom \code{shiny} modules to enhance displayed outputs.
-To manage these \code{decorators} within your module, use \code{\link[=ui_transform_data]{ui_transform_data()}} and \code{\link[=srv_transform_data]{srv_transform_data()}}.
+To manage these \code{decorators} within your module, use \code{\link[=ui_teal_transform_data]{ui_teal_transform_data()}} and \code{\link[=srv_teal_transform_data]{srv_teal_transform_data()}}.
 (For further guidance on managing decorators, refer to \code{ui_args} and \code{srv_args} in the vignette documentation.)
 
 See the vignette \code{vignette("decorate-modules-output", package = "teal")} for additional examples.
@@ -115,9 +115,17 @@ data_transforms <- list(
   )
 )
 
+output_decorator <- teal_transform_module(
+  server = make_teal_transform_server(
+    expression(
+      table <- rev(table)
+    )
+  )
+)
+
 app <- init(
   data = teal_data(iris = iris),
-  modules = example_module(transforms = data_transforms)
+  modules = example_module(transforms = data_transforms, decorators = output_decorator)
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)

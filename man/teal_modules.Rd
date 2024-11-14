@@ -28,7 +28,6 @@ modules(..., label = "root")
 
 \method{format}{teal_module}(
   x,
-  indent = 0,
   is_last = FALSE,
   parent_prefix = "",
   what = c("datasets", "properties", "ui_args", "server_args", "transforms"),

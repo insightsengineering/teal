@@ -13,7 +13,7 @@ NULL
 
 #' @export
 #' @rdname module_transform_data
-ui_transform_data <- function(id, transforms, class = "well") {
+ui_teal_transform_data <- function(id, transforms, class = "well") {
   checkmate::assert_string(id)
   if (length(transforms) == 0L) {
     return(NULL)
@@ -71,7 +71,7 @@ ui_transform_data <- function(id, transforms, class = "well") {
 
 #' @export
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transforms, modules = NULL, is_transform_failed = reactiveValues()) {
+srv_teal_transform_data <- function(id, data, transforms, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
@@ -90,7 +90,7 @@ srv_transform_data <- function(id, data, transforms, modules = NULL, is_transfor
     Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
-          logger::log_debug("srv_transform_data initializing for { name }.")
+          logger::log_debug("srv_teal_transform_data initializing for { name }.")
           is_transform_failed[[name]] <- FALSE
           data_out <- transforms[[name]]$server(name, data = data_previous)
           data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
