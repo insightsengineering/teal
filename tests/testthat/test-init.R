@@ -108,6 +108,19 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "init throws warning when datanames in modules has reserved name",
+  {
+    testthat::expect_warning(
+      init(
+        data = teal.data::teal_data(all = mtcars),
+        modules = list(example_module())
+      ),
+      "`all` is reserved for internal use\\. Please avoid using it as a dataset name\\."
+    )
+  }
+)
+
 testthat::test_that("init throws when dataname in filter incompatible w/ datanames in data", {
   testthat::expect_warning(
     init(
