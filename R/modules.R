@@ -198,7 +198,7 @@ module <- function(label = "module",
   }
 
   if ("datasets" %in% server_formals) {
-    stop(
+    warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
       "`datasets` argument in the server is deprecated and will be removed in the next release. ",
       "Please use `data` instead.",
@@ -219,7 +219,7 @@ module <- function(label = "module",
   }
 
   if (any(c("data", "datasets") %in% ui_formals)) {
-    stop(
+    warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
       "UI with `data` or `datasets` argument is no longer accepted.\n  ",
       "If some UI inputs depend on data, please move the logic to your server instead.\n  ",

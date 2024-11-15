@@ -916,14 +916,14 @@ testthat::describe("srv_teal teal_modules", {
   })
 
   testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
-    testthat::expect_error(
+    testthat::expect_warning(
       shiny::testServer(
         app = srv_teal,
         args = list(
           id = "test",
-          datasets = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          dataset = teal.data::teal_data(iris = iris, mtcars = mtcars),
           modules = modules(
-            module("module_1", server = function(id, datasets) datasets)
+            module("module_1", server = function(id, data) data)
           )
         ),
         expr = {
