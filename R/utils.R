@@ -134,14 +134,40 @@ check_modules_datanames <- function(modules, datanames) {
 }
 
 #' @rdname check_modules_datanames
-check_modules_datanames_html <- function(modules,
-                                         datanames) {
+check_reserved_datanames <- function(datanames) {
+  reserved_datanames <- datanames[datanames %in% getOption("teal.reserved_datanames")]
+  if (length(reserved_datanames) == 0L) {
+    return(NULL)
+  }
+
+  tags$span(
+    to_html_code_list(reserved_datanames),
+    sprintf(
+      "%s reserved for internal use. Please avoid using %s as %s.",
+      pluralize(reserved_datanames, "is", "are"),
+      pluralize(reserved_datanames, "it", "them"),
+      pluralize(reserved_datanames, "a dataset name", "dataset names")
+    )
+  )
+}
+
+#' @rdname check_modules_datanames
+check_modules_datanames_html <- function(modules, datanames) {
   check_datanames <- check_modules_datanames_recursive(modules, datanames)
   show_module_info <- inherits(modules, "teal_modules") # used in two contexts - module and app
+
+  reserved_datanames <- check_reserved_datanames(datanames)
+
   if (!length(check_datanames)) {
-    return(TRUE)
+    out <- if (is.null(reserved_datanames)) {
+      TRUE
+    } else {
+      reserved_datanames
+    }
+    return(out)
   }
   shiny::tagList(
+    reserved_datanames,
     lapply(
       check_datanames,
       function(mod) {
@@ -444,4 +470,27 @@ build_datanames_error_message <- function(label = NULL,
       rbind(x, y)
     }
   )
+}
+
+#' Pluralize a word depending on the size of the input
+#'
+#' @param x (`object`) to check length for plural.
+#' @param singular (`character`) singular form of the word.
+#' @param plural (optional `character`) plural form of the word. If not given an "s"
+#' is added to the singular form.
+#'
+#' @return A `character` that correctly represents the size of the `x` argument.
+#' @keywords internal
+pluralize <- function(x, singular, plural = NULL) {
+  checkmate::assert_string(singular)
+  checkmate::assert_string(plural, null.ok = TRUE)
+  if (length(x) == 1L) { # Zero length object should use plural form.
+    singular
+  } else {
+    if (is.null(plural)) {
+      sprintf("%ss", singular)
+    } else {
+      plural
+    }
+  }
 }
