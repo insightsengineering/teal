@@ -4,7 +4,6 @@
   teal_default_options <- list(
     teal.show_js_log = FALSE,
     teal.lockfile.mode = "auto",
-    teal.reserved_datanames = c("all", ".raw_data"),
     shiny.sanitize.errors = FALSE
   )
 

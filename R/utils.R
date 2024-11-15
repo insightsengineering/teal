@@ -135,7 +135,7 @@ check_modules_datanames <- function(modules, datanames) {
 
 #' @rdname check_modules_datanames
 check_reserved_datanames <- function(datanames) {
-  reserved_datanames <- datanames[datanames %in% getOption("teal.reserved_datanames")]
+  reserved_datanames <- datanames[datanames %in% c("all", ".raw_data")]
   if (length(reserved_datanames) == 0L) {
     return(NULL)
   }
