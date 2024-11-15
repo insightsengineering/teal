@@ -921,9 +921,9 @@ testthat::describe("srv_teal teal_modules", {
         app = srv_teal,
         args = list(
           id = "test",
-          dataset = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
           modules = modules(
-            module("module_1", server = function(id, data) data)
+            module("module_1", server = function(id, datasets) datasets)
           )
         ),
         expr = {

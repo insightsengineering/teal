@@ -219,7 +219,7 @@ module <- function(label = "module",
   }
 
   if (any(c("data", "datasets") %in% ui_formals)) {
-    warning(
+    stop(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
       "UI with `data` or `datasets` argument is no longer accepted.\n  ",
       "If some UI inputs depend on data, please move the logic to your server instead.\n  ",
