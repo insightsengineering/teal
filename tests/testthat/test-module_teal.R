@@ -645,7 +645,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal-datanames_warning-message"]]$html
+                  output[["datanames_warning-message"]]$html
                 )
               )
             ),
