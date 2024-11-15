@@ -194,6 +194,7 @@ module <- function(label = "module",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
   }
+
   if ("datasets" %in% server_formals) {
     warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
@@ -202,7 +203,6 @@ module <- function(label = "module",
       call. = FALSE
     )
   }
-
 
   ## UI
   checkmate::assert_function(ui)
@@ -215,6 +215,7 @@ module <- function(label = "module",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
     )
   }
+
   if (any(c("data", "datasets") %in% ui_formals)) {
     stop(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
@@ -223,7 +224,6 @@ module <- function(label = "module",
       "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
-
 
   ## `filters`
   if (!missing(filters)) {

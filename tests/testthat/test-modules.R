@@ -31,7 +31,6 @@ testthat::test_that("module warns when server contains datasets argument", {
   )
 })
 
-
 testthat::test_that("module expects server being a shiny server module with any argument", {
   testthat::expect_no_error(module(server = function(id) NULL))
 
