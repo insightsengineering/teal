@@ -108,9 +108,8 @@ testthat::test_that(
   }
 )
 
-testthat::test_that(
-  "init throws warning when datanames in modules has reserved name",
-  {
+testthat::describe("init throws warning when datanames in modules has reserved name", {
+  testthat::it("`all`", {
     testthat::expect_warning(
       init(
         data = teal.data::teal_data(all = mtcars),
@@ -118,8 +117,23 @@ testthat::test_that(
       ),
       "`all` is reserved for internal use\\. Please avoid using it as a dataset name\\."
     )
-  }
-)
+  })
+
+  testthat::it("`.raw_data` and `all`", {
+    td <-
+      testthat::expect_warning(
+        init(
+          data = teal.data::teal_data(
+            all = mtcars,
+            .raw_data = iris,
+            join_keys = teal.data::join_keys(teal.data::join_key(".raw_data", "all", "a_key"))
+          ),
+          modules = list(example_module())
+        ),
+        "`.raw_data` and `all` are reserved for internal use\\. Please avoid using them as dataset names\\."
+      )
+  })
+})
 
 testthat::test_that("init throws when dataname in filter incompatible w/ datanames in data", {
   testthat::expect_warning(
