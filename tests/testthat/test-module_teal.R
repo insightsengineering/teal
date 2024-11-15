@@ -1413,10 +1413,10 @@ testthat::describe("srv_teal filters", {
             c(
               "iris <- iris",
               "mtcars <- mtcars",
-              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
               ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-              "lockEnvironment(.raw_data)",
+              "lockEnvironment(.raw_data) # @linksto .raw_data",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1591,10 +1591,10 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
@@ -1637,10 +1637,10 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
@@ -2445,7 +2445,7 @@ testthat::describe("Datanames with special symbols", {
           }
         ),
         modules = modules(
-          module("module_1", server = function(id, data) data, , datanames = c("iris"))
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
         ),
         filter = teal_slices(
           module_specific = TRUE
@@ -2483,7 +2483,7 @@ testthat::describe("teal.data code with a function defined", {
           }
         })),
         modules = modules(module("module_1", server = function(id, data) data))
-      ), ,
+      ),
       expr = {
         session$setInputs("teal_modules-active_tab" = "module_1")
         session$flushReact()
@@ -2545,9 +2545,9 @@ testthat::describe("teal.data code with a function defined", {
             "y <- x + 1",
             "y + 3",
             "}",
-            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\")", local_env$hash),
+            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\") # @linksto fun", local_env$hash),
             ".raw_data <- list2env(list(fun = fun))",
-            "lockEnvironment(.raw_data)"
+            "lockEnvironment(.raw_data) # @linksto .raw_data"
           )
         )
       }
