@@ -546,16 +546,13 @@ testthat::describe("srv_teal teal_modules", {
   })
 
   testthat::describe("reserved dataname is being used:", {
-    # Shared common code for tests
-    td <- within(teal.data::teal_data(), {
-      all <- mtcars
-      iris <- iris
-    })
-
     testthat::it("multiple datanames with `all` and `.raw_data`", {
       testthat::skip_if_not_installed("rvest")
 
-      td_local <- within(td, {
+      # Shared common code for tests
+      td <- within(teal.data::teal_data(), {
+        all <- mtcars
+        iris <- iris
         .raw_data <- data.frame(
           Species = c("Setosa", "Virginica", "Versicolor"),
           New.Column = c("Setosas are cool", "Virginicas are also cool", "Versicolors are cool too")
@@ -588,11 +585,17 @@ testthat::describe("srv_teal teal_modules", {
 
     testthat::it("single dataname with `all`", {
       testthat::skip_if_not_installed("rvest")
+
+      td <- within(teal.data::teal_data(), {
+        all <- mtcars
+        iris <- iris
+      })
+
       shiny::testServer(
         app = srv_teal,
         args = list(
           id = "test",
-          data = within(td, all$new.column <- 1),
+          data = td,
           modules = modules(
             module("module_1", server = function(id, data) data)
           )
