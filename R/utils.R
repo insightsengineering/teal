@@ -173,18 +173,19 @@ check_modules_datanames_html <- function(modules, datanames) {
       function(mod) {
         tagList(
           tags$span(
-            tags$span(if (length(mod$missing_datanames) == 1) "Dataset" else "Datasets"),
+            tags$span(pluralize(mod$missing_datanames, "Dataset")),
             to_html_code_list(mod$missing_datanames),
             tags$span(
-              paste0(
-                if (length(mod$missing_datanames) > 1) "are missing" else "is missing",
-                if (show_module_info) sprintf(" for module '%s'.", mod$label) else "."
+              sprintf(
+                "%s missing%s.",
+                pluralize(mod$missing_datanames, "is", "are"),
+                if (show_module_info) sprintf(" for module '%s'", mod$label) else ""
               )
             )
           ),
           if (length(datanames) >= 1) {
             tagList(
-              tags$span(if (length(datanames) == 1) "Dataset" else "Datasets"),
+              tags$span(pluralize(datanames, "Dataset")),
               tags$span("available in data:"),
               tagList(
                 tags$span(
@@ -408,7 +409,7 @@ paste_datanames_character <- function(x,
       tagList(
         tags$code(x[.ix]),
         if (.ix != length(x)) {
-          tags$span(ifelse(.ix == length(x) - 1, " and ", ", "))
+          tags$span(if (.ix == length(x) - 1) " and " else ", ")
         }
       )
     })
@@ -426,17 +427,18 @@ build_datanames_error_message <- function(label = NULL,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
                                           tagList = shiny::tagList) { # nolint: object_name.
   tags$span(
-    tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
+    tags$span(pluralize(extra_datanames, "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
     tags$span(
-      paste0(
-        ifelse(length(extra_datanames) > 1, "are missing", "is missing"),
-        ifelse(is.null(label), ".", sprintf(" for tab '%s'.", label))
+      sprintf(
+        "%s missing%s",
+        pluralize(extra_datanames, "is", "are"),
+        if (is.null(label)) "" else sprintf(" for tab '%s'", label)
       )
     ),
     if (length(datanames) >= 1) {
       tagList(
-        tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
+        tags$span(pluralize(datanames, "Dataset")),
         tags$span("available in data:"),
         tagList(
           tags$span(
