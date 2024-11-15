@@ -162,7 +162,7 @@ check_modules_datanames_html <- function(modules, datanames) {
     out <- if (is.null(reserved_datanames)) {
       TRUE
     } else {
-      reserved_datanames
+      shiny::tagList(reserved_datanames)
     }
     return(out)
   }
