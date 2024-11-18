@@ -8,6 +8,7 @@
 * Possibility to download lockfile to restore app session for reproducibility. #479
 * Introduced a function `set_datanames()` to change a `datanames` of the `teal_module`.
 * Datasets which name starts with `.` are ignored when `module`'s `datanames` is set as `"all"`.
+* Added warning when reserved `datanames`, such as `all` and `.raw_data` are being used. 
 
 ### Breaking changes
 
