@@ -46,6 +46,7 @@ example_module <- function(label = "example teal module",
         })
 
         table_data <- reactive({
+          req(input$dataname)
           within(data(),
             {
               object <- dataname
