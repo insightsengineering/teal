@@ -417,7 +417,7 @@ format.teal_module <- function(
   if ("transformators" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "L- ", crayon::magenta("transformators       : "), transformators, "\n"
+      content_prefix, "L- ", crayon::magenta("Transformators       : "), transformators, "\n"
     )
   }
 
