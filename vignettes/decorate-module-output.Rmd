@@ -14,7 +14,7 @@ vignette: >
 
 `teal` is a powerful `shiny`-based framework with built-in modules for interactive data analysis. 
 This document outlines the customization options available for modifying the output of `teal` modules. 
-You will learn how to use [`teal_transform_module`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) to modify and enhance the objects created by `teal` modules, 
+You will learn how to use [`teal_transform_module`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) to modify and enhance the objects created by `teal::modules()`, 
 enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
 
 ## Decorators
