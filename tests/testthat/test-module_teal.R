@@ -545,6 +545,78 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::describe("reserved dataname is being used:", {
+    testthat::it("multiple datanames with `all` and `.raw_data`", {
+      testthat::skip_if_not_installed("rvest")
+
+      # Shared common code for tests
+      td <- within(teal.data::teal_data(), {
+        all <- mtcars
+        iris <- iris
+        .raw_data <- data.frame(
+          Species = c("Setosa", "Virginica", "Versicolor"),
+          New.Column = c("Setosas are cool", "Virginicas are also cool", "Versicolors are cool too")
+        )
+      })
+      teal.data::join_keys(td) <- teal.data::join_keys(join_key(".raw_data", "iris", "Species"))
+
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = td,
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                )
+              )
+            ),
+            "all and .raw_data are reserved for internal use. Please avoid using them as dataset names."
+          )
+        }
+      )
+    })
+
+    testthat::it("single dataname with `all`", {
+      testthat::skip_if_not_installed("rvest")
+
+      td <- within(teal.data::teal_data(), {
+        all <- mtcars
+        iris <- iris
+      })
+
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = td,
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
+                )
+              )
+            ),
+            "all is reserved for internal use. Please avoid using it as a dataset name."
+          )
+        }
+      )
+    })
+  })
+
   testthat::describe("warnings on missing datanames", {
     testthat::it("warns when dataname is not available", {
       testthat::skip_if_not_installed("rvest")
