@@ -177,7 +177,9 @@ failing_decorator <- teal_transform_module(
 ### Example Module
 
 To include decorators in a `teal` module, pass them as arguments (`ui_args` and `server_args`) to the module’s `ui` and 
-`server` components, where they will be used by `ui/srv_teal_transform_module`:
+`server` components, where they will be used by `ui/srv_teal_transform_module`. 
+
+Please find an example module for the sake of this article:
 
 
 ```{r}
