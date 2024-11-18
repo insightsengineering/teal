@@ -188,6 +188,11 @@ teal_transform_module <- function(ui = NULL,
 #'
 #' @export
 make_teal_transform_server <- function(expr) {
+  if (is.call(expr)) {
+    expr <- as.expression(expr)
+  }
+  checkmate::assert_multi_class(expr, c("call", "expression"))
+
   function(id, data) {
     moduleServer(id, function(input, output, session) {
       reactive({

@@ -148,10 +148,10 @@ get_filter_overview_wrapper <- function(teal_data) {
 
   current_data_objs <- sapply(
     datanames,
-    function(name) teal.code::get_var(teal_data(), name),
+    function(name) teal_data()[[name]],
     simplify = FALSE
   )
-  initial_data_objs <- teal.code::get_var(teal_data(), ".raw_data")
+  initial_data_objs <- teal_data()[[".raw_data"]]
 
   out <- lapply(
     datanames,

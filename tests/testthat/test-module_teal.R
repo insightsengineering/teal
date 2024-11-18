@@ -1948,27 +1948,24 @@ testthat::describe("srv_teal teal_module(s) transformator", {
   })
 
   testthat::it("changes module output for a module with a static decorator", {
-    label <- "output_decorator"
     output_decorator <- teal_transform_module(
-      label = label,
-      server = make_teal_transform_server(
-        expression(
-          data1 <- rev(data1)
-        )
-      )
+      label = "output_decorator",
+      server = make_teal_transform_server(expression(object <- rev(object)))
     )
 
     shiny::testServer(
-      app = srv_teal_transform_data,
+      app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
-        transformators = output_decorator
+        data = teal.data::teal_data(object = iris),
+        modules = modules(example_module("mod1", decorators = output_decorator))
       ),
       expr = {
-        data_out <- transformators[[label]]$server(label, data = data)
+        session$setInputs(`teal_modules-active_tab` = "mod1")
+        session$setInputs(`teal_modules-mod1-module-dataname` = "object")
+        session$flushReact()
         testthat::expect_identical(
-          data_out()[["data1"]],
+          modules_output$mod1()()[["object"]],
           rev(iris)
         )
       }
@@ -1977,25 +1974,16 @@ testthat::describe("srv_teal teal_module(s) transformator", {
 
 
   testthat::it("changes module output for a module with a decorator that is a function of an object name", {
-    label <- "output_decorator_name"
-    output_decorator_name <- function(output_name, label) {
+    decorator_name <- function(output_name, label) {
       teal_transform_module(
         label = label,
-        ui = function(id) {
-          ns <- NS(id)
-          div(
-            textInput(ns("append_text"), "Append text", value = "random text")
-          )
-        },
         server = function(id, data) {
           moduleServer(id, function(input, output, session) {
             reactive({
-              req(data())
-              within(data(),
-                {
-                  output_name <- paste0(output_name, append_text)
-                },
-                append_text = input$append_text,
+              within(
+                data(),
+                output_name <- paste0(output_name, " lorem ipsum"),
+                text = input$text,
                 output_name = as.name(output_name)
               )
             })
@@ -2005,60 +1993,66 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     }
 
     shiny::testServer(
-      app = srv_teal_transform_data,
+      app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(teal.data::teal_data(x1 = "ABC")),
-        transformators = output_decorator_name(output_name = "x1", label = label)
+        data = teal.data::teal_data(x1 = "ABC"),
+        modules = modules(
+          example_module(
+            "mod1",
+            decorators = decorator_name(output_name = "object", label = "decorator_name")
+          )
+        )
       ),
       expr = {
-        data_out <- transformators[[label]]$server(label, data = data)
-        testthat::expect_identical(
-          data_out()[["x1"]],
-          paste0("ABC", "random text") # "random text" is not appended
-        )
+        session$setInputs(`teal_modules-active_tab` = "mod1")
+        session$setInputs(`teal_modules-mod1-module-dataname` = "x1")
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum")
       }
     )
   })
 
   testthat::it("changes module output for a module with an interactive decorator", {
-    label <- "output_decorator_int"
-    output_decorator_int <- teal_transform_module(
-      label = label,
-      ui = function(id) {
-        ns <- NS(id)
-        div(
-          textInput(ns("append_text"), "Append text", value = "random text")
-        )
-      },
-      server = function(id, data) {
-        moduleServer(id, function(input, output, session) {
-          reactive({
-            req(data())
-            within(data(),
-              {
-                x1 <- paste0(x1, append_text)
-              },
-              append_text = input$append_text
-            )
+    decorator_name <- function(output_name, label) {
+      teal_transform_module(
+        label = label,
+        server = function(id, data) {
+          moduleServer(id, function(input, output, session) {
+            reactive({
+              req(data(), input$text)
+              within(
+                data(),
+                output_name <- paste0(output_name, " ", text),
+                text = input$text,
+                output_name = as.name(output_name)
+              )
+            })
           })
-        })
-      }
-    )
+        }
+      )
+    }
 
     shiny::testServer(
-      app = srv_teal_transform_data,
+      app = srv_teal,
       args = list(
         id = "test",
-        data = reactive(teal.data::teal_data(x1 = "ABC")),
-        transformators = output_decorator_int
+        data = teal.data::teal_data(x1 = "ABC"),
+        modules = modules(
+          example_module(
+            "mod1",
+            decorators = decorator_name(output_name = "object", label = "decorator_name")
+          )
+        )
       ),
       expr = {
-        data_out <- transformators[[label]]$server(label, data = data)
-        testthat::expect_identical(
-          data_out()[["x1"]],
-          paste0("ABC", "random text") # "random text" is not appended
-        )
+        session$setInputs(`teal_modules-active_tab` = "mod1")
+        session$setInputs(`teal_modules-mod1-module-dataname` = "x1")
+        session$setInputs(`teal_modules-mod1-module-decorate-decorator_name-transform-text` = "lorem ipsum dolor")
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum dolor")
       }
     )
   })

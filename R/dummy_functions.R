@@ -67,6 +67,8 @@ example_module <- function(label = "example teal module",
           verbatim_content = reactive(teal.code::get_code(req(table_data_decorated()))),
           title = "Example Code"
         )
+
+        table_data_decorated
       })
     },
     ui = function(id, decorators) {

@@ -92,7 +92,7 @@ srv_teal_transform_data <- function(id, data, transformators, modules = NULL, is
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_teal_transform_data initializing for { name }.")
           is_transform_failed[[name]] <- FALSE
-          data_out <- transformators[[name]]$server(name, data = data_previous)
+          data_out <- transformators[[name]]$server("transform", data = data_previous)
           data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
           observeEvent(data_handled(), {
             if (inherits(data_handled(), "teal_data")) {
