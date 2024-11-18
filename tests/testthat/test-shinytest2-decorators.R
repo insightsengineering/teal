@@ -1,7 +1,7 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
-testthat::test_that("e2e: module with decorator UI and output is modified interactively upon changes in decorate module", {
+testthat::test_that("e2e: module with decorator UI and output is modified interactively upon changes in decorator", {
   skip_if_too_deep(5)
 
   interactive_decorator <- teal_transform_module(
