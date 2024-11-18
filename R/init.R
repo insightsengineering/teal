@@ -103,16 +103,6 @@ init <- function(data,
 
   # argument checking (independent)
   ## `data`
-  if (inherits(data, "TealData")) {
-    lifecycle::deprecate_stop(
-      when = "0.15.0",
-      what = "init(data)",
-      paste(
-        "TealData is no longer supported. Use teal_data() instead.",
-        "Please follow migration instructions https://github.com/insightsengineering/teal/discussions/988."
-      )
-    )
-  }
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(landing_popup, "teal_module_landing", null.ok = TRUE)
 
