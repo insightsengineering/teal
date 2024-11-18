@@ -69,7 +69,7 @@ static_decorator_lang <- teal_transform_module(
 
 To create a decorator with user interactivity, you can incorporate a `shiny` UI module. 
 In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label. 
-Note how the input parameters are passed to the `within` function (e.g., `x_axis_title`):
+Note how the input parameters are passed to the `within` function using its `...` argument.
 
 ```{r}
 interactive_decorator <- teal_transform_module(
