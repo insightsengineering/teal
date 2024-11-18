@@ -1948,34 +1948,39 @@ testthat::describe("srv_teal teal_module(s) transformator", {
   })
 
   testthat::it("changes module output for a module with a static decorator", {
-    testthat::skip("TODO")
+    label <- "output_decorator"
     output_decorator <- teal_transform_module(
+      label = label,
       server = make_teal_transform_server(
         expression(
-          object <- rev(object)
+          data1 <- rev(data1)
         )
       )
     )
 
     shiny::testServer(
-      app = srv_teal,
+      app = srv_teal_transform_data,
       args = list(
         id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module("module 1", decorators = output_decorator))
+        data = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
+        transformators = output_decorator
       ),
       expr = {
-        # session$setInputs(`teal_modules-active_tab` = "module 1")
-        # testthat::expect_identical(modules_output$module_1()()[["object"]], TODO)
+        data_out <- transformators[[label]]$server(label, data = data)
+        testthat::expect_identical(
+          data_out()[['data1']],
+          rev(iris)
+        )
       }
     )
   })
 
 
-  testthat::it("changes module output for a module with a decorator that is a function of object name", {
-    testthat::skip("TODO")
-    output_decorator <- function(output_name) {
+  testthat::it("changes module output for a module with a decorator that is a function of an object name", {
+    label <- "output_decorator_name"
+    output_decorator_name <- function(output_name, label) {
       teal_transform_module(
+        label = label,
         ui = function(id) {
           ns <- NS(id)
           div(
@@ -2000,21 +2005,27 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     }
 
     shiny::testServer(
-      app = srv_teal,
+      app = srv_teal_transform_data,
       args = list(
         id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module("module 1", decorators = output_decorator[["object"]]))
+        data = reactive(teal.data::teal_data(x1 = "ABC")),
+        transformators = output_decorator_name(output_name = "x1", label = label)
       ),
       expr = {
-        # TODO
+        data_out <- transformators[[label]]$server(label, data = data)
+        testthat::expect_identical(
+          data_out()[['x1']],
+          paste0("ABC", "random text") # "random text" is not appended
+        )
       }
     )
   })
 
-  testthat::it("changes module output for a module with a interactive decorator", {
-    testthat::skip("TODO")
-    output_decorator <- teal_transform_module(
+  testthat::it("changes module output for a module with an interactive decorator", {
+
+    label = "output_decorator_int"
+    output_decorator_int <- teal_transform_module(
+      label = label,
       ui = function(id) {
         ns <- NS(id)
         div(
@@ -2027,7 +2038,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             req(data())
             within(data(),
               {
-                object <- paste0(object, append_text)
+                x1 <- paste0(x1, append_text)
               },
               append_text = input$append_text
             )
@@ -2037,14 +2048,18 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
 
     shiny::testServer(
-      app = srv_teal,
+      app = srv_teal_transform_data,
       args = list(
         id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(example_module("module 1", decorators = output_decorator))
+        data = reactive(teal.data::teal_data(x1 = "ABC")),
+        transformators = output_decorator_int
       ),
       expr = {
-        # TODO
+        data_out <- transformators[[label]]$server(label, data = data)
+        testthat::expect_identical(
+          data_out()[['x1']],
+          paste0("ABC", "random text") # "random text" is not appended
+        )
       }
     )
   })
