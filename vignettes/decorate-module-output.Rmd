@@ -30,7 +30,7 @@ example module that utilizes decorators and a snippet that uses this module in `
 
 ### Server
 
-The simplest way to create a decorator is to use `teal_transform_module` without specifying a `ui`.
+The simplest way to create a decorator is to use `teal_transform_module` with just `server` argument provided (i.e. without UI part).
 This approach adds functionality solely to the server code of the module. 
 In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`. 
 We modify the title and x-axis label of plot:
