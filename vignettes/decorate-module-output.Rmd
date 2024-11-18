@@ -17,12 +17,16 @@ This document outlines the customization options available for modifying the out
 You will learn how to use `teal_transform_module` to modify and enhance the objects created by `teal` modules, 
 enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
 
-Adjusting input data or customizing module outputs in `teal` is accomplished using `transformators` created through 
-`teal_transform_module`. This document will focus on modifying outputs, and for clarity, we will refer to these 
-output-modifying objects as decoration objects or decorators.
-
-
 ## Decorators
+
+One of ways of adjusting input data or customizing module outputs in `teal` is the usage of `transformators` 
+created through `teal_transform_module`. This document will focus on modifying outputs, and for clarity, we will refer 
+to these output-modifying objects as decoration objects or decorators.
+
+In below chapter we will present how to create the simplest static decorator with just a server part. Later, we will
+present examples on more advanced usage, where decorators contain UI. You will also learn about a convenience 
+function that makes it easier to write decorators, called `make_teal_transform_server`. The chapter ends with an 
+example module that utilizes decorators and a snippet that uses this module in `teal` application.
 
 ### Server
 
