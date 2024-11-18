@@ -86,7 +86,7 @@ static_decorator_lang <- teal_transform_module(
 
 ### UI
 
-To create a decorator with user interactivity, you can incorporate a `shiny` UI module. 
+To create a decorator with user interactivity, you can add (optional) UI part and use it in server accordingly (i.e. a typical `shiny` module). 
 In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label. 
 Note how the input parameters are passed to the [`within`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_data_module.html) function using its `...` argument.
 
