@@ -1968,7 +1968,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       expr = {
         data_out <- transformators[[label]]$server(label, data = data)
         testthat::expect_identical(
-          data_out()[['data1']],
+          data_out()[["data1"]],
           rev(iris)
         )
       }
@@ -2014,7 +2014,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       expr = {
         data_out <- transformators[[label]]$server(label, data = data)
         testthat::expect_identical(
-          data_out()[['x1']],
+          data_out()[["x1"]],
           paste0("ABC", "random text") # "random text" is not appended
         )
       }
@@ -2022,8 +2022,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
   })
 
   testthat::it("changes module output for a module with an interactive decorator", {
-
-    label = "output_decorator_int"
+    label <- "output_decorator_int"
     output_decorator_int <- teal_transform_module(
       label = label,
       ui = function(id) {
@@ -2057,7 +2056,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       expr = {
         data_out <- transformators[[label]]$server(label, data = data)
         testthat::expect_identical(
-          data_out()[['x1']],
+          data_out()[["x1"]],
           paste0("ABC", "random text") # "random text" is not appended
         )
       }
