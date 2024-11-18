@@ -55,7 +55,7 @@ static_decorator <- teal_transform_module(
 
 To simplify the repetitive elements of writing new decorators 
 (e.g., `function(id, data), moduleServer, reactive, within(data, ...)`), 
-you can use the `make_teal_transform_server(expr)` convenience function, which takes a `language` as input:
+you can use the [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/latest-tag/reference/make_teal_transform_server.html) convenience function, which takes a `language` as input:
 
 ```{r}
 static_decorator_lang <- teal_transform_module(
