@@ -101,7 +101,7 @@ interactive_decorator <- teal_transform_module(
 )
 ```
 
-As in the earlier examples, `make_teal_transform_server(expr)` can simplify the creation of the server component. 
+As in the earlier examples, [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/latest-tag/reference/make_teal_transform_server.html) can simplify the creation of the server component. 
 This wrapper allows you to use `input` object names directly in the expression:
 
 ```{r}
