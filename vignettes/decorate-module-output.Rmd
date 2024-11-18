@@ -27,7 +27,7 @@ output-modifying objects as decoration objects or decorators.
 ### Server
 
 The simplest way to create a decorator is to use `teal_transform_module` without specifying a `ui`.
-This approach adds functionality solely to the server code of the `teal` app. 
+This approach adds functionality solely to the server code of the module. 
 In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`. 
 We modify the title and x-axis label of plot:
 
