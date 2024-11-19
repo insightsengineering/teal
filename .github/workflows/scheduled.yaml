@@ -64,6 +64,7 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables.officer
   rhub:
     if: >
       github.event_name == 'schedule' || (
