@@ -1481,19 +1481,19 @@ testthat::describe("srv_teal filters", {
           # mtcars has been modified
           expected_mtcars <- subset(mtcars, cyl == 4)
           testthat::expect_identical(modules_output$module_1()()[["mtcars"]], expected_mtcars)
-          expected_code <- c(
-            "iris <- iris",
-            "mtcars <- mtcars",
-            sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
-            sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
-            ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-            "lockEnvironment(.raw_data) # @linksto .raw_data",
-            "mtcars <- dplyr::filter(mtcars, cyl == 4)"
+          expected_code <- paste0(
+            c(
+              "iris <- iris",
+              "mtcars <- mtcars",
+              sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
+              ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
+              "lockEnvironment(.raw_data) # @linksto .raw_data",
+              "mtcars <- dplyr::filter(mtcars, cyl == 4)"
+            ),
+            collapse = "\n"
           )
-          testthat::expect_setequal(
-            strsplit(teal.code::get_code(modules_output$module_1()()), "\n")[[1]],
-            expected_code
-          )
+          testthat::expect_identical(teal.code::get_code(modules_output$module_1()()), expected_code)
         }
       )
     })
@@ -1660,7 +1660,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_iris <- head(expected_iris)
         testthat::expect_identical(modules_output$module_1()()[["iris"]], expected_iris)
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 6)))
-        expected_code <- c(
+        expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
           sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
@@ -1671,9 +1671,9 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
-        )
-        testthat::expect_setequal(
-          strsplit(teal.code::get_code(modules_output$module_1()()), "\n")[[1]],
+        ))
+        testthat::expect_identical(
+          teal.code::get_code(modules_output$module_1()()),
           expected_code
         )
       }
@@ -1706,7 +1706,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
 
         testthat::expect_identical(modules_output$module_1()()[["iris"]], head(iris))
         testthat::expect_identical(modules_output$module_1()()[["mtcars"]], head(subset(mtcars, cyl == 4)))
-        expected_code <- c(
+        expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
           sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
@@ -1716,9 +1716,9 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
-        )
-        testthat::expect_setequal(
-          strsplit(teal.code::get_code(modules_output$module_1()()), "\n")[[1]],
+        ))
+        testthat::expect_identical(
+          teal.code::get_code(modules_output$module_1()()),
           expected_code
         )
       }
