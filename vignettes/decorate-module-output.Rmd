@@ -19,7 +19,7 @@ enabling you to tailor the outputs to your specific requirements without rewriti
 
 ## Decorators
 
-In programming, **decoration** refers to the process of modifying an object while preserving its original class. For instance, given an object `x` of class `"my_class"`, a function `foo(x)` is considered a **decorator function** if it modifies `x` and returns an object that retains the same class. In this context, `x` is referred to as the **decorated object**, and `foo()` is the **decorator function**. Decorators can perform a variety of operations, such as adding new methods or modifying data, while ensuring the object remains compatible with its original usage.
+In programming, **decoration** refers to the process of modifying an object while preserving its original class. For instance, given an object `x` of class `"my_class"`, a function `foo(x)` is considered a **decorator function** if it modifies `x` and returns an object that retains the same class. In this context, `x` is referred to as the **decorated object**, and `foo()` is the **decorator function** or **decorator**. Decorators can perform a variety of operations, such as adding new methods or modifying data, while ensuring the object remains compatible with its original usage.
 
 In the context of `teal` applications, decoration is specifically used to modify module outputs, such as plots or tables. For example, consider a decorator function `add_title(x, <plot_title>)` that takes a `ggplot2` plot object (`x`) as input, applies a title modification, and returns a modified `ggplot2` plot object. This function qualifies as a decorator because it preserves the original class of the input object. Conversely, a function like `create_plot(<data>, <x_axis>, <y_axis>)`, which generates a new plot object, is **not** a decorator, as it produces an output of a different class.
 
@@ -35,8 +35,7 @@ This powerful functionality empowers application developers to significantly cus
 ## Decorators in `teal`
 
 One of ways of adjusting input data or customizing module outputs in `teal` is the usage of `transformators` 
-created through `teal_transform_module`. This document will focus on modifying outputs, and for clarity, we will refer 
-to these output-modifying objects as decoration objects or decorators.
+created through `teal_transform_module`.
 
 In below chapter we will present how to create the simplest static decorator with just a server part. Later, we will
 present examples on more advanced usage, where decorators contain UI. You will also learn about a convenience 
@@ -45,7 +44,7 @@ example module that utilizes decorators and a snippet that uses this module in `
 
 ### Server
 
-The simplest way to create a decorator is to use `teal_transform_module` with just `server` argument provided (i.e. without UI part).
+The simplest way to create a decorator is to use [`teal_transform_module`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) with only `server` argument provided (i.e. without UI part).
 This approach adds functionality solely to the server code of the module. 
 In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`. 
 We modify the title and x-axis label of plot:
@@ -106,9 +105,9 @@ interactive_decorator <- teal_transform_module(
           {
             plot <- plot +
               ggtitle("This is title") +
-              xlab(x_axis_title)
+              xlab(my_title)
           },
-          x_axis_title = input$x_axis_title
+          my_title = input$x_axis_title
         )
       })
     })
@@ -117,7 +116,7 @@ interactive_decorator <- teal_transform_module(
 ```
 
 As in the earlier examples, [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/latest-tag/reference/make_teal_transform_server.html) can simplify the creation of the server component. 
-This wrapper allows you to use `input` object names directly in the expression:
+This wrapper requires you to use `input` object names directly in the expression - note that we have `xlab(x_axis_table)` and not `my_title = input$x_axis_title` together with `xlab(my_title)`.
 
 ```{r}
 interactive_decorator_lang <- teal_transform_module(
