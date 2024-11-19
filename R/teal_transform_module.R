@@ -195,12 +195,14 @@ make_teal_transform_server <- function(expr) {
 
   function(id, data) {
     moduleServer(id, function(input, output, session) {
+      list_env <- eventReactive(
+        input,
+        lapply(rlang::set_names(names(input)), function(x) input[[x]])
+      )
+
       reactive({
         call_with_inputs <- lapply(expr, function(x) {
-          do.call(
-            what = substitute,
-            args = list(expr = x, env = reactiveValuesToList(input))
-          )
+          do.call(what = substitute, args = list(expr = x, env = list_env()))
         })
         eval_code(object = data(), code = as.expression(call_with_inputs))
       })
