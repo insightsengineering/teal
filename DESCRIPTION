@@ -38,7 +38,7 @@ Depends:
     R (>= 4.0),
     shiny (>= 1.8.1),
     teal.data (>= 0.6.0.9017),
-    teal.slice (>= 0.5.1.9009)
+    teal.slice (>= 0.5.1.9015)
 Imports:
     checkmate (>= 2.1.0),
     crayon,
