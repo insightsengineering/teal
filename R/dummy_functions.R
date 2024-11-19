@@ -58,7 +58,6 @@ example_module <- function(label = "example teal module",
         table_data_decorated <- srv_teal_transform_data("decorate", data = table_data, transformators = decorators)
 
         output$text <- renderPrint({
-          req(table_data_decorated())
           table_data_decorated()[["object"]]
         })
 

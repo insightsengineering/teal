@@ -245,7 +245,6 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
         plot_data_decorated <- srv_teal_transform_data("decorate", data = plot_data, transformators = decorators)
 
         plot_r <- reactive({
-          req(plot_data_decorated())
           plot_data_decorated()[["plot"]]
         })
 
@@ -385,10 +384,8 @@ tm_decorated_plot <- function(
         plot_r <- reactive({
           req(input$plot_type)
           if (input$plot_type == "plot 1") {
-            req(plot_1_data_decorated())
             plot_1_data_decorated()[["plot_1"]]
           } else if (input$plot_type == "plot 2") {
-            req(plot_2_data_decorated())
             plot_2_data_decorated()[["plot_2"]]
           }
         })
