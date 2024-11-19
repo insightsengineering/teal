@@ -18,17 +18,18 @@ on:
           - branch-cleanup
           - revdepcheck
 
+env:
+  LOOKUP_REFS: |
+    insightsengineering/teal.data
+    insightsengineering/teal.slice
+    insightsengineering/teal.code
+    insightsengineering/teal.logger
+    insightsengineering/teal.reporter
+    insightsengineering/teal.widgets
+    insightsengineering/rtables
+    insightsengineering/rtables.officer
+
 jobs:
-  env:
-    LOOKUP_REFS: |
-      insightsengineering/teal.data
-      insightsengineering/teal.slice
-      insightsengineering/teal.code
-      insightsengineering/teal.logger
-      insightsengineering/teal.reporter
-      insightsengineering/teal.widgets
-      insightsengineering/rtables
-      insightsengineering/rtables.officer
   dependency-test:
     if: >
       github.event_name == 'schedule' || (

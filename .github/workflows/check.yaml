@@ -15,17 +15,18 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  LOOKUP_REFS: |
+    insightsengineering/teal.data
+    insightsengineering/teal.slice
+    insightsengineering/teal.code
+    insightsengineering/teal.logger
+    insightsengineering/teal.reporter
+    insightsengineering/teal.widgets
+    insightsengineering/rtables
+    insightsengineering/rtables.officer
+
 jobs:
-  env:
-    LOOKUP_REFS: |
-      insightsengineering/teal.data
-      insightsengineering/teal.slice
-      insightsengineering/teal.code
-      insightsengineering/teal.logger
-      insightsengineering/teal.reporter
-      insightsengineering/teal.widgets
-      insightsengineering/rtables
-      insightsengineering/rtables.officer
   audit:
     name: Audit Dependencies 🕵️‍♂️
     uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@main
