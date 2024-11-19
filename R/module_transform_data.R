@@ -30,7 +30,7 @@ ui_teal_transform_data <- function(id, transformators, class = "well") {
   lapply(
     names(transformators),
     function(name) {
-      child_id <- NS(id)(name)
+      child_id <- NS(id, name)
       ns <- NS(child_id)
       data_mod <- transformators[[name]]
       transform_wrapper_id <- ns(sprintf("wrapper_%s", name))
@@ -56,7 +56,7 @@ ui_teal_transform_data <- function(id, transformators, class = "well") {
           if (is.null(data_mod$ui)) {
             return(NULL)
           } else {
-            data_mod$ui(id = ns(name))
+            data_mod$ui(id = ns("transform"))
           },
           div(
             id = ns("validate_messages"),
@@ -87,7 +87,7 @@ srv_teal_transform_data <- function(id, data, transformators, modules = NULL, is
   names(transformators) <- ids
 
   moduleServer(id, function(input, output, session) {
-    Reduce(
+    module_output <- Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_teal_transform_data initializing for { name }.")
@@ -136,5 +136,6 @@ srv_teal_transform_data <- function(id, data, transformators, modules = NULL, is
       x = names(transformators),
       init = data
     )
+    module_output
   })
 }
