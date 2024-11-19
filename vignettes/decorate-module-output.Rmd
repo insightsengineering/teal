@@ -31,6 +31,14 @@ The decoration process can vary in complexity:
 
 This powerful functionality empowers application developers to significantly customize outputs beyond the default capabilities provided by existing module parameters. Decorations allow for advanced modifications, enabling highly tailored and dynamic user experiences in `teal` applications.
 
+## Requirements and Limitations
+
+To use decorators effectively, certain requirements must be met:
+
+1. **Module Support**: While `teal` provides the core functionality for decorators, the module must explicitly support this functionality. Developers should ensure that the module has been designed to work with decorators.
+2. **Matching Object Names**: Decorators must reference object names that align with the internal naming conventions of the module. Each module may use different names for its output objects, such as `plot` or `table`. This alignment is critical for successful decoration.
+
+It is recommended to review the module documentation or source code to understand its internal object naming before applying decorators.
 
 ## Decorators in `teal`
 
