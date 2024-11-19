@@ -99,6 +99,8 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
+        insightsengineering/rtables.officer
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
