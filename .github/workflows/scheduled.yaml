@@ -19,6 +19,16 @@ on:
           - revdepcheck
 
 jobs:
+  env:
+    LOOKUP_REFS: |
+      insightsengineering/teal.data
+      insightsengineering/teal.slice
+      insightsengineering/teal.code
+      insightsengineering/teal.logger
+      insightsengineering/teal.reporter
+      insightsengineering/teal.widgets
+      insightsengineering/rtables
+      insightsengineering/rtables.officer
   dependency-test:
     if: >
       github.event_name == 'schedule' || (
@@ -57,15 +67,7 @@ jobs:
     name: revdepcheck ↩️
     uses: insightsengineering/r.pkg.template/.github/workflows/revdepcheck.yaml@main
     with:
-      lookup-refs: |
-        insightsengineering/teal.data
-        insightsengineering/teal.slice
-        insightsengineering/teal.code
-        insightsengineering/teal.logger
-        insightsengineering/teal.reporter
-        insightsengineering/teal.widgets
-        insightsengineering/rtables
-        insightsengineering/rtables.officer
+      lookup-refs: ${{ env.LOOKUP_REFS }}
   rhub:
     if: >
       github.event_name == 'schedule' || (
@@ -75,12 +77,4 @@ jobs:
     name: R-hub 🌐
     uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@main
     with:
-      lookup-refs: |
-        insightsengineering/teal.data
-        insightsengineering/teal.slice
-        insightsengineering/teal.code
-        insightsengineering/teal.logger
-        insightsengineering/teal.reporter
-        insightsengineering/teal.widgets
-        insightsengineering/rtables
-        insightsengineering/rtables.officer
+      lookup-refs: ${{ env.LOOKUP_REFS }}

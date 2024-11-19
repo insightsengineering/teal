@@ -16,6 +16,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  env:
+    LOOKUP_REFS: |
+      insightsengineering/teal.data
+      insightsengineering/teal.slice
+      insightsengineering/teal.code
+      insightsengineering/teal.logger
+      insightsengineering/teal.reporter
+      insightsengineering/teal.widgets
+      insightsengineering/rtables
+      insightsengineering/rtables.officer
   audit:
     name: Audit Dependencies 🕵️‍♂️
     uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@main
@@ -43,15 +53,8 @@ jobs:
       unit-test-report-brand: >-
         https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/teal.png
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/teal.data
-        insightsengineering/teal.slice
-        insightsengineering/teal.code
-        insightsengineering/teal.logger
-        insightsengineering/teal.reporter
-        insightsengineering/teal.widgets
-        insightsengineering/rtables
-        insightsengineering/rtables.officer
+      lookup-refs: ${{ env.LOOKUP_REFS }}
+
   r-cmd-non-cran:
     name: R CMD Check (non-CRAN) 🧬
     uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
@@ -74,15 +77,8 @@ jobs:
         checking for unstated dependencies in vignettes .* NOTE
         checking top-level files .* NOTE
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/teal.data
-        insightsengineering/teal.slice
-        insightsengineering/teal.code
-        insightsengineering/teal.logger
-        insightsengineering/teal.reporter
-        insightsengineering/teal.widgets
-        insightsengineering/rtables
-        insightsengineering/rtables.officer
+      lookup-refs: ${{ env.LOOKUP_REFS }}
+
   coverage:
     name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
@@ -92,15 +88,7 @@ jobs:
       additional-env-vars: |
         NOT_CRAN=true
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/teal.data
-        insightsengineering/teal.slice
-        insightsengineering/teal.code
-        insightsengineering/teal.logger
-        insightsengineering/teal.reporter
-        insightsengineering/teal.widgets
-        insightsengineering/rtables
-        insightsengineering/rtables.officer
+      lookup-refs: ${{ env.LOOKUP_REFS }}
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
@@ -113,15 +101,7 @@ jobs:
     with:
       auto-update: true
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/teal.data
-        insightsengineering/teal.slice
-        insightsengineering/teal.code
-        insightsengineering/teal.logger
-        insightsengineering/teal.reporter
-        insightsengineering/teal.widgets
-        insightsengineering/rtables
-        insightsengineering/rtables.officer
+      lookup-refs: ${{ env.LOOKUP_REFS }}
   gitleaks:
     name: gitleaks 💧
     uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main
