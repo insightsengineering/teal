@@ -64,6 +64,7 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
         insightsengineering/rtables.officer
   rhub:
     if: >
@@ -81,3 +82,5 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
+        insightsengineering/rtables.officer
