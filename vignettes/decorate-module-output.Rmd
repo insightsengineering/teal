@@ -302,34 +302,33 @@ if (interactive()) {
 
 ### Example Module
 
-It is also possible to pass multiple decorators into a module. See below example that shows how you can
-manipulate multiple decorators passed to the module. In this scenario different decorator is selected,
-depending on the input of the module, to be applied to the `ggplot2` plot.
+It is possible to pass any number of decorators (n) to a module. The example below demonstrates how to handle a dynamic number of decorators, allowing the user to choose which decorator to apply from a list. This makes the module more flexible and capable of accommodating various customization requirements.
 
 ```{r}
 library(ggplot2)
-tm_decorated_plot <- function(
-    label = "module",
-    decorators = list(
-      plot_1 = teal_transform_module(),
-      plot_2 = teal_transform_module()
-    )) {
+tm_decorated_plot <- function(label = "module", decorators = list(teal_transform_module())) {
   module(
     label = label,
     ui = function(id, decorators) {
       ns <- NS(id)
       div(
-        selectInput(ns("dataname"), label = "select dataname", choices = NULL),
-        selectInput(ns("x"), label = "select x", choices = NULL),
-        selectInput(ns("y"), label = "select y", choices = NULL),
-        selectInput(ns("plot_type"), "plot type", choices = c("plot 1", "plot 2"), selected = "plot 1"),
-        div(
-          id = ns("decorate_1_wrapper"),
-          ui_teal_transform_data(ns("decorate_1"), transformators = decorators[[1]])
+        selectInput(ns("dataname"), label = "Select dataset", choices = NULL),
+        selectInput(ns("x"), label = "Select x-axis", choices = NULL),
+        selectInput(ns("y"), label = "Select y-axis", choices = NULL),
+        selectInput(
+          ns("decorator_choice"),
+          "Choose decorator",
+          choices = names(decorators),
+          selected = names(decorators)[1]
         ),
         div(
-          id = ns("decorate_2_wrapper"),
-          ui_teal_transform_data(ns("decorate_2"), transformators = decorators[[2]])
+          id = ns("decorate_wrapper"),
+          lapply(names(decorators), function(decorator_name) {
+            div(
+              id = ns(paste0("decorate_", decorator_name)),
+              ui_teal_transform_data(ns(paste0("decorate_", decorator_name)), transformators = decorators[[decorator_name]])
+            )
+          })
         ),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
@@ -340,79 +339,60 @@ tm_decorated_plot <- function(
         observeEvent(data(), {
           updateSelectInput(inputId = "dataname", choices = names(data()))
         })
-
+        
         observeEvent(input$dataname, {
           req(input$dataname)
           updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
           updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
-
-        observeEvent(input$plot_type, {
-          if (input$plot_type == "plot 1") {
-            shinyjs::hide("decorate_2_wrapper")
-            shinyjs::show("decorate_1_wrapper")
-          } else {
-            shinyjs::show("decorate_2_wrapper")
-            shinyjs::hide("decorate_1_wrapper")
-          }
+        
+        observeEvent(input$decorator_choice, {
+          # Dynamically show only the selected decorator's UI
+          lapply(names(decorators), function(decorator_name) {
+            if (decorator_name == input$decorator_choice) {
+              shinyjs::show(paste0("decorate_", decorator_name))
+            } else {
+              shinyjs::hide(paste0("decorate_", decorator_name))
+            }
+          })
         })
-
-        plot_1_data <- debounce(reactive({
-          req(input$dataname, input$x, input$y)
-          within(data(),
-            {
-              plot_1 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                ggplot2::geom_point() +
-                ggplot2::ggtitle("plot 1")
-            },
-            dataname = as.name(input$dataname),
-            x = as.name(input$x),
-            y = as.name(input$y)
-          )
-        }), 200)
-
-        plot_2_data <- debounce(reactive({
-          req(input$dataname, input$x, input$y)
-          within(data(),
-            {
-              plot_2 <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                ggplot2::geom_point() +
-                ggplot2::ggtitle("plot 2")
-            },
-            dataname = as.name(input$dataname),
-            x = as.name(input$x),
-            y = as.name(input$y)
-          )
-        }), 200)
-
-        plot_1_data_decorated <-
-          srv_teal_transform_data(
-            "decorate_1",
-            data = plot_1_data, transformators = decorators[[1]]
-          )
-        plot_2_data_decorated <-
-          srv_teal_transform_data(
-            "decorate_2",
-            data = plot_2_data, transformators = decorators[[2]]
-          )
-
-
-        plot_r <- reactive({
-          req(input$plot_type)
-          if (input$plot_type == "plot 1") {
-            plot_1_data_decorated()[["plot_1"]]
-          } else if (input$plot_type == "plot 2") {
-            plot_2_data_decorated()[["plot_2"]]
-          }
+        
+        dataname <- reactive(req(input$dataname))
+        x <- reactive({
+          req(input$x, input$x %in% colnames(data()[[dataname()]]))
+          input$x
         })
-
-        output$plot <- renderPlot(plot_r())
+        
+        y <- reactive({
+          req(input$y, input$y %in% colnames(data()[[dataname()]]))
+          input$y
+        })
+        plot_data <- reactive({
+          req(dataname(), x(), y())
+          within(data(), {
+            plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
+          },
+          dataname = as.name(dataname()),
+          x = as.name(x()),
+          y = as.name(y())
+          )
+        })
+        
+        selected_decorator <- reactive({
+          req(input$decorator_choice)
+          input$decorator_choice
+        })
+        
+        decorated_data <- srv_teal_transform_data(
+          paste0("decorate_", selected_decorator()),
+          data = plot_data,
+          transformators = decorators[[selected_decorator()]]
+        )
+        
+        output$plot <- renderPlot(decorated_data()[["plot"]])
         output$text <- renderText({
-          if (input$plot_type == "plot 1") {
-            teal.code::get_code(req(plot_1_data()))
-          } else if (input$plot_type == "plot 2") {
-            teal.code::get_code(req(plot_2_data()))
-          }
+          req(input$decorator_choice)
+          teal.code::get_code(req(decorated_data()))
         })
       })
     },
@@ -420,6 +400,7 @@ tm_decorated_plot <- function(
     server_args = list(decorators = decorators)
   )
 }
+
 ```
 
 
@@ -436,11 +417,11 @@ interactive_decorator_1 <- teal_transform_module(
       reactive({
         req(data())
         within(data(),
-          {
-            plot_1 <- plot_1 +
-              xlab(x_axis_title)
-          },
-          x_axis_title = input$x_axis_title
+               {
+                 plot <- plot +
+                   xlab(title)
+               },
+               title = input$x_axis_title
         )
       })
     })
@@ -459,11 +440,34 @@ interactive_decorator_2 <- teal_transform_module(
       reactive({
         req(data())
         within(data(),
-          {
-            plot_2 <- plot_2 +
-              xlab(x_axis_title)
-          },
-          x_axis_title = input$x_axis_title
+               {
+                 plot <- plot +
+                   xlab(title)
+               },
+               title = input$x_axis_title
+        )
+      })
+    })
+  }
+)
+
+interactive_decorator_3 <- teal_transform_module(
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis 3")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(),
+               {
+                 plot <- plot +
+                   xlab(title)
+               },
+               title = input$x_axis_title
         )
       })
     })
@@ -477,12 +481,12 @@ interactive_decorator_2 <- teal_transform_module(
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
-    tm_decorated_plot("identity"),
     tm_decorated_plot(
-      "interactive",
+      "dynamic_decorators",
       decorators = list(
-        plot_1 = interactive_decorator_1,
-        plot_2 = interactive_decorator_2
+        decorator_1 = interactive_decorator_1,
+        decorator_2 = interactive_decorator_2,
+        decorator_3 = interactive_decorator_3
       )
     )
   )
