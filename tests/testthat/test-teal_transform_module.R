@@ -46,7 +46,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
   })
 })
 
-testthat::test_that("xxx_teal_transform_datasame the same namespace is shared between tranformator UI and server", {
+testthat::test_that("ui_teal_transform_dataname and srv_teal_transform_dataname have the same namespace for transform module", {
   ttm <- teal_transform_module(
     ui = function(id) tags$div(id = NS(id, "a_div"), "a div"),
     server = function(id, data) {
