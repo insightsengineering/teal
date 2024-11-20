@@ -47,32 +47,34 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
 })
 
 testthat::test_that(
-  "ui_teal_transform_dataname and srv_teal_transform_dataname have the same namespace for transform module", {
-  ttm <- teal_transform_module(
-    ui = function(id) tags$div(id = NS(id, "a_div"), "a div"),
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        full_id <- session$ns("a_div")
-        reactive(within(data(), id <- full_id, full_id = full_id))
-      })
-    }
-  )
+  "ui_teal_transform_dataname and srv_teal_transform_dataname have the same namespace for transform module",
+  {
+    ttm <- teal_transform_module(
+      ui = function(id) tags$div(id = NS(id, "a_div"), "a div"),
+      server = function(id, data) {
+        moduleServer(id, function(input, output, session) {
+          full_id <- session$ns("a_div")
+          reactive(within(data(), id <- full_id, full_id = full_id))
+        })
+      }
+    )
 
-  initial_id <- "a-path-to-an-inner-namespace"
-  ui <- ui_teal_transform_data(initial_id, ttm)
-  # Find element that ends in "-a_div"
-  expected_id <- unname(unlist(ui)[grepl(".*-a_div$", unlist(ui))][1])
+    initial_id <- "a-path-to-an-inner-namespace"
+    ui <- ui_teal_transform_data(initial_id, ttm)
+    # Find element that ends in "-a_div"
+    expected_id <- unname(unlist(ui)[grepl(".*-a_div$", unlist(ui))][1])
 
-  testServer(
-    app = srv_teal_transform_data,
-    args = list(
-      id = initial_id,
-      data = reactive(within(teal_data(), iris <- iris)),
-      transformators = ttm
-    ),
-    expr = {
-      session$flushReact()
-      testthat::expect_equal(module_output()$id, expected_id)
-    }
-  )
-})
+    testServer(
+      app = srv_teal_transform_data,
+      args = list(
+        id = initial_id,
+        data = reactive(within(teal_data(), iris <- iris)),
+        transformators = ttm
+      ),
+      expr = {
+        session$flushReact()
+        testthat::expect_equal(module_output()$id, expected_id)
+      }
+    )
+  }
+)
