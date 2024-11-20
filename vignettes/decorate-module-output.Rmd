@@ -240,19 +240,21 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
           req(input$x, input$x %in% colnames(data()[[dataname()]]))
           input$x
         })
-        
+
         y <- reactive({
           req(input$y, input$y %in% colnames(data()[[dataname()]]))
           input$y
         })
         plot_data <- reactive({
           req(dataname(), x(), y())
-          within(data(), {
-            plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
-          },
-          dataname = as.name(dataname()),
-          x = as.name(x()),
-          y = as.name(y())
+          within(data(),
+            {
+              plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                ggplot2::geom_point()
+            },
+            dataname = as.name(dataname()),
+            x = as.name(x()),
+            y = as.name(y())
           )
         })
 
