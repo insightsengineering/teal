@@ -16,8 +16,8 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
         transformators = output_decorator
       ),
       expr = {
-        data_out <- transformators[[label]]$server(label, data = data)
-        testthat::expect_identical(data_out()[["data1"]], rev(iris))
+        session$flushReact()
+        testthat::expect_identical(module_output()[["data1"]], rev(iris))
       }
     )
   })
@@ -39,9 +39,39 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
         transformators = output_decorator
       ),
       expr = {
-        data_out <- transformators[[label]]$server(label, data = data)
-        testthat::expect_identical(data_out()[["data1"]], rev(iris))
+        session$flushReact()
+        testthat::expect_identical(module_output()[["data1"]], rev(iris))
       }
     )
   })
+})
+
+testthat::test_that("xxx_teal_transform_datasame the same namespace is shared between tranformator UI and server", {
+  ttm <- teal_transform_module(
+    ui = function(id) tags$div(id = NS(id, "a_div"), "a div"),
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        full_id <- session$ns("a_div")
+        reactive(within(data(), id <- full_id, full_id = full_id))
+      })
+    }
+  )
+
+  initial_id <- "a-path-to-an-inner-namespace"
+  ui <- ui_teal_transform_data(initial_id, ttm)
+  # Find element that ends in "-a_div"
+  expected_id <- unname(unlist(ui)[grepl(".*-a_div$", unlist(ui))][1])
+
+  testServer(
+    app = srv_teal_transform_data,
+    args = list(
+      id = initial_id,
+      data = reactive(within(teal_data(), iris <- iris)),
+      transformators = ttm
+    ),
+    expr = {
+      session$flushReact()
+      testthat::expect_equal(module_output()$id, expected_id)
+    }
+  )
 })

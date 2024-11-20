@@ -23,7 +23,7 @@ In programming, **decoration** refers to the process of modifying an object whil
 
 In the context of `teal` applications, decoration is specifically used to modify module outputs, such as plots or tables. For example, consider a decorator function `add_title(x, <plot_title>)` that takes a `ggplot2` plot object (`x`) as input, applies a title modification, and returns a modified `ggplot2` plot object. This function qualifies as a decorator because it preserves the original class of the input object. Conversely, a function like `create_plot(<data>, <x_axis>, <y_axis>)`, which generates a new plot object, is **not** a decorator, as it produces an output of a different class.
 
-Preserving the object's class during decoration is essential for compatibility. It ensures that the subsequent "display" logic can seamlessly handle both decorated and undecorated objects.
+Preserving the object's class during decoration is essential for compatibility. It ensures that the subsequent "display" logic can seamlessly handle both decorated and non-decorated objects.
 
 The decoration process can vary in complexity:
 - **Simple Decorations**: Single-step modifications, such as a single method call that does not require additional data.
