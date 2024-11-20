@@ -326,7 +326,10 @@ tm_decorated_plot <- function(label = "module", decorators = list(teal_transform
           lapply(names(decorators), function(decorator_name) {
             div(
               id = ns(paste0("decorate_", decorator_name)),
-              ui_teal_transform_data(ns(paste0("decorate_", decorator_name)), transformators = decorators[[decorator_name]])
+              ui_teal_transform_data(
+                ns(paste0("decorate_", decorator_name)), 
+                transformators = decorators[[decorator_name]]
+              )
             )
           })
         ),
