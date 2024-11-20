@@ -24,6 +24,8 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
+        insightsengineering/rtables.officer
   validation:
     name: R Package Validation report 📃
     needs: release
@@ -39,6 +41,8 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
+        insightsengineering/rtables.officer
   release:
     name: Create release 🎉
     uses: insightsengineering/r.pkg.template/.github/workflows/release.yaml@main
@@ -71,6 +75,8 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
+        insightsengineering/rtables.officer
   coverage:
     name: Coverage 📔
     needs: [release, docs]
@@ -88,6 +94,8 @@ jobs:
         insightsengineering/teal.logger
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
+        insightsengineering/rtables
+        insightsengineering/rtables.officer
   wasm:
     name: Build WASM packages 🧑‍🏭
     needs: release
