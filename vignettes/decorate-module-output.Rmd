@@ -235,20 +235,26 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
           updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
 
-        plot_data <- debounce(
-          reactive({
-            req(input$dataname, input$x, input$y)
-            within(data(),
-              {
-                plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                  ggplot2::geom_point()
-              },
-              dataname = as.name(input$dataname),
-              x = as.name(input$x),
-              y = as.name(input$y)
-            )
-          }), 200
-        )
+        dataname <- reactive(req(input$dataname))
+        x <- reactive({
+          req(input$x, input$x %in% colnames(data()[[dataname()]]))
+          input$x
+        })
+        
+        y <- reactive({
+          req(input$y, input$y %in% colnames(data()[[dataname()]]))
+          input$y
+        })
+        plot_data <- reactive({
+          req(dataname(), x(), y())
+          within(data(), {
+            plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
+          },
+          dataname = as.name(dataname()),
+          x = as.name(x()),
+          y = as.name(y())
+          )
+        })
 
         plot_data_decorated <- srv_teal_transform_data("decorate", data = plot_data, transformators = decorators)
 
