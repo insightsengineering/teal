@@ -355,37 +355,42 @@ tm_decorated_plot <- function(label = "module", decorators = list(teal_transform
           })
         })
         
-        plot_data <- debounce(
-          reactive({
-            req(input$dataname, input$x, input$y)
-            within(data(),
-                   {
-                     plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
-                       ggplot2::geom_point() +
-                       ggplot2::ggtitle("Base Plot")
-                   },
-                   dataname = as.name(input$dataname),
-                   x = as.name(input$x),
-                   y = as.name(input$y)
-            )
-          }), 200
-        )
-        
-        decorated_plot <- reactive({
-          req(input$decorator_choice)
-          selected_decorator <- input$decorator_choice
-          decorated_data <- srv_teal_transform_data(
-            paste0("decorate_", selected_decorator),
-            data = plot_data,
-            transformators = decorators[[selected_decorator]]
-          )
-          decorated_data()
+        dataname <- reactive(req(input$dataname))
+        x <- reactive({
+          req(input$x, input$x %in% colnames(data()[[dataname()]]))
+          input$x
         })
         
-        output$plot <- renderPlot(decorated_plot()[["plot"]])
+        y <- reactive({
+          req(input$y, input$y %in% colnames(data()[[dataname()]]))
+          input$y
+        })
+        plot_data <- reactive({
+          req(dataname(), x(), y())
+          within(data(), {
+            plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
+          },
+          dataname = as.name(dataname()),
+          x = as.name(x()),
+          y = as.name(y())
+          )
+        })
+        
+        selected_decorator <- reactive({
+          req(input$decorator_choice)
+          input$decorator_choice
+        })
+        
+        decorated_data <- srv_teal_transform_data(
+          paste0("decorate_", selected_decorator()),
+          data = plot_data,
+          transformators = decorators[[selected_decorator()]]
+        )
+        
+        output$plot <- renderPlot(decorated_data()[["plot"]])
         output$text <- renderText({
           req(input$decorator_choice)
-          teal.code::get_code(teal.code::get_code(req(decorated_plot())))
+          teal.code::get_code(req(decorated_data()))
         })
       })
     },
