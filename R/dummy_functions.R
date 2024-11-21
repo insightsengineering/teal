@@ -58,10 +58,10 @@ example_module <- function(label = "example teal module",
         })
 
         table_data_decorated_no_print <- srv_teal_transform_data("decorate", data = table_data, transformators = decorators)
-        table_data_decorated <- reactive(within(table_data_decorated_no_print(), expr = object))
+        table_data_decorated <- reactive(within(req(table_data_decorated_no_print()), expr = object))
 
         output$text <- renderPrint({
-          req(table_data) # Ensure original errors from module are displayed
+          req(table_data()) # Ensure original errors from module are displayed
           table_data_decorated()[["object"]]
         })
 
@@ -81,10 +81,10 @@ example_module <- function(label = "example teal module",
           output = verbatimTextOutput(ns("text")),
           encoding = tags$div(
             selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
+            ui_teal_transform_data(ns("decorate"), transformators = decorators),
             teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
           )
-        ),
-        ui_teal_transform_data(ns("decorate"), transformators = decorators)
+        )
       )
     },
     ui_args = list(decorators = decorators),

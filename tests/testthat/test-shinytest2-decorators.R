@@ -28,21 +28,18 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
 
   app <- TealAppDriver$new(
     data = teal.data::teal_data(x = "Text Input"),
-    modules = example_module(label = "Example Module", decorators = interactive_decorator)
+    modules = example_module(label = "Example Module", decorators = list(interactive_decorator))
   )
 
   app$navigate_teal_tab("Example Module")
 
-  input_id <- "decorate-transform_module-transform_module-append_text"
+  input_id <- Reduce(
+    shiny::NS,
+    c("decorate", "transform_module", "transform", "append_text")
+  )
 
   testthat::expect_true(
-    app$is_visible(
-      sprintf(
-        "#%s-%s",
-        app$active_module_ns(),
-        input_id
-      )
-    )
+    app$is_visible(sprintf("#%s-%s", app$active_module_ns(), input_id))
   )
 
   testthat::expect_identical(
@@ -91,38 +88,32 @@ testthat::test_that("e2e: module with decorator, where server fails,  shows shin
   )
   app <- TealAppDriver$new(
     data = teal.data::teal_data(iris = iris),
-    modules = example_module(label = "Example Module", decorators = failing_decorator)
+    modules = example_module(label = "Example Module", decorators = list(failing_decorator))
   )
 
   app$navigate_teal_tab("Example Module")
 
-  input_id <- "decorate-transform_module-silent_error-message"
-
-  testthat::expect_true(
-    app$is_visible(
-      sprintf(
-        "#%s-%s",
-        app$active_module_ns(),
-        input_id
-      )
-    )
+  input_id <- Reduce(
+    shiny::NS,
+    c("decorate", "transform_module", "silent_error", "message")
   )
+
+  testthat::expect_true(app$is_visible(sprintf("#%s-%s", app$active_module_ns(), input_id)))
 
   app$expect_validation_error()
 
-  testthat::expect_identical(
-    app$active_module_element_text(input_id),
-    paste(
+  testthat::expect_setequal(
+    strsplit(app$active_module_element_text(input_id), "\n")[[1]],
+    c(
       "Shiny error when executing the `data` module.",
       "This is error",
-      "Check your inputs or contact app developer if error persists.",
-      sep = "\n"
+      "Check your inputs or contact app developer if error persists."
     )
   )
 
-  testthat::expect_identical(
-    app$get_active_module_output("text"),
-    "NULL"
+  testthat::expect_setequal(
+    app$get_active_module_output("text")$type,
+    c("shiny.silent.error", "validation")
   )
 
   app$stop()
