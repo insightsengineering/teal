@@ -260,8 +260,14 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
           )
         })
 
-        plot_data_decorated_no_print <- srv_teal_transform_data("decorate", data = plot_data, transformators = decorators)
-        plot_data_decorated <- reactive(within(req(plot_data_decorated_no_print()), expr = plot))
+        plot_data_decorated_no_print <- srv_teal_transform_data(
+          "decorate",
+          data = plot_data,
+          transformators = decorators
+        )
+        plot_data_decorated <- reactive(
+          within(req(plot_data_decorated_no_print()), expr = plot)
+        )
 
         plot_r <- reactive({
           plot_data_decorated()[["plot"]]
