@@ -22,8 +22,10 @@
 example_module <- function(label = "example teal module",
                            datanames = "all",
                            transformators = list(),
-                           decorators = teal_transform_module()) {
+                           decorators = NULL) {
   checkmate::assert_string(label)
+  checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
+
   ans <- module(
     label,
     server = function(id, data, decorators) {
@@ -55,9 +57,11 @@ example_module <- function(label = "example teal module",
           )
         })
 
-        table_data_decorated <- srv_teal_transform_data("decorate", data = table_data, transformators = decorators)
+        table_data_decorated_no_print <- srv_teal_transform_data("decorate", data = table_data, transformators = decorators)
+        table_data_decorated <- reactive(within(table_data_decorated_no_print(), expr = object))
 
         output$text <- renderPrint({
+          req(table_data) # Ensure original errors from module are displayed
           table_data_decorated()[["object"]]
         })
 
