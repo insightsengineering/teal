@@ -9,6 +9,9 @@
 #' to read more about decorators.
 #'
 #' @inheritParams teal_modules
+#' @param decorators `r lifecycle::badge("experimental")` (`list` of `teal_transform_module` or `NULL`) optional,
+#' if not `NULL`, decorator for tables or plots included in the module.
+#'
 #' @return A `teal` module which can be included in the `modules` argument to [init()].
 #' @examples
 #' app <- init(
