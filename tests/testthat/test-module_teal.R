@@ -1960,7 +1960,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       args = list(
         id = "test",
         data = teal.data::teal_data(object = iris),
-        modules = modules(example_module("mod1", decorators = output_decorator))
+        modules = modules(example_module("mod1", decorators = list(output_decorator)))
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "mod1")
@@ -2002,7 +2002,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
         modules = modules(
           example_module(
             "mod1",
-            decorators = decorator_name(output_name = "object", label = "decorator_name")
+            decorators = list(decorator_name(output_name = "object", label = "decorator_name"))
           )
         )
       ),
@@ -2044,7 +2044,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
         modules = modules(
           example_module(
             "mod1",
-            decorators = decorator_name(output_name = "object", label = "decorator_name")
+            decorators = list(decorator_name(output_name = "object", label = "decorator_name"))
           )
         )
       ),
