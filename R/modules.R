@@ -524,7 +524,7 @@ format.teal_module <- function(
 #' cat(format(complete_modules))
 #' cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 #' @export
-format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
+format.teal_modules <- function(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
   if (is_root) {
     header <- pasten(crayon::bold("TEAL ROOT"))
     new_parent_prefix <- "  " #' Initial indent for root level
@@ -551,7 +551,6 @@ format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, 
         children_output <- c(
           children_output,
           format(child,
-            indent = indent,
             is_root = FALSE,
             is_last = is_last_child,
             parent_prefix = new_parent_prefix,
@@ -562,7 +561,6 @@ format.teal_modules <- function(x, indent = 0, is_root = TRUE, is_last = FALSE, 
         children_output <- c(
           children_output,
           format(child,
-            indent = indent,
             is_last = is_last_child,
             parent_prefix = new_parent_prefix,
             ...

@@ -34,7 +34,7 @@ modules(..., label = "root")
   ...
 )
 
-\method{format}{teal_modules}(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
+\method{format}{teal_modules}(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 

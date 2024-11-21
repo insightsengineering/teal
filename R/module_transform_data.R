@@ -5,8 +5,9 @@
 #'
 #' @inheritParams module_teal_data
 #' @inheritParams teal_modules
+#' @param class (character(1)) CSS class to be added in the `div` wrapper tag.
+
 #' @return `reactive` `teal_data`
-#'
 #'
 #' @name module_transform_data
 NULL
