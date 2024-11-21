@@ -209,7 +209,9 @@ Please find an example module for the sake of this article:
 
 
 ```{r}
-tm_decorated_plot <- function(label = "module", transformators = list(), decorators = teal_transform_module()) {
+tm_decorated_plot <- function(label = "module", transformators = list(), decorators = NULL) {
+  checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
+
   module(
     label = label,
     ui = function(id, decorators) {
@@ -258,7 +260,8 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
           )
         })
 
-        plot_data_decorated <- srv_teal_transform_data("decorate", data = plot_data, transformators = decorators)
+        plot_data_decorated_no_print <- srv_teal_transform_data("decorate", data = plot_data, transformators = decorators)
+        plot_data_decorated <- reactive(within(req(plot_data_decorated_no_print()), expr = plot))
 
         plot_r <- reactive({
           plot_data_decorated()[["plot"]]
@@ -284,12 +287,12 @@ app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
     tm_decorated_plot("identity"),
-    tm_decorated_plot("no-ui", decorators = static_decorator),
-    tm_decorated_plot("lang", decorators = static_decorator_lang),
-    tm_decorated_plot("interactive", decorators = interactive_decorator),
-    tm_decorated_plot("interactive-from lang", decorators = interactive_decorator_lang),
-    tm_decorated_plot("from-fun", decorators = gg_xlab_decorator("plot")),
-    tm_decorated_plot("failing", decorators = failing_decorator)
+    tm_decorated_plot("no-ui", decorators = list(static_decorator)),
+    tm_decorated_plot("lang", decorators = list(static_decorator_lang)),
+    tm_decorated_plot("interactive", decorators = list(interactive_decorator)),
+    tm_decorated_plot("interactive-from lang", decorators = list(interactive_decorator_lang)),
+    tm_decorated_plot("from-fun", decorators = list(gg_xlab_decorator("plot"))),
+    tm_decorated_plot("failing", decorators = list(failing_decorator))
   )
 )
 
@@ -306,7 +309,8 @@ It is possible to pass any number of decorators (n) to a module. The example bel
 
 ```{r}
 library(ggplot2)
-tm_decorated_plot <- function(label = "module", decorators = list(teal_transform_module())) {
+tm_decorated_plot <- function(label = "module", decorators = NULL) {
+  checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
   module(
     label = label,
     ui = function(id, decorators) {
@@ -388,11 +392,12 @@ tm_decorated_plot <- function(label = "module", decorators = list(teal_transform
           input$decorator_choice
         })
 
-        decorated_data <- srv_teal_transform_data(
+        decorated_data_no_print <- srv_teal_transform_data(
           paste0("decorate_", selected_decorator()),
           data = plot_data,
           transformators = decorators[[selected_decorator()]]
         )
+        decorated_data <- reactive(within(req(decorated_data_no_print()), expr = plot))
 
         output$plot <- renderPlot(decorated_data()[["plot"]])
         output$text <- renderText({
