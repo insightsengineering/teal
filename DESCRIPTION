@@ -57,6 +57,7 @@ Imports:
     utils
 Suggests:
     bslib,
+    ggplot2 (>= 3.4.0),
     knitr (>= 1.42),
     mirai (>= 1.1.1),
     MultiAssayExperiment,
