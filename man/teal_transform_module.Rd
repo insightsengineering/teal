@@ -125,7 +125,7 @@ output_decorator <- teal_transform_module(
 
 app <- init(
   data = teal_data(iris = iris),
-  modules = example_module(transformators = data_transformators, decorators = output_decorator)
+  modules = example_module(transformators = data_transformators, decorators = list(output_decorator))
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
