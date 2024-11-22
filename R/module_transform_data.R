@@ -147,3 +147,41 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
     module_output
   })
 }
+
+#' @rdname module_transform_data
+#' @param expr (`expression`) to evaluate on the output of the decoration.
+#' Must be inline code. See [within()]
+#' Default is `NULL` which won't append any expression.
+#' @details
+#' `srv_decorate_teal_data` is a wrapper around `srv_transform_teal_data` that
+#' allows to decorate the data with additional reactive expressions.
+#' When original `teal_data` object is in error state, it will show that error
+#' first.
+#'
+#' @export
+srv_decorate_teal_data <- function(id, data, decorators, expr = NULL) {
+  expr_quosure <- rlang::enexpr(expr)
+  decorated_output <- srv_transform_teal_data(id, data = data, transformators = decorators)
+
+  reactive({
+    req(data(), decorated_output()) # ensure original errors are displayed
+    if (is.null(expr_quosure)) {
+      decorated_output()
+    } else {
+      do.call(
+        base::within,
+        list(
+          data = decorated_output(),
+          expr = expr_quosure
+        )
+      )
+    }
+  })
+}
+
+#' @rdname module_transform_data
+#' @details
+#' `ui_decorate_teal_data` is a wrapper around `ui_transform_teal_data`.
+#'
+#' @export
+ui_decorate_teal_data <- ui_transform_teal_data

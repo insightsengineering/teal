@@ -4,6 +4,8 @@
 \alias{module_transform_data}
 \alias{ui_transform_teal_data}
 \alias{srv_transform_teal_data}
+\alias{srv_decorate_teal_data}
+\alias{ui_decorate_teal_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
 ui_transform_teal_data(id, transformators, class = "well")
@@ -15,6 +17,10 @@ srv_transform_teal_data(
   modules = NULL,
   is_transform_failed = reactiveValues()
 )
+
+srv_decorate_teal_data(id, data, decorators, expr = NULL)
+
+ui_decorate_teal_data(id, transformators, class = "well")
 }
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
@@ -30,6 +36,10 @@ srv_transform_teal_data(
 \item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
+
+\item{expr}{(\code{expression}) to evaluate on the output of the decoration.
+Must be inline code. See \code{\link[=within]{within()}}
+Default is \code{NULL} which won't append any expression.}
 }
 \value{
 \code{reactive} \code{teal_data}
@@ -37,4 +47,12 @@ and display a generic failure message.}
 \description{
 Module calls \code{\link[=teal_transform_module]{teal_transform_module()}} in sequence so that \verb{reactive teal_data} output
 from one module is handed over to the following module's input.
+}
+\details{
+\code{srv_decorate_teal_data} is a wrapper around \code{srv_transform_teal_data} that
+allows to decorate the data with additional reactive expressions.
+When original \code{teal_data} object is in error state, it will show that error
+first.
+
+\code{ui_decorate_teal_data} is a wrapper around \code{ui_transform_teal_data}.
 }
