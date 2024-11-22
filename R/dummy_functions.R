@@ -83,14 +83,12 @@ example_module <- function(label = "example teal module",
     },
     ui = function(id, decorators) {
       ns <- NS(id)
-      div(
-        teal.widgets::standard_layout(
-          output = verbatimTextOutput(ns("text")),
-          encoding = tags$div(
-            selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
-            ui_teal_transform_data(ns("decorate"), transformators = decorators),
-            teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
-          )
+      teal.widgets::standard_layout(
+        output = verbatimTextOutput(ns("text")),
+        encoding = tags$div(
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
+          ui_teal_transform_data(ns("decorate"), transformators = decorators),
+          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
         )
       )
     },
