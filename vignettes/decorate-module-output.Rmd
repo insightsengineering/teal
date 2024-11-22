@@ -447,7 +447,7 @@ interactive_decorator_2 <- teal_transform_module(
   ui = function(id) {
     ns <- NS(id)
     div(
-      textInput(ns("x_axis_title"), "X axis title", value = "x axis 2")
+      textInput(ns("y_axis_title"), "Y axis title", value = "y axis 1")
     )
   },
   server = function(id, data) {
@@ -457,9 +457,9 @@ interactive_decorator_2 <- teal_transform_module(
         within(data(),
           {
             plot <- plot +
-              xlab(title)
+              ylab(title)
           },
-          title = input$x_axis_title
+          title = input$y_axis_title
         )
       })
     })
