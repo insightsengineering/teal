@@ -27,7 +27,7 @@ ui_transform_data <- function(id, transformers = list(), class = "well") {
     function(name) {
       data_mod <- transformers[[name]]
       wrapper_id <- ns(sprintf("wrapper_%s", name))
-      div( # todo: accordion?
+      div(
         # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
         #   For details see tealValidate.js file.
         class = c(class, "teal_validated"),

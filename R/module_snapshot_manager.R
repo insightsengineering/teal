@@ -283,7 +283,6 @@ srv_snapshot_manager <- function(id, slices_global) {
       s <- "Initial application state"
       ### Begin restore procedure. ###
       snapshot <- snapshot_history()[[s]]
-      # todo: as.teal_slices looses module-mapping if is not global
       snapshot_state <- as.teal_slices(snapshot)
       slices_global$slices_set(snapshot_state)
       removeModal()
