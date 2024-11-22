@@ -2051,7 +2051,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "mod1")
         session$setInputs(`teal_modules-mod1-module-dataname` = "x1")
-        session$setInputs(`teal_modules-mod1-module-decorate-decorator_name-transform-text` = "lorem ipsum dolor")
+        session$setInputs(`teal_modules-mod1-module-decorate-transform_1-transform-text` = "lorem ipsum dolor")
         session$flushReact()
 
         testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum dolor")

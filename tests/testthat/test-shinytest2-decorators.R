@@ -35,7 +35,7 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
 
   input_id <- Reduce(
     shiny::NS,
-    c("decorate", "transform_module", "transform", "append_text")
+    c("decorate", "transform_1", "transform", "append_text")
   )
 
   testthat::expect_true(

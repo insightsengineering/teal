@@ -9,7 +9,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
     )
 
     shiny::testServer(
-      app = srv_teal_transform_data,
+      app = srv_transform_teal_data,
       args = list(
         id = "test",
         data = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
@@ -32,7 +32,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
     )
 
     shiny::testServer(
-      app = srv_teal_transform_data,
+      app = srv_transform_teal_data,
       args = list(
         id = "test",
         data = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
@@ -47,7 +47,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
 })
 
 testthat::test_that(
-  "ui_teal_transform_dataname and srv_teal_transform_dataname have the same namespace for transform module",
+  "ui_transform_teal_data and srv_transform_teal_data have the same namespace for transform module",
   {
     ttm <- teal_transform_module(
       ui = function(id) tags$div(id = NS(id, "a_div"), "a div"),
@@ -60,12 +60,12 @@ testthat::test_that(
     )
 
     initial_id <- "a-path-to-an-inner-namespace"
-    ui <- ui_teal_transform_data(initial_id, ttm)
+    ui <- ui_transform_teal_data(initial_id, ttm)
     # Find element that ends in "-a_div"
     expected_id <- unname(unlist(ui)[grepl(".*-a_div$", unlist(ui))][1])
 
     testServer(
-      app = srv_teal_transform_data,
+      app = srv_transform_teal_data,
       args = list(
         id = initial_id,
         data = reactive(within(teal_data(), iris <- iris)),
