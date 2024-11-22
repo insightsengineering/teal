@@ -95,7 +95,7 @@ testthat::test_that("e2e: module with decorator, where server fails,  shows shin
 
   input_id <- Reduce(
     shiny::NS,
-    c("decorate", "transform_module", "silent_error", "message")
+    c("decorate", "transform_1", "silent_error", "message")
   )
 
   testthat::expect_true(app$is_visible(sprintf("#%s-%s", app$active_module_ns(), input_id)))
