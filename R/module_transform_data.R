@@ -120,7 +120,7 @@ srv_teal_transform_data <- function(id, data, transformators, modules = NULL, is
           output$error_wrapper <- renderUI({
             if (is_previous_failed()) {
               shinyjs::disable(transform_wrapper_id)
-              tags$div("One of previous transformators failed. Please fix and continue.", class = "teal-output-warning")
+              tags$div("One of previous transformators failed. Please check its inputs.", class = "teal-output-warning")
             } else {
               shinyjs::enable(transform_wrapper_id)
               shiny::tagList(
