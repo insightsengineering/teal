@@ -33,33 +33,38 @@ ui_teal_transform_data <- function(id, transformators, class = "well") {
       data_mod <- transformators[[name]]
       transform_wrapper_id <- ns(sprintf("wrapper_%s", name))
 
-      div( # todo: accordion?
-        # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
-        #   For details see tealValidate.js file.
-        class = c(class, "teal_validated"),
-        title = attr(data_mod, "label"),
-        tags$span(
-          class = "text-primary mb-4",
-          icon("fas fa-square-pen"),
-          attr(data_mod, "label")
-        ),
-        tags$i(
-          class = "remove pull-right fa fa-angle-down",
-          style = "cursor: pointer;",
-          title = "fold/expand transformator panel",
-          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", transform_wrapper_id)
-        ),
-        tags$div(
-          id = transform_wrapper_id,
-          if (is.null(data_mod$ui)) {
-            return(NULL)
-          } else {
-            data_mod$ui(id = ns("transform"))
-          },
-          div(
-            id = ns("validate_messages"),
-            class = "teal_validated",
-            uiOutput(ns("error_wrapper"))
+      display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
+
+      display_fun(
+        div( # todo: accordion?
+          # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
+          #   For details see tealValidate.js file.
+          id = ns("wrapper"),
+          class = c(class, "teal_validated"),
+          title = attr(data_mod, "label"),
+          tags$span(
+            class = "text-primary mb-4",
+            icon("fas fa-square-pen"),
+            attr(data_mod, "label")
+          ),
+          tags$i(
+            class = "remove pull-right fa fa-angle-down",
+            style = "cursor: pointer;",
+            title = "fold/expand transformator panel",
+            onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", transform_wrapper_id)
+          ),
+          tags$div(
+            id = transform_wrapper_id,
+            if (is.null(data_mod$ui)) {
+              NULL
+            } else {
+              data_mod$ui(id = ns("transform"))
+            },
+            div(
+              id = ns("validate_messages"),
+              class = "teal_validated",
+              uiOutput(ns("error_wrapper"))
+            )
           )
         )
       )
@@ -110,6 +115,13 @@ srv_teal_transform_data <- function(id, data, transformators, modules = NULL, is
           if (!is.null(modules)) {
             srv_check_module_datanames("datanames_warning", data_handled, modules)
           }
+
+          # When there is no UI (`ui = NULL`) it should still show the errors
+          observe({
+            if (!inherits(data_handled(), "teal_data") && !is_previous_failed()) {
+              shinyjs::show("wrapper")
+            }
+          })
 
           transform_wrapper_id <- sprintf("wrapper_%s", name)
           output$error_wrapper <- renderUI({
