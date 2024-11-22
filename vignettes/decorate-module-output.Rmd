@@ -220,7 +220,7 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
         selectInput(ns("dataname"), label = "select dataname", choices = NULL),
         selectInput(ns("x"), label = "select x", choices = NULL),
         selectInput(ns("y"), label = "select y", choices = NULL),
-        ui_teal_transform_data(ns("decorate"), transformators = decorators),
+        ui_transform_teal_data(ns("decorate"), transformators = decorators),
         plotOutput(ns("plot")),
         verbatimTextOutput(ns("text"))
       )
@@ -260,7 +260,7 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
           )
         })
 
-        plot_data_decorated_no_print <- srv_teal_transform_data(
+        plot_data_decorated_no_print <- srv_transform_teal_data(
           "decorate",
           data = plot_data,
           transformators = decorators
@@ -338,7 +338,7 @@ tm_decorated_plot <- function(label = "module", decorators = NULL) {
           lapply(names(decorators), function(decorator_name) {
             div(
               id = ns(paste0("decorate_", decorator_name)),
-              ui_teal_transform_data(
+              ui_transform_teal_data(
                 ns(paste0("decorate_", decorator_name)),
                 transformators = decorators[[decorator_name]]
               )
@@ -400,7 +400,7 @@ tm_decorated_plot <- function(label = "module", decorators = NULL) {
           input$decorator_choice
         })
 
-        decorated_data_no_print <- srv_teal_transform_data(
+        decorated_data_no_print <- srv_transform_teal_data(
           paste0("decorate_", selected_decorator()),
           data = plot_data,
           transformators = decorators[[selected_decorator()]]

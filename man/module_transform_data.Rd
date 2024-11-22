@@ -2,13 +2,13 @@
 % Please edit documentation in R/module_transform_data.R
 \name{module_transform_data}
 \alias{module_transform_data}
-\alias{ui_teal_transform_data}
-\alias{srv_teal_transform_data}
+\alias{ui_transform_teal_data}
+\alias{srv_transform_teal_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
-ui_teal_transform_data(id, transformators, class = "well")
+ui_transform_teal_data(id, transformators, class = "well")
 
-srv_teal_transform_data(
+srv_transform_teal_data(
   id,
   data,
   transformators,
