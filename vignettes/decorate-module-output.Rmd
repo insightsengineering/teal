@@ -311,7 +311,9 @@ if (interactive()) {
 
 ### Example Module
 
-It is possible to pass any number of decorators (n) to a module. The example below demonstrates how to handle a dynamic number of decorators, allowing the user to choose which decorator to apply from a list. This makes the module more flexible and capable of accommodating various customization requirements.
+It is possible to pass any number of decorators (n) to a module. 
+The example below demonstrates how to handle a dynamic number of decorators, allowing the user to choose which decorator to apply from a list. 
+This makes the module more flexible and capable of accommodating various customization requirements.
 
 ```{r}
 library(ggplot2)
@@ -418,6 +420,11 @@ tm_decorated_plot <- function(label = "module", decorators = NULL) {
 }
 ```
 
+By order of the decorator we will:
+ 
+1. Change the x axis title
+2. Change the y axis title 
+3. Replace the x axis title 
 
 ```{r}
 interactive_decorator_1 <- teal_transform_module(
@@ -491,6 +498,8 @@ interactive_decorator_3 <- teal_transform_module(
 ```
 
 ### Application
+
+As you might have noted, the x axis title from the first decorator will be used but won't show up on the resulting plot:
 
 ```{r}
 app <- init(
