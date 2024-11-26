@@ -198,8 +198,7 @@ make_teal_transform_server <- function(expr) {
 
   function(id, data) {
     moduleServer(id, function(input, output, session) {
-      list_env <- eventReactive(
-        input,
+      list_env <- reactive(
         lapply(rlang::set_names(names(input)), function(x) input[[x]])
       )
 
