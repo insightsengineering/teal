@@ -528,7 +528,7 @@ In this section, we demonstrate how to extend a teal module to handle multiple o
 - a `ggplot` plot 
 - and a table 
 
-We will apply independent decorators to each.
+We will apply independent decorators to each output.
 
 ## Example Module with Two Outputs
 
