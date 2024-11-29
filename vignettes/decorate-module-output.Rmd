@@ -546,14 +546,8 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
         selectInput(ns("dataname"), label = "Select dataset", choices = NULL),
         selectInput(ns("x"), label = "Select x-axis", choices = NULL),
         selectInput(ns("y"), label = "Select y-axis", choices = NULL),
-        div(
-          id = ns("decorate_plot"),
-          ui_transform_teal_data(ns("decorate_plot"), transformators = decorators$plot)
-        ),
-        div(
-          id = ns("decorate_table"),
-          ui_transform_teal_data(ns("decorate_table"), transformators = decorators$table)
-        ),
+        ui_transform_teal_data(ns("decorate_plot"), transformators = decorators$plot),
+        ui_transform_teal_data(ns("decorate_table"), transformators = decorators$table),
         plotOutput(ns("plot")),
         tableOutput(ns("table")),
         verbatimTextOutput(ns("text"))
