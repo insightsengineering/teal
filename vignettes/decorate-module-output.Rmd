@@ -544,7 +544,8 @@ We will apply independent decorators to each output.
 
 ## Example Module with Two Outputs
 
-The following module generates both a scatter plot and a summary table. Each of these outputs can be decorated independently using decorators passed to the module:
+The following module generates both a scatter plot and a summary table.
+Each of these outputs can be decorated independently using decorators passed to the module:
 
 ```{r}
 tm_decorated_plot_table <- function(label = "module with two outputs", decorators = list()) {
@@ -607,8 +608,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
           req(dataname())
           within(data(),
             {
-              table_data <- dataname %>%
-                dplyr::summarise(dplyr::across(dplyr::everything(), mean, na.rm = TRUE))
+              table_data <- data.frame(Filter(Negate(is.na), lapply(dataname, mean, na.rm = TRUE)))
             },
             dataname = as.name(dataname())
           )
@@ -652,9 +652,10 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
 
 ```{r}
 plot_decorator <- teal_transform_module(
+  label = "Decorate plot",
   ui = function(id) {
     ns <- NS(id)
-    textInput(ns("plot_title"), "Plot Title", value = "Default Title")
+    textInput(ns("plot_title"), "Plot Title", value = "Decorated Title (editable)")
   },
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
@@ -662,7 +663,11 @@ plot_decorator <- teal_transform_module(
         req(data())
         within(data(),
           {
-            plot <- plot + ggplot2::ggtitle(ptitle)
+            plot <- plot + ggplot2::ggtitle(ptitle) +
+              ggplot2::theme_minimal() +
+              ggplot2::theme(
+                plot.title = element_text(face = "bold", size = 30, color = "blue")
+              )
           },
           ptitle = input$plot_title
         )
@@ -677,10 +682,11 @@ plot_decorator <- teal_transform_module(
 
 ```{r}
 table_decorator <- teal_transform_module(
-  label = "Decorate plot",
+  label = "Decorate table",
+  ui = function(id) shiny::tags$p("No UI needed for table decorator and could be ommited."),
   server = make_teal_transform_server(
     expression({
-      table_data[["ID (decorated)"]] <- paste0("Row ", seq_len(nrow(table_data)))
+      table_data[["Added by decorator"]] <- paste0("Row ", seq_len(nrow(table_data)))
     })
   )
 )
