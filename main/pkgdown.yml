@@ -9,6 +9,7 @@ articles:
   data-as-shiny-module: data-as-shiny-module.html
   data-transform-as-shiny-module: data-transform-as-shiny-module.html
   blueprint/dataflow: blueprint/dataflow.html
+  decorate-module-output: decorate-module-output.html
   blueprint/filter_panel: blueprint/filter_panel.html
   filter-panel: filter-panel.html
   getting-started-with-teal: getting-started-with-teal.html
@@ -20,7 +21,7 @@ articles:
   blueprint/module_encapsulation: blueprint/module_encapsulation.html
   blueprint/product_map: blueprint/product_map.html
   teal-options: teal-options.html
-last_built: 2024-11-18T08:25Z
+last_built: 2024-11-29T17:01Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles

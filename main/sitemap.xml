@@ -18,6 +18,7 @@
 <url><loc>https://insightsengineering.github.io/teal/articles/creating-custom-modules.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/articles/data-as-shiny-module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/articles/data-transform-as-shiny-module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/articles/decorate-module-output.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/articles/filter-panel.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/articles/getting-started-with-teal.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/articles/including-data-in-teal-applications.html</loc></url>
@@ -43,7 +44,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-get_hashes_code.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-smart_rbind.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/example_module.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/extract_transformers.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/extract_transformators.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/get_client_timezone.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/get_rcode_libraries.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/get_unique_labels.html</loc></url>
@@ -54,6 +55,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/init.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/is_arg_used.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/landing_popup_module.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/make_teal_transform_server.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_bookmark_manager.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_data_summary.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_filter_data.html</loc></url>
