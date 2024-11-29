@@ -658,7 +658,7 @@ plot_decorator <- teal_transform_module(
         within(data(),
                {
                  plot <- plot +
-                   ggtitle(ptitle)
+                   ggplot2::ggtitle(ptitle)
                },
                ptitle = input$plot_title
         )
