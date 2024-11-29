@@ -26,6 +26,7 @@ In the context of `teal` applications, decoration is specifically used to modify
 Preserving the object's class during decoration is essential for compatibility. It ensures that the subsequent "display" logic can seamlessly handle both decorated and non-decorated objects.
 
 The decoration process can vary in complexity:
+
 - **Simple Decorations**: Single-step modifications, such as a single method call that does not require additional data.
 - **Complex Decorations**: Multi-step operations that may involve interdependent transformations, potentially requiring input from dedicated `shiny` UI elements.
 
