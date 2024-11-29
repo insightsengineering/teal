@@ -587,7 +587,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
           req(dataname(), x(), y())
           within(data(),
             {
-              plot <- ggplot2::ggplot(dataname, aes(x = xvar, y = yvar)) +
+              plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = xvar, y = yvar)) +
                 ggplot2::geom_point()
             },
             dataname = as.name(dataname()),
