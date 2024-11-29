@@ -680,9 +680,7 @@ table_decorator <- teal_transform_module(
   label = "Decorate plot",
   server = make_teal_transform_server(
     expression({
-      table_data$id <- paste0("Row ", seq_len(nrow(table_data)))
-      table_data <- table_data[, union("id", colnames(table_data))]
-      colnames(table_data)[1] <- "ID (decorated)"
+      table_data[["ID (decorated)"]] <- paste0("Row ", seq_len(nrow(table_data)))
     })
   )
 )
