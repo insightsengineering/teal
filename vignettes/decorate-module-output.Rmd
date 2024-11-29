@@ -655,9 +655,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
 plot_decorator <- teal_transform_module(
   ui = function(id) {
     ns <- NS(id)
-    div(
-      textInput(ns("plot_title"), "Plot Title", value = "Default Title")
-    )
+    textInput(ns("plot_title"), "Plot Title", value = "Default Title")
   },
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
