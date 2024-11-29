@@ -524,8 +524,9 @@ if (interactive()) {
 
 # Modules with Multiple Outputs
 
-In this section, we demonstrate how to extend a teal module to handle multiple outputs and allow separate decoration for each. Specifically, the module will have two outputs
-- a `ggplot` plot 
+In this section, we demonstrate how to extend a teal module to handle multiple outputs and allow separate decoration for each. Specifically, the module will have two outputs:
+
+- a `ggplot` plot
 - and a table 
 
 We will apply independent decorators to each output.
