@@ -36,7 +36,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
       display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
 
       display_fun(
-        div( # todo: accordion?
+        div(
           # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
           #   For details see tealValidate.js file.
           id = ns("wrapper"),

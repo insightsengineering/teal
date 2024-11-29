@@ -311,14 +311,6 @@ srv_teal_module.teal_module <- function(id,
         # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
         module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
       }
-
-      # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
-      #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
-      #       Should we insertUI of the ReportPreviewer then?
-      #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
-      if ("report" %in% names(module_out)) {
-        # (reactively) add card to the reporter
-      }
     })
 
     module_out
