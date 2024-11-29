@@ -61,6 +61,7 @@ We modify the title and x-axis label of plot:
 ```{r}
 library(teal)
 static_decorator <- teal_transform_module(
+  label = "Static decorator",
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
       reactive({
@@ -82,6 +83,7 @@ you can use the [`make_teal_transform_server()`](https://insightsengineering.git
 
 ```{r}
 static_decorator_lang <- teal_transform_module(
+  label = "Static decorator (language)",
   server = make_teal_transform_server(
     expression(
       plot <- plot +
@@ -100,6 +102,7 @@ Note how the input parameters are passed to the [`within`](https://insightsengin
 
 ```{r}
 interactive_decorator <- teal_transform_module(
+  label = "Interactive decorator",
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -129,6 +132,7 @@ This wrapper requires you to use `input` object names directly in the expression
 
 ```{r}
 interactive_decorator_lang <- teal_transform_module(
+  label = "Interactive decorator (language)",
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -155,6 +159,7 @@ In the following example, focus on the `output_name` parameter to see how decora
 ```{r}
 gg_xlab_decorator <- function(output_name) {
   teal_transform_module(
+    label = "X-axis decorator",
     ui = function(id) {
       ns <- NS(id)
       div(
@@ -186,6 +191,7 @@ If a decorator fails, the outputs will not be shown, and an appropriate error me
 
 ```{r}
 failing_decorator <- teal_transform_module(
+  label = "Failing decorator",
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -194,7 +200,7 @@ failing_decorator <- teal_transform_module(
   },
   server = function(id, data) {
     moduleServer(id, function(input, output, session) {
-      reactive(stop("This is error"))
+      reactive(stop("\nThis is an error produced by decorator\n"))
     })
   }
 )
@@ -357,8 +363,9 @@ tm_decorated_plot <- function(label = "module", decorators = NULL) {
           updateSelectInput(inputId = "dataname", choices = names(data()))
         })
 
-        observeEvent(input$dataname, {
-          req(input$dataname)
+        dataname <- reactive(req(input$dataname))
+
+        observeEvent(dataname(), {
           updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
           updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
@@ -374,7 +381,6 @@ tm_decorated_plot <- function(label = "module", decorators = NULL) {
           })
         })
 
-        dataname <- reactive(req(input$dataname))
         x <- reactive({
           req(input$x, input$x %in% colnames(data()[[dataname()]]))
           input$x
@@ -403,7 +409,7 @@ tm_decorated_plot <- function(label = "module", decorators = NULL) {
         })
 
         decorated_data_no_print <- srv_transform_teal_data(
-          paste0("decorate_", selected_decorator()),
+          sprintf("decorate_%s", selected_decorator()),
           data = plot_data,
           transformators = decorators[[selected_decorator()]]
         )
@@ -430,6 +436,7 @@ By order of the decorator we will:
 
 ```{r}
 interactive_decorator_1 <- teal_transform_module(
+  label = "Interactive decorator 1",
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -453,6 +460,7 @@ interactive_decorator_1 <- teal_transform_module(
 )
 
 interactive_decorator_2 <- teal_transform_module(
+  label = "Interactive decorator 2",
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -476,6 +484,7 @@ interactive_decorator_2 <- teal_transform_module(
 )
 
 interactive_decorator_3 <- teal_transform_module(
+  label = "Interactive decorator 3",
   ui = function(id) {
     ns <- NS(id)
     div(
@@ -540,7 +549,7 @@ The following module generates both a scatter plot and a summary table. Each of 
 ```{r}
 tm_decorated_plot_table <- function(label = "module with two outputs", decorators = list()) {
   checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
-  
+
   module(
     label = label,
     ui = function(id, decorators) {
@@ -562,13 +571,13 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
           updateSelectInput(inputId = "dataname", choices = names(data()))
         })
 
-        observeEvent(input$dataname, {
-          req(input$dataname)
+        dataname <- reactive(req(input$dataname))
+
+        observeEvent(dataname(), {
           updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
           updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
         })
 
-        dataname <- reactive(req(input$dataname))
         x <- reactive({
           req(input$x, input$x %in% colnames(data()[[dataname()]]))
           input$x
@@ -597,11 +606,11 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
         table_data <- reactive({
           req(dataname())
           within(data(),
-             {
-              table_data <- dataname %>% 
-                 dplyr::summarise(dplyr::across(dplyr::everything(), mean, na.rm = TRUE))
-             },
-             dataname = as.name(dataname())
+            {
+              table_data <- dataname %>%
+                dplyr::summarise(dplyr::across(dplyr::everything(), mean, na.rm = TRUE))
+            },
+            dataname = as.name(dataname())
           )
         })
 
@@ -619,20 +628,14 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
           transformators = decorators$table
         )
 
-        output$plot <- renderPlot({
-          req(decorated_plot())
-          decorated_plot()[["plot"]]
-        })
+        output$plot <- renderPlot(decorated_plot()[["plot"]])
 
-        output$table <- renderTable({
-          req(decorated_table())
-          decorated_table()[["table_data"]]
-        })
+        output$table <- renderTable(decorated_table()[["table_data"]])
 
         output$text <- renderText({
           plot_code <- teal.code::get_code(req(decorated_plot()))
           table_code <- teal.code::get_code(req(decorated_table()))
-          paste("Plot Code:", plot_code, "\nTable Code:", table_code)
+          paste("# Plot Code:", plot_code, "\n\n# Table Code:", table_code)
         })
       })
     },
@@ -640,7 +643,6 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
     server_args = list(decorators = decorators)
   )
 }
-
 ```
 
 
@@ -659,11 +661,10 @@ plot_decorator <- teal_transform_module(
       reactive({
         req(data())
         within(data(),
-               {
-                 plot <- plot +
-                   ggplot2::ggtitle(ptitle)
-               },
-               ptitle = input$plot_title
+          {
+            plot <- plot + ggplot2::ggtitle(ptitle)
+          },
+          ptitle = input$plot_title
         )
       })
     })
@@ -676,13 +677,15 @@ plot_decorator <- teal_transform_module(
 
 ```{r}
 table_decorator <- teal_transform_module(
+  label = "Decorate plot",
   server = make_teal_transform_server(
     expression({
-      rownames(table_data) <- paste0("Row ", seq_len(nrow(table_data)))
+      table_data$id <- paste0("Row ", seq_len(nrow(table_data)))
+      table_data <- table_data[, union("id", colnames(table_data))]
+      colnames(table_data)[1] <- "ID (decorated)"
     })
   )
 )
-
 ```
 
 
@@ -705,5 +708,4 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
-
 ```
