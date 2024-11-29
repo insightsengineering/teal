@@ -51,6 +51,7 @@ jobs:
         insightsengineering/teal.reporter
         insightsengineering/teal.widgets
         insightsengineering/rtables
+        insightsengineering/formatters
         insightsengineering/rtables.officer
 
   r-cmd-non-cran:
@@ -84,6 +85,7 @@ jobs:
         insightsengineering/teal.widgets
         insightsengineering/rtables
         insightsengineering/rtables.officer
+        insightsengineering/formatters
 
   coverage:
     name: Coverage 📔
@@ -103,6 +105,7 @@ jobs:
         insightsengineering/teal.widgets
         insightsengineering/rtables
         insightsengineering/rtables.officer
+        insightsengineering/formatters
   linter:
     if: github.event_name != 'push'
     name: SuperLinter 🦸‍♀️
@@ -124,6 +127,7 @@ jobs:
         insightsengineering/teal.widgets
         insightsengineering/rtables
         insightsengineering/rtables.officer
+        insightsengineering/formatters
   gitleaks:
     name: gitleaks 💧
     uses: insightsengineering/r.pkg.template/.github/workflows/gitleaks.yaml@main

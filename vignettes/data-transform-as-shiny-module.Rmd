@@ -12,13 +12,13 @@ vignette: >
 
 ## Introduction
 
-`teal` version `0.16` introduced new argument in `teal::module` called `transformers`. 
-This argument allows to pass a `list` of `teal_data_module` objects that are created using `teal_transform_module()` function.
+[`teal_transform_module()`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) is a Shiny module that takes `ui` and `server` arguments. When provided, `teal` will execute data transformations for the specified module when it is loaded and whenever the data changes. `server` extend the logic behind data manipulations, where `ui` extends filter panel with new UI elements that orchestrate the transformator inputs.
+
+`teal` version `0.16` introduced a new, optional argument in `teal::module` named `transformators`. 
+This argument allows to pass a `list` of `"teal_data_module"` class of objects created using [`teal_transform_module()`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) function.
 
 The main benefit of `teal_transform_module()` is the ability to transform data before passing it 
 to the module. This feature allows to extend the regular behavior of existing modules by specifying custom data operations on data inside this module.
-
-`teal_transform_module()` is a Shiny module that takes `ui` and `server` arguments. When provided, `teal` will execute data transformations for the specified module when it is loaded and whenever the data changes. `server` extend the logic behind data manipulations, where `ui` extends filter panel with new UI elements that orchestrate the transformer inputs.
 
 This vignette presents the way on how to manage custom data transformations in `teal` apps.
 
@@ -46,7 +46,7 @@ if (interactive()) {
 }
 ```
 
-### Single Transformer
+### Single transformator
 
 Let's create a simple `teal_transform_module` that returns the first `n` number of rows of `iris` based on the user input.
 
@@ -59,9 +59,9 @@ data <- within(teal_data(), {
   mtcars <- mtcars
 })
 
-my_transformers <- list(
+my_transformators <- list(
   teal_transform_module(
-    label = "Custom transform for iris",
+    label = "Custom transformator for iris",
     ui = function(id) {
       ns <- NS(id)
       tags$div(
@@ -85,7 +85,7 @@ my_transformers <- list(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformers = my_transformers)
+  modules = teal::example_module(transformators = my_transformators)
 )
 
 if (interactive()) {
@@ -97,9 +97,9 @@ _Note_: It is recommended to return `reactive()` with `teal_data()` in `server` 
 If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
 More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
-### Multiple Transformers
+### Multiple transformators
 
-Note that we can add multiple `teal` transformers by including `teal_transform_module` in a list.
+Note that we can add multiple `teal` transformators by including `teal_transform_module` in a list.
 
 Let's add another transformation to the `mtcars` dataset that creates a column with `rownames` of `mtcars`.
 Note that this module does not have interactive UI elements.
@@ -110,9 +110,9 @@ data <- within(teal_data(), {
   mtcars <- mtcars
 })
 
-my_transformers <- list(
+my_transformators <- list(
   teal_transform_module(
-    label = "Custom transform for iris",
+    label = "Custom transformator for iris",
     ui = function(id) {
       ns <- NS(id)
       tags$div(
@@ -133,7 +133,7 @@ my_transformers <- list(
     }
   ),
   teal_transform_module(
-    label = "Custom transform for mtcars",
+    label = "Custom transformator for mtcars",
     ui = function(id) {
       ns <- NS(id)
       tags$div(
@@ -155,7 +155,7 @@ my_transformers <- list(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformers = my_transformers)
+  modules = teal::example_module(transformators = my_transformators)
 )
 
 if (interactive()) {

@@ -57,6 +57,7 @@ Imports:
     utils
 Suggests:
     bslib,
+    ggplot2 (>= 3.4.0),
     knitr (>= 1.42),
     mirai (>= 1.1.1),
     MultiAssayExperiment,
@@ -122,6 +123,7 @@ Collate:
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'
+    'teal_transform_module.R'
     'utils.R'
     'validate_inputs.R'
     'validations.R'

@@ -21,21 +21,20 @@ module(
   datanames = "all",
   server_args = NULL,
   ui_args = NULL,
-  transformers = list()
+  transformators = list()
 )
 
 modules(..., label = "root")
 
 \method{format}{teal_module}(
   x,
-  indent = 0,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "transformers"),
+  what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
   ...
 )
 
-\method{format}{teal_modules}(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
+\method{format}{teal_modules}(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 
@@ -79,7 +78,7 @@ There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
-\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+\item If \code{transformators} are specified, their \code{datanames} are automatically added to this \code{datanames}
 argument.
 }}
 
@@ -87,9 +86,7 @@ argument.
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -98,8 +95,6 @@ Transformers' \code{datanames} are added to the \code{datanames}. See \code{\lin
 
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
-\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
-
 \item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
 Affects the tree branch character used (L- vs |-)}
 
@@ -107,7 +102,7 @@ Affects the tree branch character used (L- vs |-)}
 used to maintain the tree structure in nested levels}
 
 \item{what}{(\code{character}) Specifies which metadata to display.
-Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"}
+Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"}
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
 format.teal_modules(). Determines whether to show "TEAL ROOT" header}
@@ -159,13 +154,13 @@ in a warning. Datasets with names starting with . are ignored globally unless ex
 in \code{datanames}.
 }
 
-\section{\code{datanames} with \code{transformers}}{
-When transformers are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+\section{\code{datanames} with \code{transformators}}{
+When transformators are specified, their \code{datanames} are added to the module’s \code{datanames}, which
 changes the behavior as follows:
 \itemize{
-\item If \code{module(datanames)} is \code{NULL} and the \code{transformers} have defined \code{datanames}, the sidebar
-will appear showing the \code{transformers}' datasets, instead of being hidden.
-\item If \code{module(datanames)} is set to specific values and any \code{transformer} has \code{datanames = "all"},
+\item If \code{module(datanames)} is \code{NULL} and the \code{transformators} have defined \code{datanames}, the sidebar
+will appear showing the \code{transformators}' datasets, instead of being hidden.
+\item If \code{module(datanames)} is set to specific values and any \code{transformator} has \code{datanames = "all"},
 the module may receive extra datasets that could be unnecessary
 }
 }
@@ -229,21 +224,21 @@ mod <- module(
   server = function(id, data, ...) {},
   ui = function(id, ...) {},
   datanames = c("ADSL", "ADTTE"),
-  transformers = list(),
+  transformators = list(),
   ui_args = list(a = 1, b = "b"),
   server_args = list(x = 5, y = list(p = 1))
 )
 cat(format(mod))
 custom_module <- function(
     label = "label", ui_args = NULL, server_args = NULL,
-    datanames = "all", transformers = list(), bk = FALSE) {
+    datanames = "all", transformators = list(), bk = FALSE) {
   ans <- module(
     label,
     server = function(id, data, ...) {},
     ui = function(id, ...) {
     },
     datanames = datanames,
-    transformers = transformers,
+    transformators = transformators,
     ui_args = ui_args,
     server_args = server_args
   )
@@ -251,7 +246,7 @@ custom_module <- function(
   ans
 }
 
-dummy_transformer <- teal_transform_module(
+dummy_transformator <- teal_transform_module(
   label = "Dummy Transform",
   ui = function(id) div("(does nothing)"),
   server = function(id, data) {
@@ -259,7 +254,7 @@ dummy_transformer <- teal_transform_module(
   }
 )
 
-plot_transformer <- teal_transform_module(
+plot_transformator <- teal_transform_module(
   label = "Plot Settings",
   ui = function(id) div("(does nothing)"),
   server = function(id, data) {
@@ -280,7 +275,7 @@ complete_modules <- modules(
       cache = TRUE,
       debounce = 1000
     ),
-    transformers = list(dummy_transformer),
+    transformators = list(dummy_transformator),
     bk = TRUE
   ),
   modules(
@@ -298,7 +293,7 @@ complete_modules <- modules(
         render_type = "svg",
         cache_plots = TRUE
       ),
-      transformers = list(dummy_transformer, plot_transformer),
+      transformators = list(dummy_transformator, plot_transformator),
       bk = TRUE
     ),
     modules(
@@ -330,7 +325,7 @@ complete_modules <- modules(
 )
 
 cat(format(complete_modules))
-cat(format(complete_modules, what = c("ui_args", "server_args", "transformers")))
+cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 # change the module's datanames
 set_datanames(module(datanames = "all"), "a")
 

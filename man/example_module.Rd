@@ -7,7 +7,8 @@
 example_module(
   label = "example teal module",
   datanames = "all",
-  transformers = list()
+  transformators = list(),
+  decorators = NULL
 )
 }
 \arguments{
@@ -19,19 +20,27 @@ There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
-\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+\item If \code{transformators} are specified, their \code{datanames} are automatically added to this \code{datanames}
 argument.
 }}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
+
+\item{decorators}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (\code{list} of \code{teal_transform_module} or \code{NULL}) optional,
+if not \code{NULL}, decorator for tables or plots included in the module.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\details{
+This module creates an object called \code{object} that can be modified with decorators.
+The \code{object} is determined by what's selected in \verb{Choose a dataset} input in UI.
+The object can be anything that can be handled by \code{renderPrint()}.
+See the \code{vignette("decorate-modules-output", package = "teal")} or \code{\link{teal_transform_module}}
+to read more about decorators.
 }
 \examples{
 app <- init(

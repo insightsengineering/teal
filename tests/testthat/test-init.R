@@ -57,7 +57,7 @@ testthat::test_that("init throws when an empty `data` is used", {
 })
 
 testthat::test_that(
-  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformers",
+  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformators",
   {
     testthat::expect_warning(
       init(
@@ -70,7 +70,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformers",
+  "init throws warning when datanames in modules incompatible w/ datanames in data and there is no transformators",
   {
     testthat::expect_warning(
       init(
@@ -83,7 +83,7 @@ testthat::test_that(
 )
 
 testthat::test_that(
-  "init does not throw warning when datanames in modules incompatible w/ datanames in data and there are transformers",
+  "init doesn't throw warning when datanames in modules incompatible w/ datanames in data and there are transformators",
   {
     testthat::expect_no_warning(
       init(
@@ -91,7 +91,7 @@ testthat::test_that(
         modules = list(
           example_module(
             datanames = "iris",
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {

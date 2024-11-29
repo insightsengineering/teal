@@ -1,79 +1,149 @@
 #' Module to transform `reactive` `teal_data`
 #'
-#' Module calls multiple [`module_teal_data`] in sequence so that `reactive teal_data` output
+#' Module calls [teal_transform_module()] in sequence so that `reactive teal_data` output
 #' from one module is handed over to the following module's input.
 #'
 #' @inheritParams module_teal_data
 #' @inheritParams teal_modules
+#' @param class (character(1)) CSS class to be added in the `div` wrapper tag.
+
 #' @return `reactive` `teal_data`
 #'
-#'
 #' @name module_transform_data
-#' @keywords internal
 NULL
 
+#' @export
 #' @rdname module_transform_data
-ui_transform_data <- function(id, transformers = list(), class = "well") {
+ui_transform_teal_data <- function(id, transformators, class = "well") {
   checkmate::assert_string(id)
-  checkmate::assert_list(transformers, "teal_transform_module")
-
-  ns <- NS(id)
-  labels <- lapply(transformers, function(x) attr(x, "label"))
-  ids <- get_unique_labels(labels)
-  names(transformers) <- ids
+  if (length(transformators) == 0L) {
+    return(NULL)
+  }
+  if (inherits(transformators, "teal_transform_module")) {
+    transformators <- list(transformators)
+  }
+  checkmate::assert_list(transformators, "teal_transform_module")
+  names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
   lapply(
-    names(transformers),
+    names(transformators),
     function(name) {
-      data_mod <- transformers[[name]]
-      wrapper_id <- ns(sprintf("wrapper_%s", name))
-      div(
-        # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
-        #   For details see tealValidate.js file.
-        class = c(class, "teal_validated"),
-        title = attr(data_mod, "label"),
-        tags$span(
-          class = "text-primary mb-4",
-          icon("fas fa-square-pen"),
-          attr(data_mod, "label")
-        ),
-        tags$i(
-          class = "remove pull-right fa fa-angle-down",
-          style = "cursor: pointer;",
-          title = "fold/expand transform panel",
-          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", wrapper_id)
-        ),
+      child_id <- NS(id, name)
+      ns <- NS(child_id)
+      data_mod <- transformators[[name]]
+      transform_wrapper_id <- ns(sprintf("wrapper_%s", name))
+
+      display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
+
+      display_fun(
         div(
-          id = wrapper_id,
-          ui_teal_data(id = ns(name), data_module = transformers[[name]]$ui)
+          # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
+          #   For details see tealValidate.js file.
+          id = ns("wrapper"),
+          class = c(class, "teal_validated"),
+          title = attr(data_mod, "label"),
+          tags$span(
+            class = "text-primary mb-4",
+            icon("fas fa-square-pen"),
+            attr(data_mod, "label")
+          ),
+          tags$i(
+            class = "remove pull-right fa fa-angle-down",
+            style = "cursor: pointer;",
+            title = "fold/expand transformator panel",
+            onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", transform_wrapper_id)
+          ),
+          tags$div(
+            id = transform_wrapper_id,
+            if (is.null(data_mod$ui)) {
+              return(NULL)
+            } else {
+              data_mod$ui(id = ns("transform"))
+            },
+            div(
+              id = ns("validate_messages"),
+              class = "teal_validated",
+              uiOutput(ns("error_wrapper"))
+            )
+          )
         )
       )
     }
   )
 }
 
+#' @export
 #' @rdname module_transform_data
-srv_transform_data <- function(id, data, transformers = list(), modules, is_transformer_failed = reactiveValues()) {
+srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
-  checkmate::assert_list(transformers, "teal_transform_module")
-  checkmate::assert_class(modules, "teal_module")
-  labels <- lapply(transformers, function(x) attr(x, "label"))
-  ids <- get_unique_labels(labels)
-  names(transformers) <- ids
+  checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
+  if (length(transformators) == 0L) {
+    return(data)
+  }
+  if (inherits(transformators, "teal_transform_module")) {
+    transformators <- list(transformators)
+  }
+  checkmate::assert_list(transformators, "teal_transform_module", null.ok = TRUE)
+  names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
+
   moduleServer(id, function(input, output, session) {
-    logger::log_debug("srv_teal_data_modules initializing.")
-    Reduce(
-      function(previous_result, name) {
-        srv_teal_data(
-          id = name,
-          data_module = function(id) transformers[[name]]$server(id, previous_result),
-          modules = modules,
-          is_transformer_failed = is_transformer_failed
-        )
+    module_output <- Reduce(
+      function(data_previous, name) {
+        moduleServer(name, function(input, output, session) {
+          logger::log_debug("srv_transform_teal_data initializing for { name }.")
+          is_transform_failed[[name]] <- FALSE
+          data_out <- transformators[[name]]$server("transform", data = data_previous)
+          data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
+          observeEvent(data_handled(), {
+            if (inherits(data_handled(), "teal_data")) {
+              is_transform_failed[[name]] <- FALSE
+            } else {
+              is_transform_failed[[name]] <- TRUE
+            }
+          })
+
+          is_previous_failed <- reactive({
+            idx_this <- which(names(is_transform_failed) == name)
+            is_transform_failed_list <- reactiveValuesToList(is_transform_failed)
+            idx_failures <- which(unlist(is_transform_failed_list))
+            any(idx_failures < idx_this)
+          })
+
+          srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
+          srv_check_class_teal_data("class_teal_data", data_handled)
+          if (!is.null(modules)) {
+            srv_check_module_datanames("datanames_warning", data_handled, modules)
+          }
+
+          # When there is no UI (`ui = NULL`) it should still show the errors
+          observe({
+            if (!inherits(data_handled(), "teal_data") && !is_previous_failed()) {
+              shinyjs::show("wrapper")
+            }
+          })
+
+          transform_wrapper_id <- sprintf("wrapper_%s", name)
+          output$error_wrapper <- renderUI({
+            if (is_previous_failed()) {
+              shinyjs::disable(transform_wrapper_id)
+              tags$div("One of previous transformators failed. Please check its inputs.", class = "teal-output-warning")
+            } else {
+              shinyjs::enable(transform_wrapper_id)
+              shiny::tagList(
+                ui_validate_error(session$ns("silent_error")),
+                ui_check_class_teal_data(session$ns("class_teal_data")),
+                ui_check_module_datanames(session$ns("datanames_warning"))
+              )
+            }
+          })
+
+          .trigger_on_success(data_handled)
+        })
       },
-      x = names(transformers),
+      x = names(transformators),
       init = data
     )
+    module_output
   })
 }
