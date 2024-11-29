@@ -52,3 +52,4 @@ jobs:
         insightsengineering/teal.widgets
         insightsengineering/rtables
         insightsengineering/rtables.officer
+        insightsengineering/formatters

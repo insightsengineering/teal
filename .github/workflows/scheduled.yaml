@@ -66,6 +66,7 @@ jobs:
         insightsengineering/teal.widgets
         insightsengineering/rtables
         insightsengineering/rtables.officer
+        insightsengineering/formatters
   rhub:
     if: >
       github.event_name == 'schedule' || (
@@ -84,3 +85,4 @@ jobs:
         insightsengineering/teal.widgets
         insightsengineering/rtables
         insightsengineering/rtables.officer
+        insightsengineering/formatters
