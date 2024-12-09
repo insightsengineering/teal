@@ -339,9 +339,9 @@ srv_teal_module.teal_module <- function(id,
   }
 
   if (is_arg_used(modules$server, "id")) {
-    do.call(modules$server, args)
+    do.call(modules$server, args, quote = TRUE)
   } else {
-    do.call(callModule, c(args, list(module = modules$server)))
+    do.call(callModule, c(args, list(module = modules$server)), quote = TRUE)
   }
 }
 
