@@ -610,7 +610,13 @@ set_datanames <- function(modules, datanames) {
     modules$children <- lapply(modules$children, set_datanames, datanames)
   } else {
     if (identical(modules$datanames, "all")) {
-      modules$datanames <- datanames
+      included <- grep("^[^-]", datanames, value = TRUE)
+      if (length(included)) {
+        modules$datanames <- included
+      } else {
+        excluded <- gsub("^-", "", grep("^-", datanames, value = TRUE))
+        attr(modules$datanames, "excluded") <- excluded
+      }
     } else {
       warning(
         "Not possible to modify datanames of the module ", modules$label,
