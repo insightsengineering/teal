@@ -35,11 +35,13 @@ App user will be able to interact and change the data output from the module mul
 
 \item{object}{(\code{teal_data_module})}
 
-\item{code}{(\code{character} or \code{language}) code to evaluate. If \code{character}, comments are retained.}
+\item{code}{(\code{character}, \code{language} or \code{expression}) code to evaluate.
+It is possible to preserve original formatting of the \code{code} by providing a \code{character} or an
+\code{expression} being a result of \code{parse(keep.source = TRUE)}.}
 
 \item{data}{(\code{teal_data_module}) object}
 
-\item{expr}{(\code{expression}) to evaluate. Must be inline code. See}
+\item{expr}{(\code{expression}) to evaluate. Must be inline code. See \code{\link[=within]{within()}}}
 
 \item{...}{See \code{Details}.}
 }
@@ -90,7 +92,6 @@ tdm <- teal_data_module(
             dataset2 <- mtcars
           }
         )
-        datanames(data) <- c("dataset1", "dataset2")
 
         data
       })

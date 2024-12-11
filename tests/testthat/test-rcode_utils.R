@@ -47,14 +47,3 @@ testthat::test_that("get_rcode_libraries returns current session packages", {
     )
   )
 })
-
-testthat::test_that("get_datasets_code returns code only for specified datanames", {
-  # todo: need to use code dependency? Or test it later via public functions/modules
-  datasets <- teal.slice::init_filtered_data(
-    list(
-      IRIS = list(dataset = iris),
-      MTCARS = list(dataset = mtcars)
-    )
-  )
-  testthat::expect_true(TRUE)
-})

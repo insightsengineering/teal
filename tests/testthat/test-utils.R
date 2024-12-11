@@ -1,4 +1,5 @@
 testthat::test_that("get_teal_bs_theme", {
+  testthat::skip_if_not_installed("bslib")
   testthat::expect_true(is.null(get_teal_bs_theme()))
   withr::with_options(list("teal.bs_theme" = bslib::bs_theme(version = "5")), {
     testthat::expect_s3_class(get_teal_bs_theme(), "bs_theme")
@@ -12,7 +13,7 @@ testthat::test_that("get_teal_bs_theme", {
 })
 
 testthat::test_that("report_card_template function returns TealReportCard object with appropriate content and labels", {
-  fd <- teal.slice::init_filtered_data(list(iris = list(dataset = iris)))
+  fd <- teal.slice::init_filtered_data(list(iris = iris))
   filter_panel_api <- teal.slice::FilterPanelAPI$new(fd)
 
   card <- shiny::isolate(report_card_template(
@@ -40,7 +41,6 @@ testthat::test_that("report_card_template function returns TealReportCard object
 test_that("teal_data_to_filtered_data return FilteredData class", {
   teal_data <- teal.data::teal_data()
   teal_data <- within(teal_data, iris <- head(iris))
-  datanames(teal_data) <- "iris"
 
   testthat::expect_s3_class(teal_data_to_filtered_data(teal_data), "FilteredData")
 })

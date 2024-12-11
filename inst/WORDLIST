@@ -5,9 +5,11 @@ Hoffmann
 MAEs
 ORCID
 Reproducibility
+Shiny's
 TLG
 UI
 UX
+args
 bookmarkable
 cloneable
 customizable
@@ -15,6 +17,7 @@ favicon
 favicons
 funder
 lockfile
+modularized
 omics
 pre
 programmatically
@@ -26,4 +29,7 @@ summarization
 tabset
 themer
 theming
+transformator
+transformators
+ui
 uncheck

@@ -2,36 +2,39 @@
 % Please edit documentation in R/module_transform_data.R
 \name{module_transform_data}
 \alias{module_transform_data}
-\alias{ui_transform_data}
-\alias{srv_transform_data}
+\alias{ui_transform_teal_data}
+\alias{srv_transform_teal_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
-ui_transform_data(id, transforms, class = "well")
+ui_transform_teal_data(id, transformators, class = "well")
 
-srv_transform_data(
+srv_transform_teal_data(
   id,
   data,
-  transforms,
-  modules,
-  is_transformer_failed = reactiveValues()
+  transformators,
+  modules = NULL,
+  is_transform_failed = reactiveValues()
 )
 }
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
 
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
+
+\item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
+
 \item{data}{(\verb{reactive teal_data})}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
-\item{is_transformer_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformer.
-Help to determine if any previous transformer failed, so that following transformers can be disabled
+\item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
+Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
 }
 \value{
 \code{reactive} \code{teal_data}
 }
 \description{
-Module calls multiple \code{\link{module_teal_data}} in sequence so that \verb{reactive teal_data} output
+Module calls \code{\link[=teal_transform_module]{teal_transform_module()}} in sequence so that \verb{reactive teal_data} output
 from one module is handed over to the following module's input.
 }
-\keyword{internal}

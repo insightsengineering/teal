@@ -94,22 +94,22 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
 
-  ui_teal <- tags$div(
-    div(
-      id = ns("validate_datanames"),
-      ui_validate_reactive_teal_data(ns("validate_datanames"))
+  ui_teal <- tagList(
+    shinyjs::hidden(
+      tags$div(
+        id = ns("transform_failure_info"),
+        class = "teal_validated",
+        div(
+          class = "teal-output-warning",
+          "One of transformators failed. Please check its inputs."
+        )
+      )
     ),
     tags$div(
       id = ns("teal_module_ui"),
-      shinyjs::hidden(
-        tags$div(
-          id = ns("transformer_failure_info"),
-          class = "teal_validated",
-          div(
-            class = "teal-output-warning",
-            "One of transformers failed. Please fix and continue."
-          )
-        )
+      tags$div(
+        class = "teal_validated",
+        ui_check_module_datanames(ns("validate_datanames"))
       ),
       do.call(modules$ui, args)
     )
@@ -148,7 +148,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
                   class = "teal-filter-panel",
                   ui_filter_data(ns("filter_panel"))
                 ),
-                if (length(modules$transformers) > 0 && !isTRUE(attr(modules$transformers, "custom_ui"))) {
+                if (length(modules$transformators) > 0 && !isTRUE(attr(modules$transformators, "custom_ui"))) {
                   tags$div(
                     tags$br(),
                     tags$div(
@@ -157,7 +157,10 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
                         id = ns("data_transform_accordion"),
                         bslib::accordion_panel(
                           "Transform Data",
-                          ui_transform_data(ns("data_transform"), transforms = modules$transformers)
+                          ui_transform_teal_data(
+                            ns("data_transform"),
+                            transformators = modules$transformators
+                          )
                         )
                       )
                     )
@@ -180,7 +183,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
               ns("data_filters_toggle"),
               icon("fas fa-filter")
             ),
-            if (length(modules$transformers) > 0) {
+            if (length(modules$transformators) > 0) {
               actionButton(
                 class = "data-transforms-toggle btn-outline-primary",
                 ns("data_transforms_toggle"),
@@ -203,13 +206,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
           )
         )
       } else {
-        div(
-          div(
-            class = "teal_validated",
-            uiOutput(ns("data_input_error"))
-          ),
-          ui_teal
-        )
+        ui_teal
       }
     )
   )
@@ -339,27 +336,25 @@ srv_teal_module.teal_module <- function(id,
         data_rv = data_rv,
         is_active = is_active
       )
-      is_transformer_failed <- reactiveValues()
-      transformed_teal_data <- srv_transform_data(
+      is_transform_failed <- reactiveValues()
+      transformed_teal_data <- srv_transform_teal_data(
         "data_transform",
         data = filtered_teal_data,
-        transforms = modules$transformers,
+        transformators = modules$transformators,
         modules = modules,
-        is_transformer_failed = is_transformer_failed
+        is_transform_failed = is_transform_failed
       )
-      any_transformer_failed <- reactive({
-        any(unlist(reactiveValuesToList(is_transformer_failed)))
+      any_transform_failed <- reactive({
+        any(unlist(reactiveValuesToList(is_transform_failed)))
       })
 
-      observeEvent(any_transformer_failed(), {
-        if (isTRUE(any_transformer_failed())) {
+      observeEvent(any_transform_failed(), {
+        if (isTRUE(any_transform_failed())) {
           shinyjs::hide("teal_module_ui")
-          shinyjs::hide("validate_datanames")
-          shinyjs::show("transformer_failure_info")
+          shinyjs::show("transform_failure_info")
         } else {
           shinyjs::show("teal_module_ui")
-          shinyjs::show("validate_datanames")
-          shinyjs::hide("transformer_failure_info")
+          shinyjs::hide("transform_failure_info")
         }
       })
 
@@ -367,10 +362,10 @@ srv_teal_module.teal_module <- function(id,
         req(inherits(transformed_teal_data(), "teal_data"))
         all_teal_data <- transformed_teal_data()
         module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
-        .subset_teal_data(all_teal_data, module_datanames)
+        all_teal_data[c(module_datanames, ".raw_data")]
       })
 
-      srv_validate_reactive_teal_data(
+      srv_check_module_datanames(
         "validate_datanames",
         data = module_teal_data,
         modules = modules
@@ -413,14 +408,6 @@ srv_teal_module.teal_module <- function(id,
         # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
         module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
       }
-
-      # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
-      #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
-      #       Should we insertUI of the ReportPreviewer then?
-      #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
-      if ("report" %in% names(module_out)) {
-        # (reactively) add card to the reporter
-      }
     })
 
     module_out
@@ -458,11 +445,11 @@ srv_teal_module.teal_module <- function(id,
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
-    .topologically_sort_datanames(ls(teal.code::get_env(data)), teal.data::join_keys(data))
+    names(data)
   } else {
     intersect(
-      .include_parent_datanames(modules$datanames, teal.data::join_keys(data)),
-      ls(teal.code::get_env(data))
+      names(data), # Keep topological order from teal.data::names()
+      .include_parent_datanames(modules$datanames, teal.data::join_keys(data))
     )
   }
 }

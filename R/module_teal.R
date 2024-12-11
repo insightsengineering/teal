@@ -182,15 +182,23 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     )
 
     data_pulled <- srv_init_data("data", data = data)
-    data_validated <- srv_validate_reactive_teal_data(
-      "validate",
-      data = data_pulled,
-      modules = modules,
-      validate_shiny_silent_error = FALSE
+
+    validate_ui <- tags$div(
+      id = session$ns("validate_messages"),
+      class = "teal_validated",
+      ui_check_class_teal_data(session$ns("class_teal_data")),
+      ui_validate_error(session$ns("silent_error")),
+      ui_check_module_datanames(session$ns("datanames_warning"))
     )
+    srv_check_class_teal_data("class_teal_data", data_pulled)
+    srv_validate_error("silent_error", data_pulled, validate_shiny_silent_error = FALSE)
+    srv_check_module_datanames("datanames_warning", data_pulled, modules)
+
+    data_validated <- .trigger_on_success(data_pulled)
+
     data_rv <- reactive({
       req(inherits(data_validated(), "teal_data"))
-      is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data_validated())))
+      is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
       if (!isTRUE(is_filter_ok)) {
         showNotification(
           "Some filters were not applied because of incompatibility with data. Contact app developer.",
@@ -220,6 +228,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
+
+
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
       shiny::insertTab(
@@ -231,7 +241,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           value = "teal_data_module",
           tags$div(
             ui_init_data(session$ns("data")),
-            ui_validate_reactive_teal_data(session$ns("validate"))
+            validate_ui
           )
         )
       )
@@ -248,7 +258,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
         where = "beforeBegin",
-        ui = tags$div(ui_validate_reactive_teal_data(session$ns("validate")))
+        ui = tags$div(validate_ui, tags$br())
       )
     }
 

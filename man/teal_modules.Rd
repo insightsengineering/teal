@@ -6,10 +6,10 @@
 \alias{teal_module}
 \alias{modules}
 \alias{format.teal_module}
-\alias{print.teal_module}
 \alias{format.teal_modules}
-\alias{set_datanames}
+\alias{print.teal_module}
 \alias{print.teal_modules}
+\alias{set_datanames}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
@@ -21,20 +21,26 @@ module(
   datanames = "all",
   server_args = NULL,
   ui_args = NULL,
-  transformers = list()
+  transformators = list()
 )
 
 modules(..., label = "root")
 
-\method{format}{teal_module}(x, indent = 0, ...)
+\method{format}{teal_module}(
+  x,
+  is_last = FALSE,
+  parent_prefix = "",
+  what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
+  ...
+)
+
+\method{format}{teal_modules}(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 
-\method{format}{teal_modules}(x, indent = 0, ...)
+\method{print}{teal_modules}(x, ...)
 
 set_datanames(modules, datanames)
-
-\method{print}{teal_modules}(x, ...)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -67,21 +73,20 @@ or to the \code{...}.
 
 \item{filters}{(\code{character}) Deprecated. Use \code{datanames} instead.}
 
-\item{datanames}{(\code{character}) Names of the datasets that are relevant for the item.
-The keyword \code{"all"} provides all datasets available in \code{data} passed to \code{teal} application.
-\code{NULL} will hide the filter panel.}
+\item{datanames}{(\code{character}) Names of the datasets relevant to the item.
+There are 2 reserved values that have specific behaviors:
+\itemize{
+\item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
+\item \code{NULL} hides the sidebar panel completely.
+\item If \code{transformators} are specified, their \code{datanames} are automatically added to this \code{datanames}
+argument.
+}}
 
 \item{server_args}{(named \code{list}) with additional arguments passed on to the server function.}
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal} application, unless the \code{custom_ui} attribute is set on the list.
-If so, the module developer is responsible to display the UI in the module itself. \code{datanames} of the \code{transformers}
-will be added to the \code{datanames}.
-
-When the transformation does not have sufficient input data, the resulting data will fallback
-to the last successful transform or, in case there are none, to the filtered data.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -90,7 +95,17 @@ to the last successful transform or, in case there are none, to the filtered dat
 
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
-\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
+\item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
+Affects the tree branch character used (L- vs |-)}
+
+\item{parent_prefix}{(\code{character(1)}) The prefix inherited from parent nodes,
+used to maintain the tree structure in nested levels}
+
+\item{what}{(\code{character}) Specifies which metadata to display.
+Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"}
+
+\item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
+format.teal_modules(). Determines whether to show "TEAL ROOT" header}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
@@ -121,24 +136,33 @@ The labels \code{"global_filters"} and \code{"Report previewer"} are reserved
 because they are used by the \code{mapping} argument of \code{\link[=teal_slices]{teal_slices()}}
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
-\section{\code{datanames}}{
+\section{Restricting datasets used by \code{teal_module}:}{
+The \code{datanames} argument controls which datasets are used by the module’s server. These datasets,
+passed via server's \code{data} argument, are the only ones shown in the module's tab.
 
-The module's \code{datanames} argument determines a subset of datasets from the \code{data} object, as specified in the
-server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
-to this subset.
-When \code{datanames} is set to \code{"all"}, all available datasets in the \code{data} object are considered relevant for the
-module. However, setting \code{datanames} argument to \code{"all"} might include datasets that are irrelevant for the module,
-for example:
+When \code{datanames} is set to \code{"all"}, all datasets in the data object are treated as relevant.
+However, this may include unnecessary datasets, such as:
 \itemize{
-\item Proxy variables used for modifying columns.
-\item Modified copies of datasets used to create a final dataset.
-\item Connection objects.
-To prevent these irrelevant datasets from appearing in the module, use the \code{\link[=set_datanames]{set_datanames()}} function on the
-\link{module} or \code{\link[=modules]{modules()}} to change the \code{datanames} from \code{"all"} to specific dataset names. Attempting to change
-\code{datanames} values that was not set to \code{"all"} using \code{\link[=set_datanames]{set_datanames()}} will be ignored with a warning.
+\item Proxy variables for column modifications
+\item Temporary datasets used to create final versions
+\item Connection objects
 }
 
-Additionally, datasets with names starting with \code{.} are ignored when \code{datanames} is set to \code{"all"}.
+To exclude irrelevant datasets, use the \code{\link[=set_datanames]{set_datanames()}} function to change \code{datanames} from
+\code{"all"} to specific names. Trying to modify non-\code{"all"} values with \code{\link[=set_datanames]{set_datanames()}} will result
+in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
+in \code{datanames}.
+}
+
+\section{\code{datanames} with \code{transformators}}{
+When transformators are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+changes the behavior as follows:
+\itemize{
+\item If \code{module(datanames)} is \code{NULL} and the \code{transformators} have defined \code{datanames}, the sidebar
+will appear showing the \code{transformators}' datasets, instead of being hidden.
+\item If \code{module(datanames)} is set to specific values and any \code{transformator} has \code{datanames = "all"},
+the module may receive extra datasets that could be unnecessary
+}
 }
 
 \examples{
@@ -195,6 +219,113 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+mod <- module(
+  label = "My Custom Module",
+  server = function(id, data, ...) {},
+  ui = function(id, ...) {},
+  datanames = c("ADSL", "ADTTE"),
+  transformators = list(),
+  ui_args = list(a = 1, b = "b"),
+  server_args = list(x = 5, y = list(p = 1))
+)
+cat(format(mod))
+custom_module <- function(
+    label = "label", ui_args = NULL, server_args = NULL,
+    datanames = "all", transformators = list(), bk = FALSE) {
+  ans <- module(
+    label,
+    server = function(id, data, ...) {},
+    ui = function(id, ...) {
+    },
+    datanames = datanames,
+    transformators = transformators,
+    ui_args = ui_args,
+    server_args = server_args
+  )
+  attr(ans, "teal_bookmarkable") <- bk
+  ans
+}
+
+dummy_transformator <- teal_transform_module(
+  label = "Dummy Transform",
+  ui = function(id) div("(does nothing)"),
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) data)
+  }
+)
+
+plot_transformator <- teal_transform_module(
+  label = "Plot Settings",
+  ui = function(id) div("(does nothing)"),
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) data)
+  }
+)
+
+complete_modules <- modules(
+  custom_module(
+    label = "Data Overview",
+    datanames = c("ADSL", "ADAE", "ADVS"),
+    ui_args = list(
+      view_type = "table",
+      page_size = 10,
+      filters = c("ARM", "SEX", "RACE")
+    ),
+    server_args = list(
+      cache = TRUE,
+      debounce = 1000
+    ),
+    transformators = list(dummy_transformator),
+    bk = TRUE
+  ),
+  modules(
+    label = "Nested 1",
+    custom_module(
+      label = "Interactive Plots",
+      datanames = c("ADSL", "ADVS"),
+      ui_args = list(
+        plot_type = c("scatter", "box", "line"),
+        height = 600,
+        width = 800,
+        color_scheme = "viridis"
+      ),
+      server_args = list(
+        render_type = "svg",
+        cache_plots = TRUE
+      ),
+      transformators = list(dummy_transformator, plot_transformator),
+      bk = TRUE
+    ),
+    modules(
+      label = "Nested 2",
+      custom_module(
+        label = "Summary Statistics",
+        datanames = "ADSL",
+        ui_args = list(
+          stats = c("mean", "median", "sd", "range"),
+          grouping = c("ARM", "SEX")
+        )
+      ),
+      modules(
+        label = "Labeled nested modules",
+        custom_module(
+          label = "Subgroup Analysis",
+          datanames = c("ADSL", "ADAE"),
+          ui_args = list(
+            subgroups = c("AGE", "SEX", "RACE"),
+            analysis_type = "stratified"
+          ),
+          bk = TRUE
+        )
+      ),
+      modules(custom_module(label = "Subgroup Analysis in non-labled modules"))
+    )
+  ),
+  custom_module("Non-nested module")
+)
+
+cat(format(complete_modules))
+cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 # change the module's datanames
 set_datanames(module(datanames = "all"), "a")
 

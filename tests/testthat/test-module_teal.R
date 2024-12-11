@@ -70,6 +70,8 @@ testthat::describe("srv_teal lockfile", {
     "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
     "and snapshot is copied to teal_app.lock and removed after session ended"
   ), {
+    testthat::skip_if_not_installed("mirai")
+    testthat::skip_if_not_installed("renv")
     withr::with_options(
       list(teal.lockfile.mode = "enabled"),
       {
@@ -95,6 +97,8 @@ testthat::describe("srv_teal lockfile", {
     )
   })
   testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
+    testthat::skip_if_not_installed("mirai")
+    testthat::skip_if_not_installed("renv")
     withr::with_options(
       list(teal.lockfile.mode = "disabled"),
       {
@@ -217,7 +221,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init(), NULL)
         testthat::expect_null(modules_output$module_1())
         testthat::expect_null(modules_output$module_2())
       }
@@ -236,7 +239,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -259,7 +261,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -290,7 +291,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_null(modules_output$module_2())
@@ -343,7 +343,6 @@ testthat::describe("srv_teal teal_modules", {
         )
       ),
       expr = {
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_s4_class(modules_output$module_1()(), "teal_data")
       }
@@ -370,7 +369,6 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -397,7 +395,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
+        testthat::expect_s3_class(data_pulled(), "shiny.silent.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -413,7 +411,7 @@ testthat::describe("srv_teal teal_modules", {
           ui = function(id) NULL,
           server = function(id) {
             moduleServer(id, function(input, output, session) {
-              reactive(validate(need(FALSE, "my error")))
+              reactive(stop("my error"))
             })
           }
         ),
@@ -424,7 +422,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
+        testthat::expect_s3_class(data_pulled(), "simpleError")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -451,7 +449,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_error(data_init())
+        testthat::expect_s3_class(data_pulled(), "qenv.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -485,9 +483,9 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_1()())), "iris")
+        testthat::expect_setequal(names(modules_output$module_1()()), "iris")
         session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_tab` = "module_2")
-        testthat::expect_setequal(ls(teal.code::get_env(modules_output$module_2()())), "mtcars")
+        testthat::expect_setequal(names(modules_output$module_2()()), "mtcars")
       }
     )
   })
@@ -541,38 +539,195 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
+        testthat::expect_identical(names(modules_output$module_1()()), "iris")
         testthat::expect_identical(modules_output$module_1()()[["iris"]], iris)
       }
     )
   })
 
-  testthat::it("throws warning when dataname is not available", {
-    testthat::skip_if_not_installed("rvest")
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal_data(mtcars = mtcars),
-        modules = modules(
-          module("module_1", server = function(id, data) data, datanames = c("iris"))
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_tab` = "module_1")
+  testthat::describe("reserved dataname is being used:", {
+    testthat::it("multiple datanames with `all` and `.raw_data`", {
+      testthat::skip_if_not_installed("rvest")
 
-        testthat::expect_equal(
-          trimws(
-            rvest::html_text2(
-              rvest::read_html(
-                output[["teal_modules-module_1-validate_datanames-shiny_warnings-message"]]$html
-              )
-            )
-          ),
-          "Dataset iris is missing. No datasets are available in data."
+      # Shared common code for tests
+      td <- within(teal.data::teal_data(), {
+        all <- mtcars
+        iris <- iris
+        .raw_data <- data.frame(
+          Species = c("Setosa", "Virginica", "Versicolor"),
+          New.Column = c("Setosas are cool", "Virginicas are also cool", "Versicolors are cool too")
         )
-      }
-    )
+      })
+      teal.data::join_keys(td) <- teal.data::join_keys(join_key(".raw_data", "iris", "Species"))
+
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = td,
+          modules = modules(module("module_1", server = function(id, data) data))
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
+                )
+              )
+            ),
+            "all and .raw_data are reserved for internal use. Please avoid using them as dataset names."
+          )
+        }
+      )
+    })
+
+    testthat::it("single dataname with `all`", {
+      testthat::skip_if_not_installed("rvest")
+
+      td <- within(teal.data::teal_data(), {
+        all <- mtcars
+        iris <- iris
+      })
+
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = td,
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs("teal_modules-active_tab" = "module_1")
+          session$flushReact()
+
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
+                )
+              )
+            ),
+            "all is reserved for internal use. Please avoid using it as a dataset name."
+          )
+        }
+      )
+    })
+  })
+
+  testthat::describe("warnings on missing datanames", {
+    testthat::it("warns when dataname is not available", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(iris = iris),
+          modules = modules(
+            module("module_1", server = function(id, data) data, datanames = c("iris", "missing"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
+                )
+              )
+            ),
+            "Dataset missing is missing. Dataset available in data: iris."
+          )
+        }
+      )
+    })
+
+    testthat::it("warns when datanames are not available", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(mtcars = mtcars, iris = iris),
+          modules = modules(
+            module("module_1", datanames = c("mtcars", "iris", "missing1", "missing2"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
+                )
+              )
+            ),
+            "Datasets missing1 and missing2 are missing. Datasets available in data: iris and mtcars."
+          )
+        }
+      )
+    })
+
+    testthat::it("warns about empty data when none of module$datanames is available (even if data is not empty)", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data(mtcars = mtcars),
+          modules = modules(
+            module("module_1", datanames = c("missing1", "missing2"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["teal_modules-module_1-validate_datanames-message"]]$html
+                )
+              )
+            ),
+            "Datasets missing1 and missing2 are missing. No datasets are available in data."
+          )
+        }
+      )
+    })
+
+    testthat::it("warns about empty data when none of module$datanames is available", {
+      testthat::skip_if_not_installed("rvest")
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = reactive(teal_data(mtcars = mtcars)),
+          modules = modules(
+            module("module_1", datanames = c("missing1", "missing2"))
+          )
+        ),
+        expr = {
+          session$setInputs(`teal_modules-active_tab` = "module_1")
+          testthat::expect_equal(
+            trimws(
+              rvest::html_text2(
+                rvest::read_html(
+                  output[["datanames_warning-message"]]$html
+                )
+              )
+            ),
+            "Datasets missing1 and missing2 are missing for module 'module_1'. Dataset available in data: mtcars."
+          )
+        }
+      )
+    })
   })
 
   testthat::it("is called and receives data even if datanames in `teal_data` are not sufficient", {
@@ -588,12 +743,12 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), "iris")
+        testthat::expect_identical(names(modules_output$module_1()()), "iris")
       }
     )
   })
 
-  testthat::it("receives all objects from @env when module$datanames = \"all\"", {
+  testthat::it("receives all objects from teal_data when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -609,7 +764,7 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
-          teal.data::datanames(modules_output$module_1()()),
+          names(modules_output$module_1()()),
           c("iris", "iris_raw", "mtcars", "swiss")
         )
       }
@@ -641,7 +796,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all transform datasets if module$datanames == 'all'", {
+  testthat::it("receives all transformator datasets if module$datanames == 'all'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -657,7 +812,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -673,7 +828,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -694,7 +849,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -710,7 +865,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
@@ -738,7 +893,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_setequal(ls(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
+        testthat::expect_setequal(names(modules_output$module_1()()[[".raw_data"]]), c("iris", "swiss"))
       }
     )
   })
@@ -753,7 +908,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 ui = function(id) div("(does nothing)"),
@@ -771,12 +926,12 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars", "swiss"))
       }
     )
   })
 
-  testthat::it("does not receive transform datasets not specified in transform$datanames nor modue$datanames", {
+  testthat::it("does not receive transformator datasets not specified in transform$datanames nor modue$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -792,7 +947,7 @@ testthat::describe("srv_teal teal_modules", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 label = "Dummy",
                 server = function(id, data) {
@@ -809,7 +964,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
-        testthat::expect_identical(teal.data::datanames(modules_output$module_1()()), c("iris", "mtcars"))
+        testthat::expect_identical(names(modules_output$module_1()()), c("iris", "mtcars"))
       }
     )
   })
@@ -1332,10 +1487,10 @@ testthat::describe("srv_teal filters", {
             c(
               "iris <- iris",
               "mtcars <- mtcars",
-              sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-              sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+              sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+              sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
               ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-              "lockEnvironment(.raw_data)",
+              "lockEnvironment(.raw_data) # @linksto .raw_data",
               "mtcars <- dplyr::filter(mtcars, cyl == 4)"
             ),
             collapse = "\n"
@@ -1456,7 +1611,7 @@ testthat::describe("srv_teal data reload", {
   })
 })
 
-testthat::describe("srv_teal teal_module(s) transformer", {
+testthat::describe("srv_teal teal_module(s) transformator", {
   testthat::it("evaluates custom qenv call and pass updated teal_data to the module", {
     shiny::testServer(
       app = srv_teal,
@@ -1467,7 +1622,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "mtcars")]
+            transformators = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1496,7 +1651,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "mtcars")]
+            transformators = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1510,10 +1665,10 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           'iris <- dplyr::filter(iris, Species == "versicolor")',
           "mtcars <- dplyr::filter(mtcars, cyl == 6)",
           "iris <- head(iris, n = 6)",
@@ -1540,7 +1695,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = transform_list[c("iris", "mtcars")]
+            transformators = transform_list[c("iris", "mtcars")]
           )
         )
       ),
@@ -1556,10 +1711,10 @@ testthat::describe("srv_teal teal_module(s) transformer", {
         expected_code <- paste(collapse = "\n", c(
           "iris <- iris",
           "mtcars <- mtcars",
-          sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-          sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+          sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+          sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
           ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-          "lockEnvironment(.raw_data)",
+          "lockEnvironment(.raw_data) # @linksto .raw_data",
           "mtcars <- dplyr::filter(mtcars, cyl == 4)",
           "iris <- head(iris, n = 6)",
           "mtcars <- head(mtcars, n = 6)"
@@ -1590,7 +1745,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             label = "module_1",
             server = function(id, data) data,
             datanames = c("iris", "data_from_transform"),
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1617,7 +1772,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("throws warning when transformer return reactive.event", {
+  testthat::it("throws a warning when transformator returns reactive.event", {
     testthat::expect_warning(
       testServer(
         app = srv_teal,
@@ -1627,7 +1782,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           modules = modules(
             module(
               server = function(id, data) data,
-              transformers = list(
+              transformators = list(
                 teal_transform_module(
                   ui = function(id) textInput("a", "an input"),
                   server = function(id, data) eventReactive(input$a, data())
@@ -1645,7 +1800,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("fails when transformer doesn't return reactive", {
+  testthat::it("fails when transformator doesn't return reactive", {
     testthat::expect_warning(
       # error decorator is mocked to avoid showing the trace error during the
       # test.
@@ -1659,7 +1814,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
             modules = modules(
               module(
                 server = function(id, data) data,
-                transformers = list(
+                transformators = list(
                   teal_transform_module(
                     ui = function(id) NULL,
                     server = function(id, data) "whatever"
@@ -1682,7 +1837,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("pauses when transformer throws validation error", {
+  testthat::it("pauses when transformator throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1692,7 +1847,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1710,7 +1865,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("pauses when transformer throws validation error", {
+  testthat::it("pauses when transformator throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1720,7 +1875,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1738,7 +1893,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
     )
   })
 
-  testthat::it("pauses when transformer throws qenv error", {
+  testthat::it("pauses when transformator throws qenv error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1748,7 +1903,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1776,7 +1931,7 @@ testthat::describe("srv_teal teal_module(s) transformer", {
           module(
             label = "module_1",
             server = function(id, data) data,
-            transformers = list(
+            transformators = list(
               teal_transform_module(
                 ui = function(id) NULL,
                 server = function(id, data) {
@@ -1790,6 +1945,116 @@ testthat::describe("srv_teal teal_module(s) transformer", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
+      }
+    )
+  })
+
+  testthat::it("changes module output for a module with a static decorator", {
+    output_decorator <- teal_transform_module(
+      label = "output_decorator",
+      server = make_teal_transform_server(expression(object <- rev(object)))
+    )
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(object = iris),
+        modules = modules(example_module("mod1", decorators = list(output_decorator)))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "mod1")
+        session$setInputs(`teal_modules-mod1-module-dataname` = "object")
+        session$flushReact()
+        testthat::expect_identical(
+          modules_output$mod1()()[["object"]],
+          rev(iris)
+        )
+      }
+    )
+  })
+
+
+  testthat::it("changes module output for a module with a decorator that is a function of an object name", {
+    decorator_name <- function(output_name, label) {
+      teal_transform_module(
+        label = label,
+        server = function(id, data) {
+          moduleServer(id, function(input, output, session) {
+            reactive({
+              within(
+                data(),
+                output_name <- paste0(output_name, " lorem ipsum"),
+                text = input$text,
+                output_name = as.name(output_name)
+              )
+            })
+          })
+        }
+      )
+    }
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(x1 = "ABC"),
+        modules = modules(
+          example_module(
+            "mod1",
+            decorators = list(decorator_name(output_name = "object", label = "decorator_name"))
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "mod1")
+        session$setInputs(`teal_modules-mod1-module-dataname` = "x1")
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum")
+      }
+    )
+  })
+
+  testthat::it("changes module output for a module with an interactive decorator", {
+    decorator_name <- function(output_name, label) {
+      teal_transform_module(
+        label = label,
+        server = function(id, data) {
+          moduleServer(id, function(input, output, session) {
+            reactive({
+              req(data(), input$text)
+              within(
+                data(),
+                output_name <- paste0(output_name, " ", text),
+                text = input$text,
+                output_name = as.name(output_name)
+              )
+            })
+          })
+        }
+      )
+    }
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(x1 = "ABC"),
+        modules = modules(
+          example_module(
+            "mod1",
+            decorators = list(decorator_name(output_name = "object", label = "decorator_name"))
+          )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "mod1")
+        session$setInputs(`teal_modules-mod1-module-dataname` = "x1")
+        session$setInputs(`teal_modules-mod1-module-decorate-transform_1-transform-text` = "lorem ipsum dolor")
+        session$flushReact()
+
+        testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum dolor")
       }
     )
   })
@@ -1986,7 +2251,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transform adding new dataset if specified in module", {
+  testthat::it("reflects transformator adding new dataset if specified in module", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1996,7 +2261,7 @@ testthat::describe("srv_teal summary table", {
           module(
             "module_1",
             server = function(id, data) data,
-            transformers = teal_transform_module(
+            transformators = teal_transform_module(
               datanames = character(0),
               server = function(id, data) {
                 moduleServer(id, function(input, output, session) {
@@ -2024,7 +2289,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transform filtering", {
+  testthat::it("reflects transformator filtering", {
     testthat::it("displays parent's Subjects with count based on primary key", {
       shiny::testServer(
         app = srv_teal,
@@ -2035,7 +2300,7 @@ testthat::describe("srv_teal summary table", {
             module(
               "module_1",
               server = function(id, data) data,
-              transformers = transform_list["iris"]
+              transformators = transform_list["iris"]
             )
           )
         ),
@@ -2078,7 +2343,10 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("displays parent before child when join_keys are provided", {
-    data <- teal.data::teal_data(parent = mtcars, child = data.frame(am = c(0, 1), test = c("a", "b")))
+    data <- teal.data::teal_data(
+      parent = mtcars,
+      child = data.frame(am = c(0, 1), test = c("a", "b"))
+    )
 
     teal.data::join_keys(data) <- teal.data::join_keys(
       teal.data::join_key("parent", "child", keys = c("am"))
@@ -2118,6 +2386,78 @@ testthat::describe("srv_teal summary table", {
           data.frame(
             "Data Name" = c("iris"),
             Obs = c("150/150"),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("summary table displays MAE dataset added in transformators", {
+    data <- within(teal.data::teal_data(), {
+      iris <- iris
+      mtcars <- mtcars
+      foo <- identity
+    })
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transformators = list(
+          teal_transform_module(
+            server = function(id, data) {
+              reactive({
+                within(data(), {
+                  withr::with_package("MultiAssayExperiment", {
+                    data("miniACC", package = "MultiAssayExperiment", envir = environment())
+                  })
+                })
+              })
+            }
+          )
+        )))
+      ),
+      expr = {
+        # throws warning as data("miniACC") hasn't been detected as miniACC dependency
+        suppressWarnings(session$setInputs("teal_modules-active_tab" = "module_1"))
+        testthat::expect_equal(
+          module_summary_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c(
+              "iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+              "- RPPAArray", "- Mutations", "- miRNASeqGene", "mtcars"
+            ),
+            Obs = c("150/150", "", "198", "198", "33", "97", "471", "32/32"),
+            Subjects = c(NA_integer_, 92, 79, 90, 46, 90, 80, NA_integer_),
+            check.names = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("displays unsupported datasets", {
+    data <- within(teal.data::teal_data(), {
+      iris <- iris
+      mtcars <- mtcars
+      foo <- identity
+    })
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = data,
+        modules = modules(module("module_1", server = function(id, data) data, datanames = "all"))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+        testthat::expect_identical(
+          module_summary_table(output, "module_1"),
+          data.frame(
+            "Data Name" = c("iris", "mtcars"),
+            Obs = c("150/150", "32/32"),
             check.names = FALSE
           )
         )
@@ -2210,6 +2550,188 @@ testthat::describe("srv_teal snapshot manager", {
             slices_global$module_slices_api[["module_2"]]$get_filter_state(),
             initial_slices[2],
             with_attrs = FALSE
+          )
+        )
+      }
+    )
+  })
+})
+
+testthat::describe("Datanames with special symbols", {
+  testthat::it("are detected as datanames when defined as 'all'", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(
+          iris = iris,
+          `%a_pipe%` = function(lhs, rhs) paste(lhs, rhs)
+        ),
+        modules = modules(module("module_1", server = function(id, data) data)),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          names(modules_output$module_1()()),
+          c("iris", "%a_pipe%")
+        )
+      }
+    )
+  })
+
+  testthat::it("are present in datanames when used in pre-processing code", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `_a variable with spaces_` <- "new_column" # nolint: object_name.
+            iris <- cbind(iris, data.frame(`_a variable with spaces_`))
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c("iris", "_a variable with spaces_"))
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          names(modules_output$module_1()()),
+          c("iris", "_a variable with spaces_")
+        )
+      }
+    )
+  })
+
+  testthat::it("(when used as non-native pipe) are present in datanames in the pre-processing code", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          {
+            iris <- iris
+            mtcars <- mtcars
+            `%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)
+            iris <- iris %cbind% data.frame("new_column")
+          }
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data, datanames = c("iris"))
+        ),
+        filter = teal_slices(
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        testthat::expect_contains(
+          strsplit(
+            x = teal.code::get_code(modules_output$module_1()()),
+            split = "\n"
+          )[[1]],
+          c(
+            "`%cbind%` <- function(lhs, rhs) cbind(lhs, rhs)",
+            ".raw_data <- list2env(list(iris = iris))"
+          )
+        )
+      }
+    )
+  })
+})
+
+testthat::describe("teal.data code with a function defined", {
+  testthat::it("is fully reproducible", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal.data::teal_data(), {
+          fun <- function(x) {
+            y <- x + 1
+            y + 3
+          }
+        })),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        # Need to evaluate characters to preserve indentation
+        local_env <- new.env(parent = .GlobalEnv)
+        dat <- modules_output$module_1()()
+
+        eval(
+          parse(text = teal.code::get_code(dat)),
+          envir = local_env
+        )
+
+        testthat::expect_identical(local_env$fun(1), 5)
+        testthat::expect_identical(local_env$fun(1), dat[["fun"]](1))
+      }
+    )
+  })
+
+  testthat::it("has the correct code (with hash)", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(within(teal.data::teal_data(), {
+          fun <- function(x) {
+            y <- x + 1
+            y + 3
+          }
+        })),
+        modules = modules(module("module_1", server = function(id, data) data))
+      ),
+      expr = {
+        session$setInputs("teal_modules-active_tab" = "module_1")
+        session$flushReact()
+
+        # Need to evaluate characters to preserve indentation
+        local_env <- new.env(parent = .GlobalEnv)
+        eval(
+          parse(
+            text = paste(
+              sep = "\n",
+              "fun <- function(x) {",
+              "    y <- x + 1",
+              "    y + 3",
+              "}"
+            )
+          ),
+          envir = local_env
+        )
+        local(hash <- rlang::hash(deparse1(fun)), envir = local_env)
+        testthat::expect_setequal(
+          trimws(strsplit(
+            x = teal.code::get_code(modules_output$module_1()()),
+            split = "\n"
+          )[[1]]),
+          c(
+            "fun <- function(x) {",
+            "y <- x + 1",
+            "y + 3",
+            "}",
+            sprintf("stopifnot(rlang::hash(deparse1(fun)) == \"%s\") # @linksto fun", local_env$hash),
+            ".raw_data <- list2env(list(fun = fun))",
+            "lockEnvironment(.raw_data) # @linksto .raw_data"
           )
         )
       }

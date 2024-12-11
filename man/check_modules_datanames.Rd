@@ -2,9 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{check_modules_datanames}
 \alias{check_modules_datanames}
+\alias{check_reserved_datanames}
+\alias{check_modules_datanames_html}
 \title{Check \code{datanames} in modules}
 \usage{
 check_modules_datanames(modules, datanames)
+
+check_reserved_datanames(datanames)
+
+check_modules_datanames_html(modules, datanames)
 }
 \arguments{
 \item{modules}{(\code{teal_modules}) object}
@@ -12,10 +18,15 @@ check_modules_datanames(modules, datanames)
 \item{datanames}{(\code{character}) names of datasets available in the \code{data} object}
 }
 \value{
-A \code{character(1)} containing error message or \code{TRUE} if validation passes.
+\code{TRUE} if validation passes, otherwise \code{character(1)} or \code{shiny.tag.list}
 }
 \description{
-This function ensures specified \code{datanames} in modules match those in the data object,
-returning error messages or \code{TRUE} for successful validation.
+These functions check if specified \code{datanames} in modules match those in the data object,
+returning error messages or \code{TRUE} for successful validation. Two functions return error message
+in different forms:
+\itemize{
+\item \code{check_modules_datanames} returns \code{character(1)} for basic assertion usage
+\item \code{check_modules_datanames_html} returns \code{shiny.tag.list} to display it in the app.
+}
 }
 \keyword{internal}

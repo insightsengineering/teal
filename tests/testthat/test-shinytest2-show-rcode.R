@@ -42,16 +42,17 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
   )
 
   # Check R code output.
-  testthat::expect_identical(
-    app$get_text(app$active_module_element("rcode-verbatim_content")),
-    paste(
+  testthat::expect_setequal(
+    strsplit(app$get_text(app$active_module_element("rcode-verbatim_content")), "\n")[[1]],
+    c(
       "iris <- iris",
       "mtcars <- mtcars",
-      sprintf('stopifnot(rlang::hash(iris) == "%s")', rlang::hash(iris)),
-      sprintf('stopifnot(rlang::hash(mtcars) == "%s")', rlang::hash(mtcars)),
+      sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
+      sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
       ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-      "lockEnvironment(.raw_data)",
-      sep = "\n"
+      "lockEnvironment(.raw_data) # @linksto .raw_data",
+      "object <- iris",
+      "object"
     )
   )
 

@@ -3,15 +3,17 @@
 #' Module and its utils to display the number of rows and subjects in the filtered and unfiltered data.
 #'
 #' @details Handling different data classes:
-#' `get_object_filter_overview()` is a pseudo S3 method which has variants for:
+#' `get_filter_overview()` is a pseudo S3 method which has variants for:
 #' - `array` (`data.frame`, `DataFrame`, `array`, `Matrix` and `SummarizedExperiment`): Method variant
 #' can be applied to any two-dimensional objects on which [ncol()] can be used.
 #' - `MultiAssayExperiment`: for which summary contains counts for `colData` and all `experiments`.
+#' - For other data types module displays data name with warning icon and no more details.
 #'
-#' @param id (`character(1)`)
-#'  `shiny` module instance id.
+#' Module includes also "Show/Hide unsupported" button to toggle rows of the summary table
+#' containing datasets where number of observations are not calculated.
+#'
+#' @param id (`character(1)`) `shiny` module instance id.
 #' @param teal_data (`reactive` returning `teal_data`)
-#'
 #'
 #' @name module_data_summary
 #' @rdname module_data_summary
@@ -35,27 +37,10 @@ srv_data_summary <- function(id, teal_data) {
 
       summary_table <- reactive({
         req(inherits(teal_data(), "teal_data"))
-        if (!length(ls(teal.code::get_env(teal_data())))) {
+        if (!length(teal_data())) {
           return(NULL)
         }
-
-        filter_overview <- get_filter_overview(teal_data)
-        names(filter_overview)[[1]] <- "Data Name"
-
-        filter_overview$Obs <- ifelse(
-          !is.na(filter_overview$obs),
-          sprintf("%s/%s", filter_overview$obs_filtered, filter_overview$obs),
-          ifelse(!is.na(filter_overview$obs_filtered), sprintf("%s", filter_overview$obs_filtered), "")
-        )
-
-        filter_overview$Subjects <- ifelse(
-          !is.na(filter_overview$subjects),
-          sprintf("%s/%s", filter_overview$subjects_filtered, filter_overview$subjects),
-          ""
-        )
-
-        filter_overview <- filter_overview[, colnames(filter_overview) %in% c("Data Name", "Obs", "Subjects")]
-        Filter(function(col) !all(col == ""), filter_overview)
+        get_filter_overview_wrapper(teal_data)
       })
 
       output$table <- renderUI({
@@ -68,39 +53,26 @@ srv_data_summary <- function(id, teal_data) {
         } else if (is.null(summary_table_out)) {
           "no datasets to show"
         } else {
-          body_html <- lapply(
-            seq_len(nrow(summary_table_out)),
-            function(row_index) {
-              x <- summary_table_out[row_index, ]
-              row_color <- ifelse(row_index %% 2 == 0, "#f2f2f2", "#ffffff")
-
-              tags$tr(
-                tagList(
-                  tags$td(
-                    style = paste0("background-color:", row_color, ";"),
-                    if (all(x[-1] == "")) {
-                      icon(
-                        name = "fas fa-exclamation-triangle",
-                        title = "Unsupported dataset",
-                        `data-container` = "body",
-                        `data-toggle` = "popover",
-                        `data-content` = "object not supported by the data_summary module"
-                      )
-                    },
-                    x[1]
-                  ),
-                  lapply(x[-1], function(cell) {
-                    tags$td(
-                      style = paste0("background-color:", row_color, ";"),
-                      cell
-                    )
-                  })
+          is_unsupported <- apply(summary_table(), 1, function(x) all(is.na(x[-1])))
+          summary_table_out[is.na(summary_table_out)] <- ""
+          body_html <- apply(
+            summary_table_out,
+            1,
+            function(x) {
+              is_supported <- !all(x[-1] == "")
+              if (is_supported) {
+                tags$tr(
+                  tagList(
+                    tags$td(x[1]),
+                    lapply(x[-1], tags$td)
+                  )
                 )
-              )
+              }
             }
           )
 
-          header_labels <- names(summary_table())
+          header_labels <- tools::toTitleCase(names(summary_table_out))
+          header_labels[header_labels == "Dataname"] <- "Data Name"
           header_html <- tags$tr(tagList(lapply(header_labels, tags$td)))
 
           table_html <- tags$table(
@@ -108,119 +80,141 @@ srv_data_summary <- function(id, teal_data) {
             tags$thead(header_html),
             tags$tbody(body_html)
           )
-          table_html
+          div(
+            table_html,
+            if (any(is_unsupported)) {
+              p(
+                class = c("pull-right", "float-right", "text-secondary"),
+                style = "font-size: 0.8em;",
+                sprintf("And %s more unfilterable object(s)", sum(is_unsupported)),
+                icon(
+                  name = "far fa-circle-question",
+                  title = paste(
+                    sep = "",
+                    collapse = "\n",
+                    shQuote(summary_table()[is_unsupported, "dataname"]),
+                    " (",
+                    vapply(
+                      summary_table()[is_unsupported, "dataname"],
+                      function(x) class(teal_data()[[x]])[1],
+                      character(1L)
+                    ),
+                    ")"
+                  )
+                )
+              )
+            }
+          )
         }
       })
 
-      summary_table # testing purpose
+      NULL
     }
   )
 }
 
 #' @rdname module_data_summary
-get_filter_overview <- function(teal_data) {
-  datanames <- teal.data::datanames(teal_data())
+get_filter_overview_wrapper <- function(teal_data) {
+  # Sort datanames in topological order
+  datanames <- names(teal_data())
   joinkeys <- teal.data::join_keys(teal_data())
 
-  filtered_data_objs <- sapply(
+  current_data_objs <- sapply(
     datanames,
-    function(name) teal.code::get_var(teal_data(), name),
+    function(name) teal_data()[[name]],
     simplify = FALSE
   )
-  unfiltered_data_objs <- teal.code::get_var(teal_data(), ".raw_data")
+  initial_data_objs <- teal_data()[[".raw_data"]]
 
-  rows <- lapply(
+  out <- lapply(
     datanames,
     function(dataname) {
       parent <- teal.data::parent(joinkeys, dataname)
-      # todo: what should we display for a parent dataset?
-      #     - Obs and Subjects
-      #     - Obs only
-      #     - Subjects only
-      # todo (for later): summary table should be displayed in a way that child datasets
-      #       are indented under their parent dataset to form a tree structure
       subject_keys <- if (length(parent) > 0) {
         names(joinkeys[dataname, parent])
       } else {
         joinkeys[dataname, dataname]
       }
-      get_object_filter_overview(
-        filtered_data = filtered_data_objs[[dataname]],
-        unfiltered_data = unfiltered_data_objs[[dataname]],
+      get_filter_overview(
+        current_data = current_data_objs[[dataname]],
+        initial_data = initial_data_objs[[dataname]],
         dataname = dataname,
         subject_keys = subject_keys
       )
     }
   )
 
-  unssuported_idx <- vapply(rows, function(x) all(is.na(x[-1])), logical(1)) # this is mainly for vectors
-  do.call(rbind, c(rows[!unssuported_idx], rows[unssuported_idx]))
+  do.call(.smart_rbind, out)
 }
 
+
 #' @rdname module_data_summary
-#' @param filtered_data (`list`) of filtered objects
-#' @param unfiltered_data (`list`) of unfiltered objects
+#' @param current_data (`object`) current object (after filtering and transforming).
+#' @param initial_data (`object`) initial object.
 #' @param dataname (`character(1)`)
-get_object_filter_overview <- function(filtered_data, unfiltered_data, dataname, subject_keys) {
-  if (inherits(filtered_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
-    get_object_filter_overview_array(filtered_data, unfiltered_data, dataname, subject_keys)
-  } else if (inherits(filtered_data, "MultiAssayExperiment")) {
-    get_object_filter_overview_MultiAssayExperiment(filtered_data, unfiltered_data, dataname)
+#' @param subject_keys (`character`) names of the columns which determine a single unique subjects
+get_filter_overview <- function(current_data, initial_data, dataname, subject_keys) {
+  if (inherits(current_data, c("data.frame", "DataFrame", "array", "Matrix", "SummarizedExperiment"))) {
+    get_filter_overview_array(current_data, initial_data, dataname, subject_keys)
+  } else if (inherits(current_data, "MultiAssayExperiment")) {
+    get_filter_overview_MultiAssayExperiment(current_data, initial_data, dataname)
   } else {
-    data.frame(
-      dataname = dataname,
-      obs = NA,
-      obs_filtered = NA,
-      subjects = NA,
-      subjects_filtered = NA
-    )
+    data.frame(dataname = dataname)
   }
 }
 
 #' @rdname module_data_summary
-get_object_filter_overview_array <- function(filtered_data, # nolint: object_length.
-                                             unfiltered_data,
-                                             dataname,
-                                             subject_keys) {
+get_filter_overview_array <- function(current_data,
+                                      initial_data,
+                                      dataname,
+                                      subject_keys) {
   if (length(subject_keys) == 0) {
     data.frame(
       dataname = dataname,
-      obs = ifelse(!is.null(nrow(unfiltered_data)), nrow(unfiltered_data), NA),
-      obs_filtered = nrow(filtered_data),
-      subjects = NA,
-      subjects_filtered = NA
+      obs = if (!is.null(initial_data)) {
+        sprintf("%s/%s", nrow(current_data), nrow(initial_data))
+      } else {
+        nrow(current_data)
+      }
     )
   } else {
     data.frame(
       dataname = dataname,
-      obs = ifelse(!is.null(nrow(unfiltered_data)), nrow(unfiltered_data), NA),
-      obs_filtered = nrow(filtered_data),
-      subjects = nrow(unique(unfiltered_data[subject_keys])),
-      subjects_filtered = nrow(unique(filtered_data[subject_keys]))
+      obs = if (!is.null(initial_data)) {
+        sprintf("%s/%s", nrow(current_data), nrow(initial_data))
+      } else {
+        nrow(current_data)
+      },
+      subjects = if (!is.null(initial_data)) {
+        sprintf("%s/%s", nrow(unique(current_data[subject_keys])), nrow(unique(initial_data[subject_keys])))
+      } else {
+        nrow(unique(current_data[subject_keys]))
+      }
     )
   }
 }
 
 #' @rdname module_data_summary
-get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, # nolint: object_length, object_name.
-                                                            unfiltered_data,
-                                                            dataname) {
-  experiment_names <- names(unfiltered_data)
+get_filter_overview_MultiAssayExperiment <- function(current_data, # nolint: object_length, object_name.
+                                                     initial_data,
+                                                     dataname) {
+  experiment_names <- names(current_data)
   mae_info <- data.frame(
     dataname = dataname,
-    obs = NA,
-    obs_filtered = NA,
-    subjects = nrow(unfiltered_data@colData),
-    subjects_filtered = nrow(filtered_data@colData)
+    subjects = if (!is.null(initial_data)) {
+      sprintf("%s/%s", nrow(current_data@colData), nrow(initial_data@colData))
+    } else {
+      nrow(current_data@colData)
+    }
   )
 
   experiment_obs_info <- do.call("rbind", lapply(
     experiment_names,
     function(experiment_name) {
       transform(
-        get_object_filter_overview(
-          filtered_data[[experiment_name]],
-          unfiltered_data[[experiment_name]],
+        get_filter_overview(
+          current_data[[experiment_name]],
+          initial_data[[experiment_name]],
           dataname = experiment_name,
           subject_keys = join_keys() # empty join keys
         ),
@@ -238,12 +232,19 @@ get_object_filter_overview_MultiAssayExperiment <- function(filtered_data, # nol
     experiment_names,
     function(experiment_name) {
       data.frame(
-        subjects = get_experiment_keys(filtered_data, unfiltered_data[[experiment_name]]),
-        subjects_filtered = get_experiment_keys(filtered_data, filtered_data[[experiment_name]])
+        subjects = if (!is.null(initial_data)) {
+          sprintf(
+            "%s/%s",
+            get_experiment_keys(current_data, current_data[[experiment_name]]),
+            get_experiment_keys(current_data, initial_data[[experiment_name]])
+          )
+        } else {
+          get_experiment_keys(current_data, current_data[[experiment_name]])
+        }
       )
     }
   ))
 
-  experiment_info <- cbind(experiment_obs_info[, c("dataname", "obs", "obs_filtered")], experiment_subjects_info)
-  rbind(mae_info, experiment_info)
+  experiment_info <- cbind(experiment_obs_info, experiment_subjects_info)
+  .smart_rbind(mae_info, experiment_info)
 }

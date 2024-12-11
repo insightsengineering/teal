@@ -9,9 +9,8 @@
 #' `teal.code` and `teal.data` methods.
 #'
 #' @param data (`teal_data`)
-#' @param code (`character`) code to append to `data@code`
-#' @param objects (`list`) objects to append to `data@env`
-#' @param datanames (`character`) names of the datasets
+#' @param code (`character`) code to append to the object's code slot.
+#' @param objects (`list`) objects to append to object's environment.
 #' @return modified `teal_data`
 #' @keywords internal
 #' @name teal_data_utilities
@@ -20,10 +19,7 @@ NULL
 #' @rdname teal_data_utilities
 .append_evaluated_code <- function(data, code) {
   checkmate::assert_class(data, "teal_data")
-  data@code <- c(data@code, code)
-  data@id <- c(data@id, max(data@id) + 1L + seq_along(code))
-  data@messages <- c(data@messages, rep("", length(code)))
-  data@warnings <- c(data@warnings, rep("", length(code)))
+  data@code <- c(data@code, code2list(code))
   methods::validObject(data)
   data
 }
@@ -33,32 +29,7 @@ NULL
   checkmate::assert_class(data, "teal_data")
   checkmate::assert_class(objects, "list")
   new_env <- list2env(objects, parent = .GlobalEnv)
-  rlang::env_coalesce(new_env, teal.code::get_env(data))
-  data@env <- new_env
+  rlang::env_coalesce(new_env, as.environment(data))
+  data@.xData <- new_env
   data
-}
-
-#' @rdname teal_data_utilities
-.subset_teal_data <- function(data, datanames) {
-  checkmate::assert_class(data, "teal_data")
-  checkmate::assert_class(datanames, "character")
-  datanames_corrected <- intersect(datanames, ls(teal.code::get_env(data)))
-  datanames_corrected_with_raw <- c(datanames_corrected, ".raw_data")
-  if (!length(datanames_corrected)) {
-    return(teal_data())
-  }
-
-  new_data <- do.call(
-    teal.data::teal_data,
-    args = c(
-      mget(x = datanames_corrected_with_raw, envir = teal.code::get_env(data)),
-      list(
-        code = teal.data::get_code(data, datanames = datanames_corrected_with_raw),
-        join_keys = teal.data::join_keys(data)[datanames_corrected]
-      )
-    )
-  )
-  new_data@verified <- data@verified
-  teal.data::datanames(new_data) <- datanames_corrected
-  new_data
 }

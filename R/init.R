@@ -103,16 +103,6 @@ init <- function(data,
 
   # argument checking (independent)
   ## `data`
-  if (inherits(data, "TealData")) {
-    lifecycle::deprecate_stop(
-      when = "0.15.0",
-      what = "init(data)",
-      paste(
-        "TealData is no longer supported. Use teal_data() instead.",
-        "Please follow migration instructions https://github.com/insightsengineering/teal/discussions/988."
-      )
-    )
-  }
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module"))
   checkmate::assert_class(landing_popup, "teal_module_landing", null.ok = TRUE)
 
@@ -207,16 +197,16 @@ init <- function(data,
 
   ## `data` - `modules`
   if (inherits(data, "teal_data")) {
-    if (length(ls(teal.code::get_env(data))) == 0) {
+    if (length(data) == 0) {
       stop("The environment of `data` is empty.")
     }
 
-    is_modules_ok <- check_modules_datanames(modules, ls(teal.code::get_env(data)))
-    if (!isTRUE(is_modules_ok) && length(unlist(extract_transformers(modules))) == 0) {
-      lapply(is_modules_ok$string, warning, call. = FALSE)
+    is_modules_ok <- check_modules_datanames(modules, names(data))
+    if (!isTRUE(is_modules_ok) && length(unlist(extract_transformators(modules))) == 0) {
+      warning(is_modules_ok, call. = FALSE)
     }
 
-    is_filter_ok <- check_filter_datanames(filter, ls(teal.code::get_env(data)))
+    is_filter_ok <- check_filter_datanames(filter, names(data))
     if (!isTRUE(is_filter_ok)) {
       warning(is_filter_ok)
       # we allow app to continue if applied filters are outside

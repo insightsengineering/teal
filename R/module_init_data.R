@@ -95,14 +95,13 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
-
   tdata <- do.call(
     teal.data::teal_data,
     c(
       list(code = trimws(c(teal.code::get_code(data), hashes), which = "right")),
       list(join_keys = teal.data::join_keys(data)),
       sapply(
-        ls(teal.code::get_env(data)),
+        names(data),
         teal.code::get_var,
         object = data,
         simplify = FALSE
@@ -122,15 +121,22 @@ srv_init_data <- function(id, data) {
 #' @return A character vector with the code lines.
 #' @keywords internal
 #'
-.get_hashes_code <- function(data, datanames = ls(teal.code::get_env(data))) {
+.get_hashes_code <- function(data, datanames = names(data)) {
   vapply(
     datanames,
     function(dataname, datasets) {
-      hash <- rlang::hash(data[[dataname]])
+      x <- data[[dataname]]
+
+      code <- if (is.function(x) && !is.primitive(x)) {
+        x <- deparse1(x)
+        bquote(rlang::hash(deparse1(.(as.name(dataname)))))
+      } else {
+        bquote(rlang::hash(.(as.name(dataname))))
+      }
       sprintf(
         "stopifnot(%s == %s) # @linksto %s",
-        deparse1(bquote(rlang::hash(.(as.name(dataname))))),
-        deparse1(hash),
+        deparse1(code),
+        deparse1(rlang::hash(x)),
         dataname
       )
     },

@@ -20,6 +20,29 @@ setOldClass("teal_modules")
 #' because they are used by the `mapping` argument of [teal_slices()]
 #' and the report previewer module [reporter_previewer_module()], respectively.
 #'
+#' # Restricting datasets used by `teal_module`:
+#' The `datanames` argument controls which datasets are used by the module’s server. These datasets,
+#' passed via server's `data` argument, are the only ones shown in the module's tab.
+#'
+#' When `datanames` is set to `"all"`, all datasets in the data object are treated as relevant.
+#' However, this may include unnecessary datasets, such as:
+#' -	Proxy variables for column modifications
+#' -	Temporary datasets used to create final versions
+#' -	Connection objects
+#'
+#' To exclude irrelevant datasets, use the [set_datanames()] function to change `datanames` from
+#' `"all"` to specific names. Trying to modify non-`"all"` values with [set_datanames()] will result
+#' in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
+#' in `datanames`.
+#'
+#' # `datanames` with `transformators`
+#' When transformators are specified, their `datanames` are added to the module’s `datanames`, which
+#' changes the behavior as follows:
+#' - If `module(datanames)` is `NULL` and the `transformators` have defined `datanames`, the sidebar
+#'   will appear showing the `transformators`' datasets, instead of being hidden.
+#' - If `module(datanames)` is set to specific values and any `transformator` has `datanames = "all"`,
+#'   the module may receive extra datasets that could be unnecessary
+#'
 #' @param label (`character(1)`) Label shown in the navigation item for the module or module group.
 #'   For `modules()` defaults to `"root"`. See `Details`.
 #' @param server (`function`) `shiny` module with following arguments:
@@ -42,39 +65,21 @@ setOldClass("teal_modules")
 #'  - `...` (optional) When provided, `ui_args` elements will be passed to the module named argument
 #'    or to the `...`.
 #' @param filters (`character`) Deprecated. Use `datanames` instead.
-#' @param datanames (`character`) Names of the datasets that are relevant for the item.
-#' The keyword `"all"` provides all datasets available in `data` passed to `teal` application.
-#' `NULL` will hide the filter panel.
+#' @param datanames (`character`) Names of the datasets relevant to the item.
+#' There are 2 reserved values that have specific behaviors:
+#' - The keyword `"all"` includes all datasets available in the data passed to the teal application.
+#' - `NULL` hides the sidebar panel completely.
+#' - If `transformators` are specified, their `datanames` are automatically added to this `datanames`
+#'   argument.
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
-#' @param indent (`integer(1)`) Indention level; each nested element is indented one level more.
-#' @param transformers (`list` of `teal_data_module`) that will be applied to transform the data.
-#' Each transform module UI will appear in the `teal` application, unless the `custom_ui` attribute is set on the list.
-#' If so, the module developer is responsible to display the UI in the module itself. `datanames` of the `transformers`
-#' will be added to the `datanames`.
+#' @param transformators (`list` of `teal_transform_module`) that will be applied to transformator module's data input.
 #'
-#' When the transformation does not have sufficient input data, the resulting data will fallback
-#' to the last successful transform or, in case there are none, to the filtered data.
+#'
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.
 #' - For `format()` and `print()`: Arguments passed to other methods.
-#'
-#' @section `datanames`:
-#' The module's `datanames` argument determines a subset of datasets from the `data` object, as specified in the
-#' server function argument, to be presented in the module. Datasets displayed in the filter panel will be limited
-#' to this subset.
-#' When `datanames` is set to `"all"`, all available datasets in the `data` object are considered relevant for the
-#' module. However, setting `datanames` argument to `"all"` might include datasets that are irrelevant for the module,
-#' for example:
-#' - Proxy variables used for modifying columns.
-#' - Modified copies of datasets used to create a final dataset.
-#' - Connection objects.
-#' To prevent these irrelevant datasets from appearing in the module, use the [set_datanames()] function on the
-#' [module] or [modules()] to change the `datanames` from `"all"` to specific dataset names. Attempting to change
-#' `datanames` values that was not set to `"all"` using [set_datanames()] will be ignored with a warning.
-#'
-#' Additionally, datasets with names starting with `.` are ignored when `datanames` is set to `"all"`.
 #'
 #' @return
 #' `module()` returns an object of class `teal_module`.
@@ -151,7 +156,7 @@ module <- function(label = "module",
                    datanames = "all",
                    server_args = NULL,
                    ui_args = NULL,
-                   transformers = list()) {
+                   transformators = list()) {
   # argument checking (independent)
   ## `label`
   checkmate::assert_string(label)
@@ -189,6 +194,7 @@ module <- function(label = "module",
       "\n - `...` server_args elements will be passed to the module named argument or to the `...`"
     )
   }
+
   if ("datasets" %in% server_formals) {
     warning(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
@@ -197,7 +203,6 @@ module <- function(label = "module",
       call. = FALSE
     )
   }
-
 
   ## UI
   checkmate::assert_function(ui)
@@ -210,6 +215,7 @@ module <- function(label = "module",
       "\n - `...` ui_args elements will be passed to the module argument of the same name or to the `...`"
     )
   }
+
   if (any(c("data", "datasets") %in% ui_formals)) {
     stop(
       sprintf("Called from module(label = \"%s\", ...)\n  ", label),
@@ -218,7 +224,6 @@ module <- function(label = "module",
       "Possible solutions are renderUI() or updateXyzInput() functions."
     )
   }
-
 
   ## `filters`
   if (!missing(filters)) {
@@ -258,16 +263,16 @@ module <- function(label = "module",
     )
   }
 
-  ## `transformers`
-  if (inherits(transformers, "teal_transform_module")) {
-    transformers <- list(transformers)
+  ## `transformators`
+  if (inherits(transformators, "teal_transform_module")) {
+    transformators <- list(transformators)
   }
-  checkmate::assert_list(transformers, types = "teal_transform_module")
-  transformer_datanames <- unlist(lapply(transformers, attr, "datanames"))
-  combined_datanames <- if (identical(datanames, "all") || any(sapply(transformer_datanames, identical, "all"))) {
+  checkmate::assert_list(transformators, types = "teal_transform_module")
+  transform_datanames <- unlist(lapply(transformators, attr, "datanames"))
+  combined_datanames <- if (identical(datanames, "all")) {
     "all"
   } else {
-    union(datanames, transformer_datanames)
+    union(datanames, transform_datanames)
   }
 
   structure(
@@ -278,7 +283,7 @@ module <- function(label = "module",
       datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
-      transformers = transformers
+      transformators = transformators
     ),
     class = "teal_module"
   )
@@ -314,11 +319,261 @@ modules <- function(..., label = "root") {
 # printing methods ----
 
 #' @rdname teal_modules
+#' @param is_last (`logical(1)`) Whether this is the last item in its parent's children list.
+#'   Affects the tree branch character used (L- vs |-)
+#' @param parent_prefix (`character(1)`) The prefix inherited from parent nodes,
+#'   used to maintain the tree structure in nested levels
+#' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
+#'   format.teal_modules(). Determines whether to show "TEAL ROOT" header
+#' @param what (`character`) Specifies which metadata to display.
+#'   Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"
+#' @examples
+#' mod <- module(
+#'   label = "My Custom Module",
+#'   server = function(id, data, ...) {},
+#'   ui = function(id, ...) {},
+#'   datanames = c("ADSL", "ADTTE"),
+#'   transformators = list(),
+#'   ui_args = list(a = 1, b = "b"),
+#'   server_args = list(x = 5, y = list(p = 1))
+#' )
+#' cat(format(mod))
 #' @export
-format.teal_module <- function(x, indent = 0, ...) {
-  paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, "\n", collapse = "")
+format.teal_module <- function(
+    x, is_last = FALSE, parent_prefix = "",
+    what = c("datasets", "properties", "ui_args", "server_args", "transformators"), ...) {
+  empty_text <- ""
+  branch <- if (is_last) "L-" else "|-"
+  current_prefix <- paste0(parent_prefix, branch, " ")
+  content_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
+
+  format_list <- function(lst, empty = empty_text, label_width = 0) {
+    if (is.null(lst) || length(lst) == 0) {
+      empty
+    } else {
+      colon_space <- paste(rep(" ", label_width), collapse = "")
+
+      first_item <- sprintf("%s (%s)", names(lst)[1], crayon::silver(class(lst[[1]])[1]))
+      rest_items <- if (length(lst) > 1) {
+        paste(
+          vapply(
+            names(lst)[-1],
+            function(name) {
+              sprintf(
+                "%s%s (%s)",
+                paste0(content_prefix, "|  ", colon_space),
+                name,
+                crayon::silver(class(lst[[name]])[1])
+              )
+            },
+            character(1)
+          ),
+          collapse = "\n"
+        )
+      }
+      if (length(lst) > 1) paste0(first_item, "\n", rest_items) else first_item
+    }
+  }
+
+  bookmarkable <- isTRUE(attr(x, "teal_bookmarkable"))
+  reportable <- "reporter" %in% names(formals(x$server))
+
+  transformators <- if (length(x$transformators) > 0) {
+    paste(sapply(x$transformators, function(t) attr(t, "label")), collapse = ", ")
+  } else {
+    empty_text
+  }
+
+  output <- pasten(current_prefix, crayon::bgWhite(x$label))
+
+  if ("datasets" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "|- ", crayon::yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
+    )
+  }
+  if ("properties" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "|- ", crayon::blue("Properties:"), "\n",
+      content_prefix, "|  |- ", crayon::cyan("Bookmarkable  : "), bookmarkable, "\n",
+      content_prefix, "|  L- ", crayon::cyan("Reportable    : "), reportable, "\n"
+    )
+  }
+  if ("ui_args" %in% what) {
+    ui_args_formatted <- format_list(x$ui_args, label_width = 19)
+    output <- paste0(
+      output,
+      content_prefix, "|- ", crayon::green("UI Arguments     : "), ui_args_formatted, "\n"
+    )
+  }
+  if ("server_args" %in% what) {
+    server_args_formatted <- format_list(x$server_args, label_width = 19)
+    output <- paste0(
+      output,
+      content_prefix, "|- ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
+    )
+  }
+  if ("transformators" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "L- ", crayon::magenta("Transformators       : "), transformators, "\n"
+    )
+  }
+
+  output
 }
 
+#' @rdname teal_modules
+#' @examples
+#' custom_module <- function(
+#'     label = "label", ui_args = NULL, server_args = NULL,
+#'     datanames = "all", transformators = list(), bk = FALSE) {
+#'   ans <- module(
+#'     label,
+#'     server = function(id, data, ...) {},
+#'     ui = function(id, ...) {
+#'     },
+#'     datanames = datanames,
+#'     transformators = transformators,
+#'     ui_args = ui_args,
+#'     server_args = server_args
+#'   )
+#'   attr(ans, "teal_bookmarkable") <- bk
+#'   ans
+#' }
+#'
+#' dummy_transformator <- teal_transform_module(
+#'   label = "Dummy Transform",
+#'   ui = function(id) div("(does nothing)"),
+#'   server = function(id, data) {
+#'     moduleServer(id, function(input, output, session) data)
+#'   }
+#' )
+#'
+#' plot_transformator <- teal_transform_module(
+#'   label = "Plot Settings",
+#'   ui = function(id) div("(does nothing)"),
+#'   server = function(id, data) {
+#'     moduleServer(id, function(input, output, session) data)
+#'   }
+#' )
+#'
+#' complete_modules <- modules(
+#'   custom_module(
+#'     label = "Data Overview",
+#'     datanames = c("ADSL", "ADAE", "ADVS"),
+#'     ui_args = list(
+#'       view_type = "table",
+#'       page_size = 10,
+#'       filters = c("ARM", "SEX", "RACE")
+#'     ),
+#'     server_args = list(
+#'       cache = TRUE,
+#'       debounce = 1000
+#'     ),
+#'     transformators = list(dummy_transformator),
+#'     bk = TRUE
+#'   ),
+#'   modules(
+#'     label = "Nested 1",
+#'     custom_module(
+#'       label = "Interactive Plots",
+#'       datanames = c("ADSL", "ADVS"),
+#'       ui_args = list(
+#'         plot_type = c("scatter", "box", "line"),
+#'         height = 600,
+#'         width = 800,
+#'         color_scheme = "viridis"
+#'       ),
+#'       server_args = list(
+#'         render_type = "svg",
+#'         cache_plots = TRUE
+#'       ),
+#'       transformators = list(dummy_transformator, plot_transformator),
+#'       bk = TRUE
+#'     ),
+#'     modules(
+#'       label = "Nested 2",
+#'       custom_module(
+#'         label = "Summary Statistics",
+#'         datanames = "ADSL",
+#'         ui_args = list(
+#'           stats = c("mean", "median", "sd", "range"),
+#'           grouping = c("ARM", "SEX")
+#'         )
+#'       ),
+#'       modules(
+#'         label = "Labeled nested modules",
+#'         custom_module(
+#'           label = "Subgroup Analysis",
+#'           datanames = c("ADSL", "ADAE"),
+#'           ui_args = list(
+#'             subgroups = c("AGE", "SEX", "RACE"),
+#'             analysis_type = "stratified"
+#'           ),
+#'           bk = TRUE
+#'         )
+#'       ),
+#'       modules(custom_module(label = "Subgroup Analysis in non-labled modules"))
+#'     )
+#'   ),
+#'   custom_module("Non-nested module")
+#' )
+#'
+#' cat(format(complete_modules))
+#' cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
+#' @export
+format.teal_modules <- function(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
+  if (is_root) {
+    header <- pasten(crayon::bold("TEAL ROOT"))
+    new_parent_prefix <- "  " #' Initial indent for root level
+  } else {
+    if (!is.null(x$label)) {
+      branch <- if (is_last) "L-" else "|-"
+      header <- pasten(parent_prefix, branch, " ", crayon::bold(x$label))
+      new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
+    } else {
+      header <- ""
+      new_parent_prefix <- parent_prefix
+    }
+  }
+
+  if (length(x$children) > 0) {
+    children_output <- character(0)
+    n_children <- length(x$children)
+
+    for (i in seq_along(x$children)) {
+      child <- x$children[[i]]
+      is_last_child <- (i == n_children)
+
+      if (inherits(child, "teal_modules")) {
+        children_output <- c(
+          children_output,
+          format(child,
+            is_root = FALSE,
+            is_last = is_last_child,
+            parent_prefix = new_parent_prefix,
+            ...
+          )
+        )
+      } else {
+        children_output <- c(
+          children_output,
+          format(child,
+            is_last = is_last_child,
+            parent_prefix = new_parent_prefix,
+            ...
+          )
+        )
+      }
+    }
+
+    paste0(header, paste(children_output, collapse = ""))
+  } else {
+    header
+  }
+}
 
 #' @rdname teal_modules
 #' @export
@@ -327,17 +582,11 @@ print.teal_module <- function(x, ...) {
   invisible(x)
 }
 
-
 #' @rdname teal_modules
 #' @export
-format.teal_modules <- function(x, indent = 0, ...) {
-  paste(
-    c(
-      paste0(rep(" ", indent), "+ ", x$label, "\n"),
-      unlist(lapply(x$children, format, indent = indent + 1, ...))
-    ),
-    collapse = ""
-  )
+print.teal_modules <- function(x, ...) {
+  cat(format(x, ...))
+  invisible(x)
 }
 
 #' @param modules (`teal_module` or `teal_modules`)
@@ -372,11 +621,6 @@ set_datanames <- function(modules, datanames) {
   }
   modules
 }
-
-#' @rdname teal_modules
-#' @export
-print.teal_modules <- print.teal_module
-
 
 # utilities ----
 ## subset or modify modules ----
