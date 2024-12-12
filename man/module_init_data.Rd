@@ -24,7 +24,7 @@ Output of the \code{data}. If \code{data} fails then returned error is handled (
 rest of the application can respond to this respectively.
 }
 \description{
-This module manages the \code{data} argument for \code{srv_teal}. The \code{teal} framework uses \code{\link[=teal_data]{teal_data()}},
+This module manages the \code{data} argument for \code{srv_teal}. The \code{teal} framework uses \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
 which can be provided in various ways:
 \enumerate{
 \item Directly as a \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object. This will automatically convert it into a \code{reactive} \code{teal_data}.

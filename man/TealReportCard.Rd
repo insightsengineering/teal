@@ -5,7 +5,7 @@
 \title{\code{TealReportCard}}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Child class of \code{\link{ReportCard}} that is used for \code{teal} specific applications.
+Child class of \code{\link[teal.reporter:ReportCard]{teal.reporter::ReportCard}} that is used for \code{teal} specific applications.
 In addition to the parent methods, it supports rendering \code{teal} specific elements such as
 the source code, the encodings panel content and the filter panel content as part of the
 meta data.

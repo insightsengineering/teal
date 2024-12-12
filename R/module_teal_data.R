@@ -3,17 +3,17 @@
 #' This is a low level module to handle `teal_data_module` execution and validation.
 #' [teal_transform_module()] inherits from [teal_data_module()] so it is handled by this module too.
 #' [srv_teal()] accepts various `data` objects and eventually they are all transformed to `reactive`
-#' [teal_data()] which is a standard data class in whole `teal` framework.
+#' [teal.data::teal_data()] which is a standard data class in whole `teal` framework.
 #'
 #' @section data validation:
 #'
 #' Executed [teal_data_module()] is validated and output is validated for consistency.
 #' Output `data` is invalid if:
 #' 1. [teal_data_module()] is invalid if server doesn't return `reactive`. **Immediately crashes an app!**
-#' 2. `reactive` throws a `shiny.error` - happens when module creating [teal_data()] fails.
-#' 3. `reactive` returns `qenv.error` - happens when [teal_data()] evaluates a failing code.
-#' 4. `reactive` object doesn't return [teal_data()].
-#' 5. [teal_data()] object lacks any `datanames` specified in the `modules` argument.
+#' 2. `reactive` throws a `shiny.error` - happens when module creating [teal.data::teal_data()] fails.
+#' 3. `reactive` returns `qenv.error` - happens when [teal.data::teal_data()] evaluates a failing code.
+#' 4. `reactive` object doesn't return [teal.data::teal_data()].
+#' 5. [teal.data::teal_data()] object lacks any `datanames` specified in the `modules` argument.
 #'
 #' `teal` (observers in `srv_teal`) always waits to render an app until `reactive` `teal_data` is
 #' returned. If error 2-4 occurs, relevant error message is displayed to the app user. Once the issue is
