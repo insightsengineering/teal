@@ -60,12 +60,12 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
         # by giving an id, we can reactively respond to tab changes
         list(
           id = ns("active_tab"),
-          type = if (modules$label == "root") "pills" else "tabs"
+          type = if (attr(modules, "label") == "root") "pills" else "tabs"
         ),
         lapply(
-          names(modules$children),
+          names(modules),
           function(module_id) {
-            module_label <- modules$children[[module_id]]$label
+            module_label <- attr(modules[[module_id]], "label")
             if (is.null(module_label)) {
               module_label <- icon("fas fa-database")
             }
@@ -74,7 +74,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
               value = module_id, # when clicked this tab value changes input$<tabset panel id>
               ui_teal_module(
                 id = ns(module_id),
-                modules = modules$children[[module_id]],
+                modules = modules[[module_id]],
                 depth = depth + 1L
               )
             )
@@ -89,7 +89,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 #' @export
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-  args <- c(list(id = ns("module")), modules$ui_args)
+  args <- c(list(id = ns("module")), attr(modules, "ui_args"))
 
   ui_teal <- tagList(
     shinyjs::hidden(
@@ -118,14 +118,18 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) tags$div(style = "mt-6"),
-      if (!is.null(modules$datanames)) {
+      if (!is.null(attr(modules, "datanames"))) {
         fluidRow(
           column(width = 9, ui_teal, class = "teal_primary_col"),
           column(
             width = 3,
             ui_data_summary(ns("data_summary")),
             ui_filter_data(ns("filter_panel")),
-            ui_transform_teal_data(ns("data_transform"), transformators = modules$transformators, class = "well"),
+            ui_transform_teal_data(
+              ns("data_transform"),
+              transformators = attr(modules, "transformators"),
+              class = "well"
+            ),
             class = "teal_secondary_col"
           )
         )
@@ -141,6 +145,7 @@ srv_teal_module <- function(id,
                             data_rv,
                             modules,
                             datasets = NULL,
+                            inherited_datanames = "all",
                             slices_global,
                             reporter = teal.reporter::Reporter$new(),
                             data_load_status = reactive("ok"),
@@ -161,6 +166,7 @@ srv_teal_module.default <- function(id,
                                     data_rv,
                                     modules,
                                     datasets = NULL,
+                                    inherited_datanames = "all",
                                     slices_global,
                                     reporter = teal.reporter::Reporter$new(),
                                     data_load_status = reactive("ok"),
@@ -174,12 +180,13 @@ srv_teal_module.teal_modules <- function(id,
                                          data_rv,
                                          modules,
                                          datasets = NULL,
+                                         inherited_datanames = "all",
                                          slices_global,
                                          reporter = teal.reporter::Reporter$new(),
                                          data_load_status = reactive("ok"),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
-    logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
+    logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(attr(modules, 'label')) }.")
 
     observeEvent(data_load_status(), {
       tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
@@ -196,14 +203,16 @@ srv_teal_module.teal_modules <- function(id,
       }
     })
 
+    resolved_datanames <- .resolve_parent_datanames(modules, inherited = inherited_datanames)
     modules_output <- sapply(
-      names(modules$children),
+      names(modules),
       function(module_id) {
         srv_teal_module(
           id = module_id,
           data_rv = data_rv,
-          modules = modules$children[[module_id]],
+          modules = modules[[module_id]],
           datasets = datasets,
+          inherited_datanames = resolved_datanames,
           slices_global = slices_global,
           reporter = reporter,
           is_active = reactive(
@@ -226,14 +235,15 @@ srv_teal_module.teal_module <- function(id,
                                         data_rv,
                                         modules,
                                         datasets = NULL,
+                                        inherited_datanames = "all",
                                         slices_global,
                                         reporter = teal.reporter::Reporter$new(),
                                         data_load_status = reactive("ok"),
                                         is_active = reactive(TRUE)) {
-  logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
+  logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(attr(modules, 'label')) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-
+    attr(modules, "datanames") <- .resolve_parent_datanames(modules, inherited = inherited_datanames)
     active_datanames <- reactive({
       .resolve_module_datanames(data = data_rv(), modules = modules)
     })
@@ -250,7 +260,7 @@ srv_teal_module.teal_module <- function(id,
     #   filter_manager_module_srv needs to be called before filter_panel_srv
     #   Because available_teal_slices is used in FilteredData$srv_available_slices (via srv_filter_panel)
     #   and if it is not set, then it won't be available in the srv_filter_panel
-    srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
+    srv_module_filter_manager(attr(modules, "label"), module_fd = datasets, slices_global = slices_global)
 
     call_once_when(is_active(), {
       filtered_teal_data <- srv_filter_data(
@@ -264,7 +274,7 @@ srv_teal_module.teal_module <- function(id,
       transformed_teal_data <- srv_transform_teal_data(
         "data_transform",
         data = filtered_teal_data,
-        transformators = modules$transformators,
+        transformators = attr(modules, "transformators"),
         modules = modules,
         is_transform_failed = is_transform_failed
       )
@@ -320,7 +330,7 @@ srv_teal_module.teal_module <- function(id,
 # This function calls a module server function.
 .call_teal_module <- function(modules, datasets, filtered_teal_data, reporter) {
   # collect arguments to run teal_module
-  args <- c(list(id = "module"), modules$server_args)
+  args <- c(list(id = "module"), attr(modules, "server_args"))
   if (is_arg_used(modules$server, "reporter")) {
     args <- c(args, list(reporter = reporter))
   }
@@ -347,13 +357,35 @@ srv_teal_module.teal_module <- function(id,
 
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
-  if (is.null(modules$datanames) || setequal(modules$datanames, "all")) {
-    setdiff(names(data), attr(modules$datanames, "excluded"))
+  if (is.null(attr(modules, "datanames")) || setequal(attr(modules, "datanames"), "all")) {
+    names(data)
+  } else if (any(grepl("^-", attr(modules, "datanames")))) {
+    setdiff(names(data), gsub("^-", "", attr(modules, "datanames")))
   } else {
     intersect(
       names(data), # Keep topological order from teal.data::names()
-      .include_parent_datanames(modules$datanames, teal.data::join_keys(data))
+      .include_parent_datanames(attr(modules, "datanames"), teal.data::join_keys(data))
     )
+  }
+}
+
+.resolve_parent_datanames <- function(modules, inherited) {
+  if (is.null(inherited)) inherited <- "all"
+  if (identical(attr(modules, "datanames"), "all")) {
+    inherited
+  } else if (any(grepl("^[^-]", attr(modules, "datanames")))) {
+    grep("^-", attr(modules, "datanames"), value = TRUE) # keep only positive if positive set in module
+  } else if (any(grepl("^-", attr(modules, "datanames")))) {
+    if (identical(inherited, "all")) {
+      attr(modules, "datanames")
+    } else if (any(grepl("^-", inherited))) {
+      union(attr(modules, "datanames"), inherited)
+    } else {
+      setdiff(
+        inherited,
+        gsub("^-", "", attr(modules, "datanames"))
+      )
+    }
   }
 }
 

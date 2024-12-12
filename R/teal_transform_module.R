@@ -219,8 +219,8 @@ make_teal_transform_server <- function(expr) {
 #' @keywords internal
 extract_transformators <- function(modules) {
   if (inherits(modules, "teal_module")) {
-    modules$transformators
+    attr(modules, "transformators")
   } else if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, extract_transformators)
+    lapply(modules, extract_transformators)
   }
 }

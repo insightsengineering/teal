@@ -212,14 +212,14 @@ check_modules_datanames_recursive <- function(modules, datanames) { # nolint: ob
   checkmate::assert_character(datanames)
   if (inherits(modules, "teal_modules")) {
     unlist(
-      lapply(modules$children, check_modules_datanames_recursive, datanames = datanames),
+      lapply(modules, check_modules_datanames_recursive, datanames = datanames),
       recursive = FALSE
     )
   } else {
-    missing_datanames <- setdiff(modules$datanames, c("all", datanames))
+    missing_datanames <- setdiff(attr(modules, "datanames"), c("all", datanames))
     if (length(missing_datanames)) {
       list(list(
-        label = modules$label,
+        label = attr(modules, "label"),
         missing_datanames = missing_datanames
       ))
     }

@@ -276,15 +276,12 @@ module <- function(label = "module",
   }
 
   structure(
-    list(
-      label = label,
-      server = server,
-      ui = ui,
-      datanames = combined_datanames,
-      server_args = server_args,
-      ui_args = ui_args,
-      transformators = transformators
-    ),
+    list(ui = ui, server = server),
+    label = label,
+    datanames = combined_datanames,
+    server_args = server_args,
+    ui_args = ui_args,
+    transformators = transformators,
     class = "teal_module"
   )
 }
@@ -305,13 +302,11 @@ modules <- function(..., label = "root") {
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
+  labels <- vapply(submodules, function(submodule) attr(submodule, "label"), character(1))
   names(submodules) <- get_unique_labels(labels)
   structure(
-    list(
-      label = label,
-      children = submodules
-    ),
+    submodules,
+    label = label,
     class = "teal_modules"
   )
 }
@@ -375,21 +370,22 @@ format.teal_module <- function(
     }
   }
 
-  bookmarkable <- isTRUE(attr(x, "teal_bookmarkable"))
+  attrs <- attributes(x)
+  bookmarkable <- isTRUE(attrs$teal_bookmarkable)
   reportable <- "reporter" %in% names(formals(x$server))
 
-  transformators <- if (length(x$transformators) > 0) {
-    paste(sapply(x$transformators, function(t) attr(t, "label")), collapse = ", ")
+  transformators <- if (length(attrs$transformators) > 0) {
+    paste(sapply(attrs$transformators, function(t) attr(t, "label")), collapse = ", ")
   } else {
     empty_text
   }
 
-  output <- pasten(current_prefix, crayon::bgWhite(x$label))
+  output <- pasten(current_prefix, crayon::bgWhite(attrs$label))
 
   if ("datasets" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "|- ", crayon::yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
+      content_prefix, "|- ", crayon::yellow("Datasets         : "), toString(attrs$datanames), "\n"
     )
   }
   if ("properties" %in% what) {
@@ -401,14 +397,14 @@ format.teal_module <- function(
     )
   }
   if ("ui_args" %in% what) {
-    ui_args_formatted <- format_list(x$ui_args, label_width = 19)
+    ui_args_formatted <- format_list(attrs$ui_args, label_width = 19)
     output <- paste0(
       output,
       content_prefix, "|- ", crayon::green("UI Arguments     : "), ui_args_formatted, "\n"
     )
   }
   if ("server_args" %in% what) {
-    server_args_formatted <- format_list(x$server_args, label_width = 19)
+    server_args_formatted <- format_list(attrs$server_args, label_width = 19)
     output <- paste0(
       output,
       content_prefix, "|- ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
@@ -525,13 +521,14 @@ format.teal_module <- function(
 #' cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 #' @export
 format.teal_modules <- function(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
+  attrs <- attributes(x)
   if (is_root) {
     header <- pasten(crayon::bold("TEAL ROOT"))
     new_parent_prefix <- "  " #' Initial indent for root level
   } else {
-    if (!is.null(x$label)) {
+    if (!is.null(attrs$label)) {
       branch <- if (is_last) "L-" else "|-"
-      header <- pasten(parent_prefix, branch, " ", crayon::bold(x$label))
+      header <- pasten(parent_prefix, branch, " ", crayon::bold(attrs$label))
       new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
     } else {
       header <- ""
@@ -539,12 +536,17 @@ format.teal_modules <- function(x, is_root = TRUE, is_last = FALSE, parent_prefi
     }
   }
 
-  if (length(x$children) > 0) {
-    children_output <- character(0)
-    n_children <- length(x$children)
+  if (length(attrs$datanames)) {
+    datasets_branch <- paste0(parent_prefix, "|- Datasets         : ", toString(attrs$datanames))
+    header <- paste0(header, datasets_branch, "\n")
+  }
 
-    for (i in seq_along(x$children)) {
-      child <- x$children[[i]]
+  if (length(x) > 0) {
+    children_output <- character(0)
+    n_children <- length(x)
+
+    for (i in seq_along(x)) {
+      child <- x[[i]]
       is_last_child <- (i == n_children)
 
       if (inherits(child, "teal_modules")) {
@@ -606,24 +608,14 @@ print.teal_modules <- function(x, ...) {
 #' @export
 set_datanames <- function(modules, datanames) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
-  if (inherits(modules, "teal_modules")) {
-    modules$children <- lapply(modules$children, set_datanames, datanames)
+  if (is.null(attr(modules, "datanames")) || identical(attr(modules, "datanames"), "all")) {
+    attr(modules, "datanames") <- datanames
   } else {
-    if (identical(modules$datanames, "all")) {
-      included <- grep("^[^-]", datanames, value = TRUE)
-      if (length(included)) {
-        modules$datanames <- included
-      } else {
-        excluded <- gsub("^-", "", grep("^-", datanames, value = TRUE))
-        attr(modules$datanames, "excluded") <- excluded
-      }
-    } else {
-      warning(
-        "Not possible to modify datanames of the module ", modules$label,
-        ". set_datanames() can only change datanames if it was set to \"all\".",
-        call. = FALSE
-      )
-    }
+    warning(
+      "Not possible to modify datanames of the", class(modules)[1], attr(modules, "label"),
+      ". set_datanames() can only change datanames if it was set to \"all\".",
+      call. = FALSE
+    )
   }
   modules
 }
@@ -639,9 +631,9 @@ set_datanames <- function(modules, datanames) {
 append_module <- function(modules, module) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(module, "teal_module")
-  modules$children <- c(modules$children, list(module))
-  labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
-  names(modules$children) <- get_unique_labels(labels)
+  modules <- c(modules, list(module))
+  labels <- vapply(modules, function(submodule) attr(submodule, "label"), character(1))
+  names(modules) <- get_unique_labels(labels)
   modules
 }
 
@@ -662,7 +654,7 @@ extract_module <- function(modules, class) {
   } else if (inherits(modules, "teal_module")) {
     NULL
   } else if (inherits(modules, "teal_modules")) {
-    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
+    Filter(function(x) length(x) > 0L, lapply(modules, extract_module, class))
   }
 }
 
@@ -677,7 +669,11 @@ drop_module <- function(modules, class) {
   } else if (inherits(modules, "teal_modules")) {
     do.call(
       "modules",
-      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
+      c(
+        Filter(function(x) length(x) > 0L, lapply(modules, drop_module, class)),
+        label = attr(modules, "label"),
+        datanames = attr(modules, "datanames")
+      )
     )
   }
 }
@@ -694,7 +690,7 @@ drop_module <- function(modules, class) {
 is_arg_used <- function(modules, arg) {
   checkmate::assert_string(arg)
   if (inherits(modules, "teal_modules")) {
-    any(unlist(lapply(modules$children, is_arg_used, arg)))
+    any(unlist(lapply(modules, is_arg_used, arg)))
   } else if (inherits(modules, "teal_module")) {
     is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
   } else if (is.function(modules)) {
@@ -719,7 +715,7 @@ modules_depth <- function(modules, depth = 0L) {
   checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
   checkmate::assert_int(depth, lower = 0)
   if (inherits(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
+    max(vapply(modules, modules_depth, integer(1), depth = depth + 1L))
   } else {
     depth
   }
@@ -733,9 +729,9 @@ modules_depth <- function(modules, depth = 0L) {
 #' @keywords internal
 module_labels <- function(modules) {
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules, module_labels)
   } else {
-    modules$label
+    attr(modules, "label")
   }
 }
 
@@ -749,8 +745,8 @@ modules_bookmarkable <- function(modules) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   if (inherits(modules, "teal_modules")) {
     setNames(
-      lapply(modules$children, modules_bookmarkable),
-      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
+      lapply(modules, modules_bookmarkable),
+      vapply(modules, attr, "label", FUN.VALUE = character(1))
     )
   } else {
     attr(modules, "teal_bookmarkable", exact = TRUE)

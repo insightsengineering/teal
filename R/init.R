@@ -115,7 +115,7 @@ init <- function(data,
   if (inherits(modules, "teal_module")) {
     modules <- list(modules)
   }
-  if (checkmate::test_list(modules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))) {
+  if (inherits(modules, "list")) {
     modules <- do.call(teal::modules, modules)
   }
 
