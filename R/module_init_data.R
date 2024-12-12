@@ -1,6 +1,6 @@
 #' Data Module for teal
 #'
-#' This module manages the `data` argument for `srv_teal`. The `teal` framework uses [teal_data()],
+#' This module manages the `data` argument for `srv_teal`. The `teal` framework uses [teal.data::teal_data()],
 #' which can be provided in various ways:
 #' 1. Directly as a [teal.data::teal_data()] object. This will automatically convert it into a `reactive` `teal_data`.
 #' 2. As a `reactive` object that returns a [teal.data::teal_data()] object.
