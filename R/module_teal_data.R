@@ -62,10 +62,10 @@ srv_teal_data <- function(id,
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data initializing.")
     is_transform_failed[[id]] <- FALSE
-    data_out <- data_module(id = "data")
-    data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
-    observeEvent(data_handled(), {
-      if (!inherits(data_handled(), "teal_data")) {
+    module_out  <- data_module(id = "data")
+    try_module_out <- reactive(tryCatch(module_out (), error = function(e) e))
+    observeEvent(try_module_out(), {
+      if (!inherits(try_module_out(), "teal_data")) {
         is_transform_failed[[id]] <- TRUE
       } else {
         is_transform_failed[[id]] <- FALSE
@@ -89,7 +89,7 @@ srv_teal_data <- function(id,
 
     srv_validate_reactive_teal_data(
       "validate",
-      data = data_handled,
+      data = try_module_out,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error,
       hide_validation_error = is_previous_failed
