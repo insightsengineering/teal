@@ -62,7 +62,7 @@ example_module <- function(label = "example teal module",
 
         table_data_decorated_no_print <- srv_transform_teal_data(
           "decorate",
-          data = table_data,
+          teal_data_r = table_data,
           transformators = decorators
         )
         table_data_decorated <- reactive(within(req(table_data_decorated_no_print()), expr = object))

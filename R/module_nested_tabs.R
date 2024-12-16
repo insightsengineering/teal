@@ -263,7 +263,7 @@ srv_teal_module.teal_module <- function(id,
       is_transform_failed <- reactiveValues()
       transformed_teal_data <- srv_transform_teal_data(
         "data_transform",
-        data = filtered_teal_data,
+        teal_data_r = filtered_teal_data,
         transformators = modules$transformators,
         modules = modules,
         is_transform_failed = is_transform_failed

@@ -12,7 +12,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
       app = srv_transform_teal_data,
       args = list(
         id = "test",
-        data = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
+        teal_data_r = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
         transformators = output_decorator
       ),
       expr = {
@@ -35,7 +35,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
       app = srv_transform_teal_data,
       args = list(
         id = "test",
-        data = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
+        teal_data_r = reactive(teal.data::teal_data(data1 = iris, data2 = mtcars)),
         transformators = output_decorator
       ),
       expr = {
@@ -68,7 +68,7 @@ testthat::test_that(
       app = srv_transform_teal_data,
       args = list(
         id = initial_id,
-        data = reactive(within(teal_data(), iris <- iris)),
+        teal_data_r = reactive(within(teal_data(), iris <- iris)),
         transformators = ttm
       ),
       expr = {
