@@ -10,7 +10,7 @@ ui_transform_teal_data(id, transformators, class = "well")
 
 srv_transform_teal_data(
   id,
-  data,
+  teal_data_r,
   transformators,
   modules = NULL,
   is_transform_failed = reactiveValues()
@@ -23,7 +23,7 @@ srv_transform_teal_data(
 
 \item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
 
-\item{data}{(\verb{reactive teal_data})}
+\item{teal_data_r}{(\verb{reactive teal_data})}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 
