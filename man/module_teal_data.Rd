@@ -24,7 +24,7 @@ ui_validate_reactive_teal_data(id)
 
 srv_validate_reactive_teal_data(
   id,
-  data,
+  teal_data_r,
   modules = NULL,
   validate_shiny_silent_error = FALSE,
   hide_validation_error = reactive(FALSE)
@@ -43,7 +43,7 @@ srv_validate_reactive_teal_data(
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
 
-\item{data}{(\verb{reactive teal_data})}
+\item{teal_data_r}{(\verb{reactive teal_data})}
 }
 \value{
 \code{reactive} \code{teal_data}
