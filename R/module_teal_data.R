@@ -37,7 +37,10 @@
 NULL
 
 #' @rdname module_teal_data
-ui_teal_data <- function(id, data_module = function(id) NULL) {
+#' @aliases ui_teal_data
+#' @note
+#' `ui_teal_data_module` was renamed from `ui_teal_data`.
+ui_teal_data_module <- function(id, data_module = function(id) NULL) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
   ns <- NS(id)
@@ -48,12 +51,17 @@ ui_teal_data <- function(id, data_module = function(id) NULL) {
   )
 }
 
+ui_teal_data <- ui_teal_data_module
+
 #' @rdname module_teal_data
-srv_teal_data <- function(id,
-                          data_module = function(id) NULL,
-                          modules = NULL,
-                          validate_shiny_silent_error = TRUE,
-                          is_transform_failed = reactiveValues()) {
+#' @aliases srv_teal_data
+#' @note
+#' `srv_teal_data_module` was renamed from `srv_teal_data`.
+srv_teal_data_module <- function(id,
+                                 data_module = function(id) NULL,
+                                 modules = NULL,
+                                 validate_shiny_silent_error = TRUE,
+                                 is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
@@ -96,6 +104,8 @@ srv_teal_data <- function(id,
     )
   })
 }
+
+srv_teal_data <- srv_teal_data_module
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
