@@ -51,8 +51,6 @@ ui_teal_data_module <- function(id, data_module = function(id) NULL) {
   )
 }
 
-ui_teal_data <- ui_teal_data_module
-
 #' @rdname module_teal_data
 #' @aliases srv_teal_data
 #' @note
@@ -104,8 +102,6 @@ srv_teal_data_module <- function(id,
     )
   })
 }
-
-srv_teal_data <- srv_teal_data_module
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
