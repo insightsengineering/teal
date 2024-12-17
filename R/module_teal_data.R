@@ -68,8 +68,8 @@ srv_teal_data_module <- function(id,
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal_data_module initializing.")
     is_transform_failed[[id]] <- FALSE
-    module_out  <- data_module(id = "data")
-    try_module_out <- reactive(tryCatch(module_out (), error = function(e) e))
+    module_out <- data_module(id = "data")
+    try_module_out <- reactive(tryCatch(module_out(), error = function(e) e))
     observeEvent(try_module_out(), {
       if (!inherits(try_module_out(), "teal_data")) {
         is_transform_failed[[id]] <- TRUE
