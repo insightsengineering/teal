@@ -53,8 +53,6 @@ srv_init_data <- function(id, data) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_data initializing.")
-    # data contains teal_data object
-    # either passed to teal::init or returned from teal_data_module
     data_out <- if (inherits(data, "teal_data_module")) {
       output$data <- renderUI(data$ui(id = session$ns("teal_data_module")))
       data$server("teal_data_module")
