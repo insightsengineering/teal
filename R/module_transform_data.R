@@ -75,15 +75,15 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
 #' @export
 #' @rdname module_transform_data
 srv_transform_teal_data <- function(id,
-                                    teal_data_r,
+                                    data,
                                     transformators,
                                     modules = NULL,
                                     is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
-  assert_reactive(teal_data_r)
+  assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
   if (length(transformators) == 0L) {
-    return(teal_data_r)
+    return(data)
   }
   if (inherits(transformators, "teal_transform_module")) {
     transformators <- list(transformators)
@@ -146,7 +146,7 @@ srv_transform_teal_data <- function(id,
         })
       },
       x = names(transformators),
-      init = teal_data_r
+      init = data
     )
     module_output
   })

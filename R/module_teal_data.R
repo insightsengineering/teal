@@ -21,7 +21,7 @@
 #' (except error 1).
 #'
 #' @param id (`character(1)`) Module id
-#' @param teal_data_r (`reactive teal_data`)
+#' @param data (`reactive teal_data`)
 #' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
@@ -95,7 +95,7 @@ srv_teal_data_module <- function(id,
 
     srv_validate_reactive_teal_data(
       "validate",
-      teal_data_r = try_module_out,
+      data = try_module_out,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error,
       hide_validation_error = is_previous_failed
@@ -123,7 +123,7 @@ ui_validate_reactive_teal_data <- function(id) {
 
 #' @rdname module_teal_data
 srv_validate_reactive_teal_data <- function(id, # nolint: object_length
-                                            teal_data_r,
+                                            data,
                                             modules = NULL,
                                             validate_shiny_silent_error = FALSE,
                                             hide_validation_error = reactive(FALSE)) {
@@ -132,10 +132,10 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
-    # there is an empty reactive cycle on `init` and `data_rv` has `shiny.silent.error` class
-    srv_validate_error("silent_error", teal_data_r, validate_shiny_silent_error)
-    srv_check_class_teal_data("class_teal_data", teal_data_r)
-    srv_check_module_datanames("shiny_warnings", teal_data_r, modules)
+    # there is an empty reactive cycle on `init` and `data` has `shiny.silent.error` class
+    srv_validate_error("silent_error", data, validate_shiny_silent_error)
+    srv_check_class_teal_data("class_teal_data", data)
+    srv_check_module_datanames("shiny_warnings", data, modules)
     output$previous_failed <- renderUI({
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
@@ -146,7 +146,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       }
     })
 
-    .trigger_on_success(teal_data_r)
+    .trigger_on_success(data)
   })
 }
 
