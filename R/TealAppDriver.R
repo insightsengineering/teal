@@ -10,12 +10,15 @@
 TealAppDriver <- R6::R6Class( # nolint: object_name.
   "TealAppDriver",
   inherit = {
-    if (!requireNamespace("shinytest2", quietly = TRUE)) {
-      stop("Please install 'shinytest2' package to use this class.")
-    }
-    if (!requireNamespace("rvest", quietly = TRUE)) {
-      stop("Please install 'rvest' package to use this class.")
-    }
+    lapply(c("shinytest2", "rvest"), function(.x, use_testthat) {
+      if (!requireNamespace(.x, quietly = TRUE)) {
+        if (use_testthat) {
+          testthat::skip(sprintf("%s is not installed", .x))
+        } else {
+          stop("Please install '", .x, "' package to use this class.", call. = FALSE)
+        }
+      }
+    }, use_testthat = requireNamespace("testthat", quietly = TRUE) && testthat::is_testing())
     shinytest2::AppDriver
   },
   # public methods ----
