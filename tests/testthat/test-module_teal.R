@@ -395,7 +395,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_s3_class(data_pulled(), "shiny.silent.error")
+        testthat::expect_s3_class(data_handled(), "shiny.silent.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -422,7 +422,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_s3_class(data_pulled(), "simpleError")
+        testthat::expect_s3_class(data_handled(), "simpleError")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -449,7 +449,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_s3_class(data_pulled(), "qenv.error")
+        testthat::expect_s3_class(data_handled(), "qenv.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }

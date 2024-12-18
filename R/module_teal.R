@@ -186,7 +186,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    data_pulled <- srv_init_data("data", data = data)
+    data_handled <- srv_init_data("data", data = data)
 
     validate_ui <- tags$div(
       id = session$ns("validate_messages"),
@@ -195,13 +195,13 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       ui_validate_error(session$ns("silent_error")),
       ui_check_module_datanames(session$ns("datanames_warning"))
     )
-    srv_check_class_teal_data("class_teal_data", data_pulled)
-    srv_validate_error("silent_error", data_pulled, validate_shiny_silent_error = FALSE)
-    srv_check_module_datanames("datanames_warning", data_pulled, modules)
+    srv_check_class_teal_data("class_teal_data", data_handled)
+    srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
+    srv_check_module_datanames("datanames_warning", data_handled, modules)
 
-    data_validated <- .trigger_on_success(data_pulled)
+    data_validated <- .trigger_on_success(data_handled)
 
-    data_validated_r <- reactive({
+    data_signatured <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
       if (!isTRUE(is_filter_ok)) {
@@ -216,7 +216,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     data_load_status <- reactive({
-      if (inherits(data_pulled(), "teal_data")) {
+      if (inherits(data_handled(), "teal_data")) {
         "ok"
       } else if (inherits(data, "teal_data_module")) {
         "teal_data_module failed"
@@ -226,10 +226,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(data_validated_r(), {
-        req(inherits(data_validated_r(), "teal_data"))
+      eventReactive(data_signatured(), {
+        req(inherits(data_signatured(), "teal_data"))
         logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(data_validated_r())
+        teal_data_to_filtered_data(data_signatured())
       })
     }
 
@@ -252,7 +252,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
 
       if (attr(data, "once")) {
-        observeEvent(data_validated_r(), once = TRUE, {
+        observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
           removeTab("teal_modules-active_tab", target = "teal_data_module")
@@ -271,7 +271,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
-      data = data_validated_r,
+      data = data_signatured,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
