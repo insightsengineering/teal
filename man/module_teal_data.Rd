@@ -50,7 +50,7 @@ and display a generic failure message.}
 This is a low level module to handle \code{teal_data_module} execution and validation.
 \code{\link[=teal_transform_module]{teal_transform_module()}} inherits from \code{\link[=teal_data_module]{teal_data_module()}} so it is handled by this module too.
 \code{\link[=srv_teal]{srv_teal()}} accepts various \code{data} objects and eventually they are all transformed to \code{reactive}
-\code{\link[=teal_data]{teal_data()}} which is a standard data class in whole \code{teal} framework.
+\code{\link[teal.data:teal_data]{teal.data::teal_data()}} which is a standard data class in whole \code{teal} framework.
 }
 \section{data validation}{
 
@@ -59,10 +59,10 @@ Executed \code{\link[=teal_data_module]{teal_data_module()}} is validated and ou
 Output \code{data} is invalid if:
 \enumerate{
 \item \code{\link[=teal_data_module]{teal_data_module()}} is invalid if server doesn't return \code{reactive}. \strong{Immediately crashes an app!}
-\item \code{reactive} throws a \code{shiny.error} - happens when module creating \code{\link[=teal_data]{teal_data()}} fails.
-\item \code{reactive} returns \code{qenv.error} - happens when \code{\link[=teal_data]{teal_data()}} evaluates a failing code.
-\item \code{reactive} object doesn't return \code{\link[=teal_data]{teal_data()}}.
-\item \code{\link[=teal_data]{teal_data()}} object lacks any \code{datanames} specified in the \code{modules} argument.
+\item \code{reactive} throws a \code{shiny.error} - happens when module creating \code{\link[teal.data:teal_data]{teal.data::teal_data()}} fails.
+\item \code{reactive} returns \code{qenv.error} - happens when \code{\link[teal.data:teal_data]{teal.data::teal_data()}} evaluates a failing code.
+\item \code{reactive} object doesn't return \code{\link[teal.data:teal_data]{teal.data::teal_data()}}.
+\item \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object lacks any \code{datanames} specified in the \code{modules} argument.
 }
 
 \code{teal} (observers in \code{srv_teal}) always waits to render an app until \code{reactive} \code{teal_data} is

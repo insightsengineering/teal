@@ -5,7 +5,7 @@
 \title{\code{TealReportCard}}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Child class of \code{\link{ReportCard}} that is used for \code{teal} specific applications.
+Child class of \code{\link[teal.reporter:ReportCard]{teal.reporter::ReportCard}} that is used for \code{teal} specific applications.
 In addition to the parent methods, it supports rendering \code{teal} specific elements such as
 the source code, the encodings panel content and the filter panel content as part of the
 meta data.
@@ -45,6 +45,7 @@ card$get_content()[[1]]$get_content()
 <details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_content"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_content'><code>teal.reporter::ReportCard$append_content()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_html"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_html'><code>teal.reporter::ReportCard$append_html()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_metadata"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_metadata'><code>teal.reporter::ReportCard$append_metadata()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_plot"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_plot'><code>teal.reporter::ReportCard$append_plot()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_rcode"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_rcode'><code>teal.reporter::ReportCard$append_rcode()</code></a></span></li>
