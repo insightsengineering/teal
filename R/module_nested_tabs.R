@@ -318,7 +318,9 @@ srv_teal_module.teal_module <- function(id,
 }
 
 # This function calls a module server function.
-.call_teal_module <- function(modules, datasets, filtered_teal_data, reporter) {
+.call_teal_module <- function(modules, datasets, data, reporter) {
+  checkmate::assert_class(data, "reactive")
+
   # collect arguments to run teal_module
   args <- c(list(id = "module"), modules$server_args)
   if (is_arg_used(modules$server, "reporter")) {
@@ -331,7 +333,7 @@ srv_teal_module.teal_module <- function(id,
   }
 
   if (is_arg_used(modules$server, "data")) {
-    args <- c(args, data = list(filtered_teal_data))
+    args <- c(args, data = list(data))
   }
 
   if (is_arg_used(modules$server, "filter_panel_api")) {
