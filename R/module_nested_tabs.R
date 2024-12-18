@@ -319,7 +319,7 @@ srv_teal_module.teal_module <- function(id,
 
 # This function calls a module server function.
 .call_teal_module <- function(modules, datasets, data, reporter) {
-  checkmate::assert_class(data, "reactive")
+  assert_reactive(data)
 
   # collect arguments to run teal_module
   args <- c(list(id = "module"), modules$server_args)
