@@ -201,7 +201,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_validated <- .trigger_on_success(data_pulled)
 
-    data <- reactive({
+    data_validated_r <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
       if (!isTRUE(is_filter_ok)) {
@@ -226,10 +226,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(data(), {
-        req(inherits(data(), "teal_data"))
+      eventReactive(data_validated_r(), {
+        req(inherits(data_validated_r(), "teal_data"))
         logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(data())
+        teal_data_to_filtered_data(data_validated_r())
       })
     }
 
@@ -252,7 +252,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
 
       if (attr(data, "once")) {
-        observeEvent(data(), once = TRUE, {
+        observeEvent(data_validated_r(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
           removeTab("teal_modules-active_tab", target = "teal_data_module")
@@ -271,7 +271,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
-      data = data,
+      data = data_validated_r,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
