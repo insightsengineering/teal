@@ -74,11 +74,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
 
 #' @export
 #' @rdname module_transform_data
-srv_transform_teal_data <- function(id,
-                                    data,
-                                    transformators,
-                                    modules = NULL,
-                                    is_transform_failed = reactiveValues()) {
+srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
