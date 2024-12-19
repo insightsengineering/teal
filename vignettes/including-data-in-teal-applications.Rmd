@@ -247,6 +247,12 @@ my_data <- within(my_data, {
 
 ls(my_data)
 names(my_data)
+
+app <- teal::init(data = my_data, modules = example_module())
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 ```
 
 ## Further reading
