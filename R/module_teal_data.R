@@ -169,7 +169,7 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
             FALSE,
             paste(
               "Error when executing the `data` module:",
-              strip_style(paste(data()$message, collapse = "\n")),
+              cli::ansi_strip(paste(data()$message, collapse = "\n")),
               "\nCheck your inputs or contact app developer if error persists.",
               collapse = "\n"
             )
