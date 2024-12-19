@@ -22,7 +22,7 @@ ui_teal_module(id, modules, depth = 0L)
 
 srv_teal_module(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -33,7 +33,7 @@ srv_teal_module(
 
 \method{srv_teal_module}{default}(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -44,7 +44,7 @@ srv_teal_module(
 
 \method{srv_teal_module}{teal_modules}(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -55,7 +55,7 @@ srv_teal_module(
 
 \method{srv_teal_module}{teal_module}(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -78,7 +78,7 @@ more details.}
 \item{depth}{(\code{integer(1)})
 number which helps to determine depth of the modules nesting.}
 
-\item{data_rv}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton

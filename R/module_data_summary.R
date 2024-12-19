@@ -55,19 +55,19 @@ ui_data_summary <- function(id) {
 }
 
 #' @rdname module_data_summary
-srv_data_summary <- function(id, teal_data) {
-  assert_reactive(teal_data)
+srv_data_summary <- function(id, data) {
+  assert_reactive(data)
   moduleServer(
     id = id,
     function(input, output, session) {
       logger::log_debug("srv_data_summary initializing")
 
       summary_table <- reactive({
-        req(inherits(teal_data(), "teal_data"))
-        if (!length(teal_data())) {
+        req(inherits(data(), "teal_data"))
+        if (!length(data())) {
           return(NULL)
         }
-        get_filter_overview_wrapper(teal_data)
+        get_filter_overview_wrapper(data)
       })
 
       output$table <- renderUI({
@@ -123,7 +123,7 @@ srv_data_summary <- function(id, teal_data) {
                     " (",
                     vapply(
                       summary_table()[is_unsupported, "dataname"],
-                      function(x) class(teal_data()[[x]])[1],
+                      function(x) class(data()[[x]])[1],
                       character(1L)
                     ),
                     ")"
