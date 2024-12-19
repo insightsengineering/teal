@@ -19,7 +19,7 @@ repos:
           - davidgohel/gdtools # for flextable
           - mirai
           - checkmate
-          - crayon
+          - cli
           - jsonlite
           - lifecycle
           - logger
