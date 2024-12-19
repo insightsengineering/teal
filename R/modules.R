@@ -21,6 +21,7 @@ setOldClass("teal_modules")
 #' and the report previewer module [reporter_previewer_module()], respectively.
 #'
 #' # Restricting datasets used by `teal_module`:
+#'
 #' The `datanames` argument controls which datasets are used by the module’s server. These datasets,
 #' passed via server's `data` argument, are the only ones shown in the module's tab.
 #'
@@ -29,7 +30,8 @@ setOldClass("teal_modules")
 #' -	Proxy variables for column modifications
 #' -	Temporary datasets used to create final versions
 #' -	Connection objects
-#'
+#' Datasets which name is prefixed in `teal_data` by the dot (`.`) are not displayed in the `teal` application.
+#' Please see the _"Hidden datasets"_ section in `vignette("including-data-in-teal-applications").
 #'
 #' # `datanames` with `transformators`
 #' When transformators are specified, their `datanames` are added to the module’s `datanames`, which
