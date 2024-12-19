@@ -1028,7 +1028,7 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_identical(
-          modules$children$module_1$server_args,
+          modules$module_1$server_args,
           list(x = 1L, y = 2L)
         )
       }
