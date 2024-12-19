@@ -14,7 +14,7 @@ vignette: >
 
 `teal` is a powerful `shiny`-based framework with built-in modules for interactive data analysis. 
 This document outlines the customization options available for modifying the output of `teal` modules. 
-You will learn how to use [`teal_transform_module`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) to modify and enhance the objects created by `teal::modules()`, 
+You will learn how to use `teal_transform_module()` to modify and enhance the objects created by `teal::modules()`, 
 enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
 
 ## Decorators
@@ -48,12 +48,12 @@ created through `teal_transform_module`.
 
 In below chapter we will present how to create the simplest static decorator with just a server part. Later, we will
 present examples on more advanced usage, where decorators contain UI. You will also learn about a convenience 
-function that makes it easier to write decorators, called [`make_teal_transform_server`](https://insightsengineering.github.io/teal/latest-tagx/reference/make_teal_transform_server.html). The chapter ends with an 
+function that makes it easier to write decorators, called `make_teal_transform_server()`. The chapter ends with an 
 example module that utilizes decorators and a snippet that uses this module in `teal` application.
 
 ### Server
 
-The simplest way to create a decorator is to use [`teal_transform_module`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_transform_module.html) with only `server` argument provided (i.e. without UI part).
+The simplest way to create a decorator is to use `teal_transform_module()` with only `server` argument provided (i.e. without UI part).
 This approach adds functionality solely to the server code of the module. 
 In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`. 
 We modify the title and x-axis label of plot:
@@ -79,7 +79,7 @@ static_decorator <- teal_transform_module(
 
 To simplify the repetitive elements of writing new decorators 
 (e.g., `function(id, data), moduleServer, reactive, within(data, ...)`), 
-you can use the [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/latest-tag/reference/make_teal_transform_server.html) convenience function, which takes a `language` as input:
+you can use the `make_teal_transform_server()`] convenience function, which takes a `language` as input:
 
 ```{r}
 static_decorator_lang <- teal_transform_module(
@@ -98,7 +98,7 @@ static_decorator_lang <- teal_transform_module(
 
 To create a decorator with user interactivity, you can add (optional) UI part and use it in server accordingly (i.e. a typical `shiny` module). 
 In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label. 
-Note how the input parameters are passed to the [`within`](https://insightsengineering.github.io/teal/latest-tag/reference/teal_data_module.html) function using its `...` argument.
+Note how the input parameters are passed to the `within()` function using its `...` argument.
 
 ```{r}
 interactive_decorator <- teal_transform_module(
@@ -127,7 +127,7 @@ interactive_decorator <- teal_transform_module(
 )
 ```
 
-As in the earlier examples, [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/latest-tag/reference/make_teal_transform_server.html) can simplify the creation of the server component. 
+As in the earlier examples, `make_teal_transform_server()` can simplify the creation of the server component. 
 This wrapper requires you to use `input` object names directly in the expression - note that we have `xlab(x_axis_table)` and not `my_title = input$x_axis_title` together with `xlab(my_title)`.
 
 ```{r}
