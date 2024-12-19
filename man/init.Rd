@@ -17,8 +17,7 @@ init(
 }
 \arguments{
 \item{data}{(\code{teal_data} or \code{teal_data_module})
-For constructing the data object, refer to \code{\link[teal.data:teal_data]{teal.data::teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.
-If \code{datanames} are not set for the \code{teal_data} object, defaults from the \code{teal_data} environment will be used.}
+For constructing the data object, refer to \code{\link[teal.data:teal_data]{teal.data::teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 Nested list of \code{teal_modules} or \code{teal_module} objects or a single
