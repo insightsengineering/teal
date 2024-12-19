@@ -241,14 +241,15 @@ the `teal_data` instance, without being visible in the `teal` summary and filter
 ```{r}
 my_data <- teal_data()
 my_data <- within(my_data, {
-  data <- data.frame(id = 1:10, x = 11:20)
-  .data2 <- data.frame(id = 1:20, data_id = c(1:10, 1:10), y = 21:30)
+  .data1 <- data.frame(id = 1:10, x = 11:20)
+  .data2 <- data.frame(id = 1:10, y = 11:20)
+  data <- merge(.data1, .data2)
 })
 
 ls(my_data)
 names(my_data)
 
-app <- teal::init(data = my_data, modules = example_module())
+app <- init(data = my_data, modules = example_module())
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
