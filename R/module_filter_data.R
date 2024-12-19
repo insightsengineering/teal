@@ -24,7 +24,7 @@ ui_filter_data <- function(id) {
 }
 
 #' @rdname module_filter_data
-srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) {
+srv_filter_data <- function(id, datasets, active_datanames, data, is_active) {
   assert_reactive(datasets)
   moduleServer(id, function(input, output, session) {
     active_corrected <- reactive(intersect(active_datanames(), datasets()$datanames()))
@@ -42,10 +42,10 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
       })
     })
 
-    trigger_data <- .observe_active_filter_changed(datasets, is_active, active_corrected, data_rv)
+    trigger_data <- .observe_active_filter_changed(datasets, is_active, active_corrected, data)
 
     eventReactive(trigger_data(), {
-      .make_filtered_teal_data(modules, data = data_rv(), datasets = datasets(), datanames = active_corrected())
+      .make_filtered_teal_data(modules, data = data(), datasets = datasets(), datanames = active_corrected())
     })
   })
 }
@@ -69,12 +69,12 @@ srv_filter_data <- function(id, datasets, active_datanames, data_rv, is_active) 
 }
 
 #' @rdname module_filter_data
-.observe_active_filter_changed <- function(datasets, is_active, active_datanames, data_rv) {
+.observe_active_filter_changed <- function(datasets, is_active, active_datanames, data) {
   previous_signature <- reactiveVal(NULL)
   filter_changed <- reactive({
     req(inherits(datasets(), "FilteredData"))
     new_signature <- c(
-      teal.code::get_code(data_rv()),
+      teal.code::get_code(data()),
       .get_filter_expr(datasets = datasets(), datanames = active_datanames())
     )
     if (!identical(previous_signature(), new_signature)) {
