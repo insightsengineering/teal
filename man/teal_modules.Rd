@@ -9,7 +9,6 @@
 \alias{format.teal_modules}
 \alias{print.teal_module}
 \alias{print.teal_modules}
-\alias{set_datanames}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
@@ -39,8 +38,6 @@ modules(..., label = "root")
 \method{print}{teal_module}(x, ...)
 
 \method{print}{teal_modules}(x, ...)
-
-set_datanames(modules, datanames)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -106,8 +103,6 @@ Possible values: "datasets", "properties", "ui_args", "server_args", "transforma
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
 format.teal_modules(). Determines whether to show "TEAL ROOT" header}
-
-\item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.
@@ -147,11 +142,6 @@ However, this may include unnecessary datasets, such as:
 \item Temporary datasets used to create final versions
 \item Connection objects
 }
-
-To exclude irrelevant datasets, use the \code{\link[=set_datanames]{set_datanames()}} function to change \code{datanames} from
-\code{"all"} to specific names. Trying to modify non-\code{"all"} values with \code{\link[=set_datanames]{set_datanames()}} will result
-in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
-in \code{datanames}.
 }
 
 \section{\code{datanames} with \code{transformators}}{
@@ -326,15 +316,4 @@ complete_modules <- modules(
 
 cat(format(complete_modules))
 cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
-# change the module's datanames
-set_datanames(module(datanames = "all"), "a")
-
-# change modules' datanames
-set_datanames(
-  modules(
-    module(datanames = "all"),
-    module(datanames = "a")
-  ),
-  "b"
-)
 }

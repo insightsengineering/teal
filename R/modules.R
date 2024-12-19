@@ -30,10 +30,6 @@ setOldClass("teal_modules")
 #' -	Temporary datasets used to create final versions
 #' -	Connection objects
 #'
-#' To exclude irrelevant datasets, use the [set_datanames()] function to change `datanames` from
-#' `"all"` to specific names. Trying to modify non-`"all"` values with [set_datanames()] will result
-#' in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
-#' in `datanames`.
 #'
 #' # `datanames` with `transformators`
 #' When transformators are specified, their `datanames` are added to the module’s `datanames`, which
@@ -589,39 +585,6 @@ print.teal_module <- function(x, ...) {
 print.teal_modules <- function(x, ...) {
   cat(format(x, ...))
   invisible(x)
-}
-
-#' @param modules (`teal_module` or `teal_modules`)
-#' @rdname teal_modules
-#' @examples
-#' # change the module's datanames
-#' set_datanames(module(datanames = "all"), "a")
-#'
-#' # change modules' datanames
-#' set_datanames(
-#'   modules(
-#'     module(datanames = "all"),
-#'     module(datanames = "a")
-#'   ),
-#'   "b"
-#' )
-#' @export
-set_datanames <- function(modules, datanames) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
-  if (inherits(modules, "teal_modules")) {
-    modules$children <- lapply(modules$children, set_datanames, datanames)
-  } else {
-    if (identical(modules$datanames, "all")) {
-      modules$datanames <- datanames
-    } else {
-      warning(
-        "Not possible to modify datanames of the module ", modules$label,
-        ". set_datanames() can only change datanames if it was set to \"all\".",
-        call. = FALSE
-      )
-    }
-  }
-  modules
 }
 
 # utilities ----
