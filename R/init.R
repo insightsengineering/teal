@@ -12,7 +12,6 @@
 #'
 #' @param data (`teal_data` or `teal_data_module`)
 #'   For constructing the data object, refer to [teal.data::teal_data()] and [teal_data_module()].
-#'   If `datanames` are not set for the `teal_data` object, defaults from the `teal_data` environment will be used.
 #' @param modules (`list` or `teal_modules` or `teal_module`)
 #'   Nested list of `teal_modules` or `teal_module` objects or a single
 #'   `teal_modules` or `teal_module` object. These are the specific output modules which
