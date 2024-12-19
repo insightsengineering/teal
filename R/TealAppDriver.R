@@ -10,7 +10,7 @@
 TealAppDriver <- R6::R6Class( # nolint: object_name.
   "TealAppDriver",
   inherit = {
-    lapply(c("shinytest2", "rvest"), function(.x, use_testthat) {
+    lapply(c("testthat", "shinytest2", "rvest"), function(.x, use_testthat) {
       if (!requireNamespace(.x, quietly = TRUE)) {
         if (use_testthat) {
           testthat::skip(sprintf("%s is not installed", .x))
