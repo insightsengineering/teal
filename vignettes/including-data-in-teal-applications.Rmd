@@ -233,6 +233,22 @@ For a detailed explanation of verification, see [this `teal.data` vignette](http
 
 <br>
 
+##### Hidden datasets
+
+An object is hidden in `teal_data` if its name starts with a dot (`.`). This can be used to pass auxiliary objects in
+the `teal_data` instance, without being visible in the `teal` summary and filter panel.
+
+```{r}
+my_data <- teal_data()
+my_data <- within(my_data, {
+  data <- data.frame(id = 1:10, x = 11:20)
+  .data2 <- data.frame(id = 1:20, data_id = c(1:10, 1:10), y = 21:30)
+})
+
+ls(my_data)
+names(my_data)
+```
+
 ## Further reading
 
 For a complete guide to the `teal_data` class, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/latest-tag/).
