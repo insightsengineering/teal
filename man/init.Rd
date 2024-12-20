@@ -17,7 +17,9 @@ init(
 }
 \arguments{
 \item{data}{(\code{teal_data} or \code{teal_data_module})
-For constructing the data object, refer to \code{\link[teal.data:teal_data]{teal.data::teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.}
+For constructing the data object, refer to \code{\link[teal.data:teal_data]{teal.data::teal_data()}} and \code{\link[=teal_data_module]{teal_data_module()}}.
+Datasets which names are prefixed by dot (\code{.}) are hidden from the application.
+For more see the \code{vignette("including-data-in-teal-applications", package = "teal")}.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 Nested list of \code{teal_modules} or \code{teal_module} objects or a single
