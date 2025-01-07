@@ -28,8 +28,9 @@ setOldClass("teal_modules")
 #' When `datanames` is set to `"all"`, all datasets in the data object are treated as relevant.
 #' However, this may include unnecessary datasets, such as:
 #' -	Proxy variables for column modifications
-#' -	Temporary datasets used to create final versions
+#' -	Temporary datasets used to create final ones
 #' -	Connection objects
+#'
 #' Datasets which name is prefixed in `teal_data` by the dot (`.`) are not displayed in the `teal` application.
 #' Please see the _"Hidden datasets"_ section in `vignette("including-data-in-teal-applications").
 #'

@@ -139,11 +139,12 @@ When \code{datanames} is set to \code{"all"}, all datasets in the data object ar
 However, this may include unnecessary datasets, such as:
 \itemize{
 \item Proxy variables for column modifications
-\item Temporary datasets used to create final versions
+\item Temporary datasets used to create final ones
 \item Connection objects
+}
+
 Datasets which name is prefixed in \code{teal_data} by the dot (\code{.}) are not displayed in the \code{teal} application.
 Please see the \emph{"Hidden datasets"} section in `vignette("including-data-in-teal-applications").
-}
 }
 
 \section{\code{datanames} with \code{transformators}}{

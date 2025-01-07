@@ -235,7 +235,11 @@ For a detailed explanation of verification, see [this `teal.data` vignette](http
 
 ##### Hidden datasets
 
-An object is hidden in `teal_data` and `teal` application if its name starts with a dot (`.`). This can be used to pass auxiliary objects in the `teal_data` instance, without being visible in the `teal` summary and filter panel.
+Objects which name starts with a dot (.) are hidden in teal_data and the whole teal application. This can be used to pass auxiliary objects in the `teal_data` instance, without exposing them to the app user. For example:
+
+-	Proxy variables for column modifications
+- Temporary datasets used to create final ones
+-	Connection objects
 
 ```{r}
 my_data <- teal_data()
