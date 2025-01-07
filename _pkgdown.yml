@@ -108,6 +108,13 @@ reference:
       - module
       - modules
       - teal_slices
+  - title: Teal app modifiers
+    desc: Functions to modify the `teal` app object
+    contents:
+      - add_footer
+      - add_header
+      - add_title
+      - add_custom_server
   - title: Helper Functions
     desc: Helper functions for `teal`
     contents:
