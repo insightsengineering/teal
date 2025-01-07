@@ -8,11 +8,10 @@ init(
   data,
   modules,
   filter = teal_slices(),
-  title = build_app_title(),
-  header = tags$p(),
-  footer = tags$p(),
-  id = character(0),
-  landing_popup = NULL
+  title = NULL,
+  header = NULL,
+  footer = NULL,
+  id = character(0)
 )
 }
 \arguments{
@@ -29,23 +28,23 @@ more details.}
 \item{filter}{(\code{teal_slices}) Optionally,
 specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
-\item{title}{(\code{shiny.tag} or \code{character(1)}) Optionally,
+\item{title}{(\code{shiny.tag} or \code{character(1)}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Optionally,
 the browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
-by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
+by passing a valid \code{shiny.tag} which is a head tag with title and link tag.
+This parameter is deprecated. Use \code{add_title()} on the teal app object instead.}
 
-\item{header}{(\code{shiny.tag} or \code{character(1)}) Optionally,
-the header of the app.}
+\item{header}{(\code{shiny.tag} or \code{character(1)}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Optionally,
+the header of the app.
+This parameter is deprecated. Use \code{add_header()} on the teal app object instead.}
 
-\item{footer}{(\code{shiny.tag} or \code{character(1)}) Optionally,
-the footer of the app.}
+\item{footer}{(\code{shiny.tag} or \code{character(1)}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Optionally,
+the footer of the app.
+This parameter is deprecated. Use \code{add_footer()} on the teal app object instead.}
 
 \item{id}{(\code{character}) Optionally,
 a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app. This is a legacy feature.}
-
-\item{landing_popup}{(\code{teal_module_landing}) Optionally,
-a \code{landing_popup_module} to show up as soon as the teal app is initialized.}
 }
 \value{
 Named list containing server and UI functions.
