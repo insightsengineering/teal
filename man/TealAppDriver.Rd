@@ -98,10 +98,6 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   data,
   modules,
   filter = teal_slices(),
-  title = build_app_title(),
-  header = tags$p(),
-  footer = tags$p(),
-  landing_popup = NULL,
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...

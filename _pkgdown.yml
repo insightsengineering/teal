@@ -115,6 +115,7 @@ reference:
       - add_header
       - add_title
       - add_custom_server
+      - add_landing_popup
   - title: Helper Functions
     desc: Helper functions for `teal`
     contents:

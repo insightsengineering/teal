@@ -11,13 +11,15 @@ add_footer(app, footer = tags$p())
 
 \item{footer}{(\code{shiny.tag} or \code{character(1)}) The footer content to set. Defaults to an empty paragraph tag.}
 }
-\value{
-The modified \code{teal} app environment, invisibly.
-}
 \description{
 Adds a footer to the \code{teal} app.
 }
 \examples{
-app <- list2env(list(footer = NULL))
-app <- add_footer(app, tags$p("App Footer"))
+app <- init(
+  data = teal_data(IRIS = iris),
+  modules = modules(example_module())
+) |>
+  add_footer("Custom footer")
+
+shinyApp(app$ui, app$server)
 }

@@ -2,22 +2,25 @@
 % Please edit documentation in R/init.R
 \name{add_title}
 \alias{add_title}
-\title{Add a Title to a \code{teal} App}
+\title{Add a custom title to the app}
 \usage{
 add_title(app, title = build_app_title())
 }
 \arguments{
-\item{app}{(\code{environment}) The \code{teal} app environment.}
-
-\item{title}{(\code{shiny.tag} or \code{character(1)}) The title to set. Defaults to the result of \code{\link[=build_app_title]{build_app_title()}}.}
+\item{title}{The title to add}
 }
 \value{
-The modified \code{teal} app environment, invisibly.
+The modified app object
 }
 \description{
-Adds a browser window title or app title to the \code{teal} app.
+Add a custom title to the app
 }
 \examples{
-app <- list2env(list(title = NULL))
-app <- add_title(app, "My App Title")
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = modules(example_module())
+) |>
+  add_title("Custom title")
+
+shinyApp(app$ui, app$server)
 }

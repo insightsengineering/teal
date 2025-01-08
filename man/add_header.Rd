@@ -11,13 +11,19 @@ add_header(messages, header = "")
 
 \item{app}{(\code{environment}) The \code{teal} app environment.}
 }
-\value{
-The modified \code{teal} app environment, invisibly.
-}
 \description{
 Adds a header to the \code{teal} app.
 }
 \examples{
-app <- list2env(list(header = NULL))
-app <- add_header(app, tags$h1("App Header"))
+app <- init(
+  data = teal_data(IRIS = iris),
+  modules = modules(example_module())
+) |>
+  add_header(
+    tags$div(
+      h3("Custom header")
+    )
+  )
+
+shinyApp(app$ui, app$server)
 }

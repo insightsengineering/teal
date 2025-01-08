@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{add_custom_server}
 \alias{add_custom_server}
-\title{Add a Custom Server Function to a \code{teal} App}
+\title{Add a Custom Server Logic to a \code{teal} App}
 \usage{
 add_custom_server(app, custom_server)
 }
@@ -11,16 +11,17 @@ add_custom_server(app, custom_server)
 
 \item{custom_server}{(\code{function}) The custom server function to set.}
 }
-\value{
-The modified \code{teal} app environment, invisibly.
-}
 \description{
 Adds a custom server function to the \code{teal} app. This function can define additional server logic.
 }
 \examples{
-app <- list2env(list(custom_server = NULL))
-custom_server <- function(input, output, session) {
-  message("Custom server logic here")
-}
-app <- add_custom_server(app, custom_server)
+app <- init(
+  data = teal_data(IRIS = iris),
+  modules = modules(example_module())
+) |>
+  add_custom_server(function(input, output, session) {
+    print("injected server logic to the main shiny server function")
+  })
+
+shinyApp(app$ui, app$server)
 }

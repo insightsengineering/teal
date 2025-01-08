@@ -191,6 +191,7 @@ init <- function(data,
   res$title <- build_app_title()
   res$header <- tags$p()
   res$footer <- tags$p()
+  res$landing_popup_server <- NULL
 
   if (!is.null(title)) {
     checkmate::assert(
@@ -242,7 +243,7 @@ init <- function(data,
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
   if (length(landing) == 1L) {
-    res$landing_popup <- landing[[1L]]
+    res$landing_popup_server <- landing[[1L]]$server
     modules <- drop_module(modules, "teal_module_landing")
     lifecycle::deprecate_soft(
       when = "0.15.3",
@@ -268,8 +269,12 @@ init <- function(data,
     )
   }
   res$server <- function(input, output, session) {
-    if (!is.null(res$landing_popup)) {
-      do.call(res$landing_popup$server, c(list(id = "landing_module_shiny_id"), res$landing_popup$server_args))
+    if (!is.null(res$landing_popup_server)) {
+      if (identical(names(formals(res$landing_popup_server)), "id")) {
+        do.call(res$landing_popup_server, c(list(id = "landing_module_shiny_id")))
+      } else {
+        res$landing_popup_server(input, output, session)
+      }
     }
     if (!is.null(res$custom_server)) {
       res$custom_server(input, output, session)
@@ -282,20 +287,19 @@ init <- function(data,
   res
 }
 
-
-#' Add a Title to a `teal` App
+#' Add a custom title to the app
 #'
-#' @description Adds a browser window title or app title to the `teal` app.
-#'
-#' @param app (`environment`) The `teal` app environment.
-#' @param title (`shiny.tag` or `character(1)`) The title to set. Defaults to the result of [build_app_title()].
-#'
-#' @return The modified `teal` app environment, invisibly.
+#' @param title The title to add
+#' @return The modified app object
 #' @export
-#'
 #' @examples
-#' app <- list2env(list(title = NULL))
-#' app <- add_title(app, "My App Title")
+#' app <- init(
+#'   data = teal_data(IRIS = iris, MTCARS = mtcars),
+#'   modules = modules(example_module())
+#' ) |>
+#'   add_title("Custom title")
+#'
+#' shinyApp(app$ui, app$server)
 add_title <- function(app, title = build_app_title()) {
   checkmate::assert_environment(app)
   checkmate::assert_multi_class(title, c("shiny.tag", "character"))
@@ -309,13 +313,19 @@ add_title <- function(app, title = build_app_title()) {
 #'
 #' @param app (`environment`) The `teal` app environment.
 #' @param header (`shiny.tag` or `character(1)`) The header content to set. Defaults to an empty paragraph tag.
-#'
-#' @return The modified `teal` app environment, invisibly.
 #' @export
-#'
 #' @examples
-#' app <- list2env(list(header = NULL))
-#' app <- add_header(app, tags$h1("App Header"))
+#' app <- init(
+#'   data = teal_data(IRIS = iris),
+#'   modules = modules(example_module())
+#' ) |>
+#'   add_header(
+#'     tags$div(
+#'       h3("Custom header")
+#'     )
+#'   )
+#'
+#' shinyApp(app$ui, app$server)
 add_header <- function(app, header = tags$p()) {
   checkmate::assert_environment(app)
   checkmate::assert_multi_class(header, c("shiny.tag", "character"))
@@ -329,13 +339,15 @@ add_header <- function(app, header = tags$p()) {
 #'
 #' @param app (`environment`) The `teal` app environment.
 #' @param footer (`shiny.tag` or `character(1)`) The footer content to set. Defaults to an empty paragraph tag.
-#'
-#' @return The modified `teal` app environment, invisibly.
 #' @export
-#'
 #' @examples
-#' app <- list2env(list(footer = NULL))
-#' app <- add_footer(app, tags$p("App Footer"))
+#' app <- init(
+#'   data = teal_data(IRIS = iris),
+#'   modules = modules(example_module())
+#' ) |>
+#'   add_footer("Custom footer")
+#'
+#' shinyApp(app$ui, app$server)
 add_footer <- function(app, footer = tags$p()) {
   checkmate::assert_environment(app)
   checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
@@ -343,25 +355,81 @@ add_footer <- function(app, footer = tags$p()) {
   invisible(app)
 }
 
-#' Add a Custom Server Function to a `teal` App
+#' Add a Custom Server Logic to a `teal` App
 #'
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
 #' @param app (`environment`) The `teal` app environment.
 #' @param custom_server (`function`) The custom server function to set.
-#'
-#' @return The modified `teal` app environment, invisibly.
 #' @export
-#'
 #' @examples
-#' app <- list2env(list(custom_server = NULL))
-#' custom_server <- function(input, output, session) {
-#'   message("Custom server logic here")
-#' }
-#' app <- add_custom_server(app, custom_server)
+#' app <- init(
+#'   data = teal_data(IRIS = iris),
+#'   modules = modules(example_module())
+#' ) |>
+#'   add_custom_server(function(input, output, session) {
+#'     print("injected server logic to the main shiny server function")
+#'   })
+#'
+#' shinyApp(app$ui, app$server)
 add_custom_server <- function(app, custom_server) {
   checkmate::assert_environment(app)
   checkmate::assert_function(custom_server)
   app$custom_server <- custom_server
+  invisible(app)
+}
+
+
+#' Add a Landing Popup to a `teal` App
+#'
+#' @description Adds a landing popup to the `teal` app. This popup will be shown when the app starts.
+#'
+#' This modifier is used to display a popup dialog when the application starts.
+#' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
+#'
+#' @param app (`environment`) The `teal` app environment.
+#' @param id (`character(1)`) The ID of the modal dialog.
+#' @param label (`character(1)`) Label of the module.
+#' @param title (`character(1)`) Text to be displayed as popup title.
+#' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
+#'  Passed to `...` of `shiny::modalDialog`. See examples.
+#' @param buttons (`shiny.tag` or `shiny.tag.list`) Typically a `modalButton` or `actionButton`. See examples.
+#' @export
+#' @examples
+#' app <- init(
+#'   data = teal_data(IRIS = iris, MTCARS = mtcars),
+#'   modules = modules(example_module())
+#' ) |>
+#'   add_landing_popup(
+#'     title = "Welcome",
+#'     content = "This is a landing popup.",
+#'     buttons = modalButton("Accept")
+#'   )
+#'
+#' shinyApp(app$ui, app$server)
+add_landing_popup <- function(
+    app,
+    id = "landingpopup",
+    label = "Landing Popup",
+    title = NULL,
+    content = NULL,
+    buttons = modalButton("Accept")) {
+  checkmate::assert_environment(app)
+  checkmate::assert_string(id)
+  checkmate::assert_string(label)
+  checkmate::assert_class(title, "character", null.ok = TRUE)
+  checkmate::assert_multi_class(content, c("shiny.tag", "character"), null.ok = TRUE)
+  checkmate::assert_multi_class(buttons, c("shiny.tag", "character"))
+
+  app$landing_popup_server <- function(input, output, session) {
+    showModal(
+      modalDialog(
+        id = id,
+        title = title,
+        content,
+        footer = buttons
+      )
+    )
+  }
   invisible(app)
 }
