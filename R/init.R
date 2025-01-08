@@ -250,8 +250,7 @@ init <- function(data,
       what = "landing_popup_module()",
       details = paste(
         "landing_popup_module() is deprecated.",
-        "Use `add_custom_server()` to add a landing popup at the start of the app",
-        "using the `shiny::showModal()` and `shiny::modalDialog()` functions instead."
+        "Use `add_landing_popup()` on the teal app object instead."
       )
     )
   } else if (length(landing) > 1L) {
