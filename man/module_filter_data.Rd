@@ -11,11 +11,11 @@
 \usage{
 ui_filter_data(id)
 
-srv_filter_data(id, datasets, active_datanames, data_rv, is_active)
+srv_filter_data(id, datasets, active_datanames, data, is_active)
 
 .make_filtered_teal_data(modules, data, datasets = NULL, datanames)
 
-.observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
+.observe_active_filter_changed(datasets, is_active, active_datanames, data)
 
 .get_filter_expr(datasets, datanames)
 }
@@ -30,7 +30,7 @@ which implies in filter-panel to be "global". When \code{NULL} then filter-panel
 
 \item{active_datanames}{(\code{reactive} returning \code{character}) this module's data names}
 
-\item{data_rv}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 Nested list of \code{teal_modules} or \code{teal_module} objects or a single

@@ -510,7 +510,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
   appended_mods <- append_module(mods, mod3)
 
   testthat::expect_setequal(
-    strsplit(gsub("\033\\[[0-9;]*m", "", format(appended_mods)), "\n")[[1]],
+    strsplit(cli::ansi_strip(format(appended_mods)), "\n")[[1]],
     c(
       "TEAL ROOT",
       "  |- a",
@@ -520,7 +520,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "  |  |  L- Reportable    : FALSE",
       "  |  |- UI Arguments     : ",
       "  |  |- Server Arguments : ",
-      "  |  L- Transformators       : ",
+      "  |  L- Transformators   : ",
       "  |- c",
       "  |  |- Datasets         : all",
       "  |  |- Properties:",
@@ -528,7 +528,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "  |  |  L- Reportable    : FALSE",
       "  |  |- UI Arguments     : ",
       "  |  |- Server Arguments : ",
-      "  |  L- Transformators       : ",
+      "  |  L- Transformators   : ",
       "  L- c",
       "     |- Datasets         : all",
       "     |- Properties:",
@@ -536,7 +536,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "     |  L- Reportable    : FALSE",
       "     |- UI Arguments     : ",
       "     |- Server Arguments : ",
-      "     L- Transformators       : "
+      "     L- Transformators   : "
     )
   )
 })

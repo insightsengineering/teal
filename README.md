@@ -1,4 +1,4 @@
-# `teal`: Interactive Exploratory Data Analysis with `Shiny` Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/teal.png" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
+# `teal`: Interactive Exploratory Data Analysis with `Shiny` Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/logo.svg" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
 
 <!-- start badges -->
 [![CRAN Version](https://www.r-pkg.org/badges/version/teal?color=green)](https://cran.r-project.org/package=teal)

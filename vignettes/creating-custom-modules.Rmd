@@ -211,6 +211,7 @@ Let's review what we've done so far:
 The `teal::module()` function allows you to encapsulate your UI and server logic into a `teal` module, making it reusable and ready to integrate into any `teal` application.
 
 By setting `datanames = "all"`, you give the module access to all datasets specified in the `teal_data` object.
+Datasets which names start with `.` won't be included (see [Hidden datasets](including-data-in-teal-applications.html#hidden-datasets) section).
 
 ```r
 # Custom histogram module creation

@@ -21,19 +21,18 @@ setOldClass("teal_modules")
 #' and the report previewer module [reporter_previewer_module()], respectively.
 #'
 #' # Restricting datasets used by `teal_module`:
+#'
 #' The `datanames` argument controls which datasets are used by the module’s server. These datasets,
 #' passed via server's `data` argument, are the only ones shown in the module's tab.
 #'
 #' When `datanames` is set to `"all"`, all datasets in the data object are treated as relevant.
 #' However, this may include unnecessary datasets, such as:
 #' -	Proxy variables for column modifications
-#' -	Temporary datasets used to create final versions
+#' -	Temporary datasets used to create final ones
 #' -	Connection objects
 #'
-#' To exclude irrelevant datasets, use the [set_datanames()] function to change `datanames` from
-#' `"all"` to specific names. Trying to modify non-`"all"` values with [set_datanames()] will result
-#' in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
-#' in `datanames`.
+#' Datasets which name is prefixed in `teal_data` by the dot (`.`) are not displayed in the `teal` application.
+#' Please see the _"Hidden datasets"_ section in `vignette("including-data-in-teal-applications").
 #'
 #' # `datanames` with `transformators`
 #' When transformators are specified, their `datanames` are added to the module’s `datanames`, which
@@ -339,9 +338,11 @@ modules <- function(..., label = "root") {
 #' )
 #' cat(format(mod))
 #' @export
-format.teal_module <- function(
-    x, is_last = FALSE, parent_prefix = "",
-    what = c("datasets", "properties", "ui_args", "server_args", "transformators"), ...) {
+format.teal_module <- function(x,
+                               is_last = FALSE,
+                               parent_prefix = "",
+                               what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
+                               ...) {
   empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
   current_prefix <- paste0(parent_prefix, branch, " ")
@@ -353,7 +354,7 @@ format.teal_module <- function(
     } else {
       colon_space <- paste(rep(" ", label_width), collapse = "")
 
-      first_item <- sprintf("%s (%s)", names(lst)[1], crayon::silver(class(lst[[1]])[1]))
+      first_item <- sprintf("%s (%s)", names(lst)[1], cli::col_silver(class(lst[[1]])[1]))
       rest_items <- if (length(lst) > 1) {
         paste(
           vapply(
@@ -363,7 +364,7 @@ format.teal_module <- function(
                 "%s%s (%s)",
                 paste0(content_prefix, "|  ", colon_space),
                 name,
-                crayon::silver(class(lst[[name]])[1])
+                cli::col_silver(class(lst[[name]])[1])
               )
             },
             character(1)
@@ -384,40 +385,40 @@ format.teal_module <- function(
     empty_text
   }
 
-  output <- pasten(current_prefix, crayon::bgWhite(x$label))
+  output <- pasten(current_prefix, cli::bg_white(cli::col_black(x$label)))
 
   if ("datasets" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "|- ", crayon::yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
+      content_prefix, "|- ", cli::col_yellow("Datasets         : "), paste(x$datanames, collapse = ", "), "\n"
     )
   }
   if ("properties" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "|- ", crayon::blue("Properties:"), "\n",
-      content_prefix, "|  |- ", crayon::cyan("Bookmarkable  : "), bookmarkable, "\n",
-      content_prefix, "|  L- ", crayon::cyan("Reportable    : "), reportable, "\n"
+      content_prefix, "|- ", cli::col_blue("Properties:"), "\n",
+      content_prefix, "|  |- ", cli::col_cyan("Bookmarkable  : "), bookmarkable, "\n",
+      content_prefix, "|  L- ", cli::col_cyan("Reportable    : "), reportable, "\n"
     )
   }
   if ("ui_args" %in% what) {
     ui_args_formatted <- format_list(x$ui_args, label_width = 19)
     output <- paste0(
       output,
-      content_prefix, "|- ", crayon::green("UI Arguments     : "), ui_args_formatted, "\n"
+      content_prefix, "|- ", cli::col_green("UI Arguments     : "), ui_args_formatted, "\n"
     )
   }
   if ("server_args" %in% what) {
     server_args_formatted <- format_list(x$server_args, label_width = 19)
     output <- paste0(
       output,
-      content_prefix, "|- ", crayon::green("Server Arguments : "), server_args_formatted, "\n"
+      content_prefix, "|- ", cli::col_green("Server Arguments : "), server_args_formatted, "\n"
     )
   }
   if ("transformators" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "L- ", crayon::magenta("Transformators       : "), transformators, "\n"
+      content_prefix, "L- ", cli::col_magenta("Transformators   : "), transformators, "\n"
     )
   }
 
@@ -526,12 +527,12 @@ format.teal_module <- function(
 #' @export
 format.teal_modules <- function(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
   if (is_root) {
-    header <- pasten(crayon::bold("TEAL ROOT"))
+    header <- pasten(cli::style_bold("TEAL ROOT"))
     new_parent_prefix <- "  " #' Initial indent for root level
   } else {
     if (!is.null(x$label)) {
       branch <- if (is_last) "L-" else "|-"
-      header <- pasten(parent_prefix, branch, " ", crayon::bold(x$label))
+      header <- pasten(parent_prefix, branch, " ", cli::style_bold(x$label))
       new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
     } else {
       header <- ""
@@ -587,39 +588,6 @@ print.teal_module <- function(x, ...) {
 print.teal_modules <- function(x, ...) {
   cat(format(x, ...))
   invisible(x)
-}
-
-#' @param modules (`teal_module` or `teal_modules`)
-#' @rdname teal_modules
-#' @examples
-#' # change the module's datanames
-#' set_datanames(module(datanames = "all"), "a")
-#'
-#' # change modules' datanames
-#' set_datanames(
-#'   modules(
-#'     module(datanames = "all"),
-#'     module(datanames = "a")
-#'   ),
-#'   "b"
-#' )
-#' @export
-set_datanames <- function(modules, datanames) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
-  if (inherits(modules, "teal_modules")) {
-    modules$children <- lapply(modules$children, set_datanames, datanames)
-  } else {
-    if (identical(modules$datanames, "all")) {
-      modules$datanames <- datanames
-    } else {
-      warning(
-        "Not possible to modify datanames of the module ", modules$label,
-        ". set_datanames() can only change datanames if it was set to \"all\".",
-        call. = FALSE
-      )
-    }
-  }
-  modules
 }
 
 # utilities ----

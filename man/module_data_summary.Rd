@@ -12,7 +12,7 @@
 \usage{
 ui_data_summary(id)
 
-srv_data_summary(id, teal_data)
+srv_data_summary(id, data)
 
 get_filter_overview_wrapper(teal_data)
 

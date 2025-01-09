@@ -1,6 +1,6 @@
 #' Data Module for teal
 #'
-#' This module manages the `data` argument for `srv_teal`. The `teal` framework uses [teal_data()],
+#' This module manages the `data` argument for `srv_teal`. The `teal` framework uses [teal.data::teal_data()],
 #' which can be provided in various ways:
 #' 1. Directly as a [teal.data::teal_data()] object. This will automatically convert it into a `reactive` `teal_data`.
 #' 2. As a `reactive` object that returns a [teal.data::teal_data()] object.
@@ -53,8 +53,6 @@ srv_init_data <- function(id, data) {
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_data initializing.")
-    # data_rv contains teal_data object
-    # either passed to teal::init or returned from teal_data_module
     data_out <- if (inherits(data, "teal_data_module")) {
       output$data <- renderUI(data$ui(id = session$ns("teal_data_module")))
       data$server("teal_data_module")
