@@ -45,7 +45,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     initialize = function(data,
                           modules,
                           filter = teal_slices(),
-                          title_args = list(title = "App title"),
+                          title_args,
                           header = tags$p(),
                           footer = tags$p(),
                           landing_popup_args = NULL,
@@ -55,18 +55,40 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$data <- data
       private$modules <- modules
       private$filter <- filter
+
+      new_title <- modifyList(
+        list(
+          title = "Custom Teal App Title",
+          favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+        ),
+        title_args
+      )
       app <- init(
         data = data,
         modules = modules,
         filter = filter
       ) |>
+        modify_title(title = new_title$title, favicon = new_title$favicon) |>
         modify_header(header) |>
         modify_footer(footer)
 
-      app <- do.call(modify_title, c(list(app = app), title_args))
-
       if (!is.null(landing_popup_args)) {
-        app <- do.call(add_landing_popup, c(list(app = app), landing_popup_args))
+        args <- modifyList(
+          list(
+            id = "landingpopup",
+            title = NULL,
+            content = NULL,
+            buttons = modalButton("Accept")
+          ),
+          landing_popup_args
+        )
+        app <- app |>
+          add_landing_popup(
+            id = args$id,
+            title = args$title,
+            content = args$content,
+            buttons = args$button
+          )
       }
 
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
