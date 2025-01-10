@@ -282,12 +282,12 @@ modify_title <- function(
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   res <- app
   res$ui <- function(request) {
-    title <- tags$div(
+    title_tag <- tags$div(
       id = "teal-title",
       build_app_title(title, favicon)
     )
     ui_tq <- htmltools::tagQuery(app$ui(request = request))
-    ui_tq$find("#teal-title")$replaceWith(title)$allTags()
+    ui_tq$find("#teal-title")$replaceWith(title_tag)$allTags()
   }
   res
 }

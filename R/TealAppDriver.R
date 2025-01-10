@@ -26,7 +26,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param data,modules,filter,title,header,footer,landing_popup arguments passed to `init`
+    #' @param data,modules,filter arguments passed to `init` and title,header,footer,landing_popup modifiers
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
     #' Defaults to 20s.
@@ -45,6 +45,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     initialize = function(data,
                           modules,
                           filter = teal_slices(),
+                          title_args = list(title = "App title"),
+                          header = tags$p(),
+                          footer = tags$p(),
+                          landing_popup_args = NULL,
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
@@ -55,7 +59,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         data = data,
         modules = modules,
         filter = filter
-      )
+      ) |>
+        modify_header(header) |>
+        modify_footer(footer)
+
+      app <- do.call(modify_title, c(list(app = app), title_args))
+
+      if (!is.null(landing_popup_args)) {
+        app <- do.call(add_landing_popup, c(list(app = app), landing_popup_args))
+      }
 
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # It must be set as parameter to the AppDriver
