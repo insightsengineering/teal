@@ -4,7 +4,7 @@
 \alias{modify_header}
 \title{Add a Header to a \code{teal} App}
 \usage{
-modify_header(app, header = "test")
+modify_header(app, header = tags$p())
 }
 \arguments{
 \item{app}{(\code{environment}) The \code{teal} app environment.}

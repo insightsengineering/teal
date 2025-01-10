@@ -4,7 +4,7 @@
 \alias{modify_footer}
 \title{Add a Footer to a \code{teal} App}
 \usage{
-modify_footer(app, footer = "test")
+modify_footer(app, footer = tags$p())
 }
 \arguments{
 \item{app}{(\code{environment}) The \code{teal} app environment.}

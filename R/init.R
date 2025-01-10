@@ -315,7 +315,7 @@ modify_title <- function(
 #'   )
 #'
 #' shinyApp(app$ui, app$server)
-modify_header <- function(app, header = "test") {
+modify_header <- function(app, header = tags$p()) {
   res <- app
   res$ui <- function(request, ...) {
     args <- list(...)
@@ -342,7 +342,7 @@ modify_header <- function(app, header = "test") {
 #'   modify_footer("Custom footer")
 #'
 #' shinyApp(app$ui, app$server)
-modify_footer <- function(app, footer = "test") {
+modify_footer <- function(app, footer = tags$p()) {
   res <- app
   res$ui <- function(request, ...) {
     args <- list(...)

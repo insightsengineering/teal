@@ -8,9 +8,9 @@ init(
   data,
   modules,
   filter = teal_slices(),
-  title = build_app_title(),
-  header = tags$p(),
-  footer = tags$p(),
+  title = NULL,
+  header = NULL,
+  footer = NULL,
   id = character(0)
 )
 }
