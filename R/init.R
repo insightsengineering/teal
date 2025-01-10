@@ -379,8 +379,7 @@ add_landing_popup <- function(
     buttons = modalButton("Accept")) {
   old_server <- app$server
 
-  app$server <- function(input, output, session) {
-    old_server(input, output, session)
+  custom_server <- function(input, output, session() {
     showModal(
       modalDialog(
         id = id,
@@ -390,6 +389,7 @@ add_landing_popup <- function(
       )
     )
   }
+  app$server <- add_custom_server(app, custom_server)
   app
 }
 
