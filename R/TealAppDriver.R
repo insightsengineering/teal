@@ -45,7 +45,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     initialize = function(data,
                           modules,
                           filter = teal_slices(),
-                          title_args,
+                          title_args = list(),
                           header = tags$p(),
                           footer = tags$p(),
                           landing_popup_args = NULL,
