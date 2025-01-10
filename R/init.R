@@ -24,13 +24,13 @@
 #'   the browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#'   This parameter is deprecated. Use `add_title()` on the teal app object instead.
+#'   This parameter is deprecated. Use `modify_title()` on the teal app object instead.
 #' @param header (`shiny.tag` or `character(1)`) `r lifecycle::badge("deprecated")` Optionally,
 #'   the header of the app.
-#'   This parameter is deprecated. Use `add_header()` on the teal app object instead.
+#'   This parameter is deprecated. Use `modify_header()` on the teal app object instead.
 #' @param footer (`shiny.tag` or `character(1)`) `r lifecycle::badge("deprecated")` Optionally,
 #'   the footer of the app.
-#'   This parameter is deprecated. Use `add_footer()` on the teal app object instead.
+#'   This parameter is deprecated. Use `modify_footer()` on the teal app object instead.
 #' @param id (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app. This is a legacy feature.
@@ -95,9 +95,9 @@
 init <- function(data,
                  modules,
                  filter = teal_slices(),
-                 title = NULL,
-                 header = NULL,
-                 footer = NULL,
+                 title = build_app_title(),
+                 header = tags$p(),
+                 footer = tags$p(),
                  id = character(0)) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
@@ -186,55 +186,34 @@ init <- function(data,
     )
   }
 
-  ns <- NS(id)
-  res <- new.env(parent = emptyenv())
-  res$title <- build_app_title()
-  res$header <- tags$p()
-  res$footer <- tags$p()
+  res <- list()
   res$landing_popup_server <- NULL
 
   if (!is.null(title)) {
-    checkmate::assert(
-      .var.name = "title",
-      checkmate::check_string(title),
-      checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
-    )
-    res$title <- title
-    lifecycle::deprecate_soft(
+    checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
+    lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "init(title)",
-      details = paste(
-        "Use `add_title()` on the teal app object instead."
-      )
+      details = "Use `modify_title()` on the teal app object instead."
     )
   }
   if (!is.null(header)) {
-    checkmate::assert(
-      .var.name = "header",
-      checkmate::check_string(header),
-      checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
-    )
-    res$header <- header
-    lifecycle::deprecate_soft(
+    checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
+    lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "init(header)",
       details = paste(
-        "Use `add_header()` on the teal app object instead."
+        "Use `modify_header()` on the teal app object instead."
       )
     )
   }
   if (!is.null(footer)) {
-    checkmate::assert(
-      .var.name = "footer",
-      checkmate::check_string(footer),
-      checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
-    )
-    res$footer <- footer
-    lifecycle::deprecate_soft(
+    checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
+    lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "init(footer)",
       details = paste(
-        "Use `add_footer()` on the teal app object instead."
+        "Use `modify_footer()` on the teal app object instead."
       )
     )
   }
@@ -245,12 +224,12 @@ init <- function(data,
   if (length(landing) == 1L) {
     res$landing_popup_server <- landing[[1L]]$server
     modules <- drop_module(modules, "teal_module_landing")
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "landing_popup_module()",
       details = paste(
         "landing_popup_module() is deprecated.",
-        "Use `add_landing_popup()` on the teal app object instead."
+        "Use add_landing_popup() on the teal app object instead."
       )
     )
   } else if (length(landing) > 1L) {
@@ -258,27 +237,20 @@ init <- function(data,
   }
 
   # Note: UI must be a function to support bookmarking.
-  res$ui <- function(request) {
+  res$ui <- function(request, ...) {
     ui_teal(
-      id = ns("teal"),
+      id = "teal",
       modules = modules,
-      title = res$title,
-      header = res$header,
-      footer = res$footer
+      title = title,
+      header = header,
+      footer = footer
     )
   }
   res$server <- function(input, output, session) {
     if (!is.null(res$landing_popup_server)) {
-      if (identical(names(formals(res$landing_popup_server)), "id")) {
-        do.call(res$landing_popup_server, c(list(id = "landing_module_shiny_id")))
-      } else {
-        res$landing_popup_server(input, output, session)
-      }
+      do.call(res$landing_popup_server, c(list(id = "landing_module_shiny_id")))
     }
-    if (!is.null(res$custom_server)) {
-      res$custom_server(input, output, session)
-    }
-    srv_teal(id = ns("teal"), data = data, modules = modules, filter = deep_copy_filter(filter))
+    srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
   }
 
   logger::log_debug("init teal app has been initialized.")
@@ -296,14 +268,32 @@ init <- function(data,
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
 #'   modules = modules(example_module())
 #' ) |>
-#'   add_title("Custom title")
+#'   modify_title("Custom title")
 #'
 #' shinyApp(app$ui, app$server)
-add_title <- function(app, title = build_app_title()) {
-  checkmate::assert_environment(app)
-  checkmate::assert_multi_class(title, c("shiny.tag", "character"))
-  app$title <- title
-  invisible(app)
+modify_title <- function(
+    app,
+    title = "teal app",
+    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+  res <- app
+  res$ui <- function(request, ...) {
+    args <- list(...)
+    args$title <- tags$div(
+      id = "teal-title",
+      tags$head(
+        tags$title(title),
+        tags$link(
+          rel = "icon",
+          href = favicon,
+          sizes = "any"
+        )
+      )
+    )
+    ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
+      htmltools::tagQuery()
+    ui_tq$find("#teal-title")$replaceWith(args$title)$allTags()
+  }
+  res
 }
 
 #' Add a Header to a `teal` App
@@ -318,18 +308,23 @@ add_title <- function(app, title = build_app_title()) {
 #'   data = teal_data(IRIS = iris),
 #'   modules = modules(example_module())
 #' ) |>
-#'   add_header(
+#'   modify_header(
 #'     tags$div(
 #'       h3("Custom header")
 #'     )
 #'   )
 #'
 #' shinyApp(app$ui, app$server)
-add_header <- function(app, header = tags$p()) {
-  checkmate::assert_environment(app)
-  checkmate::assert_multi_class(header, c("shiny.tag", "character"))
-  app$header <- header
-  invisible(app)
+modify_header <- function(app, header = "test") {
+  res <- app
+  res$ui <- function(request, ...) {
+    args <- list(...)
+    args$header <- header
+    ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
+      htmltools::tagQuery()
+    ui_tq$find("#teal-header")$replaceWith(tags$header(id = "teal-header", args$header))$allTags()
+  }
+  res
 }
 
 #' Add a Footer to a `teal` App
@@ -344,40 +339,20 @@ add_header <- function(app, header = tags$p()) {
 #'   data = teal_data(IRIS = iris),
 #'   modules = modules(example_module())
 #' ) |>
-#'   add_footer("Custom footer")
+#'   modify_footer("Custom footer")
 #'
 #' shinyApp(app$ui, app$server)
-add_footer <- function(app, footer = tags$p()) {
-  checkmate::assert_environment(app)
-  checkmate::assert_multi_class(footer, c("shiny.tag", "character"))
-  app$footer <- footer
-  invisible(app)
+modify_footer <- function(app, footer = "test") {
+  res <- app
+  res$ui <- function(request, ...) {
+    args <- list(...)
+    args$footer <- footer
+    ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
+      htmltools::tagQuery()
+    ui_tq$find("#teal-footer")$replaceWith(tags$div(id = "teal-footer", args$footer))$allTags()
+  }
+  res
 }
-
-#' Add a Custom Server Logic to a `teal` App
-#'
-#' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
-#'
-#' @param app (`environment`) The `teal` app environment.
-#' @param custom_server (`function`) The custom server function to set.
-#' @export
-#' @examples
-#' app <- init(
-#'   data = teal_data(IRIS = iris),
-#'   modules = modules(example_module())
-#' ) |>
-#'   add_custom_server(function(input, output, session) {
-#'     print("injected server logic to the main shiny server function")
-#'   })
-#'
-#' shinyApp(app$ui, app$server)
-add_custom_server <- function(app, custom_server) {
-  checkmate::assert_environment(app)
-  checkmate::assert_function(custom_server)
-  app$custom_server <- custom_server
-  invisible(app)
-}
-
 
 #' Add a Landing Popup to a `teal` App
 #'
@@ -409,18 +384,13 @@ add_custom_server <- function(app, custom_server) {
 add_landing_popup <- function(
     app,
     id = "landingpopup",
-    label = "Landing Popup",
     title = NULL,
     content = NULL,
     buttons = modalButton("Accept")) {
-  checkmate::assert_environment(app)
-  checkmate::assert_string(id)
-  checkmate::assert_string(label)
-  checkmate::assert_class(title, "character", null.ok = TRUE)
-  checkmate::assert_multi_class(content, c("shiny.tag", "character"), null.ok = TRUE)
-  checkmate::assert_multi_class(buttons, c("shiny.tag", "character"))
+  old_server <- app$server
 
-  app$landing_popup_server <- function(input, output, session) {
+  app$server <- function(input, output, session) {
+    old_server(input, output, session)
     showModal(
       modalDialog(
         id = id,
@@ -430,5 +400,32 @@ add_landing_popup <- function(
       )
     )
   }
-  invisible(app)
+  app
+}
+
+#' Add a Custom Server Logic to a `teal` App
+#'
+#' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
+#'
+#' @param app (`environment`) The `teal` app environment.
+#' @param custom_server (`function`) The custom server function to set.
+#' @export
+#' @examples
+#' app <- init(
+#'   data = teal_data(IRIS = iris),
+#'   modules = modules(example_module())
+#' ) |>
+#'   add_custom_server(function(input, output, session) {
+#'     print("injected server logic to the main shiny server function")
+#'   })
+#'
+#' shinyApp(app$ui, app$server)
+add_custom_server <- function(app, custom_server) {
+  old_server <- app$server
+
+  app$server <- function(input, output, session) {
+    old_server(input, output, session)
+    custom_server(input, output, session)
+  }
+  app
 }

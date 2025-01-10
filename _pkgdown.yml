@@ -111,9 +111,9 @@ reference:
   - title: Teal app modifiers
     desc: Functions to modify the `teal` app object
     contents:
-      - add_footer
-      - add_header
-      - add_title
+      - modify_footer
+      - modify_header
+      - modify_title
       - add_custom_server
       - add_landing_popup
   - title: Helper Functions

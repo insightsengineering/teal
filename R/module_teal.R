@@ -92,10 +92,10 @@ ui_teal <- function(id,
 
   fluidPage(
     id = id,
-    title = title,
+    title = tags$div(id = "teal-title", title),
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(header),
+    tags$header(id = "teal-header", header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
@@ -133,7 +133,7 @@ ui_teal <- function(id,
     tags$hr(),
     tags$footer(
       tags$div(
-        footer,
+        tags$div(id = "teal-footer", footer),
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
         ui_teal_lockfile(ns("lockfile")),
