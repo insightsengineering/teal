@@ -224,9 +224,28 @@ init <- function(data,
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
+  modules <- drop_module(modules, "teal_module_landing")
+
+  # Note: UI must be a function to support bookmarking.
+  res <- list(
+    ui = function(request) {
+      ui_teal(
+        id = "teal",
+        modules = modules,
+        title = title,
+        header = header,
+        footer = footer
+      )
+    },
+    server = function(input, output, session) {
+      srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
+    }
+  )
+
   if (length(landing) == 1L) {
-    landing_popup_server <- landing[[1L]]$server
-    modules <- drop_module(modules, "teal_module_landing")
+    res <- add_custom_server(res, function(input, output, session) {
+      do.call(landing[[1L]]$server, c(list(id = "landing_module_shiny_id")))
+    })
     lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "landing_popup_module()",
@@ -238,25 +257,6 @@ init <- function(data,
   } else if (length(landing) > 1L) {
     stop("Only one `landing_popup_module` can be used.")
   }
-
-  # Note: UI must be a function to support bookmarking.
-  res <- list(
-    ui = function(request, ...) {
-      ui_teal(
-        id = "teal",
-        modules = modules,
-        title = title,
-        header = header,
-        footer = footer
-      )
-    },
-    server = function(input, output, session) {
-      if (!is.null(landing_popup_server)) {
-        do.call(landing_popup_server, c(list(id = "landing_module_shiny_id")))
-      }
-      srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
-    }
-  )
 
   logger::log_debug("init teal app has been initialized.")
 
@@ -281,15 +281,13 @@ modify_title <- function(
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   res <- app
-  res$ui <- function(request, ...) {
-    args <- list(...)
-    args$title <- tags$div(
+  res$ui <- function(request) {
+    title <- tags$div(
       id = "teal-title",
       build_app_title(title, favicon)
     )
-    ui_tq <- htmltools::tagQuery(do.call(app$ui, c(list(request = request), args)))
-
-    ui_tq$find("#teal-title")$replaceWith(args$title)$allTags()
+    ui_tq <- htmltools::tagQuery(app$ui(request = request))
+    ui_tq$find("#teal-title")$replaceWith(title)$allTags()
   }
   res
 }
@@ -315,11 +313,9 @@ modify_title <- function(
 #' shinyApp(app$ui, app$server)
 modify_header <- function(app, header = tags$p()) {
   res <- app
-  res$ui <- function(request, ...) {
-    args <- list(...)
-    args$header <- header
-    ui_tq <- htmltools::tagQuery(do.call(app$ui, c(list(request = request), args)))
-    ui_tq$find("#teal-header")$replaceWith(tags$header(id = "teal-header", args$header))$allTags()
+  res$ui <- function(request) {
+    ui_tq <- htmltools::tagQuery(app$ui(request = request))
+    ui_tq$find("#teal-header")$replaceWith(tags$header(id = "teal-header", header))$allTags()
   }
   res
 }
@@ -341,11 +337,9 @@ modify_header <- function(app, header = tags$p()) {
 #' shinyApp(app$ui, app$server)
 modify_footer <- function(app, footer = tags$p()) {
   res <- app
-  res$ui <- function(request, ...) {
-    args <- list(...)
-    args$footer <- footer
-    ui_tq <- htmltools::tagQuery(do.call(app$ui, c(list(request = request), args)))
-    ui_tq$find("#teal-footer")$replaceWith(tags$div(id = "teal-footer", args$footer))$allTags()
+  res$ui <- function(request) {
+    ui_tq <- htmltools::tagQuery(app$ui(request = request))
+    ui_tq$find("#teal-footer")$replaceWith(tags$div(id = "teal-footer", footer))$allTags()
   }
   res
 }
@@ -412,7 +406,6 @@ add_landing_popup <- function(
 #'   modules = modules(example_module())
 #' ) |>
 #'   add_custom_server(function(input, output, session) {
-#'     print("injected server logic to the main shiny server function")
 #'   })
 #'
 #' shinyApp(app$ui, app$server)
