@@ -315,7 +315,7 @@ build_app_title <- function(
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_soft(
     when = "0.15.3",
     what = "build_app_title()",
     details = "Use `modify_title()` on the teal app object instead."

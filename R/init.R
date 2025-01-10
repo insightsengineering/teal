@@ -95,9 +95,9 @@
 init <- function(data,
                  modules,
                  filter = teal_slices(),
-                 title = build_app_title(),
-                 header = tags$p(),
-                 footer = tags$p(),
+                 title = NULL,
+                 header = NULL,
+                 footer = NULL,
                  id = character(0)) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
@@ -186,9 +186,6 @@ init <- function(data,
     )
   }
 
-  res <- list()
-  res$landing_popup_server <- NULL
-
   if (!is.null(title)) {
     checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
@@ -196,6 +193,8 @@ init <- function(data,
       what = "init(title)",
       details = "Use `modify_title()` on the teal app object instead."
     )
+  } else {
+    title <- build_app_title()
   }
   if (!is.null(header)) {
     checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
@@ -206,6 +205,8 @@ init <- function(data,
         "Use `modify_header()` on the teal app object instead."
       )
     )
+  } else {
+    header <- tags$p()
   }
   if (!is.null(footer)) {
     checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
@@ -216,13 +217,15 @@ init <- function(data,
         "Use `modify_footer()` on the teal app object instead."
       )
     )
+  } else {
+    footer <- tags$p()
   }
 
   # argument transformations
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
   if (length(landing) == 1L) {
-    res$landing_popup_server <- landing[[1L]]$server
+    landing_popup_server <- landing[[1L]]$server
     modules <- drop_module(modules, "teal_module_landing")
     lifecycle::deprecate_warn(
       when = "0.15.3",
@@ -237,21 +240,23 @@ init <- function(data,
   }
 
   # Note: UI must be a function to support bookmarking.
-  res$ui <- function(request, ...) {
-    ui_teal(
-      id = "teal",
-      modules = modules,
-      title = title,
-      header = header,
-      footer = footer
-    )
-  }
-  res$server <- function(input, output, session) {
-    if (!is.null(res$landing_popup_server)) {
-      do.call(res$landing_popup_server, c(list(id = "landing_module_shiny_id")))
+  res <- list(
+    ui = function(request, ...) {
+      ui_teal(
+        id = "teal",
+        modules = modules,
+        title = title,
+        header = header,
+        footer = footer
+      )
+    },
+    server = function(input, output, session) {
+      if (!is.null(landing_popup_server)) {
+        do.call(landing_popup_server, c(list(id = "landing_module_shiny_id")))
+      }
+      srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
     }
-    srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
-  }
+  )
 
   logger::log_debug("init teal app has been initialized.")
 
@@ -280,14 +285,7 @@ modify_title <- function(
     args <- list(...)
     args$title <- tags$div(
       id = "teal-title",
-      tags$head(
-        tags$title(title),
-        tags$link(
-          rel = "icon",
-          href = favicon,
-          sizes = "any"
-        )
-      )
+      build_app_title(title, favicon)
     )
     ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
       htmltools::tagQuery()
