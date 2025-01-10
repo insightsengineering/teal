@@ -287,8 +287,8 @@ modify_title <- function(
       id = "teal-title",
       build_app_title(title, favicon)
     )
-    ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
-      htmltools::tagQuery()
+    ui_tq <- htmltools::tagQuery(do.call(app$ui, c(list(request = request), args)))
+
     ui_tq$find("#teal-title")$replaceWith(args$title)$allTags()
   }
   res
@@ -318,8 +318,7 @@ modify_header <- function(app, header = tags$p()) {
   res$ui <- function(request, ...) {
     args <- list(...)
     args$header <- header
-    ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
-      htmltools::tagQuery()
+    ui_tq <- htmltools::tagQuery(do.call(app$ui, c(list(request = request), args)))
     ui_tq$find("#teal-header")$replaceWith(tags$header(id = "teal-header", args$header))$allTags()
   }
   res
@@ -345,8 +344,7 @@ modify_footer <- function(app, footer = tags$p()) {
   res$ui <- function(request, ...) {
     args <- list(...)
     args$footer <- footer
-    ui_tq <- do.call(app$ui, c(list(request = request), args)) |>
-      htmltools::tagQuery()
+    ui_tq <- htmltools::tagQuery(do.call(app$ui, c(list(request = request), args)))
     ui_tq$find("#teal-footer")$replaceWith(tags$div(id = "teal-footer", args$footer))$allTags()
   }
   res
