@@ -27,8 +27,6 @@ Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
 }
 \description{
 Adds a landing popup to the \code{teal} app. This popup will be shown when the app starts.
-
-This modifier is used to display a popup dialog when the application starts.
 The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 }
 \examples{
