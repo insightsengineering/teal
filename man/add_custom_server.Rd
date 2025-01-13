@@ -23,5 +23,7 @@ app <- init(
     print("injected server logic")
   })
 
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 }

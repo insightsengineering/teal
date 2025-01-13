@@ -56,6 +56,7 @@ articles:
     navbar: Get started
     contents:
       - getting-started-with-teal
+      - quick-usage-guide-for-teal
   - title: Using `teal`
     navbar: Using `teal`
     contents:
@@ -108,7 +109,7 @@ reference:
       - module
       - modules
       - teal_slices
-  - title: `teal` application modifiers
+  - title: Application modifiers for `teal`
     desc: Functions to modify the `teal` app object
     contents:
       - modify_footer

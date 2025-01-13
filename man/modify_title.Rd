@@ -27,5 +27,7 @@ app <- init(
 ) |>
   modify_title("Custom title")
 
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 }

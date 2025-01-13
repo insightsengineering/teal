@@ -111,7 +111,9 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data, modules, filter}}{arguments passed to \code{init} and title,header,footer,landing_popup modifiers}
+\item{\code{data, modules, filter}}{arguments passed to \code{init}}
+
+\item{\code{title_args, header, footer, landing_popup_args}}{to pass into the modifier functions.}
 
 \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.

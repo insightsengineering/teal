@@ -21,5 +21,7 @@ app <- init(
 ) |>
   modify_footer("Custom footer")
 
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 }

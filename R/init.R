@@ -281,7 +281,9 @@ init <- function(data,
 #' ) |>
 #'   modify_title("Custom title")
 #'
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 modify_title <- function(
     app,
     title = "teal app",
@@ -323,7 +325,9 @@ modify_title <- function(
 #'     )
 #'   )
 #'
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 modify_header <- function(app, header = tags$p()) {
   res <- app
   res$ui <- function(request) {
@@ -347,7 +351,9 @@ modify_header <- function(app, header = tags$p()) {
 #' ) |>
 #'   modify_footer("Custom footer")
 #'
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 modify_footer <- function(app, footer = tags$p()) {
   res <- app
   res$ui <- function(request) {
@@ -383,7 +389,9 @@ modify_footer <- function(app, footer = tags$p()) {
 #'     buttons = modalButton("Accept")
 #'   )
 #'
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 add_landing_popup <- function(
     app,
     id = "landingpopup",
@@ -420,7 +428,9 @@ add_landing_popup <- function(
 #'     print("injected server logic")
 #'   })
 #'
-#' shinyApp(app$ui, app$server)
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 add_custom_server <- function(app, custom_server) {
   old_server <- app$server
 

@@ -26,7 +26,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param data,modules,filter arguments passed to `init` and title,header,footer,landing_popup modifiers
+    #' @param data,modules,filter arguments passed to `init`
+    #' @param title_args,header,footer,landing_popup_args to pass into the modifier functions.
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
     #' Defaults to 20s.
