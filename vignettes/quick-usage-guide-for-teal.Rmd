@@ -10,18 +10,18 @@ vignette: >
 
 ## `init` to initialize your app
 
-The `init` function is the entrypoint to create a `teal` application.
+The `init` function is the entry point to create a `teal` application.
 The main arguments of `init` are `data` and `modules`, which are mandatory. Additionally, the `filter` argument allows the user to specify the default filter state of the filter panel.
 
 * The `data` argument takes a `teal_data` object, please refer to [Including Data in teal Applications vignette](including-data-in-teal-applications.html) to learn more.
-* The `modules` argument takes a nested list of `teal_modules` or `teal_module` objects or a single `teal_modules` or `teal_module` object. The packages like [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/) or [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/) contain a collection of thess modules that can be used in your `teal` application.
+* The `modules` argument takes a nested list of `teal_modules` or `teal_module` objects or a single `teal_modules` or `teal_module` object. The packages like [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/) or [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/) contain a collection of these modules that can be used in your `teal` application.
 * The `filter` argument takes an object of class `teal_slices`, please refer the [Filter Panel vignette](filter-panel.html) to learn more.
 
 ## A simple `teal` application:
 
 This simple `teal` application takes the `iris` and `mtcars` datasets and displays their contents:
 
-```{r, message=FALSE}
+```{r, eval=FALSE}
 library(teal)
 
 app <- init(
@@ -53,9 +53,9 @@ The following functions can be used to extend the `teal` application:
 * `add_landing_popup` to add a landing popup to the application
 * `add_custom_server` to add custom server logic to the application
 
-Let's use these mopdifiers to customize the application we created earlier.
+Let's use these modifiers to customize the application we created earlier.
 
-```{r, message=FALSE}
+```{r, eval=FALSE}
 library(teal)
 
 app <- init(
@@ -75,7 +75,7 @@ app <- init(
     )
   ) |>
   modify_footer(footer = "Custom footer") |>
-  add_landing_popup(title = "Teal", content = "Welcome to my first teal application!") |>
+  add_landing_popup(title = "Te al", content = "Welcome to my first teal application!") |>
   add_custom_server(function(input, output, session) {
     observeEvent(input$notify, {
       showNotification("Yes, the button works!")
