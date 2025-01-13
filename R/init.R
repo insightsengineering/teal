@@ -229,7 +229,7 @@ init <- function(data,
       what = "init(id)",
       details = paste(
         "To wrap `teal` application within other shiny application please use",
-        "`ui_teal()` and `srv_teal()` and call them as normal shiny modules"
+        "`ui_teal()` and `srv_teal()` and call them as regular shiny modules."
       )
     )
     checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
