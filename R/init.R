@@ -193,7 +193,14 @@ init <- function(data,
       details = "Use `modify_title()` on the teal app object instead."
     )
   } else {
-    title <- build_app_title()
+    title <- tags$head(
+      tags$title("teal app"),
+      tags$link(
+        rel = "icon",
+        href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
+        sizes = "any"
+      )
+    )
   }
   if (lifecycle::is_present(header)) {
     checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
@@ -283,7 +290,14 @@ modify_title <- function(
   res$ui <- function(request) {
     title_tag <- tags$div(
       id = "teal-title",
-      build_app_title(title, favicon)
+      tags$head(
+        tags$title(title),
+        tags$link(
+          rel = "icon",
+          href = favicon,
+          sizes = "any"
+        )
+      )
     )
     ui_tq <- htmltools::tagQuery(app$ui(request = request))
     ui_tq$find("#teal-title")$replaceWith(title_tag)$allTags()
