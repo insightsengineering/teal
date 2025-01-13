@@ -39,21 +39,17 @@ if (interactive()) {
 }
 ```
 
-<span>
-  <img class="teal-example" src="images/teal-app-init.svg" alt="Simple teal app to showcase `init`" style="width: 100%;" />
-</span>
+![](./images/teal-app-init.svg)
 
 ## Extending the `teal` application
 
 The following functions can be used to extend the `teal` application:
 
-* `modify_title` to change the title of the application
-* `modify_header` to change the header of the application
-* `modify_footer` to change the footer of the application
-* `add_landing_popup` to add a landing popup to the application
-* `add_custom_server` to add custom server logic to the application
-
-Let's use these modifiers to customize the application we created earlier.
+* `modify_title` changes the title that appears in the browser tab.
+* `modify_header` adds a header with a button that shows a notification when clicked, also note that the observer for this button was added using the modifier `add_custom_server`.
+* `modify_footer` adds a custom footer.
+* `add_landing_popup` adds a landing popup that appears when the application is first loaded. Note that the screenshot does not show the popup, but it will appear when the application is first loaded.
+* `add_custom_server` adds custom server logic to the teal application, in this case the button created in the header is observed and a notification is shown.
 
 ```{r, eval=FALSE}
 library(teal)
@@ -87,15 +83,7 @@ if (interactive()) {
 }
 ```
 
-<span>
-  <img class="teal-example" src="images/teal-app-init-with-modifiers.svg" alt="Simple teal app to showcase the modifier functions" style="width: 100%;" />
-</span>
+Here is what the app would look with those modifiers added.
 
+![](./images/teal-app-init-with-modifiers.svg)
 
-Note the changes made by these extensions:
-
-* `modify_title` changed the title that appears in the browser tab.
-* `modify_header` adds a header with a button that shows a notification when clicked, but note that the observer for this button was added using the modifier `add_custom_server`.
-* `modify_footer` adds a custom footer.
-* `add_landing_popup` adds a landing popup that appears when the application is first loaded. Note that the screenshot does not show the popup, but it will appear when the application is first loaded.
-* `add_custom_server` observed the button created in the header and shows a notification when it is clicked.

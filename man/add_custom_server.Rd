@@ -7,9 +7,9 @@
 add_custom_server(app, custom_server)
 }
 \arguments{
-\item{app}{(\code{environment}) The \code{teal} app environment.}
+\item{app}{(\code{list}) The \code{teal} app environment.}
 
-\item{custom_server}{(\code{function}) The custom server function to set.}
+\item{custom_server}{(\verb{function(input, output, session)}) The custom server function to set.}
 }
 \description{
 Adds a custom server function to the \code{teal} app. This function can define additional server logic.

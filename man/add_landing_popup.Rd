@@ -6,16 +6,13 @@
 \usage{
 add_landing_popup(
   app,
-  id = "landingpopup",
   title = NULL,
   content = NULL,
   buttons = modalButton("Accept")
 )
 }
 \arguments{
-\item{app}{(\code{environment}) The \code{teal} app environment.}
-
-\item{id}{(\code{character(1)}) The ID of the modal dialog.}
+\item{app}{(\code{list}) The \code{teal} app environment.}
 
 \item{title}{(\code{character(1)}) Text to be displayed as popup title.}
 
@@ -23,6 +20,8 @@ add_landing_popup(
 Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
 
 \item{buttons}{(\code{shiny.tag} or \code{shiny.tag.list}) Typically a \code{modalButton} or \code{actionButton}. See examples.}
+
+\item{id}{(\code{character(1)}) The ID of the modal dialog.}
 
 \item{label}{(\code{character(1)}) Label of the module.}
 }

@@ -272,6 +272,8 @@ init <- function(data,
 #' Add a custom Title to `teal` application
 #'
 #' @param title (`shiny.tag` or `character(1)`) The title to be used
+#' @param favicon (`character`) The path for the icon for the title.
+#' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
 #' @return The modified app object
 #' @export
 #' @examples
@@ -288,6 +290,8 @@ modify_title <- function(
     app,
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+  checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
+  checkmate::assert_string(favicon)
   res <- app
   res$ui <- function(request) {
     title_tag <- tags$div(
@@ -311,7 +315,7 @@ modify_title <- function(
 #'
 #' @description Adds a header to the `teal` app.
 #'
-#' @param app (`environment`) The `teal` app environment.
+#' @param app (`list`) The `teal` app environment.
 #' @param header (`shiny.tag` or `character(1)`) The header content to set. Defaults to an empty paragraph tag.
 #' @export
 #' @examples
@@ -329,6 +333,7 @@ modify_title <- function(
 #'   shinyApp(app$ui, app$server)
 #' }
 modify_header <- function(app, header = tags$p()) {
+  checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
   res <- app
   res$ui <- function(request) {
     ui_tq <- htmltools::tagQuery(app$ui(request = request))
@@ -341,7 +346,7 @@ modify_header <- function(app, header = tags$p()) {
 #'
 #' @description Adds a footer to the `teal` app.
 #'
-#' @param app (`environment`) The `teal` app environment.
+#' @param app (`list`) The `teal` app environment.
 #' @param footer (`shiny.tag` or `character(1)`) The footer content to set. Defaults to an empty paragraph tag.
 #' @export
 #' @examples
@@ -355,6 +360,7 @@ modify_header <- function(app, header = tags$p()) {
 #'   shinyApp(app$ui, app$server)
 #' }
 modify_footer <- function(app, footer = tags$p()) {
+  checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
   res <- app
   res$ui <- function(request) {
     ui_tq <- htmltools::tagQuery(app$ui(request = request))
@@ -370,7 +376,7 @@ modify_footer <- function(app, footer = tags$p()) {
 #' This modifier is used to display a popup dialog when the application starts.
 #' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 #'
-#' @param app (`environment`) The `teal` app environment.
+#' @param app (`list`) The `teal` app environment.
 #' @param id (`character(1)`) The ID of the modal dialog.
 #' @param label (`character(1)`) Label of the module.
 #' @param title (`character(1)`) Text to be displayed as popup title.
@@ -394,30 +400,35 @@ modify_footer <- function(app, footer = tags$p()) {
 #' }
 add_landing_popup <- function(
     app,
-    id = "landingpopup",
     title = NULL,
     content = NULL,
     buttons = modalButton("Accept")) {
   custom_server <- function(input, output, session) {
+    checkmate::assert_string(id)
+    checkmate::assert_string(title, null.ok = TRUE)
+    checkmate::assert_multi_class(
+      content,
+      classes = c("character", "shiny.tag", "shiny.tag.list", "html"), null.ok = TRUE
+    )
+    checkmate::assert_multi_class(buttons, classes = c("shiny.tag", "shiny.tag.list"))
     showModal(
       modalDialog(
-        id = id,
+        id = "landingpopup",
         title = title,
         content,
         footer = buttons
       )
     )
   }
-  app <- add_custom_server(app, custom_server)
-  app
+  add_custom_server(app, custom_server)
 }
 
 #' Add a Custom Server Logic to `teal` Application
 #'
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
-#' @param app (`environment`) The `teal` app environment.
-#' @param custom_server (`function`) The custom server function to set.
+#' @param app (`list`) The `teal` app environment.
+#' @param custom_server (`function(input, output, session)`) The custom server function to set.
 #' @export
 #' @examples
 #' app <- init(
@@ -432,6 +443,7 @@ add_landing_popup <- function(
 #'   shinyApp(app$ui, app$server)
 #' }
 add_custom_server <- function(app, custom_server) {
+  checkmate::assert_function(custom_server, args = c("input", "output", "session"))
   old_server <- app$server
 
   app$server <- function(input, output, session) {

@@ -13,6 +13,9 @@ modify_title(
 }
 \arguments{
 \item{title}{(\code{shiny.tag} or \code{character(1)}) The title to be used}
+
+\item{favicon}{(\code{character}) The path for the icon for the title.
+The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
 }
 \value{
 The modified app object

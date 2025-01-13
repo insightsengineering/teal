@@ -7,7 +7,7 @@
 modify_footer(app, footer = tags$p())
 }
 \arguments{
-\item{app}{(\code{environment}) The \code{teal} app environment.}
+\item{app}{(\code{list}) The \code{teal} app environment.}
 
 \item{footer}{(\code{shiny.tag} or \code{character(1)}) The footer content to set. Defaults to an empty paragraph tag.}
 }

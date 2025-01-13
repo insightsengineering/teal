@@ -7,7 +7,7 @@
 modify_header(app, header = tags$p())
 }
 \arguments{
-\item{app}{(\code{environment}) The \code{teal} app environment.}
+\item{app}{(\code{list}) The \code{teal} app environment.}
 
 \item{header}{(\code{shiny.tag} or \code{character(1)}) The header content to set. Defaults to an empty paragraph tag.}
 }
