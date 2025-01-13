@@ -394,7 +394,7 @@ add_landing_popup <- function(
   app
 }
 
-#' Add a Custom Server Logic to a `teal` App
+#' Add a Custom Server Logic to `teal` Application
 #'
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
