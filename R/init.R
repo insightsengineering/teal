@@ -293,7 +293,7 @@ modify_title <- function(
   res
 }
 
-#' Add a Header to a `teal` App
+#' Add a Header to `teal` Application
 #'
 #' @description Adds a header to the `teal` app.
 #'
