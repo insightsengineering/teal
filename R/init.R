@@ -27,9 +27,11 @@
 #'   the header of the app.
 #' @param footer (`shiny.tag` or `character(1)`) Optionally,
 #'   the footer of the app.
-#' @param id (`character`) Optionally,
+#' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
-#'   rather than a standalone `shiny` app. This is a legacy feature.
+#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.15.3
+#'   please use [ui_teal()] and [srv_teal()] instead.
+#'
 #' @param landing_popup (`teal_module_landing`) Optionally,
 #'   a `landing_popup_module` to show up as soon as the teal app is initialized.
 #'
@@ -96,7 +98,7 @@ init <- function(data,
                  title = build_app_title(),
                  header = tags$p(),
                  footer = tags$p(),
-                 id = character(0),
+                 id = lifecycle::deprecated(),
                  landing_popup = NULL) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
@@ -137,7 +139,6 @@ init <- function(data,
     checkmate::check_string(footer),
     checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
   )
-  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   # log
   teal.logger::log_system_info()
@@ -221,6 +222,20 @@ init <- function(data,
     )
   }
 
+
+  if (lifecycle::is_present(id)) {
+    lifecycle::deprecate_soft(
+      when = "0.15.3",
+      what = "init(id)",
+      details = paste(
+        "To wrap `teal` application within other shiny application please use",
+        "`ui_teal()` and `srv_teal()` and call them as normal shiny modules"
+      )
+    )
+    checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+  } else {
+    id <- character(0)
+  }
   ns <- NS(id)
   # Note: UI must be a function to support bookmarking.
   res <- list(
