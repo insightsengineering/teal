@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{modify_header}
 \alias{modify_header}
-\title{Add a Header to a \code{teal} App}
+\title{Add a Header to \code{teal} Application}
 \usage{
 modify_header(app, header = tags$p())
 }

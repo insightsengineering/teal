@@ -8,9 +8,9 @@ init(
   data,
   modules,
   filter = teal_slices(),
-  title = NULL,
-  header = NULL,
-  footer = NULL,
+  title = lifecycle::deprecated(),
+  header = lifecycle::deprecated(),
+  footer = lifecycle::deprecated(),
   id = character(0)
 )
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{modify_footer}
 \alias{modify_footer}
-\title{Add a Footer to a \code{teal} App}
+\title{Add a Footer to \code{teal} Application}
 \usage{
 modify_footer(app, footer = tags$p())
 }

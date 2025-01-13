@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{modify_title}
 \alias{modify_title}
-\title{Add a custom title to the app}
+\title{Add a custom Title to \code{teal} application}
 \usage{
 modify_title(
   app,
@@ -12,13 +12,13 @@ modify_title(
 )
 }
 \arguments{
-\item{title}{The title to add}
+\item{title}{(\code{shiny.tag} or \code{character(1)}) The title to be used}
 }
 \value{
 The modified app object
 }
 \description{
-Add a custom title to the app
+Add a custom Title to \code{teal} application
 }
 \examples{
 app <- init(

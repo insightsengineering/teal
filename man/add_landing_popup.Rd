@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{add_landing_popup}
 \alias{add_landing_popup}
-\title{Add a Landing Popup to a \code{teal} App}
+\title{Add a Landing Popup to \code{teal} Application}
 \usage{
 add_landing_popup(
   app,

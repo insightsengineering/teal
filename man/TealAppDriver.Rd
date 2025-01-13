@@ -98,6 +98,10 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
   data,
   modules,
   filter = teal_slices(),
+  title_args = list(),
+  header = tags$p(),
+  footer = tags$p(),
+  landing_popup_args = NULL,
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...
@@ -107,7 +111,7 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data, modules, filter, title, header, footer, landing_popup}}{arguments passed to \code{init}}
+\item{\code{data, modules, filter}}{arguments passed to \code{init} and title,header,footer,landing_popup modifiers}
 
 \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.

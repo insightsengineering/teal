@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{add_custom_server}
 \alias{add_custom_server}
-\title{Add a Custom Server Logic to a \code{teal} App}
+\title{Add a Custom Server Logic to \code{teal} Application}
 \usage{
 add_custom_server(app, custom_server)
 }
@@ -20,7 +20,7 @@ app <- init(
   modules = modules(example_module())
 ) |>
   add_custom_server(function(input, output, session) {
-    print("injected server logic to the main shiny server function")
+    print("injected server logic")
   })
 
 shinyApp(app$ui, app$server)
