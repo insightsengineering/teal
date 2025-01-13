@@ -73,22 +73,24 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         modify_footer(footer)
 
       if (!is.null(landing_popup_args)) {
-        args <- modifyList(
-          list(
-            id = "landingpopup",
-            title = NULL,
-            content = NULL,
-            buttons = modalButton("Accept")
-          ),
-          landing_popup_args
+        default_args <- list(
+          id = "landingpopup",
+          title = NULL,
+          content = NULL,
+          buttons = modalButton("Accept")
         )
-        app <- app |>
-          add_landing_popup(
-            id = args$id,
-            title = args$title,
-            content = args$content,
-            buttons = args$button
-          )
+        landing_popup_args[names(default_args)] <- Map(
+          function(x, y) if (is.null(y)) x else y,
+          default_args,
+          landing_popup_args[names(default_args)]
+        )
+        app <- add_landing_popup(
+          app,
+          id = landing_popup_args$id,
+          title = landing_popup_args$title,
+          content = landing_popup_args$content,
+          buttons = landing_popup_args$button
+        )
       }
 
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout

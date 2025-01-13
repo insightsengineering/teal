@@ -279,8 +279,7 @@ init <- function(data,
 modify_title <- function(
     app,
     title = "teal app",
-    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png"
-    ) {
+    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   res <- app
   res$ui <- function(request) {
     title_tag <- tags$div(
@@ -378,9 +377,7 @@ add_landing_popup <- function(
     title = NULL,
     content = NULL,
     buttons = modalButton("Accept")) {
-  old_server <- app$server
-
-  custom_server <- function(input, output, session() {
+  custom_server <- function(input, output, session) {
     showModal(
       modalDialog(
         id = id,
@@ -390,7 +387,7 @@ add_landing_popup <- function(
       )
     )
   }
-  app$server <- add_custom_server(app, custom_server)
+  app <- add_custom_server(app, custom_server)
   app
 }
 
@@ -407,6 +404,7 @@ add_landing_popup <- function(
 #'   modules = modules(example_module())
 #' ) |>
 #'   add_custom_server(function(input, output, session) {
+#'     print("injected server logic")
 #'   })
 #'
 #' shinyApp(app$ui, app$server)
