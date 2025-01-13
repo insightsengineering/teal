@@ -4,12 +4,15 @@
 \alias{add_custom_server}
 \title{Add a Custom Server Logic to \code{teal} Application}
 \usage{
-add_custom_server(app, custom_server)
+add_custom_server(app, custom_server, module_id = "wrapper")
 }
 \arguments{
 \item{app}{(\code{list}) The \code{teal} app environment.}
 
-\item{custom_server}{(\verb{function(input, output, session)}) The custom server function to set.}
+\item{custom_server}{(\verb{function(input, output, session)} or \verb{function(input, output, session)})
+The custom server function or server module to set.}
+
+\item{module_id}{(\code{character(1)}) The ID of the module when a module server function is passed.}
 }
 \description{
 Adds a custom server function to the \code{teal} app. This function can define additional server logic.
@@ -22,6 +25,27 @@ app <- init(
   add_custom_server(function(input, output, session) {
     print("injected server logic")
   })
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+
+ns <- NS("custom_ns")
+app <- init(
+  data = teal_data(IRIS = iris),
+  modules = modules(example_module())
+) |>
+  modify_header(actionButton(ns("button"), "Click me")) |>
+  add_custom_server(
+    function(id) {
+      moduleServer(id, function(input, output, session) {
+        observeEvent(input$button, {
+          showNotification("Button is clicked!")
+        })
+      })
+    },
+    module_id = "custom_ns"
+  )
 
 if (interactive()) {
   shinyApp(app$ui, app$server)

@@ -425,7 +425,9 @@ add_landing_popup <- function(
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
 #' @param app (`list`) The `teal` app environment.
-#' @param custom_server (`function(input, output, session)`) The custom server function to set.
+#' @param custom_server (`function(input, output, session)` or `function(input, output, session)`)
+#'    The custom server function or server module to set.
+#' @param module_id (`character(1)`) The ID of the module when a module server function is passed.
 #' @export
 #' @examples
 #' app <- init(
@@ -439,16 +441,37 @@ add_landing_popup <- function(
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
-add_custom_server <- function(app, custom_server) {
-  checkmate::assert_function(custom_server, args = c("input", "output", "session"))
+#'
+#' ns <- NS("custom_ns")
+#' app <- init(
+#'   data = teal_data(IRIS = iris),
+#'   modules = modules(example_module())
+#' ) |>
+#'   modify_header(actionButton(ns("button"), "Click me")) |>
+#'   add_custom_server(
+#'     function(id) {
+#'       moduleServer(id, function(input, output, session) {
+#'         observeEvent(input$button, {
+#'           showNotification("Button is clicked!")
+#'         })
+#'       })
+#'     },
+#'     module_id = "custom_ns"
+#'   )
+#'
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+add_custom_server <- function(app, custom_server, module_id = "wrapper") {
+  checkmate::assert_function(custom_server)
   old_server <- app$server
 
   app$server <- function(input, output, session) {
     old_server(input, output, session)
     if (all(c("input", "output", "session") %in% names(formals(custom_server)))) {
-      callModule(custom_server, "wrapper")
+      custom_server(input, output, session)
     } else if ("id" %in% names(formals(custom_server))) {
-      custom_server("wrapper")
+      custom_server(module_id)
     }
   }
   app
