@@ -11,7 +11,7 @@ editor_options:
 ---
 
 # Motivation
-Some `R` packages use `options` to modify their runtime behavior. They usually specify sensible default values for internal function arguments or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are confined to an option. This vignette details the options available in the package `teal` and it's supporting packages `teal.logger`, `teal.widgets`, and `teal.slice`.
+Some `R` packages use `options` to modify their runtime behavior. They usually specify sensible default values for internal function arguments or determine responses to users actions. For example, `testthat` uses an option `testthat.progress.max_fails` to define a default number of failed expectations before the testing functions terminate execution. While some of these adjustable values can be exposed as function parameters, some are confined to an option. This vignette details the options available in the package `teal` and its supporting packages `teal.logger`, `teal.widgets`, and `teal.slice`.
 
 # Setting an option
 At any time during an interactive session, you can change an option using:
@@ -86,7 +86,7 @@ Default: `FALSE`.
 
 ### `teal.lockfile.mode` (`character`)
 
-This enables to compute `renv` lockfile and shows a button to `"download lockfile"` in the footer. 
+This enables to compute `renv` lockfile and shows a button to `"download lockfile"` in the footer.
 
 Values:
 
