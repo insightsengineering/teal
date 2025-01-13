@@ -279,7 +279,8 @@ init <- function(data,
 modify_title <- function(
     app,
     title = "teal app",
-    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png"
+    ) {
   res <- app
   res$ui <- function(request) {
     title_tag <- tags$div(
