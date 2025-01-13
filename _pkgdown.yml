@@ -108,7 +108,7 @@ reference:
       - module
       - modules
       - teal_slices
-  - title: Teal app modifiers
+  - title: `teal` application modifiers
     desc: Functions to modify the `teal` app object
     contents:
       - modify_footer
