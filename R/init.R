@@ -265,7 +265,7 @@ init <- function(data,
 
 #' Add a custom title to the app
 #'
-#' @param title The title to add
+#' @param title (`shiny.tag` or `character(1)`) The title to be used
 #' @return The modified app object
 #' @export
 #' @examples
