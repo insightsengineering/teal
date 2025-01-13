@@ -345,7 +345,7 @@ modify_footer <- function(app, footer = tags$p()) {
   res
 }
 
-#' Add a Landing Popup to a `teal` App
+#' Add a Landing Popup to `teal` Application
 #'
 #' @description Adds a landing popup to the `teal` app. This popup will be shown when the app starts.
 #'
