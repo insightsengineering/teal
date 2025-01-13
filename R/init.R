@@ -321,7 +321,7 @@ modify_header <- function(app, header = tags$p()) {
   res
 }
 
-#' Add a Footer to a `teal` App
+#' Add a Footer to `teal` Application
 #'
 #' @description Adds a footer to the `teal` app.
 #'
