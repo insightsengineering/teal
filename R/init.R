@@ -95,9 +95,9 @@
 init <- function(data,
                  modules,
                  filter = teal_slices(),
-                 title = NULL,
-                 header = NULL,
-                 footer = NULL,
+                 title = lifecycle::deprecated(),
+                 header = lifecycle::deprecated(),
+                 footer = lifecycle::deprecated(),
                  id = character(0)) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
@@ -186,7 +186,7 @@ init <- function(data,
     )
   }
 
-  if (!is.null(title)) {
+  if (lifecycle::is_present(title)) {
     checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
       when = "0.15.3",
@@ -196,7 +196,7 @@ init <- function(data,
   } else {
     title <- build_app_title()
   }
-  if (!is.null(header)) {
+  if (lifecycle::is_present(header)) {
     checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
       when = "0.15.3",
@@ -208,7 +208,7 @@ init <- function(data,
   } else {
     header <- tags$p()
   }
-  if (!is.null(footer)) {
+  if (lifecycle::is_present(footer)) {
     checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
       when = "0.15.3",
