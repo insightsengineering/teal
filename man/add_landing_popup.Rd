@@ -20,10 +20,6 @@ add_landing_popup(
 Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
 
 \item{buttons}{(\code{shiny.tag} or \code{shiny.tag.list}) Typically a \code{modalButton} or \code{actionButton}. See examples.}
-
-\item{id}{(\code{character(1)}) The ID of the modal dialog.}
-
-\item{label}{(\code{character(1)}) Label of the module.}
 }
 \description{
 Adds a landing popup to the \code{teal} app. This popup will be shown when the app starts.

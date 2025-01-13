@@ -271,6 +271,7 @@ init <- function(data,
 
 #' Add a custom Title to `teal` application
 #'
+#' @param app (`list`) The `teal` app environment.
 #' @param title (`shiny.tag` or `character(1)`) The title to be used
 #' @param favicon (`character`) The path for the icon for the title.
 #' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
@@ -375,8 +376,6 @@ modify_footer <- function(app, footer = tags$p()) {
 #' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 #'
 #' @param app (`list`) The `teal` app environment.
-#' @param id (`character(1)`) The ID of the modal dialog.
-#' @param label (`character(1)`) Label of the module.
 #' @param title (`character(1)`) Text to be displayed as popup title.
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
 #'  Passed to `...` of `shiny::modalDialog`. See examples.

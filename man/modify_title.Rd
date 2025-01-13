@@ -12,6 +12,8 @@ modify_title(
 )
 }
 \arguments{
+\item{app}{(\code{list}) The \code{teal} app environment.}
+
 \item{title}{(\code{shiny.tag} or \code{character(1)}) The title to be used}
 
 \item{favicon}{(\code{character}) The path for the icon for the title.
