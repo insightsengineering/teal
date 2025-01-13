@@ -402,7 +402,6 @@ add_landing_popup <- function(
     content = NULL,
     buttons = modalButton("Accept")) {
   custom_server <- function(input, output, session) {
-    checkmate::assert_string(id)
     checkmate::assert_string(title, null.ok = TRUE)
     checkmate::assert_multi_class(
       content,
@@ -446,7 +445,11 @@ add_custom_server <- function(app, custom_server) {
 
   app$server <- function(input, output, session) {
     old_server(input, output, session)
-    custom_server(input, output, session)
+    if (all(c("input", "output", "session") %in% names(formals(custom_server)))) {
+      callModule(custom_server, "wrapper")
+    } else if ("id" %in% names(formals(custom_server))) {
+      custom_server("wrapper")
+    }
   }
   app
 }
