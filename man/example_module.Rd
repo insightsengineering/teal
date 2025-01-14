@@ -24,7 +24,8 @@ There are 2 reserved values that have specific behaviors:
 argument.
 }}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+To learn more check \code{vignette("data-transform-as-shiny-module", package = "teal")}.}
 
 \item{decorators}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (\code{list} of \code{teal_transform_module} or \code{NULL}) optional,
 if not \code{NULL}, decorator for tables or plots included in the module.}
