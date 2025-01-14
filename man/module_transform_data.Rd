@@ -19,7 +19,7 @@ srv_transform_teal_data(
 \arguments{
 \item{id}{(\code{character(1)}) Module id}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.}
 
 \item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
 

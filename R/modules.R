@@ -73,7 +73,7 @@ setOldClass("teal_modules")
 #' @param server_args (named `list`) with additional arguments passed on to the server function.
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
-#' @param transformators (`list` of `teal_transform_module`) that will be applied to transformator module's data input.
+#' @param transformators (`list` of `teal_transform_module`) that will be applied to transform module's data input.
 #'
 #'
 #' @param ...
