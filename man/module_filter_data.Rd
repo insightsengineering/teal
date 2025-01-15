@@ -20,9 +20,7 @@ srv_filter_data(id, datasets, active_datanames, data, is_active)
 .get_filter_expr(datasets, datanames)
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton

@@ -17,9 +17,7 @@ ui_teal(
 srv_teal(id, data, modules, filter = teal_slices())
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
 Nested list of \code{teal_modules} or \code{teal_module} objects or a single

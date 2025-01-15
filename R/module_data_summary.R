@@ -12,8 +12,7 @@
 #' Module includes also "Show/Hide unsupported" button to toggle rows of the summary table
 #' containing datasets where number of observations are not calculated.
 #'
-#' @param id (`character(1)`) `shiny` module instance id.
-#' @param teal_data (`reactive` returning `teal_data`)
+#' @inheritParams module_teal_module
 #'
 #' @name module_data_summary
 #' @rdname module_data_summary

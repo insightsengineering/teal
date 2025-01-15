@@ -31,7 +31,7 @@ srv_validate_reactive_teal_data(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)}) Module id}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{data_module}{(\code{teal_data_module})}
 
@@ -43,7 +43,7 @@ srv_validate_reactive_teal_data(
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
 
-\item{data}{(\verb{reactive teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 }
 \value{
 \code{reactive} \code{teal_data}
