@@ -108,7 +108,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         class = "teal_validated",
         ui_check_module_datanames(ns("validate_datanames"))
       ),
-      do.call(modules$ui, args)
+      do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
 
@@ -341,9 +341,9 @@ srv_teal_module.teal_module <- function(id,
   }
 
   if (is_arg_used(modules$server, "id")) {
-    do.call(modules$server, args)
+    do.call(what = modules$server, args = args, quote = TRUE)
   } else {
-    do.call(callModule, c(args, list(module = modules$server)))
+    do.call(what = callModule, args = c(args, list(module = modules$server)), quote = TRUE)
   }
 }
 
