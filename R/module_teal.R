@@ -43,13 +43,13 @@ NULL
 ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   title <- tags$head(
-      tags$title("teal app"),
-      tags$link(
-        rel = "icon",
-        href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
-        sizes = "any"
-      )
+    tags$title("teal app"),
+    tags$link(
+      rel = "icon",
+      href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
+      sizes = "any"
     )
+  )
   header <- tags$p()
   footer <- tags$p()
   ns <- NS(id)
