@@ -19,7 +19,8 @@ srv_transform_teal_data(
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+To learn more check \code{vignette("data-transform-as-shiny-module", package = "teal")}.}
 
 \item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
 
