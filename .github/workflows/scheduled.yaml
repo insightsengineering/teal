@@ -34,6 +34,8 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
       GCHAT_WEBHOOK: ${{ secrets.GCHAT_WEBHOOK }}
+    extra-deps: |
+      SummarizedExperiment (>= 1.36.0)
     with:
       strategy: ${{ matrix.test-strategy }}
       additional-env-vars: |
