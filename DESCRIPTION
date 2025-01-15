@@ -42,6 +42,7 @@ Depends:
 Imports:
     checkmate (>= 2.1.0),
     cli,
+    htmltools,
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
@@ -84,7 +85,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
-    yaml=vubiostat/r-yaml
+    yaml=vubiostat/r-yaml, rstudio/htmltools
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
@@ -120,6 +121,7 @@ Collate:
     'teal_data_module-eval_code.R'
     'teal_data_module-within.R'
     'teal_data_utils.R'
+    'teal_modifiers.R'
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'

@@ -40,42 +40,18 @@ NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id,
-                    modules,
-                    title = build_app_title(),
-                    header = tags$p(),
-                    footer = tags$p()) {
+ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert(
-    .var.name = "title",
-    checkmate::check_string(title),
-    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-  checkmate::assert(
-    .var.name = "header",
-    checkmate::check_string(header),
-    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-  checkmate::assert(
-    .var.name = "footer",
-    checkmate::check_string(footer),
-    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-
-  if (is.character(title)) {
-    title <- build_app_title(title)
-  } else {
-    validate_app_title_tag(title)
-  }
-
-  if (checkmate::test_string(header)) {
-    header <- tags$p(header)
-  }
-
-  if (checkmate::test_string(footer)) {
-    footer <- tags$p(footer)
-  }
-
+  title <- tags$head(
+      tags$title("teal app"),
+      tags$link(
+        rel = "icon",
+        href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
+        sizes = "any"
+      )
+    )
+  header <- tags$p()
+  footer <- tags$p()
   ns <- NS(id)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -92,10 +68,10 @@ ui_teal <- function(id,
 
   fluidPage(
     id = id,
-    title = tags$div(id = "teal-title", title),
+    title = tags$div(id = ns("teal-title"), title),
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(id = "teal-header", header),
+    tags$header(id = ns("teal-header"), header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
@@ -133,7 +109,7 @@ ui_teal <- function(id,
     tags$hr(),
     tags$footer(
       tags$div(
-        tags$div(id = "teal-footer", footer),
+        tags$div(id = ns("teal-footer"), footer),
         teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
         br(),
         ui_teal_lockfile(ns("lockfile")),
