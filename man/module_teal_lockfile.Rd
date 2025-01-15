@@ -23,6 +23,8 @@ srv_teal_lockfile(id)
 .is_disabled_lockfile_scenario()
 }
 \arguments{
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
+
 \item{lockfile_path}{(\code{character}) path to the lockfile.}
 }
 \value{

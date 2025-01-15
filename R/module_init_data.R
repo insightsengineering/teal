@@ -22,10 +22,7 @@
 #'
 #' For more details, see [`module_teal_data`].
 #'
-#' @inheritParams init
-#'
-#' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
-#' The data which application will depend on.
+#' @inheritParams module_teal
 #'
 #' @return A `reactive` object that returns:
 #' Output of the `data`. If `data` fails then returned error is handled (after [tryCatch()]) so that
