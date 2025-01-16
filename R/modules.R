@@ -341,7 +341,7 @@ modules <- function(..., label = "root") {
 format.teal_module <- function(x,
                                is_last = FALSE,
                                parent_prefix = "",
-                               what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
+                               what = c("datasets", "properties", "ui_args", "server_args", "decorators", "transformators"),
                                ...) {
   empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
@@ -385,6 +385,12 @@ format.teal_module <- function(x,
     empty_text
   }
 
+  decorators <- if (length(x$server_args$decorators) > 0) {
+    paste(sapply(x$server_args$decorators, function(t) attr(t, "label")), collapse = ", ")
+  } else {
+    empty_text
+  }
+
   output <- pasten(current_prefix, cli::bg_white(cli::col_black(x$label)))
 
   if ("datasets" %in% what) {
@@ -402,6 +408,7 @@ format.teal_module <- function(x,
     )
   }
   if ("ui_args" %in% what) {
+    x$ui_args$decorators <- NULL
     ui_args_formatted <- format_list(x$ui_args, label_width = 19)
     output <- paste0(
       output,
@@ -409,10 +416,17 @@ format.teal_module <- function(x,
     )
   }
   if ("server_args" %in% what) {
+    x$server_args$decorators <- NULL
     server_args_formatted <- format_list(x$server_args, label_width = 19)
     output <- paste0(
       output,
       content_prefix, "|- ", cli::col_green("Server Arguments : "), server_args_formatted, "\n"
+    )
+  }
+  if ("decorators" %in% what) {
+    output <- paste0(
+      output,
+      content_prefix, "|- ", cli::col_magenta("Decorators       : "), decorators, "\n"
     )
   }
   if ("transformators" %in% what) {
