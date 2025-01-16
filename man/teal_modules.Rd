@@ -29,7 +29,8 @@ modules(..., label = "root")
   x,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
+  what = c("datasets", "properties", "ui_args", "server_args", "decorators",
+    "transformators"),
   ...
 )
 
