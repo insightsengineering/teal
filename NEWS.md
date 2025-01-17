@@ -1,4 +1,4 @@
-# teal 0.15.2.9105
+# teal 0.15.2.9106
 
 ### New features
 
