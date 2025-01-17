@@ -120,11 +120,8 @@ modify_footer <- function(x, element = tags$p()) {
 #' The dialog must be closed by the app user to proceed to the main application.
 #'
 #' @param x (`teal_app`) A `teal_app` object created using the `init` function.
-#' @param title (`character(1)`) Text to be displayed as popup title.
-#' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
-#'  Passed to `...` of `shiny::modalDialog`.
-#' @param footer (`shiny.tag` or `shiny.tag.list`) Typically a `modalButton` or `actionButton`.
-#' @param ... Additional arguments to `shiny::modalDialog`.
+#' @inheritParams shiny::modalDialog
+#' @param ... Additional arguments to [shiny::modalDialog()].
 #' @export
 #' @examples
 #' app <- init(
