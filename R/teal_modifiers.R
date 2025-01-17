@@ -16,6 +16,7 @@ NULL
 
 #' @rdname teal_modifiers
 #' @keywords internal
+#' @noRd
 #' @param x One of:
 #'   - A `teal_app` object created using the `init` function.
 #'   - A `teal_module`, `teal_data_module`, or `teal_transform_module` object.
@@ -44,8 +45,6 @@ teal_replace_ui <- function(x, selector, element) {
   }
 }
 
-#' Add a custom Title to `teal` application
-#'
 #' @rdname teal_modifiers
 #' @export
 #' @examples
@@ -79,8 +78,6 @@ modify_title <- function(
   )
 }
 
-#' Add a Header to `teal` Application
-#'
 #' @rdname teal_modifiers
 #' @export
 #' @examples
@@ -98,8 +95,6 @@ modify_header <- function(x, element = tags$p()) {
   teal_replace_ui(x, "#teal-header-content", element)
 }
 
-#' Add a Footer to `teal` Application
-#'
 #' @rdname teal_modifiers
 #' @export
 #' @examples
@@ -172,7 +167,7 @@ add_landing_popup <- function(
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
 #' @param x (`teal_app`) A `teal_app` object created using the `init` function.
-#' @param custom_server (`function(input, output, session)` or `function(input, output, session)`)
+#' @param custom_server (`function(input, output, session)` or `function(id, ...)`)
 #'    The custom server function or server module to set.
 #' @param module_id (`character(1)`) The ID of the module when a module server function is passed.
 #' @keywords internal

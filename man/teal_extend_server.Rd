@@ -9,7 +9,7 @@ teal_extend_server(x, custom_server, module_id = character(0))
 \arguments{
 \item{x}{(\code{teal_app}) A \code{teal_app} object created using the \code{init} function.}
 
-\item{custom_server}{(\verb{function(input, output, session)} or \verb{function(input, output, session)})
+\item{custom_server}{(\verb{function(input, output, session)} or \verb{function(id, ...)})
 The custom server function or server module to set.}
 
 \item{module_id}{(\code{character(1)}) The ID of the module when a module server function is passed.}

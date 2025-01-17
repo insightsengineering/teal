@@ -116,7 +116,6 @@ reference:
       - modify_footer
       - modify_header
       - modify_title
-      - teal_extend_server
       - add_landing_popup
   - title: Helper Functions
     desc: Helper functions for `teal`

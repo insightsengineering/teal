@@ -1,6 +1,6 @@
 #' `teal` user session info module
 #'
-#' Module to display the user session info popup and teal lockfile download.
+#' Module to display the user session info popup and teal lockfile downloader.
 #'
 #' @rdname module_session_info
 #' @name module_session_info
