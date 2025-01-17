@@ -17,38 +17,4 @@ The custom server function or server module to set.}
 \description{
 Adds a custom server function to the \code{teal} app. This function can define additional server logic.
 }
-\examples{
-app <- init(
-  data = teal_data(IRIS = iris),
-  modules = modules(example_module())
-) |>
-  teal_extend_server(function(input, output, session) {
-    print("injected server logic")
-  })
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-
-ns <- NS("custom_ns")
-app <- init(
-  data = teal_data(IRIS = iris),
-  modules = modules(example_module())
-) |>
-  modify_header(actionButton(ns("button"), "Click me")) |>
-  teal_extend_server(
-    function(id) {
-      moduleServer(id, function(input, output, session) {
-        observeEvent(input$button, {
-          showNotification("Button is clicked!")
-        })
-      })
-    },
-    module_id = "custom_ns"
-  )
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-}
 \keyword{internal}

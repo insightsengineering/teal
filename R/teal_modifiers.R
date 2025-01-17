@@ -176,39 +176,6 @@ add_landing_popup <- function(
 #'    The custom server function or server module to set.
 #' @param module_id (`character(1)`) The ID of the module when a module server function is passed.
 #' @keywords internal
-#' @examples
-#' app <- init(
-#'   data = teal_data(IRIS = iris),
-#'   modules = modules(example_module())
-#' ) |>
-#'   teal_extend_server(function(input, output, session) {
-#'     print("injected server logic")
-#'   })
-#'
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
-#'
-#' ns <- NS("custom_ns")
-#' app <- init(
-#'   data = teal_data(IRIS = iris),
-#'   modules = modules(example_module())
-#' ) |>
-#'   modify_header(actionButton(ns("button"), "Click me")) |>
-#'   teal_extend_server(
-#'     function(id) {
-#'       moduleServer(id, function(input, output, session) {
-#'         observeEvent(input$button, {
-#'           showNotification("Button is clicked!")
-#'         })
-#'       })
-#'     },
-#'     module_id = "custom_ns"
-#'   )
-#'
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
 teal_extend_server <- function(x, custom_server, module_id = character(0)) {
   checkmate::assert_class(x, "teal_app")
   checkmate::assert_function(custom_server)
