@@ -105,13 +105,12 @@ app <- init(
   data = teal_data(IRIS = iris), # nolint: line_length.
   filter = teal_slices(teal_slice("IRIS", "Sepal.Length", selected = c(5, 7))),
   modules = modules(example_module(), example_module()),
-  header = "My first teal application"
 )
 
 bslib::run_with_themer(shinyApp(app$ui, app$server))
 ```
 
-This gives us the following.
+This gives us a `Theme Customizer` similar to what is shown below.
 
 <img src="images/bs-launch.png" style="width: 100%;"/>
 

@@ -1,21 +1,25 @@
-# teal 0.15.2.9103
+# teal 0.15.2.9104
 
 ### New features
 
 * Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object. #669
 * Since introduction of `ui_teal` and `srv_teal` functions `id` argument in `init` is being deprecated. #1438
+* Introduce `ui_session_info` and `srv_session_info` shiny module to create the user session info and teal app lockfile lockfile download button.
 * Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to decorate module outputs. #1228 #1384
 * Introduced a new argument `once = FALSE` in `teal_data_module` to possibly reload data during a run time.
 * Possibility to download lockfile to restore app session for reproducibility. #479
 * Datasets which name starts with `.` are ignored when `module`'s `datanames` is set as `"all"`.
 * Added warning when reserved `datanames`, such as `all` and `.raw_data` are being used. 
+* Added `add_custom_server()` to allow adding custom server logic to the main shiny server function of a teal app.
 
 ### Breaking changes
 
 * Setting `datanames()` on `data` passed to teal application no longer has effect. In order to change `teal_module`'s 
 `datanames` one should modify `module$datanames`.
-* The `landing_popup_module()` needs to be passed as the `landing_popup` argument of `init` instead of being passed as a module of the `modules` argument of `init`.
+* `landing_popup_module()` is deprecated. Please use `add_landing_modal()` function to add a landing popup for your teal application.
 * `teal` no longer re-export `%>%`. Please load `library(magrittr)` instead or use `|>` from `base`.
+* `build_app_title` will be removed in the future release. Please use the `modify_title()` function to change the title for your teal application.
+* The `title`, `header`, and `footer` arguments of the `init()` function are deprecated. Please use the `modify_title`, `modify_header`, and `modify_footer` respectively.
 
 ### Enhancement
 

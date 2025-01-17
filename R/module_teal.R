@@ -2,11 +2,12 @@
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' Module to create a `teal` app. This module can be called directly instead of [init()] and
-#' included in your custom application. Please note that [init()] adds `reporter_previewer_module`
-#' automatically, which is not a case when calling `ui/srv_teal` directly.
+#' Module to create a `teal` app as a Shiny Module.
 #'
 #' @details
+#' This module can be used instead of [init()] in custom Shiny applications. Unlike [init()], it doesn't
+#' automatically include `reporter_previewer_module`, `module_session_info`, or UI components like
+#' `header`, `footer`, and `title` which can be added separately in the Shiny app consuming this module.
 #'
 #' Module is responsible for creating the main `shiny` app layout and initializing all the necessary
 #' components. This module establishes reactive connection between the input `data` and every other
@@ -36,48 +37,19 @@
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
 #' The data which application will depend on.
+#' @param modules (`teal_modules`)
+#'   `teal_modules` object. These are the specific output modules which
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
+#'   more details.
 #'
 #' @return `NULL` invisibly
 NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id,
-                    modules,
-                    title = build_app_title(),
-                    header = tags$p(),
-                    footer = tags$p()) {
+ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert(
-    .var.name = "title",
-    checkmate::check_string(title),
-    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-  checkmate::assert(
-    .var.name = "header",
-    checkmate::check_string(header),
-    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-  checkmate::assert(
-    .var.name = "footer",
-    checkmate::check_string(footer),
-    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-
-  if (is.character(title)) {
-    title <- build_app_title(title)
-  } else {
-    validate_app_title_tag(title)
-  }
-
-  if (checkmate::test_string(header)) {
-    header <- tags$p(header)
-  }
-
-  if (checkmate::test_string(footer)) {
-    footer <- tags$p(footer)
-  }
-
+  checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -94,10 +66,8 @@ ui_teal <- function(id,
 
   fluidPage(
     id = id,
-    title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
@@ -132,16 +102,7 @@ ui_teal <- function(id,
         )
       )
     ),
-    tags$hr(),
-    tags$footer(
-      tags$div(
-        footer,
-        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
-        br(),
-        ui_teal_lockfile(ns("lockfile")),
-        textOutput(ns("identifier"))
-      )
-    )
+    tags$hr()
   )
 }
 
@@ -159,18 +120,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
-
-    srv_teal_lockfile("lockfile")
-
-    output$identifier <- renderText(
-      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
-    )
-
-    teal.widgets::verbatim_popup_srv(
-      "sessionInfo",
-      verbatim_content = utils::capture.output(utils::sessionInfo()),
-      title = "SessionInfo"
-    )
 
     # `JavaScript` code
     run_js_files(files = "init.js")

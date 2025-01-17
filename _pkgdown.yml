@@ -105,9 +105,17 @@ reference:
       - make_teal_transform_server
       - module_teal_with_splash
       - module_teal
+      - module_session_info
       - module
       - modules
       - teal_slices
+  - title: Application modifiers for `teal`
+    desc: Functions to modify the `teal` app object
+    contents:
+      - modify_footer
+      - modify_header
+      - modify_title
+      - add_landing_modal
   - title: Helper Functions
     desc: Helper functions for `teal`
     contents:
