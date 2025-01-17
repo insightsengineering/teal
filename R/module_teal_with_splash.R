@@ -44,7 +44,7 @@ ui_teal_with_splash <- function(id,
     tags$footer(
       id = "teal-footer",
       tags$div(id = "teal-footer-content"),
-      ui_session_info(ns("session_info"))
+      ui_session_info(ns("teal-footer-session_info"))
     )
   )
 }
@@ -58,5 +58,5 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     details = "Deprecated, please use `srv_teal` instead"
   )
   srv_teal(id = id, data = data, modules = modules, filter = filter)
-  srv_session_info("session_info")
+  srv_session_info("teal-footer-session_info")
 }

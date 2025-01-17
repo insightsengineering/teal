@@ -237,13 +237,13 @@ init <- function(data,
           tags$footer(
             id = "teal-footer",
             tags$div(id = "teal-footer-content"),
-            ui_session_info("session_info")
+            ui_session_info("teal-footer-session_info")
           )
         )
       },
       server = function(input, output, session) {
         srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
-        srv_session_info("session_info")
+        srv_session_info("teal-footer-session_info")
       }
     ),
     class = "teal_app"
@@ -290,7 +290,7 @@ init <- function(data,
       what = "landing_popup_module()",
       details = paste(
         "landing_popup_module() is deprecated.",
-        "Use add_landing_popup() on the teal app object instead."
+        "Use add_landing_modal() on the teal app object instead."
       )
     )
   } else if (length(landing) > 1L) {

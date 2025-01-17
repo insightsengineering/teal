@@ -116,7 +116,7 @@ reference:
       - modify_footer
       - modify_header
       - modify_title
-      - add_landing_popup
+      - add_landing_modal
   - title: Helper Functions
     desc: Helper functions for `teal`
     contents:

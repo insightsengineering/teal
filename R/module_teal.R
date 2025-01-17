@@ -2,9 +2,12 @@
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' Module to create a `teal` app. This module can be called directly instead of [init()] and
-#' included in your custom application. Please note that [init()] adds `reporter_previewer_module`
+#' Module to create a `teal` app as a Shiny Module.
+#' This module can be used instead of [init()] and include in your custom Shiny application.
+#' Please note that [init()] adds `reporter_previewer_module` and `module_session_info`
 #' automatically, which is not a case when calling `ui/srv_teal` directly.
+#' Also note that the `header`, `footer`and `title` components added by `init` are not part of this module
+#' as they can be easily added by in the shiny app which consumes this module.
 #'
 #' @details
 #'

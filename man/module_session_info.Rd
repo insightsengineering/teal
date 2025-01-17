@@ -17,7 +17,7 @@ srv_session_info(id)
 \code{NULL} invisibly
 }
 \description{
-Module to display the user session info popup and teal lockfile download button
+Module to display the user session info popup and to download a lockfile.
 }
 \examples{
 ui <- fluidPage(

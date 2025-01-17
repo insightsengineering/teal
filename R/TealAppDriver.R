@@ -77,18 +77,18 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         default_args <- list(
           title = NULL,
           content = NULL,
-          buttons = modalButton("Accept")
+          footer = modalButton("Accept")
         )
         landing_popup_args[names(default_args)] <- Map(
           function(x, y) if (is.null(y)) x else y,
           default_args,
           landing_popup_args[names(default_args)]
         )
-        app <- add_landing_popup(
+        app <- add_landing_modal(
           app,
           title = landing_popup_args$title,
           content = landing_popup_args$content,
-          buttons = landing_popup_args$button
+          footer = landing_popup_args$footer
         )
       }
 

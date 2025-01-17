@@ -1,7 +1,6 @@
 #' Replace UI Elements in `teal` UI objects
 #'
 #' @param x (`teal_app`) A `teal_app` object created using the `init` function.
-#' @param selector (`character(1)`) CSS selector to find elements to replace
 #' @param element Replacement UI element (shiny tag or HTML)
 #' @param title (`shiny.tag` or `character(1)`) The new title to be used.
 #' @param favicon (`character`) The path for the icon for the title.
@@ -21,6 +20,7 @@ NULL
 #'   - A `teal_app` object created using the `init` function.
 #'   - A `teal_module`, `teal_data_module`, or `teal_transform_module` object.
 #'   - A Shiny module UI function with `id` parameter
+#' @param selector (`character(1)`) CSS selector to find elements to replace
 teal_replace_ui <- function(x, selector, element) {
   if (inherits(x, c("teal_app", "teal_module", "teal_data_module", "teal_transform_module"))) {
     x$ui <- teal_replace_ui(x$ui, selector, element)
@@ -91,6 +91,7 @@ modify_title <- function(
 #'   shinyApp(app$ui, app$server)
 #' }
 modify_header <- function(x, element = tags$p()) {
+  checkmate::assert_multi_class(x, "teal_app")
   checkmate::assert_multi_class(element, c("shiny.tag", "shiny.tag.list", "html", "character"))
   teal_replace_ui(x, "#teal-header-content", element)
 }
@@ -108,6 +109,7 @@ modify_header <- function(x, element = tags$p()) {
 #'   shinyApp(app$ui, app$server)
 #' }
 modify_footer <- function(x, element = tags$p()) {
+  checkmate::assert_multi_class(x, "teal_app")
   checkmate::assert_multi_class(element, c("shiny.tag", "shiny.tag.list", "html", "character"))
   teal_replace_ui(x, "#teal-footer-content", element)
 }
@@ -115,20 +117,21 @@ modify_footer <- function(x, element = tags$p()) {
 #' Add a Landing Popup to `teal` Application
 #'
 #' @description Adds a landing popup to the `teal` app. This popup will be shown when the app starts.
-#' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
+#' The dialog must be closed by the app user to proceed to the main application.
 #'
 #' @param x (`teal_app`) A `teal_app` object created using the `init` function.
 #' @param title (`character(1)`) Text to be displayed as popup title.
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
 #'  Passed to `...` of `shiny::modalDialog`.
-#' @param buttons (`shiny.tag` or `shiny.tag.list`) Typically a `modalButton` or `actionButton`.
+#' @param footer (`shiny.tag` or `shiny.tag.list`) Typically a `modalButton` or `actionButton`.
+#' @param ... Additional arguments to `shiny::modalDialog`.
 #' @export
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
 #'   modules = modules(example_module())
 #' ) |>
-#'   add_landing_popup(
+#'   add_landing_modal(
 #'     title = "Welcome",
 #'     content = "This is a landing popup.",
 #'     buttons = modalButton("Accept")
@@ -137,11 +140,12 @@ modify_footer <- function(x, element = tags$p()) {
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
-add_landing_popup <- function(
+add_landing_modal <- function(
     x,
     title = NULL,
     content = NULL,
-    buttons = modalButton("Accept")) {
+    footer = modalButton("Accept"),
+    ...) {
   checkmate::assert_class(x, "teal_app")
   custom_server <- function(input, output, session) {
     checkmate::assert_string(title, null.ok = TRUE)
@@ -149,13 +153,14 @@ add_landing_popup <- function(
       content,
       classes = c("character", "shiny.tag", "shiny.tag.list", "html"), null.ok = TRUE
     )
-    checkmate::assert_multi_class(buttons, classes = c("shiny.tag", "shiny.tag.list"))
+    checkmate::assert_multi_class(footer, classes = c("shiny.tag", "shiny.tag.list"))
     showModal(
       modalDialog(
         id = "landingpopup",
         title = title,
         content,
-        footer = buttons
+        footer = footer,
+        ...
       )
     )
   }

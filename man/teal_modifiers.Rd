@@ -27,8 +27,6 @@ modify_footer(x, element = tags$p())
 The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
 
 \item{element}{Replacement UI element (shiny tag or HTML)}
-
-\item{selector}{(\code{character(1)}) CSS selector to find elements to replace}
 }
 \description{
 Replace UI Elements in \code{teal} UI objects

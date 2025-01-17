@@ -16,7 +16,7 @@
 
 * Setting `datanames()` on `data` passed to teal application no longer has effect. In order to change `teal_module`'s 
 `datanames` one should modify `module$datanames`.
-* `landing_popup_module()` is deprecated. Please use `add_landing_popup()` function to add a landing popup for your teal application.
+* `landing_popup_module()` is deprecated. Please use `add_landing_modal()` function to add a landing popup for your teal application.
 * `teal` no longer re-export `%>%`. Please load `library(magrittr)` instead or use `|>` from `base`.
 * `build_app_title` will be removed in the future release. Please use the `modify_title()` function to change the title for your teal application.
 * The `title`, `header`, and `footer` arguments of the `init()` function are deprecated. Please use the `modify_title`, `modify_header`, and `modify_footer` respectively.

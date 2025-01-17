@@ -74,7 +74,7 @@ testthat::test_that(
       landing_popup_args = list(
         title = "Custom Landing Popup Module Title",
         content = tags$b("A welcome message!", style = "color: red;"),
-        buttons = tagList(
+        footer = tagList(
           shiny::modalButton("Proceed"),
           shiny::actionButton(
             "read",
@@ -137,7 +137,7 @@ testthat::test_that("e2e: when customized button in landing_popup_module is clic
       example_module()
     ),
     landing_popup_args = list(
-      buttons = actionButton("read", "Read more", onclick = "window.open('http://google.com', '_blank')")
+      footer = actionButton("read", "Read more", onclick = "window.open('http://google.com', '_blank')")
     )
   )
 
