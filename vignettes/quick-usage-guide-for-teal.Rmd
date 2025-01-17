@@ -48,7 +48,7 @@ The following functions can be used to extend the `teal` application:
 * `modify_title` changes the title that appears in the browser tab.
 * `modify_header` adds a header with a button that shows a notification when clicked, also note that the observer for this button was added using the modifier `teal_extend_server`.
 * `modify_footer` adds a custom footer.
-* `add_landing_popup` adds a landing popup that appears when the application is first loaded. Note that the screenshot does not show the popup, but it will appear when the application is first loaded.
+* `add_landing_popup` adds a landing popup that appears when the application is first loaded. Note app illustration below does not show the popup, but it will appear as soon as the application loads.
 
 ```{r, eval=FALSE}
 library(teal)
@@ -64,13 +64,10 @@ app <- init(
 ) |>
   modify_title(title = "Custom title") |>
   modify_header(
-    header = tags$div(
-      h3("Header with a button that can be observed!"),
-      actionButton("notify", "Show notification")
-    )
+    header = tags$div(h3("Custom header"))
   ) |>
   modify_footer(footer = "Custom footer") |>
-  add_landing_popup(title = "Te al", content = "Welcome to my first teal application!")
+  add_landing_popup(title = "Teal", content = "Welcome to my first teal application!")
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
