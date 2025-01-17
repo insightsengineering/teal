@@ -17,6 +17,8 @@ add_landing_modal(
 
 \item{title}{An optional title for the dialog.}
 
+\item{content}{(\code{character(1)}, \code{shiny.tag} or \code{shiny.tag.list}) with the content of the popup.}
+
 \item{footer}{UI for footer. Use \code{NULL} for no footer.}
 
 \item{...}{Additional arguments to \code{\link[shiny:modalDialog]{shiny::modalDialog()}}.}

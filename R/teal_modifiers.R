@@ -121,6 +121,7 @@ modify_footer <- function(x, element = tags$p()) {
 #'
 #' @param x (`teal_app`) A `teal_app` object created using the `init` function.
 #' @inheritParams shiny::modalDialog
+#' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
 #' @param ... Additional arguments to [shiny::modalDialog()].
 #' @export
 #' @examples
