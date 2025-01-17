@@ -56,7 +56,6 @@ articles:
     navbar: Get started
     contents:
       - getting-started-with-teal
-      - quick-usage-guide-for-teal
   - title: Using `teal`
     navbar: Using `teal`
     contents:
