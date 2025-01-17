@@ -12,7 +12,7 @@ add_landing_popup(
 )
 }
 \arguments{
-\item{x}{(\code{list}) The \code{teal} ui and server object created using \code{init}.}
+\item{x}{(\code{teal_app}) A \code{teal_app} object created using the \code{init} function.}
 
 \item{title}{(\code{character(1)}) Text to be displayed as popup title.}
 

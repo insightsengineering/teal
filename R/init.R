@@ -282,7 +282,7 @@ init <- function(data,
   }
 
   if (length(landing) == 1L) {
-    res <- add_custom_server(res, function(input, output, session) {
+    res <- teal_extend_server(res, function(input, output, session) {
       do.call(landing[[1L]]$server, c(list(id = "landing_module_shiny_id")))
     })
     lifecycle::deprecate_warn(

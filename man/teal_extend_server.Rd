@@ -7,7 +7,7 @@
 teal_extend_server(x, custom_server, module_id = character(0))
 }
 \arguments{
-\item{x}{(\code{list}) The \code{teal} ui and server object created using \code{init}.}
+\item{x}{(\code{teal_app}) A \code{teal_app} object created using the \code{init} function.}
 
 \item{custom_server}{(\verb{function(input, output, session)} or \verb{function(input, output, session)})
 The custom server function or server module to set.}

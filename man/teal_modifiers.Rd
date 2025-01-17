@@ -2,11 +2,14 @@
 % Please edit documentation in R/teal_modifiers.R
 \name{teal_modifiers}
 \alias{teal_modifiers}
+\alias{teal_replace_ui}
 \alias{modify_title}
 \alias{modify_header}
 \alias{modify_footer}
 \title{Replace UI Elements in \code{teal} UI objects}
 \usage{
+teal_replace_ui(x, selector, element)
+
 modify_title(
   x,
   title = "teal app",
@@ -21,19 +24,19 @@ modify_footer(x, element = tags$p())
 \arguments{
 \item{x}{One of:
 \itemize{
-\item List containing \code{ui} and \code{server} components (teal app/module)
-\item Function with \code{request} parameter (teal UI function)
-\item Function with \code{id} parameter (module UI function)
+\item A \code{teal_app} object created using the \code{init} function.
+\item A \code{teal_module}, \code{teal_data_module}, or \code{teal_transform_module} object.
+\item A Shiny module UI function with \code{id} parameter
 }}
+
+\item{selector}{(\code{character(1)}) CSS selector to find elements to replace}
+
+\item{element}{Replacement UI element (shiny tag or HTML)}
 
 \item{title}{(\code{shiny.tag} or \code{character(1)}) The new title to be used.}
 
 \item{favicon}{(\code{character}) The path for the icon for the title.
 The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
-
-\item{element}{Replacement UI element (shiny tag or HTML)}
-
-\item{selector}{(\code{character(1)}) CSS selector to find elements to replace}
 }
 \description{
 Replace UI Elements in \code{teal} UI objects

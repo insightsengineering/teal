@@ -1,9 +1,6 @@
 #' Replace UI Elements in `teal` UI objects
 #'
-#' @param x One of:
-#'   - List containing `ui` and `server` components (teal app/module)
-#'   - Function with `request` parameter (teal UI function)
-#'   - Function with `id` parameter (module UI function)
+#' @param x (`teal_app`) A `teal_app` object created using the `init` function.
 #' @param selector (`character(1)`) CSS selector to find elements to replace
 #' @param element Replacement UI element (shiny tag or HTML)
 #' @param title (`shiny.tag` or `character(1)`) The new title to be used.
@@ -17,7 +14,12 @@
 NULL
 
 
+#' @rdname teal_modifiers
 #' @keywords internal
+#' @param x One of:
+#'   - A `teal_app` object created using the `init` function.
+#'   - A `teal_module`, `teal_data_module`, or `teal_transform_module` object.
+#'   - A Shiny module UI function with `id` parameter
 teal_replace_ui <- function(x, selector, element) {
   if (inherits(x, c("teal_app", "teal_module", "teal_data_module", "teal_transform_module"))) {
     x$ui <- teal_replace_ui(x$ui, selector, element)
@@ -120,7 +122,7 @@ modify_footer <- function(x, element = tags$p()) {
 #' @description Adds a landing popup to the `teal` app. This popup will be shown when the app starts.
 #' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 #'
-#' @param x (`list`) The `teal` ui and server object created using `init`.
+#' @param x (`teal_app`) A `teal_app` object created using the `init` function.
 #' @param title (`character(1)`) Text to be displayed as popup title.
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
 #'  Passed to `...` of `shiny::modalDialog`.
@@ -169,7 +171,7 @@ add_landing_popup <- function(
 #'
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
-#' @param x (`list`) The `teal` ui and server object created using `init`.
+#' @param x (`teal_app`) A `teal_app` object created using the `init` function.
 #' @param custom_server (`function(input, output, session)` or `function(input, output, session)`)
 #'    The custom server function or server module to set.
 #' @param module_id (`character(1)`) The ID of the module when a module server function is passed.
