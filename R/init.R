@@ -191,13 +191,42 @@ init <- function(data,
   modules <- drop_module(modules, "teal_module_landing")
 
   # Note: UI must be a function to support bookmarking.
-  res <- list(
-    ui = function(request) {
-      ui_teal(id = character(0), modules = modules)
-    },
-    server = function(input, output, session) {
-      srv_teal(id = character(0), data = data, modules = modules, filter = deep_copy_filter(filter))
-    }
+  res <- structure(
+    list(
+      ui = function(request) {
+        fluidPage(
+          title = tags$div(
+            id = "teal-app-title",
+            tags$head(
+              tags$title("teal app"),
+              tags$link(
+                rel = "icon",
+                href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
+                sizes = "any"
+              )
+            )
+          ),
+          tags$header(
+            id = "teal-header",
+            tags$div(id = "teal-header-content")
+          ),
+          ui_teal(
+            id = "teal",
+            modules = modules
+          ),
+          tags$footer(
+            id = "teal-footer",
+            tags$div(id = "teal-footer-content"),
+            ui_session_info("session_info")
+          )
+        )
+      },
+      server = function(input, output, session) {
+        srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
+        srv_session_info("session_info")
+      }
+    ),
+    class = "teal_app"
   )
 
   if (lifecycle::is_present(title)) {

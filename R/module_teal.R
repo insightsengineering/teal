@@ -42,16 +42,6 @@ NULL
 #' @export
 ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  title <- tags$head(
-    tags$title("teal app"),
-    tags$link(
-      rel = "icon",
-      href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
-      sizes = "any"
-    )
-  )
-  header <- tags$p()
-  footer <- tags$p()
   ns <- NS(id)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -68,10 +58,8 @@ ui_teal <- function(id, modules) {
 
   fluidPage(
     id = id,
-    title = tags$div(id = ns("teal-title"), title),
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(id = ns("teal-header"), header),
     tags$hr(class = "my-2"),
     shiny_busy_message_panel,
     tags$div(
@@ -106,20 +94,15 @@ ui_teal <- function(id, modules) {
         )
       )
     ),
-    tags$hr(),
-    tags$footer(
-      tags$div(
-        tags$div(id = ns("teal-footer"), footer),
-        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
-        br(),
-        ui_teal_lockfile(ns("lockfile")),
-        textOutput(ns("identifier"))
-      )
-    )
+    tags$hr()
   )
 }
 
 #' @rdname module_teal
+#' @param modules (`teal_modules`)
+#'   `teal_modules` object. These are the specific output modules which
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
+#'   more details.
 #' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
@@ -133,18 +116,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
-
-    srv_teal_lockfile("lockfile")
-
-    output$identifier <- renderText(
-      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
-    )
-
-    teal.widgets::verbatim_popup_srv(
-      "sessionInfo",
-      verbatim_content = utils::capture.output(utils::sessionInfo()),
-      title = "SessionInfo"
-    )
 
     # `JavaScript` code
     run_js_files(files = "init.js")

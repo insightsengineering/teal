@@ -2,16 +2,11 @@
 % Please edit documentation in R/teal_modifiers.R
 \name{teal_modifiers}
 \alias{teal_modifiers}
-\alias{teal_replace_ui}
 \alias{modify_title}
 \alias{modify_header}
 \alias{modify_footer}
-\alias{add_landing_popup}
-\alias{add_custom_server}
 \title{Replace UI Elements in \code{teal} UI objects}
 \usage{
-teal_replace_ui(x, selector, element, asis = FALSE, ns_id = character(0))
-
 modify_title(
   x,
   title = "teal app",
@@ -22,15 +17,6 @@ modify_title(
 modify_header(x, element = tags$p())
 
 modify_footer(x, element = tags$p())
-
-add_landing_popup(
-  app,
-  title = NULL,
-  content = NULL,
-  buttons = modalButton("Accept")
-)
-
-add_custom_server(app, custom_server, module_id = character(0))
 }
 \arguments{
 \item{x}{One of:
@@ -38,40 +24,25 @@ add_custom_server(app, custom_server, module_id = character(0))
 \item List containing \code{ui} and \code{server} components (teal app/module)
 \item Function with \code{request} parameter (teal UI function)
 \item Function with \code{id} parameter (module UI function)
-\item Shiny tag object (\code{shiny.tag}, \code{shiny.tag.list}, \code{html})
 }}
 
-\item{selector}{(\code{character(1)}) CSS selector to find elements to replace}
-
-\item{element}{Replacement UI element (shiny tag or HTML)}
-
-\item{asis}{(\code{logical(1)}) If TRUE, use the ID (selector prefixed with #) as-is even when inside a module.
-Else use the module ID as a namespace.}
-
-\item{ns_id}{(\code{character(1)}) The namespace ID to use when replacing elements in a module.}
-
-\item{title}{(\code{character(1)}) Text to be displayed as popup title.}
+\item{title}{(\code{shiny.tag} or \code{character(1)}) The new title to be used.}
 
 \item{favicon}{(\code{character}) The path for the icon for the title.
 The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
 
-\item{app}{(\code{list}) The \code{teal} ui and server object created using \code{init}.}
+\item{element}{Replacement UI element (shiny tag or HTML)}
 
-\item{content}{(\code{character(1)}, \code{shiny.tag} or \code{shiny.tag.list}) with the content of the popup.
-Passed to \code{...} of \code{shiny::modalDialog}.}
-
-\item{buttons}{(\code{shiny.tag} or \code{shiny.tag.list}) Typically a \code{modalButton} or \code{actionButton}.}
-
-\item{custom_server}{(\verb{function(input, output, session)} or \verb{function(input, output, session)})
-The custom server function or server module to set.}
-
-\item{module_id}{(\code{character(1)}) The ID of the module when a module server function is passed.}
+\item{selector}{(\code{character(1)}) CSS selector to find elements to replace}
 }
 \description{
-Adds a landing popup to the \code{teal} app. This popup will be shown when the app starts.
-The dialog blocks access to the application and must be closed with a button before the application can be viewed.
+Replace UI Elements in \code{teal} UI objects
 
-Adds a custom server function to the \code{teal} app. This function can define additional server logic.
+Add a custom Title to \code{teal} application
+
+Add a Header to \code{teal} Application
+
+Add a Footer to \code{teal} Application
 }
 \examples{
 app <- init(
@@ -97,51 +68,6 @@ app <- init(
   modules = modules(example_module())
 ) |>
   modify_footer(element = "Custom footer")
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = modules(example_module())
-) |>
-  add_landing_popup(
-    title = "Welcome",
-    content = "This is a landing popup.",
-    buttons = modalButton("Accept")
-  )
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-app <- init(
-  data = teal_data(IRIS = iris),
-  modules = modules(example_module())
-) |>
-  add_custom_server(function(input, output, session) {
-    print("injected server logic")
-  })
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-
-ns <- NS("custom_ns")
-app <- init(
-  data = teal_data(IRIS = iris),
-  modules = modules(example_module())
-) |>
-  modify_header(actionButton(ns("button"), "Click me")) |>
-  add_custom_server(
-    function(id) {
-      moduleServer(id, function(input, output, session) {
-        observeEvent(input$button, {
-          showNotification("Button is clicked!")
-        })
-      })
-    },
-    module_id = "custom_ns"
-  )
 
 if (interactive()) {
   shinyApp(app$ui, app$server)

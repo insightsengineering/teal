@@ -24,10 +24,25 @@ ui_teal_with_splash <- function(id,
     what = "ui_teal_with_splash()",
     details = "Deprecated, please use `ui_teal` instead"
   )
-  res <- ui_teal(id = id)
-  res <- modify_title(res, title)
-  res <- modify_header(res, header)
-  modify_footer(res, footer)
+  fluidPage(
+    title = tags$div(
+      id = "teal-title",
+      tags$head(
+        tags$title("teal app"),
+        tags$link(
+          rel = "icon",
+          href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
+          sizes = "any"
+        )
+      )
+    ),
+    tags$header(id = "teal-header-content"),
+    ui_teal(id = id),
+    tags$footer(
+      tags$div(id = "teal-footer-content"),
+      ui_session_info(ns("session_info"))
+    )
+  )
 }
 
 #' @export
@@ -39,4 +54,5 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     details = "Deprecated, please use `srv_teal` instead"
   )
   srv_teal(id = id, data = data, modules = modules, filter = filter)
+  srv_session_info(NS(id, "session_info"))
 }

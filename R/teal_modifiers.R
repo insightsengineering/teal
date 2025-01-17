@@ -4,15 +4,11 @@
 #'   - List containing `ui` and `server` components (teal app/module)
 #'   - Function with `request` parameter (teal UI function)
 #'   - Function with `id` parameter (module UI function)
-#'   - Shiny tag object (`shiny.tag`, `shiny.tag.list`, `html`)
 #' @param selector (`character(1)`) CSS selector to find elements to replace
 #' @param element Replacement UI element (shiny tag or HTML)
-#' @param asis (`logical(1)`) If TRUE, use the ID (selector prefixed with #) as-is even when inside a module.
-#'   Else use the module ID as a namespace.
 #' @param title (`shiny.tag` or `character(1)`) The new title to be used.
 #' @param favicon (`character`) The path for the icon for the title.
 #' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
-#' @param ns_id (`character(1)`) The namespace ID to use when replacing elements in a module.
 #' @name teal_modifiers
 #' @rdname teal_modifiers
 #'
@@ -21,35 +17,26 @@
 NULL
 
 
-#' @rdname teal_modifiers
 #' @keywords internal
-teal_replace_ui <- function(x, selector, element, asis = FALSE, ns_id = character(0)) {
-  if (checkmate::test_list(x) && all(c("ui", "server") %in% names(x))) {
-    # teal app, teal_module, teal_data_module, teal_transform_module.
-    x$ui <- teal_replace_ui(x$ui, selector, element, asis = asis)
+teal_replace_ui <- function(x, selector, element) {
+  if (inherits(x, c("teal_app", "teal_module", "teal_data_module", "teal_transform_module"))) {
+    x$ui <- teal_replace_ui(x$ui, selector, element)
     x
   } else if (checkmate::test_function(x, args = "request")) {
-    # teal ui function
+    # shiny ui function from teal_app
     function(request) {
       ui_tq <- htmltools::tagQuery(x(request = request))
-      ui_tq$find(selector)$children()$replaceWith(element)$allTags()
+      ui_tq$find(selector)$empty()$append(element)$allTags()
     }
   } else if (checkmate::test_function(x, args = "id")) {
     # shiny module ui function
     function(id, ...) {
       ui_tq <- htmltools::tagQuery(x(id = id, ...))
-      if (grepl("^#[a-zA-Z0-9_-]+$", selector) && !asis) {
+      if (grepl("^#[a-zA-Z0-9_-]+$", selector)) {
         selector <- paste0("#", NS(id, gsub("^#", "", selector)))
       }
-      ui_tq$find(selector)$replaceWith(element)$allTags()
+      ui_tq$find(selector)$empty()$append(element)$allTags()
     }
-  } else if (inherits(x, c("shiny.tag", "shiny.tag.list", "html"))) {
-    # shiny ui object
-    ui_tq <- htmltools::tagQuery(x)
-    if (grepl("^#[a-zA-Z0-9_-]+$", selector) && !asis) {
-      selector <- paste0("#", NS(ns_id, gsub("^#", "", selector)))
-    }
-    ui_tq$find(selector)$children()$replaceWith(element)$allTags()
   } else {
     stop("Invalid UI object")
   }
@@ -73,11 +60,12 @@ modify_title <- function(
     x,
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+  checkmate::assert_multi_class(x, "teal_app")
   checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
   checkmate::assert_string(favicon)
   teal_replace_ui(
     x,
-    "#teal-title",
+    "#teal-app-title",
     tags$head(
       tags$title(title),
       tags$link(
@@ -105,7 +93,7 @@ modify_title <- function(
 #' }
 modify_header <- function(x, element = tags$p()) {
   checkmate::assert_multi_class(element, c("shiny.tag", "shiny.tag.list", "html", "character"))
-  teal_replace_ui(x, "#teal-header", element)
+  teal_replace_ui(x, "#teal-header-content", element)
 }
 
 #' Add a Footer to `teal` Application
@@ -124,7 +112,7 @@ modify_header <- function(x, element = tags$p()) {
 #' }
 modify_footer <- function(x, element = tags$p()) {
   checkmate::assert_multi_class(element, c("shiny.tag", "shiny.tag.list", "html", "character"))
-  teal_replace_ui(x, "#teal-footer", element)
+  teal_replace_ui(x, "#teal-footer-content", element)
 }
 
 #' Add a Landing Popup to `teal` Application
@@ -132,12 +120,11 @@ modify_footer <- function(x, element = tags$p()) {
 #' @description Adds a landing popup to the `teal` app. This popup will be shown when the app starts.
 #' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
 #'
-#' @param app (`list`) The `teal` ui and server object created using `init`.
+#' @param x (`list`) The `teal` ui and server object created using `init`.
 #' @param title (`character(1)`) Text to be displayed as popup title.
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
 #'  Passed to `...` of `shiny::modalDialog`.
 #' @param buttons (`shiny.tag` or `shiny.tag.list`) Typically a `modalButton` or `actionButton`.
-#' @rdname teal_modifiers
 #' @export
 #' @examples
 #' app <- init(
@@ -154,10 +141,11 @@ modify_footer <- function(x, element = tags$p()) {
 #'   shinyApp(app$ui, app$server)
 #' }
 add_landing_popup <- function(
-    app,
+    x,
     title = NULL,
     content = NULL,
     buttons = modalButton("Accept")) {
+  checkmate::assert_class(x, "teal_app")
   custom_server <- function(input, output, session) {
     checkmate::assert_string(title, null.ok = TRUE)
     checkmate::assert_multi_class(
@@ -174,25 +162,24 @@ add_landing_popup <- function(
       )
     )
   }
-  add_custom_server(app, custom_server)
+  teal_extend_server(x, custom_server)
 }
 
 #' Add a Custom Server Logic to `teal` Application
 #'
 #' @description Adds a custom server function to the `teal` app. This function can define additional server logic.
 #'
-#' @param app (`list`) The `teal` ui and server object created using `init`.
+#' @param x (`list`) The `teal` ui and server object created using `init`.
 #' @param custom_server (`function(input, output, session)` or `function(input, output, session)`)
 #'    The custom server function or server module to set.
 #' @param module_id (`character(1)`) The ID of the module when a module server function is passed.
-#' @rdname teal_modifiers
 #' @keywords internal
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris),
 #'   modules = modules(example_module())
 #' ) |>
-#'   add_custom_server(function(input, output, session) {
+#'   teal_extend_server(function(input, output, session) {
 #'     print("injected server logic")
 #'   })
 #'
@@ -206,7 +193,7 @@ add_landing_popup <- function(
 #'   modules = modules(example_module())
 #' ) |>
 #'   modify_header(actionButton(ns("button"), "Click me")) |>
-#'   add_custom_server(
+#'   teal_extend_server(
 #'     function(id) {
 #'       moduleServer(id, function(input, output, session) {
 #'         observeEvent(input$button, {
@@ -220,11 +207,12 @@ add_landing_popup <- function(
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
-add_custom_server <- function(app, custom_server, module_id = character(0)) {
+teal_extend_server <- function(x, custom_server, module_id = character(0)) {
+  checkmate::assert_class(x, "teal_app")
   checkmate::assert_function(custom_server)
-  old_server <- app$server
+  old_server <- x$server
 
-  app$server <- function(input, output, session) {
+  x$server <- function(input, output, session) {
     old_server(input, output, session)
     if (all(c("input", "output", "session") %in% names(formals(custom_server)))) {
       callModule(custom_server, module_id)
@@ -232,5 +220,5 @@ add_custom_server <- function(app, custom_server, module_id = character(0)) {
       custom_server(module_id)
     }
   }
-  app
+  x
 }
