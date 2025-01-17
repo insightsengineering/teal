@@ -29,7 +29,8 @@ modules(..., label = "root")
   x,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "transformators"),
+  what = c("datasets", "properties", "ui_args", "server_args", "decorators",
+    "transformators"),
   ...
 )
 
@@ -256,6 +257,22 @@ plot_transformator <- teal_transform_module(
   }
 )
 
+static_decorator <- teal_transform_module(
+  label = "Static decorator",
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(), {
+          plot <- plot +
+            ggtitle("This is title") +
+            xlab("x axis")
+        })
+      })
+    })
+  }
+)
+
 complete_modules <- modules(
   custom_module(
     label = "Data Overview",
@@ -263,11 +280,13 @@ complete_modules <- modules(
     ui_args = list(
       view_type = "table",
       page_size = 10,
-      filters = c("ARM", "SEX", "RACE")
+      filters = c("ARM", "SEX", "RACE"),
+      decorators = list(static_decorator)
     ),
     server_args = list(
       cache = TRUE,
-      debounce = 1000
+      debounce = 1000,
+      decorators = list(static_decorator)
     ),
     transformators = list(dummy_transformator),
     bk = TRUE
@@ -320,4 +339,5 @@ complete_modules <- modules(
 
 cat(format(complete_modules))
 cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
+cat(format(complete_modules, what = c("decorators", "transformators")))
 }
