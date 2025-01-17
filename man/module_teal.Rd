@@ -30,13 +30,12 @@ specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Module to create a \code{teal} app as a Shiny Module.
-This module can be used instead of \code{\link[=init]{init()}} and include in your custom Shiny application.
-Please note that \code{\link[=init]{init()}} adds \code{reporter_previewer_module} and \code{module_session_info}
-automatically, which is not a case when calling \code{ui/srv_teal} directly.
-Also note that the \code{header}, \code{footer}and \code{title} components added by \code{init} are not part of this module
-as they can be easily added by in the shiny app which consumes this module.
 }
 \details{
+This module can be used instead of \code{\link[=init]{init()}} in custom Shiny applications. Unlike \code{\link[=init]{init()}}, it doesn't
+automatically include \code{reporter_previewer_module}, \code{module_session_info}, or UI components like
+\code{header}, \code{footer}, and \code{title} which can be added separately in the Shiny app consuming this module.
+
 Module is responsible for creating the main \code{shiny} app layout and initializing all the necessary
 components. This module establishes reactive connection between the input \code{data} and every other
 component in the app. Reactive change of the \code{data} passed as an argument, reloads the app and
