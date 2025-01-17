@@ -520,6 +520,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "  |  |  L- Reportable    : FALSE",
       "  |  |- UI Arguments     : ",
       "  |  |- Server Arguments : ",
+      "  |  |- Decorators       : ",
       "  |  L- Transformators   : ",
       "  |- c",
       "  |  |- Datasets         : all",
@@ -528,6 +529,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "  |  |  L- Reportable    : FALSE",
       "  |  |- UI Arguments     : ",
       "  |  |- Server Arguments : ",
+      "  |  |- Decorators       : ",
       "  |  L- Transformators   : ",
       "  L- c",
       "     |- Datasets         : all",
@@ -536,6 +538,7 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "     |  L- Reportable    : FALSE",
       "     |- UI Arguments     : ",
       "     |- Server Arguments : ",
+      "     |- Decorators       : ",
       "     L- Transformators   : "
     )
   )
