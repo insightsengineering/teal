@@ -49,7 +49,6 @@ The following functions can be used to extend the `teal` application:
 * `modify_header` adds a header with a button that shows a notification when clicked, also note that the observer for this button was added using the modifier `teal_extend_server`.
 * `modify_footer` adds a custom footer.
 * `add_landing_popup` adds a landing popup that appears when the application is first loaded. Note that the screenshot does not show the popup, but it will appear when the application is first loaded.
-* `teal_extend_server` adds custom server logic to the teal application, in this case the button created in the header is observed and a notification is shown.
 
 ```{r, eval=FALSE}
 library(teal)
@@ -71,12 +70,7 @@ app <- init(
     )
   ) |>
   modify_footer(footer = "Custom footer") |>
-  add_landing_popup(title = "Te al", content = "Welcome to my first teal application!") |>
-  teal_extend_server(function(input, output, session) {
-    observeEvent(input$notify, {
-      showNotification("Yes, the button works!")
-    })
-  })
+  add_landing_popup(title = "Te al", content = "Welcome to my first teal application!")
 
 if (interactive()) {
   shinyApp(app$ui, app$server)

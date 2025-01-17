@@ -2,8 +2,8 @@
 #'
 #' Module to display the user session info popup and teal lockfile download.
 #'
-#' @rdname session_info
-#' @name session_info
+#' @rdname module_session_info
+#' @name module_session_info
 #'
 #' @inheritParams module_teal
 #'
@@ -23,7 +23,7 @@
 #' @return `NULL` invisibly
 NULL
 
-#' @rdname session_info
+#' @rdname module_session_info
 #' @export
 ui_session_info <- function(id) {
   ns <- NS(id)
@@ -35,7 +35,7 @@ ui_session_info <- function(id) {
   )
 }
 
-#' @rdname session_info
+#' @rdname module_session_info
 #' @export
 srv_session_info <- function(id) {
   moduleServer(id, function(input, output, session) {
