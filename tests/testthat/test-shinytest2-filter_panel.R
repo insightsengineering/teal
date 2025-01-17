@@ -69,7 +69,6 @@ testthat::test_that("e2e: filtering a module-specific filter is reflected in oth
 
 testthat::test_that("e2e: filtering a module-specific filter is not refected in other unshared modules", {
   skip_if_too_deep(5)
-  devtools::load_all()
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = modules(

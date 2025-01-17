@@ -5,6 +5,7 @@
 #'
 #' @inheritParams ui_teal
 #' @inheritParams srv_teal
+#' @inheritParams init
 #'
 #' @return
 #' Returns a `reactive` expression containing a `teal_data` object when data is loaded or `NULL` when it is not.
@@ -16,6 +17,7 @@ NULL
 #' @rdname module_teal_with_splash
 ui_teal_with_splash <- function(id,
                                 data,
+                                modules,
                                 title = build_app_title(),
                                 header = tags$p(),
                                 footer = tags$p()) {
@@ -24,9 +26,10 @@ ui_teal_with_splash <- function(id,
     what = "ui_teal_with_splash()",
     details = "Deprecated, please use `ui_teal` instead"
   )
+  ns <- shiny::NS(id)
   fluidPage(
     title = tags$div(
-      id = "teal-title",
+      id = ns("teal-app-title"),
       tags$head(
         tags$title("teal app"),
         tags$link(
@@ -36,9 +39,10 @@ ui_teal_with_splash <- function(id,
         )
       )
     ),
-    tags$header(id = "teal-header-content"),
-    ui_teal(id = id),
+    tags$header(id = ns("teal-header-content")),
+    ui_teal(id = id, modules = modules),
     tags$footer(
+      id = "teal-footer",
       tags$div(id = "teal-footer-content"),
       ui_session_info(ns("session_info"))
     )
@@ -54,5 +58,5 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
     details = "Deprecated, please use `srv_teal` instead"
   )
   srv_teal(id = id, data = data, modules = modules, filter = filter)
-  srv_session_info(NS(id, "session_info"))
+  srv_session_info("session_info")
 }
