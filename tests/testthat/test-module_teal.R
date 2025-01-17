@@ -981,6 +981,37 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("srv_teal_module.teal_module passes quoted arguments to the teal_module$server call", {
+    tm_query <- function(query) {
+      module(
+        "module_1",
+        server = function(id, data, query) {
+          moduleServer(id, function(input, output, session) {
+            reactive(q <- eval_code(data(), query))
+          })
+        },
+        server_args = list(query = query)
+      )
+    }
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(a_dataset = iris),
+        modules = modules(tm_query(quote(a_dataset <- subset(a_dataset, Species == "setosa"))))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          "setosa",
+          unique(modules_output$module_1()()[["a_dataset"]]$Species)
+        )
+      }
+    )
+  })
+
   testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified", {
     shiny::testServer(
       app = srv_teal,

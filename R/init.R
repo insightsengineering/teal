@@ -30,9 +30,14 @@
 #' @param footer (`shiny.tag` or `character(1)`) `r lifecycle::badge("deprecated")` Optionally,
 #'   the footer of the app.
 #'   This parameter is deprecated. Use `modify_footer()` on the teal app object instead.
-#' @param id (`character`) Optionally,
+#' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
-#'   rather than a standalone `shiny` app. This is a legacy feature.
+#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.15.3
+#'   please use [ui_teal()] and [srv_teal()] instead.
+#' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
+#'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
+#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.15.3
+#'   please use [ui_teal()] and [srv_teal()] instead.
 #'
 #' @return Named list containing server and UI functions.
 #'
@@ -97,7 +102,7 @@ init <- function(data,
                  title = lifecycle::deprecated(),
                  header = lifecycle::deprecated(),
                  footer = lifecycle::deprecated(),
-                 id = character(0)) {
+                 id = lifecycle::deprecated()) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
@@ -119,7 +124,6 @@ init <- function(data,
 
   ## `filter`
   checkmate::assert_class(filter, "teal_slices")
-  checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
 
   # log
   teal.logger::log_system_info()
@@ -189,6 +193,22 @@ init <- function(data,
   ## `modules` - landing module
   landing <- extract_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_landing")
+
+
+  if (lifecycle::is_present(id)) {
+    lifecycle::deprecate_soft(
+      when = "0.15.3",
+      what = "init(id)",
+      details = paste(
+        "To wrap `teal` application within other shiny application please use",
+        "`ui_teal()` and `srv_teal()` and call them as regular shiny modules."
+      )
+    )
+    checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+  } else {
+    id <- character(0)
+  }
+  ns <- NS(id)
 
   # Note: UI must be a function to support bookmarking.
   res <- structure(

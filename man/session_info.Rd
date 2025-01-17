@@ -11,9 +11,7 @@ ui_session_info(id)
 srv_session_info(id)
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 }
 \value{
 \code{NULL} invisibly

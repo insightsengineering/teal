@@ -32,8 +32,10 @@
 #' @rdname module_teal
 #' @name module_teal
 #'
-#' @inheritParams module_init_data
 #' @inheritParams init
+#' @param id (`character(1)`) `shiny` module instance id.
+#' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
+#' The data which application will depend on.
 #'
 #' @return `NULL` invisibly
 NULL
