@@ -19,7 +19,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   # Check if button exists.
-  button_selector <- "#session_info-sessionInfo-button"
+  button_selector <- "#teal-footer-session_info-sessionInfo-button"
   testthat::expect_equal(
     app$get_text(button_selector),
     "Session Info"
@@ -37,7 +37,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   testthat::expect_setequal(
     testthat::expect_length(
       app$get_text(
-        "#shiny-modal [id^='session_info-sessionInfo-copy_button']"
+        "#shiny-modal [id^='teal-footer-session_info-sessionInfo-copy_button']"
       ),
       2
     ),
@@ -53,7 +53,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   # Check session info output.
-  session_info <- app$get_text("#session_info-sessionInfo-verbatim_content")
+  session_info <- app$get_text("#teal-footer-session_info-sessionInfo-verbatim_content")
 
   testthat::expect_match(session_info, "R version", fixed = TRUE)
   testthat::expect_match(session_info, "attached base packages:", fixed = TRUE)
