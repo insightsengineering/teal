@@ -355,9 +355,9 @@ app <- init(
     example_reporter_module(label = "with Reporter"),
     my_module(label = "without Reporter")
   ),
-  filter = teal_slices(teal_slice(dataname = "AIR", varname = "Temp", selected = c(72, 85))),
-  header = "Example teal app with reporter"
-)
+  filter = teal_slices(teal_slice(dataname = "AIR", varname = "Temp", selected = c(72, 85)))
+) |>
+  modify_header("Example teal app with reporter")
 
 if (interactive()) shinyApp(app$ui, app$server)
 ```

@@ -20,6 +20,7 @@ repos:
           - mirai
           - checkmate
           - cli
+          - htmltools
           - jsonlite
           - lifecycle
           - logger

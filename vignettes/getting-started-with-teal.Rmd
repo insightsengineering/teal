@@ -40,11 +40,11 @@ app <- init(
   ),
   filter = teal_slices(
     teal_slice(dataname = "IRIS", varname = "Species", selected = "setosa")
-  ),
-  title = build_app_title(title = "My first teal app"),
-  header = h3("My first teal application"),
-  footer = tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/"))
-)
+  )
+) |>
+  modify_title("My first teal application") |>
+  modify_header(h3("My first teal application")) |>
+  modify_footer(tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/")))
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
