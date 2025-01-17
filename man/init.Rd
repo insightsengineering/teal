@@ -97,10 +97,7 @@ app <- init(
       `Iris Sepal.Length histogram` = "new_iris Species",
       global_filters = "new_mtcars cyl"
     )
-  ),
-  title = "App title",
-  header = tags$h1("Sample App"),
-  footer = tags$p("Sample footer")
+  )
 )
 if (interactive()) {
   shinyApp(app$ui, app$server)
