@@ -35,13 +35,14 @@ URL: https://insightsengineering.github.io/teal/,
     https://github.com/insightsengineering/teal/
 BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
-    R (>= 4.0),
+    R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.6.0.9017),
     teal.slice (>= 0.5.1.9015)
 Imports:
     checkmate (>= 2.1.0),
     cli,
+    htmltools,
     jsonlite,
     lifecycle (>= 0.2.0),
     logger (>= 0.2.0),
@@ -84,7 +85,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
-    yaml=vubiostat/r-yaml
+    yaml=vubiostat/r-yaml, rstudio/htmltools
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
@@ -106,6 +107,7 @@ Collate:
     'module_filter_manager.R'
     'module_init_data.R'
     'module_nested_tabs.R'
+    'module_session_info.R'
     'module_snapshot_manager.R'
     'module_teal.R'
     'module_teal_data.R'
@@ -120,6 +122,7 @@ Collate:
     'teal_data_module-eval_code.R'
     'teal_data_module-within.R'
     'teal_data_utils.R'
+    'teal_modifiers.R'
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'

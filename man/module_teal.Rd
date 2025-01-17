@@ -6,35 +6,17 @@
 \alias{srv_teal}
 \title{\code{teal} main module}
 \usage{
-ui_teal(
-  id,
-  modules,
-  title = build_app_title(),
-  header = tags$p(),
-  footer = tags$p()
-)
+ui_teal(id, modules)
 
 srv_teal(id, data, modules, filter = teal_slices())
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-Nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+\item{modules}{(\code{teal_modules})
+\code{teal_modules} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
-
-\item{title}{(\code{shiny.tag} or \code{character(1)}) Optionally,
-the browser window title. Defaults to a title "teal app" with the icon of NEST.
-Can be created using the \code{build_app_title()} or
-by passing a valid \code{shiny.tag} which is a head tag with title and link tag.}
-
-\item{header}{(\code{shiny.tag} or \code{character(1)}) Optionally,
-the header of the app.}
-
-\item{footer}{(\code{shiny.tag} or \code{character(1)}) Optionally,
-the footer of the app.}
 
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
 The data which application will depend on.}
@@ -47,11 +29,13 @@ specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-Module to create a \code{teal} app. This module can be called directly instead of \code{\link[=init]{init()}} and
-included in your custom application. Please note that \code{\link[=init]{init()}} adds \code{reporter_previewer_module}
-automatically, which is not a case when calling \code{ui/srv_teal} directly.
+Module to create a \code{teal} app as a Shiny Module.
 }
 \details{
+This module can be used instead of \code{\link[=init]{init()}} in custom Shiny applications. Unlike \code{\link[=init]{init()}}, it doesn't
+automatically include \code{reporter_previewer_module}, \code{module_session_info}, or UI components like
+\code{header}, \code{footer}, and \code{title} which can be added separately in the Shiny app consuming this module.
+
 Module is responsible for creating the main \code{shiny} app layout and initializing all the necessary
 components. This module establishes reactive connection between the input \code{data} and every other
 component in the app. Reactive change of the \code{data} passed as an argument, reloads the app and

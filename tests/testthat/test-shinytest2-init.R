@@ -19,7 +19,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   # Check if button exists.
-  button_selector <- "#teal-sessionInfo-button"
+  button_selector <- "#teal-footer-session_info-sessionInfo-button"
   testthat::expect_equal(
     app$get_text(button_selector),
     "Session Info"
@@ -37,7 +37,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   testthat::expect_setequal(
     testthat::expect_length(
       app$get_text(
-        "#shiny-modal [id^='teal-sessionInfo-copy_button']"
+        "#shiny-modal [id^='teal-footer-session_info-sessionInfo-copy_button']"
       ),
       2
     ),
@@ -53,7 +53,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   )
 
   # Check session info output.
-  session_info <- app$get_text("#teal-sessionInfo-verbatim_content")
+  session_info <- app$get_text("#teal-footer-session_info-sessionInfo-verbatim_content")
 
   testthat::expect_match(session_info, "R version", fixed = TRUE)
   testthat::expect_match(session_info, "attached base packages:", fixed = TRUE)
@@ -68,39 +68,36 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
 
 testthat::test_that("e2e: init creates UI containing specified title, favicon, header and footer", {
   skip_if_too_deep(5)
-  app_title <- "Custom Teal App Title"
-  app_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
-  app_header <- "Custom Teal App Header"
-  app_footer <- "Custom Teal App Footer"
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module"),
-    title = build_app_title(
-      app_title,
-      app_favicon
+    title_args = list(
+      title = "Custom Teal App Title",
+      something_else = "asdfsdf",
+      favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
     ),
-    header = app_header,
-    footer = app_footer
+    header = "Custom Teal App Header",
+    footer = "Custom Teal App Footer"
   )
 
   testthat::expect_equal(
     app$get_text("head > title")[1],
-    app_title
+    "Custom Teal App Title"
   )
   testthat::expect_equal(
     rvest::html_attr(
       rvest::html_elements(app$get_html_rvest("head > link[rel='icon']"), "link"),
       "href"
     ),
-    app_favicon
+    "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
   )
   testthat::expect_match(
     app$get_text("header"),
-    app_header
+    "Custom Teal App Header"
   )
   testthat::expect_match(
     app$get_text("footer"),
-    app_footer
+    "Custom Teal App Footer"
   )
   app$stop()
 })

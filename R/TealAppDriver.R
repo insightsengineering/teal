@@ -26,7 +26,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param data,modules,filter,title,header,footer,landing_popup arguments passed to `init`
+    #' @param data,modules,filter arguments passed to `init`
+    #' @param title_args,header,footer,landing_popup_args to pass into the modifier functions.
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
     #' Defaults to 20s.
@@ -45,25 +46,51 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     initialize = function(data,
                           modules,
                           filter = teal_slices(),
-                          title = build_app_title(),
+                          title_args = list(),
                           header = tags$p(),
                           footer = tags$p(),
-                          landing_popup = NULL,
+                          landing_popup_args = NULL,
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
       private$data <- data
       private$modules <- modules
       private$filter <- filter
+
+      new_title <- modifyList(
+        list(
+          title = "Custom Teal App Title",
+          favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+        ),
+        title_args
+      )
       app <- init(
         data = data,
         modules = modules,
-        filter = filter,
-        title = title,
-        header = header,
-        footer = footer,
-        landing_popup = landing_popup,
-      )
+        filter = filter
+      ) |>
+        modify_title(title = new_title$title, favicon = new_title$favicon) |>
+        modify_header(header) |>
+        modify_footer(footer)
+
+      if (!is.null(landing_popup_args)) {
+        default_args <- list(
+          title = NULL,
+          content = NULL,
+          footer = modalButton("Accept")
+        )
+        landing_popup_args[names(default_args)] <- Map(
+          function(x, y) if (is.null(y)) x else y,
+          default_args,
+          landing_popup_args[names(default_args)]
+        )
+        app <- add_landing_modal(
+          app,
+          title = landing_popup_args$title,
+          content = landing_popup_args$content,
+          footer = landing_popup_args$footer
+        )
+      }
 
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # It must be set as parameter to the AppDriver

@@ -25,49 +25,9 @@ Passed to \code{...} of \code{shiny::modalDialog}. See examples.}
 A \code{teal_module} (extended with \code{teal_landing_module} class) to be used in \code{teal} applications.
 }
 \description{
-Creates a landing welcome popup for \code{teal} applications.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Creates a landing welcome popup for \code{teal} applications.
 
 This module is used to display a popup dialog when the application starts.
 The dialog blocks access to the application and must be closed with a button before the application can be viewed.
-}
-\examples{
-app1 <- init(
-  data = teal_data(iris = iris),
-  modules = modules(
-    example_module()
-  ),
-  landing_popup = landing_popup_module(
-    content = "A place for the welcome message or a disclaimer statement.",
-    buttons = modalButton("Proceed")
-  )
-)
-if (interactive()) {
-  shinyApp(app1$ui, app1$server)
-}
-
-app2 <- init(
-  data = teal_data(iris = iris),
-  modules = modules(
-    example_module()
-  ),
-  landing_popup = landing_popup_module(
-    title = "Welcome",
-    content = tags$b(
-      "A place for the welcome message or a disclaimer statement.",
-      style = "color: red;"
-    ),
-    buttons = tagList(
-      modalButton("Proceed"),
-      actionButton("read", "Read more",
-        onclick = "window.open('http://google.com', '_blank')"
-      ),
-      actionButton("close", "Reject", onclick = "window.close()")
-    )
-  )
-)
-
-if (interactive()) {
-  shinyApp(app2$ui, app2$server)
-}
-
+This function is deprecated, please use \code{add_landing_modal()} on the teal app object instead.
 }
