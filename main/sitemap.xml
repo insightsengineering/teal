@@ -30,6 +30,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/TealAppDriver.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/TealReportCard.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/TealSlicesBlock.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/add_landing_modal.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc></url>
@@ -63,6 +64,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/module_init_data.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_labels.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_management.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_session_info.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_snapshot_manager.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_data.html</loc></url>
@@ -84,6 +86,8 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_utilities.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_extend_server.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/teal_modifiers.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_modules.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_slices.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_transform_module.html</loc></url>
