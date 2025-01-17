@@ -15,14 +15,11 @@ add_landing_modal(
 \arguments{
 \item{x}{(\code{teal_app}) A \code{teal_app} object created using the \code{init} function.}
 
-\item{title}{(\code{character(1)}) Text to be displayed as popup title.}
+\item{title}{An optional title for the dialog.}
 
-\item{content}{(\code{character(1)}, \code{shiny.tag} or \code{shiny.tag.list}) with the content of the popup.
-Passed to \code{...} of \code{shiny::modalDialog}.}
+\item{footer}{UI for footer. Use \code{NULL} for no footer.}
 
-\item{footer}{(\code{shiny.tag} or \code{shiny.tag.list}) Typically a \code{modalButton} or \code{actionButton}.}
-
-\item{...}{Additional arguments to \code{shiny::modalDialog}.}
+\item{...}{Additional arguments to \code{\link[shiny:modalDialog]{shiny::modalDialog()}}.}
 }
 \description{
 Adds a landing popup to the \code{teal} app. This popup will be shown when the app starts.

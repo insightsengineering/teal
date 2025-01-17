@@ -39,6 +39,10 @@
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
 #' The data which application will depend on.
+#' @param modules (`teal_modules`)
+#'   `teal_modules` object. These are the specific output modules which
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
+#'   more details.
 #'
 #' @return `NULL` invisibly
 NULL
@@ -47,6 +51,7 @@ NULL
 #' @export
 ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
+  checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -104,10 +109,6 @@ ui_teal <- function(id, modules) {
 }
 
 #' @rdname module_teal
-#' @param modules (`teal_modules`)
-#'   `teal_modules` object. These are the specific output modules which
-#'   will be displayed in the `teal` application. See [modules()] and [module()] for
-#'   more details.
 #' @export
 srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
