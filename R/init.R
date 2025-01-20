@@ -243,7 +243,7 @@ init <- function(data,
         srv_session_info("teal-footer-session_info")
       }
     ),
-    class = "teal_app"
+    class = c("teal_app", "list")
   )
 
   if (lifecycle::is_present(title)) {
