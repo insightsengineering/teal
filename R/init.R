@@ -247,16 +247,15 @@ init <- function(data,
   )
 
   if (lifecycle::is_present(title)) {
-    checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "init(title)",
       details = "Use `modify_title()` on the teal app object instead."
     )
+    checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
     res <- modify_title(res, title)
   }
   if (lifecycle::is_present(header)) {
-    checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "init(header)",
@@ -264,10 +263,10 @@ init <- function(data,
         "Use `modify_header()` on the teal app object instead."
       )
     )
+    checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
     res <- modify_header(res, header)
   }
   if (lifecycle::is_present(footer)) {
-    checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
     lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "init(footer)",
@@ -275,13 +274,11 @@ init <- function(data,
         "Use `modify_footer()` on the teal app object instead."
       )
     )
+    checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
     res <- modify_footer(res, footer)
   }
 
   if (length(landing) == 1L) {
-    res <- teal_extend_server(res, function(input, output, session) {
-      do.call(landing[[1L]]$server, c(list(id = "landing_module_shiny_id")))
-    })
     lifecycle::deprecate_warn(
       when = "0.15.3",
       what = "landing_popup_module()",
@@ -290,6 +287,9 @@ init <- function(data,
         "Use add_landing_modal() on the teal app object instead."
       )
     )
+    res <- teal_extend_server(res, function(input, output, session) {
+      do.call(landing[[1L]]$server, c(list(id = "landing_module_shiny_id")))
+    })
   } else if (length(landing) > 1L) {
     stop("Only one `landing_popup_module` can be used.")
   }
