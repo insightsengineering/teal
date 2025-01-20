@@ -247,31 +247,36 @@ init <- function(data,
   )
 
   if (lifecycle::is_present(title)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       when = "0.15.3",
       what = "init(title)",
-      details = "Use `modify_title()` on the teal app object instead."
+      details = paste(
+        "Use `modify_title()` on the teal app object instead.",
+        "See ?modify_title for examples and more details."
+      )
     )
     checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
     res <- modify_title(res, title)
   }
   if (lifecycle::is_present(header)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       when = "0.15.3",
       what = "init(header)",
       details = paste(
-        "Use `modify_header()` on the teal app object instead."
+        "Use `modify_header()` on the teal app object instead.",
+        "See ?modify_header for examples and more details."
       )
     )
     checkmate::assert_multi_class(header, c("shiny.tag", "shiny.tag.list", "html", "character"))
     res <- modify_header(res, header)
   }
   if (lifecycle::is_present(footer)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       when = "0.15.3",
       what = "init(footer)",
       details = paste(
-        "Use `modify_footer()` on the teal app object instead."
+        "Use `modify_footer()` on the teal app object instead.",
+        "See ?modify_footer for examples and more details."
       )
     )
     checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
@@ -279,11 +284,11 @@ init <- function(data,
   }
 
   if (length(landing) == 1L) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       when = "0.15.3",
       what = "landing_popup_module()",
       details = paste(
-        "landing_popup_module() is deprecated.",
+        "`landing_popup_module()` is deprecated.",
         "Use add_landing_modal() on the teal app object instead."
       )
     )

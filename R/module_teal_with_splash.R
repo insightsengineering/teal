@@ -24,7 +24,7 @@ ui_teal_with_splash <- function(id,
   lifecycle::deprecate_soft(
     when = "0.15.3",
     what = "ui_teal_with_splash()",
-    details = "Deprecated, please use `ui_teal` instead"
+    details = "Deprecated, please use `?ui_teal` instead"
   )
   ns <- shiny::NS(id)
   fluidPage(
@@ -55,7 +55,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = teal_slices()) {
   lifecycle::deprecate_soft(
     when = "0.15.3",
     what = "srv_teal_with_splash()",
-    details = "Deprecated, please use `srv_teal` instead"
+    details = "Deprecated, please use `?srv_teal` instead"
   )
   srv_teal(id = id, data = data, modules = modules, filter = filter)
   srv_session_info("teal-footer-session_info")
