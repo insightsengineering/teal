@@ -218,7 +218,7 @@ init <- function(data,
               tags$title("teal app"),
               tags$link(
                 rel = "icon",
-                href = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png",
+                href = .teal_favicon,
                 sizes = "any"
               )
             )

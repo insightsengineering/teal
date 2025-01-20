@@ -1,3 +1,7 @@
+#' The default favicon for the teal app.
+#' @keywords internal
+.teal_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+
 #' Get client timezone
 #'
 #' User timezone in the browser may be different to the one on the server.
