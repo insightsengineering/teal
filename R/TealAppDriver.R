@@ -60,7 +60,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       new_title <- modifyList(
         list(
           title = "Custom Teal App Title",
-          favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+          favicon = .teal_favicon
         ),
         title_args
       )

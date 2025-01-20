@@ -7,12 +7,7 @@
 \alias{modify_footer}
 \title{Replace UI Elements in \code{teal} UI objects}
 \usage{
-modify_title(
-  x,
-  title = "teal app",
-  favicon =
-    "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png"
-)
+modify_title(x, title = "teal app", favicon = NULL)
 
 modify_header(x, element = tags$p())
 
@@ -24,7 +19,8 @@ modify_footer(x, element = tags$p())
 \item{title}{(\code{shiny.tag} or \code{character(1)}) The new title to be used.}
 
 \item{favicon}{(\code{character}) The path for the icon for the title.
-The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}}
+The image/icon path can be remote or the static path accessible by \code{shiny}, like the \verb{www/}.
+If the favicon is \code{NULL} the \code{teal} logo will be used as the favicon.}
 
 \item{element}{Replacement UI element (shiny tag or HTML)}
 }
