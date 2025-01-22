@@ -85,7 +85,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
-    yaml=vubiostat/r-yaml, rstudio/htmltools
+    yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
