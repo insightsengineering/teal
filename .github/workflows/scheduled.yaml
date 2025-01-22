@@ -39,7 +39,7 @@ jobs:
       additional-env-vars: |
         PKG_SYSREQS_DRY_RUN=true
       extra-deps: |
-        SummarizedExperiment (>= 1.36.0)
+        MatrixStats (>= 1.5.0)
   branch-cleanup:
     if: >
       github.event_name == 'schedule' || (
