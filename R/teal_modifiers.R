@@ -4,7 +4,8 @@
 #' @param element Replacement UI element (shiny tag or HTML)
 #' @param title (`shiny.tag` or `character(1)`) The new title to be used.
 #' @param favicon (`character`) The path for the icon for the title.
-#' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`
+#' The image/icon path can be remote or the static path accessible by `shiny`, like the `www/`.
+#' If the favicon is `NULL` the `teal` logo will be used as the favicon.
 #' @name teal_modifiers
 #' @rdname teal_modifiers
 #'
@@ -60,10 +61,13 @@ teal_replace_ui <- function(x, selector, element) {
 modify_title <- function(
     x,
     title = "teal app",
-    favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+    favicon = NULL) {
   checkmate::assert_multi_class(x, "teal_app")
   checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
-  checkmate::assert_string(favicon)
+  checkmate::assert_string(favicon, null.ok = TRUE)
+  if (is.null(favicon)) {
+    favicon <- .teal_favicon
+  }
   teal_replace_ui(
     x,
     "#teal-app-title",

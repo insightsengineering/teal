@@ -1,3 +1,7 @@
+#' The default favicon for the teal app.
+#' @keywords internal
+.teal_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+
 #' Get client timezone
 #'
 #' User timezone in the browser may be different to the one on the server.
@@ -313,13 +317,13 @@ validate_app_title_tag <- function(shiny_tag) {
 build_app_title <- function(
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
-  checkmate::assert_string(title, null.ok = TRUE)
-  checkmate::assert_string(favicon, null.ok = TRUE)
   lifecycle::deprecate_soft(
     when = "0.15.3",
     what = "build_app_title()",
     details = "Use `modify_title()` on the object created using the `init`."
   )
+  checkmate::assert_string(title, null.ok = TRUE)
+  checkmate::assert_string(favicon, null.ok = TRUE)
   tags$head(
     tags$title(title),
     tags$link(
