@@ -21,7 +21,7 @@ testthat::test_that("report_previewer_module throws no error and stores label if
 
 testthat::test_that("report_previewer_module default label is Report previewer ", {
   r_p_m <- reporter_previewer_module()
-  testthat::expect_equal(r_p_m$label, "Report previewer")
+  testthat::expect_equal(r_p_m$label, "Report Previewer")
 })
 
 testthat::test_that(
