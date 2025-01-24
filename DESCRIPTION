@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9108
-Date: 2025-01-20
+Version: 0.15.2.9111
+Date: 2025-01-24
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -38,7 +38,7 @@ Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.6.0.9017),
-    teal.slice (>= 0.5.1.9015)
+    teal.slice (>= 0.5.1.9022)
 Imports:
     checkmate (>= 2.1.0),
     cli,
@@ -50,8 +50,8 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.code (>= 0.5.0.9015),
-    teal.logger (>= 0.3.0.9003),
+    teal.code (>= 0.5.0.9022),
+    teal.logger (>= 0.3.1),
     teal.reporter (>= 0.3.1.9023),
     teal.widgets (>= 0.4.0),
     tools,
@@ -61,7 +61,7 @@ Suggests:
     ggplot2 (>= 3.4.0),
     knitr (>= 1.42),
     mirai (>= 1.1.1),
-    MultiAssayExperiment (>= 1.32.0),
+    MultiAssayExperiment,
     R6,
     renv (>= 1.0.11),
     rmarkdown (>= 2.23),
@@ -76,6 +76,11 @@ VignetteBuilder:
     rmarkdown
 RdMacros:
     lifecycle
+Remotes:
+    insightsengineering/teal.code,
+    insightsengineering/teal.data,
+    insightsengineering/teal.reporter,
+    insightsengineering/teal.slice
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/cli,
@@ -85,7 +90,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
-    yaml=vubiostat/r-yaml, rstudio/htmltools
+    yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
