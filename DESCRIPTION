@@ -77,7 +77,6 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.logger,
     insightsengineering/teal.reporter,
     insightsengineering/teal.slice,
     insightsengineering/teal.code,
