@@ -50,8 +50,8 @@ For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 \item \code{input}, \code{output}, \code{session} - (optional; not recommended) When provided, then \code{\link[shiny:callModule]{shiny::callModule()}}
 will be used to call a module. From \code{shiny} 1.5.0, the recommended way is to use
 \code{\link[shiny:moduleServer]{shiny::moduleServer()}} instead which doesn't require these arguments.
-\item \code{data} (optional) When provided, the module will be called with \code{teal_data} object (i.e. a list of
-reactive (filtered) data specified in the \code{filters} argument) as the value of this argument.
+\item \code{data} (optional) If the server function includes a \code{data} argument, it will receive a reactive
+expression containing the \code{teal_data} object.
 \item \code{datasets} (optional) When provided, the module will be called with \code{FilteredData} object as the
 value of this argument. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
 \item \code{reporter} (optional) When provided, the module will be called with \code{Reporter} object as the value

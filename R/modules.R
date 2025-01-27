@@ -49,8 +49,8 @@ setOldClass("teal_modules")
 #'  - `input`, `output`, `session` - (optional; not recommended) When provided, then [shiny::callModule()]
 #'    will be used to call a module. From `shiny` 1.5.0, the recommended way is to use
 #'    [shiny::moduleServer()] instead which doesn't require these arguments.
-#'  - `data` (optional) When provided, the module will be called with `teal_data` object (i.e. a list of
-#'    reactive (filtered) data specified in the `filters` argument) as the value of this argument.
+#'  - `data` (optional) If the server function includes a `data` argument, it will receive a reactive
+#'     expression containing the `teal_data` object.
 #'  - `datasets` (optional) When provided, the module will be called with `FilteredData` object as the
 #'    value of this argument. (See [`teal.slice::FilteredData`]).
 #'  - `reporter` (optional) When provided, the module will be called with `Reporter` object as the value
