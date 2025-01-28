@@ -16,7 +16,7 @@ vignette: >
 The `server` argument extends the logic behind data manipulations, while the `ui` argument adds new UI elements to the filter panel, managing the transformator inputs.
 
 In version `0.16`, `teal` introduced a new optional argument in `teal::module` named `transformators`.
-This argument allows users to pass a `list` of objects of the `teal_data_module` class, created using the `teal_transform_module()` function.
+This argument allows users to pass a `list` of objects of `teal_data_module` class, created using the `teal_transform_module()` function.
 
 The main advantage of `teal_transform_module()` is its ability to transform data before passing it to the module.
 This feature allows users to extend the default behavior of existing modules by performing specific data operations on the data within the module.
@@ -49,7 +49,7 @@ if (interactive()) {
 
 ### Single transformator
 
-In this section, we demonstrate how to create a **single transformator** using `teal_transform_module`.
+Next, let's create a **single transformator** using `teal_transform_module()`.
 This example enables users to display the first `n` rows of the `iris` dataset based on their input.
 
 Here’s how we can implement this:
@@ -101,8 +101,8 @@ if (interactive()) {
 }
 ```
 
-> **_Note_**: It is recommended to return `reactive()` with `teal_data()` in `server` code of a `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
-If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
+> **_Note_**: It is recommended to return `reactive()` with `teal_data()` in the `server` code of a `teal_transform_module`, as this approach ensures better robustness in maintaining Shiny's reactivity.
+If you are planning on using `eventReactive()` in the `server`, make sure the event includes `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
 More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
 ### Multiple transformators
