@@ -46,20 +46,6 @@
 NULL
 
 #' @rdname module_teal
-#' @keywords internal
-#' @noRd
-append_reporter_module <- function(modules) {
-  reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
-  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
-    modules <- append_module(
-      modules,
-      reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
-    )
-  }
-  modules
-}
-
-#' @rdname module_teal
 #' @export
 ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
@@ -236,6 +222,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
     }
 
+    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
@@ -244,7 +231,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
-      data_load_status = data_load_status
+      data_load_status = data_load_status,
+      reporter = reporter
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
