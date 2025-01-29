@@ -74,7 +74,11 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
   ),
   private = list(
     dispatch_block = function(block_class) {
-      eval(str2lang(block_class))
+      if (exists(block_class, getNamespace("teal"))) {
+        get(block_class)
+      } else {
+        super$dispatch_block(block_class)
+      }
     }
   )
 )
