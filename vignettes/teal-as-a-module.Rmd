@@ -1,0 +1,57 @@
+---
+title: "teal as a module"
+author: "NEST CoreDev"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{teal as a module}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+Shiny developer who is interested in embedding Teal application into its own app, can use the Teal module composed of `ui_teal()` and `srv_teal()` functions. Unlike `init()`, this module will not automatically include session info
+footer, but it is possible to add it manually with `ui_session_info()` and `srv_session_info()`.
+Team as module offers several advantages such as:
+
+- Including one or multiple teal application in other app.
+- Run teal applications based on the dynamically created components like initial data, modules, filters.
+
+# Example
+
+Example below shows how to use the Teal module in Shiny app. In the example `srv_teal()` is called with the dynamic
+data created in the server of the parent app.
+
+```{r setup}
+library(teal)
+
+data <- teal_data() |> within({
+  iris <- iris
+  mtcars <- mtcars
+  df <- data.frame(a = 1:10, b = letters[1:10])
+})
+
+mods <- modules(
+  example_module("mod1"),
+  example_module("mod2")
+)
+
+ui_app <- fluidPage(
+  title = "Your app with teal as a module",
+  selectInput("datasets", "Select datasets", choices = c("iris", "mtcars", "df"), selected = "iris", multiple = TRUE),
+  ui_teal("teal", mods),
+  ui_session_info("session_info")
+)
+
+srv_app <- function(input, output, session) {
+  data_subset <- reactive(data[input$datasets])
+  srv_teal("teal", data = data_subset, modules = mods)
+  srv_session_info("session_info")
+}
+
+if (interactive()) {
+  shinyApp(ui_app, srv_app)
+}
+```

@@ -33,8 +33,7 @@ Module to create a \code{teal} app as a Shiny Module.
 }
 \details{
 This module can be used instead of \code{\link[=init]{init()}} in custom Shiny applications. Unlike \code{\link[=init]{init()}}, it doesn't
-automatically include \code{reporter_previewer_module}, \code{module_session_info}, or UI components like
-\code{header}, \code{footer}, and \code{title} which can be added separately in the Shiny app consuming this module.
+automatically include \code{reporter_previewer_module}, \code{module_session_info}.
 
 Module is responsible for creating the main \code{shiny} app layout and initializing all the necessary
 components. This module establishes reactive connection between the input \code{data} and every other
