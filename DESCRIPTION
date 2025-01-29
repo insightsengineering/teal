@@ -77,7 +77,6 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.data,
     insightsengineering/teal.slice
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
