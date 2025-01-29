@@ -52,6 +52,8 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
+  modules <- append_reporter_module(modules)
+
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
@@ -113,6 +115,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
+
+  modules <- append_reporter_module(modules)
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
@@ -218,6 +222,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
     }
 
+    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
@@ -226,7 +231,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
-      data_load_status = data_load_status
+      data_load_status = data_load_status,
+      reporter = reporter
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
