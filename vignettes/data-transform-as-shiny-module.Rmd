@@ -12,18 +12,17 @@ vignette: >
 
 ## Introduction
 
-`teal_transform_module()` is a Shiny module that takes `ui` and `server` arguments. When provided, `teal` executes data transformations for the specified module both when it is loaded and whenever the data changes.
-The `server` argument extends the logic behind data manipulations, while the `ui` argument adds new UI elements to the filter panel, managing the transformator inputs.
+`teal` version `0.16` introduced a new, optional argument in `teal::module`, `transformators`.
+This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_data_module` created using the `teal_transform_module()` function.
 
-The main advantage of `teal_transform_module()` is its ability to transform data before passing it to the module.
-This feature allows users to extend the default behavior of existing modules by performing specific data operations on the data within the module.
+A `teal_transform_module` is a `shiny` module that takes `ui` and `server` arguments, and that encodes data transformations.
+When provided, `teal` will execute data transformations for the specified module when it is loaded and whenever the original data changes.
+The transformations are applied to the data _before_ it reaches the module.
+The `ui` elements of the transform module will be added to the filter panel, while the server function provides the data manipulation logic.
 
-In version `0.16`, `teal` introduced a new optional argument in `teal::module` named `transformators`.
-This argument allows users to pass a `list` of objects of `teal_data_module` class, created using the `teal_transform_module()` function.
+This vignette describes how to manage custom data transformations in `teal` apps.
 
-This vignette presents the way on how to manage custom data transformations in `teal` apps.
-
-## Creating Your First Custom Data Transformation Module
+## Creating a data transformation module
 
 Let's initialize a simple `teal` app by providing `iris` and `mtcars` as input datasets.
 
@@ -47,13 +46,10 @@ if (interactive()) {
 
 ### Single transformator
 
-Next, let's create a **single transformator** using `teal_transform_module()`.
-This example enables users to subset the first `n` rows of the `iris` dataset based on their input.
+Let us create a simple `teal_transform_module` that returns the first `n` number of rows of `iris` based on the user input.
 
-Here’s how we can implement this:
-
-1. **UI Component**: We create a `numericInput` in the `ui` that allows users to specify the number of rows they want to display.
-2. **Server Logic**: In the `server` function, we take in a reactive `data` object, perform the transformation to extract the first `n` rows of the `iris` dataset, and return the updated reactive `data`.
+We will achieve this by creating the `ui` with a `numericInput` for the user to specify the number of rows to be displayed.
+The `server` function will take a reactive expression holding `data` as argument and return a reactive expression holding transformed `data`.
 
 ```{r}
 data <- within(teal_data(), {
@@ -61,32 +57,99 @@ data <- within(teal_data(), {
   mtcars <- mtcars
 })
 
-my_transformators <- list(
-  teal_transform_module(
-    label = "Custom transformator for iris",
-    ui = function(id) {
-      ns <- NS(id)
-      tags$div(
-        numericInput(
-          ns("n_rows"),
-          "Number of rows to subset",
-          value = 6, min = 1, max = 150, step = 1
+transformator_iris <- teal_transform_module(
+  label = "Custom transformator for iris",
+  ui = function(id) {
+    ns <- NS(id)
+    tags$div(
+      numericInput(ns("n_rows"), "Number of rows to display", value = 6, min = 1, max = 150, step = 1)
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        within(
+          data(),
+          iris <- head(iris, num_rows),
+          num_rows = input$n_rows
         )
-      )
-    },
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        reactive({
-          within(data(),
-            {
-              iris <- head(iris, num_rows)
-            },
-            num_rows = input$n_rows
-          )
+      })
+    })
+  }
+)
+
+app <- init(
+  data = data,
+  modules = teal::example_module(transformators = list(transformator_iris))
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+_Note_: The `server` function of a `teal_transform_module` must return a reactive expression with a `teal_data` obect.
+In order to maintain full reactivity, we recommended using `reactive()` over `eventReactive()`.
+If you do use `eventReactive()` or `bindEvent()`, the trigger event should include `data()` _(e.g. `eventReactive(list(input$a, data()), {...})`)_.
+See [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832) for a detaileed explanation.
+
+### Multiple transformators
+
+`module(transformators)` accepts a list so we can use multiple `teal_transform_module`s at the same time.
+
+Let us add another transformation that creates a column with `rownames` in `mtcars`.
+Note that this module does not have interactive UI elements.
+
+```{r}
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+
+transformator_iris <- teal_transform_module(
+  label = "Custom transformator for iris",
+  ui = function(id) {
+    ns <- NS(id)
+    tags$div(
+      numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        within(
+          data(),
+          iris <- head(iris, num_rows),
+          num_rows = input$n_rows
+        )
+      })
+    })
+  }
+)
+
+transformator_mtcars <- teal_transform_module(
+  label = "Custom transformator for mtcars",
+  ui = function(id) {
+    ns <- NS(id)
+    tags$div(
+      "Adding rownames column to mtcars"
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        within(data(), {
+          mtcars$rownames <- rownames(mtcars)
+          rownames(mtcars) <- NULL
         })
       })
-    }
-  )
+    })
+  }
+)
+
+my_transformators <- list(
+  transformator_iris,
+  transformator_mtcars
 )
 
 app <- init(
@@ -99,68 +162,49 @@ if (interactive()) {
 }
 ```
 
-> **_Note_**: It is recommended to return `reactive()` with `teal_data()` in the `server` code of a `teal_transform_module`, as this approach ensures better robustness in maintaining Shiny's reactivity.
-If you are planning on using `eventReactive()` in the `server`, make sure the event includes `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
-More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
-
-### Multiple transformators
-
-We could also add **multiple transformators** to the app by including several instances of `teal_transform_module` in a list.
-
-For example, let’s add another transformation to the `mtcars` dataset. This transformation creates a new column containing the `rownames` of `mtcars`.
-Unlike the previous example, this module does not include any interactive UI elements.
+Note that it is possible to pass two transformator modules act on one dataset.
+In such cases, transformations will follow the order of the transformators.
 
 ```{r}
-data <- within(teal_data(), {
-  iris <- iris
-  mtcars <- mtcars
-})
+transformator_iris_scale <- teal_transform_module(
+  label = "Scaling transformator for iris",
+  ui = function(id) {
+    ns <- NS(id)
+    uiOutput(ns("scaled_columns_container"))
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      ns <- session$ns
+
+      scalable_columns <- names(Filter(is.numeric, data()[["iris"]])) |> isolate()
+
+      output$scaled_columns_container <- renderUI({
+        selectInput(
+          inputId = ns("scaled_columns"),
+          label = "Columns to scale",
+          choices = scalable_columns,
+          selected = input$scaled_columns,
+          multiple = TRUE
+        )
+      })
+
+      reactive({
+        within(
+          data(),
+          {
+            iris[scaled_columns] <- scale(iris[scaled_columns])
+          },
+          scaled_columns = input$scaled_columns
+        )
+      })
+    })
+  }
+)
 
 my_transformators <- list(
-  teal_transform_module(
-    label = "Custom transformator for iris",
-    ui = function(id) {
-      ns <- NS(id)
-      tags$div(
-        numericInput(
-          ns("n_rows"),
-          "Number of rows to subset",
-          value = 6, min = 1, max = 150, step = 1
-        )
-      )
-    },
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        reactive({
-          within(data(),
-            {
-              iris <- head(iris, num_rows)
-            },
-            num_rows = input$n_rows
-          )
-        })
-      })
-    }
-  ),
-  teal_transform_module(
-    label = "Custom transformator for mtcars",
-    ui = function(id) {
-      ns <- NS(id)
-      tags$div(
-        "Adding rownames column to mtcars"
-      )
-    },
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        reactive({
-          within(data(), {
-            mtcars$rownames <- rownames(mtcars)
-            rownames(mtcars) <- NULL
-          })
-        })
-      })
-    }
-  )
+  transformator_iris,
+  transformator_iris_scale,
+  transformator_mtcars
 )
 
 app <- init(
