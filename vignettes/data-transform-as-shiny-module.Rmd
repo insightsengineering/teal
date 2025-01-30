@@ -15,11 +15,11 @@ vignette: >
 `teal_transform_module()` is a Shiny module that takes `ui` and `server` arguments. When provided, `teal` executes data transformations for the specified module both when it is loaded and whenever the data changes.
 The `server` argument extends the logic behind data manipulations, while the `ui` argument adds new UI elements to the filter panel, managing the transformator inputs.
 
-In version `0.16`, `teal` introduced a new optional argument in `teal::module` named `transformators`.
-This argument allows users to pass a `list` of objects of `teal_data_module` class, created using the `teal_transform_module()` function.
-
 The main advantage of `teal_transform_module()` is its ability to transform data before passing it to the module.
 This feature allows users to extend the default behavior of existing modules by performing specific data operations on the data within the module.
+
+In version `0.16`, `teal` introduced a new optional argument in `teal::module` named `transformators`.
+This argument allows users to pass a `list` of objects of `teal_data_module` class, created using the `teal_transform_module()` function.
 
 This vignette presents the way on how to manage custom data transformations in `teal` apps.
 
