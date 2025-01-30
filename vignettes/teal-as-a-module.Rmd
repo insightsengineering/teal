@@ -12,19 +12,19 @@ vignette: >
 
 # Introduction
 
-Shiny developer who is interested in embedding Teal application into its own app, can use the Teal module composed of `ui_teal()` and `srv_teal()` functions. Unlike `init()`, this module will not automatically include session info
-footer, but it is possible to add it manually with `ui_session_info()` and `srv_session_info()`.
-Team as module offers several advantages such as:
+A Shiny developer interested in embedding Teal application into its own app, can use the Teal module composed of `ui_teal()` and `srv_teal()` functions. 
+Unlike `init()`, this module will not automatically include session info footer, but it is possible to add it manually with `ui_session_info()` and `srv_session_info()`.
+Using Teal as modules offers several advantages such as:
 
 - Including one or multiple teal application in other app.
 - Run teal applications based on the dynamically created components like initial data, modules, filters.
 
 # Example
 
-Example below shows how to use the Teal module in Shiny app. In the example `srv_teal()` is called with the dynamic
-data created in the server of the parent app.
+Example below demonstrates how to embed `teal` as a module in a Shiny application. 
+Here, `srv_teal()` is called using the dynamic data generated within the server of the parent app.
 
-```{r setup}
+```{r setup, message=FALSE}
 library(teal)
 
 data <- teal_data() |> within({

@@ -2,7 +2,7 @@
 #'
 #' Module to display the user session info popup and to download a lockfile. Module is included
 #' when running [init()] but skipped when using [`module_teal`]. Please be aware that session info
-#' contains R session information, so the module called multiple times will share the same information.
+#' contains R session information, so multiple module's calls will share the same information.
 #'
 #' @rdname module_session_info
 #' @name module_session_info
