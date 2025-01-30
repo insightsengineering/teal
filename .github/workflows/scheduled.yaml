@@ -57,7 +57,7 @@ jobs:
         inputs.chosen-workflow == 'revdepcheck'
       )
     name: revdepcheck ↩️
-    uses: insightsengineering/r.pkg.template/.github/workflows/revdepcheck.yaml@rlib_setup_r_dependencies
+    uses: insightsengineering/r.pkg.template/.github/workflows/revdepcheck.yaml@main
 
   rhub:
     if: >
@@ -66,5 +66,5 @@ jobs:
         inputs.chosen-workflow == 'rhub'
       )
     name: R-hub 🌐
-    uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@rlib_setup_r_dependencies
+    uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@main
 

@@ -21,7 +21,7 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/audit.yaml@main
   r-cmd:
     name: R CMD Check 🧬
-    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@rlib_setup_r_dependencies
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -46,7 +46,7 @@ jobs:
 
   r-cmd-non-cran:
     name: R CMD Check (non-CRAN) 🧬
-    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@rlib_setup_r_dependencies
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -69,7 +69,7 @@ jobs:
 
   coverage:
     name: Coverage 📔
-    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@rlib_setup_r_dependencies
+    uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
@@ -82,7 +82,7 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/linter.yaml@main
   roxygen:
     name: Roxygen 🅾
-    uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@rlib_setup_r_dependencies
+    uses: insightsengineering/r.pkg.template/.github/workflows/roxygen.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
