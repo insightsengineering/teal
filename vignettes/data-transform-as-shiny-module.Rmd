@@ -174,3 +174,9 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
+
+By using multiple transformators, we can apply different transformations to different datasets available in the `teal_data` object.
+
+In this example, one transformator enables users to subset the `iris` dataset interactively, while another automatically adds row names as a new column in the `mtcars` dataset.
+
+This approach provides greater flexibility in data preprocessing, allowing transformations to be tailored to specific datasets for a specific module.
