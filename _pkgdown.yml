@@ -73,7 +73,7 @@ articles:
     contents:
       - creating-custom-modules
       - adding-support-for-reporting
-      - decorate-module-output
+      - customizing-module-output
   - title: 📃 Technical blueprint
     desc: >
       The purpose of the blueprint is to aid new developer’s comprehension of the

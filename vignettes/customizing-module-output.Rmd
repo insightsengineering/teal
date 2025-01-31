@@ -41,7 +41,7 @@ This powerful functionality empowers application developers to significantly cus
 
 To use decorators effectively, certain requirements must be met:
 
-1. **Module Support**: While `teal` provides the core functionality for decorators, the module must explicitly support this functionality. Developers should ensure that the module has been designed to work with decorators.
+1. **Module Support**: While `teal` provides the core functionality for decorators, the module must explicitly support this functionality. Developers should ensure that the module has been designed to work with decorators. See (Include Decorators in a `teal` Module)[#include-decorators-in-a-teal-Module].
 2. **Matching Object Names**: Decorators must reference object names that align with the internal naming conventions of the module. Each module may use different names for its output objects, such as `plot` or `table`. This alignment is critical for successful decoration.
 
 It is recommended to review the module documentation or source code to understand its internal object naming before applying decorators.
@@ -56,7 +56,7 @@ You will also learn about a convenient function, `make_teal_transform_server()`,
 
 The chapter concludes with an example module that utilizes decorators and a snippet demonstrating how to use this module in a `teal` application.
 
-### Server
+### Non-interactive decorators
 
 The simplest way to create a decorator is to use `teal_transform_module()` with only `server` argument provided (i.e. without UI part).
 This approach adds functionality solely to the server code of the module.
@@ -100,7 +100,7 @@ static_decorator_lang <- teal_transform_module(
 )
 ```
 
-### UI
+### Interactive decorators
 
 To create a decorator with user interactivity, you can add (optional) UI part and use it in server accordingly (i.e. a typical `shiny` module).
 In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label.
