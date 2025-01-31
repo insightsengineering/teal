@@ -22,14 +22,11 @@ allowing you to tailor the outputs without rewriting the original module code.
 
 ## Decorators
 
-In the context of `teal` applications, decorators are specifically used to modify module outputs, such as plots or tables.
+In `teal`, decorators are used to modify module outputs, such as plots or tables, without changing their core structure.
 
-For example, consider a decorator function `add_title(x, <plot_title>)` that takes a `ggplot2` plot object (`x`) as input, applies a title modification, and returns a modified `ggplot2` plot object.
-This function qualifies as a decorator because it preserves the original class of the input object.
-Conversely, a function like `create_plot(<data>, <x_axis>, <y_axis>)`, which generates a new plot object, is **not** a decorator, as it produces an output of a different class.
-
-Preserving the object's class during decorator process is essential for compatibility.
-It ensures that the subsequent "display" logic can seamlessly handle both decorated and non-decorated objects.
+For example, imagine you have a plot and you want to add a title.
+A decorator function, like `add_title(x, "My Plot")`, takes an existing plot and updates it by adding a title while keeping everything else the same.
+This makes it different from a function that creates a brand-new plot from scratch, as decorators work by enhancing what’s already there.
 
 The decorators process can vary in complexity:
 
