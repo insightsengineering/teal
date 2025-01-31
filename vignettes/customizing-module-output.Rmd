@@ -12,36 +12,39 @@ vignette: >
 
 ## Introduction
 
-Yet when these built-in module outputs don’t fully meet your needs, you have the flexibility to customize the output. This document outlines the customization options available for modifying the output of `teal` modules.
+`teal` provides a collection of ready-to-use modules, each with a predefined way of presenting outputs.
+
+While these built-in modules cover many common use cases, you may need to customize their outputs to better fit your specific requirements.
+This document outlines the available customization options for modifying `teal` module outputs.
 
 You will learn how to use `teal_transform_module()` to modify and enhance the objects created by `teal::modules()`,
-enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
+allowing you to tailor the outputs without rewriting the original module code.
 
 ## Decorators
 
-In programming, **decoration** refers to the process of modifying an object while preserving its original class.
-For instance, given an object `x` of class `"my_class"`, a function `foo(x)` is considered a **decorator function** if it modifies `x` and returns an object that retains the same class.
-In this context, `x` is referred to as the **decorated object**, and `foo()` is the **decorator function** or **decorator**. Decorators can perform a variety of operations, such as adding new methods or modifying data, while ensuring the object remains compatible with its original usage.
+In the context of `teal` applications, decorators are specifically used to modify module outputs, such as plots or tables.
 
-In the context of `teal` applications, decoration is specifically used to modify module outputs, such as plots or tables.
 For example, consider a decorator function `add_title(x, <plot_title>)` that takes a `ggplot2` plot object (`x`) as input, applies a title modification, and returns a modified `ggplot2` plot object.
-This function qualifies as a decorator because it preserves the original class of the input object. Conversely, a function like `create_plot(<data>, <x_axis>, <y_axis>)`, which generates a new plot object, is **not** a decorator, as it produces an output of a different class.
+This function qualifies as a decorator because it preserves the original class of the input object.
+Conversely, a function like `create_plot(<data>, <x_axis>, <y_axis>)`, which generates a new plot object, is **not** a decorator, as it produces an output of a different class.
 
-Preserving the object's class during decoration is essential for compatibility. It ensures that the subsequent "display" logic can seamlessly handle both decorated and non-decorated objects.
+Preserving the object's class during decorator process is essential for compatibility.
+It ensures that the subsequent "display" logic can seamlessly handle both decorated and non-decorated objects.
 
-The decoration process can vary in complexity:
+The decorators process can vary in complexity:
 
-- **Simple Decorations**: Single-step modifications, such as a single method call that does not require additional data.
-- **Complex Decorations**: Multi-step operations that may involve interdependent transformations, potentially requiring input from dedicated `shiny` UI elements.
+- **Simple Decorators**: Single-step modifications, such as a single method call that does not require additional data.
+- **Complex Decorators**: Multi-step operations that may involve interdependent transformations, potentially requiring input from dedicated `shiny` UI elements.
 
-This powerful functionality empowers application developers to significantly customize outputs beyond the default capabilities provided by existing module parameters. Decorations allow for advanced modifications, enabling highly tailored and dynamic user experiences in `teal` applications.
+This functionality empowers application developers to significantly customize outputs beyond the default capabilities provided by existing module parameters.
+Decorators allow for advanced modifications, enabling highly tailored and dynamic user experiences in `teal` applications.
 
 ## Requirements and Limitations
 
 To use decorators effectively, certain requirements must be met:
 
-1. **Module Support**: While `teal` provides the core functionality for decorators, the module must explicitly support this functionality. Developers should ensure that the module has been designed to work with decorators. See [Include Decorators in a `teal` Module](#include-decorators-in-a-teal-module).
-2. **Matching Object Names**: Decorators must reference object names that align with the internal naming conventions of the module. Each module may use different names for its output objects, such as `plot` or `table`. This alignment is critical for successful decoration.
+1. **Module Support**: While `teal` provides the core functionality for decorators, the module must explicitly support this functionality. Developers should ensure that the module has been designed to work with decorators (see [Include Decorators in a `teal` Module](#include-decorators-in-a-teal-module)).
+2. **Matching Object Names**: Decorators must reference object names that align with the internal naming conventions of the module. Each module may use different names for its output objects, such as `plot` or `table`. This alignment is critical for successful decorator.
 
 It is recommended to review the module documentation or source code to understand its internal object naming before applying decorators.
 
