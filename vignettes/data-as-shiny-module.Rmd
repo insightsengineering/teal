@@ -63,13 +63,12 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-```{r shinylive_url_1, echo = FALSE, results = 'hide'}
+```{r shinylive_url_1, echo=FALSE, results='hide'}
 code <- paste0(c(
   knitr::knit_code$get("app_1")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-cat(sprintf("[Open in Shinylive](%s)\n\n", url))
 ```
 
 ```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
@@ -126,14 +125,13 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-```{r shinylive_url_2, echo = FALSE, results = 'hide'}
+```{r shinylive_url_2, echo=FALSE, results='hide'}
 code <- paste0(c(
   knitr::knit_code$get("teal_lib_call"),
   knitr::knit_code$get("app_2")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-cat(sprintf("[Open in Shinylive](%s)\n\n", url))
 ```
 
 ```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
@@ -206,7 +204,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-```{r shinylive_url_3, echo = FALSE, results = 'hide'}
+```{r shinylive_url_3, echo=FALSE, results='hide'}
 code <- paste0(c(
   knitr::knit_code$get("teal_lib_call"),
   knitr::knit_code$get("app_3_prep"),
@@ -214,7 +212,6 @@ code <- paste0(c(
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-cat(sprintf("[Open in Shinylive](%s)\n\n", url))
 ```
 
 ```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}

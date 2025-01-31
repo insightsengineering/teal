@@ -26,7 +26,7 @@ This vignette presents the way on how to manage custom data transformations in `
 
 We initialize a simple `teal` app where we pass `iris` and `mtcars` as the input datasets.
 
-```{r message = FALSE, warning = FALSE}
+```{r app_1, eval=FALSE}
 library(teal)
 
 data <- within(teal_data(), {
@@ -39,9 +39,18 @@ app <- init(
   modules = teal::example_module()
 )
 
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
+shinyApp(app$ui, app$server)
+```
+```{r shinylive_url_1, echo=FALSE, results='hide'}
+code <- paste0(c(
+  knitr::knit_code$get("app_1")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+```
+
+```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+knitr::include_url(url, height = "800px")
 ```
 
 ### Single transformator
@@ -51,7 +60,15 @@ Let's create a simple `teal_transform_module` that returns the first `n` number 
 We do this by creating the `ui` with the `numericInput` for the user to input the number of rows to be displayed.
 In the `server` function we take in the reactive `data` and perform this transformation and return the new reactive `data`.
 
-```{r}
+_Note_: It is recommended to return `reactive()` with `teal_data()` in `server` code of a `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
+If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
+More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
+
+```{r teal_lib_call, eval=FALSE, echo=FALSE}
+library(teal)
+```
+
+```{r app_2, eval = FALSE}
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -86,14 +103,22 @@ app <- init(
   modules = teal::example_module(transformators = my_transformators)
 )
 
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
+shinyApp(app$ui, app$server)
 ```
 
-_Note_: It is recommended to return `reactive()` with `teal_data()` in `server` code of a `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
-If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
-More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
+
+```{r shinylive_url_2, echo=FALSE, results='hide'}
+code <- paste0(c(
+  knitr::knit_code$get("teal_lib_call"),
+  knitr::knit_code$get("app_2")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+```
+
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+knitr::include_url(url, height = "800px")
+```
 
 ### Multiple transformators
 
@@ -102,7 +127,7 @@ Note that we can add multiple `teal` transformators by including `teal_transform
 Let's add another transformation to the `mtcars` dataset that creates a column with `rownames` of `mtcars`.
 Note that this module does not have interactive UI elements.
 
-```{r}
+```{r app_3, eval=FALSE}
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -159,4 +184,17 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+```
+
+```{r shinylive_url_3, echo=FALSE, results='hide'}
+code <- paste0(c(
+  knitr::knit_code$get("teal_lib_call"),
+  knitr::knit_code$get("app_3")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+```
+
+```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+knitr::include_url(url, height = "800px")
 ```
