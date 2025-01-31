@@ -32,25 +32,6 @@ Their server logic will be used to modify objects such as plots or tables that e
 A `ui` function can provide interactivity but that is optional, an app developer is free to use decorator modules that do not require user input.
 
 
-### Failing Gracefully
-
-Decorator failures are managed by an internal `teal` mechanism called **trigger on success**, which ensures that the `data` object within the module remains intact.
-If a decorator fails, the outputs will not be shown, and an appropriate error message will be displayed.
-This behavior comes out of the box.
-Here we define a decorator module that will raise an error, which we will show in action later on.
-
-```{r}
-failing_decorator <- teal_transform_module(
-  label = "Failing decorator",
-  server = function(id, data) {
-    moduleServer(id, function(input, output, session) {
-      reactive(stop("\nThis error was raised by a decorator\n"))
-    })
-  }
-)
-```
-
-
 ### Requirements and Limitations
 
 Using decorators requires the following:
@@ -274,8 +255,7 @@ app <- init(
     tm_decorated_plot("undecorated"),
     tm_decorated_plot("static", decorators = list(static_decorator)),
     tm_decorated_plot("interactive", decorators = list(interactive_decorator)),
-    tm_decorated_plot("dynamic", decorators = list(dynamic_decorator("plot"))),
-    tm_decorated_plot("failing", decorators = list(failing_decorator))
+    tm_decorated_plot("dynamic", decorators = list(dynamic_decorator("plot")))
   )
 )
 
