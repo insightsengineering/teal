@@ -27,11 +27,9 @@ This vignette presents the way on how to manage custom data transformations in `
 
 Let's initialize a simple `teal` app by providing `iris` and `mtcars` as input datasets.
 
-```{r, message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE}
 library(teal)
-```
 
-```{r}
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars

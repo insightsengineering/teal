@@ -58,7 +58,7 @@ This approach adds functionality solely to the server code of the module.
 In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`. 
 We modify the title and x-axis label of plot:
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(teal)
 static_decorator <- teal_transform_module(
   label = "Static decorator",

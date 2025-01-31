@@ -31,12 +31,9 @@ One case for postponing data operations is datasets that are dynamic, frequently
 Such data cannot be created once and kept in the global environment.
 Using `teal_data_module` enables creating a dataset from scratch every time the user starts the application.
 
-```{r, message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE}
 library(teal)
-```
 
-
-```{r}
 data_module <- teal_data_module(
   ui = function(id) tags$div(),
   server = function(id) {
