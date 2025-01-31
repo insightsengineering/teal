@@ -12,7 +12,6 @@ vignette: >
 
 ## Introduction
 
-`teal` is a powerful `shiny`-based framework with built-in modules for interactive data analysis.
 Yet when these built-in module outputs don’t fully meet your needs, you have the flexibility to customize the output. This document outlines the customization options available for modifying the output of `teal` modules.
 
 You will learn how to use `teal_transform_module()` to modify and enhance the objects created by `teal::modules()`,
