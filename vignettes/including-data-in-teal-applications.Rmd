@@ -36,7 +36,7 @@ Thus, the first step of building a `teal` app is creating a `teal_data` object.
 
 A `teal_data` object is created by calling the `teal_data` function and passing data objects as `name:value` pairs.
 
-```{r, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(teal)
 
 # create teal_data

@@ -29,7 +29,7 @@ More advanced users of the framework can also create new analysis modules which 
 
 This simple `teal` application takes the `iris` and `mtcars` datasets and displays their contents:
 
-```{r, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(teal)
 
 app <- init(
