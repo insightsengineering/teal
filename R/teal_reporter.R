@@ -74,7 +74,13 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
   ),
   private = list(
     dispatch_block = function(block_class) {
-      eval(str2lang(block_class))
+      if (exists(block_class, getNamespace("teal"))) {
+        # for block classes which are in teal (TealSlicesBlock)
+        get(block_class)
+      } else {
+        # other block classes are in teal.reporter so we need to use super (ReporterCard) class
+        super$dispatch_block(block_class)
+      }
     }
   )
 )
