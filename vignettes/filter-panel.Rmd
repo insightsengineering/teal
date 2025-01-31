@@ -85,7 +85,7 @@ To achieve the described setup, one must set the `module_specific` argument to `
 
 For a detailed explanation about the filter states, see [this `teal.slice` vignette](https://insightsengineering.github.io/teal.slice/latest-tag/articles/filter-panel-for-developers.html).
 
-```r
+```{r app, eval=FALSE}
 library(teal)
 
 app <- init(
@@ -116,7 +116,20 @@ app <- init(
   )
 )
 
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
+shinyApp(app$ui, app$server)
+```
+
+### Try the above app in Shinylive
+
+```{r shinylive_url, echo = FALSE, results = 'asis'}
+code <- paste0(c(
+  knitr::knit_code$get("app")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+cat(sprintf("[Open in Shinylive](%s)\n\n", url))
+```
+
+```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+knitr::include_url(url, height = "800px")
 ```

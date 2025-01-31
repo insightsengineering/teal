@@ -45,6 +45,10 @@
 #'
 #' @include modules.R
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = within(
