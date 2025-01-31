@@ -13,7 +13,7 @@ vignette: >
 ## Introduction
 
 `teal` is a powerful `shiny`-based framework with built-in modules for interactive data analysis.
-This document outlines the customization options available for modifying the output of `teal` modules.
+Yet when these built-in module outputs don’t fully meet your needs, you have the flexibility to customize the output. This document outlines the customization options available for modifying the output of `teal` modules.
 
 You will learn how to use `teal_transform_module()` to modify and enhance the objects created by `teal::modules()`,
 enabling you to tailor the outputs to your specific requirements without rewriting the original module code.
@@ -134,7 +134,7 @@ interactive_decorator <- teal_transform_module(
 ```
 
 As in the earlier examples, `make_teal_transform_server()` can simplify the creation of the server component.
-This wrapper requires you to use `input` object names directly in the expression - note that we have `xlab(x_axis_table)` and not `my_title = input$x_axis_title` together with `xlab(my_title)`.
+This wrapper requires you to use `input` object names directly in the expression - note that we have `xlab(x_axis_title)` and not `my_title = input$x_axis_title` together with `xlab(my_title)`.
 
 ```{r}
 interactive_decorator_lang <- teal_transform_module(
