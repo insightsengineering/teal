@@ -48,6 +48,11 @@ teal_replace_ui <- function(x, selector, element) {
 
 #' @rdname teal_modifiers
 #' @export
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
@@ -84,6 +89,11 @@ modify_title <- function(
 
 #' @rdname teal_modifiers
 #' @export
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris),
@@ -102,6 +112,11 @@ modify_header <- function(x, element = tags$p()) {
 
 #' @rdname teal_modifiers
 #' @export
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris),
@@ -128,6 +143,11 @@ modify_footer <- function(x, element = tags$p()) {
 #' @param content (`character(1)`, `shiny.tag` or `shiny.tag.list`) with the content of the popup.
 #' @param ... Additional arguments to [shiny::modalDialog()].
 #' @export
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),

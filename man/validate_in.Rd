@@ -42,3 +42,13 @@ if (interactive()) {
 }
 
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEracxUurmAJgAUoAczjsB06QGc41OGICSEKgqpG4QHh58YJ6ofrRwnlG47hFRAMo+fqResQTxiXgpHgQAFkS0BAnSALzSBG7RcKREnlBJ0lFSjJ4VRNREjO2dtIxOQhVteB1gagDWEEQA7uExcQlRPMnhEd6+YnC2NdPeza1JRdIwKtTiqL5HAGIAggAyaSbbmyld9FDiMLo4AAPUgAeRCwVCUU8KhgMBYrA2An4EAE3kYXUsyjUGi0QkhuGkRAhIR0IBSxNIkIAJDC4QisYwKLYRPZGEJQuTth4JNxaLY-nAAPpCdj4kK03L5QkjWiealpKUJQnpJWeaS2IhVBbZYFy0gYJHc6QQRhLMXszzAWXyxVrdXVWri0iS+2EgC6KI8AF8Ud6BLQlNIxcJROIpNoySlPCUhKwnuh2OZCeiun6BGBve6gA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEracxUurmAJgAUoAczjsB06QGc41OGICSEKgqpG4QHh58YJ6ofrRwnlG47hFRAMo+fqResQTxiXgpHgQAFkS0BAnSALzSBG7RcKREnlBJ0lFSjJ4VRNREjO2dtIxOQhVteB1gagDWEEQA7uExcQlRPMnhEd6+YnC2NdPeza1JRdIwKtTiqL5HAGIAggAyaSbbmyld9FDiMLo4AAPUgAeRCwVCUU8KhgMBYrA2An4EAE3kYXUsyjUGi0QkhuGkRAhIR0IBSxNIkIAJDC4QisYwKLYRPZGEJQuTth4JNxaLY-nAAPpCdj4kK03L5QkjWiealpKUJQnpJWeaS2IhVBbZYFy0gYJHc6QQRhLMXszzAWXyxVrdXVWri0iS+2EgC6KI8AF8Ud6BLQlNIxcJROIpNoySlPCUhKwnuh2OZCeiun6BGBve6gA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

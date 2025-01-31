@@ -31,6 +31,11 @@
 #'
 #' @seealso [`shinyvalidate::InputValidator`], [`shiny::validate`]
 #'
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examplesIf require("shinyvalidate")
 #' library(shiny)
 #' library(shinyvalidate)

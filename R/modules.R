@@ -91,6 +91,10 @@ setOldClass("teal_modules")
 #' @name teal_modules
 #' @aliases teal_module
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' library(shiny)
 #'

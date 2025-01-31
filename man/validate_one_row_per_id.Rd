@@ -42,3 +42,13 @@ if (interactive()) {
 }
 
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIG1GtAM4ASWgBM5ixnFTsAjIgCsABlzTx8JbSALzSAMz8ECq0jsrU0XYAClAA5nDsAtLSlnDUcGIAkhCoKqQZEFlZQiWkBQ6hfGCWqPm0cJaNuJmV1FD0uSHSjQDKufmk2S0EbR143VkEABZEtATtgwQZTXCkRJZQnUNgUoyWq0TURIyHjRLmKUKrB2A8XRWVOXlicPVHObv7TrzaQwFTUcSoPKDfTGbqvbqQoikADypRqW0RpEakUiOUYJ1iqnU4i01VKfiIaNKOhA3UppBq1kxsWcEDsIkSlzKtPeVQslgA+kpYuYrMBRTZhlMZtIAKRCWXSMmkazNVrtPwAXWBEm49ig5AFJDgAsYRAA7gKWowBfZ2BKhX4ANZwVgbLb2bGRYGLKxlB1KayjVDcDAAGQoKVIiz8TDgUCdQVCnkiWQAvpE02ZhfbhKJxFJtDTupZfRBWABBdDsaJ+PEnTMCMBpzVAA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIG1GtAM4ASWgBM5ixnFTsAjIgCsABlzTx8JbSALzSAMz8ECq0jsrU0XYAClAA5nDsAtLSlnDUcGIAkhCoKqQZEFlZQiWkBQ6hfGCWqPm0cJaNuJmV1FD0uSHSjQDKufmk2S0EbR143VkEABZEtATtgwQZTXCkRJZQnUNgUoyWq0TURIyHjRLmKUKrB2A8XRWVOXlicPVHObv7TrzaQwFTUcSoPKDfTGbqvbqQoikADypRqW0RpEakUiOUYJ1iqnU4i01VKfiIaNKOhA3UppBq1kxsWcEDsIkSlzKtPeVQslgA+kpYuYrMBRTZhlMZtIAKRCWXSMmkazNVrtPwAXWBEm49ig5AFJDgAsYRAA7gKWowBfZ2BKhX4ANZwVgbLb2bGRYGLKxlB1KayjVDcDAAGQoKVIiz8TDgUCdQVCnkiWQAvpE02ZhfbhKJxFJtDTupZfRBWABBdDsaJ+PEnTMCMBpzVAA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

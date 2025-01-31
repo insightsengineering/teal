@@ -12,6 +12,10 @@
 #'
 #' @export
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' library(teal)
 #' ui <- fluidPage(
@@ -82,6 +86,10 @@ validate_has_data <- function(x,
 #'
 #' @export
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' iris$id <- rep(1:50, times = 3)
 #' ui <- fluidPage(
@@ -122,6 +130,10 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 #'
 #' @export
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' ui <- fluidPage(
 #'   selectInput(
@@ -159,6 +171,10 @@ validate_in <- function(x, choices, msg) {
 #'
 #' @export
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' data <- data.frame(
 #'   id = c(1:10, 11:20, 1:10),
@@ -207,6 +223,10 @@ validate_has_elements <- function(x, msg) {
 #'
 #' @export
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' data <- data.frame(
 #'   id = c(1:10, 11:20, 1:10),
@@ -261,6 +281,10 @@ validate_no_intersection <- function(x, y, msg) {
 #'
 #' @export
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' data <- data.frame(
 #'   one = rep("a", length.out = 20),
@@ -318,6 +342,11 @@ validate_has_variable <- function(data, varname, msg) {
 #'   validation message
 #'
 #' @export
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' data <- data.frame(
 #'   one = rep("a", length.out = 20),

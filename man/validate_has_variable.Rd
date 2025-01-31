@@ -44,3 +44,13 @@ if (interactive()) {
   shinyApp(ui, server)
 }
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEATKKShzFFqxiXN47AdOkkZAXmmM4qFyh8eNLUFADmpAAWGEQqpNLeAEwADDy4rtKkAO5ECT5+7AQBUEG40kH0QWkh4VExcXkp-BDNKrQ2ytRtZgAKUGFwLhBuAM5woWIAkhCocUNubkESLKUZi2AAyuNwYtLLjLRQ9KGrwwsEkUS0BHAjeUVBHqXlYNlEz0FRvnAfYEqxjCq6TOo22YjgZjyjwgPzAGTSGSkjHolloMF0cAAHqQAPJxWakAIjFQwGAsVhVATNARjRhIjqqdTiLRCAllWKkAk6EAZDkEgAkxNJ5I6vggZhEGOx7B5IL23FodjgAH1IlARsr9odjoM7FAyqy4vz9s0FtJUOryMkAlsJuRIaRfJZ4GR5QcjqERogXmULSNyOxDaRjSwysRqNQ0GMocEqqbpABfZoJgS0JTSQPCUTiKTabkZEaRISsACC6HYbTKtKRybACYAukA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEATKKShzFFqxiXN47AdOkkZAXmmM4qFyh8eNLUFADmpAAWGEQqpNLeAEwADDy4rtKkAO5ECT5+7AQBUEG40kH0QWkh4VExcXkp-BDNKrQ2ytRtZgAKUGFwLhBuAM5woWIAkhCocUNubkESLKUZi2AAyuNwYtLLjLRQ9KGrwwsEkUS0BHAjeUVBHqXlYNlEz0FRvnAfYEqxjCq6TOo22YjgZjyjwgPzAGTSGSkjHolloMF0cAAHqQAPJxWakAIjFQwGAsVhVATNARjRhIjqqdTiLRCAllWKkAk6EAZDkEgAkxNJ5I6vggZhEGOx7B5IL23FodjgAH1IlARsr9odjoM7FAyqy4vz9s0FtJUOryMkAlsJuRIaRfJZ4GR5QcjqERogXmULSNyOxDaRjSwysRqNQ0GMocEqqbpABfZoJgS0JTSQPCUTiKTabkZEaRISsACC6HYbTKtKRybACYAukA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

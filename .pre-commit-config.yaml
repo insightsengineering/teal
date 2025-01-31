@@ -31,6 +31,7 @@ repos:
           - shiny
           - shinyjs
           - stats
+          - insightsengineering/roxy.shinylive
           - insightsengineering/teal.code
           - insightsengineering/teal.data
           - insightsengineering/teal.logger
