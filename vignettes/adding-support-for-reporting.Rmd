@@ -29,8 +29,9 @@ The entire life cycle of objects involved in creating the report and configuring
 ## Custom module
 
 Let us consider an example module, based on the example module from `teal`:
-```{r, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(teal)
+
 my_module <- function(label = "example teal module") {
   module(
     label = label,
@@ -255,7 +256,7 @@ In the final example, we have incorporated `teal.code` snippets.
 This allows `ReporterCard` to store the code necessary to generate the table along with the table itself.
 To learn more about `teal.code` see the vignette _`qenv`_ in  `teal.code`.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(teal)
 library(teal.reporter)
 
