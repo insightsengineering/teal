@@ -119,15 +119,12 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-### Try the above app in Shinylive
-
-```{r shinylive_url, echo = FALSE, results = 'asis'}
+```{r shinylive_url, echo=FALSE, results='none'}
 code <- paste0(c(
   knitr::knit_code$get("app")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-cat(sprintf("[Open in Shinylive](%s)\n\n", url))
 ```
 
 ```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
