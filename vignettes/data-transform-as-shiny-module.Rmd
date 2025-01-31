@@ -50,7 +50,7 @@ if (interactive()) {
 ### Single transformator
 
 Next, let's create a **single transformator** using `teal_transform_module()`.
-This example enables users to display the first `n` rows of the `iris` dataset based on their input.
+This example enables users to subset the first `n` rows of the `iris` dataset based on their input.
 
 Here’s how we can implement this:
 
