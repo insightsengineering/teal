@@ -17,7 +17,9 @@ srv_session_info(id)
 \code{NULL} invisibly
 }
 \description{
-Module to display the user session info popup and to download a lockfile.
+Module to display the user session info popup and to download a lockfile. Module is included
+when running \code{\link[=init]{init()}} but skipped when using \code{\link{module_teal}}. Please be aware that session info
+contains R session information, so multiple module's calls will share the same information.
 }
 \examples{
 ui <- fluidPage(

@@ -56,17 +56,12 @@ articles:
     navbar: Get started
     contents:
       - getting-started-with-teal
-  - title: Using `teal`
-    navbar: Using `teal`
-    contents:
-      - filter-panel
-      - teal-options
-      - bootstrap-themes-in-teal
   - title: Data in `teal` apps
     navbar: Data in `teal` apps
     contents:
       - including-data-in-teal-applications
       - data-as-shiny-module
+      - filter-panel
       - data-transform-as-shiny-module
   - title: Extending `teal`
     navbar: Extending `teal`
@@ -74,6 +69,12 @@ articles:
       - creating-custom-modules
       - adding-support-for-reporting
       - decorate-module-output
+  - title: Using `teal`
+    navbar: Using `teal`
+    contents:
+      - teal-as-a-module
+      - teal-options
+      - bootstrap-themes-in-teal
   - title: 📃 Technical blueprint
     desc: >
       The purpose of the blueprint is to aid new developer’s comprehension of the
