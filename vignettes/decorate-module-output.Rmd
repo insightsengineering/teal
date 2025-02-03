@@ -21,6 +21,7 @@ library(ggplot2)
 The outputs produced by `teal` modules, like graphs or tables, are created by the module developer and look a certain way.
 It is impossible to design an output that will satisfy every possible user, so the form of the output should be considered a default value that can be customized.
 Here we describe the concept of _decoration_, whereby a `teal_transform_module` can modify an output created by a `teal_module`, enabling you to tailor outputs to your specific requirements without rewriting the original module code.
+
 While it is not required, reading [this vignette](data-transform-as-shiny-module.html) may give you a fuller understanding.
 
 
@@ -36,12 +37,12 @@ A `ui` function can provide interactivity but that is optional, an app developer
 
 Using decorators requires the following:
 
-1. **Module Support**:
+1. **Module Support**:<br>
 `teal` will apply decorators to `teal_module` outputs but the module in question must explicitly support this functionality.
 It the responsibility of to the module developer to ensure that decorators can be used.
-2. **Matching Object Names**:
+2. **Matching Object Names**:<br>
 Decorators will reference variables that exist in the `teal_module` server function and therefore must use the appropriate variable names.
-When writing decorators, one must adjust them the source code of the module in question.
+When writing decorators, one must follow the source code of the module in question.
 
 
 ## Building Decorators
@@ -107,8 +108,8 @@ interactive_decorator <- teal_transform_module(
 
 ### Variable Names as Arguments
 
-`teal_transform_module` relies on the names of the variables that exist in the module server function.
-Writing a universal decorator that applies to any module may well be impossible because different modules may use different variable for their output elements.
+The server function of a decorating `teal_transform_module` must conform to the names of the variables that exist in the server function of the decorated `teal_module`.
+Writing a universal decorator that applies to any module is impossible because different modules may use different variable names for their output elements.
 It is possible, however, to create a parametrized decorator that will take the relevant variable names as arguments.
 Here, the `output_name` variable name is passed to a decorator, allowing it to work with multiple modules.
 
@@ -146,8 +147,12 @@ Note that when the function is used, `output_name` will be passed a character st
 
 ## Using Decorators
 
-Decorators are applied to a `teal` module by passing them to the `ui_args` and `server_args` arguments of the module server functions.
-There they will be passed to `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
+Decorators are applied to a `teal` module as follows:
+
+1. A list of decorators is passed to the module constructor function (_e.g._ `tm_my_module`).
+2. The module constructor calls the module generator function (`teal::module`) and passes the decorators to the `ui_args` and `server_args` arguments.
+3. The module functions, UI and server, take a list of decoratos as arguments and resolve them using `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
+
 The following examples demonstrate various uses of decorators.
 
 ### Single Decoration
@@ -157,7 +162,7 @@ In the first examlpe we will apply one decoration to one output.
 #### Module
 
 This module has one output, a plot created with `ggplot2`, and it displays the reproducible code used to obtain the plot.
-We can use the decorators defined above, applying each to a separate instance of the same module.
+We can use the decorators defined above, applying each one to a separate instance of the same module.
 
 ```{r}
 tm_decorated_plot <- function(label = "module", transformators = list(), decorators = NULL) {
@@ -424,7 +429,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
 
 #### Application
 
-Note that a named list is passed to the module constructor.
+Note that a named list of decorators is passed to the module constructor.
 
 ```{r}
 app <- init(
@@ -450,13 +455,16 @@ if (interactive()) {
 
 ## Convenience
 
+Here we present some ways to work with decorators more conveniently.
+These are purely oprional.
+
 ### Reducing Boilerplate
 
 The function `make_teal_transform_server` can be used to reduce the amount of boilerplate code when writing new decorators.
 It takes `language` as input and requires you to use `input` object names directly in the expression.
 The following calls yield the same decorator module.
-Note that `my_title = input$x_axis_title` together with `xlab(my_title)` is replaced by `xlab(x_axis_table)`.
-```{r}
+Note that the combination of `my_title = input$x_axis_title` and `xlab(my_title)` is replaced by a simple `xlab(x_axis_table)`.
+```{r, eval=FALSE}
 teal_transform_module(
   label = "Static decorator",
   ui = function(id) {
