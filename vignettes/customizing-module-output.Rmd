@@ -24,9 +24,7 @@ allowing you to tailor the outputs without rewriting the original module code.
 
 In `teal`, decorators are used to modify module outputs, such as plots or tables, without changing their core structure.
 
-For example, imagine you have a plot and you want to add a title.
-A decorator function, like `add_title(x, "My Plot")`, takes an existing plot and updates it by adding a title while keeping everything else the same.
-This makes it different from a function that creates a brand-new plot from scratch, as decorators work by enhancing what’s already there.
+For example, imagine you have a `plot` object (ggplot) and you want to add a title. To do so one simply needs to call `plot <- plot + ggtitle("My Plot")`. It is important to enhance the current object object instead of creating a new one. We call this operation a decoration.
 
 The decorators process can vary in complexity:
 
