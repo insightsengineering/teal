@@ -19,6 +19,10 @@ This design enables a structured and reusable approach to creating interactive c
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
 
+```{r setup, include=FALSE}
+library(teal)
+```
+
 ```r
 my_plot <- hist(
   dataset[[vars]],
@@ -58,7 +62,9 @@ For this module, we will use:
 
 Here’s the code for the `histogram_module_ui` function:
 
-```{r module_ui, eval=FALSE}
+```{r module_ui}
+library(teal)
+
 # UI function for the custom histogram module
 histogram_module_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -144,7 +150,7 @@ In this updated server function, we will perform the following:
 
 Here’s the code:
 
-```{r module_server, eval=FALSE}
+```{r module_server}
 # Server function for the custom histogram module with injected variables in within()
 histogram_module_server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
@@ -220,7 +226,7 @@ The `teal::module()` function allows you to encapsulate your UI and server logic
 By setting `datanames = "all"`, you give the module access to all datasets specified in the `teal_data` object.
 Datasets which names start with `.` won't be included (see [Hidden datasets](including-data-in-teal-applications.html#hidden-datasets) section).
 
-```{r app_module, eval=FALSE}
+```{r app_module}
 # Custom histogram module creation
 create_histogram_module <- function(label = "Histogram Module") {
   teal::module(
@@ -237,9 +243,7 @@ create_histogram_module <- function(label = "Histogram Module") {
 With the custom `teal` module set up, it can now be integrated into a `teal` app.
 We’ll use `init()` from `teal` to specify the datasets and modules used in the app, then run the app to test the newly created module.
 
-```{r app_init, eval=FALSE}
-library(teal)
-
+```{r app_init}
 # Define datasets in `teal_data`
 data_obj <- teal_data(
   iris = iris,
@@ -253,20 +257,18 @@ app <- init(
 )
 
 # Run the app
-shiny::shinyApp(ui = app$ui, server = app$server)
+if (interactive()) {
+  shiny::shinyApp(ui = app$ui, server = app$server)
+}
 ```
 
 **Congratulations! You just created a custom teal module and used it in a teal app!**
 
 This setup provides a fully dynamic, user-controlled `teal` module that allows for interactive data exploration and code visibility, enhancing both usability and transparency.
 
-```{r teal_lib_call, eval=FALSE, echo=FALSE}
-library(teal)
-```
-
-```{r shinylive_url, echo=FALSE, results='hide'}
+```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
-  knitr::knit_code$get("teal_lib_call"),
+  "interactive <- function() TRUE",
   knitr::knit_code$get("module_ui"),
   knitr::knit_code$get("module_server"),
   knitr::knit_code$get("app_module"),
@@ -274,9 +276,6 @@ code <- paste0(c(
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-```
-
-```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 knitr::include_url(url, height = "800px")
 ```
 

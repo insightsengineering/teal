@@ -147,7 +147,10 @@ As expected, our corners are no longer rounded. If we look at our `R` console, w
 
 Once our customization is complete, we will apply the changes to our application. To do this, we use the option `teal.bs_theme` like before but this time we will expand on our `bslib::bs_theme` call to include our changes. Luckily, the arguments that were printed to the `R` console when running our app in the themer can be plugged right in.
 
-```{r app, eval=FALSE}
+```{r setup, include=FALSE}
+library(teal)
+```
+```{r app}
 options(
   "teal.bs_theme" = bslib::bs_theme(
     version = "5",
@@ -165,24 +168,22 @@ app <- init(
   modules = modules(example_module(), example_module())
 )
 
-shinyApp(app$ui, app$server)
-```
-
-
-### Try the above app in Shinylive
-
-```{r shinylive_url, echo = FALSE, results = 'asis'}
-code <- paste0(c(
-  knitr::knit_code$get("app")
-), collapse = "\n")
-
-url <- roxy.shinylive::create_shinylive_url(code)
-cat(sprintf("[Open in Shinylive](%s)\n\n", url))
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 ```
 
 Now the application has our custom theme applied.
 
+### Try the above app in Shinylive
+
 ```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("app")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
 knitr::include_url(url, height = "800px")
 ```
 

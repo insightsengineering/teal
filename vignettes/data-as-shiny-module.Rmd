@@ -33,7 +33,15 @@ Using `teal_data_module` enables creating a dataset from scratch every time the 
 
 _See `?qenv` for a detailed explanation of how to use the `within` method._ 
 
-```{r app_1, eval=FALSE}
+```{r setup, include=FALSE}
+library(teal)
+```
+
+```{r as_interactive, eval=FALSE, echo=FALSE}
+interactive <- function() TRUE
+```
+
+```{r app_1}
 library(teal)
 
 data_module <- teal_data_module(
@@ -60,18 +68,18 @@ app <- init(
   modules = example_module()
 )
 
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 ```
 
-```{r shinylive_url_1, echo=FALSE, results='hide'}
+```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
   knitr::knit_code$get("app_1")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-```
-
-```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 knitr::include_url(url, height = "800px")
 ```
 
@@ -83,11 +91,7 @@ An initial, constant form of the data can be created in the global environment a
 
 The following example illustrates how `teal_data_module` can be utilized to subset data based on the user inputs:
 
-```{r teal_lib_call, eval=FALSE, echo=FALSE}
-library(teal)
-```
-
-```{r app_2, eval = FALSE}
+```{r app_2}
 data <- within(teal_data(), {
   dataset1 <- iris
   dataset2 <- mtcars
@@ -122,19 +126,18 @@ app <- init(
   modules = example_module()
 )
 
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shiny::shinyApp(ui = app$ui, server = app$server)
+}
 ```
 
-```{r shinylive_url_2, echo=FALSE, results='hide'}
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
-  knitr::knit_code$get("teal_lib_call"),
+  knitr::knit_code$get("as_interactive"),
   knitr::knit_code$get("app_2")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-```
-
-```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 knitr::include_url(url, height = "800px")
 ```
 
@@ -185,7 +188,7 @@ data_module <- teal_data_module(
 )
 ```
 
-```{r app_3, eval = FALSE}
+```{r app_3}
 data_module_2 <- within(
   data_module,
   {
@@ -201,20 +204,19 @@ app <- init(
   modules = example_module()
 )
 
-shinyApp(app$ui, app$server)
+if (interactive()) {
+  shiny::shinyApp(ui = app$ui, server = app$server)
+}
 ```
 
-```{r shinylive_url_3, echo=FALSE, results='hide'}
+```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
-  knitr::knit_code$get("teal_lib_call"),
+  knitr::knit_code$get("as_interactive"),
   knitr::knit_code$get("app_3_prep"),
   knitr::knit_code$get("app_3")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-```
-
-```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 knitr::include_url(url, height = "800px")
 ```
 
