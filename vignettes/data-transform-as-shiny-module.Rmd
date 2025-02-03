@@ -14,17 +14,18 @@ vignette: >
 
 `teal` version `0.16` introduced a new, optional argument in `teal::module`, `transformators`.
 This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_data_module` created using the `teal_transform_module()` function.
+`teal_transform_module()` takes `ui` and `server` arguments to create a `shiny` module that encodes data transformations.
 
-A `teal_transform_module` is a `shiny` module that takes `ui` and `server` arguments, and that encodes data transformations.
-When provided, `teal` will execute data transformations for the specified module when it is loaded and whenever the original data changes.
+When transformators are passed to a module, `teal` will execute data transformations when that module is loaded as well as whenever the original data changes.
 The transformations are applied to the data _before_ it reaches the module.
+
 The `ui` elements of the transform module will be added to the filter panel, while the server function provides the data manipulation logic.
 
 This vignette describes how to manage custom data transformations in `teal` apps.
 
 ## Creating a data transformation module
 
-Let's initialize a simple `teal` app by providing `iris` and `mtcars` as input datasets.
+Let us initialize a simple `teal` app by providing `iris` and `mtcars` as input datasets.
 
 ```{r message = FALSE, warning = FALSE}
 library(teal)
@@ -36,7 +37,7 @@ data <- within(teal_data(), {
 
 app <- init(
   data = data,
-  modules = teal::example_module()
+  modules = example_module()
 )
 
 if (interactive()) {
@@ -46,10 +47,10 @@ if (interactive()) {
 
 ### Single transformator
 
-Let us create a simple `teal_transform_module` that returns the first `n` number of rows of `iris` based on the user input.
+Now let us create a simple `teal_transform_module` that returns the first `n` number of rows of `iris` based on user input.
 
-We will achieve this by creating the `ui` with a `numericInput` for the user to specify the number of rows to be displayed.
-The `server` function will take a reactive expression holding `data` as argument and return a reactive expression holding transformed `data`.
+We will achieve this by creating a UI function with a `numericInput` for the user to specify the number of rows to be displayed.
+The server function will take a reactive expression holding `data` as argument and return a reactive expression holding transformed `data`.
 
 ```{r}
 data <- within(teal_data(), {
@@ -80,7 +81,7 @@ transformator_iris <- teal_transform_module(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformators = list(transformator_iris))
+  modules = example_module(transformators = list(transformator_iris))
 )
 
 if (interactive()) {
@@ -90,12 +91,14 @@ if (interactive()) {
 
 _Note_: The `server` function of a `teal_transform_module` must return a reactive expression with a `teal_data` obect.
 In order to maintain full reactivity, we recommended using `reactive()` over `eventReactive()`.
-If you do use `eventReactive()` or `bindEvent()`, the trigger event should include `data()` _(e.g. `eventReactive(list(input$a, data()), {...})`)_.
-See [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832) for a detaileed explanation.
+If you do use `eventReactive()` or `bindEvent()`, the trigger event should include `data()` (_e.g._ `eventReactive(list(input$a, data()), {...})`).
+See [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832) for a detailed explanation.
 
 ### Multiple transformators
 
-`module(transformators)` accepts a list so we can use multiple `teal_transform_module`s at the same time.
+`module(transformators)` accepts a list, so we can use multiple `teal_transform_module`s at the same time.
+
+#### Targeting multiple datasets
 
 Let us add another transformation that creates a column with `rownames` in `mtcars`.
 Note that this module does not have interactive UI elements.
@@ -154,7 +157,7 @@ my_transformators <- list(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformators = my_transformators)
+  modules = example_module(transformators = my_transformators)
 )
 
 if (interactive()) {
@@ -162,8 +165,10 @@ if (interactive()) {
 }
 ```
 
-Note that it is possible to pass two transformator modules act on one dataset.
-In such cases, transformations will follow the order of the transformators.
+#### Targeting one dataset
+
+It is also possible to have multiple transformator modules act on one dataset.
+In such cases, transformations will be executed in the same order in which the transformator modules are passed to the module.
 
 ```{r}
 transformator_iris_scale <- teal_transform_module(
@@ -209,16 +214,10 @@ my_transformators <- list(
 
 app <- init(
   data = data,
-  modules = teal::example_module(transformators = my_transformators)
+  modules = example_module(transformators = my_transformators)
 )
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
-
-By using multiple transformators, we can apply different transformations to different datasets available in the `teal_data` object.
-
-In this example, one transformator enables users to subset the `iris` dataset interactively, while another automatically adds row names as a new column in the `mtcars` dataset.
-
-This approach provides greater flexibility in data preprocessing, allowing transformations to be tailored to specific datasets for a specific module.
