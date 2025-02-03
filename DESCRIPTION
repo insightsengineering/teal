@@ -53,7 +53,7 @@ Imports:
     teal.code (>= 0.6.0),
     teal.logger (>= 0.3.1),
     teal.reporter (>= 0.4.0),
-    teal.widgets (>= 0.4.0),
+    teal.widgets (>= 0.4.3),
     tools,
     utils
 Suggests:
