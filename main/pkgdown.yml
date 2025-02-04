@@ -6,10 +6,10 @@ articles:
   adding-support-for-reporting: adding-support-for-reporting.html
   bootstrap-themes-in-teal: bootstrap-themes-in-teal.html
   creating-custom-modules: creating-custom-modules.html
+  customizing-module-output: customizing-module-output.html
   data-as-shiny-module: data-as-shiny-module.html
   data-transform-as-shiny-module: data-transform-as-shiny-module.html
   blueprint/dataflow: blueprint/dataflow.html
-  decorate-module-output: decorate-module-output.html
   blueprint/filter_panel: blueprint/filter_panel.html
   filter-panel: filter-panel.html
   getting-started-with-teal: getting-started-with-teal.html
@@ -21,7 +21,7 @@ articles:
   blueprint/module_encapsulation: blueprint/module_encapsulation.html
   blueprint/product_map: blueprint/product_map.html
   teal-options: teal-options.html
-last_built: 2025-02-04T08:29Z
+last_built: 2025-02-04T09:10Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
