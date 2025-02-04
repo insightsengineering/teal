@@ -94,7 +94,7 @@ For our histogram module, the server function will handle user interactions and 
 
 To begin, it's essential to include the `data` argument in the server function definition.
 
-This `data` argument holds the reactive `teal_data` object, which contains your datasets after updergoing any active filtering by the filter panel. By including `data`, we can ensure:
+This `data` argument holds the reactive `teal_data` object, which contains your datasets after applying any active filtering by the filter panel. By including `data`, we can ensure:
 
 - The server function receives a reactive version of `teal_data`, allowing it to automatically respond to changes.
 - The server can access the filtered datasets directly.
