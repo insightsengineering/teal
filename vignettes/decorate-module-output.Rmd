@@ -394,7 +394,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
           req(dataname())
           within(data(),
             {
-              table_data <- data.frame(Filter(Negate(is.na), lapply(dataname, mean, na.rm = TRUE)))
+              table_data <- data.frame(lapply(dataname, mean, na.rm = TRUE))
             },
             dataname = as.name(dataname())
           )
@@ -525,7 +525,7 @@ div(
   })
 )
 # in the module server function
-output_data <- reactive(<holds your teal_data>)
+output_data <- reactive(teal_data())
 decorations <- lapply(names(decorators), function(decorator_name) {
   function(data) {
     srv_transform_teal_data(
