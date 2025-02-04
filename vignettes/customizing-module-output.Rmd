@@ -24,15 +24,12 @@ allowing you to tailor the outputs without rewriting the original module code.
 
 In `teal`, decorators are used to modify module outputs, such as plots or tables, without changing their core structure.
 
-For example, imagine you have a `plot` object (ggplot) and you want to add a title. To do so one simply needs to call `plot <- plot + ggtitle("My Plot")`. It is important to enhance the current object object instead of creating a new one. We call this operation a decoration.
+For example, imagine you have a `plot` object (`ggplot`) and you want to add a title. To do so one simply needs to call `plot <- plot + ggtitle("My Plot")`. It is important to enhance the current object object instead of creating a new one. We call this operation a decoration.
 
 The decorators process can vary in complexity:
 
 - **Simple Decorators**: Single-step modifications, such as a single method call that does not require additional data.
 - **Complex Decorators**: Multi-step operations that may involve interdependent transformations, potentially requiring input from dedicated `shiny` UI elements.
-
-This functionality empowers application developers to significantly customize outputs beyond the default capabilities provided by existing module parameters.
-Decorators allow for advanced modifications, enabling highly tailored and dynamic user experiences in `teal` applications.
 
 ## Requirements and Limitations
 
@@ -323,3 +320,4 @@ if (interactive()) {
 
 By utilizing `teal_transform_module()`, decorators can efficiently modify and enhance the outputs of a `teal` module without altering its original implementation.
 Whether you need simple static adjustments or dynamic UI-driven transformations, decorators provide a powerful way to customize plots, tables, or any other module output.
+
