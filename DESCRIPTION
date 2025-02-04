@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9120
-Date: 2025-02-03
+Version: 0.15.2.9123
+Date: 2025-02-04
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -65,6 +65,7 @@ Suggests:
     R6,
     renv (>= 1.0.11),
     rmarkdown (>= 2.23),
+    roxy.shinylive,
     rvest (>= 1.0.0),
     shinytest2,
     shinyvalidate,
@@ -87,12 +88,13 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
-    yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats
+    yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats,
+    insightsengineering/roxy.shinylive
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
 RoxygenNote: 7.3.2
 Collate:
     'TealAppDriver.R'
