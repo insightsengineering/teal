@@ -7,6 +7,10 @@
 #'
 #' @inheritParams module_teal
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' ui <- fluidPage(
 #'   ui_session_info("session_info")

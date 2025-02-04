@@ -3,6 +3,8 @@ current_repo:
   repo: insightsengineering/teal
   host: https://github.com
 upstream_repos:
+  insightsengineering/roxy.shinylive:
+    repo: insightsengineering/roxy.shinylive
   insightsengineering/teal.widgets:
     repo: insightsengineering/teal.widgets
     host: https://github.com

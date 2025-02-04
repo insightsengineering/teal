@@ -13,6 +13,11 @@
 #' decorator for `object` included in the module.
 #'
 #' @return A `teal` module which can be included in the `modules` argument to [init()].
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
