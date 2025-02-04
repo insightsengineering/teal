@@ -88,16 +88,24 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
   names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
   moduleServer(id, function(input, output, session) {
-    Reduce(
+    module_output <- Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
 
-          data_handled <- reactiveVal()
+          data_out <- reactiveVal()
           .call_once_when(inherits(data_previous(), "teal_data"), {
             logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
-            data_out <- transformators[[name]]$server("transform", data = data_previous)
-            data_handled(tryCatch(data_out(), error = function(e) e))
+            data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
+            data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
+
+            observeEvent(data_handled(), {
+              if (inherits(data_handled(), "teal_data")) {
+                if (!identical(data_handled(), data_out())) {
+                  data_out(data_handled())
+                }
+              }
+            })
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
@@ -147,11 +155,13 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             })
           })
 
-          .trigger_on_success(data_handled)
+          data_out
         })
       },
       x = names(transformators),
       init = data
     )
+
+    module_output
   })
 }
