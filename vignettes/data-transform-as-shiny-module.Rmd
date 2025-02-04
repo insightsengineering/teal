@@ -67,7 +67,7 @@ knitr::include_url(url, height = "800px")
 Next, let's create a **single transformator** using `teal_transform_module()`.
 This example enables users to subset the first `n` rows of the `iris` dataset based on their input.
 
-Here’s how we can implement this:
+Here's how we can implement this:
 
 1. **UI Component**: We create a `numericInput` in the `ui` that allows users to specify the number of rows they want to display.
 2. **Server Logic**: In the `server` function, we take in a reactive `data` object, perform the transformation to extract the first `n` rows of the `iris` dataset, and return the updated reactive `data`.
@@ -142,7 +142,7 @@ knitr::include_url(url, height = "800px")
 
 We could also add **multiple transformators** to the app by including several instances of `teal_transform_module` in a list.
 
-For example, let’s add another transformation to the `mtcars` dataset. This transformation creates a new column containing the `rownames` of `mtcars`.
+For example, let's add another transformation to the `mtcars` dataset. This transformation creates a new column containing the `rownames` of `mtcars`.
 Unlike the previous example, this module does not include any interactive UI elements.
 
 ```{r app_3}

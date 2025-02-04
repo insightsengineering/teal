@@ -41,171 +41,100 @@ To use decorators effectively, certain requirements must be met:
 
 It is recommended to review the module documentation or source code to understand its internal object naming and object class before applying decorators.
 
-## Decorators in `teal`
+## Example Module which will be decorated
 
-One way to adjust input data or customize module outputs in `teal` is by using transformators created through `teal_transform_module()`.
+Here's a simple module `tm_plot()` to showcase how decorator works.
 
-In the chapter below, we will demonstrate how to create the simplest static decorator with only a server component.
-Later, we will explore more advanced use cases where decorators include a UI.
-You will also learn about a convenient function, `make_teal_transform_server()`, which simplifies writing decorators.
-
-The chapter concludes with an example module that utilizes decorators and a snippet demonstrating how to use this module in a `teal` application.
-
-### Non-interactive decorators
-
-The simplest way to create a decorator is to use `teal_transform_module()` with only `server` argument provided (i.e. without UI part).
-This approach adds functionality solely to the server code of the module.
-
-In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`.
-We modify the title and x-axis label of plot:
-
-```{r, message = FALSE}
+```{r setup, include=FALSE}
+library(ggplot2)
 library(teal)
-static_decorator <- teal_transform_module(
-  label = "Static decorator",
-  server = function(id, data) {
-    moduleServer(id, function(input, output, session) {
-      reactive({
-        req(data())
-        within(data(), {
-          plot <- plot +
-            ggtitle("This is title") +
-            xlab("x axis")
-        })
-      })
-    })
-  }
-)
 ```
 
-To simplify the repetitive elements of writing new decorators
-(e.g., `function(id, data), moduleServer, reactive, within(data, ...)`),
-you can use the `make_teal_transform_server()` convenience function, which takes a `language` as input:
+```{r undecorated_app}
+library(ggplot2)
+library(teal)
 
-```{r}
-static_decorator_lang <- teal_transform_module(
-  label = "Static decorator (language)",
-  server = make_teal_transform_server(
-    expression(
-      plot <- plot +
-        ggtitle("This is title") +
-        xlab("x axis title")
-    )
-  )
-)
-```
-
-### Interactive decorators
-
-To create a decorator with user interactivity, you can add (optional) UI part and use it in server accordingly (i.e. a typical `shiny` module).
-In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label.
-Note how the input parameters are passed to the `within()` function using its `...` argument.
-
-```{r}
-interactive_decorator <- teal_transform_module(
-  label = "Interactive decorator",
-  ui = function(id) {
-    ns <- NS(id)
-    div(
-      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
-    )
-  },
-  server = function(id, data) {
-    moduleServer(id, function(input, output, session) {
-      reactive({
-        req(data())
-        within(data(),
-          {
-            plot <- plot +
-              ggtitle("This is title") +
-              xlab(my_title)
-          },
-          my_title = input$x_axis_title
-        )
-      })
-    })
-  }
-)
-```
-
-As in the earlier examples, `make_teal_transform_server()` can simplify the creation of the server component.
-This wrapper requires you to use `input` object names directly in the expression - note that we have `xlab(x_axis_title)` and not `my_title = input$x_axis_title` together with `xlab(my_title)`.
-
-```{r}
-interactive_decorator_lang <- teal_transform_module(
-  label = "Interactive decorator (language)",
-  ui = function(id) {
-    ns <- NS(id)
-    div(
-      textInput(ns("y_axis_title"), "Y axis title", value = "y axis")
-    )
-  },
-  server = make_teal_transform_server(
-    expression(
-      plot <- plot +
-        ggtitle("This is title") +
-        ylab(y_axis_title)
-    )
-  )
-)
-```
-
-## Handling Various Object Names
-
-`teal_transform_module` relies on the names of objects created within a module.
-Writing a decorator that applies to any module can be challenging since different modules may use different object names.
-It is recommended to create a library of decorator functions that can be adapted to the specific object names used in `teal` modules.
-
-In the following example, pay attention to the `output_name` parameter to see how a decorator can be applied to multiple modules:
-
-```{r}
-gg_xlab_decorator <- function(output_name) {
-  teal_transform_module(
-    label = "X-axis decorator",
+tm_plot <- function(label = "module") {
+  module(
+    label = label,
     ui = function(id) {
       ns <- NS(id)
       div(
-        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+        selectInput(ns("dataname"), label = "select dataname", choices = NULL),
+        selectInput(ns("x"), label = "select x", choices = NULL),
+        selectInput(ns("y"), label = "select y", choices = NULL),
+        plotOutput(ns("plot")),
+        verbatimTextOutput(ns("text"))
       )
     },
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
-        reactive({
-          req(data())
+        observeEvent(data(), {
+          updateSelectInput(inputId = "dataname", choices = names(data()))
+        })
+
+        observeEvent(input$dataname, {
+          req(input$dataname)
+          updateSelectInput(inputId = "x", choices = colnames(data()[[input$dataname]]))
+          updateSelectInput(inputId = "y", choices = colnames(data()[[input$dataname]]))
+        })
+
+        dataname <- reactive(req(input$dataname))
+        x <- reactive({
+          req(input$x, input$x %in% colnames(data()[[dataname()]]))
+          input$x
+        })
+
+        y <- reactive({
+          req(input$y, input$y %in% colnames(data()[[dataname()]]))
+          input$y
+        })
+        plot_data <- reactive({
+          req(dataname(), x(), y())
           within(data(),
             {
-              output_name <- output_name +
-                xlab(x_axis_title)
+              plot <- ggplot2::ggplot(dataname, ggplot2::aes(x = x, y = y)) +
+                ggplot2::geom_point()
             },
-            x_axis_title = input$x_axis_title,
-            output_name = as.name(output_name)
+            dataname = as.name(dataname()),
+            x = as.name(x()),
+            y = as.name(y())
           )
+        })
+
+        plot_r <- reactive({
+          plot_data()[["plot"]]
+        })
+
+        output$plot <- renderPlot(plot_r())
+        output$text <- renderText({
+          teal.code::get_code(req(plot_data()))
         })
       })
     }
   )
 }
+
+app <- init(
+  data = teal_data(iris = iris, mtcars = mtcars),
+  modules = modules(
+    tm_plot("identity")
+  )
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 ```
 
-Decorator failures are managed by an internal `teal` mechanism called **trigger on success**, which ensures that the `data`
-object within the module remains intact.
-If a decorator fails, the outputs will not be shown, and an appropriate error message will be displayed.
+```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("undecorated_app")
+), collapse = "\n")
 
-```{r}
-failing_decorator <- teal_transform_module(
-  label = "Failing decorator",
-  ui = function(id) {
-    ns <- NS(id)
-    div(
-      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
-    )
-  },
-  server = function(id, data) {
-    moduleServer(id, function(input, output, session) {
-      reactive(stop("\nThis is an error produced by decorator\n"))
-    })
-  }
-)
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
 ```
 
 ## Include Decorators in a `teal` Module
@@ -213,9 +142,9 @@ failing_decorator <- teal_transform_module(
 To include decorators in a `teal` module, pass them as arguments (`ui_args` and `server_args`) to the module’s `ui` and
 `server` components, where they will be used by `ui_transform_teal_data` and `srv_transform_teal_data`.
 
-Please find an example module for the sake of this article:
+Please find the module `tm_decorated_plot()` which is the modified `tm_plot()` ready for decoration:
 
-```{r}
+```{r tm_decorated_plot}
 tm_decorated_plot <- function(label = "module", transformators = list(), decorators = NULL) {
   checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
 
@@ -292,13 +221,178 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
 }
 ```
 
+## Decorators in `teal`
+
+One way to adjust input data or customize module outputs in `teal` is by using transformators created through `teal_transform_module()`.
+
+In the chapter below, we will demonstrate how to create the simplest static decorator with only a server component.
+Later, we will explore more advanced use cases where decorators include a UI.
+You will also learn about a convenient function, `make_teal_transform_server()`, which simplifies writing decorators.
+
+The chapter concludes with an example module that utilizes decorators and a snippet demonstrating how to use this module in a `teal` application.
+
+### Non-interactive decorators
+
+The simplest way to create a decorator is to use `teal_transform_module()` with only `server` argument provided (i.e. without UI part).
+This approach adds functionality solely to the server code of the module.
+
+In the following example, we assume that the module contains an object (of class `ggplot2`) named `plot`.
+We modify the title and x-axis label of plot:
+
+```{r static_decorator}
+static_decorator <- teal_transform_module(
+  label = "Static decorator",
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(), {
+          plot <- plot +
+            ggtitle("This is title") +
+            xlab("x axis")
+        })
+      })
+    })
+  }
+)
+```
+
+To simplify the repetitive elements of writing new decorators
+(e.g., `function(id, data), moduleServer, reactive, within(data, ...)`),
+you can use the `make_teal_transform_server()` convenience function, which takes a `language` as input:
+
+```{r static_decorator_lang}
+static_decorator_lang <- teal_transform_module(
+  label = "Static decorator (language)",
+  server = make_teal_transform_server(
+    expression(
+      plot <- plot +
+        ggtitle("This is title") +
+        xlab("x axis title")
+    )
+  )
+)
+```
+
+### Interactive decorators
+
+To create a decorator with user interactivity, you can add (optional) UI part and use it in server accordingly (i.e. a typical `shiny` module).
+In the example below, the x-axis title is set dynamically via a `textInput`, allowing users to specify their preferred label.
+Note how the input parameters are passed to the `within()` function using its `...` argument.
+
+```{r interactive_decorator}
+interactive_decorator <- teal_transform_module(
+  label = "Interactive decorator",
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(),
+          {
+            plot <- plot +
+              ggtitle("This is title") +
+              xlab(my_title)
+          },
+          my_title = input$x_axis_title
+        )
+      })
+    })
+  }
+)
+```
+
+As in the earlier examples, `make_teal_transform_server()` can simplify the creation of the server component.
+This wrapper requires you to use `input` object names directly in the expression - note that we have `xlab(x_axis_title)` and not `my_title = input$x_axis_title` together with `xlab(my_title)`.
+
+```{r interactive_decorator_lang}
+interactive_decorator_lang <- teal_transform_module(
+  label = "Interactive decorator (language)",
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("y_axis_title"), "Y axis title", value = "y axis")
+    )
+  },
+  server = make_teal_transform_server(
+    expression(
+      plot <- plot +
+        ggtitle("This is title") +
+        ylab(y_axis_title)
+    )
+  )
+)
+```
+
+## Handling Various Object Names
+
+`teal_transform_module` relies on the names of objects created within a module.
+Writing a decorator that applies to any module can be challenging since different modules may use different object names.
+It is recommended to create a library of decorator functions that can be adapted to the specific object names used in `teal` modules.
+
+In the following example, pay attention to the `output_name` parameter to see how a decorator can be applied to multiple modules:
+
+```{r gg_xlab_decorator}
+gg_xlab_decorator <- function(output_name) {
+  teal_transform_module(
+    label = "X-axis decorator",
+    ui = function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          req(data())
+          within(data(),
+            {
+              output_name <- output_name +
+                xlab(x_axis_title)
+            },
+            x_axis_title = input$x_axis_title,
+            output_name = as.name(output_name)
+          )
+        })
+      })
+    }
+  )
+}
+```
+
+Decorator failures are managed by an internal `teal` mechanism called **trigger on success**, which ensures that the `data`
+object within the module remains intact.
+If a decorator fails, the outputs will not be shown, and an appropriate error message will be displayed.
+
+```{r failing_decorator}
+failing_decorator <- teal_transform_module(
+  label = "Failing decorator",
+  ui = function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("x_axis_title"), "X axis title", value = "x axis")
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive(stop("\nThis is an error produced by decorator\n"))
+    })
+  }
+)
+```
+
 ## `teal` App With Decorators
 
 Now that we have the `teal` module ready, let's apply all the decorators we’ve created in our `teal` app.
 Please note that a module can accept any number of decorators as demonstrated in the example below.
 
-```{r}
-library(ggplot2)
+```{r app}
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
@@ -321,3 +415,20 @@ if (interactive()) {
 By utilizing `teal_transform_module()`, decorators can efficiently modify and enhance the outputs of a `teal` module without altering its original implementation.
 Whether you need simple static adjustments or dynamic UI-driven transformations, decorators provide a powerful way to customize plots, tables, or any other module output.
 
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("static_decorator"),
+  knitr::knit_code$get("static_decorator_lang"),
+  knitr::knit_code$get("interactive_decorator"),
+  knitr::knit_code$get("interactive_decorator_lang"),
+  knitr::knit_code$get("gg_xlab_decorator"),
+  knitr::knit_code$get("failing_decorator"),
+  knitr::knit_code$get("tm_decorated_plot"),
+  knitr::knit_code$get("app")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
