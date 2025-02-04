@@ -29,7 +29,7 @@ More advanced users of the framework can also create new analysis modules which 
 
 This simple `teal` application takes the `iris` and `mtcars` datasets and displays their contents:
 
-```{r, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(teal)
 
 app <- init(
@@ -107,7 +107,7 @@ To use our predefined modules, see the references below for links to these modul
 ### Defining filters
 
 The optional `filter` argument in `init` allows you to initialize the application with predefined filters.
-For further details see [Filter Panel vignette](filter-panel.html) .
+For further details see [Filter Panel vignette](filter-panel.html).
 
 ### Reporting
 
@@ -121,6 +121,10 @@ This report can then be downloaded and a special _Report Previewer_ module will 
 Note that `teal` does not display the code, that is the modules' responsibility.
 For example, the `example_module` function used above shows the code in the main panel together with other outputs.
 For more details see [this vignette](including-data-in-teal-applications.html).
+
+### Embedding teal in shiny application
+
+Advanced shiny users can include teal application in their Shiny application. For further details see [teal as a module](teal-as-a-module.html).
 
 ## Where to go next
 

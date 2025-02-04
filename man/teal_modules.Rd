@@ -50,8 +50,8 @@ For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 \item \code{input}, \code{output}, \code{session} - (optional; not recommended) When provided, then \code{\link[shiny:callModule]{shiny::callModule()}}
 will be used to call a module. From \code{shiny} 1.5.0, the recommended way is to use
 \code{\link[shiny:moduleServer]{shiny::moduleServer()}} instead which doesn't require these arguments.
-\item \code{data} (optional) When provided, the module will be called with \code{teal_data} object (i.e. a list of
-reactive (filtered) data specified in the \code{filters} argument) as the value of this argument.
+\item \code{data} (optional) If the server function includes a \code{data} argument, it will receive a reactive
+expression containing the \code{teal_data} object.
 \item \code{datasets} (optional) When provided, the module will be called with \code{FilteredData} object as the
 value of this argument. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
 \item \code{reporter} (optional) When provided, the module will be called with \code{Reporter} object as the value
@@ -341,3 +341,13 @@ cat(format(complete_modules))
 cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 cat(format(complete_modules, what = c("decorators", "transformators")))
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIF0mLDgGcAFkNb8IAmEQAmK6nAD6ARjmKXd092AWlpaih6OGppAF5pPhRpQI84RNxQ6SsRKUY45TUNLVpXXGlXKFIoHRBMsJTPAGUckRCIMI7pEoz2zuS3VPzVdXFiiFQVUjKiSYmprLgrK00IGrq+mdI5gBIKqv9pRgpXEQARSqhdSOC9qG1gYETaRlorRIBdd8c+6QBfde+fx6YRUtCGhVGEHYJTWvTCECsBwAco1oa5AWEqgBzAAyr1I7FuV3ongA8rNJuwESEwLdEjwGZlfsDyhdoPBEfFEtxqIkBI5nANPF4AEwHBpwNphCJRGJclAQIikGwifpBNJ4TLZRi5cEjFZo2GdCXNHWtdZhboWtWDeLDIpQoRzaYU+bZJYrI0-aSbHbkAAepAORwgJ0YujggZpAEFFcrVQBZIUajEdf5w6SA5mZUF6h2G6S1DMI5GomHrbF4qwEgOkclbSnUxK1+mM3rZ3q3dmLfJIgw4nH80wQCWIhQ2zxWKXhSLRfKJUfpTKj6fS2dyhKQRbkVwTxZLjMS3yZHgso8iodOaDoA5CWgEzK3fJcaheW7Ql6crqf0-L5NfxdVmHWglGkaFhFEcQpG0L1bHsaN0HYNBUG2UEymQ7ZtVyRxfjAX53iAA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIF0mLDgGcAFkNb8IAmEQAmK6nAD6ARjmKXd092AWlpaih6OGppAF5pPhRpQI84RNxQ6SsRKUY45TUNLVpXXGlXKFIoHRBMsJTPAGUckRCIMI7pEoz2zuS3VPzVdXFiiFQVUjKiSYmprLgrK00IGrq+mdI5gBIKqv9pRgpXEQARSqhdSOC9qG1gYETaRlorRIBdd8c+6QBfde+fx6YRUtCGhVGEHYJTWvTCECsBwAco1oa5AWEqgBzAAyr1I7FuV3ongA8rNJuwESEwLdEjwGZlfsDyhdoPBEfFEtxqIkBI5nANPF4AEwHBpwNphCJRGJclAQIikGwifpBNJ4TLZRi5cEjFZo2GdCXNHWtdZhboWtWDeLDIpQoRzaYU+bZJYrI0-aSbHbkAAepAORwgJ0YujggZpAEFFcrVQBZIUajEdf5w6SA5mZUF6h2G6S1DMI5GomHrbF4qwEgOkclbSnUxK1+mM3rZ3q3dmLfJIgw4nH80wQCWIhQ2zxWKXhSLRfKJUfpTKj6fS2dyhKQRbkVwTxZLjMS3yZHgso8iodOaDoA5CWgEzK3fJcaheW7Ql6crqf0-L5NfxdVmHWglGkaFhFEcQpG0L1bHsaN0HYNBUG2UEymQ7ZtVyRxfjAX53iAA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

@@ -45,6 +45,10 @@
 #'
 #' @include modules.R
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = within(
@@ -176,14 +180,6 @@ init <- function(data,
       # we allow app to continue if applied filters are outside
       # of possible data range
     }
-  }
-
-  reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
-  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
-    modules <- append_module(
-      modules,
-      reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
-    )
   }
 
   # argument transformations

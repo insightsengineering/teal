@@ -31,12 +31,19 @@ One case for postponing data operations is datasets that are dynamic, frequently
 Such data cannot be created once and kept in the global environment.
 Using `teal_data_module` enables creating a dataset from scratch every time the user starts the application.
 
-```{r, message = FALSE, warning = FALSE}
+_See `?qenv` for a detailed explanation of how to use the `within` method._ 
+
+```{r setup, include=FALSE}
 library(teal)
 ```
 
+```{r as_interactive, eval=FALSE, echo=FALSE}
+interactive <- function() TRUE
+```
 
-```{r}
+```{r app_1}
+library(teal)
+
 data_module <- teal_data_module(
   ui = function(id) tags$div(),
   server = function(id) {
@@ -66,7 +73,16 @@ if (interactive()) {
 }
 ```
 
-_See `?qenv` for a detailed explanation of how to use the `within` method._ 
+```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("app_1")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
 
 ## Modification of data in-app
 
@@ -75,7 +91,7 @@ An initial, constant form of the data can be created in the global environment a
 
 The following example illustrates how `teal_data_module` can be utilized to subset data based on the user inputs:
 
-```{r}
+```{r app_2}
 data <- within(teal_data(), {
   dataset1 <- iris
   dataset2 <- mtcars
@@ -111,8 +127,18 @@ app <- init(
 )
 
 if (interactive()) {
-  shinyApp(app$ui, app$server)
+  shiny::shinyApp(ui = app$ui, server = app$server)
 }
+```
+
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("app_2")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
 ```
 
 Note that running preprocessing code in a module as opposed to the global environment will increase app loading times.
@@ -131,7 +157,38 @@ This allows the `teal_data` object that is created in the `teal_data_module` to 
 In the previous example, `data_module` takes a predefined `teal_data` object and allows the app user to select a subset.
 The following example modifies `data_module` so that new columns are added once the data is retrieved.
 
-```{r}
+```{r app_3_prep, eval=FALSE, echo=FALSE}
+data <- within(teal_data(), {
+  dataset1 <- iris
+  dataset2 <- mtcars
+})
+
+data_module <- teal_data_module(
+  ui = function(id) {
+    ns <- NS(id)
+    tags$div(
+      selectInput(ns("species"), "Select species to keep",
+        choices = unique(iris$Species), multiple = TRUE
+      ),
+      actionButton(ns("submit"), "Submit")
+    )
+  },
+  server = function(id) {
+    moduleServer(id, function(input, output, session) {
+      eventReactive(input$submit, {
+        data_modified <- within(
+          data,
+          dataset1 <- subset(dataset1, Species %in% selected),
+          selected = input$species
+        )
+        data_modified
+      })
+    })
+  }
+)
+```
+
+```{r app_3}
 data_module_2 <- within(
   data_module,
   {
@@ -148,6 +205,18 @@ app <- init(
 )
 
 if (interactive()) {
-  shinyApp(app$ui, app$server)
+  shiny::shinyApp(ui = app$ui, server = app$server)
 }
 ```
+
+```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("app_3_prep"),
+  knitr::knit_code$get("app_3")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+

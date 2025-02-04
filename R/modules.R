@@ -49,8 +49,8 @@ setOldClass("teal_modules")
 #'  - `input`, `output`, `session` - (optional; not recommended) When provided, then [shiny::callModule()]
 #'    will be used to call a module. From `shiny` 1.5.0, the recommended way is to use
 #'    [shiny::moduleServer()] instead which doesn't require these arguments.
-#'  - `data` (optional) When provided, the module will be called with `teal_data` object (i.e. a list of
-#'    reactive (filtered) data specified in the `filters` argument) as the value of this argument.
+#'  - `data` (optional) If the server function includes a `data` argument, it will receive a reactive
+#'     expression containing the `teal_data` object.
 #'  - `datasets` (optional) When provided, the module will be called with `FilteredData` object as the
 #'    value of this argument. (See [`teal.slice::FilteredData`]).
 #'  - `reporter` (optional) When provided, the module will be called with `Reporter` object as the value
@@ -91,6 +91,10 @@ setOldClass("teal_modules")
 #' @name teal_modules
 #' @aliases teal_module
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' library(shiny)
 #'
@@ -638,6 +642,19 @@ append_module <- function(modules, module) {
   modules$children <- c(modules$children, list(module))
   labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
   names(modules$children) <- get_unique_labels(labels)
+  modules
+}
+
+#' @rdname module_teal
+#' @keywords internal
+#' @noRd
+append_reporter_module <- function(modules) {
+  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+    modules <- append_module(
+      modules,
+      reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
+    )
+  }
   modules
 }
 
