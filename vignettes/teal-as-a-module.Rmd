@@ -22,7 +22,7 @@ Using Teal as modules offers several advantages such as:
 # Example
 
 Example below demonstrates how to embed Teal as a module in a Shiny application. 
-Here, `srv_teal()` is called using the reactive `teal_data` object passed from the server of the parent app.
+Here, user can select dataset names which will be handed over and displayed in the Teal module. On the server side `srv_teal()` is called using the reactive `teal_data` object passed from the server of the parent app.
 
 ```{r setup, message=FALSE}
 library(teal)
@@ -55,3 +55,4 @@ if (interactive()) {
   shinyApp(ui_app, srv_app)
 }
 ```
+
