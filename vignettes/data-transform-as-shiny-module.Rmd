@@ -89,7 +89,7 @@ if (interactive()) {
 }
 ```
 
-_Note_: The `server` function of a `teal_transform_module` must return a reactive expression with a `teal_data` obect.
+_Note_: The `server` function of a `teal_transform_module` must return a reactive expression with a `teal_data` object.
 In order to maintain full reactivity, we recommended using `reactive()` over `eventReactive()`.
 If you do use `eventReactive()` or `bindEvent()`, the trigger event should include `data()` (_e.g._ `eventReactive(list(input$a, data()), {...})`).
 See [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832) for a detailed explanation.

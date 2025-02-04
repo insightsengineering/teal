@@ -110,7 +110,7 @@ interactive_decorator <- teal_transform_module(
 
 The server function of a decorating `teal_transform_module` must conform to the names of the variables that exist in the server function of the decorated `teal_module`.
 Writing a universal decorator that applies to any module is impossible because different modules may use different variable names for their output elements.
-It is possible, however, to create a parametrized decorator that will take the relevant variable names as arguments.
+It is possible, however, to create a decorator that will take the relevant variable names as arguments.
 Here, the `output_name` variable name is passed to a decorator, allowing it to work with multiple modules.
 
 ```{r}
@@ -151,13 +151,13 @@ Decorators are applied to a `teal` module as follows:
 
 1. A list of decorators is passed to the module constructor function (_e.g._ `tm_my_module`).
 2. The module constructor calls the module generator function (`teal::module`) and passes the decorators to the `ui_args` and `server_args` arguments.
-3. The module functions, UI and server, take a list of decoratos as arguments and resolve them using `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
+3. The module functions, UI and server, take a list of decorators as arguments and resolve them using `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
 
 The following examples demonstrate various uses of decorators.
 
 ### Single Decoration
 
-In the first examlpe we will apply one decoration to one output.
+In the first example we will apply one decoration to one output.
 
 #### Module
 
@@ -328,7 +328,7 @@ table_decorator <- teal_transform_module(
 #### Module
 
 The following module uses `ggplot2` to generate a scatter plot, and presents a simple `data.frame` as a summary table.
-Code for both outputs is also dispayed.
+Code for both outputs is also displayed.
 
 Note that the module constructor accepts one list of decorators and the decorators are then manually separated in the module functions.
 
@@ -456,7 +456,7 @@ if (interactive()) {
 ## Convenience
 
 Here we present some ways to work with decorators more conveniently.
-These are purely oprional.
+These are purely optional.
 
 ### Reducing Boilerplate
 
@@ -509,7 +509,7 @@ teal_transform_module(
 ### Multiple Decorators
 
 Consider these constructs to accommodate an arbitrary number of decorators in your module.
-Note that with this method all decorations wil be applied ot one output.
+Note that with this method all decorations will be applied to one output.
 ```{r, eval=FALSE}
 # in the module UI function
 div(
