@@ -27,7 +27,15 @@ This vignette presents the way on how to manage custom data transformations in `
 
 Let's initialize a simple `teal` app by providing `iris` and `mtcars` as input datasets.
 
-```{r message = FALSE, warning = FALSE}
+```{r setup, include=FALSE}
+library(teal)
+```
+
+```{r as_interactive, eval=FALSE, echo=FALSE}
+interactive <- function() TRUE
+```
+
+```{r app_1}
 library(teal)
 
 data <- within(teal_data(), {
@@ -44,6 +52,15 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
+```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("app_1")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
 
 ### Single transformator
 
@@ -55,7 +72,15 @@ Here’s how we can implement this:
 1. **UI Component**: We create a `numericInput` in the `ui` that allows users to specify the number of rows they want to display.
 2. **Server Logic**: In the `server` function, we take in a reactive `data` object, perform the transformation to extract the first `n` rows of the `iris` dataset, and return the updated reactive `data`.
 
-```{r}
+_Note_: It is recommended to return `reactive()` with `teal_data()` in `server` code of a `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
+If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
+More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
+
+```{r teal_lib_call, eval=FALSE, echo=FALSE}
+library(teal)
+```
+
+```{r app_2, eval = FALSE}
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -103,6 +128,16 @@ if (interactive()) {
 If you are planning on using `eventReactive()` in the `server`, make sure the event includes `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
 More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("app_2")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
 ### Multiple transformators
 
 We could also add **multiple transformators** to the app by including several instances of `teal_transform_module` in a list.
@@ -110,7 +145,7 @@ We could also add **multiple transformators** to the app by including several in
 For example, let’s add another transformation to the `mtcars` dataset. This transformation creates a new column containing the `rownames` of `mtcars`.
 Unlike the previous example, this module does not include any interactive UI elements.
 
-```{r}
+```{r app_3}
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -178,3 +213,13 @@ By using multiple transformators, we can apply different transformations to diff
 In this example, one transformator enables users to subset the `iris` dataset interactively, while another automatically adds row names as a new column in the `mtcars` dataset.
 
 This approach provides greater flexibility in data preprocessing, allowing transformations to be tailored to specific datasets for a specific module.
+
+```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("app_3")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```

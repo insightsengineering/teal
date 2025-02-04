@@ -117,3 +117,13 @@ if (interactive()) {
 \code{\link[teal.slice:teal_slices]{teal.slice::teal_slices}}, \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}, \code{\link[=slices_store]{slices_store()}}
 }
 \keyword{internal}
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIFLa1cozmKu1APoBnOgTiP2A6dLtOXcdgAmUKRQ0PDSALzSfGC0jLSOMbjSEixhMlExAMqocAS0bknStAGR0WCOufmFYDy4nt5w3L60roHBobAZ5XEJRamM6WXZcKjcGAAyFADmpAAWRSXDFaPN1DPzMXUNPs6t-g1eQSFDmbHxiXjFpWfUJNP2uSHUl8nipOvLE-fST9yv0jgAA9UNYzgAFODPSYbObSAB80gArDEGtsIF5dn52icussYKQCCwAQNTuUYKhposbuTCcT7BSqbV6hjpDA0KghNMynRHKQPKyvDAiAEVOsAIxlAgeCpVAoAmKOVYOdYQWYLZmHNkisVwABMUplBKJjEcDMpWxZXi80zu9Ga5ksIkcyzuaseUP+qNZ-AgvoEHJsxUE-IaxygZR84fYvRdUVjyWNxLKSdN6KFOvWcekvNDgu1ovWRszcHFlq1wsLBzAld1eq2aKtygsVjKjqsAn9giU0hjwlE4ik2h0IAajjmQlYAEF0OwOQASFS0ZILpWMKSMX0AXwEYC3AF0gA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIFLa1cozmKu1APoBnOgTiP2A6dLtOXcdgAmUKRQ0PDSALzSfGC0jLSOMbjSEixhMlExAMqocAS0bknStAGR0WCOufmFYDy4nt5w3L60roHBobAZ5XEJRamM6WXZcKjcGAAyFADmpAAWRSXDFaPN1DPzMXUNPs6t-g1eQSFDmbHxiXjFpWfUJNP2uSHUl8nipOvLE-fST9yv0jgAA9UNYzgAFODPSYbObSAB80gArDEGtsIF5dn52icussYKQCCwAQNTuUYKhposbuTCcT7BSqbV6hjpDA0KghNMynRHKQPKyvDAiAEVOsAIxlAgeCpVAoAmKOVYOdYQWYLZmHNkisVwABMUplBKJjEcDMpWxZXi80zu9Ga5ksIkcyzuaseUP+qNZ-AgvoEHJsxUE-IaxygZR84fYvRdUVjyWNxLKSdN6KFOvWcekvNDgu1ovWRszcHFlq1wsLBzAld1eq2aKtygsVjKjqsAn9giU0hjwlE4ik2h0IAajjmQlYAEF0OwOQASFS0ZILpWMKSMX0AXwEYC3AF0gA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

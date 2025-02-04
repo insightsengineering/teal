@@ -57,3 +57,13 @@ if (interactive()) {
 }
 
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEATKKShzFFqxiXN47AdOm0z0gLzSC7AIyI-gAMuNL+gQBMoeFBwTy4rtIAzqTMVt7SjHCo7H58YACCBWEFAEIl0gUAwgUJ0nBQBAAWmSH8EB0CKrQ2ytQ9ZgAKUADmcC4Qbslw1HBiAJIQqCqkLmDZSv6VBQDKs-OkKWmWUP7SpES+RDCoLHAlSW4tRLQEcMmZ+UU7YBV4VTAtTACSeKQOYjgnh8BWKYCSoKm4Lmi2Wq3Wm0iv32KKOqXSUEiFyuxFu90eSOezVe70+Pm+cNKf1+wMRbmmEPI0MB-wRiSRUkY9EstBgujgAA9SAB5VYrNYFZIqGAwFisOoCLoQGaMQV9VTqcRaITysJEOWrHQgJLm0jygAkSpVar62QgZhE4ql7GtlJSsFQcwA+ucFNI7FB7R5gBHHScMl4fCbVvbNv4ALpg5IB4NEsOx6Ox-GnbxJtGkVNwJSRTMQMESbgeSxwIMQIhBoTkRgzDRaMHTHMt-xhbO3XP89nsxUqegAK0OnwA7rRSM0hMcCecoO6N6ciQRt22jkRBdQ0AUwR1J3dUnBgpNJ24CgA5ZX0ETSIhKFIz+didwQIgWRViIFDvBc2SWPAZBeJUcwQKMq7sKOgZDmyj4FNcZKMJo2oQY0pDQaQsEAvBiHNMhg5BpEV7srRAC+HT0QItDfuwnYiE04hSNoVpJMka4QKwhToOwPQjiIgpMQIYD0emQA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEATKKShzFFqxiXN47AdOm0z0gLzSC7AIyI-gAMuNL+gQBMoeFBwTy4rtIAzqTMVt7SjHCo7H58YACCBWEFAEIl0gUAwgUJ0nBQBAAWmSH8EB0CKrQ2ytQ9ZgAKUADmcC4Qbslw1HBiAJIQqCqkLmDZSv6VBQDKs-OkKWmWUP7SpES+RDCoLHAlSW4tRLQEcMmZ+UU7YBV4VTAtTACSeKQOYjgnh8BWKYCSoKm4Lmi2Wq3Wm0iv32KKOqXSUEiFyuxFu90eSOezVe70+Pm+cNKf1+wMRbmmEPI0MB-wRiSRUkY9EstBgujgAA9SAB5VYrNYFZIqGAwFisOoCLoQGaMQV9VTqcRaITysJEOWrHQgJLm0jygAkSpVar62QgZhE4ql7GtlJSsFQcwA+ucFNI7FB7R5gBHHScMl4fCbVvbNv4ALpg5IB4NEsOx6Ox-GnbxJtGkVNwJSRTMQMESbgeSxwIMQIhBoTkRgzDRaMHTHMt-xhbO3XP89nsxUqegAK0OnwA7rRSM0hMcCecoO6N6ciQRt22jkRBdQ0AUwR1J3dUnBgpNJ24CgA5ZX0ETSIhKFIz+didwQIgWRViIFDvBc2SWPAZBeJUcwQKMq7sKOgZDmyj4FNcZKMJo2oQY0pDQaQsEAvBiHNMhg5BpEV7srRAC+HT0QItDfuwnYiE04hSNoVpJMka4QKwhToOwPQjiIgpMQIYD0emQA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+
