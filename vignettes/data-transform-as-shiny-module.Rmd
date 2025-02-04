@@ -1,7 +1,7 @@
 ---
-title: "Data Transformations as shiny Module"
+title: "Data Transformations as Shiny Module"
 author: "NEST CoreDev"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
@@ -12,25 +12,24 @@ vignette: >
 
 ## Introduction
 
-`teal_transform_module()` is a Shiny module that takes `ui` and `server` arguments. When provided, `teal` will execute data transformations for the specified module when it is loaded and whenever the data changes. `server` extend the logic behind data manipulations, where `ui` extends filter panel with new UI elements that orchestrate the transformator inputs.
+`teal_transform_module()` is a Shiny module that takes `ui` and `server` arguments. When provided, `teal` executes data transformations for the specified module both when it is loaded and whenever the data changes.
+The `server` argument extends the logic behind data manipulations, while the `ui` argument adds new UI elements to the filter panel, managing the transformator inputs.
 
-`teal` version `0.16` introduced a new, optional argument in `teal::module` named `transformators`. 
-This argument allows to pass a `list` of `"teal_data_module"` class of objects created using `teal_transform_module()` function.
+The main advantage of `teal_transform_module()` is its ability to transform data before passing it to the module.
+This feature allows users to extend the default behavior of existing modules by performing specific data operations on the data within the module.
 
-The main benefit of `teal_transform_module()` is the ability to transform data before passing it 
-to the module. This feature allows to extend the regular behavior of existing modules by specifying custom data operations on data inside this module.
+In version `0.16`, `teal` introduced a new optional argument in `teal::module` named `transformators`.
+This argument allows users to pass a `list` of objects of `teal_data_module` class, created using the `teal_transform_module()` function.
 
 This vignette presents the way on how to manage custom data transformations in `teal` apps.
 
-## Creating your first custom data transformation module
+## Creating Your First Custom Data Transformation Module
 
-We initialize a simple `teal` app where we pass `iris` and `mtcars` as the input datasets.
+Let's initialize a simple `teal` app by providing `iris` and `mtcars` as input datasets.
 
-```{r, message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE}
 library(teal)
-```
 
-```{r}
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -48,10 +47,13 @@ if (interactive()) {
 
 ### Single transformator
 
-Let's create a simple `teal_transform_module` that returns the first `n` number of rows of `iris` based on the user input.
+Next, let's create a **single transformator** using `teal_transform_module()`.
+This example enables users to subset the first `n` rows of the `iris` dataset based on their input.
 
-We do this by creating the `ui` with the `numericInput` for the user to input the number of rows to be displayed.
-In the `server` function we take in the reactive `data` and perform this transformation and return the new reactive `data`.
+Here’s how we can implement this:
+
+1. **UI Component**: We create a `numericInput` in the `ui` that allows users to specify the number of rows they want to display.
+2. **Server Logic**: In the `server` function, we take in a reactive `data` object, perform the transformation to extract the first `n` rows of the `iris` dataset, and return the updated reactive `data`.
 
 ```{r}
 data <- within(teal_data(), {
@@ -65,7 +67,11 @@ my_transformators <- list(
     ui = function(id) {
       ns <- NS(id)
       tags$div(
-        numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+        numericInput(
+          ns("n_rows"),
+          "Number of rows to subset",
+          value = 6, min = 1, max = 150, step = 1
+        )
       )
     },
     server = function(id, data) {
@@ -93,16 +99,16 @@ if (interactive()) {
 }
 ```
 
-_Note_: It is recommended to return `reactive()` with `teal_data()` in `server` code of a `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
-If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
+> **_Note_**: It is recommended to return `reactive()` with `teal_data()` in the `server` code of a `teal_transform_module`, as this approach ensures better robustness in maintaining Shiny's reactivity.
+If you are planning on using `eventReactive()` in the `server`, make sure the event includes `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
 More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
 ### Multiple transformators
 
-Note that we can add multiple `teal` transformators by including `teal_transform_module` in a list.
+We could also add **multiple transformators** to the app by including several instances of `teal_transform_module` in a list.
 
-Let's add another transformation to the `mtcars` dataset that creates a column with `rownames` of `mtcars`.
-Note that this module does not have interactive UI elements.
+For example, let’s add another transformation to the `mtcars` dataset. This transformation creates a new column containing the `rownames` of `mtcars`.
+Unlike the previous example, this module does not include any interactive UI elements.
 
 ```{r}
 data <- within(teal_data(), {
@@ -116,7 +122,11 @@ my_transformators <- list(
     ui = function(id) {
       ns <- NS(id)
       tags$div(
-        numericInput(ns("n_rows"), "Number of rows to subset", value = 6, min = 1, max = 150, step = 1)
+        numericInput(
+          ns("n_rows"),
+          "Number of rows to subset",
+          value = 6, min = 1, max = 150, step = 1
+        )
       )
     },
     server = function(id, data) {
@@ -162,3 +172,9 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 ```
+
+By using multiple transformators, we can apply different transformations to different datasets available in the `teal_data` object.
+
+In this example, one transformator enables users to subset the `iris` dataset interactively, while another automatically adds row names as a new column in the `mtcars` dataset.
+
+This approach provides greater flexibility in data preprocessing, allowing transformations to be tailored to specific datasets for a specific module.
