@@ -24,7 +24,10 @@ Using Teal as modules offers several advantages such as:
 Example below demonstrates how to embed Teal as a module in a Shiny application. 
 Here, user can select dataset names which will be handed over and displayed in the Teal module. On the server side `srv_teal()` is called using the reactive `teal_data` object passed from the server of the parent app.
 
-```{r setup, message=FALSE}
+```{r setup, include=FALSE}
+library(teal)
+```
+```{r app}
 library(teal)
 
 data <- teal_data() |> within({
@@ -56,3 +59,12 @@ if (interactive()) {
 }
 ```
 
+```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("app")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
