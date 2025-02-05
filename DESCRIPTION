@@ -98,7 +98,6 @@ Collate:
     'TealAppDriver.R'
     'checkmate.R'
     'dummy_functions.R'
-    'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
