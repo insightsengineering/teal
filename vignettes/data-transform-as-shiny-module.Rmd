@@ -306,7 +306,8 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
-=======
+```
+
 This approach provides greater flexibility in data preprocessing, allowing transformations to be tailored to specific datasets for a specific module.
 
 ```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
