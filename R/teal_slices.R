@@ -37,6 +37,10 @@
 #'
 #' @seealso [`teal.slice::teal_slices`], [`teal.slice::teal_slice`], [slices_store()]
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' filter <- teal_slices(
 #'   teal_slice(dataname = "iris", varname = "Species", id = "species"),

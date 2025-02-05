@@ -6,8 +6,7 @@
 #'
 #' @details
 #' This module can be used instead of [init()] in custom Shiny applications. Unlike [init()], it doesn't
-#' automatically include `reporter_previewer_module`, `module_session_info`, or UI components like
-#' `header`, `footer`, and `title` which can be added separately in the Shiny app consuming this module.
+#' automatically include [`module_session_info`].
 #'
 #' Module is responsible for creating the main `shiny` app layout and initializing all the necessary
 #' components. This module establishes reactive connection between the input `data` and every other

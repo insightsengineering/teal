@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9119
-Date: 2025-01-31
+Version: 0.15.2.9125
+Date: 2025-02-05
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -38,7 +38,7 @@ Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.7.0),
-    teal.slice (>= 0.5.1.9022)
+    teal.slice (>= 0.6.0)
 Imports:
     checkmate (>= 2.1.0),
     cli,
@@ -53,7 +53,7 @@ Imports:
     teal.code (>= 0.6.0),
     teal.logger (>= 0.3.1),
     teal.reporter (>= 0.4.0),
-    teal.widgets (>= 0.4.0),
+    teal.widgets (>= 0.4.3),
     tools,
     utils
 Suggests:
@@ -65,6 +65,7 @@ Suggests:
     R6,
     renv (>= 1.0.11),
     rmarkdown (>= 2.23),
+    roxy.shinylive,
     rvest (>= 1.0.0),
     shinytest2,
     shinyvalidate,
@@ -76,8 +77,6 @@ VignetteBuilder:
     rmarkdown
 RdMacros:
     lifecycle
-Remotes:
-    insightsengineering/teal.slice
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/cli,
@@ -87,18 +86,18 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,
-    yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats
+    yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats,
+    insightsengineering/roxy.shinylive
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
 RoxygenNote: 7.3.2
 Collate:
     'TealAppDriver.R'
     'checkmate.R'
     'dummy_functions.R'
-    'get_rcode_utils.R'
     'include_css_js.R'
     'modules.R'
     'init.R'

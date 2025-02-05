@@ -60,7 +60,10 @@
 #' in the filter panel. The keyword `"all"` can be used to display filters for all datasets. `datanames` are
 #' automatically appended to the [`modules()`] `datanames`.
 #'
-#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' data_transformators <- list(
 #'   teal_transform_module(
@@ -169,6 +172,11 @@ teal_transform_module <- function(ui = NULL,
 #' @param expr (`language`)
 #'  An R call which will be evaluated within [`teal.data::teal_data`] environment.
 #' @return `function(id, data)` returning `shiny` module
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #'
 #' trim_iris <- teal_transform_module(
