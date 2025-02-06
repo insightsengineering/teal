@@ -60,7 +60,7 @@ For this module, we will use:
 - **`plotOutput` for Histogram**: Displays the histogram once both dataset and variable inputs are selected.
 - **`verbatimTextOutput` for Code**: Automatically displays code that generated the plot based on user input.
 
-Here’s the code for the `histogram_module_ui` function:
+Here's the code for the `histogram_module_ui` function:
 
 ```{r module_ui}
 library(teal)
@@ -92,7 +92,7 @@ For our histogram module, the server function will handle user interactions and 
 
 ### Passing the `data` Argument to the Server Function
 
-To begin, it’s essential to include the `data` argument in the server function definition.
+To begin, it's essential to include the `data` argument in the server function definition.
 
 This `data` argument holds the reactive `teal_data` object, which contains your datasets and any filters applied. By including `data`, we can ensure:
 
@@ -148,7 +148,7 @@ In this updated server function, we will perform the following:
 1. **Create `new_data`** as a modified version of `data()` using `within()`, dynamically injecting `input$dataset` and `input$variable`.
 2. **Render the Plot**: `renderPlot()` displays the plot by referencing the plot stored in the updated `teal_data` object, `new_data`.
 
-Here’s the code:
+Here's the code:
 
 ```{r module_server}
 # Server function for the custom histogram module with injected variables in within()
@@ -241,7 +241,7 @@ create_histogram_module <- function(label = "Histogram Module") {
 ## Integrating the Custom `teal` Module into a `teal` App
 
 With the custom `teal` module set up, it can now be integrated into a `teal` app.
-We’ll use `init()` from `teal` to specify the datasets and modules used in the app, then run the app to test the newly created module.
+We'll use `init()` from `teal` to specify the datasets and modules used in the app, then run the app to test the newly created module.
 
 ```{r app_init}
 # Define datasets in `teal_data`
@@ -282,12 +282,12 @@ knitr::include_url(url, height = "800px")
 
 ## What's next?
 
-Now that you’ve mastered the essentials of building and integrating modules in `teal`, you’re ready to explore more advanced features.
-`teal` offers a wide range of capabilities to enhance your module’s functionality and user experience.
+Now that you've mastered the essentials of building and integrating modules in `teal`, you're ready to explore more advanced features.
+`teal` offers a wide range of capabilities to enhance your module's functionality and user experience.
 
 ### Adding reporting to a module
 
-Enhance your custom `teal` module with reporting features! Dive into [this vignette](adding-support-for-reporting.html) to see just how simple it is to add powerful reporting capabilities and elevate your module’s impact.
+Enhance your custom `teal` module with reporting features! Dive into [this vignette](adding-support-for-reporting.html) to see just how simple it is to add powerful reporting capabilities and elevate your module's impact.
 
 ### Using standard widgets in your custom module
 The [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/) package provides various widgets which can be leveraged to quickly create standard elements in your custom `teal` module.

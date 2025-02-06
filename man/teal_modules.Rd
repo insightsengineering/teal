@@ -134,7 +134,7 @@ because they are used by the \code{mapping} argument of \code{\link[=teal_slices
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
 \section{Restricting datasets used by \code{teal_module}:}{
-The \code{datanames} argument controls which datasets are used by the module’s server. These datasets,
+The \code{datanames} argument controls which datasets are used by the module's server. These datasets,
 passed via server's \code{data} argument, are the only ones shown in the module's tab.
 
 When \code{datanames} is set to \code{"all"}, all datasets in the data object are treated as relevant.
@@ -150,7 +150,7 @@ Please see the \emph{"Hidden datasets"} section in `vignette("including-data-in-
 }
 
 \section{\code{datanames} with \code{transformators}}{
-When transformators are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+When transformators are specified, their \code{datanames} are added to the module's \code{datanames}, which
 changes the behavior as follows:
 \itemize{
 \item If \code{module(datanames)} is \code{NULL} and the \code{transformators} have defined \code{datanames}, the sidebar

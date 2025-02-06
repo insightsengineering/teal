@@ -22,7 +22,7 @@ setOldClass("teal_modules")
 #'
 #' # Restricting datasets used by `teal_module`:
 #'
-#' The `datanames` argument controls which datasets are used by the module’s server. These datasets,
+#' The `datanames` argument controls which datasets are used by the module's server. These datasets,
 #' passed via server's `data` argument, are the only ones shown in the module's tab.
 #'
 #' When `datanames` is set to `"all"`, all datasets in the data object are treated as relevant.
@@ -35,7 +35,7 @@ setOldClass("teal_modules")
 #' Please see the _"Hidden datasets"_ section in `vignette("including-data-in-teal-applications").
 #'
 #' # `datanames` with `transformators`
-#' When transformators are specified, their `datanames` are added to the module’s `datanames`, which
+#' When transformators are specified, their `datanames` are added to the module's `datanames`, which
 #' changes the behavior as follows:
 #' - If `module(datanames)` is `NULL` and the `transformators` have defined `datanames`, the sidebar
 #'   will appear showing the `transformators`' datasets, instead of being hidden.
