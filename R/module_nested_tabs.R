@@ -252,7 +252,7 @@ srv_teal_module.teal_module <- function(id,
     #   and if it is not set, then it won't be available in the srv_filter_panel
     srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
 
-    call_once_when(is_active(), {
+    .call_once_when(is_active(), {
       filtered_teal_data <- srv_filter_data(
         "filter_panel",
         datasets = datasets,
@@ -299,7 +299,7 @@ srv_teal_module.teal_module <- function(id,
 
       # Call modules.
       if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- call_once_when(
+        obs_module <- .call_once_when(
           !is.null(module_teal_data()),
           ignoreNULL = TRUE,
           handlerExpr = {
@@ -372,11 +372,11 @@ srv_teal_module.teal_module <- function(id,
 #' @return An observer.
 #'
 #' @keywords internal
-call_once_when <- function(eventExpr, # nolint: object_name.
-                           handlerExpr, # nolint: object_name.
-                           event.env = parent.frame(), # nolint: object_name.
-                           handler.env = parent.frame(), # nolint: object_name.
-                           ...) {
+.call_once_when <- function(eventExpr, # nolint: object_name.
+                            handlerExpr, # nolint: object_name.
+                            event.env = parent.frame(), # nolint: object_name.
+                            handler.env = parent.frame(), # nolint: object_name.
+                            ...) {
   event_quo <- rlang::new_quosure(substitute(eventExpr), env = event.env)
   handler_quo <- rlang::new_quosure(substitute(handlerExpr), env = handler.env)
 
