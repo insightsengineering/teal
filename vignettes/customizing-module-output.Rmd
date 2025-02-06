@@ -42,7 +42,7 @@ Using decorators requires the following:
 It the responsibility of to the module developer to ensure that decorators can be used.
 2. **Matching Object Names**:<br>
 Decorators will reference variables that exist in the `teal_module` server function and therefore must use the appropriate variable names.
-When writing decorators, one must follow the source code of the module in question.
+Module developers are encouraged to provide the relevant names in the module's documentation, otherwise the person witing a decorator must follow the source code.
 3. **Maintaining Object Classes**:<br>
 A decorator must not alter the class of the object that it modifies.
 This is because a different class may require a different rendering function and that is part of the module structure, which beyond the control of decorators.
