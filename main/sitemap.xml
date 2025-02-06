@@ -35,7 +35,6 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/call_once_when.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_filter_datanames.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_modules_datanames.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_reactive.html</loc></url>
@@ -43,6 +42,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/decorate_err_msg.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/deep_copy_filter.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-add_signature_to_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/dot-call_once_when.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-get_hashes_code.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-smart_rbind.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-teal_favicon.html</loc></url>
