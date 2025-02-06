@@ -155,6 +155,44 @@ Decorators are applied to a `teal` module as follows:
 2. The module constructor calls the module generator function (`teal::module`) and passes the decorators to the `ui_args` and `server_args` arguments.
 3. The module functions, UI and server, take a list of decorators as arguments and resolve them using `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
 
+Here is a minimal illustration:
+
+```{r pseudo_module, eval = FALSE}
+pseudo_decorated_module <- function(
+  label = "Pseudo Module with Decorator Support",
+  decorators = list()                                                         # <--- added block (1)
+) {
+  module(
+    label = label,
+    ui_args = list(decorators = decorators),                                  # <--- added block (2)
+    server_args = list(decorators = decorators),                              # <--- added block (2)
+    ui = function(id, decorators) {
+      ns <- NS(id)
+      div(
+        # <input widgets>,
+        # <output widgets>,
+        ui_transform_teal_data(ns("decorate"), transformators = decorators)   # <--- added block (3)
+      )
+    },
+    server = function(id, data, decorators) {
+      moduleServer(id, function(input, output, session) {
+        # <receive inputs>
+        # <process data>
+        data_with_output <- reactive({
+          within(data(), output_item <- generate_output())
+        })
+        data_with_output_decorated <- srv_transform_teal_data(                # <--- added block (3)
+          "decorate",                                                         # <-
+          data = data_with_output,                                            # <-
+          transformators = decorators                                         # <-
+        )                                                                     # <--- added block (3)
+        # <render output>
+      })
+    }
+  )
+}
+```
+
 The following examples demonstrate various uses of decorators.
 
 ### Single Decoration
