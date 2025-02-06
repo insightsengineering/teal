@@ -13,8 +13,8 @@ vignette: >
 ## Introduction
 
 The `teal` framework provides a large catalog of plug-in-ready analysis modules that can be incorporated into `teal` applications.
-However, it is also possible to create your own modules using the module function, which leverages Shiny modules.
-Each custom teal module is built as a Shiny module, combining Shiny's reactive capabilities with modularized UI and server logic to encapsulate functionality.
+However, it is also possible to create your own modules using the `module` function, which leverages Shiny modules.
+Each custom teal module is built as a [Shiny module](https://shiny.posit.co/r/articles/improve/modules/), combining Shiny's reactive capabilities with modularized UI and server logic to encapsulate functionality.
 This design enables a structured and reusable approach to creating interactive components that integrate seamlessly within the teal ecosystem.
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:
@@ -56,9 +56,9 @@ The UI function defines the controls and display area for the histogram.
 For this module, we will use:
 
 - **`selectInput` for Dataset**: Enables users to select a dataset from the list of available datasets.
-- **`selectInput` for Variable**: Allows users to choose a numeric variable from the chosen dataset, dynamically filtering out any non-numeric columns.
+- **`selectInput` for Variable**: Allows users to choose a numeric variable from the chosen dataset, dynamically filtering out any non-numeric variables from the choices.
 - **`plotOutput` for Histogram**: Displays the histogram once both dataset and variable inputs are selected.
-- **`verbatimTextOutput` for Code**: Automatically displays code that generated the plot based on user input.
+- **`verbatimTextOutput` for Code**: Automatically displays code that generated the plot based on the user input.
 
 Here's the code for the `histogram_module_ui` function:
 
@@ -94,7 +94,7 @@ For our histogram module, the server function will handle user interactions and 
 
 To begin, it's essential to include the `data` argument in the server function definition.
 
-This `data` argument holds the reactive `teal_data` object, which contains your datasets and any filters applied. By including `data`, we can ensure:
+This `data` argument holds the reactive `teal_data` object, which contains your datasets after applying any active filtering by the filter panel. By including `data`, we can ensure:
 
 - The server function receives a reactive version of `teal_data`, allowing it to automatically respond to changes.
 - The server can access the filtered datasets directly.
