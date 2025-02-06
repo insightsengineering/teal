@@ -164,9 +164,6 @@ In the first example we will apply one decoration to one output.
 ### Module
 
 This module has one output, a plot created with `ggplot2`, and it displays the reproducible code used to obtain the plot.
-Note down the key changes made to this module to make it decorate-friendly:
-1. The `ui_args` and `server_args` arguments get the `decorators`.
-2. The `decorators` object is consumed by the `ui_transform_teal_data` and `srv_transform_teal_data` in the `ui` and `server` functions, respectively.
 
 ```{r tm_decorated_plot}
 tm_decorated_plot <- function(label = "module", decorators = list()) {
