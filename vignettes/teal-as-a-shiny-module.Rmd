@@ -12,7 +12,7 @@ vignette: >
 
 ## Introduction
 
-A Shiny developer can embed a Teal application into their own Shiny app by using Teal's Shiny module components: `ui_teal()` and `srv_teal()`.
+A Shiny developer can embed a teal application into their own Shiny app by using Shiny module components of teal: `ui_teal()` and `srv_teal()`.
 This approach differs from using `init()` and offers greater flexibility. While `init()` includes a session info footer automatically,
 when using Teal as a Shiny module you can optionally add it manually with `ui_session_info()` and `srv_session_info()`.
 Using Teal as a Shiny module offers several advantages:
