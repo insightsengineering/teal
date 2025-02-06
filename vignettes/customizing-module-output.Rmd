@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, message=FALSE}
+```{r setup, include=FALSE}
 library(teal)
 library(ggplot2)
 ```
@@ -47,7 +47,6 @@ Module developers are encouraged to provide the relevant names in the module's d
 A decorator must not alter the class of the object that it modifies.
 This is because a different class may require a different rendering function and that is part of the module structure, which beyond the control of decorators.
 
-
 ## Building Decorators
 
 ### Server
@@ -55,7 +54,7 @@ This is because a different class may require a different rendering function and
 Here we create a simple decorator that does not provide user input.
 Knowing that the module contains an object of class `ggplot2` named `plot`, we will modify its title and x-axis title:
 
-```{r}
+```{r static_decorator}
 static_decorator <- teal_transform_module(
   label = "Static decorator",
   server = function(id, data) {
@@ -81,7 +80,7 @@ Here, the x-axis title is obtained from a `textInput` widget, giving the user so
 Note how the input values are passed to the `within()` function using its `...` argument.
 See `?teal.code::within.qenv` for more examples.
 
-```{r}
+```{r interactive_decorator}
 interactive_decorator <- teal_transform_module(
   label = "Interactive decorator",
   ui = function(id) {
@@ -116,7 +115,7 @@ Writing a universal decorator that applies to any module is impossible because d
 It is possible, however, to create a decorator that will take the relevant variable names as arguments.
 Here, the `output_name` variable name is passed to a decorator, allowing it to work with multiple modules.
 
-```{r}
+```{r dynamic_decorator}
 dynamic_decorator <- function(output_name) {
   teal_transform_module(
     label = "Dynamic decorator",
@@ -162,20 +161,21 @@ The following examples demonstrate various uses of decorators.
 
 In the first example we will apply one decoration to one output.
 
-#### Module
+### Module
 
 This module has one output, a plot created with `ggplot2`, and it displays the reproducible code used to obtain the plot.
-We can use the decorators defined above, applying each one to a separate instance of the same module.
+Note down the key changes made to this module to make it decorate-friendly:
+1. The `ui_args` and `server_args` arguments get the `decorators`.
+2. The `decorators` object is consumed by the `ui_transform_teal_data` and `srv_transform_teal_data` in the `ui` and `server` functions, respectively.
 
-```{r}
-tm_decorated_plot <- function(label = "module", transformators = list(), decorators = NULL) {
+```{r tm_decorated_plot}
+tm_decorated_plot <- function(label = "module", decorators = list()) {
   checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
 
   module(
     label = label,
     ui_args = list(decorators = decorators),
     server_args = list(decorators = decorators),
-
     ui = function(id, decorators) {
       ns <- NS(id)
       div(
@@ -187,7 +187,6 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
         verbatimTextOutput(ns("text"))
       )
     },
-
     server = function(id, data, decorators) {
       moduleServer(id, function(input, output, session) {
         observeEvent(data(), {
@@ -256,7 +255,7 @@ tm_decorated_plot <- function(label = "module", transformators = list(), decorat
 
 Note that every call to the module constructor (`tm_decorated_plot`) takes a list containing _one_ decorator.
 
-```{r}
+```{r app_1}
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
@@ -272,6 +271,20 @@ if (interactive()) {
 }
 ```
 
+```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("static_decorator"),
+  knitr::knit_code$get("interactive_decorator"),
+  knitr::knit_code$get("dynamic_decorator"),
+  knitr::knit_code$get("tm_decorated_plot"),
+  knitr::knit_code$get("app_1")
+), collapse = "\n")
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
 
 ### Decorating Multiple Outputs
 
@@ -281,7 +294,7 @@ Here we will apply decoration to two outputs in one module.
 
 The plot decorator adds a user-provided title to a `ggplot2` object.
 
-```{r}
+```{r plot_decorator}
 plot_decorator <- teal_transform_module(
   label = "Decorate plot",
   ui = function(id) {
@@ -310,7 +323,7 @@ plot_decorator <- teal_transform_module(
 
 The table decorator adds a column to a `data.frame`.
 
-```{r}
+```{r table_decorator}
 table_decorator <- teal_transform_module(
   label = "Decorate table",
   ui = function(id) shiny::tags$p("No UI needed for table decorator and could be ommited."),
@@ -335,7 +348,7 @@ Code for both outputs is also displayed.
 
 Note that the module constructor accepts one list of decorators and the decorators are then manually separated in the module functions.
 
-```{r}
+```{r tm_decorated_plot_table}
 tm_decorated_plot_table <- function(label = "module with two outputs", decorators = list()) {
   checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
 
@@ -353,7 +366,6 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
         # Separately inject UI for plot and table decorators
         ui_transform_teal_data(ns("decorate_plot"), transformators = decorators$plot),
         ui_transform_teal_data(ns("decorate_table"), transformators = decorators$table),
-
         plotOutput(ns("plot")),
         tableOutput(ns("table")),
         verbatimTextOutput(ns("text"))
@@ -434,7 +446,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
 
 Note that a named list of decorators is passed to the module constructor.
 
-```{r}
+```{r app_2}
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
@@ -453,7 +465,18 @@ if (interactive()) {
 }
 ```
 
-
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("plot_decorator"),
+  knitr::knit_code$get("table_decorator"),
+  knitr::knit_code$get("tm_decorated_plot_table"),
+  knitr::knit_code$get("app_2")
+), collapse = "\n")
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
 
 
 ## Convenience

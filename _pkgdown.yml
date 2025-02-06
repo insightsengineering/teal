@@ -77,7 +77,7 @@ articles:
       - bootstrap-themes-in-teal
   - title: 📃 Technical blueprint
     desc: >
-      The purpose of the blueprint is to aid new developer’s comprehension of the
+      The purpose of the blueprint is to aid new developer's comprehension of the
       fundamental principles of the `teal` framework. We will explore crucial `teal`
       concepts such as data flow, actors, and filter panel, among others.
     contents:

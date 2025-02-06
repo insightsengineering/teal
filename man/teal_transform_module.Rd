@@ -49,7 +49,7 @@ Some \code{\link{teal_modules}} permit developers to inject custom \code{shiny} 
 To manage these \code{decorators} within your module, use \code{\link[=ui_transform_teal_data]{ui_transform_teal_data()}} and \code{\link[=srv_transform_teal_data]{srv_transform_teal_data()}}.
 (For further guidance on managing decorators, refer to \code{ui_args} and \code{srv_args} in the vignette documentation.)
 
-See the vignette \code{vignette("decorate-module-output", package = "teal")} for additional examples.
+See the vignette \code{vignette("customizing-module-output", package = "teal")} for additional examples.
 }
 
 \section{\code{server} as a language}{

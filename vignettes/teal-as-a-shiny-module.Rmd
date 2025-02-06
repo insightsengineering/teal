@@ -1,28 +1,30 @@
 ---
-title: "Teal as a Module"
+title: "Teal as a Shiny Module"
 author: "NEST CoreDev"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Teal as a Module}
+  %\VignetteIndexEntry{Teal as a Shiny Module}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
+## Introduction
 
-A Shiny developer interested in embedding Teal application into its own app, can use the Teal module composed of `ui_teal()` and `srv_teal()` functions. 
-Unlike `init()`, this module will not automatically include session info footer, but it is possible to add it manually with `ui_session_info()` and `srv_session_info()`.
-Using Teal as modules offers several advantages such as:
+A Shiny developer can embed a teal application into their own Shiny app by using Shiny module components of teal: `ui_teal()` and `srv_teal()`.
+This approach differs from using `init()` and offers greater flexibility. While `init()` includes a session info footer automatically,
+when using Teal as a Shiny module you can optionally add it manually with `ui_session_info()` and `srv_session_info()`.
+Using Teal as a Shiny module offers several advantages:
 
-- Including one or multiple Teal applications in other app.
-- Run Teal applications based on the dynamically created components like initial data, modules, filters.
+- Embedding one or more Teal applications within a larger Shiny app
+- Creating Teal applications with dynamically generated components (initial data, teal modules, filters)
 
-# Example
+## Example
 
-Example below demonstrates how to embed Teal as a module in a Shiny application. 
-Here, user can select dataset names which will be handed over and displayed in the Teal module. On the server side `srv_teal()` is called using the reactive `teal_data` object passed from the server of the parent app.
+The following example demonstrates embedding Teal as a Shiny module within a larger Shiny application.
+Users can select dataset names which are passed to the embedded Teal component.
+On the server side, `srv_teal()` is called with a reactive teal_data object passed from the parent app's server.
 
 ```{r setup, include=FALSE}
 library(teal)
