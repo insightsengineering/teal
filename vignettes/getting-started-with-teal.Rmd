@@ -10,7 +10,7 @@ vignette: >
 
 ## Introduction
 
-`teal` is a shiny-based interactive exploration framework for analyzing data, with particular emphasis on CDISC clinical trial data.
+`teal` is a `shiny`-based interactive exploration framework for analyzing data, with particular emphasis on CDISC clinical trial data.
 `teal` applications allow their users to:
 
 * "Pull" in data from external data sources
@@ -124,7 +124,7 @@ For more details see [this vignette](including-data-in-teal-applications.html).
 
 ### Embedding teal in shiny application
 
-Advanced shiny users can include teal application in their Shiny application. For further details see [teal as a module](teal-as-a-module.html).
+Advanced `shiny` users can include teal application in their `shiny` application. For further details see [teal as a module](teal-as-a-module.html).
 
 ## Where to go next
 

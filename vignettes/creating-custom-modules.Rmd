@@ -13,8 +13,8 @@ vignette: >
 ## Introduction
 
 The `teal` framework provides a large catalog of plug-in-ready analysis modules that can be incorporated into `teal` applications.
-However, it is also possible to create your own modules using the `module` function, which leverages Shiny modules.
-Each custom teal module is built as a [Shiny module](https://shiny.posit.co/r/articles/improve/modules/), combining Shiny's reactive capabilities with modularized UI and server logic to encapsulate functionality.
+However, it is also possible to create your own modules using the `module` function, which leverages `shiny` modules.
+Each custom teal module is built as a [`shiny` module](https://shiny.posit.co/r/articles/improve/modules/), combining `shiny`'s reactive capabilities with modularized UI and server logic to encapsulate functionality.
 This design enables a structured and reusable approach to creating interactive components that integrate seamlessly within the teal ecosystem.
 
 In this guide, we will use the simple histogram below as an example, and demonstrate how to convert this histogram function into a robust `teal` module step-by-step:

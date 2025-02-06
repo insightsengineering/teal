@@ -1,7 +1,7 @@
 ---
 title: "Teal as a Shiny Module"
 author: "NEST CoreDev"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
@@ -12,19 +12,19 @@ vignette: >
 
 ## Introduction
 
-A Shiny developer can embed a teal application into their own Shiny app by using Shiny module components of teal: `ui_teal()` and `srv_teal()`.
+A `shiny` developer can embed a `teal` application into their own `shiny` app by using `shiny` module components of `teal`: `ui_teal()` and `srv_teal()`.
 This approach differs from using `init()` and offers greater flexibility. While `init()` includes a session info footer automatically,
-when using Teal as a Shiny module you can optionally add it manually with `ui_session_info()` and `srv_session_info()`.
-Using Teal as a Shiny module offers several advantages:
+when using `teal` as a `shiny` module you can optionally add it manually with `ui_session_info()` and `srv_session_info()`.
+Using `teal` as a `shiny` module offers several advantages:
 
-- Embedding one or more Teal applications within a larger Shiny app
-- Creating Teal applications with dynamically generated components (initial data, teal modules, filters)
+- Embedding one or more `teal` applications within a larger `shiny` app
+- Creating `teal` applications with dynamically generated components (initial data, modules, filters)
 
 ## Example
 
-The following example demonstrates embedding Teal as a Shiny module within a larger Shiny application.
-Users can select dataset names which are passed to the embedded Teal component.
-On the server side, `srv_teal()` is called with a reactive teal_data object passed from the parent app's server.
+The following example demonstrates embedding `teal` as a `shiny` module within a larger `shiny` application.
+Users can select dataset names which are passed to the embedded `teal` component.
+On the server side, `srv_teal()` is called with a reactive `teal_data` object passed from the parent app's server.
 
 ```{r setup, include=FALSE}
 library(teal)
