@@ -134,6 +134,7 @@ if (interactive()) {
 ```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("app_2")
 ), collapse = "\n")
 
@@ -158,6 +159,8 @@ In the previous example, `data_module` takes a predefined `teal_data` object and
 The following example modifies `data_module` so that new columns are added once the data is retrieved.
 
 ```{r app_3_prep, eval=FALSE, echo=FALSE}
+library(teal)
+
 data <- within(teal_data(), {
   dataset1 <- iris
   dataset2 <- mtcars

@@ -122,6 +122,7 @@ See [this discussion](https://github.com/insightsengineering/teal/issues/1303#is
 ```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("app_2")
 ), collapse = "\n")
 
@@ -203,6 +204,7 @@ if (interactive()) {
 ```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("app_3")
 ), collapse = "\n")
 
@@ -216,6 +218,11 @@ It is also possible to have multiple transformator modules act on one dataset.
 In such cases, transformations will be executed in the same order in which the transformator modules are passed to the module.
 
 ```{r app_4, eval = FALSE}
+data <- within(teal_data(), {
+  iris <- iris
+  mtcars <- mtcars
+})
+
 transformator_iris_scale <- teal_transform_module(
   label = "Scaling transformator for iris",
   ui = function(id) {
@@ -313,6 +320,7 @@ This approach provides greater flexibility in data preprocessing, allowing trans
 ```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("app_4")
 ), collapse = "\n")
 

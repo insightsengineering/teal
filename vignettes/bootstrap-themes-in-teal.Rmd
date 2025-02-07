@@ -175,7 +175,7 @@ if (interactive()) {
 
 Now the application has our custom theme applied.
 
-### Try the above app in shiny live
+### Try the above app in `shinylive`
 
 ```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(

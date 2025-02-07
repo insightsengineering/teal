@@ -124,7 +124,7 @@ For more details see [this vignette](including-data-in-teal-applications.html).
 
 ### Embedding teal in shiny application
 
-Advanced `shiny` users can include teal application in their `shiny` application. For further details see [teal as a module](teal-as-a-module.html).
+Advanced `shiny` users can include teal application in their `shiny` application. For further details see [teal as a module](teal-as-a-shiny-module.html).
 
 ## Where to go next
 

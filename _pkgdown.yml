@@ -72,7 +72,7 @@ articles:
   - title: Using `teal`
     navbar: Using `teal`
     contents:
-      - teal-as-a-module
+      - teal-as-a-shiny-module
       - teal-options
       - bootstrap-themes-in-teal
   - title: 📃 Technical blueprint
