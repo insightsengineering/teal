@@ -76,7 +76,7 @@ The most important HTML tags in `teal` have a specific id or class, so they can 
 ```
 library(magrittr)
 options("teal.bs_theme" = bslib::bs_add_rules(
-  bslib::bs_theme(version = "5"), 
+  bslib::bs_theme(version = "5"),
   "Anything understood by sass::as_sass()"
 ))
 ```
@@ -175,7 +175,7 @@ if (interactive()) {
 
 Now the application has our custom theme applied.
 
-### Try the above app in Shinylive
+### Try the above app in `shinylive`
 
 ```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(

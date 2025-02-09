@@ -39,6 +39,7 @@ interactive <- function() TRUE
 Let us consider an example module, based on the example module from `teal`:
 ```{r module_1}
 library(teal)
+library(teal.reporter)
 
 my_module <- function(label = "example teal module") {
   module(
@@ -138,6 +139,7 @@ if (interactive()) {
 ```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("module_2"),
   knitr::knit_code$get("app_2")
 ), collapse = "\n")
@@ -206,6 +208,7 @@ The user can now add a card to the report and view it in the `Report previewer` 
 ```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("module_3"),
   knitr::knit_code$get("app_3")
 ), collapse = "\n")
@@ -278,6 +281,7 @@ Now, an application user can see the text added by `custom_function` in the `Rep
 ```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
   knitr::knit_code$get("module_4"),
   knitr::knit_code$get("app_4")
 ), collapse = "\n")
@@ -318,9 +322,6 @@ This allows `ReporterCard` to store the code necessary to generate the table alo
 To learn more about `teal.code` see the vignette _`qenv`_ in  `teal.code`.
 
 ```{r app_5}
-library(teal)
-library(teal.reporter)
-
 example_reporter_module <- function(label = "Example") {
   module(
     label = label,
@@ -420,7 +421,7 @@ app <- init(
   ),
   filter = teal_slices(teal_slice(dataname = "AIR", varname = "Temp", selected = c(72, 85)))
 ) |>
-  modify_header("Example teal app with reporter")
+  modify_header(tags$h2("Example teal app with reporter"))
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
@@ -430,6 +431,7 @@ if (interactive()) {
 ```{r shinylive_iframe_5, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("module_1"),
   knitr::knit_code$get("module_5"),
   knitr::knit_code$get("app_5")
 ), collapse = "\n")
