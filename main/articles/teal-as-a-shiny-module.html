@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Teal as a Module • teal</title>
+<title>Teal as a Shiny Module • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Teal as a Module">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Teal as a Shiny Module">
 <link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9125</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9126</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
     <li><a class="dropdown-item" href="../articles/customizing-module-output.html">Customizing Module Output</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using `teal`</h6></li>
-    <li><a class="dropdown-item" href="../articles/teal-as-a-module.html">Teal as a Module</a></li>
+    <li><a class="dropdown-item" href="../articles/teal-as-a-shiny-module.html">Teal as a Shiny Module</a></li>
     <li><a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a></li>
     <li><a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -101,13 +101,13 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.svg" class="logo" alt=""><h1>Teal as a Module</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Teal as a Shiny Module</h1>
                         <h4 data-toc-skip class="author">NEST
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/main/vignettes/teal-as-a-module.Rmd" class="external-link"><code>vignettes/teal-as-a-module.Rmd</code></a></small>
-      <div class="d-none name"><code>teal-as-a-module.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/main/vignettes/teal-as-a-shiny-module.Rmd" class="external-link"><code>vignettes/teal-as-a-shiny-module.Rmd</code></a></small>
+      <div class="d-none name"><code>teal-as-a-shiny-module.Rmd</code></div>
     </div>
 
     
@@ -115,28 +115,32 @@ CoreDev</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>A Shiny developer interested in embedding Teal application into its
-own app, can use the Teal module composed of <code><a href="../reference/module_teal.html">ui_teal()</a></code> and
-<code><a href="../reference/module_teal.html">srv_teal()</a></code> functions. Unlike <code><a href="../reference/init.html">init()</a></code>, this
-module will not automatically include session info footer, but it is
-possible to add it manually with <code><a href="../reference/module_session_info.html">ui_session_info()</a></code> and
-<code><a href="../reference/module_session_info.html">srv_session_info()</a></code>. Using Teal as modules offers several
-advantages such as:</p>
+<p>A <code>shiny</code> developer can embed a <code>teal</code>
+application into their own <code>shiny</code> app by using
+<code>shiny</code> module components of <code>teal</code>:
+<code><a href="../reference/module_teal.html">ui_teal()</a></code> and <code><a href="../reference/module_teal.html">srv_teal()</a></code>. This approach
+differs from using <code><a href="../reference/init.html">init()</a></code> and offers greater flexibility.
+While <code><a href="../reference/init.html">init()</a></code> includes a session info footer automatically,
+when using <code>teal</code> as a <code>shiny</code> module you can
+optionally add it manually with <code><a href="../reference/module_session_info.html">ui_session_info()</a></code> and
+<code><a href="../reference/module_session_info.html">srv_session_info()</a></code>. Using <code>teal</code> as a
+<code>shiny</code> module offers several advantages:</p>
 <ul>
-<li>Including one or multiple Teal applications in other app.</li>
-<li>Run Teal applications based on the dynamically created components
-like initial data, modules, filters.</li>
+<li>Embedding one or more <code>teal</code> applications within a larger
+<code>shiny</code> app</li>
+<li>Creating <code>teal</code> applications with dynamically generated
+components (initial data, modules, filters)</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>Example below demonstrates how to embed Teal as a module in a Shiny
-application. Here, user can select dataset names which will be handed
-over and displayed in the Teal module. On the server side
-<code><a href="../reference/module_teal.html">srv_teal()</a></code> is called using the reactive
-<code>teal_data</code> object passed from the server of the parent
-app.</p>
+<p>The following example demonstrates embedding <code>teal</code> as a
+<code>shiny</code> module within a larger <code>shiny</code>
+application. Users can select dataset names which are passed to the
+embedded <code>teal</code> component. On the server side,
+<code><a href="../reference/module_teal.html">srv_teal()</a></code> is called with a reactive <code>teal_data</code>
+object passed from the parent app’s server.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
 <span></span>

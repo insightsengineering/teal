@@ -9,7 +9,7 @@ Create a nested tab structure to embed modules in a teal application."><meta pro
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9125</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9126</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@ Create a nested tab structure to embed modules in a teal application."><meta pro
     <li><a class="dropdown-item" href="../articles/customizing-module-output.html">Customizing Module Output</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using `teal`</h6></li>
-    <li><a class="dropdown-item" href="../articles/teal-as-a-module.html">Teal as a Module</a></li>
+    <li><a class="dropdown-item" href="../articles/teal-as-a-shiny-module.html">Teal as a Shiny Module</a></li>
     <li><a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a></li>
     <li><a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -230,7 +230,7 @@ and the report previewer module <code><a href="reporter_previewer_module.html">r
     </div>
     <div class="section level2">
     <h2 id="restricting-datasets-used-by-teal-module-">Restricting datasets used by <code>teal_module</code>:<a class="anchor" aria-label="anchor" href="#restricting-datasets-used-by-teal-module-"></a></h2>
-    <p>The <code>datanames</code> argument controls which datasets are used by the module’s server. These datasets,
+    <p>The <code>datanames</code> argument controls which datasets are used by the module's server. These datasets,
 passed via server's <code>data</code> argument, are the only ones shown in the module's tab.</p>
 <p>When <code>datanames</code> is set to <code>"all"</code>, all datasets in the data object are treated as relevant.
 However, this may include unnecessary datasets, such as:</p><ul><li><p>Proxy variables for column modifications</p></li>
@@ -241,7 +241,7 @@ Please see the <em>"Hidden datasets"</em> section in `vignette("including-data-i
     </div>
     <div class="section level2">
     <h2 id="datanames-with-transformators"><code>datanames</code> with <code>transformators</code><a class="anchor" aria-label="anchor" href="#datanames-with-transformators"></a></h2>
-    <p>When transformators are specified, their <code>datanames</code> are added to the module’s <code>datanames</code>, which
+    <p>When transformators are specified, their <code>datanames</code> are added to the module's <code>datanames</code>, which
 changes the behavior as follows:</p><ul><li><p>If <code>module(datanames)</code> is <code>NULL</code> and the <code>transformators</code> have defined <code>datanames</code>, the sidebar
 will appear showing the <code>transformators</code>' datasets, instead of being hidden.</p></li>
 <li><p>If <code>module(datanames)</code> is set to specific values and any <code>transformator</code> has <code>datanames = "all"</code>,

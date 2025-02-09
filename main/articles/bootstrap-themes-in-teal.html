@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9125</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9126</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
     <li><a class="dropdown-item" href="../articles/customizing-module-output.html">Customizing Module Output</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using `teal`</h6></li>
-    <li><a class="dropdown-item" href="../articles/teal-as-a-module.html">Teal as a Module</a></li>
+    <li><a class="dropdown-item" href="../articles/teal-as-a-shiny-module.html">Teal as a Shiny Module</a></li>
     <li><a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a></li>
     <li><a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -211,7 +211,7 @@ or class, so they can be directly styled. The
 rules.</p>
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"teal.bs_theme"</span> <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_bundle.html" class="external-link">bs_add_rules</a></span><span class="op">(</span></span>
-<span>  <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span>, </span>
+<span>  <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bs_theme</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"5"</span><span class="op">)</span>,</span>
 <span>  <span class="st">"Anything understood by sass::as_sass()"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>Other <code>bslib::bs_add_*</code> family functions could be used to
@@ -342,7 +342,7 @@ our app in the themer can be plugged right in.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="try-the-above-app-in-shinylive">Try the above app in Shinylive<a class="anchor" aria-label="anchor" href="#try-the-above-app-in-shinylive"></a>
+<h3 id="try-the-above-app-in-shinylive">Try the above app in <code>shinylive</code><a class="anchor" aria-label="anchor" href="#try-the-above-app-in-shinylive"></a>
 </h3>
 <iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EIqhYkAzuNUcOysOSgAbDACMtAfVIALOPEMcAvB0snq5xIks378XQh9fXZ6LTEg10MAVkNcPWD+ElIrLQJTTlcARgwAJmj4oOCAAwoocxM4HnoiYQATODrilw4AMQBBABkAZUVC4LciIlItAHcoUgJbFsMYWlIAT0MEyVVViFUPc0Z6BfFjE3XVNFRuPlpqUkD9OomoFoOrW9IocQBJLDfulup6ai1JP0BNQTOR6A84KZUh4CHAdI8tDC4LowB8vnEDGBunBUKYMJ0KABzOwYrRwSrMRotAjiAocADskiZQJgRDqgkqWharPZnPEcAAHrBUJUrDyOcjARxBcLReLKlJ1kcINR+BxxPMGEwWOxFRwQAktLZaAt2uhxCcACSCai4DhWsn0ULrAC+YBdAF0gA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
 </iframe>

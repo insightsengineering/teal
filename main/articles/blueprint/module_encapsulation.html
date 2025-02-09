@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9125</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9126</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
     <li><a class="dropdown-item" href="../../articles/customizing-module-output.html">Customizing Module Output</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using `teal`</h6></li>
-    <li><a class="dropdown-item" href="../../articles/teal-as-a-module.html">Teal as a Module</a></li>
+    <li><a class="dropdown-item" href="../../articles/teal-as-a-shiny-module.html">Teal as a Shiny Module</a></li>
     <li><a class="dropdown-item" href="../../articles/teal-options.html">Modifying a teal Application With R Options</a></li>
     <li><a class="dropdown-item" href="../../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -123,29 +123,29 @@ between the modules and the application.</p>
 <div class="section level2">
 <h2 id="benefits">Benefits<a class="anchor" aria-label="anchor" href="#benefits"></a>
 </h2>
-<p>By implementing the modular app technique from the shiny module into
-the creation of the <code>teal</code> module, several benefits are
-realized:</p>
+<p>By implementing the modular app technique from the <code>shiny</code>
+module into the creation of the <code>teal</code> module, several
+benefits are realized:</p>
 <ol style="list-style-type: decimal">
-<li><p>Streamlined maintenance<br>
-The development of the <code>teal</code> module becomes more manageable,
-as it can function independently from the <code>teal</code> framework.
-This separation allows developers to maintain the module with ease. This
-approach has been successfully applied in <code>R</code> packages
-dedicated to <code>teal</code> module development, such as
-<code>teal.modules.general</code> and
+<li><p>Streamlined maintenance The development of the <code>teal</code>
+module becomes more manageable, as it can function independently from
+the <code>teal</code> framework. This separation allows developers to
+maintain the module with ease. This approach has been successfully
+applied in <code>R</code> packages dedicated to <code>teal</code> module
+development, such as <code>teal.modules.general</code> and
 <code>teal.modules.clinical</code>.</p></li>
-<li><p>Enhanced focus on output<br><code>teal</code> module developers can concentrate solely on refining
-parameters or encoding, and output aspects (such as data summarization
-and visualization) without the need to concern themselves with the
-intricacies of the <code>teal</code> framework. When developed
-correctly, the module seamlessly integrates with
-<code>teal</code>.</p></li>
-<li><p>Facilitated collaboration<br><code>teal</code> module development becomes an accessible entry point
-for developers interested in collaborating. This approach encourages
-user collaboration for the improvement of <code>teal</code> modules, as
-developers gain a deeper understanding of the mechanics of the
-<code>teal</code> framework.</p></li>
+<li><p>Enhanced focus on output <code>teal</code> module developers can
+concentrate solely on refining parameters or encoding, and output
+aspects (such as data summarization and visualization) without the need
+to concern themselves with the intricacies of the <code>teal</code>
+framework. When developed correctly, the module seamlessly integrates
+with <code>teal</code>.</p></li>
+<li><p>Facilitated collaboration <code>teal</code> module development
+becomes an accessible entry point for developers interested in
+collaborating. This approach encourages user collaboration for the
+improvement of <code>teal</code> modules, as developers gain a deeper
+understanding of the mechanics of the <code>teal</code>
+framework.</p></li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

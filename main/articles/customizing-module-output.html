@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9125</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9126</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
     <li><a class="dropdown-item" href="../articles/customizing-module-output.html">Customizing Module Output</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using `teal`</h6></li>
-    <li><a class="dropdown-item" href="../articles/teal-as-a-module.html">Teal as a Module</a></li>
+    <li><a class="dropdown-item" href="../articles/teal-as-a-shiny-module.html">Teal as a Shiny Module</a></li>
     <li><a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a></li>
     <li><a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -115,96 +115,67 @@ CoreDev</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><code>teal</code> provides a collection of ready-to-use modules, each
-with a predefined way of presenting outputs.</p>
-<p>While these built-in modules cover many common use cases, you may
-need to customize their outputs to better fit your specific
-requirements. This document outlines the available customization options
-for modifying <code>teal</code> module outputs.</p>
-<p>You will learn how to use <code><a href="../reference/teal_transform_module.html">teal_transform_module()</a></code> to
-modify and enhance the objects created by <code><a href="../reference/teal_modules.html">teal::modules()</a></code>,
-allowing you to tailor the outputs without rewriting the original module
+<p>The outputs produced by <code>teal</code> modules, like graphs or
+tables, are created by the module developer and look a certain way. It
+is impossible to design an output that will satisfy every possible user,
+so the form of the output should be considered a default value that can
+be customized. Here we describe the concept of <em>decoration</em>,
+whereby a <code>teal_transform_module</code> can modify an output
+created by a <code>teal_module</code>, enabling you to tailor outputs to
+your specific requirements without rewriting the original module
 code.</p>
+<p>While it is not required, reading <a href="data-transform-as-shiny-module.html">this vignette</a> may give
+you a fuller understanding.</p>
 </div>
 <div class="section level2">
 <h2 id="decorators">Decorators<a class="anchor" aria-label="anchor" href="#decorators"></a>
 </h2>
-<p>In <code>teal</code>, decorators are used to modify module outputs,
-such as plots or tables, without changing their core structure.</p>
-<p>For example, imagine you have a <code>plot</code> object
-(<code>ggplot</code>) and you want to add a title. To do so one simply
-needs to call <code>plot &lt;- plot + ggtitle("My Plot")</code>. It is
-important to enhance the current object object instead of creating a new
-one. We call this operation a decoration.</p>
-<p>The decorators process can vary in complexity:</p>
-<ul>
-<li>
-<strong>Simple Decorators</strong>: Single-step modifications, such
-as a single method call that does not require additional data.</li>
-<li>
-<strong>Complex Decorators</strong>: Multi-step operations that may
-involve interdependent transformations, potentially requiring input from
-dedicated <code>shiny</code> UI elements.</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="requirements-and-limitations">Requirements and Limitations<a class="anchor" aria-label="anchor" href="#requirements-and-limitations"></a>
-</h2>
-<p>To use decorators effectively, certain requirements must be met:</p>
+<p>Decorators are created with <code>teal_transform_module</code> and
+thus they are <code>shiny</code> modules. They are passed to
+<code>teal_module</code> constructors as arguments (see below). Their
+server logic will be used to modify objects such as plots or tables that
+exist in the server function of a <code>teal_module</code>. A
+<code>ui</code> function can provide interactivity but that is optional,
+an app developer is free to use decorator modules that do not require
+user input.</p>
+<div class="section level3">
+<h3 id="requirements-and-limitations">Requirements and Limitations<a class="anchor" aria-label="anchor" href="#requirements-and-limitations"></a>
+</h3>
+<p>Using decorators requires the following:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Module Support</strong>: While <code>teal</code> provides
-the core functionality for decorators, the module must explicitly
-support this functionality. Developers should ensure that the module has
-been designed to work with decorators (see <a href="#include-decorators-in-a-teal-module">Include Decorators in a
-<code>teal</code> Module</a>).</li>
+<strong>Module Support</strong>:<br><code>teal</code> will apply
+decorators to <code>teal_module</code> outputs but the module in
+question must explicitly support this functionality. It the
+responsibility of to the module developer to ensure that decorators can
+be used.</li>
 <li>
-<strong>Matching Object Names</strong>: Decorators must reference
-object names that align with the internal naming conventions of the
-module. Each module may use different names for its output objects, such
-as <code>plot</code> or <code>table</code>. This alignment is critical
-for successful decorator.</li>
+<strong>Matching Object Names</strong>:<br> Decorators will
+reference variables that exist in the <code>teal_module</code> server
+function and therefore must use the appropriate variable names. Module
+developers are encouraged to provide the relevant names in the module’s
+documentation, otherwise the person writing a decorator must follow the
+source code.</li>
 <li>
-<strong>Matching Object Class</strong>: Decorated objects are used
-in certain context and they are use to be consumed by relevant
-<code>render*</code> functions. For example <code>ggplot</code> objects
-are used in <code>renderPlot</code> while <code>plotly</code> objects
-are consumed by <code>renderPlotly</code>. It is important that the
-object doesn’t change its basic class so the module can deal with the
-modified object.</li>
+<strong>Maintaining Object Classes</strong>:<br> A decorator must
+not alter the class of the object that it modifies. This is because a
+different class may require a different rendering function and that is
+part of the module structure, which beyond the control of
+decorators.</li>
 </ol>
-<p>It is recommended to review the module documentation or source code
-to understand its internal object naming and object class before
-applying decorators.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="decorators-in-teal">Decorators in <code>teal</code><a class="anchor" aria-label="anchor" href="#decorators-in-teal"></a>
+<h2 id="building-decorators">Building Decorators<a class="anchor" aria-label="anchor" href="#building-decorators"></a>
 </h2>
-<p>One way to adjust input data or customize module outputs in
-<code>teal</code> is by using transformators created through
-<code><a href="../reference/teal_transform_module.html">teal_transform_module()</a></code>.</p>
-<p>In the chapter below, we will demonstrate how to create the simplest
-static decorator with only a server component. Later, we will explore
-more advanced use cases where decorators include a UI. You will also
-learn about a convenient function,
-<code><a href="../reference/make_teal_transform_server.html">make_teal_transform_server()</a></code>, which simplifies writing
-decorators.</p>
-<p>The chapter concludes with an example module that utilizes decorators
-and a snippet demonstrating how to use this module in a
-<code>teal</code> application.</p>
 <div class="section level3">
-<h3 id="non-interactive-decorators">Non-interactive decorators<a class="anchor" aria-label="anchor" href="#non-interactive-decorators"></a>
+<h3 id="server">Server<a class="anchor" aria-label="anchor" href="#server"></a>
 </h3>
-<p>The simplest way to create a decorator is to use
-<code><a href="../reference/teal_transform_module.html">teal_transform_module()</a></code> with only <code>server</code>
-argument provided (i.e. without UI part). This approach adds
-functionality solely to the server code of the module.</p>
-<p>In the following example, we assume that the module contains an
-object (of class <code>ggplot2</code>) named <code>plot</code>. We
-modify the title and x-axis label of plot:</p>
+<p>Here we create a simple decorator that does not provide user input.
+Knowing that the module contains an object of class <code>ggplot2</code>
+named <code>plot</code>, we will modify its title and x-axis title:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://insightsengineering.github.io/teal/">teal</a></span><span class="op">)</span></span>
-<span><span class="va">static_decorator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">static_decorator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
 <span>  label <span class="op">=</span> <span class="st">"Static decorator"</span>,</span>
 <span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
@@ -212,45 +183,30 @@ modify the title and x-axis label of plot:</p>
 <span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>        <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
 <span>          <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span></span>
-<span>            <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is title"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>            <span class="fu">xlab</span><span class="op">(</span><span class="st">"x axis"</span><span class="op">)</span></span>
+<span>            <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is a better title"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>            <span class="fu">xlab</span><span class="op">(</span><span class="st">"the real x axis"</span><span class="op">)</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>To simplify the repetitive elements of writing new decorators (e.g.,
-<code>function(id, data), moduleServer, reactive, within(data, ...)</code>),
-you can use the <code><a href="../reference/make_teal_transform_server.html">make_teal_transform_server()</a></code> convenience
-function, which takes a <code>language</code> as input:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">static_decorator_lang</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
-<span>  label <span class="op">=</span> <span class="st">"Static decorator (language)"</span>,</span>
-<span>  server <span class="op">=</span> <span class="fu"><a href="../reference/make_teal_transform_server.html">make_teal_transform_server</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span></span>
-<span>      <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span></span>
-<span>        <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is title"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>        <span class="fu">xlab</span><span class="op">(</span><span class="st">"x axis title"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="interactive-decorators">Interactive decorators<a class="anchor" aria-label="anchor" href="#interactive-decorators"></a>
+<h3 id="ui">UI<a class="anchor" aria-label="anchor" href="#ui"></a>
 </h3>
-<p>To create a decorator with user interactivity, you can add (optional)
-UI part and use it in server accordingly (i.e. a typical
-<code>shiny</code> module). In the example below, the x-axis title is
-set dynamically via a <code>textInput</code>, allowing users to specify
-their preferred label. Note how the input parameters are passed to the
-<code><a href="../reference/teal_data_module.html">within()</a></code> function using its <code>...</code> argument.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>If decoration requires user input, a <code>ui</code> function can be
+added. Here, the x-axis title is obtained from a <code>textInput</code>
+widget, giving the user some flexibility. Note how the input values are
+passed to the <code><a href="../reference/teal_data_module.html">within()</a></code> function using its <code>...</code>
+argument. See <code><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/eval_code.html">?teal.code::within.qenv</a></code> for more
+examples.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interactive_decorator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
 <span>  label <span class="op">=</span> <span class="st">"Interactive decorator"</span>,</span>
 <span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"x axis"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"the suggested x axis"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
@@ -260,7 +216,7 @@ their preferred label. Note how the input parameters are passed to the
 <span>        <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>          <span class="op">{</span></span>
 <span>            <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span></span>
-<span>              <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is title"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>              <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is a better title"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>              <span class="fu">xlab</span><span class="op">(</span><span class="va">my_title</span><span class="op">)</span></span>
 <span>          <span class="op">}</span>,</span>
 <span>          my_title <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">x_axis_title</span></span>
@@ -269,51 +225,27 @@ their preferred label. Note how the input parameters are passed to the
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>As in the earlier examples, <code><a href="../reference/make_teal_transform_server.html">make_teal_transform_server()</a></code>
-can simplify the creation of the server component. This wrapper requires
-you to use <code>input</code> object names directly in the expression -
-note that we have <code>xlab(x_axis_title)</code> and not
-<code>my_title = input$x_axis_title</code> together with
-<code>xlab(my_title)</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">interactive_decorator_lang</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
-<span>  label <span class="op">=</span> <span class="st">"Interactive decorator (language)"</span>,</span>
-<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"y_axis_title"</span><span class="op">)</span>, <span class="st">"Y axis title"</span>, value <span class="op">=</span> <span class="st">"y axis"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span>,</span>
-<span>  server <span class="op">=</span> <span class="fu"><a href="../reference/make_teal_transform_server.html">make_teal_transform_server</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span></span>
-<span>      <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span></span>
-<span>        <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is title"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>        <span class="fu">ylab</span><span class="op">(</span><span class="va">y_axis_title</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="handling-various-object-names">Handling Various Object Names<a class="anchor" aria-label="anchor" href="#handling-various-object-names"></a>
-</h2>
-<p><code>teal_transform_module</code> relies on the names of objects
-created within a module. Writing a decorator that applies to any module
-can be challenging since different modules may use different object
-names. It is recommended to create a library of decorator functions that
-can be adapted to the specific object names used in <code>teal</code>
-modules.</p>
-<p>In the following example, pay attention to the
-<code>output_name</code> parameter to see how a decorator can be applied
-to multiple modules:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gg_xlab_decorator</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">output_name</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="section level3">
+<h3 id="variable-names-as-arguments">Variable Names as Arguments<a class="anchor" aria-label="anchor" href="#variable-names-as-arguments"></a>
+</h3>
+<p>The server function of a decorating
+<code>teal_transform_module</code> must conform to the names of the
+variables that exist in the server function of the decorated
+<code>teal_module</code>. Writing a universal decorator that applies to
+any module is impossible because different modules may use different
+variable names for their output elements. It is possible, however, to
+create a decorator that will take the relevant variable names as
+arguments. Here, the <code>output_name</code> variable name is passed to
+a decorator, allowing it to work with multiple modules.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dynamic_decorator</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">output_name</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
-<span>    label <span class="op">=</span> <span class="st">"X-axis decorator"</span>,</span>
+<span>    label <span class="op">=</span> <span class="st">"Dynamic decorator"</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"x axis"</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"the syggested x axis"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
 <span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
@@ -325,50 +257,89 @@ to multiple modules:</p>
 <span>              <span class="va">output_name</span> <span class="op">&lt;-</span> <span class="va">output_name</span> <span class="op">+</span></span>
 <span>                <span class="fu">xlab</span><span class="op">(</span><span class="va">x_axis_title</span><span class="op">)</span></span>
 <span>            <span class="op">}</span>,</span>
-<span>            x_axis_title <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">x_axis_title</span>,</span>
-<span>            output_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="va">output_name</span><span class="op">)</span></span>
+<span>            output_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="va">output_name</span><span class="op">)</span>,</span>
+<span>            x_axis_title <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">x_axis_title</span></span>
 <span>          <span class="op">)</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Decorator failures are managed by an internal <code>teal</code>
-mechanism called <strong>trigger on success</strong>, which ensures that
-the <code>data</code> object within the module remains intact. If a
-decorator fails, the outputs will not be shown, and an appropriate error
-message will be displayed.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">failing_decorator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
-<span>  label <span class="op">=</span> <span class="st">"Failing decorator"</span>,</span>
-<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"x axis"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span>,</span>
-<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"\nThis is an error produced by decorator\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">}</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<p>Note that when the function is used, <code>output_name</code> will be
+passed a character string but the expression passed to
+<code>within</code> needs a <code>name</code>/<code>symbol</code>, a
+language object, hence the argument value must be converted to a
+<code>name</code>.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="include-decorators-in-a-teal-module">Include Decorators in a <code>teal</code> Module<a class="anchor" aria-label="anchor" href="#include-decorators-in-a-teal-module"></a>
+<h2 id="using-decorators">Using Decorators<a class="anchor" aria-label="anchor" href="#using-decorators"></a>
 </h2>
-<p>To include decorators in a <code>teal</code> module, pass them as
-arguments (<code>ui_args</code> and <code>server_args</code>) to the
-module’s <code>ui</code> and <code>server</code> components, where they
-will be used by <code>ui_transform_teal_data</code> and
-<code>srv_transform_teal_data</code>.</p>
-<p>Please find an example module for the sake of this article:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tm_decorated_plot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"module"</span>, <span class="va">transformators</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">decorators</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
+<p>Decorators are applied to a <code>teal</code> module as follows:</p>
+<ol style="list-style-type: decimal">
+<li>A list of decorators is passed to the module constructor function
+(<em>e.g.</em> <code>tm_my_module</code>).</li>
+<li>The module constructor calls the module generator function
+(<code><a href="../reference/teal_modules.html">teal::module</a></code>) and passes the decorators to the
+<code>ui_args</code> and <code>server_args</code> arguments.</li>
+<li>The module functions, UI and server, take a list of decorators as
+arguments and resolve them using <code>ui_transform_teal_data</code> and
+<code>srv_transform_teal_data</code>, respectively.</li>
+</ol>
+<p>Here is a minimal illustration:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pseudo_decorated_module</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
+<span>  <span class="va">label</span> <span class="op">=</span> <span class="st">"Pseudo Module with Decorator Support"</span>,</span>
+<span>  <span class="va">decorators</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>                                                         <span class="co"># &lt;--- added block (1)</span></span>
+<span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
+<span>    label <span class="op">=</span> <span class="va">label</span>,</span>
+<span>    ui_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,                                  <span class="co"># &lt;--- added block (2)</span></span>
+<span>    server_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,                              <span class="co"># &lt;--- added block (2)</span></span>
+<span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">decorators</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>        <span class="co"># &lt;input widgets&gt;,</span></span>
+<span>        <span class="co"># &lt;output widgets&gt;,</span></span>
+<span>        <span class="fu"><a href="../reference/module_transform_data.html">ui_transform_teal_data</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"decorate"</span><span class="op">)</span>, transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>   <span class="co"># &lt;--- added block (3)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">decorators</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="co"># &lt;receive inputs&gt;</span></span>
+<span>        <span class="co"># &lt;process data&gt;</span></span>
+<span>        <span class="va">data_with_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">output_item</span> <span class="op">&lt;-</span> <span class="fu">generate_output</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>        <span class="va">data_with_output_decorated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span>                <span class="co"># &lt;--- added block (3)</span></span>
+<span>          <span class="st">"decorate"</span>,                                                         <span class="co"># &lt;-</span></span>
+<span>          data <span class="op">=</span> <span class="va">data_with_output</span>,                                            <span class="co"># &lt;-</span></span>
+<span>          transformators <span class="op">=</span> <span class="va">decorators</span>                                         <span class="co"># &lt;-</span></span>
+<span>        <span class="op">)</span>                                                                     <span class="co"># &lt;--- added block (3)</span></span>
+<span>        <span class="co"># &lt;render output&gt;</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>The following examples demonstrate various uses of decorators.</p>
+<div class="section level3">
+<h3 id="single-decoration">Single Decoration<a class="anchor" aria-label="anchor" href="#single-decoration"></a>
+</h3>
+<p>In the first example we will apply one decoration to one output.</p>
+</div>
+<div class="section level3">
+<h3 id="module">Module<a class="anchor" aria-label="anchor" href="#module"></a>
+</h3>
+<p>This module has one output, a plot created with <code>ggplot2</code>,
+and it displays the reproducible code used to obtain the plot.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tm_decorated_plot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"module"</span>, <span class="va">decorators</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkList.html" class="external-link">assert_list</a></span><span class="op">(</span><span class="va">decorators</span>, <span class="st">"teal_transform_module"</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
 <span>    label <span class="op">=</span> <span class="va">label</span>,</span>
+<span>    ui_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,</span>
+<span>    server_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">decorators</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
@@ -397,12 +368,13 @@ will be used by <code>ui_transform_teal_data</code> and
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">x</span>, <span class="va">input</span><span class="op">$</span><span class="va">x</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>          <span class="va">input</span><span class="op">$</span><span class="va">x</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
-<span></span>
 <span>        <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">y</span>, <span class="va">input</span><span class="op">$</span><span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>          <span class="va">input</span><span class="op">$</span><span class="va">y</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
-<span>        <span class="va">plot_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span></span>
+<span>        <span class="co"># Plot is created within the teal_data object</span></span>
+<span>        <span class="va">data_with_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="fu">x</span><span class="op">(</span><span class="op">)</span>, <span class="fu">y</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>            <span class="op">{</span></span>
@@ -415,63 +387,323 @@ will be used by <code>ui_transform_teal_data</code> and
 <span>          <span class="op">)</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span>        <span class="va">plot_data_decorated_no_print</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
+<span>        <span class="co"># Decorators are applied</span></span>
+<span>        <span class="va">data_with_plot_decorated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
 <span>          <span class="st">"decorate"</span>,</span>
-<span>          data <span class="op">=</span> <span class="va">plot_data</span>,</span>
+<span>          data <span class="op">=</span> <span class="va">data_with_plot</span>,</span>
 <span>          transformators <span class="op">=</span> <span class="va">decorators</span></span>
 <span>        <span class="op">)</span></span>
-<span>        <span class="va">plot_data_decorated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">plot_data_decorated_no_print</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, expr <span class="op">=</span> <span class="va">plot</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span>
 <span></span>
+<span>        <span class="co"># (Decorated) plot object is extracted for rendering</span></span>
 <span>        <span class="va">plot_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu">plot_data_decorated</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"plot"</span><span class="op">]</span><span class="op">]</span></span>
+<span>          <span class="fu">data_with_plot_decorated</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"plot"</span><span class="op">]</span><span class="op">]</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># Add plot printing statement to reproducible code</span></span>
+<span>        <span class="co">## This does not affect the analysis but when the code is "replayed"</span></span>
+<span>        <span class="co">## in an interactive session it will send the plot to a graphics device.</span></span>
+<span>        <span class="va">reproducible_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu">data_with_plot_decorated</span><span class="op">(</span><span class="op">)</span>, expr <span class="op">=</span> <span class="va">plot</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>            <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span>        <span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="fu">plot_r</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="va">output</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">plot_data_decorated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>        <span class="va">output</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="fu">reproducible_code</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
-<span>    <span class="op">}</span>,</span>
-<span>    ui_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,</span>
-<span>    server_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="teal-app-with-decorators">
-<code>teal</code> App With Decorators<a class="anchor" aria-label="anchor" href="#teal-app-with-decorators"></a>
-</h2>
-<p>Now that we have the <code>teal</code> module ready, let’s apply all
-the decorators we’ve created in our <code>teal</code> app. Please note
-that a module can accept any number of decorators as demonstrated in the
-example below.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<div class="section level4">
+<h4 id="application">Application<a class="anchor" aria-label="anchor" href="#application"></a>
+</h4>
+<p>Note that every call to the module constructor
+(<code>tm_decorated_plot</code>) takes a list containing <em>one</em>
+decorator.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, mtcars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"identity"</span><span class="op">)</span>,</span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"no-ui"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">static_decorator</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"lang"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">static_decorator_lang</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"undecorated"</span><span class="op">)</span>,</span>
+<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"static"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">static_decorator</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"interactive"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">interactive_decorator</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"interactive-from lang"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">interactive_decorator_lang</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"from-fun"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">gg_xlab_decorator</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"failing"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">failing_decorator</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"multiple decorators"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">interactive_decorator</span>, <span class="va">interactive_decorator_lang</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">tm_decorated_plot</span><span class="op">(</span><span class="st">"dynamic"</span>, decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">dynamic_decorator</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>By utilizing <code><a href="../reference/teal_transform_module.html">teal_transform_module()</a></code>, decorators can
-efficiently modify and enhance the outputs of a <code>teal</code> module
-without altering its original implementation. Whether you need simple
-static adjustments or dynamic UI-driven transformations, decorators
-provide a powerful way to customize plots, tables, or any other module
-output.</p>
+<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh7xAcyuo1RUgCYTEAM6koLAgH0AJnGJGUiJ6bj5DNW9SRjd+EJhvGCJfQTU4cVUODjUoTTg1DgBeDmUwAGUPLw5-QM8Q0txMjlcGdlDioREWCWpfXGrPKGkQJqyklLSy1oZxXv7O0R6IVEFSfqJVlbXmuFdXMQhh0ayOejgmFnZxEYgTu9O4AEdxX0GpF3uTgHdqUgALWgvN6Sfo3T53OwOMIcSGkDgAamO4I4NhYpDSGTAMgBrg41FxUA4eVI5FCaLSpWkiNuyJOAA8cppMf9OGcjBw6RwoHT8ZSkScAL4fe5C46imkC1QuWiki5sOB+AIhOqhXgcCJRGKuOL0BLjVLpJqM-JFEpgACSdEYonY1SVQXqeCagmopoW3Qgs18RxpWTc0IAcmUvcKsr42BlfSdyHTSJatuI3Ji6d5ufior8KWAQWaABpcnm48lwBocVhGQScYqlFnNQQ2XbkXwcgu87PHYUCxo0lr0Npu4SLT1zAYeH13fWTab0L3zQce2bLVbrTbLnZ7A7j+5sm3pMHgs7PV4ed78rI-f6A49QKTd2kcff32HQ5-U+93VGZw1YnF4glEuASQYdUv0pBEz3BBlcnEGBdAzdE4FDcEuwgsY4OLU1aC2AASFM01ceCKSjO4kKycU7nIjhJUOVRfF0aAYGoHwamVYJVT4d0DnEDZSC2bwGMQh8mg1aIoFieJEmSA1IzuY0CmrMAABF6NgJi7VqNiGmOF0By6Ljei3O5-TVIMQ35cNWBk8EYzjJdSETVxk1TQtCJLbN+lKfN8JAhDS3LNRK1NGs-k4VxdAbdw4GbTl8L5YiOCQlCo17fsOnnfS+lHIYhPiyc4CmPsZhHTili2FdeLXFoNxIQzt3OXdrlQh4j2BUj7gvAFPWvW8mqyR93x4viBOhQbVn42BODfd87igpk8Jc4s2s+JLptG0hxvgU0oFcDABO41d1oEkFeo5Zz0ww4osNWXCzoI4smqWqi2sosimhcajSASFigii7xnzVErPTkoKwDy0tvpVXFig0dx3hyrICBCggAGsYE8OBEEQbbe3WmH7IhtjXA8sARK1HU9SkrN+ggVI1AwIhkdNOQlBcJo8qsrJgeh3J8jvE4XVTegrCh7J8Xx+1IdNAmQlcY7kunQXhdNPGXglwmpbVmW5buHS0r0npMul+hZfh+5jL4UyDPMiMIJaNJmHjVYHMxa8BMpfoubNO2AjhV2JtLRGiCY3ZTQDeQABlw+18FvYduzndKOl3eyHn5K9-IfY5AO-iDggQ+KMPI+jz5Y9shMk1KXRk890pS44Ku8A4QPg5Fwuo75z4BdE8TdSic5Im6iuwAJtyc277V4kl4ojdljv7lhAB5A6E7AWFKWL+42k0TxqBgGQ4FjJeKvsoebPX-lErnlLgL1odZyy-oZ9qsZKfy6d78Bxcyo4Nb+iq-Yaqm0+EQTQ19FDsDIECE8OZ+qd1QMeN+9sy5OyunGZsCk-bwGzrnfOHABKOW6pIIhEFxQQRAWAiB9lUHYUwXAUETVDxf2urQx6WRBDwPRlMJBjsqF2XNOgs0SdG7NzziLYgah8FQJvJIYAwBqG0IALoKOIfFHWHDyBcJ9jwphaCQYN36CI3B4jJGENkfIwYAklEqORKQ1RWVhpqh3JcdIjDzEeCOo9Tkjj6rOManYrIri7K4X6NQzkABSWgYSm5EAkRNAhwJZG0KkFY1heIglJzsS9e4uhoROPlH4+8gScK6BCUEnJESIBROMXEqRUhEkWImsk5RqTqFV0yazOxABiDgAAFewcJ8RNzZE2DgHVaDqhCuqfufhBg-00AAKx9hBa83gOp-X6bknx+TYF1Rau4xpOY6S3nrqefxozfidVqRvZEOzkT-T4DYWEjhMaPP6VIgS-RXkOGeVjXY4hOTFDpP0HJxRdBEPAmcz4XynAvLgEQBIqAg6QNSWROeyJaFbR2ntJJRC0WQUxbtRpRzcUnRBVyLFjT9DWNpI9WxyJumKU1sbLkZwuToA0FFZZgxVkXPWQ4RUGkorQlcH2TUYkJ69w1N1JqpQR5aTOdeKW3K1mwjxXcce5Mp7qVYjLCCHT6UcHEIywV3oYQbJAYs5gf4OAH1EswIVOoHgQH8PQWgVgIKwm8OxB4cori3JOCslV-SBWsSinU4ApQ15gCUSQ-V4JukAEFfDNmfKgV1ZA3XNEqHAeAZB1REAeGmqSBAtBpGif4CCnTunYkGb4IgIcIBQigPwfgmdaxiSMLofYuJNCrFGSFW4tZiD+GtaUM4dgoC6E5WASt3TxliTSbKXc64AG3F+OctQBQWjOomZwZ8wQuQokYKgAEBBcT+FYMHDAEFx30GLaWhUw7ODeN9XuJqYyurKt5Z6kevhjkHzTaaWE0gAA+AA+E6EQMBPthetJ9UhY2qDIQdbC9ynUur6Q4cQnqZzUuAShmymznUMH3rGcQt772aDSN4eDeHBSJTeqoaiaBUDQloL8KyirihSreNQV1Is+P4n6DAUgBALAixE2J420c8oSdfo5Y4n0Q0-V8Hy+ypRhC-vdopr6atfqwkxO4HeBBwZMpFirIzXhlMqhJVGJTv61OYhlAwV9pmNIy2VmLRcS7nHWbYrZ9VumTWOdlSpRiJnG4z087DOiDEmJ+ZCJiKNRDhQuA6dQfghrnPWl8eC-crhOq6ATegcQLHsIun6GV6+9B3pgAFAooAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+</iframe>
+</div>
+</div>
+<div class="section level3">
+<h3 id="decorating-multiple-outputs">Decorating Multiple Outputs<a class="anchor" aria-label="anchor" href="#decorating-multiple-outputs"></a>
+</h3>
+<p>Here we will apply decoration to two outputs in one module.</p>
+<div class="section level4">
+<h4 id="decorators-1">Decorators<a class="anchor" aria-label="anchor" href="#decorators-1"></a>
+</h4>
+<p>The plot decorator adds a user-provided title to a
+<code>ggplot2</code> object.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_decorator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
+<span>  label <span class="op">=</span> <span class="st">"Decorate plot"</span>,</span>
+<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"plot_title"</span><span class="op">)</span>, <span class="st">"Plot Title"</span>, value <span class="op">=</span> <span class="st">"Title (editable)"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>          <span class="op">{</span></span>
+<span>            <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="va">ptitle</span><span class="op">)</span> <span class="op">+</span></span>
+<span>              <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>              <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>                plot.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">30</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+<span>              <span class="op">)</span></span>
+<span>          <span class="op">}</span>,</span>
+<span>          ptitle <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">plot_title</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The table decorator adds a column to a <code>data.frame</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">table_decorator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
+<span>  label <span class="op">=</span> <span class="st">"Decorate table"</span>,</span>
+<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="fu">shiny</span><span class="fu">::</span><span class="va"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">tags</a></span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"No UI needed for table decorator and could be ommited."</span><span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>          <span class="va">table_data</span><span class="op">[[</span><span class="st">"Added by decorator"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Row "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">table_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="module-1">Module<a class="anchor" aria-label="anchor" href="#module-1"></a>
+</h4>
+<p>The following module uses <code>ggplot2</code> to generate a scatter
+plot, and presents a simple <code>data.frame</code> as a summary table.
+Code for both outputs is also displayed.</p>
+<p>Note that the module constructor accepts one list of decorators and
+the decorators are then manually separated in the module functions.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tm_decorated_plot_table</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"module with two outputs"</span>, <span class="va">decorators</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkList.html" class="external-link">assert_list</a></span><span class="op">(</span><span class="va">decorators</span>, <span class="st">"teal_transform_module"</span>, null.ok <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
+<span>    label <span class="op">=</span> <span class="va">label</span>,</span>
+<span>    ui_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,</span>
+<span>    server_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorators <span class="op">=</span> <span class="va">decorators</span><span class="op">)</span>,</span>
+<span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">decorators</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Select dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Select x-axis"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Select y-axis"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span></span>
+<span>        <span class="co"># Separately inject UI for plot and table decorators</span></span>
+<span>        <span class="fu"><a href="../reference/module_transform_data.html">ui_transform_teal_data</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"decorate_plot"</span><span class="op">)</span>, transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">$</span><span class="va">plot</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/module_transform_data.html">ui_transform_teal_data</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"decorate_table"</span><span class="op">)</span>, transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">$</span><span class="va">table</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"text"</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">decorators</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"dataname"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="va">dataname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"x"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span>inputId <span class="op">=</span> <span class="st">"y"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>        <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">x</span>, <span class="va">input</span><span class="op">$</span><span class="va">x</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="va">input</span><span class="op">$</span><span class="va">x</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>        <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">y</span>, <span class="va">input</span><span class="op">$</span><span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="va">input</span><span class="op">$</span><span class="va">y</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># Separately create outputs within teal_data objects in separate reactive expressions</span></span>
+<span>        <span class="va">plot_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span>, <span class="fu">x</span><span class="op">(</span><span class="op">)</span>, <span class="fu">y</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            <span class="op">{</span></span>
+<span>              <span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dataname</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xvar</span>, y <span class="op">=</span> <span class="va">yvar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>            <span class="op">}</span>,</span>
+<span>            dataname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            xvar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">x</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            yvar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">y</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>        <span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            <span class="op">{</span></span>
+<span>              <span class="va">table_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">dataname</span>, <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="op">}</span>,</span>
+<span>            dataname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="fu">dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># Separately apply decoration to the outputs</span></span>
+<span>        <span class="va">decorated_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
+<span>          <span class="st">"decorate_plot"</span>,</span>
+<span>          data <span class="op">=</span> <span class="va">plot_data</span>,</span>
+<span>          transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">$</span><span class="va">plot</span></span>
+<span>        <span class="op">)</span></span>
+<span>        <span class="va">decorated_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
+<span>          <span class="st">"decorate_table"</span>,</span>
+<span>          data <span class="op">=</span> <span class="va">table_data</span>,</span>
+<span>          transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">$</span><span class="va">table</span></span>
+<span>        <span class="op">)</span></span>
+<span></span>
+<span>        <span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="fu">decorated_plot</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"plot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">output</span><span class="op">$</span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="fu">decorated_table</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"table_data"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="va">output</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="va">plot_code</span> <span class="op">&lt;-</span> <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">decorated_plot</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="va">table_code</span> <span class="op">&lt;-</span> <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">decorated_table</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"# Plot Code:"</span>, <span class="va">plot_code</span>, <span class="st">"\n\n# Table Code:"</span>, <span class="va">table_code</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="application-1">Application<a class="anchor" aria-label="anchor" href="#application-1"></a>
+</h4>
+<p>Note that a named list of decorators is passed to the module
+constructor.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, mtcars <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
+<span>    <span class="fu">tm_decorated_plot_table</span><span class="op">(</span></span>
+<span>      <span class="st">"plot_and_table"</span>,</span>
+<span>      decorators <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        plot <span class="op">=</span> <span class="va">plot_decorator</span>,</span>
+<span>        table <span class="op">=</span> <span class="va">table_decorator</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh7xAcyuo1RUgCYTEOw4D6AEzjFGpIvTcfIZq7qSMEADO-AEw7jBEnoJqcOKqHBxqUJpwahwAvBzKYAAiPgFQ5BxupMW46RyC1AUCwqIS1J7SIA0ZUUEcAHIAyuKdLhkZ5AAepACSroKk4lFpYDVh1KQpxZK4RWAACvaksls7eBysRoKchcUy55zicJ5b2SkmYBMcAL71EAykQY7EChSEIhYHU8+08lSg3V6HASSRSwxBDDGMNakLEEDGi1I+yIS1QS32wMikTxiMBkwy9DgTBY7HEPTp9IZcAAjuI4aQoFIfpyOAB3LYAC1ofPhUgBIvp7IVnJqA1VAGoODYao5EIgbCxtqlUIbPhx1UjlRltSddYhSBK4PB4rRqDAjFJzZarTaHHaHU7Ut6rdUThhTXcOLlA2QwnBZuJ+ExI8VNEQ1J46hxqQAvSMAZgADPtiPYwQdNGpbrtgwrhQr-rWMiani1aGTSAASDYR2v1jK-euDhq-VQuAWVuBecp+AIDEJhCLRWLxRLJIN0rI5PL3UozyqcCcXeWNZrgtpQ-HjbNSiC6PUCqyRbtrQZEDjyOYcCBwV6vARzkenDeL4lRzlAECeBwxDJFBOQcEQMAwFsrwYLsJ7AvQoItBC7RXti-IIhwSqTCi67olhmKdPsuGXgSHbEqS5LZnAVI0sR3qMsybCpCRIqMryhFCrW4oOtKQl7BxHIKkBXjwsAwDFAAgp43hwboHAgRU-j0MUAC6elqlAkTkIWaxYEQooHBSPLuCk+IQPQlkGB8U6EZIHm1sO0kDkOPyjhA45xFpfivO4PauQMtF4uIW65C0xRkSkYqShwpCiu+JKkB2kRZiFYH0JELQaCZQpSRkBCOgQADW7rkHqxmYaQdnUKV+U6ZE+zFAu4QQcu9BxElcBZhAyRqBgRDVS0chKC4DRDWk0lxTumTZLkJ4ZE07gWE+xWtcs7UBEVhSHYVexIphoLbfQu2FCVB37h1LSnZE53SU0OEXjF1GaY9R20iK-S8EMozjN6bysItyrAikzALB2KyRGshHQPA6GrduCVgOisOnIRwK1JclVENQBCsS0gzyAAMlTb3Q9GcOEojazTOjy1YzjPinNMPBQNMrVZsTpPk4UlM03TCow1z8NLMzxS6Gza0rcUnPMBwui8-zuVExKJNk8dQzU7TAK1gAxBw6KoBYB5qBptAAFZcx+X4xIEqoQVBQG-aBHW1ltvVRK7cQLkJqzFO1U41OjAf9XVR3PX9hXdicEsiv7S5B3GRhyQKctgBHYSudHGexAVBsvZ2QGpyqJwAPJMcsYfrCcuzV-SQH19lstN0BrcbZyoKaJUboyPGpCdwjPdj633pDv3l0MJ9uLQrC8Kwonr3lZyQ0UaCWI0V9HSEoxXdEixbEkADCpEJoC+KOwZAyrnkl8QqgioPycCq-MTPtkscxQV3CjWAw0dZ6xFt+EBSMJKeR8pMbytZgHwAGFxUQrIBL0SWJ2JBcBYG1hvnfB+B14So1SC-JsjQP4Hm-jLZYf95iAIOKzMBwsDallIdA2UkgFL0OwSQkBBlYEhnfp-Ghv9CQAKxgrFh+sWjsKgU-QU3DgC8JwYI-s8CNEZGmCgpkaDeIUIwbw6Y+xjEcAAKS0HMdBdMHDFFSAUjgqQ6iKHGK8lo9WujuKslfvxHkmCuy6FMYSTsGlLEQGsfI+AnDn6OP4fAZxekhFWl4QrOBvlVBmwtnAK2oVbbQS4lULKOUUpiUBCHeECFNCO2YEVWgLFckHg4KglknB4yoEZBfKItYNiES8fotkhj-FOMktMOU6thLpMmKJW89i24Kl8VaVUwNfROD1KsxRpD9irLtFAVi4gdGFGmNceg+wNKFF0CcjyXopnKh2esuAiFwok0fh4+kjZbmTBwS0YyGBSGbJAUKfuypjkWB+ZEP5gKxkeWBQqS5YLCi-P+foZJyoPHeWVLJPpwMWk8UGZ8jBIy3mlNmRJWFIpFmYtcjnKAAxCIYH4IwBJWR0C2wBfAfY8AIL7GgBgAa00FCKFRVaD5IYMjfMRRC-5RKKHormlM82ltrbkHyWgOwGl2p4jSu+AMCEG65SmRHTw4UTgDEiFhRcfVM4VNzhQ8Oj1I4tzwBQvphRelrwoTHIOZcE4+yOsnBwfZEEOuNV7YG5rWCWsDiuG1go7X5wdYXScdQXWVMKFij1nyvWlyeidDelci5TPlcqYpWDll8EZJBBgxwHB8hDSa2tyjihRzAII-BDcC2Tl0VW+gMhXJ1p9mFICDjFJgAzQKfSSTMlTNLV2GYpwcUUG8L2se+KQwbGIN4ecTJxqbrgA85qe7xCEvrTUIUxLZJ7u3UYDAe6D3uCPSewdob+0eWJVbEyQYwDmxracAAwokfdWYN2Aa6mAZQmTVDmz7V2gD3hEBZkvYBuV3oMXwIaC4AKaqBiumWA0V1aUd00rGPQVqbZSOdWRKQAgFgDYwGo7RiWQ06NrhSEjJEpBgqnpOEmlIUNOTNp4x7XjoDYUvT2qVHppq3U8dOuStKkV03UtOrPJEPwXDyuoPwDgBJyCMAGdckikRby6CUugcQarOxNH2JZhe9BMNgF+HpIAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+</iframe>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="convenience">Convenience<a class="anchor" aria-label="anchor" href="#convenience"></a>
+</h2>
+<p>Here we present some ways to work with decorators more conveniently.
+These are purely optional.</p>
+<div class="section level3">
+<h3 id="reducing-boilerplate">Reducing Boilerplate<a class="anchor" aria-label="anchor" href="#reducing-boilerplate"></a>
+</h3>
+<p>The function <code>make_teal_transform_server</code> can be used to
+reduce the amount of boilerplate code when writing new decorators. It
+takes <code>language</code> as input and requires you to use
+<code>input</code> object names directly in the expression. The
+following calls yield the same decorator module. Note that the
+combination of <code>my_title = input$x_axis_title</code> and
+<code>xlab(my_title)</code> is replaced by a simple
+<code>xlab(x_axis_table)</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
+<span>  label <span class="op">=</span> <span class="st">"Static decorator"</span>,</span>
+<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"x axis"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>          <span class="op">{</span></span>
+<span>            <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is a better title"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlab</span><span class="op">(</span><span class="va">x_axis_title</span><span class="op">)</span></span>
+<span>          <span class="op">}</span>,</span>
+<span>          x_axis_title <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">x_axis_title</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/teal_transform_module.html">teal_transform_module</a></span><span class="op">(</span></span>
+<span>  label <span class="op">=</span> <span class="st">"Static decorator (language)"</span>,</span>
+<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"x_axis_title"</span><span class="op">)</span>, <span class="st">"X axis title"</span>, value <span class="op">=</span> <span class="st">"x axis"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  server <span class="op">=</span> <span class="fu"><a href="../reference/make_teal_transform_server.html">make_teal_transform_server</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span></span>
+<span>      <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"This is a better title"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlab</span><span class="op">(</span><span class="va">x_axis_title</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="multiple-decorators">Multiple Decorators<a class="anchor" aria-label="anchor" href="#multiple-decorators"></a>
+</h3>
+<p>Consider these constructs to accommodate an arbitrary number of
+decorators in your module. Note that with this method all decorations
+will be applied to one output.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># in the module UI function</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="st">"deorator_container"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">decorators</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">decorator_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
+<span>      id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"decorate_"</span>, <span class="va">decorator_name</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/module_transform_data.html">ui_transform_teal_data</a></span><span class="op">(</span></span>
+<span>        <span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"decorate_"</span>, <span class="va">decorator_name</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">[[</span><span class="va">decorator_name</span><span class="op">]</span><span class="op">]</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># in the module server function</span></span>
+<span><span class="va">output_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">decorations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">decorators</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">decorator_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"decorate_"</span>, <span class="va">decorator_name</span><span class="op">)</span>,</span>
+<span>      data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>      transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">[[</span><span class="va">decorator_name</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">output_data_decorated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">f</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">f</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, <span class="va">decorations</span>, init <span class="op">=</span> <span class="va">output_data</span>, right <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

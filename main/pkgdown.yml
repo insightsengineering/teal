@@ -20,9 +20,9 @@ articles:
   blueprint/intro: blueprint/intro.html
   blueprint/module_encapsulation: blueprint/module_encapsulation.html
   blueprint/product_map: blueprint/product_map.html
-  teal-as-a-module: teal-as-a-module.html
+  teal-as-a-shiny-module: teal-as-a-shiny-module.html
   teal-options: teal-options.html
-last_built: 2025-02-06T11:32Z
+last_built: 2025-02-09T16:31Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles

@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9125</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.9126</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
     <li><a class="dropdown-item" href="../articles/customizing-module-output.html">Customizing Module Output</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Using `teal`</h6></li>
-    <li><a class="dropdown-item" href="../articles/teal-as-a-module.html">Teal as a Module</a></li>
+    <li><a class="dropdown-item" href="../articles/teal-as-a-shiny-module.html">Teal as a Shiny Module</a></li>
     <li><a class="dropdown-item" href="../articles/teal-options.html">Modifying a teal Application With R Options</a></li>
     <li><a class="dropdown-item" href="../articles/bootstrap-themes-in-teal.html">Bootstrap Themes in teal</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -118,12 +118,13 @@ CoreDev</h4>
 <p>The <code>teal</code> framework provides a large catalog of
 plug-in-ready analysis modules that can be incorporated into
 <code>teal</code> applications. However, it is also possible to create
-your own modules using the module function, which leverages Shiny
-modules. Each custom teal module is built as a Shiny module, combining
-Shiny’s reactive capabilities with modularized UI and server logic to
-encapsulate functionality. This design enables a structured and reusable
-approach to creating interactive components that integrate seamlessly
-within the teal ecosystem.</p>
+your own modules using the <code>module</code> function, which leverages
+<code>shiny</code> modules. Each custom teal module is built as a <a href="https://shiny.posit.co/r/articles/improve/modules/" class="external-link"><code>shiny</code>
+module</a>, combining <code>shiny</code>’s reactive capabilities with
+modularized UI and server logic to encapsulate functionality. This
+design enables a structured and reusable approach to creating
+interactive components that integrate seamlessly within the teal
+ecosystem.</p>
 <p>In this guide, we will use the simple histogram below as an example,
 and demonstrate how to convert this histogram function into a robust
 <code>teal</code> module step-by-step:</p>
@@ -177,13 +178,13 @@ to select a dataset from the list of available datasets.</li>
 <li>
 <strong><code>selectInput</code> for Variable</strong>: Allows users
 to choose a numeric variable from the chosen dataset, dynamically
-filtering out any non-numeric columns.</li>
+filtering out any non-numeric variables from the choices.</li>
 <li>
 <strong><code>plotOutput</code> for Histogram</strong>: Displays the
 histogram once both dataset and variable inputs are selected.</li>
 <li>
 <strong><code>verbatimTextOutput</code> for Code</strong>:
-Automatically displays code that generated the plot based on user
+Automatically displays code that generated the plot based on the user
 input.</li>
 </ul>
 <p>Here’s the code for the <code>histogram_module_ui</code>
@@ -224,8 +225,9 @@ inputs.</p>
 <p>To begin, it’s essential to include the <code>data</code> argument in
 the server function definition.</p>
 <p>This <code>data</code> argument holds the reactive
-<code>teal_data</code> object, which contains your datasets and any
-filters applied. By including <code>data</code>, we can ensure:</p>
+<code>teal_data</code> object, which contains your datasets after
+applying any active filtering by the filter panel. By including
+<code>data</code>, we can ensure:</p>
 <ul>
 <li>The server function receives a reactive version of
 <code>teal_data</code>, allowing it to automatically respond to
