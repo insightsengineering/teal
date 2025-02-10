@@ -155,7 +155,14 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             })
           })
 
-          data_out
+          # Ignoring unwanted reactivity breaks during initialization
+          data_return <- reactive({
+            if (is.null(data_out())) {
+              rlang::abort(class = "shiny.silent.error")
+            }
+            data_out()
+          })
+          data_return
         })
       },
       x = names(transformators),
