@@ -5,6 +5,7 @@ current_repo:
 upstream_repos:
   insightsengineering/roxy.shinylive:
     repo: insightsengineering/roxy.shinylive
+    host: https://github.com
   insightsengineering/teal.widgets:
     repo: insightsengineering/teal.widgets
     host: https://github.com
