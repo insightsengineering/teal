@@ -23,7 +23,7 @@
 #' To manage these `decorators` within your module, use [`ui_transform_teal_data()`] and [`srv_transform_teal_data()`].
 #' (For further guidance on managing decorators, refer to `ui_args` and `srv_args` in the vignette documentation.)
 #'
-#' See the vignette `vignette("decorate-modules-output", package = "teal")` for additional examples.
+#' See the vignette `vignette("customizing-module-output", package = "teal")` for additional examples.
 #'
 #' # `server` as a language
 #'

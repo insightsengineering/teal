@@ -155,7 +155,10 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             })
           })
 
-          data_out
+          # Ignoring unwanted reactivity breaks during initialization
+          reactive({
+            req(data_out())
+          })
         })
       },
       x = names(transformators),
