@@ -1,11 +1,11 @@
 ---
-title: "Decorate Module Output"
+title: "Transform Module Output"
 author: "NEST CoreDev"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Decorate Module Output}
+  %\VignetteIndexEntry{Transform Module Output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,12 +18,9 @@ library(ggplot2)
 
 ## Introduction
 
-`teal` version `0.16` introduced a new, optional argument in `teal::module`, `decorators`.
-This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_data_module` created using the `teal_transform_module()` function
-to transform the `teal_data` produced by `teal` modules thus giving the ability to decorate the output objects from the module, like graphs or tables to look a certain way.
-
+The outputs produced by `teal` modules, like graphs or tables, are created by the module developer and look a certain way.
 It is hard to design an output that will satisfy every possible user, so the form of the output should be considered a default value that can be customized.
-Here we describe the concept of _decoration_, whereby a `teal_transform_module` can modify an output created by a `teal_module`, enabling you to tailor outputs to your specific requirements without rewriting the original module code.
+Here we describe the concept of _transforming_, whereby a `teal_transform_module` can modify an output created by a `teal_module`, enabling you to tailor outputs to your specific requirements without rewriting the original module code.
 
 Note that we use the same mechanism to transform the `teal_data` before it reaches the module, you can read [this vignette](transform-input-data.html) to learn more about this.
 
@@ -31,33 +28,37 @@ Note that we use the same mechanism to transform the `teal_data` before it reach
 
 In this vignette we will focus on using the `teal_transform_module` for transforming the module outputs using the `decorators` argument in the `teal::module` function.
 
-## Decorators
+## How to Transform outputs?
 
-Decorators are created with `teal_transform_module` and thus they are `shiny` modules.
+Custom trasformations for the output objects can be created with `teal_transform_module` and thus they are `shiny` modules.
 They are passed to `teal_module` constructors as arguments (see below).
 Their server logic will be used to modify objects such as plots or tables that exist in the server function of a `teal_module`.
-A `ui` function can provide interactivity but that is optional, an app developer is free to use decorator modules that do not require user input.
+A `ui` function can provide interactivity but that is optional, an app developer is free to transform outputs objects of a `teal` module that do not require user input.
 
 
 ### Requirements and Limitations
 
-Using decorators requires the following:
+Transforming `teal` module output requires the following:
 
 1. **Module Support**:<br>
-`teal` will apply decorators to `teal_module` outputs but the module in question must explicitly support this functionality.
-It the responsibility of to the module developer to ensure that decorators can be used.
+`teal` will apply transformations to `teal_module` outputs, but the module in question must explicitly support this functionality.
+It the responsibility of to the module developer to accept and consume the list of `teal_transform_module`.
 2. **Matching Object Names**:<br>
-Decorators will reference variables that exist in the `teal_module` server function and therefore must use the appropriate variable names.
-Module developers are encouraged to provide the relevant names in the module's documentation, otherwise the person writing a decorator must follow the source code.
+Transformations will have to reference variables that already exist in the `teal_module` server function and therefore must use the appropriate variable names.
+Think of it as extending the plot/table code that already exists in the module.
+Module developers are encouraged to provide the relevant names in the module's documentation, otherwise the person writing the output transformation must follow the source code.
 3. **Maintaining Object Classes**:<br>
-A decorator must not alter the class of the object that it modifies.
+A transformation must not alter the class of the object that it modifies.
 This is because a different class may require a different rendering function and that is part of the module structure, which beyond the control of decorators.
+If change of this magnitude is required, it is recommended to create a new module.
 
-## Building Decorators
+## Building Output Transformations (Decorators)
+
+For the sake of simplicity, we will call the output transformators as **decorators** in code examples below.
 
 ### Server
 
-Here we create a simple decorator that does not provide user input.
+Here we create a simple transformator that does not provide user input.
 Knowing that the module contains an object of class `ggplot2` named `plot`, we will modify its title and x-axis title:
 
 ```{r static_decorator}

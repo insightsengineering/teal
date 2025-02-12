@@ -68,7 +68,7 @@ articles:
     contents:
       - creating-custom-modules
       - adding-support-for-reporting
-      - decorate-module-output
+      - transform-module-output
   - title: Using `teal`
     navbar: Using `teal`
     contents:
