@@ -51,7 +51,7 @@ If change of this magnitude is required, it is recommended to create a new modul
 ## Building Output Transformations (Decorators)
 
 For the sake of simplicity, we will name the output transformers as **decorators** in code examples below.
-This name convention is used in [`teal.modules.general` modules](https://insightsengineering.github.io/teal.modules.general/latest-tag/articles/decorate-module-output.html).
+
 ### Server
 
 Here we create a simple transformator that does not provide user input.
