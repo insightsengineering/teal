@@ -1,11 +1,11 @@
 ---
-title: "Data Transformations as Shiny Module"
+title: "Transform Input Data"
 author: "NEST CoreDev"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Data Transformations as shiny Module}
+  %\VignetteIndexEntry{Transform Input Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,7 +13,7 @@ vignette: >
 ## Introduction
 
 `teal` version `0.16` introduced a new, optional argument in `teal::module`, `transformators`.
-This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_data_module` created using the `teal_transform_module()` function.
+This argument accepts a `list` of `teal_transform_module` objects, which are created using the `teal_transform_module()` function.
 `teal_transform_module()` takes `ui` and `server` arguments to create a `shiny` module that encodes data transformations.
 
 When transformators are passed to a module, `teal` will execute data transformations when that module is loaded as well as whenever the original data changes.
@@ -22,6 +22,10 @@ The transformations are applied to the data _before_ it reaches the module.
 The `ui` elements of the transform module will be added to the filter panel, while the server function provides the data manipulation logic.
 
 This vignette describes how to manage custom data transformations in `teal` apps.
+
+<img src="images/teal-transform-module-transformators.svg" alt="Transforming teal_data" style="width: 100%;" />
+
+In this vignette we will focus on using the `teal_transform_module` for transforming the input data using the `transformators` argument in `teal::module` function.
 
 ## Creating a data transformation module
 

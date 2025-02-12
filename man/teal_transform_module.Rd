@@ -39,7 +39,7 @@ The transformed data is then passed to the \code{server} of \code{\link[=teal_mo
 The primary advantage of \code{teal_transform_module} over custom modules is in its error handling, where all warnings and
 errors are managed by \code{teal}, allowing developers to focus on transformation logic.
 
-For more details, see the vignette: \code{vignette("data-transform-as-shiny-module", package = "teal")}.
+For more details, see the vignette: \code{vignette("transform-input-data", package = "teal")}.
 }
 
 \section{Customizing Module Outputs}{
@@ -49,7 +49,7 @@ Some \code{\link{teal_modules}} permit developers to inject custom \code{shiny} 
 To manage these \code{decorators} within your module, use \code{\link[=ui_transform_teal_data]{ui_transform_teal_data()}} and \code{\link[=srv_transform_teal_data]{srv_transform_teal_data()}}.
 (For further guidance on managing decorators, refer to \code{ui_args} and \code{srv_args} in the vignette documentation.)
 
-See the vignette \code{vignette("customizing-module-output", package = "teal")} for additional examples.
+See the vignette \code{vignette("transform-module-output", package = "teal")} for additional examples.
 }
 
 \section{\code{server} as a language}{

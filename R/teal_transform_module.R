@@ -13,7 +13,7 @@
 #' The primary advantage of `teal_transform_module` over custom modules is in its error handling, where all warnings and
 #' errors are managed by `teal`, allowing developers to focus on transformation logic.
 #'
-#' For more details, see the vignette: `vignette("data-transform-as-shiny-module", package = "teal")`.
+#' For more details, see the vignette: `vignette("transform-input-data", package = "teal")`.
 #'
 #' # Customizing Module Outputs
 #'
@@ -23,7 +23,7 @@
 #' To manage these `decorators` within your module, use [`ui_transform_teal_data()`] and [`srv_transform_teal_data()`].
 #' (For further guidance on managing decorators, refer to `ui_args` and `srv_args` in the vignette documentation.)
 #'
-#' See the vignette `vignette("customizing-module-output", package = "teal")` for additional examples.
+#' See the vignette `vignette("transform-module-output", package = "teal")` for additional examples.
 #'
 #' # `server` as a language
 #'
@@ -141,7 +141,7 @@ teal_transform_module <- function(ui = NULL,
             "teal_transform_module() ",
             "Using eventReactive in teal_transform module server code should be avoided as it ",
             "may lead to unexpected behavior. See the vignettes for more information  ",
-            "(`vignette(\"data-transform-as-shiny-module\", package = \"teal\")`).",
+            "(`vignette(\"transform-input-data\", package = \"teal\")`).",
             call. = FALSE
           )
         }
