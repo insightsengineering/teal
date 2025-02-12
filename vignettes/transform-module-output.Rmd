@@ -50,11 +50,11 @@ If change of this magnitude is required, it is recommended to create a new modul
 
 ## Building Output Transformations (Decorators)
 
-For the sake of simplicity, we will name the output transformers as **decorators** in code examples below.
+For simplicity, we will refer to the output transformers as **decorators** in the code examples below.
 
 ### Server
 
-Here we create a simple transformator that does not provide user input.
+Here we create a simple transformator that does not provide any user input.
 Knowing that the module contains an object of class `ggplot2` named `plot`, we will modify its title and x-axis title:
 
 ```{r static_decorator}
@@ -78,7 +78,7 @@ static_decorator <- teal_transform_module(
 
 ### UI
 
-If the transformation requires user input, a `ui` function can be added.
+If the transformation requires a user input, a `ui` function can be added.
 Here, the x-axis title is obtained from a `textInput` widget, giving the user some flexibility.
 Note how the input values are passed to the `within()` function using its `...` argument.
 See `?teal.code::within.qenv` for more examples.

@@ -86,7 +86,7 @@
                 <mxCell id="201" value="Transforming module outputs (decorators)" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
                     <mxGeometry x="530" y="1425" width="235" height="35" as="geometry"/>
                 </mxCell>
-                <mxCell id="202" value="Transforming the teal_data" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=11;verticalAlign=top;" vertex="1" parent="1">
+                <mxCell id="202" value="Transforming teal_data" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=11;verticalAlign=top;" vertex="1" parent="1">
                     <mxGeometry x="852" y="1090" width="208" height="270" as="geometry"/>
                 </mxCell>
                 <mxCell id="203" style="edgeStyle=none;html=1;strokeColor=#000000;fontSize=28;" edge="1" parent="1" source="204" target="208">

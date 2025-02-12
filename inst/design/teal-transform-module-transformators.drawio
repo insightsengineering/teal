@@ -83,7 +83,7 @@
                 <mxCell id="174" value="Transform Panel (transformators)" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=50;" vertex="1" parent="1">
                     <mxGeometry x="545" y="1082.5" width="190" height="35" as="geometry"/>
                 </mxCell>
-                <mxCell id="175" value="Transforming the teal_data" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=11;verticalAlign=top;" vertex="1" parent="1">
+                <mxCell id="175" value="Transforming teal_data" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=11;verticalAlign=top;" vertex="1" parent="1">
                     <mxGeometry x="852.5" y="1090" width="207.5" height="270" as="geometry"/>
                 </mxCell>
                 <mxCell id="176" style="edgeStyle=none;html=1;strokeColor=#000000;fontSize=28;" edge="1" parent="1" source="177" target="181">
