@@ -26,11 +26,11 @@ Note that we use the same mechanism to transform the `teal_data` before it reach
 
 <img src="images/teal-transform-module-decorators.svg" alt="Transforming teal_data" style="width: 100%;" />
 
-In this vignette we will focus on using the `teal_transform_module` for transforming the module outputs using the `decorators` argument in the `teal::module` function.
+In this vignette we will focus on using the `teal_transform_module` for transforming the module outputs using the `decorators` argument of the `teal` module function.
 
 ## How to Transform outputs?
 
-Custom trasformations for the output objects can be created with `teal_transform_module` and thus they are `shiny` modules.
+Custom transformations for the output objects can be created with `teal_transform_module` and thus they are `shiny` modules.
 They are passed to `teal_module` constructors as arguments (see below).
 Their server logic will be used to modify objects such as plots or tables that exist in the server function of a `teal_module`.
 A `ui` function can provide interactivity but that is optional, an app developer is free to transform outputs objects of a `teal` module that do not require user input.
