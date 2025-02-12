@@ -74,7 +74,7 @@ setOldClass("teal_modules")
 #' @param ui_args (named `list`) with additional arguments passed on to the UI function.
 #' @param x (`teal_module` or `teal_modules`) Object to format/print.
 #' @param transformators (`list` of `teal_transform_module`) that will be applied to transform module's data input.
-#' To learn more check `vignette("data-transform-as-shiny-module", package = "teal")`.
+#' To learn more check `vignette("transform-input-data", package = "teal")`.
 #'
 #' @param ...
 #' - For `modules()`: (`teal_module` or `teal_modules`) Objects to wrap into a tab.

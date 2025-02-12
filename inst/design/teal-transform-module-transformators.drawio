@@ -1,0 +1,134 @@
+<mxfile host="65bd71144e">
+    <diagram name="Page-1" id="Af2CoAbSZcckCuTcOnmQ">
+        <mxGraphModel dx="1748" dy="940" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="78" value="&lt;span style=&quot;font-weight: 700; font-size: 20px;&quot;&gt;Input Data Transformations&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="505" y="870" width="275" height="310" as="geometry"/>
+                </mxCell>
+                <mxCell id="76" value="&lt;span style=&quot;font-weight: 700; font-size: 20px;&quot;&gt;Module Output Decoration&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="505" y="1390" width="280" height="155" as="geometry"/>
+                </mxCell>
+                <mxCell id="150" value="" style="shape=flexArrow;endArrow=classic;html=1;strokeColor=#d79b00;fontSize=20;fillColor=#ffe6cc;entryX=0.011;entryY=0.956;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1" target="175">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="747.73" y="1457.36" as="sourcePoint"/>
+                        <mxPoint x="852.5025" y="1389.9961700000001" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="77" value="&lt;span style=&quot;font-weight: 700; font-size: 20px;&quot;&gt;Teal Module Logic&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="505" y="1210" width="280" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="79" value="" style="endArrow=classic;html=1;" parent="1" source="84" target="85" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="80" value="" style="endArrow=classic;html=1;" parent="1" source="85" target="86" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="81" value="" style="endArrow=classic;html=1;" parent="1" source="86" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="640" y="1082.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="82" value="" style="endArrow=classic;html=1;" parent="1" target="171" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="640" y="1117.5" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="83" value="" style="endArrow=classic;html=1;" parent="1" source="89" target="91" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="84" value="teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;container=0;fontColor=#333333;arcSize=0;" parent="1" vertex="1">
+                    <mxGeometry x="587.5" y="920" width="105" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="Filter Panel" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;container=0;glass=0;arcSize=50;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="970" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="86" value="Filtered teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;container=0;fontColor=#333333;arcSize=0;" parent="1" vertex="1">
+                    <mxGeometry x="582.5" y="1032.5" width="115" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="88" value="Module Logic" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=50;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="1254" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="Generated outputs (plots/tables) within&#10;teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;arcSize=0;" parent="1" vertex="1">
+                    <mxGeometry x="532.5" y="1310" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="" style="endArrow=classic;html=1;" parent="1" source="88" target="89" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" value="Transforming module outputs (decorators)" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="522.5" y="1435" width="235" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="Decorated outputs within&#10;teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;arcSize=0;" parent="1" vertex="1">
+                    <mxGeometry x="562.5" y="1495" width="155" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="" style="endArrow=classic;html=1;" parent="1" source="91" target="92" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="171" value="Transformed teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;container=0;fontColor=#333333;arcSize=0;" vertex="1" parent="1">
+                    <mxGeometry x="575.63" y="1137" width="128.75" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="172" style="edgeStyle=none;html=1;" edge="1" parent="1" source="171" target="88">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="170" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;opacity=50;" vertex="1" parent="1">
+                    <mxGeometry x="488" y="850" width="590" height="710" as="geometry"/>
+                </mxCell>
+                <mxCell id="173" value="" style="shape=flexArrow;endArrow=classic;html=1;strokeColor=#d79b00;fontSize=20;fillColor=#ffe6cc;entryX=-0.005;entryY=0.124;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="175">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="725" y="1100" as="sourcePoint"/>
+                        <mxPoint x="882.19" y="1029.9961700000001" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="174" value="Transform Panel (transformators)" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=50;" vertex="1" parent="1">
+                    <mxGeometry x="545" y="1082.5" width="190" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="175" value="Transforming teal_data" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=11;verticalAlign=top;" vertex="1" parent="1">
+                    <mxGeometry x="852.5" y="1090" width="207.5" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="176" style="edgeStyle=none;html=1;strokeColor=#000000;fontSize=28;" edge="1" parent="1" source="177" target="181">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="177" value="teal_transform_module" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;container=0;glass=0;arcSize=50;" vertex="1" parent="1">
+                    <mxGeometry x="881.25" y="1175" width="150" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="178" style="edgeStyle=none;html=1;strokeColor=#000000;fontSize=28;" edge="1" parent="1" source="179" target="177">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="179" value="teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;container=0;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="905.75" y="1125" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="180" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;fontSize=28;" edge="1" parent="1" source="181" target="184">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="181" value="teal_transform_module" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;container=0;glass=0;arcSize=50;" vertex="1" parent="1">
+                    <mxGeometry x="881.25" y="1225" width="150" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="182" value="Transformed teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;container=0;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="890.25" y="1315" width="134" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="183" style="edgeStyle=none;html=1;strokeColor=#000000;fontSize=28;" edge="1" parent="1" source="184" target="182">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="184" value="..." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=bottom;whiteSpace=wrap;rounded=0;fontSize=28;" vertex="1" parent="1">
+                    <mxGeometry x="927.25" y="1272.5" width="60" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="185" value="" style="rounded=0;whiteSpace=wrap;html=1;fontSize=28;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="935" y="870" width="125" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="186" value="Logic" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;container=0;glass=0;arcSize=50;" vertex="1" parent="1">
+                    <mxGeometry x="967.5" y="950" width="60" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="187" value="teal_data" style="rounded=1;fillColor=#f5f5f5;strokeColor=#666666;container=0;fontColor=#333333;arcSize=0;" vertex="1" parent="1">
+                    <mxGeometry x="962.5" y="910" width="70" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="188" value="Transform Logic" style="rounded=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=50;" vertex="1" parent="1">
+                    <mxGeometry x="947.5" y="985" width="100" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="189" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="945" y="870" width="105" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

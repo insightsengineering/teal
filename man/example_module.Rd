@@ -25,7 +25,7 @@ argument.
 }}
 
 \item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
-To learn more check \code{vignette("data-transform-as-shiny-module", package = "teal")}.}
+To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 
 \item{decorators}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (\code{list} of \code{teal_transform_module}) optional,
 decorator for \code{object} included in the module.}
@@ -40,7 +40,7 @@ A \code{teal} module which can be included in the \code{modules} argument to \co
 This module creates an object called \code{object} that can be modified with decorators.
 The \code{object} is determined by what's selected in \verb{Choose a dataset} input in UI.
 The object can be anything that can be handled by \code{renderPrint()}.
-See the \code{vignette("customizing-module-output", package = "teal")} or \code{\link{teal_transform_module}}
+See the \code{vignette("transform-module-output", package = "teal")} or \code{\link{teal_transform_module}}
 to read more about decorators.
 }
 \examples{
