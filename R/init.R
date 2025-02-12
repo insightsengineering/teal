@@ -32,11 +32,11 @@
 #'   This parameter is deprecated. Use `modify_footer()` on the teal app object instead.
 #' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
-#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.15.3
+#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.16.0
 #'   please use [ui_teal()] and [srv_teal()] instead.
 #' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
-#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.15.3
+#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.16.0
 #'   please use [ui_teal()] and [srv_teal()] instead.
 #'
 #' @return Named list containing server and UI functions.
@@ -190,7 +190,7 @@ init <- function(data,
 
   if (lifecycle::is_present(id)) {
     lifecycle::deprecate_soft(
-      when = "0.15.3",
+      when = "0.16.0",
       what = "init(id)",
       details = paste(
         "To wrap `teal` application within other shiny application please use",
@@ -244,7 +244,7 @@ init <- function(data,
 
   if (lifecycle::is_present(title)) {
     lifecycle::deprecate_soft(
-      when = "0.15.3",
+      when = "0.16.0",
       what = "init(title)",
       details = paste(
         "Use `modify_title()` on the teal app object instead.",
@@ -256,7 +256,7 @@ init <- function(data,
   }
   if (lifecycle::is_present(header)) {
     lifecycle::deprecate_soft(
-      when = "0.15.3",
+      when = "0.16.0",
       what = "init(header)",
       details = paste(
         "Use `modify_header()` on the teal app object instead.",
@@ -268,7 +268,7 @@ init <- function(data,
   }
   if (lifecycle::is_present(footer)) {
     lifecycle::deprecate_soft(
-      when = "0.15.3",
+      when = "0.16.0",
       what = "init(footer)",
       details = paste(
         "Use `modify_footer()` on the teal app object instead.",
@@ -281,7 +281,7 @@ init <- function(data,
 
   if (length(landing) == 1L) {
     lifecycle::deprecate_soft(
-      when = "0.15.3",
+      when = "0.16.0",
       what = "landing_popup_module()",
       details = paste(
         "`landing_popup_module()` is deprecated.",

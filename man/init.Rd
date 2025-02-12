@@ -43,7 +43,7 @@ This parameter is deprecated. Use \code{modify_footer()} on the teal app object 
 
 \item{id}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} (\code{character}) Optionally,
 a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature. Deprecated since v0.15.3
+rather than a standalone \code{shiny} app. This is a legacy feature. Deprecated since v0.16.0
 please use \code{\link[=ui_teal]{ui_teal()}} and \code{\link[=srv_teal]{srv_teal()}} instead.}
 }
 \value{
