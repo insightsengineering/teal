@@ -54,7 +54,7 @@ If change of this magnitude is required, it is recommended to create a new modul
 
 ## Building Output Transformations (Decorators)
 
-For the sake of simplicity, we will call the output transformators as **decorators** in code examples below.
+For the sake of simplicity, we will name the output transformers as **decorators** in code examples below.
 
 ### Server
 
@@ -82,7 +82,7 @@ static_decorator <- teal_transform_module(
 
 ### UI
 
-If decoration requires user input, a `ui` function can be added.
+If the transformation requires user input, a `ui` function can be added.
 Here, the x-axis title is obtained from a `textInput` widget, giving the user some flexibility.
 Note how the input values are passed to the `within()` function using its `...` argument.
 See `?teal.code::within.qenv` for more examples.
@@ -117,10 +117,10 @@ interactive_decorator <- teal_transform_module(
 
 ### Variable Names as Arguments
 
-The server function of a decorating `teal_transform_module` must conform to the names of the variables that exist in the server function of the decorated `teal_module`.
-Writing a universal decorator that applies to any module is impossible because different modules may use different variable names for their output elements.
-It is possible, however, to create a decorator that will take the relevant variable names as arguments.
-Here, the `output_name` variable name is passed to a decorator, allowing it to work with multiple modules.
+The server function of a transforming `teal_transform_module` must conform to the names of the variables that exist in the server function of the transformed `teal_module`.
+Writing a universal transformer that applies to any module is impossible because different modules may use different variable names for their output elements.
+It is possible, however, to create a transformer that will take the relevant variable names as arguments.
+Here, the `output_name` variable name is passed to a transformer, allowing it to work with multiple modules.
 
 ```{r dynamic_decorator}
 dynamic_decorator <- function(output_name) {
@@ -154,13 +154,13 @@ dynamic_decorator <- function(output_name) {
 Note that when the function is used, `output_name` will be passed a character string but the expression passed to `within` needs a `name`/`symbol`, a language object, hence the argument value must be converted to a `name`.
 
 
-## Using Decorators
+## Using Output Transformations (Decorators)
 
-Decorators are applied to a `teal` module as follows:
+Transformations are applied to a `teal` module as follows:
 
-1. A list of decorators is passed to the module constructor function (_e.g._ `tm_my_module`).
-2. The module constructor calls the module generator function (`teal::module`) and passes the decorators to the `ui_args` and `server_args` arguments.
-3. The module functions, UI and server, take a list of decorators as arguments and resolve them using `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
+1. A list of transformations is passed to the module constructor function (_e.g._ `tm_my_module`).
+2. The module constructor calls the module generator function (`teal::module`) and passes the transformations to the `ui_args` and `server_args` arguments.
+3. The module functions, UI and server, take a list of transformations as arguments and resolve them using `ui_transform_teal_data` and `srv_transform_teal_data`, respectively.
 
 Here is a minimal illustration:
 
@@ -202,11 +202,11 @@ pseudo_decorated_module <- function(
 # styler: on
 ```
 
-The following examples demonstrate various uses of decorators.
+The following examples demonstrate various uses of output transformations.
 
-### Single Decoration
+### Single Transformation (Decoration)
 
-In the first example we will apply one decoration to one output.
+In the first example we will apply one transformation to one output.
 
 ### Module
 
@@ -297,7 +297,7 @@ tm_decorated_plot <- function(label = "module", decorators = list()) {
 
 #### Application
 
-Note that every call to the module constructor (`tm_decorated_plot`) takes a list containing _one_ decorator.
+Note that every call to the module constructor (`tm_decorated_plot`) takes a list containing _one_ transformer.
 
 ```{r app_1}
 app <- init(
@@ -330,13 +330,13 @@ knitr::include_url(url, height = "800px")
 ```
 
 
-### Decorating Multiple Outputs
+### Transforming Multiple Outputs (Decorators)
 
-Here we will apply decoration to two outputs in one module.
+Here we will apply transformation to two outputs in one module.
 
-#### Decorators
+#### Transformators
 
-The plot decorator adds a user-provided title to a `ggplot2` object.
+The plot transformators adds a user-provided title to a `ggplot2` object.
 
 ```{r plot_decorator}
 plot_decorator <- teal_transform_module(
@@ -365,7 +365,7 @@ plot_decorator <- teal_transform_module(
 )
 ```
 
-The table decorator adds a column to a `data.frame`.
+The table transformators adds a column to a `data.frame`.
 
 ```{r table_decorator}
 table_decorator <- teal_transform_module(
@@ -390,7 +390,7 @@ table_decorator <- teal_transform_module(
 The following module uses `ggplot2` to generate a scatter plot, and presents a simple `data.frame` as a summary table.
 Code for both outputs is also displayed.
 
-Note that the module constructor accepts one list of decorators and the decorators are then manually separated in the module functions.
+Note that the module constructor accepts one list of transformations and the transformations are then manually separated in the module functions.
 
 ```{r tm_decorated_plot_table}
 tm_decorated_plot_table <- function(label = "module with two outputs", decorators = list()) {
@@ -488,7 +488,7 @@ tm_decorated_plot_table <- function(label = "module with two outputs", decorator
 
 #### Application
 
-Note that a named list of decorators is passed to the module constructor.
+Note that a named list of transformations is passed to the module constructor.
 
 ```{r app_2}
 app <- init(
@@ -525,14 +525,14 @@ knitr::include_url(url, height = "800px")
 
 ## Convenience
 
-Here we present some ways to work with decorators more conveniently.
+Here we present some ways to work with transformers more conveniently.
 These are purely optional.
 
 ### Reducing Boilerplate
 
-The function `make_teal_transform_server` can be used to reduce the amount of boilerplate code when writing new decorators.
+The function `make_teal_transform_server` can be used to reduce the amount of boilerplate code when writing new transformers.
 It takes `language` as input and requires you to use `input` object names directly in the expression.
-The following calls yield the same decorator module.
+The following calls yield the same transformer module.
 Note that the combination of `my_title = input$x_axis_title` and `xlab(my_title)` is replaced by a simple `xlab(x_axis_table)`.
 ```{r, eval=FALSE}
 teal_transform_module(
@@ -576,9 +576,9 @@ teal_transform_module(
 ```
 
 
-### Multiple Decorators
+### Multiple Transformers
 
-Consider these constructs to accommodate an arbitrary number of decorators in your module.
+Consider these constructs to accommodate an arbitrary number of transformers in your module.
 Note that with this method all decorations will be applied to one output.
 ```{r, eval=FALSE}
 # in the module UI function
