@@ -96,9 +96,11 @@ app <- init(
     module(
       label = "iris histogram",
       server = function(input, output, session, data) {
-        updateSelectInput(session = session,
-                          inputId =  "var",
-                          choices = names(data()[["iris"]])[1:4])
+        updateSelectInput(
+          session = session,
+          inputId = "var",
+          choices = names(data()[["iris"]])[1:4]
+        )
 
         output$hist <- renderPlot({
           req(input$var)
@@ -108,9 +110,11 @@ app <- init(
       ui = function(id) {
         ns <- NS(id)
         list(
-          selectInput(inputId = ns("var"),
-                      label =  "Column name",
-                      choices = NULL),
+          selectInput(
+            inputId = ns("var"),
+            label = "Column name",
+            choices = NULL
+          ),
           plotOutput(outputId = ns("hist"))
         )
       }
