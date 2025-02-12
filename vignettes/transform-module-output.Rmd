@@ -20,17 +20,13 @@ library(ggplot2)
 
 The outputs produced by `teal` modules, like graphs or tables, are created by the module developer and look a certain way.
 It is hard to design an output that will satisfy every possible user, so the form of the output should be considered a default value that can be customized.
-Here we describe the concept of _transforming_, whereby a `teal_transform_module` can modify an output created by a `teal_module`, enabling you to tailor outputs to your specific requirements without rewriting the original module code.
-
-Note that we use the same mechanism to transform the `teal_data` before it reaches the module, you can read [this vignette](transform-input-data.html) to learn more about this.
+In [Transform Input Data](transform-input-data.html) we described how `teal_module`'s input data can be modified using `teal_transform_module`. Here we present how to utilize `teal_transform_module` to modify an output created by a `teal_module`, enabling you to tailor outputs to your specific requirements without rewriting the original module code.
 
 <img src="images/teal-transform-module-decorators.svg" alt="Transforming teal_data" style="width: 100%;" />
 
-In this vignette we will focus on using the `teal_transform_module` for transforming the module outputs using the `decorators` argument of the `teal` module function.
-
 ## How to Transform outputs?
 
-Custom transformations for the output objects can be created with `teal_transform_module` and thus they are `shiny` modules.
+Custom transformations for the output objects can be created with `teal_transform_module()` and thus they are `shiny` modules.
 They are passed to `teal_module` constructors as arguments (see below).
 Their server logic will be used to modify objects such as plots or tables that exist in the server function of a `teal_module`.
 A `ui` function can provide interactivity but that is optional, an app developer is free to transform outputs objects of a `teal` module that do not require user input.
@@ -42,9 +38,9 @@ Transforming `teal` module output requires the following:
 
 1. **Module Support**:<br>
 `teal` will apply transformations to `teal_module` outputs, but the module in question must explicitly support this functionality.
-It the responsibility of to the module developer to accept and consume the list of `teal_transform_module`.
+It is the responsibility of to the module developer to accept and consume the list of `teal_transform_module`.
 2. **Matching Object Names**:<br>
-Transformations will have to reference variables that already exist in the `teal_module` server function and therefore must use the appropriate variable names.
+Transformations have to reference variables that already exist in the `teal_module` server function and therefore must use the appropriate variable names.
 Think of it as extending the plot/table code that already exists in the module.
 Module developers are encouraged to provide the relevant names in the module's documentation, otherwise the person writing the output transformation must follow the source code.
 3. **Maintaining Object Classes**:<br>
@@ -55,7 +51,7 @@ If change of this magnitude is required, it is recommended to create a new modul
 ## Building Output Transformations (Decorators)
 
 For the sake of simplicity, we will name the output transformers as **decorators** in code examples below.
-
+This name convention is used in [`teal.modules.general` modules](https://insightsengineering.github.io/teal.modules.general/latest-tag/articles/decorate-module-output.html).
 ### Server
 
 Here we create a simple transformator that does not provide user input.
@@ -118,9 +114,9 @@ interactive_decorator <- teal_transform_module(
 ### Variable Names as Arguments
 
 The server function of a transforming `teal_transform_module` must conform to the names of the variables that exist in the server function of the transformed `teal_module`.
-Writing a universal transformer that applies to any module is impossible because different modules may use different variable names for their output elements.
-It is possible, however, to create a transformer that will take the relevant variable names as arguments.
-Here, the `output_name` variable name is passed to a transformer, allowing it to work with multiple modules.
+Writing a universal transformator that applies to any module is impossible because different modules may use different variable names for their output elements.
+It is possible, however, to create a transformator that will take the relevant variable names as arguments.
+Here, the `output_name` variable name is passed to a transformator, allowing it to work with multiple modules.
 
 ```{r dynamic_decorator}
 dynamic_decorator <- function(output_name) {
@@ -297,7 +293,7 @@ tm_decorated_plot <- function(label = "module", decorators = list()) {
 
 #### Application
 
-Note that every call to the module constructor (`tm_decorated_plot`) takes a list containing _one_ transformer.
+Note that every call to the module constructor (`tm_decorated_plot`) takes a list containing _one_ transformator.
 
 ```{r app_1}
 app <- init(
@@ -525,14 +521,14 @@ knitr::include_url(url, height = "800px")
 
 ## Convenience
 
-Here we present some ways to work with transformers more conveniently.
+Here we present some ways to work with transformators more conveniently.
 These are purely optional.
 
 ### Reducing Boilerplate
 
-The function `make_teal_transform_server` can be used to reduce the amount of boilerplate code when writing new transformers.
+The function `make_teal_transform_server` can be used to reduce the amount of boilerplate code when writing new transformators.
 It takes `language` as input and requires you to use `input` object names directly in the expression.
-The following calls yield the same transformer module.
+The following calls yield the same transformator module.
 Note that the combination of `my_title = input$x_axis_title` and `xlab(my_title)` is replaced by a simple `xlab(x_axis_table)`.
 ```{r, eval=FALSE}
 teal_transform_module(
@@ -576,9 +572,9 @@ teal_transform_module(
 ```
 
 
-### Multiple Transformers
+### Multiple Transformations
 
-Consider these constructs to accommodate an arbitrary number of transformers in your module.
+Consider these constructs to accommodate an arbitrary number of transformators in your module.
 Note that with this method all decorations will be applied to one output.
 ```{r, eval=FALSE}
 # in the module UI function

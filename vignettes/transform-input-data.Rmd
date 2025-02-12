@@ -13,8 +13,7 @@ vignette: >
 ## Introduction
 
 `teal` version `0.16` introduced a new, optional argument in `teal::module`, `transformators`.
-This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_data_module` created using the `teal_transform_module()` function
-to transform the input `teal_data` object before passing them to the module.
+This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_transform_module` created using the `teal_transform_module()` function.
 `teal_transform_module()` takes `ui` and `server` arguments to create a `shiny` module that encodes data transformations.
 
 When transformators are passed to a module, `teal` will execute data transformations when that module is loaded as well as whenever the original data changes.
