@@ -1,4 +1,4 @@
-pandoc: '3.4'
+pandoc: 3.6.2
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
@@ -6,9 +6,7 @@ articles:
   adding-support-for-reporting: adding-support-for-reporting.html
   bootstrap-themes-in-teal: bootstrap-themes-in-teal.html
   creating-custom-modules: creating-custom-modules.html
-  customizing-module-output: customizing-module-output.html
   data-as-shiny-module: data-as-shiny-module.html
-  data-transform-as-shiny-module: data-transform-as-shiny-module.html
   blueprint/dataflow: blueprint/dataflow.html
   blueprint/filter_panel: blueprint/filter_panel.html
   filter-panel: filter-panel.html
@@ -22,7 +20,9 @@ articles:
   blueprint/product_map: blueprint/product_map.html
   teal-as-a-shiny-module: teal-as-a-shiny-module.html
   teal-options: teal-options.html
-last_built: 2025-02-09T16:31Z
+  transform-input-data: transform-input-data.html
+  transform-module-output: transform-module-output.html
+last_built: 2025-02-12T13:36Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
