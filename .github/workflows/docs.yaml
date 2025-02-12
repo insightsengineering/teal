@@ -50,8 +50,6 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v2
 
-      - uses: r-lib/actions/setup-renv@v2
-
       - name: Render Rmarkdown files 🖹
         run: |
           RMD_PATH=($(git diff --name-only ${{ github.event.before }} ${{ github.sha }} *.Rmd))
