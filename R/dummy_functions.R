@@ -5,7 +5,7 @@
 #' This module creates an object called `object` that can be modified with decorators.
 #' The `object` is determined by what's selected in `Choose a dataset` input in UI.
 #' The object can be anything that can be handled by `renderPrint()`.
-#' See the `vignette("customizing-module-output", package = "teal")` or [`teal_transform_module`]
+#' See the `vignette("decorate-module-output", package = "teal")` or [`teal_transform_module`]
 #' to read more about decorators.
 #'
 #' @inheritParams teal_modules

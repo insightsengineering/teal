@@ -1,11 +1,11 @@
 ---
-title: "Customizing Module Output"
+title: "Decorate Module Output"
 author: "NEST CoreDev"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Customizing Module Output}
+  %\VignetteIndexEntry{Decorate Module Output}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,12 +18,18 @@ library(ggplot2)
 
 ## Introduction
 
-The outputs produced by `teal` modules, like graphs or tables, are created by the module developer and look a certain way.
-It is impossible to design an output that will satisfy every possible user, so the form of the output should be considered a default value that can be customized.
+`teal` version `0.16` introduced a new, optional argument in `teal::module`, `decorators`.
+This argument accepts a `list` of `teal_transform_module` objects, which are a special class of `teal_data_module` created using the `teal_transform_module()` function
+to transform the `teal_data` produced by `teal` modules thus giving the ability to decorate the output objects from the module, like graphs or tables to look a certain way.
+
+It is hard to design an output that will satisfy every possible user, so the form of the output should be considered a default value that can be customized.
 Here we describe the concept of _decoration_, whereby a `teal_transform_module` can modify an output created by a `teal_module`, enabling you to tailor outputs to your specific requirements without rewriting the original module code.
 
-While it is not required, reading [this vignette](data-transform-as-shiny-module.html) may give you a fuller understanding.
+Note that we use the same mechanism to transform the `teal_data` before it reaches the module, you can read [this vignette](transform-input-data.html) to learn more about this.
 
+<img src="images/teal-transform-module-decorators.svg" alt="Transforming teal_data" style="width: 100%;" />
+
+In this vignette we will focus on using the `teal_transform_module` for transforming the module outputs using the `decorators` argument in the `teal::module` function.
 
 ## Decorators
 
@@ -158,10 +164,11 @@ Decorators are applied to a `teal` module as follows:
 Here is a minimal illustration:
 
 ```{r pseudo_module, eval = FALSE}
+# styler: off
 pseudo_decorated_module <- function(
-  label = "Pseudo Module with Decorator Support",
-  decorators = list()                                                         # <--- added block (1)
-) {
+    label = "Pseudo Module with Decorator Support",
+    decorators = list()                                                       # <--- added block (1)
+  ) {
   module(
     label = label,
     ui_args = list(decorators = decorators),                                  # <--- added block (2)
@@ -191,6 +198,7 @@ pseudo_decorated_module <- function(
     }
   )
 }
+# styler: on
 ```
 
 The following examples demonstrate various uses of decorators.

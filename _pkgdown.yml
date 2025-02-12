@@ -62,13 +62,13 @@ articles:
       - including-data-in-teal-applications
       - data-as-shiny-module
       - filter-panel
-      - data-transform-as-shiny-module
+      - transform-input-data
   - title: Extending `teal`
     navbar: Extending `teal`
     contents:
       - creating-custom-modules
       - adding-support-for-reporting
-      - customizing-module-output
+      - decorate-module-output
   - title: Using `teal`
     navbar: Using `teal`
     contents:
