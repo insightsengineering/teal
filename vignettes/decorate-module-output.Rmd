@@ -166,9 +166,9 @@ Here is a minimal illustration:
 ```{r pseudo_module, eval = FALSE}
 # styler: off
 pseudo_decorated_module <- function(
-    label = "Pseudo Module with Decorator Support",
-    decorators = list()                                                       # <--- added block (1)
-  ) {
+  label = "Pseudo Module with Decorator Support",
+  decorators = list()                                                       # <--- added block (1)
+) {
   module(
     label = label,
     ui_args = list(decorators = decorators),                                  # <--- added block (2)
