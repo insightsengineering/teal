@@ -71,8 +71,6 @@ ui_teal <- function(id, modules) {
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    tags$header(header),
-    tags$hr(style = "margin-top: 0.5rem; margin-bottom: 0.5rem;"),
     shiny_busy_message_panel,
     tags$div(
       id = ns("tabpanel_wrapper"),
