@@ -29,7 +29,11 @@ More advanced users of the framework can also create new analysis modules which 
 
 This simple `teal` application takes the `iris` and `mtcars` datasets and displays their contents:
 
-```{r message=FALSE, warning=FALSE}
+```{r setup, include=FALSE}
+library(teal)
+```
+
+```{r app}
 library(teal)
 
 app <- init(
@@ -80,6 +84,17 @@ Every `teal` application is composed of the following elements, all of which can
 * <span style="color: #83cc41;">Module Content</span> _(panel on the middle)_: the outputs of the currently active module.
 * <span style="color: #3A88FE;">Filter Panel</span> _(panel on the right hand side)_: for filtering the data to be passed into all `teal` modules.
   * In the example code: the filter panel is being initialized with a filter for the `Species` variable in the `iris` dataset.
+
+## Try the above app in `shinylive`
+
+```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("app")
+), collapse = "\n")
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
 
 ## Creating your own applications
 
