@@ -2,15 +2,17 @@
 % Please edit documentation in R/module_teal_data.R
 \name{module_teal_data}
 \alias{module_teal_data}
+\alias{ui_teal_data_module}
 \alias{ui_teal_data}
+\alias{srv_teal_data_module}
 \alias{srv_teal_data}
 \alias{ui_validate_reactive_teal_data}
 \alias{srv_validate_reactive_teal_data}
 \title{Execute and validate \code{teal_data_module}}
 \usage{
-ui_teal_data(id, data_module = function(id) NULL)
+ui_teal_data_module(id, data_module = function(id) NULL)
 
-srv_teal_data(
+srv_teal_data_module(
   id,
   data_module = function(id) NULL,
   modules = NULL,
@@ -29,7 +31,7 @@ srv_validate_reactive_teal_data(
 )
 }
 \arguments{
-\item{id}{(\code{character(1)}) Module id}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{data_module}{(\code{teal_data_module})}
 
@@ -41,7 +43,7 @@ srv_validate_reactive_teal_data(
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
 
-\item{data}{(\verb{reactive teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 }
 \value{
 \code{reactive} \code{teal_data}
@@ -50,7 +52,12 @@ and display a generic failure message.}
 This is a low level module to handle \code{teal_data_module} execution and validation.
 \code{\link[=teal_transform_module]{teal_transform_module()}} inherits from \code{\link[=teal_data_module]{teal_data_module()}} so it is handled by this module too.
 \code{\link[=srv_teal]{srv_teal()}} accepts various \code{data} objects and eventually they are all transformed to \code{reactive}
-\code{\link[=teal_data]{teal_data()}} which is a standard data class in whole \code{teal} framework.
+\code{\link[teal.data:teal_data]{teal.data::teal_data()}} which is a standard data class in whole \code{teal} framework.
+}
+\note{
+\code{ui_teal_data_module} was renamed from \code{ui_teal_data}.
+
+\code{srv_teal_data_module} was renamed from \code{srv_teal_data}.
 }
 \section{data validation}{
 
@@ -59,10 +66,10 @@ Executed \code{\link[=teal_data_module]{teal_data_module()}} is validated and ou
 Output \code{data} is invalid if:
 \enumerate{
 \item \code{\link[=teal_data_module]{teal_data_module()}} is invalid if server doesn't return \code{reactive}. \strong{Immediately crashes an app!}
-\item \code{reactive} throws a \code{shiny.error} - happens when module creating \code{\link[=teal_data]{teal_data()}} fails.
-\item \code{reactive} returns \code{qenv.error} - happens when \code{\link[=teal_data]{teal_data()}} evaluates a failing code.
-\item \code{reactive} object doesn't return \code{\link[=teal_data]{teal_data()}}.
-\item \code{\link[=teal_data]{teal_data()}} object lacks any \code{datanames} specified in the \code{modules} argument.
+\item \code{reactive} throws a \code{shiny.error} - happens when module creating \code{\link[teal.data:teal_data]{teal.data::teal_data()}} fails.
+\item \code{reactive} returns \code{qenv.error} - happens when \code{\link[teal.data:teal_data]{teal.data::teal_data()}} evaluates a failing code.
+\item \code{reactive} object doesn't return \code{\link[teal.data:teal_data]{teal.data::teal_data()}}.
+\item \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object lacks any \code{datanames} specified in the \code{modules} argument.
 }
 
 \code{teal} (observers in \code{srv_teal}) always waits to render an app until \code{reactive} \code{teal_data} is

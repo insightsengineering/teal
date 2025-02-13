@@ -8,9 +8,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-`teal` is an interactive data exploration framework based on Shiny, designed primarily to analyze CDISC clinical trial data.
+`teal` is an interactive data exploration framework based on `shiny`, designed primarily to analyze CDISC clinical trial data.
 
-A Shiny Application created with `teal` offers users the ability to:
+A `shiny` Application created with `teal` offers users the ability to:
 
 - Import data from external sources;
 - Dynamically filter data for analysis;

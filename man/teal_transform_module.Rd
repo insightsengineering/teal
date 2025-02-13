@@ -39,7 +39,7 @@ The transformed data is then passed to the \code{server} of \code{\link[=teal_mo
 The primary advantage of \code{teal_transform_module} over custom modules is in its error handling, where all warnings and
 errors are managed by \code{teal}, allowing developers to focus on transformation logic.
 
-For more details, see the vignette: \code{vignette("data-transform-as-shiny-module", package = "teal")}.
+For more details, see the vignette: \code{vignette("transform-input-data", package = "teal")}.
 }
 
 \section{Customizing Module Outputs}{
@@ -49,7 +49,7 @@ Some \code{\link{teal_modules}} permit developers to inject custom \code{shiny} 
 To manage these \code{decorators} within your module, use \code{\link[=ui_transform_teal_data]{ui_transform_teal_data()}} and \code{\link[=srv_transform_teal_data]{srv_transform_teal_data()}}.
 (For further guidance on managing decorators, refer to \code{ui_args} and \code{srv_args} in the vignette documentation.)
 
-See the vignette \code{vignette("decorate-modules-output", package = "teal")} for additional examples.
+See the vignette \code{vignette("transform-module-output", package = "teal")} for additional examples.
 }
 
 \section{\code{server} as a language}{
@@ -135,3 +135,13 @@ if (interactive()) {
 }
 
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEATKKSgB9UswgBnJUUYxLLh3MV0HpdgOlpLmpbeycXGGsYIjMVajh-CEDA6ih6OGppAF5pPjAAZStxAiCw51d3RmUXaVpGWgc83ADkiytoeE8cvLqGppbAhxEpKpzVdXEtWjNcaTaoHRAB5OjY+PzhkXZp2fGNKYhUFVJZomOjk+khhwdNCEXl5OlGOCgNKXYlpKefgHdaUgACyE7Hm2lmXx+UNq9U8CmkgNeZm2sNmAFZ+N9odIAL6Y7F4x64-HJHEtHjNb7BUJQRzlSKrOIJZapdKZbpgACSwlE4ikpVp4QqpBq5RhfTwy3mHTgXVyYF6jUlWOkKlo2WUan2EG2ZgeKsCji80gAcvldSSnlYAOYOAAkZkkiWxEBU8HqBG5F3Yjn8kGsxGoSop8vygKIv2kSUDbscTWkEm4KhkOTRsxgQg1AEZ01AAB4atNXciobOW5LlnGUp5DRgjDV7SY6nZzSwLaSQn6M9abRi63ZapvbQ7HU7nUdXWW3Ej67EvN58hKd7H-IEgsEUolQ5fY5KK42K4CzLOICABohBgC6W5+VZvTzPgblQgudsfF8aBp+5aehK-f9-ckBExAQzlIC5rDMOBiGYEUqnhak7EFekohiJlnUnOsRA1NwAGs4FsV4QiQukImsWsRgwwI4DzVAXhuO4qOSIh6AAK2g0hjReCR2BY9ixHLElMRA6B0APQQ-BaeYNWpMF9xyRVN2+btZQ1GjYFQeJULWZkVRIoU3DguV5hpUjhQ8atWmglxKjlHw-DAiCoJgyohOAgRaCUaRh3IXlJASHhZyuYEIFYABBdB2DQVA7TVWZortCiRExMkIDAHFLyAA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEATKKSgB9UswgBnJUUYxLLh3MV0HpdgOlpLmpbeycXGGsYIjMVajh-CEDA6ih6OGppAF5pPjAAZStxAiCw51d3RmUXaVpGWgc83ADkiytoeE8cvLqGppbAhxEpKpzVdXEtWjNcaTaoHRAB5OjY+PzhkXZp2fGNKYhUFVJZomOjk+khhwdNCEXl5OlGOCgNKXYlpKefgHdaUgACyE7Hm2lmXx+UNq9U8CmkgNeZm2sNmAFZ+N9odIAL6Y7F4x64-HJHEtHjNb7BUJQRzlSKrOIJZapdKZbpgACSwlE4ikpVp4QqpBq5RhfTwy3mHTgXVyYF6jUlWOkKlo2WUan2EG2ZgeKsCji80gAcvldSSnlYAOYOAAkZkkiWxEBU8HqBG5F3Yjn8kGsxGoSop8vygKIv2kSUDbscTWkEm4KhkOTRsxgQg1AEZ01AAB4atNXciobOW5LlnGUp5DRgjDV7SY6nZzSwLaSQn6M9abRi63ZapvbQ7HU7nUdXWW3Ej67EvN58hKd7H-IEgsEUolQ5fY5KK42K4CzLOICABohBgC6W5+VZvTzPgblQgudsfF8aBp+5aehK-f9-ckBExAQzlIC5rDMOBiGYEUqnhak7EFekohiJlnUnOsRA1NwAGs4FsV4QiQukImsWsRgwwI4DzVAXhuO4qOSIh6AAK2g0hjReCR2BY9ixHLElMRA6B0APQQ-BaeYNWpMF9xyRVN2+btZQ1GjYFQeJULWZkVRIoU3DguV5hpUjhQ8atWmglxKjlHw-DAiCoJgyohOAgRaCUaRh3IXlJASHhZyuYEIFYABBdB2DQVA7TVWZortCiRExMkIDAHFLyAA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

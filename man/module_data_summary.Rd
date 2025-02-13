@@ -12,7 +12,7 @@
 \usage{
 ui_data_summary(id)
 
-srv_data_summary(id, teal_data)
+srv_data_summary(id, data)
 
 get_filter_overview_wrapper(teal_data)
 
@@ -25,7 +25,7 @@ get_filter_overview_MultiAssayExperiment(current_data, initial_data, dataname)
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{teal_data}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{current_data}{(\code{object}) current object (after filtering and transforming).}
 

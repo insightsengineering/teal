@@ -36,7 +36,7 @@ Thus, the first step of building a `teal` app is creating a `teal_data` object.
 
 A `teal_data` object is created by calling the `teal_data` function and passing data objects as `name:value` pairs.
 
-```{r, message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(teal)
 
 # create teal_data
@@ -232,6 +232,32 @@ For a detailed explanation of verification, see [this `teal.data` vignette](http
 [(back to Reproducible Data)](#reproducible-data)
 
 <br>
+
+##### Hidden datasets
+
+Objects which name starts with a dot (.) are hidden in teal_data and the whole teal application. This can be used to pass auxiliary objects in the `teal_data` instance, without exposing them to the app user. For example:
+
+- Proxy variables for column modifications
+- Temporary datasets used to create final ones
+- Connection objects
+
+```{r}
+my_data <- teal_data()
+my_data <- within(my_data, {
+  .data1 <- data.frame(id = 1:10, x = 11:20)
+  .data2 <- data.frame(id = 1:10, y = 11:20)
+  data <- merge(.data1, .data2)
+})
+
+ls(my_data)
+names(my_data)
+
+app <- init(data = my_data, modules = example_module())
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
 
 ## Further reading
 

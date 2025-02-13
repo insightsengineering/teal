@@ -11,9 +11,7 @@ ui_init_data(id)
 srv_init_data(id, data)
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
 The data which application will depend on.}
@@ -24,7 +22,7 @@ Output of the \code{data}. If \code{data} fails then returned error is handled (
 rest of the application can respond to this respectively.
 }
 \description{
-This module manages the \code{data} argument for \code{srv_teal}. The \code{teal} framework uses \code{\link[=teal_data]{teal_data()}},
+This module manages the \code{data} argument for \code{srv_teal}. The \code{teal} framework uses \code{\link[teal.data:teal_data]{teal.data::teal_data()}},
 which can be provided in various ways:
 \enumerate{
 \item Directly as a \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object. This will automatically convert it into a \code{reactive} \code{teal_data}.

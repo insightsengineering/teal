@@ -5,14 +5,19 @@
 #' This module creates an object called `object` that can be modified with decorators.
 #' The `object` is determined by what's selected in `Choose a dataset` input in UI.
 #' The object can be anything that can be handled by `renderPrint()`.
-#' See the `vignette("decorate-modules-output", package = "teal")` or [`teal_transform_module`]
+#' See the `vignette("transform-module-output", package = "teal")` or [`teal_transform_module`]
 #' to read more about decorators.
 #'
 #' @inheritParams teal_modules
-#' @param decorators `r lifecycle::badge("experimental")` (`list` of `teal_transform_module` or `NULL`) optional,
-#' if not `NULL`, decorator for tables or plots included in the module.
+#' @param decorators `r lifecycle::badge("experimental")` (`list` of `teal_transform_module`) optional,
+#' decorator for `object` included in the module.
 #'
 #' @return A `teal` module which can be included in the `modules` argument to [init()].
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
@@ -25,9 +30,9 @@
 example_module <- function(label = "example teal module",
                            datanames = "all",
                            transformators = list(),
-                           decorators = NULL) {
+                           decorators = list()) {
   checkmate::assert_string(label)
-  checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
+  checkmate::assert_list(decorators, "teal_transform_module")
 
   ans <- module(
     label,

@@ -29,7 +29,7 @@
 #' - set `options(shiny.bookmarkStore = "server")` before running the app
 #'
 #'
-#' @inheritParams init
+#' @inheritParams module_teal
 #'
 #' @return Invisible `NULL`.
 #'

@@ -1,9 +1,10 @@
 #' Landing popup module
 #'
-#' @description Creates a landing welcome popup for `teal` applications.
+#' @description `r lifecycle::badge("deprecated")` Creates a landing welcome popup for `teal` applications.
 #'
 #' This module is used to display a popup dialog when the application starts.
 #' The dialog blocks access to the application and must be closed with a button before the application can be viewed.
+#' This function is deprecated, please use `add_landing_modal()` on the teal app object instead.
 #'
 #' @param label (`character(1)`) Label of the module.
 #' @param title (`character(1)`) Text to be displayed as popup title.
@@ -13,51 +14,19 @@
 #'
 #' @return A `teal_module` (extended with `teal_landing_module` class) to be used in `teal` applications.
 #'
-#' @examples
-#' app1 <- init(
-#'   data = teal_data(iris = iris),
-#'   modules = modules(
-#'     example_module()
-#'   ),
-#'   landing_popup = landing_popup_module(
-#'     content = "A place for the welcome message or a disclaimer statement.",
-#'     buttons = modalButton("Proceed")
-#'   )
-#' )
-#' if (interactive()) {
-#'   shinyApp(app1$ui, app1$server)
-#' }
-#'
-#' app2 <- init(
-#'   data = teal_data(iris = iris),
-#'   modules = modules(
-#'     example_module()
-#'   ),
-#'   landing_popup = landing_popup_module(
-#'     title = "Welcome",
-#'     content = tags$b(
-#'       "A place for the welcome message or a disclaimer statement.",
-#'       style = "color: red;"
-#'     ),
-#'     buttons = tagList(
-#'       modalButton("Proceed"),
-#'       actionButton("read", "Read more",
-#'         onclick = "window.open('http://google.com', '_blank')"
-#'       ),
-#'       actionButton("close", "Reject", onclick = "window.close()")
-#'     )
-#'   )
-#' )
-#'
-#' if (interactive()) {
-#'   shinyApp(app2$ui, app2$server)
-#' }
-#'
 #' @export
 landing_popup_module <- function(label = "Landing Popup",
                                  title = NULL,
                                  content = NULL,
                                  buttons = modalButton("Accept")) {
+  lifecycle::deprecate_soft(
+    when = "0.15.3",
+    what = "landing_popup_module()",
+    details = paste(
+      "landing_popup_module() is deprecated.",
+      "Use add_landing_modal() on the teal app object instead."
+    )
+  )
   checkmate::assert_string(label)
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_multi_class(
@@ -70,6 +39,7 @@ landing_popup_module <- function(label = "Landing Popup",
 
   module <- module(
     label = label,
+    datanames = NULL,
     server = function(id) {
       moduleServer(id, function(input, output, session) {
         showModal(

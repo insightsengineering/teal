@@ -11,18 +11,16 @@
 \usage{
 ui_filter_data(id)
 
-srv_filter_data(id, datasets, active_datanames, data_rv, is_active)
+srv_filter_data(id, datasets, active_datanames, data, is_active)
 
 .make_filtered_teal_data(modules, data, datasets = NULL, datanames)
 
-.observe_active_filter_changed(datasets, is_active, active_datanames, data_rv)
+.observe_active_filter_changed(datasets, is_active, active_datanames, data)
 
 .get_filter_expr(datasets, datanames)
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton
@@ -30,11 +28,10 @@ which implies in filter-panel to be "global". When \code{NULL} then filter-panel
 
 \item{active_datanames}{(\code{reactive} returning \code{character}) this module's data names}
 
-\item{data_rv}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 
-\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-Nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+\item{modules}{(\code{teal_modules})
+\code{teal_modules} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 }

@@ -1,6 +1,6 @@
 #' @title `TealReportCard`
 #' @description `r lifecycle::badge("experimental")`
-#' Child class of [`ReportCard`] that is used for `teal` specific applications.
+#' Child class of [`teal.reporter::ReportCard`] that is used for `teal` specific applications.
 #' In addition to the parent methods, it supports rendering `teal` specific elements such as
 #' the source code, the encodings panel content and the filter panel content as part of the
 #' meta data.
@@ -74,7 +74,13 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
   ),
   private = list(
     dispatch_block = function(block_class) {
-      eval(str2lang(block_class))
+      if (exists(block_class, getNamespace("teal"))) {
+        # for block classes which are in teal (TealSlicesBlock)
+        get(block_class)
+      } else {
+        # other block classes are in teal.reporter so we need to use super (ReporterCard) class
+        super$dispatch_block(block_class)
+      }
     }
   )
 )

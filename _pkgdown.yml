@@ -56,27 +56,28 @@ articles:
     navbar: Get started
     contents:
       - getting-started-with-teal
-  - title: Using `teal`
-    navbar: Using `teal`
-    contents:
-      - filter-panel
-      - teal-options
-      - bootstrap-themes-in-teal
   - title: Data in `teal` apps
     navbar: Data in `teal` apps
     contents:
       - including-data-in-teal-applications
       - data-as-shiny-module
-      - data-transform-as-shiny-module
+      - filter-panel
+      - transform-input-data
   - title: Extending `teal`
     navbar: Extending `teal`
     contents:
       - creating-custom-modules
       - adding-support-for-reporting
-      - decorate-module-output
+      - transform-module-output
+  - title: Using `teal`
+    navbar: Using `teal`
+    contents:
+      - teal-as-a-shiny-module
+      - teal-options
+      - bootstrap-themes-in-teal
   - title: 📃 Technical blueprint
     desc: >
-      The purpose of the blueprint is to aid new developer’s comprehension of the
+      The purpose of the blueprint is to aid new developer's comprehension of the
       fundamental principles of the `teal` framework. We will explore crucial `teal`
       concepts such as data flow, actors, and filter panel, among others.
     contents:
@@ -105,9 +106,17 @@ reference:
       - make_teal_transform_server
       - module_teal_with_splash
       - module_teal
+      - module_session_info
       - module
       - modules
       - teal_slices
+  - title: Application modifiers for `teal`
+    desc: Functions to modify the `teal` app object
+    contents:
+      - modify_footer
+      - modify_header
+      - modify_title
+      - add_landing_modal
   - title: Helper Functions
     desc: Helper functions for `teal`
     contents:

@@ -8,7 +8,7 @@ example_module(
   label = "example teal module",
   datanames = "all",
   transformators = list(),
-  decorators = NULL
+  decorators = list()
 )
 }
 \arguments{
@@ -24,10 +24,11 @@ There are 2 reserved values that have specific behaviors:
 argument.
 }}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transformator module's data input.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 
-\item{decorators}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (\code{list} of \code{teal_transform_module} or \code{NULL}) optional,
-if not \code{NULL}, decorator for tables or plots included in the module.}
+\item{decorators}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} (\code{list} of \code{teal_transform_module}) optional,
+decorator for \code{object} included in the module.}
 }
 \value{
 A \code{teal} module which can be included in the \code{modules} argument to \code{\link[=init]{init()}}.
@@ -39,7 +40,7 @@ A \code{teal} module which can be included in the \code{modules} argument to \co
 This module creates an object called \code{object} that can be modified with decorators.
 The \code{object} is determined by what's selected in \verb{Choose a dataset} input in UI.
 The object can be anything that can be handled by \code{renderPrint()}.
-See the \code{vignette("decorate-modules-output", package = "teal")} or \code{\link{teal_transform_module}}
+See the \code{vignette("transform-module-output", package = "teal")} or \code{\link{teal_transform_module}}
 to read more about decorators.
 }
 \examples{
@@ -51,3 +52,13 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIFpUcxUNql2A6dIAmUUlGkBeaV2oB9Z6-YASSxAgGUPaVpGWgBnXGkAWV0AYQBBLHDPGFICFhieXHtpGCJHFWo4GIi4AA9YVAqfErKK7QF+QSVpdiFyUXEpbR0QIpiACyFWVPR2cwASFVp4+ZiRKUYOgF8wTYBdIA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIFpUcxUNql2A6dIAmUUlGkBeaV2oB9Z6-YASSxAgGUPaVpGWgBnXGkAWV0AYQBBLHDPGFICFhieXHtpGCJHFWo4GIi4AA9YVAqfErKK7QF+QSVpdiFyUXEpbR0QIpiACyFWVPR2cwASFVp4+ZiRKUYOgF8wTYBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

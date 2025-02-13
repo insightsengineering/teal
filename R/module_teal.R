@@ -2,11 +2,11 @@
 #'
 #' @description
 #' `r lifecycle::badge("stable")`
-#' Module to create a `teal` app. This module can be called directly instead of [init()] and
-#' included in your custom application. Please note that [init()] adds `reporter_previewer_module`
-#' automatically, which is not a case when calling `ui/srv_teal` directly.
+#' Module to create a `teal` app as a Shiny Module.
 #'
 #' @details
+#' This module can be used instead of [init()] in custom Shiny applications. Unlike [init()], it doesn't
+#' automatically include [`module_session_info`].
 #'
 #' Module is responsible for creating the main `shiny` app layout and initializing all the necessary
 #' components. This module establishes reactive connection between the input `data` and every other
@@ -32,51 +32,26 @@
 #' @rdname module_teal
 #' @name module_teal
 #'
-#' @inheritParams module_init_data
 #' @inheritParams init
+#' @param id (`character(1)`) `shiny` module instance id.
+#' @param data (`teal_data`, `teal_data_module`, or `reactive` returning `teal_data`)
+#' The data which application will depend on.
+#' @param modules (`teal_modules`)
+#'   `teal_modules` object. These are the specific output modules which
+#'   will be displayed in the `teal` application. See [modules()] and [module()] for
+#'   more details.
 #'
 #' @return `NULL` invisibly
 NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id,
-                    modules,
-                    title = build_app_title(),
-                    header = tags$p(),
-                    footer = tags$p()) {
+ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
-  checkmate::assert(
-    .var.name = "title",
-    checkmate::check_string(title),
-    checkmate::check_multi_class(title, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-  checkmate::assert(
-    .var.name = "header",
-    checkmate::check_string(header),
-    checkmate::check_multi_class(header, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-  checkmate::assert(
-    .var.name = "footer",
-    checkmate::check_string(footer),
-    checkmate::check_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html"))
-  )
-
-  if (is.character(title)) {
-    title <- build_app_title(title)
-  } else {
-    validate_app_title_tag(title)
-  }
-
-  if (checkmate::test_string(header)) {
-    header <- tags$p(header)
-  }
-
-  if (checkmate::test_string(footer)) {
-    footer <- tags$p(footer)
-  }
-
+  checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
+
+  modules <- append_reporter_module(modules)
 
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
@@ -94,7 +69,6 @@ ui_teal <- function(id,
 
   bslib::page_fluid(
     id = id,
-    title = title,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     tags$header(header),
@@ -125,16 +99,7 @@ ui_teal <- function(id,
         )
       )
     ),
-    tags$hr(),
-    tags$footer(
-      tags$div(
-        footer,
-        teal.widgets::verbatim_popup_ui(ns("sessionInfo"), "Session Info", type = "link"),
-        br(),
-        ui_teal_lockfile(ns("lockfile")),
-        textOutput(ns("identifier"))
-      )
-    )
+    tags$hr()
   )
 }
 
@@ -146,24 +111,14 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
+  modules <- append_reporter_module(modules)
+
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
-
-    srv_teal_lockfile("lockfile")
-
-    output$identifier <- renderText(
-      paste0("Pid:", Sys.getpid(), " Token:", substr(session$token, 25, 32))
-    )
-
-    teal.widgets::verbatim_popup_srv(
-      "sessionInfo",
-      verbatim_content = utils::capture.output(utils::sessionInfo()),
-      title = "SessionInfo"
-    )
 
     # `JavaScript` code
     run_js_files(files = "init.js")
@@ -181,7 +136,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    data_pulled <- srv_init_data("data", data = data)
+    data_handled <- srv_init_data("data", data = data)
 
     validate_ui <- tags$div(
       id = session$ns("validate_messages"),
@@ -190,13 +145,13 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       ui_validate_error(session$ns("silent_error")),
       ui_check_module_datanames(session$ns("datanames_warning"))
     )
-    srv_check_class_teal_data("class_teal_data", data_pulled)
-    srv_validate_error("silent_error", data_pulled, validate_shiny_silent_error = FALSE)
-    srv_check_module_datanames("datanames_warning", data_pulled, modules)
+    srv_check_class_teal_data("class_teal_data", data_handled)
+    srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
+    srv_check_module_datanames("datanames_warning", data_handled, modules)
 
-    data_validated <- .trigger_on_success(data_pulled)
+    data_validated <- .trigger_on_success(data_handled)
 
-    data_rv <- reactive({
+    data_signatured <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
       if (!isTRUE(is_filter_ok)) {
@@ -211,7 +166,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     data_load_status <- reactive({
-      if (inherits(data_pulled(), "teal_data")) {
+      if (inherits(data_handled(), "teal_data")) {
         "ok"
       } else if (inherits(data, "teal_data_module")) {
         "teal_data_module failed"
@@ -221,10 +176,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(data_rv(), {
-        req(inherits(data_rv(), "teal_data"))
+      eventReactive(data_signatured(), {
+        req(inherits(data_signatured(), "teal_data"))
         logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(data_rv())
+        teal_data_to_filtered_data(data_signatured())
       })
     }
 
@@ -247,7 +202,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
 
       if (attr(data, "once")) {
-        observeEvent(data_rv(), once = TRUE, {
+        observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
           removeTab("teal_modules-active_tab", target = "teal_data_module")
@@ -262,15 +217,17 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
     }
 
+    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
-      data_rv = data_rv,
+      data = data_signatured,
       datasets = datasets_rv,
       modules = modules,
       slices_global = slices_global,
-      data_load_status = data_load_status
+      data_load_status = data_load_status,
+      reporter = reporter
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)

@@ -33,13 +33,13 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
     },
     server = function(id) {
       moduleServer(id, function(input, output, session) {
-        teal_data_rv <- object$server("mutate_inner")
-        td <- eventReactive(teal_data_rv(),
+        data <- object$server("mutate_inner")
+        td <- eventReactive(data(),
           {
-            if (inherits(teal_data_rv(), c("teal_data", "qenv.error"))) {
-              eval_code(teal_data_rv(), code)
+            if (inherits(data(), c("teal_data", "qenv.error"))) {
+              eval_code(data(), code)
             } else {
-              teal_data_rv()
+              data()
             }
           },
           ignoreNULL = FALSE

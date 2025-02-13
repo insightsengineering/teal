@@ -65,60 +65,6 @@ transform_list <<- list(
   )
 )
 
-testthat::describe("srv_teal lockfile", {
-  testthat::it(paste0(
-    "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
-    "and snapshot is copied to teal_app.lock and removed after session ended"
-  ), {
-    testthat::skip_if_not_installed("mirai")
-    testthat::skip_if_not_installed("renv")
-    withr::with_options(
-      list(teal.lockfile.mode = "enabled"),
-      {
-        renv_filename <- "teal_app.lock"
-        shiny::testServer(
-          app = srv_teal,
-          args = list(
-            id = "test",
-            data = teal.data::teal_data(iris = iris),
-            modules = modules(example_module())
-          ),
-          expr = {
-            iter <- 1
-            while (!file.exists(renv_filename) && iter <= 1000) {
-              Sys.sleep(0.5)
-              iter <- iter + 1 # max wait time is 500 seconds
-            }
-            testthat::expect_true(file.exists(renv_filename))
-          }
-        )
-        testthat::expect_false(file.exists(renv_filename))
-      }
-    )
-  })
-  testthat::it("creation process is not invoked for teal.lockfile.mode = \"disabled\"", {
-    testthat::skip_if_not_installed("mirai")
-    testthat::skip_if_not_installed("renv")
-    withr::with_options(
-      list(teal.lockfile.mode = "disabled"),
-      {
-        renv_filename <- "teal_app.lock"
-        shiny::testServer(
-          app = srv_teal,
-          args = list(
-            id = "test",
-            data = teal.data::teal_data(iris = iris),
-            modules = modules(example_module())
-          ),
-          expr = {
-            testthat::expect_false(file.exists(renv_filename))
-          }
-        )
-      }
-    )
-  })
-})
-
 testthat::describe("srv_teal arguments", {
   testthat::it("accepts data to be teal_data", {
     testthat::expect_no_error(
@@ -395,7 +341,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_s3_class(data_pulled(), "shiny.silent.error")
+        testthat::expect_s3_class(data_handled(), "shiny.silent.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -422,7 +368,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_s3_class(data_pulled(), "simpleError")
+        testthat::expect_s3_class(data_handled(), "simpleError")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -449,7 +395,7 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        testthat::expect_s3_class(data_pulled(), "qenv.error")
+        testthat::expect_s3_class(data_handled(), "qenv.error")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
       }
@@ -1035,6 +981,37 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("srv_teal_module.teal_module passes quoted arguments to the teal_module$server call", {
+    tm_query <- function(query) {
+      module(
+        "module_1",
+        server = function(id, data, query) {
+          moduleServer(id, function(input, output, session) {
+            reactive(q <- eval_code(data(), query))
+          })
+        },
+        server_args = list(query = query)
+      )
+    }
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(a_dataset = iris),
+        modules = modules(tm_query(quote(a_dataset <- subset(a_dataset, Species == "setosa"))))
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "module_1")
+        session$flushReact()
+
+        testthat::expect_setequal(
+          "setosa",
+          unique(modules_output$module_1()()[["a_dataset"]]$Species)
+        )
+      }
+    )
+  })
+
   testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified", {
     shiny::testServer(
       app = srv_teal,
@@ -1065,6 +1042,42 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_s3_class(modules_output$module_1(), "Reporter")
+      }
+    )
+  })
+
+  testthat::it("does not receive report_previewer when none of the modules contain reporter argument", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id) {}),
+          module("module_2", server = function(id) {})
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "report_previewer")
+        testthat::expect_setequal(names(modules_output), c("module_1", "module_2"))
+      }
+    )
+  })
+
+  testthat::it("receives one report_previewer module when any module contains reporter argument", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, reporter) {}),
+          module("module_2", server = function(id) {})
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_tab` = "report_previewer")
+        testthat::expect_setequal(names(modules_output), c("module_1", "module_2", "report_previewer"))
       }
     )
   })
