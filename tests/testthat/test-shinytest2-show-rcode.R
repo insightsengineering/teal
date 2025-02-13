@@ -50,7 +50,9 @@ testthat::test_that("e2e: teal app initializes with Show R Code modal", {
       sprintf('stopifnot(rlang::hash(iris) == "%s") # @linksto iris', rlang::hash(iris)),
       sprintf('stopifnot(rlang::hash(mtcars) == "%s") # @linksto mtcars', rlang::hash(mtcars)),
       ".raw_data <- list2env(list(iris = iris, mtcars = mtcars))",
-      "lockEnvironment(.raw_data) # @linksto .raw_data"
+      "lockEnvironment(.raw_data) # @linksto .raw_data",
+      "object <- iris",
+      "object"
     )
   )
 

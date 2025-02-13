@@ -1,0 +1,72 @@
+---
+title: "Teal as a Shiny Module"
+author: "NEST CoreDev"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Teal as a Shiny Module}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+A `shiny` developer can embed a `teal` application into their own `shiny` app by using `shiny` module components of `teal`: `ui_teal()` and `srv_teal()`.
+This approach differs from using `init()` and offers greater flexibility. While `init()` includes a session info footer automatically,
+when using `teal` as a `shiny` module you can optionally add it manually with `ui_session_info()` and `srv_session_info()`.
+Using `teal` as a `shiny` module offers several advantages:
+
+- Embedding one or more `teal` applications within a larger `shiny` app
+- Creating `teal` applications with dynamically generated components (initial data, modules, filters)
+
+## Example
+
+The following example demonstrates embedding `teal` as a `shiny` module within a larger `shiny` application.
+Users can select dataset names which are passed to the embedded `teal` component.
+On the server side, `srv_teal()` is called with a reactive `teal_data` object passed from the parent app's server.
+
+```{r setup, include=FALSE}
+library(teal)
+```
+```{r app}
+library(teal)
+
+data <- teal_data() |> within({
+  iris <- iris
+  mtcars <- mtcars
+  df <- data.frame(a = 1:10, b = letters[1:10])
+})
+
+mods <- modules(
+  example_module("mod1"),
+  example_module("mod2")
+)
+
+ui_app <- fluidPage(
+  title = "Your app with teal as a module",
+  selectInput("datasets", "Select datasets", choices = c("iris", "mtcars", "df"), selected = "iris", multiple = TRUE),
+  ui_teal("teal", mods),
+  ui_session_info("session_info")
+)
+
+srv_app <- function(input, output, session) {
+  data_subset <- reactive(data[input$datasets])
+  srv_teal("teal", data = data_subset, modules = mods)
+  srv_session_info("session_info")
+}
+
+if (interactive()) {
+  shinyApp(ui_app, srv_app)
+}
+```
+
+```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  "interactive <- function() TRUE",
+  knitr::knit_code$get("app")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```

@@ -20,13 +20,10 @@ get_bookmarking_option()
 need_bookmarking(modules)
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-Nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+\item{modules}{(\code{teal_modules})
+\code{teal_modules} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 }

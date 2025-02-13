@@ -22,7 +22,7 @@ ui_teal_module(id, modules, depth = 0L)
 
 srv_teal_module(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -33,7 +33,7 @@ srv_teal_module(
 
 \method{srv_teal_module}{default}(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -44,7 +44,7 @@ srv_teal_module(
 
 \method{srv_teal_module}{teal_modules}(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -55,7 +55,7 @@ srv_teal_module(
 
 \method{srv_teal_module}{teal_module}(
   id,
-  data_rv,
+  data,
   modules,
   datasets = NULL,
   slices_global,
@@ -65,20 +65,17 @@ srv_teal_module(
 )
 }
 \arguments{
-\item{id}{(\code{character}) Optionally,
-a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
-rather than a standalone \code{shiny} app. This is a legacy feature.}
+\item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{modules}{(\code{list} or \code{teal_modules} or \code{teal_module})
-Nested list of \code{teal_modules} or \code{teal_module} objects or a single
-\code{teal_modules} or \code{teal_module} object. These are the specific output modules which
+\item{modules}{(\code{teal_modules})
+\code{teal_modules} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
 \item{depth}{(\code{integer(1)})
 number which helps to determine depth of the modules nesting.}
 
-\item{data_rv}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton

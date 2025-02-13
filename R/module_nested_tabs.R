@@ -8,7 +8,7 @@
 #'
 #' @inheritParams module_teal
 #'
-#' @param data_rv (`reactive` returning `teal_data`)
+#' @param data (`reactive` returning `teal_data`)
 #'
 #' @param slices_global (`reactiveVal` returning `modules_teal_slices`)
 #'   see [`module_filter_manager`]
@@ -92,23 +92,23 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   args <- c(list(id = ns("module")), modules$ui_args)
 
   ui_teal <- tagList(
-    div(
-      id = ns("validate_datanames"),
-      ui_validate_reactive_teal_data(ns("validate_datanames"))
-    ),
     shinyjs::hidden(
       tags$div(
-        id = ns("transformer_failure_info"),
+        id = ns("transform_failure_info"),
         class = "teal_validated",
         div(
           class = "teal-output-warning",
-          "One of transformers failed. Please fix and continue."
+          "One of transformators failed. Please check its inputs."
         )
       )
     ),
     tags$div(
       id = ns("teal_module_ui"),
-      do.call(modules$ui, args)
+      tags$div(
+        class = "teal_validated",
+        ui_check_module_datanames(ns("validate_datanames"))
+      ),
+      do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
 
@@ -125,18 +125,12 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             width = 3,
             ui_data_summary(ns("data_summary")),
             ui_filter_data(ns("filter_panel")),
-            ui_transform_data(ns("data_transform"), transformers = modules$transformers, class = "well"),
+            ui_transform_teal_data(ns("data_transform"), transformators = modules$transformators, class = "well"),
             class = "teal_secondary_col"
           )
         )
       } else {
-        div(
-          div(
-            class = "teal_validated",
-            uiOutput(ns("data_input_error"))
-          ),
-          ui_teal
-        )
+        ui_teal
       }
     )
   )
@@ -144,7 +138,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
 
 #' @rdname module_teal_module
 srv_teal_module <- function(id,
-                            data_rv,
+                            data,
                             modules,
                             datasets = NULL,
                             slices_global,
@@ -152,7 +146,7 @@ srv_teal_module <- function(id,
                             data_load_status = reactive("ok"),
                             is_active = reactive(TRUE)) {
   checkmate::assert_string(id)
-  assert_reactive(data_rv)
+  assert_reactive(data)
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   assert_reactive(datasets, null.ok = TRUE)
   checkmate::assert_class(slices_global, ".slicesGlobal")
@@ -164,7 +158,7 @@ srv_teal_module <- function(id,
 #' @rdname module_teal_module
 #' @export
 srv_teal_module.default <- function(id,
-                                    data_rv,
+                                    data,
                                     modules,
                                     datasets = NULL,
                                     slices_global,
@@ -177,7 +171,7 @@ srv_teal_module.default <- function(id,
 #' @rdname module_teal_module
 #' @export
 srv_teal_module.teal_modules <- function(id,
-                                         data_rv,
+                                         data,
                                          modules,
                                          datasets = NULL,
                                          slices_global,
@@ -207,7 +201,7 @@ srv_teal_module.teal_modules <- function(id,
       function(module_id) {
         srv_teal_module(
           id = module_id,
-          data_rv = data_rv,
+          data = data,
           modules = modules$children[[module_id]],
           datasets = datasets,
           slices_global = slices_global,
@@ -229,7 +223,7 @@ srv_teal_module.teal_modules <- function(id,
 #' @rdname module_teal_module
 #' @export
 srv_teal_module.teal_module <- function(id,
-                                        data_rv,
+                                        data,
                                         modules,
                                         datasets = NULL,
                                         slices_global,
@@ -241,13 +235,13 @@ srv_teal_module.teal_module <- function(id,
     module_out <- reactiveVal()
 
     active_datanames <- reactive({
-      .resolve_module_datanames(data = data_rv(), modules = modules)
+      .resolve_module_datanames(data = data(), modules = modules)
     })
     if (is.null(datasets)) {
-      datasets <- eventReactive(data_rv(), {
-        req(inherits(data_rv(), "teal_data"))
+      datasets <- eventReactive(data(), {
+        req(inherits(data(), "teal_data"))
         logger::log_debug("srv_teal_module@1 initializing module-specific FilteredData")
-        teal_data_to_filtered_data(data_rv(), datanames = active_datanames())
+        teal_data_to_filtered_data(data(), datanames = active_datanames())
       })
     }
 
@@ -258,35 +252,33 @@ srv_teal_module.teal_module <- function(id,
     #   and if it is not set, then it won't be available in the srv_filter_panel
     srv_module_filter_manager(modules$label, module_fd = datasets, slices_global = slices_global)
 
-    call_once_when(is_active(), {
+    .call_once_when(is_active(), {
       filtered_teal_data <- srv_filter_data(
         "filter_panel",
         datasets = datasets,
         active_datanames = active_datanames,
-        data_rv = data_rv,
+        data = data,
         is_active = is_active
       )
-      is_transformer_failed <- reactiveValues()
-      transformed_teal_data <- srv_transform_data(
+      is_transform_failed <- reactiveValues()
+      transformed_teal_data <- srv_transform_teal_data(
         "data_transform",
         data = filtered_teal_data,
-        transformers = modules$transformers,
+        transformators = modules$transformators,
         modules = modules,
-        is_transformer_failed = is_transformer_failed
+        is_transform_failed = is_transform_failed
       )
-      any_transformer_failed <- reactive({
-        any(unlist(reactiveValuesToList(is_transformer_failed)))
+      any_transform_failed <- reactive({
+        any(unlist(reactiveValuesToList(is_transform_failed)))
       })
 
-      observeEvent(any_transformer_failed(), {
-        if (isTRUE(any_transformer_failed())) {
+      observeEvent(any_transform_failed(), {
+        if (isTRUE(any_transform_failed())) {
           shinyjs::hide("teal_module_ui")
-          shinyjs::hide("validate_datanames")
-          shinyjs::show("transformer_failure_info")
+          shinyjs::show("transform_failure_info")
         } else {
           shinyjs::show("teal_module_ui")
-          shinyjs::show("validate_datanames")
-          shinyjs::hide("transformer_failure_info")
+          shinyjs::hide("transform_failure_info")
         }
       })
 
@@ -297,7 +289,7 @@ srv_teal_module.teal_module <- function(id,
         all_teal_data[c(module_datanames, ".raw_data")]
       })
 
-      srv_validate_reactive_teal_data(
+      srv_check_module_datanames(
         "validate_datanames",
         data = module_teal_data,
         modules = modules
@@ -307,7 +299,7 @@ srv_teal_module.teal_module <- function(id,
 
       # Call modules.
       if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- call_once_when(
+        obs_module <- .call_once_when(
           !is.null(module_teal_data()),
           ignoreNULL = TRUE,
           handlerExpr = {
@@ -319,14 +311,6 @@ srv_teal_module.teal_module <- function(id,
         # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
         module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
       }
-
-      # todo: (feature request) add a ReporterCard to the reporter as an output from the teal_module
-      #       how to determine if module returns a ReporterCard so that reportPreviewer is needed?
-      #       Should we insertUI of the ReportPreviewer then?
-      #       What about attr(module, "reportable") - similar to attr(module, "bookmarkable")
-      if ("report" %in% names(module_out)) {
-        # (reactively) add card to the reporter
-      }
     })
 
     module_out
@@ -334,7 +318,9 @@ srv_teal_module.teal_module <- function(id,
 }
 
 # This function calls a module server function.
-.call_teal_module <- function(modules, datasets, filtered_teal_data, reporter) {
+.call_teal_module <- function(modules, datasets, data, reporter) {
+  assert_reactive(data)
+
   # collect arguments to run teal_module
   args <- c(list(id = "module"), modules$server_args)
   if (is_arg_used(modules$server, "reporter")) {
@@ -347,7 +333,7 @@ srv_teal_module.teal_module <- function(id,
   }
 
   if (is_arg_used(modules$server, "data")) {
-    args <- c(args, data = list(filtered_teal_data))
+    args <- c(args, data = list(data))
   }
 
   if (is_arg_used(modules$server, "filter_panel_api")) {
@@ -355,14 +341,14 @@ srv_teal_module.teal_module <- function(id,
   }
 
   if (is_arg_used(modules$server, "id")) {
-    do.call(modules$server, args)
+    do.call(what = modules$server, args = args, quote = TRUE)
   } else {
-    do.call(callModule, c(args, list(module = modules$server)))
+    do.call(what = callModule, args = c(args, list(module = modules$server)), quote = TRUE)
   }
 }
 
 .resolve_module_datanames <- function(data, modules) {
-  stopifnot("data_rv must be teal_data object." = inherits(data, "teal_data"))
+  stopifnot("data must be teal_data object." = inherits(data, "teal_data"))
   if (is.null(modules$datanames) || identical(modules$datanames, "all")) {
     names(data)
   } else {
@@ -386,11 +372,11 @@ srv_teal_module.teal_module <- function(id,
 #' @return An observer.
 #'
 #' @keywords internal
-call_once_when <- function(eventExpr, # nolint: object_name.
-                           handlerExpr, # nolint: object_name.
-                           event.env = parent.frame(), # nolint: object_name.
-                           handler.env = parent.frame(), # nolint: object_name.
-                           ...) {
+.call_once_when <- function(eventExpr, # nolint: object_name.
+                            handlerExpr, # nolint: object_name.
+                            event.env = parent.frame(), # nolint: object_name.
+                            handler.env = parent.frame(), # nolint: object_name.
+                            ...) {
   event_quo <- rlang::new_quosure(substitute(eventExpr), env = event.env)
   handler_quo <- rlang::new_quosure(substitute(handlerExpr), env = handler.env)
 

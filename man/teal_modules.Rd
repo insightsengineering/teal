@@ -9,7 +9,6 @@
 \alias{format.teal_modules}
 \alias{print.teal_module}
 \alias{print.teal_modules}
-\alias{set_datanames}
 \title{Create \code{teal_module} and \code{teal_modules} objects}
 \usage{
 module(
@@ -21,27 +20,25 @@ module(
   datanames = "all",
   server_args = NULL,
   ui_args = NULL,
-  transformers = list()
+  transformators = list()
 )
 
 modules(..., label = "root")
 
 \method{format}{teal_module}(
   x,
-  indent = 0,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "transformers"),
+  what = c("datasets", "properties", "ui_args", "server_args", "decorators",
+    "transformators"),
   ...
 )
 
-\method{format}{teal_modules}(x, indent = 0, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
+\method{format}{teal_modules}(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 
 \method{print}{teal_modules}(x, ...)
-
-set_datanames(modules, datanames)
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.
@@ -53,8 +50,8 @@ For \code{modules()} defaults to \code{"root"}. See \code{Details}.}
 \item \code{input}, \code{output}, \code{session} - (optional; not recommended) When provided, then \code{\link[shiny:callModule]{shiny::callModule()}}
 will be used to call a module. From \code{shiny} 1.5.0, the recommended way is to use
 \code{\link[shiny:moduleServer]{shiny::moduleServer()}} instead which doesn't require these arguments.
-\item \code{data} (optional) When provided, the module will be called with \code{teal_data} object (i.e. a list of
-reactive (filtered) data specified in the \code{filters} argument) as the value of this argument.
+\item \code{data} (optional) If the server function includes a \code{data} argument, it will receive a reactive
+expression containing the \code{teal_data} object.
 \item \code{datasets} (optional) When provided, the module will be called with \code{FilteredData} object as the
 value of this argument. (See \code{\link[teal.slice:FilteredData]{teal.slice::FilteredData}}).
 \item \code{reporter} (optional) When provided, the module will be called with \code{Reporter} object as the value
@@ -79,7 +76,7 @@ There are 2 reserved values that have specific behaviors:
 \itemize{
 \item The keyword \code{"all"} includes all datasets available in the data passed to the teal application.
 \item \code{NULL} hides the sidebar panel completely.
-\item If \code{transformers} are specified, their \code{datanames} are automatically added to this \code{datanames}
+\item If \code{transformators} are specified, their \code{datanames} are automatically added to this \code{datanames}
 argument.
 }}
 
@@ -87,9 +84,8 @@ argument.
 
 \item{ui_args}{(named \code{list}) with additional arguments passed on to the UI function.}
 
-\item{transformers}{(\code{list} of \code{teal_data_module}) that will be applied to transform the data.
-Each transform module UI will appear in the \code{teal}'s sidebar panel.
-Transformers' \code{datanames} are added to the \code{datanames}. See \code{\link[=teal_transform_module]{teal_transform_module()}}.}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
+To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 
 \item{...}{\itemize{
 \item For \code{modules()}: (\code{teal_module} or \code{teal_modules}) Objects to wrap into a tab.
@@ -98,8 +94,6 @@ Transformers' \code{datanames} are added to the \code{datanames}. See \code{\lin
 
 \item{x}{(\code{teal_module} or \code{teal_modules}) Object to format/print.}
 
-\item{indent}{(\code{integer(1)}) Indention level; each nested element is indented one level more.}
-
 \item{is_last}{(\code{logical(1)}) Whether this is the last item in its parent's children list.
 Affects the tree branch character used (L- vs |-)}
 
@@ -107,12 +101,10 @@ Affects the tree branch character used (L- vs |-)}
 used to maintain the tree structure in nested levels}
 
 \item{what}{(\code{character}) Specifies which metadata to display.
-Possible values: "datasets", "properties", "ui_args", "server_args", "transformers"}
+Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"}
 
 \item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
 format.teal_modules(). Determines whether to show "TEAL ROOT" header}
-
-\item{modules}{(\code{teal_module} or \code{teal_modules})}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.
@@ -142,30 +134,28 @@ because they are used by the \code{mapping} argument of \code{\link[=teal_slices
 and the report previewer module \code{\link[=reporter_previewer_module]{reporter_previewer_module()}}, respectively.
 }
 \section{Restricting datasets used by \code{teal_module}:}{
-The \code{datanames} argument controls which datasets are used by the module’s server. These datasets,
+The \code{datanames} argument controls which datasets are used by the module's server. These datasets,
 passed via server's \code{data} argument, are the only ones shown in the module's tab.
 
 When \code{datanames} is set to \code{"all"}, all datasets in the data object are treated as relevant.
 However, this may include unnecessary datasets, such as:
 \itemize{
 \item Proxy variables for column modifications
-\item Temporary datasets used to create final versions
+\item Temporary datasets used to create final ones
 \item Connection objects
 }
 
-To exclude irrelevant datasets, use the \code{\link[=set_datanames]{set_datanames()}} function to change \code{datanames} from
-\code{"all"} to specific names. Trying to modify non-\code{"all"} values with \code{\link[=set_datanames]{set_datanames()}} will result
-in a warning. Datasets with names starting with . are ignored globally unless explicitly listed
-in \code{datanames}.
+Datasets which name is prefixed in \code{teal_data} by the dot (\code{.}) are not displayed in the \code{teal} application.
+Please see the \emph{"Hidden datasets"} section in `vignette("including-data-in-teal-applications").
 }
 
-\section{\code{datanames} with \code{transformers}}{
-When transformers are specified, their \code{datanames} are added to the module’s \code{datanames}, which
+\section{\code{datanames} with \code{transformators}}{
+When transformators are specified, their \code{datanames} are added to the module's \code{datanames}, which
 changes the behavior as follows:
 \itemize{
-\item If \code{module(datanames)} is \code{NULL} and the \code{transformers} have defined \code{datanames}, the sidebar
-will appear showing the \code{transformers}' datasets, instead of being hidden.
-\item If \code{module(datanames)} is set to specific values and any \code{transformer} has \code{datanames = "all"},
+\item If \code{module(datanames)} is \code{NULL} and the \code{transformators} have defined \code{datanames}, the sidebar
+will appear showing the \code{transformators}' datasets, instead of being hidden.
+\item If \code{module(datanames)} is set to specific values and any \code{transformator} has \code{datanames = "all"},
 the module may receive extra datasets that could be unnecessary
 }
 }
@@ -229,21 +219,21 @@ mod <- module(
   server = function(id, data, ...) {},
   ui = function(id, ...) {},
   datanames = c("ADSL", "ADTTE"),
-  transformers = list(),
+  transformators = list(),
   ui_args = list(a = 1, b = "b"),
   server_args = list(x = 5, y = list(p = 1))
 )
 cat(format(mod))
 custom_module <- function(
     label = "label", ui_args = NULL, server_args = NULL,
-    datanames = "all", transformers = list(), bk = FALSE) {
+    datanames = "all", transformators = list(), bk = FALSE) {
   ans <- module(
     label,
     server = function(id, data, ...) {},
     ui = function(id, ...) {
     },
     datanames = datanames,
-    transformers = transformers,
+    transformators = transformators,
     ui_args = ui_args,
     server_args = server_args
   )
@@ -251,7 +241,7 @@ custom_module <- function(
   ans
 }
 
-dummy_transformer <- teal_transform_module(
+dummy_transformator <- teal_transform_module(
   label = "Dummy Transform",
   ui = function(id) div("(does nothing)"),
   server = function(id, data) {
@@ -259,11 +249,27 @@ dummy_transformer <- teal_transform_module(
   }
 )
 
-plot_transformer <- teal_transform_module(
+plot_transformator <- teal_transform_module(
   label = "Plot Settings",
   ui = function(id) div("(does nothing)"),
   server = function(id, data) {
     moduleServer(id, function(input, output, session) data)
+  }
+)
+
+static_decorator <- teal_transform_module(
+  label = "Static decorator",
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(), {
+          plot <- plot +
+            ggtitle("This is title") +
+            xlab("x axis")
+        })
+      })
+    })
   }
 )
 
@@ -274,13 +280,15 @@ complete_modules <- modules(
     ui_args = list(
       view_type = "table",
       page_size = 10,
-      filters = c("ARM", "SEX", "RACE")
+      filters = c("ARM", "SEX", "RACE"),
+      decorators = list(static_decorator)
     ),
     server_args = list(
       cache = TRUE,
-      debounce = 1000
+      debounce = 1000,
+      decorators = list(static_decorator)
     ),
-    transformers = list(dummy_transformer),
+    transformators = list(dummy_transformator),
     bk = TRUE
   ),
   modules(
@@ -298,7 +306,7 @@ complete_modules <- modules(
         render_type = "svg",
         cache_plots = TRUE
       ),
-      transformers = list(dummy_transformer, plot_transformer),
+      transformators = list(dummy_transformator, plot_transformator),
       bk = TRUE
     ),
     modules(
@@ -330,16 +338,16 @@ complete_modules <- modules(
 )
 
 cat(format(complete_modules))
-cat(format(complete_modules, what = c("ui_args", "server_args", "transformers")))
-# change the module's datanames
-set_datanames(module(datanames = "all"), "a")
-
-# change modules' datanames
-set_datanames(
-  modules(
-    module(datanames = "all"),
-    module(datanames = "a")
-  ),
-  "b"
-)
+cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
+cat(format(complete_modules, what = c("decorators", "transformators")))
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIF0mLDgGcAFkNb8IAmEQAmK6nAD6ARjmKXd092AWlpaih6OGppAF5pPhRpQI84RNxQ6SsRKUY45TUNLVpXXGlXKFIoHRBMsJTPAGUckRCIMI7pEoz2zuS3VPzVdXFiiFQVUjKiSYmprLgrK00IGrq+mdI5gBIKqv9pRgpXEQARSqhdSOC9qG1gYETaRlorRIBdd8c+6QBfde+fx6YRUtCGhVGEHYJTWvTCECsBwAco1oa5AWEqgBzAAyr1I7FuV3ongA8rNJuwESEwLdEjwGZlfsDyhdoPBEfFEtxqIkBI5nANPF4AEwHBpwNphCJRGJclAQIikGwifpBNJ4TLZRi5cEjFZo2GdCXNHWtdZhboWtWDeLDIpQoRzaYU+bZJYrI0-aSbHbkAAepAORwgJ0YujggZpAEFFcrVQBZIUajEdf5w6SA5mZUF6h2G6S1DMI5GomHrbF4qwEgOkclbSnUxK1+mM3rZ3q3dmLfJIgw4nH80wQCWIhQ2zxWKXhSLRfKJUfpTKj6fS2dyhKQRbkVwTxZLjMS3yZHgso8iodOaDoA5CWgEzK3fJcaheW7Ql6crqf0-L5NfxdVmHWglGkaFhFEcQpG0L1bHsaN0HYNBUG2UEymQ7ZtVyRxfjAX53iAA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIF0mLDgGcAFkNb8IAmEQAmK6nAD6ARjmKXd092AWlpaih6OGppAF5pPhRpQI84RNxQ6SsRKUY45TUNLVpXXGlXKFIoHRBMsJTPAGUckRCIMI7pEoz2zuS3VPzVdXFiiFQVUjKiSYmprLgrK00IGrq+mdI5gBIKqv9pRgpXEQARSqhdSOC9qG1gYETaRlorRIBdd8c+6QBfde+fx6YRUtCGhVGEHYJTWvTCECsBwAco1oa5AWEqgBzAAyr1I7FuV3ongA8rNJuwESEwLdEjwGZlfsDyhdoPBEfFEtxqIkBI5nANPF4AEwHBpwNphCJRGJclAQIikGwifpBNJ4TLZRi5cEjFZo2GdCXNHWtdZhboWtWDeLDIpQoRzaYU+bZJYrI0-aSbHbkAAepAORwgJ0YujggZpAEFFcrVQBZIUajEdf5w6SA5mZUF6h2G6S1DMI5GomHrbF4qwEgOkclbSnUxK1+mM3rZ3q3dmLfJIgw4nH80wQCWIhQ2zxWKXhSLRfKJUfpTKj6fS2dyhKQRbkVwTxZLjMS3yZHgso8iodOaDoA5CWgEzK3fJcaheW7Ql6crqf0-L5NfxdVmHWglGkaFhFEcQpG0L1bHsaN0HYNBUG2UEymQ7ZtVyRxfjAX53iAA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

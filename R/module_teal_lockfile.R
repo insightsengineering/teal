@@ -1,5 +1,6 @@
 #' Generate lockfile for application's environment reproducibility
 #'
+#' @inheritParams module_teal
 #' @param lockfile_path (`character`) path to the lockfile.
 #'
 #' @section Different ways of creating lockfile:

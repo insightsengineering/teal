@@ -1,3 +1,7 @@
+#' The default favicon for the teal app.
+#' @keywords internal
+.teal_favicon <- "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+
 #' Get client timezone
 #'
 #' User timezone in the browser may be different to the one on the server.
@@ -134,31 +138,58 @@ check_modules_datanames <- function(modules, datanames) {
 }
 
 #' @rdname check_modules_datanames
-check_modules_datanames_html <- function(modules,
-                                         datanames) {
+check_reserved_datanames <- function(datanames) {
+  reserved_datanames <- datanames[datanames %in% c("all", ".raw_data")]
+  if (length(reserved_datanames) == 0L) {
+    return(NULL)
+  }
+
+  tags$span(
+    to_html_code_list(reserved_datanames),
+    sprintf(
+      "%s reserved for internal use. Please avoid using %s as %s.",
+      pluralize(reserved_datanames, "is", "are"),
+      pluralize(reserved_datanames, "it", "them"),
+      pluralize(reserved_datanames, "a dataset name", "dataset names")
+    )
+  )
+}
+
+#' @rdname check_modules_datanames
+check_modules_datanames_html <- function(modules, datanames) {
   check_datanames <- check_modules_datanames_recursive(modules, datanames)
   show_module_info <- inherits(modules, "teal_modules") # used in two contexts - module and app
+
+  reserved_datanames <- check_reserved_datanames(datanames)
+
   if (!length(check_datanames)) {
-    return(TRUE)
+    out <- if (is.null(reserved_datanames)) {
+      TRUE
+    } else {
+      shiny::tagList(reserved_datanames)
+    }
+    return(out)
   }
   shiny::tagList(
+    reserved_datanames,
     lapply(
       check_datanames,
       function(mod) {
         tagList(
           tags$span(
-            tags$span(if (length(mod$missing_datanames) == 1) "Dataset" else "Datasets"),
+            tags$span(pluralize(mod$missing_datanames, "Dataset")),
             to_html_code_list(mod$missing_datanames),
             tags$span(
-              paste0(
-                if (length(mod$missing_datanames) > 1) "are missing" else "is missing",
-                if (show_module_info) sprintf(" for module '%s'.", mod$label) else "."
+              sprintf(
+                "%s missing%s.",
+                pluralize(mod$missing_datanames, "is", "are"),
+                if (show_module_info) sprintf(" for module '%s'", mod$label) else ""
               )
             )
           ),
           if (length(datanames) >= 1) {
             tagList(
-              tags$span(if (length(datanames) == 1) "Dataset" else "Datasets"),
+              tags$span(pluralize(datanames, "Dataset")),
               tags$span("available in data:"),
               tagList(
                 tags$span(
@@ -286,6 +317,11 @@ validate_app_title_tag <- function(shiny_tag) {
 build_app_title <- function(
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
+  lifecycle::deprecate_soft(
+    when = "0.15.3",
+    what = "build_app_title()",
+    details = "Use `modify_title()` on the object created using the `init`."
+  )
   checkmate::assert_string(title, null.ok = TRUE)
   checkmate::assert_string(favicon, null.ok = TRUE)
   tags$head(
@@ -352,20 +388,6 @@ get_unique_labels <- function(labels) {
   make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
 }
 
-#' Remove ANSI escape sequences from a string
-#' @noRd
-strip_style <- function(string) {
-  checkmate::assert_string(string)
-
-  gsub(
-    "(?:(?:\\x{001b}\\[)|\\x{009b})(?:(?:[0-9]{1,3})?(?:(?:;[0-9]{0,3})*)?[A-M|f-m])|\\x{001b}[A-M]",
-    "",
-    string,
-    perl = TRUE,
-    useBytes = TRUE
-  )
-}
-
 #' @keywords internal
 #' @noRd
 pasten <- function(...) paste0(..., "\n")
@@ -382,7 +404,7 @@ paste_datanames_character <- function(x,
       tagList(
         tags$code(x[.ix]),
         if (.ix != length(x)) {
-          tags$span(ifelse(.ix == length(x) - 1, " and ", ", "))
+          tags$span(if (.ix == length(x) - 1) " and " else ", ")
         }
       )
     })
@@ -400,17 +422,18 @@ build_datanames_error_message <- function(label = NULL,
                                           tags = list(span = shiny::tags$span, code = shiny::tags$code),
                                           tagList = shiny::tagList) { # nolint: object_name.
   tags$span(
-    tags$span(ifelse(length(extra_datanames) > 1, "Datasets", "Dataset")),
+    tags$span(pluralize(extra_datanames, "Dataset")),
     paste_datanames_character(extra_datanames, tags, tagList),
     tags$span(
-      paste0(
-        ifelse(length(extra_datanames) > 1, "are missing", "is missing"),
-        ifelse(is.null(label), ".", sprintf(" for tab '%s'.", label))
+      sprintf(
+        "%s missing%s",
+        pluralize(extra_datanames, "is", "are"),
+        if (is.null(label)) "" else sprintf(" for tab '%s'", label)
       )
     ),
     if (length(datanames) >= 1) {
       tagList(
-        tags$span(ifelse(length(datanames) > 1, "Datasets", "Dataset")),
+        tags$span(pluralize(datanames, "Dataset")),
         tags$span("available in data:"),
         tagList(
           tags$span(
@@ -444,4 +467,27 @@ build_datanames_error_message <- function(label = NULL,
       rbind(x, y)
     }
   )
+}
+
+#' Pluralize a word depending on the size of the input
+#'
+#' @param x (`object`) to check length for plural.
+#' @param singular (`character`) singular form of the word.
+#' @param plural (optional `character`) plural form of the word. If not given an "s"
+#' is added to the singular form.
+#'
+#' @return A `character` that correctly represents the size of the `x` argument.
+#' @keywords internal
+pluralize <- function(x, singular, plural = NULL) {
+  checkmate::assert_string(singular)
+  checkmate::assert_string(plural, null.ok = TRUE)
+  if (length(x) == 1L) { # Zero length object should use plural form.
+    singular
+  } else {
+    if (is.null(plural)) {
+      sprintf("%ss", singular)
+    } else {
+      plural
+    }
+  }
 }

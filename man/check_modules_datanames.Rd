@@ -2,10 +2,13 @@
 % Please edit documentation in R/utils.R
 \name{check_modules_datanames}
 \alias{check_modules_datanames}
+\alias{check_reserved_datanames}
 \alias{check_modules_datanames_html}
 \title{Check \code{datanames} in modules}
 \usage{
 check_modules_datanames(modules, datanames)
+
+check_reserved_datanames(datanames)
 
 check_modules_datanames_html(modules, datanames)
 }
