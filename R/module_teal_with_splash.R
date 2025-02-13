@@ -24,7 +24,7 @@ ui_teal_with_splash <- function(id,
   lifecycle::deprecate_soft(
     when = "0.16.0",
     what = "ui_teal_with_splash()",
-    details = "Deprecated, please use `?ui_teal` instead"
+    details = "Please use `?ui_teal` instead"
   )
   ns <- shiny::NS(id)
   fluidPage(

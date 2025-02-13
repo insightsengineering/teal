@@ -23,21 +23,17 @@
 #'   the browser window title. Defaults to a title "teal app" with the icon of NEST.
 #'   Can be created using the `build_app_title()` or
 #'   by passing a valid `shiny.tag` which is a head tag with title and link tag.
-#'   This parameter is deprecated. Use `modify_title()` on the teal app object instead.
+#'   This parameter is no longer supported. Use `modify_title()` on the teal app object instead.
 #' @param header (`shiny.tag` or `character(1)`) `r lifecycle::badge("deprecated")` Optionally,
 #'   the header of the app.
-#'   This parameter is deprecated. Use `modify_header()` on the teal app object instead.
+#'   This parameter is no longer supported. Use `modify_header()` on the teal app object instead.
 #' @param footer (`shiny.tag` or `character(1)`) `r lifecycle::badge("deprecated")` Optionally,
 #'   the footer of the app.
-#'   This parameter is deprecated. Use `modify_footer()` on the teal app object instead.
+#'   This parameter is no longer supported. Use `modify_footer()` on the teal app object instead.
 #' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
-#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.16.0
-#'   please use [ui_teal()] and [srv_teal()] instead.
-#' @param id `r lifecycle::badge("deprecated")` (`character`) Optionally,
-#'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
-#'   rather than a standalone `shiny` app. This is a legacy feature. Deprecated since v0.16.0
-#'   please use [ui_teal()] and [srv_teal()] instead.
+#'   rather than a standalone `shiny` app.
+#'   This parameter is no longer supported. Use [ui_teal()] and [srv_teal()] instead.
 #'
 #' @return Named list containing server and UI functions.
 #'
