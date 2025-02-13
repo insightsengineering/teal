@@ -2,12 +2,12 @@
 
 ### New features
 
-* Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object.
-* Since introduction of `ui_teal` and `srv_teal` functions, the `id` argument in `init` is being deprecated.
+* Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object (#669).
+* Since introduction of `ui_teal` and `srv_teal` functions, the `id` argument in `init` is being deprecated (#1438).
 * Introduce `ui_session_info` and `srv_session_info` shiny module to create the user session info and teal app lockfile download button.
-* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to decorate module outputs.
+* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to decorate module outputs, along with a vignette to demonstrate its usage (#1228, #1384).
 * Introduced a new argument `once = FALSE` in `teal_data_module` to possibly reload data during a run time.
-* Possibility to download lockfile to restore app session for reproducibility.
+* Possibility to download lockfile to restore app session for reproducibility (#479).
 * Datasets which name starts with `.` are ignored when `module`'s `datanames` is set as `"all"`.
 * Added warning when reserved `datanames`, such as `all` and `.raw_data` are being used.
 * Added `add_custom_server()` to allow adding custom server logic to the main shiny server function of a teal app.
@@ -24,7 +24,7 @@
 ### Enhancement
 
 * Enhanced a system of data validation and a display of error messages.
-* Easier way of to call `javascript` events by setting `$(document).ready(function() { ... })`. #1114
+* Easier way of to call `javascript` events by setting `$(document).ready(function() { ... })` (#1114).
 * Provided progress bar for modules loading and data filtering during teal app startup.
 * Filter mapping display has a separate icon in the tab.
 * Environment of the `data` passed to the `teal_module`'s server consists unfiltered datasets contained in `.raw_data`.
