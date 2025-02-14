@@ -128,12 +128,12 @@
 <h4 id="new-features-0-16-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-16-0"></a>
 </h4>
 <ul>
-<li>Possible to call <code>ui_teal</code> and <code>srv_teal</code> directly in any application by delivering <code>data</code> argument as a <code>reactive</code> returning <code>teal_data</code> object.</li>
-<li>Since introduction of <code>ui_teal</code> and <code>srv_teal</code> functions, the <code>id</code> argument in <code>init</code> is being deprecated.</li>
+<li>Possible to call <code>ui_teal</code> and <code>srv_teal</code> directly in any application by delivering <code>data</code> argument as a <code>reactive</code> returning <code>teal_data</code> object (<a href="https://github.com/insightsengineering/teal/issues/669" class="external-link">#669</a>).</li>
+<li>Since introduction of <code>ui_teal</code> and <code>srv_teal</code> functions, the <code>id</code> argument in <code>init</code> is being deprecated (<a href="https://github.com/insightsengineering/teal/issues/1438" class="external-link">#1438</a>).</li>
 <li>Introduce <code>ui_session_info</code> and <code>srv_session_info</code> shiny module to create the user session info and teal app lockfile download button.</li>
-<li>Introduced <code>teal_transform_module</code> to provide a way to interactively modify data delivered to <code>teal_module</code>’s <code>server</code> and to decorate module outputs.</li>
+<li>Introduced <code>teal_transform_module</code> to provide a way to interactively modify data delivered to <code>teal_module</code>’s <code>server</code> and to decorate module outputs, along with a vignette to demonstrate its usage (<a href="https://github.com/insightsengineering/teal/issues/1228" class="external-link">#1228</a>, <a href="https://github.com/insightsengineering/teal/issues/1384" class="external-link">#1384</a>).</li>
 <li>Introduced a new argument <code>once = FALSE</code> in <code>teal_data_module</code> to possibly reload data during a run time.</li>
-<li>Possibility to download lockfile to restore app session for reproducibility.</li>
+<li>Possibility to download lockfile to restore app session for reproducibility (<a href="https://github.com/insightsengineering/teal/issues/479" class="external-link">#479</a>).</li>
 <li>Datasets which name starts with <code>.</code> are ignored when <code>module</code>’s <code>datanames</code> is set as <code>"all"</code>.</li>
 <li>Added warning when reserved <code>datanames</code>, such as <code>all</code> and <code>.raw_data</code> are being used.</li>
 <li>Added <code>add_custom_server()</code> to allow adding custom server logic to the main shiny server function of a teal app.</li>
@@ -158,8 +158,7 @@
 </h4>
 <ul>
 <li>Enhanced a system of data validation and a display of error messages.</li>
-<li>Easier way of to call <code>javascript</code> events by setting <code>$(document).ready(function() { ... })</code>. <a href="https://github.com/insightsengineering/teal/issues/1114" class="external-link">#1114</a>
-</li>
+<li>Easier way of to call <code>javascript</code> events by setting <code>$(document).ready(function() { ... })</code> (<a href="https://github.com/insightsengineering/teal/issues/1114" class="external-link">#1114</a>).</li>
 <li>Provided progress bar for modules loading and data filtering during teal app startup.</li>
 <li>Filter mapping display has a separate icon in the tab.</li>
 <li>Environment of the <code>data</code> passed to the <code>teal_module</code>’s server consists unfiltered datasets contained in <code>.raw_data</code>.</li>

@@ -364,7 +364,7 @@ but can become verified by running the <code>verify</code> function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_with_code</span></span>
 <span><span class="co">#&gt; ✖ unverified teal_data object</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x561b790028a8&gt;</span> 🔒 </span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x55b74cb87770&gt;</span> 🔒 </span></span>
 <span><span class="co">#&gt; Parent: &lt;environment: package:teal&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Bindings:</span></span></span>
 <span><span class="co"><span style="font-weight: bold;">#&gt; </span>- cars: [data.frame]</span></span>
@@ -373,7 +373,7 @@ but can become verified by running the <code>verify</code> function.</p>
 <span><span class="va">data_with_objects_and_code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>iris <span class="op">=</span> <span class="va">iris</span>, cars <span class="op">=</span> <span class="va">mtcars</span>, code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span>, <span class="va">cars</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data_with_objects_and_code</span></span>
 <span><span class="co">#&gt; ✖ unverified teal_data object</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x561b7b39f598&gt;</span> 🔒 </span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x55b74ef12860&gt;</span> 🔒 </span></span>
 <span><span class="co">#&gt; Parent: &lt;environment: package:teal&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Bindings:</span></span></span>
 <span><span class="co"><span style="font-weight: bold;">#&gt; </span>- cars: [data.frame]</span></span>
@@ -382,7 +382,7 @@ but can become verified by running the <code>verify</code> function.</p>
 <span><span class="va">data_with_objects_and_code_ver</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/verify.html">verify</a></span><span class="op">(</span><span class="va">data_with_objects_and_code</span><span class="op">)</span></span>
 <span><span class="va">data_with_objects_and_code_ver</span></span>
 <span><span class="co">#&gt; ✅︎ verified teal_data object</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x561b7b39f598&gt;</span> 🔒 </span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">&lt;environment: 0x55b74ef12860&gt;</span> 🔒 </span></span>
 <span><span class="co">#&gt; Parent: &lt;environment: package:teal&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Bindings:</span></span></span>
 <span><span class="co"><span style="font-weight: bold;">#&gt; </span>- cars: [data.frame]</span></span>
