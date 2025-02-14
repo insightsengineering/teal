@@ -52,7 +52,7 @@ as_tdata <- function(...) {
 
 .deprecate_tdata_msg <- function() {
   lifecycle::deprecate_stop(
-    when = "0.15.3",
+    when = "0.16.0",
     what = "tdata()",
     details = paste(
       "tdata has been removed in favour of `teal_data`.\n",
