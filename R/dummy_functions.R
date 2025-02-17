@@ -105,3 +105,5 @@ example_module <- function(label = "example teal module",
   attr(ans, "teal_bookmarkable") <- TRUE
   ans
 }
+
+globalVariables("dataname")
