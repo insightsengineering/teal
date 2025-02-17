@@ -106,4 +106,4 @@ example_module <- function(label = "example teal module",
   ans
 }
 
-globalVariables('dataname')
+globalVariables("dataname")
