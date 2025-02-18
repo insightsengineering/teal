@@ -72,15 +72,15 @@ body:
         - [ ] Execute UAT tests (Optional).
 
         #### CRAN submission
-        - [ ] Tag the update(s) as a release candidate vX.Y.Z-rc<iteration-number> (e.g. v0.5.3-rc1) on the release candidate branch (release-candidate-vX.Y.Z).
+        - [ ] Build the package locally using the command:`R CMD build .` which will generate a .tar.gz file necessary for the CRAN submission.
+        - [ ] Submit the package to https://win-builder.r-project.org/upload.aspx for testing, for more details please see "Building and checking R source packages for Windows": https://win-builder.r-project.org/.
+        - [ ] Once tested, tag the update(s) as a release candidate vX.Y.Z-rc<iteration-number> (e.g. v0.5.3-rc1) on the release candidate branch (release-candidate-vX.Y.Z).
           ```r
           # Create rc tag for submission for internal validation
           git tag vX.Y.Z-rc<iteration number>
           git push origin vX.Y.Z-rc<iteration number>
           ```
-        - [ ] Build the package locally using the command:`R CMD build .` which will generate a .tar.gz file necessary for the CRAN submission.
-        - [ ] Submit the package to https://win-builder.r-project.org/upload.aspx for testing, for more details please see "Building and checking R source packages for Windows": https://win-builder.r-project.org/.
-        - [ ] Once tested, send the package that was built in the previous steps to CRAN via this form: https://cran.r-project.org/submit.html.
+        - [ ] Send the package that was built in the previous steps to CRAN via this form: https://cran.r-project.org/submit.html.
         - [ ] Address CRAN feedback, tag the package vX.Y.Z-rc(n+1) and repeat the submission to CRAN whenever necessary.
         - [ ] Get the package accepted and published on CRAN.
 
@@ -90,7 +90,6 @@ body:
         ##### Make sure of the following before continuing
         - [ ] CI checks are passing in GH before releasing the package.
         - [ ] Shiny apps are deployable and there are no errors/warnings (Applicable only for frameworks that use Shiny).
-
         - [ ] Create a git tag with the final version set to vX.Y.Z on the main branch. In order to do this:
           1. Checkout the commit hash.
           `git checkout <commit hash>`
