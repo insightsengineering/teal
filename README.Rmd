@@ -128,7 +128,7 @@ shinyApp(app$ui, app$server)
 ![App recording](man/figures/readme_app.webp)
 
 
-## Try it out in Shinylive
+## Try it out
 
 ```{r shinylive_url, echo = FALSE, results = 'asis', eval = requireNamespace("roxy.shinylive", quietly = TRUE)}
 code <- paste0(c(
@@ -136,12 +136,9 @@ code <- paste0(c(
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
-cat(sprintf("[Open in Shinylive](%s)\n\n", url))
+cat(sprintf("[Open example above](%s)\n\n", url))
 ```
 
-```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
-knitr::include_url(url, height = "800px")
-```
 
 Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to see examples of `teal` apps.
 

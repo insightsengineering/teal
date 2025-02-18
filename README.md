@@ -125,9 +125,11 @@ app <- init(
     module(
       label = "iris histogram",
       server = function(input, output, session, data) {
-        updateSelectInput(session = session,
-                          inputId =  "var",
-                          choices = names(data()[["iris"]])[1:4])
+        updateSelectInput(
+          session = session,
+          inputId = "var",
+          choices = names(data()[["iris"]])[1:4]
+        )
 
         output$hist <- renderPlot({
           req(input$var)
@@ -137,9 +139,11 @@ app <- init(
       ui = function(id) {
         ns <- NS(id)
         list(
-          selectInput(inputId = ns("var"),
-                      label =  "Column name",
-                      choices = NULL),
+          selectInput(
+            inputId = ns("var"),
+            label = "Column name",
+            choices = NULL
+          ),
           plotOutput(outputId = ns("hist"))
         )
       }
@@ -155,10 +159,10 @@ shinyApp(app$ui, app$server)
 <figcaption aria-hidden="true">App recording</figcaption>
 </figure>
 
-## Try it out in Shinylive
+## Try it out
 
-[Open in
-Shinylive](https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0IAtKgAEAHgC0I2hFql2AkSIAmUUlBEBeEV2oB9Veva1GtAM5bppsz1yKRMIsoCu1OBe10z8+0scu3BQglEJFqKHo4aks+MBNzEQALc1IiAHNmGFi7YNCRMzhGADdCywAzZwgCUloSYwhUZ1JcESImxub89zNaiBbDKB4REF8851RDOABlKLhqgEkGpvYCsx6SS1X1vtG8vf3QmQ755UsRWKKWbN2D29CCRKJaAndLaHgzdgH2HmBgWPiZliAF1gb8AIyIAAsYIENyUbVIHQAJMlvOIpIwKMpCgAFahEeQjXIHLEAR3qKMujH4JP2aPkAA9LN9fv84tYQcC-kcmsjqaDaQcAL5CvLCnJ7Zy0cqVaq9YzKIbEg4QCySEQAOSmirFey8PjpewKbgWS3kvNIJzenwuVzAtnhdzy4Ui0W05zAAGEiNRnDBgu84Ncjc69g8ni8PFqAKoAGTjjtDoVQBNIAHl2stEcdTto1QowAzYjw9Xky0phaMxbTaQIzMkIKwAILodjCZHSlodgrFQo8MDC4FAA)
+[Open example
+above](https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0IAtKgAEAHgC0I2hFql2AkSIAmUUlBEBeEV2oB9Veva1GtAM5bppsz1yKRMIsoCu1OBe10z8+0scu3BQglEJFqKHo4aks+MBNzEQALc1IiAHNmGFi7YNCRMzhGADdCywAzZwgCUloSYwhUZ1JcESImxub89zNaiBbDKB4REF8851RDOABlKLhqgEkGpqC8vIKzHpJLdc2+0dWZDvnlGLAilmz9vIJEoloCd0toeDN2AfYeYGBY+LNYgF1-p8AIyIAAs-yuSn4glyqzapA6ABJkt5xFJGBRlIUAArUIjyEZw1YiTEAR3qyPOjBhJJCqPkAA9LO9Pt84tYAf8vocmkjqYDaSSAL5C0LCnKrZy0cqVaq9YzKIZEukQCySEQAOSmirFeS8PmJqwKbgWS0NdNCvNIxyer1i1Nitih+oiUVOAGEiNRnDBgs84JcjSSbncHh4tQBVAAy0Zd0MlltQ+NIAHl2ssEUcTto1QowAynXrQsWRMLRkKYTCBGZkhBWABBdDsYRI6UtVsFYqFHhgYX-IA)
 
 Please see
 [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/)
