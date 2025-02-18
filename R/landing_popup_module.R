@@ -20,7 +20,7 @@ landing_popup_module <- function(label = "Landing Popup",
                                  content = NULL,
                                  buttons = modalButton("Accept")) {
   lifecycle::deprecate_soft(
-    when = "0.15.3",
+    when = "0.16.0",
     what = "landing_popup_module()",
     details = paste(
       "landing_popup_module() is deprecated.",

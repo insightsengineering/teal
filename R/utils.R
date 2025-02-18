@@ -318,7 +318,7 @@ build_app_title <- function(
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   lifecycle::deprecate_soft(
-    when = "0.15.3",
+    when = "0.16.0",
     what = "build_app_title()",
     details = "Use `modify_title()` on the object created using the `init`."
   )
