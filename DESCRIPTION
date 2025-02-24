@@ -72,6 +72,8 @@ Suggests:
     testthat (>= 3.2.0),
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
+Remotes:
+    insightsengineering/teal.reporter@redesign@main
 VignetteBuilder:
     knitr,
     rmarkdown
