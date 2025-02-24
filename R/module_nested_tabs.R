@@ -416,15 +416,7 @@ srv_teal_module.teal_module <- function(id,
 
     reporter_card_out <- reactive({
       card <- if (is.list(module_out())) {
-        unlist(
-          Filter(
-            function(x) is.reactive(x) && inherits(x(), "ReportCard"),
-            module_out()
-          ),
-          recursive = FALSE
-        )
-      } else if (is.reactive(module_out()) && inherits(module_out()(), "ReportCard")) {
-        module_out()
+        module_out()$report_card()
       }
     })
 
