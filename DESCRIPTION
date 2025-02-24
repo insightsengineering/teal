@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9131
-Date: 2025-02-12
+Version: 0.16.0.9000
+Date: 2025-02-24
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -50,8 +50,8 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.code (>= 0.6.0),
-    teal.logger (>= 0.3.1),
+    teal.code (>= 0.6.1),
+    teal.logger (>= 0.3.2),
     teal.reporter (>= 0.4.0),
     teal.widgets (>= 0.4.3),
     tools,
