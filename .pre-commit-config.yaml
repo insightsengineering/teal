@@ -8,6 +8,8 @@ repos:
   - repo: https://github.com/lorenzwalthert/precommit
     rev: v0.4.3.9003
     hooks:
+      - id: readme-rmd-rendered
+        name: Render README.md
       - id: style-files
         name: Style code with `styler`
         args:
