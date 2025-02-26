@@ -425,7 +425,7 @@ srv_teal_module.teal_module <- function(id,
       teal.reporter::add_card_button_ui(session$ns("reporter_add"))
     })
 
-    teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = reporter_card_out)
+    teal.reporter::add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
 
     module_out
   })
