@@ -203,7 +203,7 @@ init <- function(data,
   res <- structure(
     list(
       ui = function(request) {
-        fluidPage(
+        bslib::page_fluid(
           title = tags$div(
             id = "teal-app-title",
             tags$head(
