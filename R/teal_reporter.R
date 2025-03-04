@@ -194,3 +194,99 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     teal_slices = NULL # teal_slices
   )
 )
+
+#' Server function for `ReportDocument` card class.
+#' @keywords internal
+add_document_button_srv <- function(id, reporter, r_card_fun) {
+  checkmate::assert_class(r_card_fun, "reactive")
+  checkmate::assert_class(reporter, "Reporter")
+
+  shiny::moduleServer(id, function(input, output, session) {
+    shiny::setBookmarkExclude(c(
+      "add_report_card_button", "download_button", "reset_reporter",
+      "add_card_ok", "download_data", "reset_reporter_ok",
+      "label", "comment"
+    ))
+
+    ns <- session$ns
+
+    add_modal <- function() {
+      div(
+        class = "teal-widgets reporter-modal",
+        shiny::modalDialog(
+          easyClose = TRUE,
+          shiny::tags$h3("Add a Card to the Report"),
+          shiny::tags$hr(),
+          shiny::textInput(
+            ns("label"),
+            "Card Name",
+            value = "",
+            placeholder = "Add the card title here",
+            width = "100%"
+          ),
+          shiny::tags$script(
+            shiny::HTML(
+              sprintf(
+                "
+                $('#shiny-modal').on('shown.bs.modal', () => {
+                  $('#%s').focus()
+                })
+                ",
+                ns("label")
+              )
+            )
+          ),
+          footer = shiny::div(
+            shiny::tags$button(
+              type = "button",
+              class = "btn btn-secondary",
+              `data-dismiss` = "modal",
+              `data-bs-dismiss` = "modal",
+              NULL,
+              "Cancel"
+            ),
+            shiny::tags$button(
+              id = ns("add_card_ok"),
+              type = "button",
+              class = "btn btn-primary action-button",
+              `data-val` = shiny::restoreInput(id = ns("add_card_ok"), default = NULL),
+              NULL,
+              "Add Card"
+            )
+          )
+        )
+      )
+    }
+
+    shiny::observeEvent(input$add_report_card_button, {
+      shiny::showModal(add_modal())
+    })
+
+    # the add card button is disabled when clicked to prevent multi-clicks
+    # please check the ui part for more information
+    shiny::observeEvent(input$add_card_ok, {
+      if (inherits(r_card_fun, "try-error")) {
+        msg <- paste0(
+          "The card could not be added to the report. ",
+          "Have the outputs for the report been created yet? If not please try again when they ",
+          "are ready. Otherwise contact your application developer"
+        )
+        warning(msg)
+        shiny::showNotification(
+          msg,
+          type = "error"
+        )
+      } else {
+        card <- r_card_fun()
+        checkmate::assert_class(card, "ReportDocument")
+        names(card) <- input$label
+
+        # todo card <- to_markdown(card)
+
+        reporter$append_cards(list(card))
+        shiny::showNotification(sprintf("The card added successfully."), type = "message")
+        shiny::removeModal()
+      }
+    })
+  })
+}
