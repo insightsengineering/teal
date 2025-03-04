@@ -279,14 +279,10 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
       } else {
 
         card <- r_card_fun()
-        checkmate::assert_class(card, "ReportDocument")
-
         card <- to_markdown(card)
-        card <- list(card)
         names(card) <- input$label
-        attributes(card) <- attributes(r_card_fun())
 
-        reporter$append_cards(list(card))
+        reporter$append_cards(card)
 
         shiny::showNotification(sprintf("The card added successfully."), type = "message")
         shiny::removeModal()
@@ -296,7 +292,10 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
 }
 
 to_markdown <- function(card){
-  lapply(card, element_to_markdown)
+  checkmate::assert_class(card, "ReportDocument")
+  card_markdown <- lapply(card, element_to_markdown)
+  class(card_markdown) <- "ReportDocument"
+  list(card_markdown)
 }
 
 #' @rdname element_to_markdown
