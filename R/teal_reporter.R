@@ -277,13 +277,13 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           type = "error"
         )
       } else {
-        card <- r_card_fun()
-        checkmate::assert_class(card, "ReportDocument")
+        card <- list(r_card_fun())
+        checkmate::assert_class(card[[1]], "ReportDocument")
         names(card) <- input$label
 
         # todo card <- to_markdown(card)
 
-        reporter$append_cards(list(card))
+        reporter$append_cards(card)
         shiny::showNotification(sprintf("The card added successfully."), type = "message")
         shiny::removeModal()
       }
