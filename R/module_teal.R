@@ -185,11 +185,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
-      shiny::insertTab(
-        inputId = "teal_modules-active_tab",
+      bslib::nav_insert(
+        id = "teal_modules-active_tab",
         position = "before",
         select = TRUE,
-        tabPanel(
+        bslib::nav_panel(
           title = icon("fas fa-database"),
           value = "teal_data_module",
           tags$div(
