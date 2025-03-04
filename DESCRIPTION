@@ -75,7 +75,7 @@ Suggests:
 Remotes:
     insightsengineering/teal.slice@test@bslib@main,
     insightsengineering/teal.widgets@test@bslib@main,
-    insightsengineering/teal.reporter@test@bslib@main
+    insightsengineering/teal.reporter@redesign@main
 VignetteBuilder:
     knitr,
     rmarkdown
