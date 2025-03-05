@@ -32,15 +32,15 @@ more details.}
 the browser window title. Defaults to a title "teal app" with the icon of NEST.
 Can be created using the \code{build_app_title()} or
 by passing a valid \code{shiny.tag} which is a head tag with title and link tag.
-This parameter is deprecated. Use \code{modify_title()} on the teal app object instead.}
+This parameter is no longer supported. Use \code{modify_title()} on the teal app object instead.}
 
 \item{header}{(\code{shiny.tag} or \code{character(1)}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Optionally,
 the header of the app.
-This parameter is deprecated. Use \code{modify_header()} on the teal app object instead.}
+This parameter is no longer supported. Use \code{modify_header()} on the teal app object instead.}
 
 \item{footer}{(\code{shiny.tag} or \code{character(1)}) \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Optionally,
 the footer of the app.
-This parameter is deprecated. Use \code{modify_footer()} on the teal app object instead.}
+This parameter is no longer supported. Use \code{modify_footer()} on the teal app object instead.}
 
 \item{filter}{(\code{teal_slices}) Optionally,
 specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
