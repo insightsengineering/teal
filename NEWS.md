@@ -1,4 +1,4 @@
-# teal 0.16.0.9000
+# teal 0.16.0.9001
 
 # teal 0.16.0
 
@@ -12,7 +12,6 @@
 * Possibility to download lockfile to restore app session for reproducibility (#479).
 * Datasets which name starts with `.` are ignored when `module`'s `datanames` is set as `"all"`.
 * Added warning when reserved `datanames`, such as `all` and `.raw_data` are being used.
-* Added `add_custom_server()` to allow adding custom server logic to the main shiny server function of a teal app.
 
 ### Breaking changes
 
