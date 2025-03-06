@@ -152,7 +152,7 @@ testthat::test_that("defunction recursively goes down a list", {
   # styler: off
   x <- list(
     "character" = "character",
-    "function1" = function(x) return(x),
+    "function1" = function(x) x,
     "list2" = list(
       "function2" = function(x) mean(x),
       "list3" = list(
