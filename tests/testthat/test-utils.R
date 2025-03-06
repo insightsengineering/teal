@@ -1,14 +1,14 @@
 testthat::test_that("get_teal_bs_theme", {
   testthat::skip_if_not_installed("bslib")
-  testthat::expect_true(is.null(get_teal_bs_theme()))
+  testthat::expect_identical(get_teal_bs_theme(), bslib::bs_theme())
   withr::with_options(list("teal.bs_theme" = bslib::bs_theme(version = "5")), {
     testthat::expect_s3_class(get_teal_bs_theme(), "bs_theme")
   })
   withr::with_options(list("teal.bs_theme" = 1), {
-    testthat::expect_warning(get_teal_bs_theme(), ".*The default Shiny Bootstrap theme will be used.")
+    testthat::expect_warning(get_teal_bs_theme(), ".*The default bslib Bootstrap theme will be used.")
   })
   withr::with_options(list("teal.bs_theme" = "bs_theme"), {
-    testthat::expect_warning(get_teal_bs_theme(), ".*The default Shiny Bootstrap theme will be used.")
+    testthat::expect_warning(get_teal_bs_theme(), ".*The default bslib Bootstrap theme will be used.")
   })
 })
 

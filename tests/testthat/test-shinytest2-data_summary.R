@@ -6,8 +6,8 @@ testthat::test_that("e2e: data summary just list the unfilterable objects at the
   )
 
   testthat::expect_match(
-    app$get_text(sprintf("#%s", app$active_data_summary_ns())),
-    "\\And 3 more unfilterable object\\(s\\)"
+    app$get_text(sprintf("#%s-table", app$active_data_summary_ns())),
+    "And 3 more unfilterable object"
   )
 
   app$stop()

@@ -101,7 +101,7 @@ testthat::test_that(
     )
 
     testthat::expect_equal(
-      app$get_text(".btn-default:nth-child(1)"),
+      app$get_text(".modal-footer button:nth-child(1)"),
       "Proceed"
     )
 
