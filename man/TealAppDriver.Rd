@@ -49,7 +49,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
 \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
 \item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
-\item \href{#method-TealAppDriver-clone}{\code{TealAppDriver$clone()}}
 }
 }
 \if{html}{\out{
@@ -682,23 +681,6 @@ Only one of these parameters may be used.}
 
 \item{\code{...}}{Must be empty. Allows for parameter expansion.
 Parameter with additional value to passed in \code{wait_for_value}.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
 }
 \if{html}{\out{</div>}}
 }
