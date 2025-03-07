@@ -13,7 +13,6 @@ testthat::test_that("e2e: data summary just list the unfilterable objects at the
   app$stop()
 })
 
-
 testthat::test_that("e2e: data summary table is displayed with 2 columns data without keys", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
