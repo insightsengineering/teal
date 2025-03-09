@@ -327,6 +327,7 @@ element_to_markdown.ggplot <- function(x, width = 5, height = 4, dpi = 100) {
 #' @method element_to_markdown data.frame
 #' @exportS3Method teal::element_to_markdown
 element_to_markdown.data.frame <- function(x) {
-  knitr::kable(x)
+  paste(as.character(knitr::kable(x)), collapse = "\n")
+  # I am not sure it renders the table, but it's here to assure it has length 1.
 }
 
