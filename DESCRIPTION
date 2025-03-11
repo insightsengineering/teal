@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.16.0.9002
+Version: 0.16.0.9003
 Date: 2025-03-11
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
@@ -79,9 +79,9 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.widgets@main,
     insightsengineering/teal.reporter@main,
-    insightsengineering/teal.slice@main
+    insightsengineering/teal.slice@main,
+    insightsengineering/teal.widgets@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/cli,
