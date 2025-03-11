@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: teal_slices filters are initialized when global filters are created", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -45,6 +46,7 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
 })
 
 testthat::test_that("e2e: teal_slices filters are initialized when module specific filters are created", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),

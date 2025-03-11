@@ -38,7 +38,7 @@ Once set, the value of an option persists during a session, but it returns to th
 This option controls the bootstrap theme and version used in `teal` apps. Achieve better UX with the customized UI of an app.
 Please see the [vignette on Bootstrap themes](bootstrap-themes-in-teal.html) to read more about the functionality.
 
-Default: `NULL`
+Default: `bslib::bs_theme()`
 
 ### `teal.load_nest_code` (`character`)
 The value of this option is appended to the top of the code rendered when using the `Show R Code` modal button.
@@ -98,6 +98,11 @@ Default: `"auto"`.
 
 To read more about lockfile usage creation check `?teal::module_teal_lockfile`.
 
+### `teal.sidebar.width` (`numeric`)
+
+This sets the sidebar width in pixels in the teal app.
+
+Default: `250`
 
 # Deprecated options
 

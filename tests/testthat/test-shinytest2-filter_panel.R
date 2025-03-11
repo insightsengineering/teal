@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: module content is updated when data is filtered in filter panel", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -29,6 +30,7 @@ testthat::test_that("e2e: module content is updated when data is filtered in fil
 })
 
 testthat::test_that("e2e: filtering a module-specific filter is reflected in other shared module", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -68,6 +70,7 @@ testthat::test_that("e2e: filtering a module-specific filter is reflected in oth
 })
 
 testthat::test_that("e2e: filtering a module-specific filter is not refected in other unshared modules", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),

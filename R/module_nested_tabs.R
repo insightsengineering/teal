@@ -55,12 +55,15 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
   tags$div(
     id = ns("wrapper"),
     do.call(
-      tabsetPanel,
+      switch(as.character(depth),
+        "0" = bslib::navset_pill,
+        "1" = bslib::navset_tab,
+        bslib::navset_underline
+      ),
       c(
         # by giving an id, we can reactively respond to tab changes
         list(
-          id = ns("active_tab"),
-          type = if (modules$label == "root") "pills" else "tabs"
+          id = ns("active_tab")
         ),
         lapply(
           names(modules$children),
@@ -69,7 +72,7 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
             if (is.null(module_label)) {
               module_label <- icon("fas fa-database")
             }
-            tabPanel(
+            bslib::nav_panel(
               title = module_label,
               value = module_id, # when clicked this tab value changes input$<tabset panel id>
               ui_teal_module(
@@ -91,7 +94,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
 
-  ui_teal <- tagList(
+  ui_teal <- tags$div(
     shinyjs::hidden(
       tags$div(
         id = ns("transform_failure_info"),
@@ -117,16 +120,89 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      if (depth >= 2L) tags$div(style = "mt-6"),
+      if (depth >= 2L) tags$div(),
       if (!is.null(modules$datanames)) {
-        fluidRow(
-          column(width = 9, ui_teal, class = "teal_primary_col"),
-          column(
-            width = 3,
-            ui_data_summary(ns("data_summary")),
-            ui_filter_data(ns("filter_panel")),
-            ui_transform_teal_data(ns("data_transform"), transformators = modules$transformators, class = "well"),
-            class = "teal_secondary_col"
+        tagList(
+          bslib::layout_sidebar(
+            class = "teal-sidebar-layout",
+            sidebar = bslib::sidebar(
+              id = ns("teal_module_sidebar"),
+              class = "teal-sidebar",
+              width = getOption("teal.sidebar.width", 250),
+              tags$div(
+                tags$div(
+                  class = "teal-active-data-summary-panel",
+                  bslib::accordion(
+                    id = ns("data_summary_accordion"),
+                    bslib::accordion_panel(
+                      "Active Data Summary",
+                      tags$div(
+                        class = "teal-active-data-summary",
+                        ui_data_summary(ns("data_summary"))
+                      )
+                    )
+                  )
+                ),
+                tags$br(),
+                tags$div(
+                  class = "teal-filter-panel",
+                  ui_filter_data(ns("filter_panel"))
+                ),
+                if (length(modules$transformators) > 0 && !isTRUE(attr(modules$transformators, "custom_ui"))) {
+                  tags$div(
+                    tags$br(),
+                    tags$div(
+                      class = "teal-transform-panel",
+                      bslib::accordion(
+                        id = ns("data_transform_accordion"),
+                        bslib::accordion_panel(
+                          "Transform Data",
+                          ui_transform_teal_data(
+                            ns("data_transform"),
+                            transformators = modules$transformators
+                          )
+                        )
+                      )
+                    )
+                  )
+                }
+              )
+            ),
+            ui_teal
+          ),
+          div(
+            id = ns("sidebar_toggle_buttons"),
+            class = "sidebar-toggle-buttons",
+            actionButton(
+              class = "data-summary-toggle btn-outline-primary",
+              ns("data_summary_toggle"),
+              icon("fas fa-list")
+            ),
+            actionButton(
+              class = "data-filters-toggle btn-outline-secondary",
+              ns("data_filters_toggle"),
+              icon("fas fa-filter")
+            ),
+            if (length(modules$transformators) > 0) {
+              actionButton(
+                class = "data-transforms-toggle btn-outline-primary",
+                ns("data_transforms_toggle"),
+                icon("fas fa-pen-to-square")
+              )
+            }
+          ),
+          tags$script(
+            HTML(
+              sprintf(
+                "
+                  $(document).ready(function() {
+                    $('#%s').insertAfter('#%s > .bslib-sidebar-layout > button.collapse-toggle');
+                  });
+                ",
+                ns("sidebar_toggle_buttons"),
+                id
+              )
+            )
           )
         )
       } else {
@@ -296,6 +372,27 @@ srv_teal_module.teal_module <- function(id,
       )
 
       summary_table <- srv_data_summary("data_summary", module_teal_data)
+
+      observeEvent(input$data_summary_toggle, {
+        bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
+        bslib::accordion_panel_open(id = "data_summary_accordion", values = TRUE)
+        bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+        bslib::accordion_panel_close(id = "data_transform_accordion", values = TRUE)
+      })
+
+      observeEvent(input$data_filters_toggle, {
+        bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
+        bslib::accordion_panel_close(id = "data_summary_accordion", values = TRUE)
+        bslib::accordion_panel_open(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+        bslib::accordion_panel_close(id = "data_transform_accordion", values = TRUE)
+      })
+
+      observeEvent(input$data_transforms_toggle, {
+        bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
+        bslib::accordion_panel_close(id = "data_summary_accordion", values = TRUE)
+        bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+        bslib::accordion_panel_open(id = "data_transform_accordion", values = TRUE)
+      })
 
       # Call modules.
       if (!inherits(modules, "teal_module_previewer")) {

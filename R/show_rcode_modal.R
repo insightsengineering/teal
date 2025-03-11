@@ -27,8 +27,7 @@ show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDo
     tagList(
       tags$div(
         actionButton(ns("copyRCode"), "Copy to Clipboard", `data-clipboard-target` = paste0("#", ns("r_code"))),
-        modalButton("Dismiss"),
-        style = "mb-4"
+        modalButton("Dismiss")
       ),
       tags$div(tags$pre(id = ns("r_code"), rcode)),
     ),

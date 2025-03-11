@@ -38,8 +38,10 @@ Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.7.0),
-    teal.slice (>= 0.6.0)
+    teal.slice (>= 0.6.0.9000)
 Imports:
+    bslib (>= 0.8.0),
+    bsicons,
     checkmate (>= 2.1.0),
     cli,
     htmltools,
@@ -52,12 +54,11 @@ Imports:
     stats,
     teal.code (>= 0.6.1),
     teal.logger (>= 0.3.2),
-    teal.reporter (>= 0.4.0),
-    teal.widgets (>= 0.4.3),
+    teal.reporter (>= 0.4.0.9000),
+    teal.widgets (>= 0.4.3.9000),
     tools,
     utils
 Suggests:
-    bslib,
     ggplot2 (>= 3.4.0),
     knitr (>= 1.42),
     mirai (>= 1.1.1),
@@ -72,6 +73,10 @@ Suggests:
     testthat (>= 3.2.0),
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
+Remotes:
+    insightsengineering/teal.slice@test@bslib@main,
+    insightsengineering/teal.widgets@test@bslib@main,
+    insightsengineering/teal.reporter@test@bslib@main
 VignetteBuilder:
     knitr,
     rmarkdown
