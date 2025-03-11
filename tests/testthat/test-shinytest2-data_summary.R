@@ -1,4 +1,5 @@
 testthat::test_that("e2e: data summary just list the unfilterable objects at the bottom when provided", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = teal.data::teal_data(x = 1, y = "z", foo = function() NULL),
@@ -14,6 +15,7 @@ testthat::test_that("e2e: data summary just list the unfilterable objects at the
 })
 
 testthat::test_that("e2e: data summary table is displayed with 2 columns data without keys", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(), # iris, mtcars
@@ -33,6 +35,7 @@ testthat::test_that("e2e: data summary table is displayed with 2 columns data wi
 })
 
 testthat::test_that("e2e: data summary table displays datasets by topological_sort of join_keys", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
@@ -55,6 +58,7 @@ testthat::test_that("e2e: data summary table displays datasets by topological_so
 })
 
 testthat::test_that("e2e: data summary table is displayed with 3 columns for data with join keys", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
@@ -85,6 +89,7 @@ testthat::test_that(
   "e2e: data summary table does not list unsupported objects",
   {
     testthat::skip_if_not_installed("MultiAssayExperiment")
+    testthat::skip("chromium")
     skip_if_too_deep(5)
 
     data <- within(
@@ -127,6 +132,7 @@ testthat::test_that(
 )
 
 testthat::test_that("e2e: data summary table displays datasets by names() order if no join_keys", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))

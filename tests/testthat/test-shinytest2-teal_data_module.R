@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: teal_data_module will have a delayed load of datasets", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
@@ -38,6 +39,7 @@ testthat::test_that("e2e: teal_data_module will have a delayed load of datasets"
 })
 
 testthat::test_that("e2e: teal_data_module shows validation errors", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
@@ -73,6 +75,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
 })
 
 testthat::test_that("e2e: teal_data_module inputs change teal_data object that is passed to teal main UI", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
@@ -124,6 +127,7 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
 })
 
 testthat::test_that("e2e: teal_data_module gets removed after successful data load, when once = TRUE", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
@@ -168,6 +172,7 @@ testthat::test_that("e2e: teal_data_module gets removed after successful data lo
 })
 
 testthat::test_that("e2e: teal_data_module is still visible after successful data load, when once = FALSE", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
@@ -207,6 +212,7 @@ testthat::test_that("e2e: teal_data_module is still visible after successful dat
 })
 
 testthat::test_that("e2e: teal_data_module will make other tabs inactive before successful data load", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   tdm <- teal_data_module(
     ui = function(id) {
