@@ -55,23 +55,28 @@ a.disabled {
   --_padding: 0px;
 }
 
+.accordion {
+  --bs-accordion-border-radius: 0rem;
+  --bs-accordion-inner-border-radius: 0rem;
+}
+
 .teal-sidebar .accordion-button {
   height: 2.5rem;
   --bs-accordion-btn-bg: #ededed;
   --bs-accordion-active-bg: #ededed;
-  --bs-accordion-btn-padding-x: 1rem;
-  --bs-accordion-btn-padding-y: 0.8rem;
+  --bs-accordion-btn-padding-x: 0.5em;
+  --bs-accordion-btn-padding-y: 0.5rem;
 }
 
 .teal-sidebar .accordion {
-  --bs-accordion-body-padding-x: 1rem;
-  --bs-accordion-body-padding-y: 0.5rem;
+  --bs-accordion-body-padding-x: 0rem;
+  --bs-accordion-body-padding-y: 0rem;
 }
 
-.teal-sidebar .accordion-button:hover {
+/* .teal-sidebar .accordion-button:hover {
   --bs-accordion-btn-bg: #c5c5c5;
   --bs-accordion-active-bg: #c5c5c5;
-}
+} */
 
 .teal-transform-accordian .accordion-button {
   --bs-accordion-btn-padding-y: 0.5rem;
