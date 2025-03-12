@@ -66,6 +66,7 @@ a.disabled {
   --bs-accordion-active-bg: #ededed;
   --bs-accordion-btn-padding-x: 0.5em;
   --bs-accordion-btn-padding-y: 0.5rem;
+  background-color: #ededed;
 }
 
 .teal-sidebar .accordion {
@@ -168,25 +169,26 @@ a.remove {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-.teal-transform-panel .accordion .accordion-button,
+/* .teal-transform-panel .accordion .accordion-button,
 .teal-active-data-summary-panel .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
   color: #fff;
-}
-.teal-transform-panel .accordion .accordion-button:hover,
+} */
+
+/* .teal-transform-panel .accordion .accordion-button:hover,
 .teal-active-data-summary-panel .accordion .accordion-button:hover {
   background-color: rgba(var(--bs-primary-rgb), 0.75);
   color: #fff;
-}
+} */
 
-.teal-transform-panel .accordion-body .accordion .accordion-button {
+/* .teal-transform-panel .accordion-body .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
   color: #fff;
 }
 .teal-transform-panel .accordion-body .accordion .accordion-button:hover {
   background-color: rgba(var(--bs-primary-rgb), 0.75);
   color: #fff;
-}
+} */
 /* .teal-transform-panel .accordion .accordion-body,
 .teal-active-data-summary-panel .accordion .accordion-body {
   background-color: rgba(var(--bs-primary-rgb), 0.05);
@@ -209,7 +211,7 @@ a.remove {
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.2)
 } */
 
-.accordion-item {
+.teal-filter-panel .accordion-item {
   --bs-border-width: 0rem;
 }
 
