@@ -156,15 +156,15 @@ a.remove {
 
 .teal-active-data-summary::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 .teal-active-data-summary::-webkit-scrollbar {
-  height: 6px;
+  height: 4px;
 }
 
 .teal-active-data-summary::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  /* border-radius: 10px; */
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -200,6 +200,18 @@ a.remove {
 .teal-filter-panel .accordion-body {
   border: solid 1.5px var(--bs-gray);
 } */
+
+/* .accordion-button {
+  --bs-border-width: 1rem;
+} */
+
+/* .teal-filter-panel .accordion-header {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2)
+} */
+
+.accordion-item {
+  --bs-border-width: 0rem;
+}
 
 .sidebar-toggle-buttons .data-summary-toggle {
   color: rgba(var(--bs-primary-rgb), 1);
