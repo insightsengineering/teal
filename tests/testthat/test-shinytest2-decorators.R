@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: module with decorator UI and output is modified interactively upon changes in decorator", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
 
   interactive_decorator <- teal_transform_module(
@@ -72,6 +73,7 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
 })
 
 testthat::test_that("e2e: module with decorator, where server fails,  shows shiny error message", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   failing_decorator <- teal_transform_module(
     ui = function(id) {

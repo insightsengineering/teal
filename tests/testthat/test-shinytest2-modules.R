@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: the module server logic is only triggered when the teal module becomes active", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   value_export_module <- function(label = "custom module") {
     module(
@@ -41,6 +42,7 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
 
 
 testthat::test_that("e2e: filter panel only shows the data supplied using datanames", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -57,6 +59,7 @@ testthat::test_that("e2e: filter panel only shows the data supplied using datana
 })
 
 testthat::test_that("e2e: filter panel shows all the datasets when datanames is all", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -74,6 +77,7 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
 
 
 testthat::test_that("e2e: all the nested teal modules are initiated as expected", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),

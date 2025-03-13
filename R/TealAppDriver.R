@@ -9,6 +9,7 @@
 #'
 TealAppDriver <- R6::R6Class( # nolint: object_name.
   "TealAppDriver",
+  cloneable = FALSE,
   inherit = {
     lapply(c("testthat", "shinytest2", "rvest"), function(.x, use_testthat) {
       if (!requireNamespace(.x, quietly = TRUE)) {
@@ -364,12 +365,22 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         sprintf("#%s-filters-filter_active_vars_contents > span", self$active_filters_ns())
       )
 
-      available_datasets <- self$get_text(
-        sprintf(
-          "#%s-filters-filter_active_vars_contents .filter_panel_dataname",
-          self$active_filters_ns()
-        )
+      js_code <- sprintf(
+        "
+          const accordionTitles = document.querySelectorAll(
+            '#%s-filters-filter_active_vars_contents .accordion-title'
+          );
+          let textContents = [];
+
+          accordionTitles.forEach(accordionTitle => {
+              let textNode = accordionTitle.childNodes[0];
+              textContents.push(textNode.textContent);
+          });
+          textContents;
+        ",
+        self$active_filters_ns()
       )
+      available_datasets <- unlist(self$get_js(js_code))
 
       available_datasets[displayed_datasets_index]
     },

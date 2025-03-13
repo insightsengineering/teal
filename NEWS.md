@@ -1,20 +1,21 @@
-# teal 0.15.2.9131
+# teal 0.16.0.9003
+
+# teal 0.16.0
 
 ### New features
 
-* Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object. #669
-* Since introduction of `ui_teal` and `srv_teal` functions `id` argument in `init` is being deprecated. #1438
+* Possible to call `ui_teal` and `srv_teal` directly in any application by delivering `data` argument as a `reactive` returning `teal_data` object (#669).
+* Since introduction of `ui_teal` and `srv_teal` functions, the `id` argument in `init` is being deprecated (#1438).
 * Introduce `ui_session_info` and `srv_session_info` shiny module to create the user session info and teal app lockfile download button.
-* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to decorate module outputs. #1228 #1384
+* Introduced `teal_transform_module` to provide a way to interactively modify data delivered to `teal_module`'s `server` and to decorate module outputs, along with a vignette to demonstrate its usage (#1228, #1384).
 * Introduced a new argument `once = FALSE` in `teal_data_module` to possibly reload data during a run time.
-* Possibility to download lockfile to restore app session for reproducibility. #479
+* Possibility to download lockfile to restore app session for reproducibility (#479).
 * Datasets which name starts with `.` are ignored when `module`'s `datanames` is set as `"all"`.
-* Added warning when reserved `datanames`, such as `all` and `.raw_data` are being used. 
-* Added `add_custom_server()` to allow adding custom server logic to the main shiny server function of a teal app.
+* Added warning when reserved `datanames`, such as `all` and `.raw_data` are being used.
 
 ### Breaking changes
 
-* Setting `datanames()` on `data` passed to teal application no longer has effect. In order to change `teal_module`'s 
+* Setting `datanames()` on `data` passed to teal application no longer has effect. In order to change `teal_module`'s
 `datanames` one should modify `module$datanames`.
 * `landing_popup_module()` is deprecated. Please use `add_landing_modal()` function to add a landing popup for your teal application.
 * `teal` no longer re-export `%>%`. Please load `library(magrittr)` instead or use `|>` from `base`.
@@ -24,7 +25,7 @@
 ### Enhancement
 
 * Enhanced a system of data validation and a display of error messages.
-* Easier way of to call `javascript` events by setting `$(document).ready(function() { ... })`. #1114
+* Easier way of to call `javascript` events by setting `$(document).ready(function() { ... })` (#1114).
 * Provided progress bar for modules loading and data filtering during teal app startup.
 * Filter mapping display has a separate icon in the tab.
 * Environment of the `data` passed to the `teal_module`'s server consists unfiltered datasets contained in `.raw_data`.

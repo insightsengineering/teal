@@ -1,15 +1,10 @@
 /* teal sidebar css */
 
-
 .filter_hamburger,
 .wunder_bar_button {
   font-size: 16px;
   padding: 8px !important;
   background-color: transparent !important;
-}
-
-.filter_hamburger {
-  float: right !important;
 }
 
 .badge-count {
@@ -19,7 +14,7 @@
   -moz-border-radius: 1em;
   border-radius: 1em;
   font-size: 0.7em;
-  padding: 0 .5em;
+  padding: 0 0.5em;
   vertical-align: top;
   margin-left: -1em;
 }
@@ -47,11 +42,174 @@ a.disabled {
   flex: 1 1 80%;
 }
 
-.manager_table_row *+* {
+.manager_table_row * + * {
   flex: 0 0 0px;
   padding: 0em 1.5em;
 }
 
 .manager_placeholder {
   margin-top: 1em;
+}
+
+.teal-sidebar {
+  --_padding: 0px;
+}
+
+.teal-sidebar .accordion-button {
+  height: 2.5rem;
+  --bs-accordion-btn-bg: #ededed;
+  --bs-accordion-active-bg: #ededed;
+  --bs-accordion-btn-padding-x: 1rem;
+  --bs-accordion-btn-padding-y: 0.8rem;
+}
+
+.teal-sidebar .accordion {
+  --bs-accordion-body-padding-x: 1rem;
+  --bs-accordion-body-padding-y: 0.5rem;
+}
+
+.teal-sidebar .accordion-button:hover {
+  --bs-accordion-btn-bg: #c5c5c5;
+  --bs-accordion-active-bg: #c5c5c5;
+}
+
+.teal-transform-accordian .accordion-button {
+  --bs-accordion-btn-padding-y: 0.5rem;
+  --bs-accordion-btn-padding-x: 0.5rem;
+}
+
+.teal-transform-accordian .accordion-button:not(.collapsed)::after,
+.teal-transform-accordian .accordion-button::after {
+  display: none;
+}
+
+.bslib-sidebar-layout > .sidebar-toggle-buttons {
+  grid-column: 1 / 2;
+  z-index: -1;
+  opacity: 0;
+  position: absolute;
+  right: calc(var(--_icon-size) + 3rem);
+  top: calc(var(--_icon-size, 1rem) / 2);
+  height: var(--_icon-button-size, 2rem);
+  width: 80%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bslib-sidebar-layout > .sidebar-toggle-buttons > button {
+  width: 80%;
+}
+
+.bslib-sidebar-layout.sidebar-collapsed > .sidebar-toggle-buttons {
+  z-index: 1000;
+  width: 3rem;
+  top: 3rem;
+  opacity: 1;
+  right: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  transition: 0.3s ease, top 0.3s ease, right 0.3s ease;
+}
+
+.teal_module > .bslib-sidebar-layout > .main {
+  --_padding: 0;
+}
+
+.bslib-sidebar-layout.sidebar-collapsed > .main {
+  padding-right: 0;
+}
+
+.bslib-sidebar-layout > .main {
+  padding: 0;
+}
+
+.teal-sidebar-layout > div > .container-fluid {
+  padding-right: 0;
+}
+
+.teal-sidebar-layout > div > .container-fluid > .bslib-sidebar-layout > .main {
+  padding: 0;
+}
+
+a.remove {
+  padding: 0;
+}
+
+.teal-sidebar-layout .accordion-button:not(.collapsed)::after,
+.accordion-button::after {
+  scale: 0.8;
+}
+
+.teal-active-data-summary {
+  overflow-x: scroll;
+}
+
+.teal-active-data-summary::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.5);
+}
+
+.teal-active-data-summary::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.teal-active-data-summary::-webkit-scrollbar {
+  height: 6px;
+}
+
+.teal-active-data-summary::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.teal-transform-panel .accordion .accordion-button,
+.teal-active-data-summary-panel .accordion .accordion-button {
+  background-color: rgba(var(--bs-primary-rgb), 1);
+  color: #fff;
+}
+.teal-transform-panel .accordion .accordion-button:hover,
+.teal-active-data-summary-panel .accordion .accordion-button:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.75);
+  color: #fff;
+}
+
+.teal-transform-panel .accordion-body .accordion .accordion-button {
+  background-color: rgba(var(--bs-primary-rgb), 1);
+  color: #fff;
+}
+.teal-transform-panel .accordion-body .accordion .accordion-button:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.75);
+  color: #fff;
+}
+/* .teal-transform-panel .accordion .accordion-body,
+.teal-active-data-summary-panel .accordion .accordion-body {
+  background-color: rgba(var(--bs-primary-rgb), 0.05);
+} */
+
+/* .teal-transform-panel .accordion-body,
+.teal-active-data-summary-panel .accordion-body {
+  border: solid 1.5px var(--bs-primary);
+}
+
+.teal-filter-panel .accordion-body {
+  border: solid 1.5px var(--bs-gray);
+} */
+
+.sidebar-toggle-buttons .data-summary-toggle {
+  color: rgba(var(--bs-primary-rgb), 1);
+}
+
+.sidebar-toggle-buttons .data-summary-toggle:hover {
+  background: rgba(var(--bs-primary-rgb), 1);
+  color: white;
+}
+
+.sidebar-toggle-buttons .data-transforms-toggle {
+  color: rgba(var(--bs-primary-rgb), 1);
+}
+
+.sidebar-toggle-buttons .data-transforms-toggle:hover {
+  background: rgba(var(--bs-primary-rgb), 1);
+  color: white;
 }

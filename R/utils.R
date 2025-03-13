@@ -30,16 +30,16 @@ get_teal_bs_theme <- function() {
   bs_theme <- getOption("teal.bs_theme")
 
   if (is.null(bs_theme)) {
-    return(NULL)
+    bs_theme <- bslib::bs_theme()
   }
 
   if (!checkmate::test_class(bs_theme, "bs_theme")) {
     warning(
       "Assertion on 'teal.bs_theme' option value failed: ",
       checkmate::check_class(bs_theme, "bs_theme"),
-      ". The default Shiny Bootstrap theme will be used."
+      ". The default bslib Bootstrap theme will be used."
     )
-    return(NULL)
+    bs_theme <- bslib::bs_theme()
   }
 
   bs_theme
@@ -318,7 +318,7 @@ build_app_title <- function(
     title = "teal app",
     favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") {
   lifecycle::deprecate_soft(
-    when = "0.15.3",
+    when = "0.16.0",
     what = "build_app_title()",
     details = "Use `modify_title()` on the object created using the `init`."
   )

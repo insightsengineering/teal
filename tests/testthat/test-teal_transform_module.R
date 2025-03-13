@@ -62,7 +62,7 @@ testthat::test_that(
     initial_id <- "a-path-to-an-inner-namespace"
     ui <- ui_transform_teal_data(initial_id, ttm)
     # Find element that ends in "-a_div"
-    expected_id <- unname(unlist(ui)[grepl(".*-a_div$", unlist(ui))][1])
+    expected_id <- unname(unlist(ui)[grepl(".*-a_div$", unlist(ui))][[1]])
 
     testServer(
       app = srv_transform_teal_data,

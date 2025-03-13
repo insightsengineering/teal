@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.15.2.9131
-Date: 2025-02-12
+Version: 0.16.0.9003
+Date: 2025-03-11
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -38,8 +38,10 @@ Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.7.0),
-    teal.slice (>= 0.6.0)
+    teal.slice (>= 0.6.0.9001)
 Imports:
+    bsicons,
+    bslib (>= 0.8.0),
     checkmate (>= 2.1.0),
     cli,
     htmltools,
@@ -50,14 +52,13 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.code (>= 0.6.0),
-    teal.logger (>= 0.3.1),
-    teal.reporter (>= 0.4.0),
-    teal.widgets (>= 0.4.3),
+    teal.code (>= 0.6.1),
+    teal.logger (>= 0.3.2),
+    teal.reporter (>= 0.4.0.9004),
+    teal.widgets (>= 0.4.3.9001),
     tools,
     utils
 Suggests:
-    bslib,
     ggplot2 (>= 3.4.0),
     knitr (>= 1.42),
     mirai (>= 1.1.1),
@@ -77,6 +78,10 @@ VignetteBuilder:
     rmarkdown
 RdMacros:
     lifecycle
+Remotes:
+    insightsengineering/teal.reporter@main,
+    insightsengineering/teal.slice@main,
+    insightsengineering/teal.widgets@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/cli,

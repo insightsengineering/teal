@@ -36,34 +36,22 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
       display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
 
       display_fun(
-        div(
-          # class .teal_validated changes the color of the boarder on error in ui_validate_reactive_teal_data
-          #   For details see tealValidate.js file.
-          id = ns("wrapper"),
-          class = c(class, "teal_validated"),
-          title = attr(data_mod, "label"),
-          tags$span(
-            class = "text-primary mb-4",
-            icon("fas fa-square-pen"),
-            attr(data_mod, "label")
-          ),
-          tags$i(
-            class = "remove pull-right fa fa-angle-down",
-            style = "cursor: pointer;",
-            title = "fold/expand transformator panel",
-            onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", transform_wrapper_id)
-          ),
-          tags$div(
-            id = transform_wrapper_id,
-            if (is.null(data_mod$ui)) {
-              return(NULL)
-            } else {
-              data_mod$ui(id = ns("transform"))
-            },
-            div(
-              id = ns("validate_messages"),
-              class = "teal_validated",
-              uiOutput(ns("error_wrapper"))
+        bslib::accordion(
+          bslib::accordion_panel(
+            attr(data_mod, "label"),
+            icon = bsicons::bs_icon("palette-fill"),
+            tags$div(
+              id = transform_wrapper_id,
+              if (is.null(data_mod$ui)) {
+                return(NULL)
+              } else {
+                data_mod$ui(id = ns("transform"))
+              },
+              div(
+                id = ns("validate_messages"),
+                class = "teal_validated",
+                uiOutput(ns("error_wrapper"))
+              )
             )
           )
         )
