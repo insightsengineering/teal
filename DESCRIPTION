@@ -38,7 +38,7 @@ Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.7.0),
-    teal.slice (>= 0.6.0.9000)
+    teal.slice (>= 0.6.0.9001)
 Imports:
     bsicons,
     bslib (>= 0.8.0),
