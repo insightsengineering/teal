@@ -105,7 +105,7 @@ srv_teal_data_module <- function(id,
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
   ns <- NS(id)
-  tagList(
+  tags$div(
     div(
       id = ns("validate_messages"),
       class = "teal_validated",

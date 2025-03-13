@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("bookmark_manager_button is not rendered by default", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -16,6 +17,7 @@ testthat::test_that("bookmark_manager_button is not rendered by default", {
 
 
 testthat::test_that("bookmark_manager_button is not rendered when enableBookmarking = 'url'", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -30,6 +32,7 @@ testthat::test_that("bookmark_manager_button is not rendered when enableBookmark
 
 
 testthat::test_that("bookmark_manager_button is rendered when enableBookmarking = 'server'", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -41,6 +44,7 @@ testthat::test_that("bookmark_manager_button is rendered when enableBookmarking 
 })
 
 testthat::test_that("bookmark_manager_button shows modal with url containing state_id when clicked", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),

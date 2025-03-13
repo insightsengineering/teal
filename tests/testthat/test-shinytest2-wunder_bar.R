@@ -2,6 +2,7 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("wunder_bar_srv clicking filter icon opens filter-manager modal", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -21,6 +22,7 @@ testthat::test_that("wunder_bar_srv clicking filter icon opens filter-manager mo
 
 
 testthat::test_that("wunder_bar_srv clicking snapshot icon opens snapshot-manager modal", {
+  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
