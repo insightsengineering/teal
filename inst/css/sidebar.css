@@ -118,16 +118,20 @@ a.disabled {
   transition: 0.3s ease, top 0.3s ease, right 0.3s ease;
 }
 
-.teal_module > .bslib-sidebar-layout > .main {
+/* .teal_module > .bslib-sidebar-layout > .main {
   --_padding: 0;
-}
+} */
 
-.bslib-sidebar-layout.sidebar-collapsed > .main {
+/* .bslib-sidebar-layout.sidebar-collapsed > .main {
   padding-right: 0;
-}
+} */
 
-.bslib-sidebar-layout > .main {
+/* .bslib-sidebar-layout > .main {
   padding: 0;
+} */
+
+.bslib-sidebar-layout>.teal-sidebar-layout {
+  padding: 0rem;
 }
 
 .teal-sidebar-layout > div > .container-fluid {
@@ -231,4 +235,8 @@ a.remove {
 .sidebar-toggle-buttons .data-transforms-toggle:hover {
   background: rgba(var(--bs-primary-rgb), 1);
   color: white;
+}
+
+.teal_module .teal-sidebar-layout {
+  padding-right: 0;
 }
