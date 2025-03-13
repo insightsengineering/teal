@@ -130,9 +130,9 @@ a.disabled {
   padding: 0;
 } */
 
-.bslib-sidebar-layout>.teal-sidebar-layout {
+/* .bslib-sidebar-layout>.teal-sidebar-layout {
   padding: 0rem;
-}
+} */
 
 .teal-sidebar-layout > div > .container-fluid {
   padding-right: 0;
@@ -235,8 +235,4 @@ a.remove {
 .sidebar-toggle-buttons .data-transforms-toggle:hover {
   background: rgba(var(--bs-primary-rgb), 1);
   color: white;
-}
-
-.teal_module .teal-sidebar-layout {
-  padding-right: 0;
 }
