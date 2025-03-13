@@ -143,14 +143,14 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
                     )
                   )
                 ),
-                tags$br(),
+                # tags$br(),
                 tags$div(
                   class = "teal-filter-panel",
                   ui_filter_data(ns("filter_panel"))
                 ),
                 if (length(modules$transformators) > 0 && !isTRUE(attr(modules$transformators, "custom_ui"))) {
                   tags$div(
-                    tags$br(),
+                    # tags$br(),
                     tags$div(
                       class = "teal-transform-panel",
                       bslib::accordion(

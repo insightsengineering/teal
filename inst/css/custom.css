@@ -3,7 +3,7 @@
 /* per tag */
 
 body:not(.modal-open) {
-  padding-right: 0 !important;
+  /* padding-right: 0 !important; */
   overflow: auto !important;
 }
 
@@ -48,4 +48,14 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 
 .modal-dialog:has(.teal-filter-manager-modal) {
   width: fit-content;
+}
+
+/* .container-fluid {
+  --bs-gutter-x: 0rem;
+} */
+
+.bslib-page-fill > .container-fluid,
+.bslib-page-fill > .container-fluid #teal {
+  padding-left: 0;
+  padding-right: 0;
 }
