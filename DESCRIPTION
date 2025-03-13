@@ -73,17 +73,13 @@ Suggests:
     testthat (>= 3.2.0),
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
-Remotes:
-    insightsengineering/teal.slice@main,
-    insightsengineering/teal.widgets@main,
-    insightsengineering/teal.reporter@redesign@main
 VignetteBuilder:
     knitr,
     rmarkdown
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.reporter@main,
+    insightsengineering/teal.reporter@redesign@main,
     insightsengineering/teal.slice@main,
     insightsengineering/teal.widgets@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
