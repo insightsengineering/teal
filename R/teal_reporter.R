@@ -194,3 +194,140 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
     teal_slices = NULL # teal_slices
   )
 )
+
+#' Server function for `ReportDocument` card class.
+#' @keywords internal
+add_document_button_srv <- function(id, reporter, r_card_fun) {
+  checkmate::assert_class(r_card_fun, "reactive")
+  checkmate::assert_class(reporter, "Reporter")
+
+  shiny::moduleServer(id, function(input, output, session) {
+    shiny::setBookmarkExclude(c(
+      "add_report_card_button", "download_button", "reset_reporter",
+      "add_card_ok", "download_data", "reset_reporter_ok",
+      "label", "comment"
+    ))
+
+    ns <- session$ns
+
+    add_modal <- function() {
+      div(
+        class = "teal-widgets reporter-modal",
+        shiny::modalDialog(
+          easyClose = TRUE,
+          shiny::tags$h3("Add a Card to the Report"),
+          shiny::tags$hr(),
+          shiny::textInput(
+            ns("label"),
+            "Card Name",
+            value = "",
+            placeholder = "Add the card title here",
+            width = "100%"
+          ),
+          shiny::tags$script(
+            shiny::HTML(
+              sprintf(
+                "
+                $('#shiny-modal').on('shown.bs.modal', () => {
+                  $('#%s').focus()
+                })
+                ",
+                ns("label")
+              )
+            )
+          ),
+          footer = shiny::div(
+            shiny::tags$button(
+              type = "button",
+              class = "btn btn-secondary",
+              `data-dismiss` = "modal",
+              `data-bs-dismiss` = "modal",
+              NULL,
+              "Cancel"
+            ),
+            shiny::tags$button(
+              id = ns("add_card_ok"),
+              type = "button",
+              class = "btn btn-primary action-button",
+              `data-val` = shiny::restoreInput(id = ns("add_card_ok"), default = NULL),
+              NULL,
+              "Add Card"
+            )
+          )
+        )
+      )
+    }
+
+    shiny::observeEvent(input$add_report_card_button, {
+      shiny::showModal(add_modal())
+    })
+
+    # the add card button is disabled when clicked to prevent multi-clicks
+    # please check the ui part for more information
+    shiny::observeEvent(input$add_card_ok, {
+      if (inherits(r_card_fun, "try-error")) {
+        msg <- paste0(
+          "The card could not be added to the report. ",
+          "Have the outputs for the report been created yet? If not please try again when they ",
+          "are ready. Otherwise contact your application developer"
+        )
+        warning(msg)
+        shiny::showNotification(
+          msg,
+          type = "error"
+        )
+      } else {
+
+        card <- r_card_fun()
+        card <- to_markdown(card)
+        names(card) <- input$label
+
+        reporter$append_cards(card)
+
+        shiny::showNotification(sprintf("The card added successfully."), type = "message")
+        shiny::removeModal()
+      }
+    })
+  })
+}
+
+to_markdown <- function(card){
+  checkmate::assert_class(card, "ReportDocument")
+  card_markdown <- lapply(card, element_to_markdown)
+  class(card_markdown) <- "ReportDocument"
+  list(card_markdown)
+}
+
+#' @rdname element_to_markdown
+#' @export element_to_markdown
+element_to_markdown <- function(x) UseMethod("element_to_markdown")
+
+#' @rdname element_to_markdown
+#' @method element_to_markdown default
+#' @exportS3Method teal::element_to_markdown
+element_to_markdown.default <- function(x) x
+
+#' @rdname element_to_markdown
+#' @method element_to_markdown ggplot
+#' @exportS3Method teal::element_to_markdown
+element_to_markdown.ggplot <- function(x, width = 5, height = 4, dpi = 100) {
+  # Temporary file to save the plot
+  tmpfile <- tempfile(fileext = ".png")
+
+  # Save the plot as a PNG file
+  ggsave(tmpfile, plot = x, width = width, height = height, dpi = dpi)
+
+  # Read the binary data and encode as base64
+  # base64enc::base64encode(tmpfile)
+  base64_string<- knitr::image_uri(tmpfile)
+  sprintf("![Plot](%s)", base64_string)
+}
+
+#' @rdname element_to_markdown
+#' @method element_to_markdown data.frame
+#' @exportS3Method teal::element_to_markdown
+element_to_markdown.data.frame <- function(x) {
+  paste(as.character(knitr::kable(x)), collapse = "\n")
+  # I am not sure it renders the table, but it's here to assure it has length 1.
+}
+
