@@ -279,55 +279,16 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
       } else {
 
         card <- r_card_fun()
-        card <- to_markdown(card)
-        names(card) <- input$label
+        #card <- to_markdown(card)
+        lcard <- list(card)
+        names(lcard) <- input$label
 
-        reporter$append_cards(card)
+        reporter$append_cards(lcard)
 
         shiny::showNotification(sprintf("The card added successfully."), type = "message")
         shiny::removeModal()
       }
     })
   })
-}
-
-to_markdown <- function(card){
-  checkmate::assert_class(card, "ReportDocument")
-  card_markdown <- lapply(card, element_to_markdown)
-  class(card_markdown) <- "ReportDocument"
-  list(card_markdown)
-}
-
-#' @rdname element_to_markdown
-#' @export element_to_markdown
-element_to_markdown <- function(x) UseMethod("element_to_markdown")
-
-#' @rdname element_to_markdown
-#' @method element_to_markdown default
-#' @exportS3Method teal::element_to_markdown
-element_to_markdown.default <- function(x) x
-
-#' @rdname element_to_markdown
-#' @method element_to_markdown ggplot
-#' @exportS3Method teal::element_to_markdown
-element_to_markdown.ggplot <- function(x, width = 5, height = 4, dpi = 100) {
-  # Temporary file to save the plot
-  tmpfile <- tempfile(fileext = ".png")
-
-  # Save the plot as a PNG file
-  ggsave(tmpfile, plot = x, width = width, height = height, dpi = dpi)
-
-  # Read the binary data and encode as base64
-  # base64enc::base64encode(tmpfile)
-  base64_string<- knitr::image_uri(tmpfile)
-  sprintf("![Plot](%s)", base64_string)
-}
-
-#' @rdname element_to_markdown
-#' @method element_to_markdown data.frame
-#' @exportS3Method teal::element_to_markdown
-element_to_markdown.data.frame <- function(x) {
-  paste(as.character(knitr::kable(x)), collapse = "\n")
-  # I am not sure it renders the table, but it's here to assure it has length 1.
 }
 
