@@ -367,7 +367,7 @@ srv_teal_module.teal_module <- function(id,
 
       srv_check_module_datanames(
         "validate_datanames",
-        data = module_teal_data,
+        x = module_teal_data,
         modules = modules
       )
 

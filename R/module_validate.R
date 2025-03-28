@@ -1,10 +1,11 @@
 #' @keywords internal
 ui_validate_error <- function(id) {
+  ns <- NS(id)
   tagList(
-    module_validate_shinysilenterror$ui(id),
-    module_validate_reactive$ui(id),
-    module_validate_teal_data$ui(id),
-    module_validate_error$ui(id)
+    module_validate_shinysilenterror$ui(ns("validate_shinysilenterror")),
+    module_validate_reactive$ui(ns("validate_reactive")),
+    module_validate_teal_data$ui(ns("validate_teal_data")),
+    module_validate_error$ui(ns("validate_error"))
   )
 }
 
@@ -14,10 +15,13 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
   checkmate::assert_flag(validate_shiny_silent_error)
   moduleServer(id, function(input, output, session) {
     # New
-    module_validate_shinysilenterror$server(data)
-    module_validate_reactive$server(data, types = c("simpleError", "teal_data"))
-    module_validate_teal_data$server(data)
-    module_validate_error$server(data)
+    module_validate_shinysilenterror$server("validate_shinysilent_error", data)
+    # module_validate_reactive$server("validate_reactive", data)
+    # module_validate_teal_data$server("validate_teal_Data", data)
+    # module_validate_error$server("validate_error", data)
+
+    # # Uncomment line below and choose "validate error"
+    # module_validate_reactive$server("validate_reactive", data, types = c("simpleError", "teal_data"))
 
     # # Old
     # output$message <- renderUI({
@@ -101,7 +105,7 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
 #'   })
 #' }
 #'
-#' module_validate_factory("validate_error", check_error)
+#' module_validate_factory(check_error)
 #'
 #' check_numeric <- function(x, skip = FALSE) {
 #'   moduleServer("check_numeric", function(input, output, session) {
@@ -109,9 +113,9 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
 #'   })
 #' }
 #'
-#' module_validate_factory("validate_error", check_error, check_numeric)
+#' module_validate_factory(check_error, check_numeric)
 #' @export
-module_validate_factory <- function(module_id, ...) {
+module_validate_factory <- function(...) {
   dots <- rlang::list2(...)
   checkmate::check_list(dots, min.len = 1)
 
@@ -135,6 +139,8 @@ module_validate_factory <- function(module_id, ...) {
     }
   )
 
+  new_server_fun = function(id) TRUE
+
   top_level_formals <- Reduce(
     function(u, v) {
       new_formals <- formals(v)
@@ -148,7 +154,7 @@ module_validate_factory <- function(module_id, ...) {
       }, FUN.VALUE = logical(1L))
       append(u, new_formals[setdiff(names(new_formals), names(u))])
     },
-    init = list(),
+    init = formals(new_server_fun),
     x = dots
   )
 
@@ -161,18 +167,33 @@ module_validate_factory <- function(module_id, ...) {
 
     validate_r <- reactive({
       message_collection <- Reduce(
-        function(u, v) if (isTRUE(v())) u else c(u, v()),
+        function(u, v) if (isTRUE(v()) || is.null(v())) u else append(u, list(v())),
         x = collection,
-        init = c()
+        init = list()
       )
-
-      validate(need(length(message_collection) == 0, message_collection))
-      TRUE
+      message_collection
     })
 
     output$errors <- renderUI({
-      validate_r()
-      NULL
+      error_class <- c("shiny.silent.error", "validation", "error", "condition")
+      if (length(validate_r()) > 0) {
+        # Custom rendering of errors instead of validate
+        #  this allows for more control over the output (as some show errors in
+        # html)
+        tagList(
+          !!!lapply(
+            validate_r(),
+            function(.x) {
+              html_class <- if (isTRUE(attr(.x[1], "is_warning")) || isTRUE(attr(.x, "is_warning"))) {
+                "teal-output-warning"
+              } else {
+                "shiny-output-error"
+              }
+              tags$div(class = html_class, tags$div(lapply(.x, tags$p)))
+            }
+          )
+        )
+      }
     })
 
     x
@@ -181,19 +202,15 @@ module_validate_factory <- function(module_id, ...) {
   new_body_list <- .substitute_template(template_str, module_server_body, check_calls)
 
   server_body <- substitute({
-    moduleServer(module_id, function(input, output, session) server_body)
-  }, list(module_id = module_id, server_body = new_body_list))
+    moduleServer(id, function(input, output, session) server_body)
+  }, list(server_body = new_body_list))
 
-  new_server_fun = function() TRUE
   formals(new_server_fun) <- top_level_formals
   body(new_server_fun) <- server_body
 
-  new_ui_fun <- function(id) TRUE
-  body(new_ui_fun) <- substitute({
-    ns <- NS(NS(id, module_id)) # id is defined at factory creation level
-    uiOutput(ns("errors"))
-  }, list(module_id = module_id))
+  new_ui_fun <- function(id) uiOutput(NS(id, "errors"))
 
+  # todo: check if body need
   list(ui = new_ui_fun, server = new_server_fun)
 }
 
@@ -224,6 +241,42 @@ module_validate_factory <- function(module_id, ...) {
     )
   )
 }
+
+# ##########################################################################
+#
+#                        _       _
+#                       | |     | |
+#  __   __            __| | __ _| |_ __ _ _ __   __ _ _ __ ___   ___  ___
+#  \ \ / /           / _` |/ _` | __/ _` | '_ \ / _` | '_ ` _ \ / _ \/ __|
+#   \ V /           | (_| | (_| | || (_| | | | | (_| | | | | | |  __/\__ \
+#    \_/             \__,_|\__,_|\__\__,_|_| |_|\__,_|_| |_| |_|\___||___/
+#           ______
+#          |______|
+#
+#  v_datanames
+# #########################################################################
+
+#' @keywords internal
+srv_module_check_datanames <- function(id, x, modules) {
+  checkmate::assert_string(id)
+  moduleServer(id, function(input, output, session) {
+    reactive({
+      if (inherits(x(), "teal_data")) {
+        is_modules_ok <- check_modules_datanames_html(
+          modules = modules, datanames = names(x())
+        )
+        attr(is_modules_ok, "is_warning") <- TRUE
+        is_modules_ok
+      } else {
+        TRUE # Error handled elsewhere (avoids showing)
+      }
+    })
+  })
+}
+
+module_validate_datanames <- module_validate_factory(srv_module_check_datanames)
+srv_check_module_datanames <- module_validate_datanames$server
+ui_check_module_datanames <- module_validate_datanames$ui
 
 # #############################################################################
 #
@@ -261,7 +314,7 @@ srv_module_check_reactive <- function(x, types = character(0L), null.ok = FALSE)
           sprintf(
             "Reactive value's class may only of the following types: %s, but it is '%s'",
             paste("{", types, "}", sep = "", collapse = ", "),
-            class(x())
+            paste("{", class(x()), "}", sep = "", collapse = ", ")
           )
         } else {
           TRUE
@@ -283,9 +336,7 @@ srv_module_check_reactive <- function(x, types = character(0L), null.ok = FALSE)
 #' # Show the generated server function
 #' print(module_validate_reactive$server)
 #' @export
-module_validate_reactive <- module_validate_factory(
-  "validate_reactive", srv_module_check_reactive
-)
+module_validate_reactive <- module_validate_factory(srv_module_check_reactive)
 
 # ###########################################################################
 #
@@ -314,6 +365,7 @@ module_validate_reactive <- module_validate_factory(
 srv_module_check_shinysilenterror <- function(x) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
+      browser()
       if (inherits(x(), "shiny.silent.error") && identical(x()$message, "")) {
         "NEW: Shiny silent error was raised"
       } else {
@@ -333,9 +385,7 @@ srv_module_check_shinysilenterror <- function(x) {
 #' # Show the generated server function
 #' print(module_validate_shinysilenterror$server)
 #' @export
-module_validate_shinysilenterror <- module_validate_factory(
-  "validate_shinysilenterror", srv_module_check_shinysilenterror
-)
+module_validate_shinysilenterror <- module_validate_factory(srv_module_check_shinysilenterror)
 
 # ###############################################################################
 #
@@ -369,9 +419,7 @@ srv_module_check_teal_data <- function(x) {
   })
 }
 
-module_validate_teal_data <- module_validate_factory(
-  "validate_teal_data", srv_module_check_teal_data
-)
+module_validate_teal_data <- module_validate_factory(srv_module_check_teal_data)
 
 # ##################################################################
 #
@@ -400,9 +448,7 @@ srv_module_check_error <- function(x) {
   })
 }
 
-module_validate_error <- module_validate_factory(
-  "validate_error", srv_module_check_error
-)
+module_validate_error <- module_validate_factory(srv_module_check_error)
 
 # ##########################################
 #

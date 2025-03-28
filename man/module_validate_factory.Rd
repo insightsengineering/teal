@@ -4,15 +4,15 @@
 \alias{module_validate_factory}
 \title{Factory to build validate modules}
 \usage{
-module_validate_factory(module_id, ...)
+module_validate_factory(...)
 }
 \arguments{
-\item{module_id}{(\code{character(1)}) The module id.}
-
 \item{...}{(\code{function}) 1 or more \code{\link[shiny:moduleServer]{shiny::moduleServer()}} functions that
 return a \code{\link[shiny:reactive]{shiny::reactive()}} with \code{TRUE} or a character string detailing
 the excpetion.
 It can be a named function, a character string or an anonymous function.}
+
+\item{module_id}{(\code{character(1)}) The module id.}
 }
 \value{
 A list with \code{ui} and \code{server} functions with code generated from the
@@ -40,7 +40,7 @@ check_error <- function(x, skip_on_empty_message = TRUE) {
   })
 }
 
-module_validate_factory("validate_error", check_error)
+module_validate_factory(check_error)
 
 check_numeric <- function(x, skip = FALSE) {
   moduleServer("check_numeric", function(input, output, session) {
@@ -48,5 +48,5 @@ check_numeric <- function(x, skip = FALSE) {
   })
 }
 
-module_validate_factory("validate_error", check_error, check_numeric)
+module_validate_factory(check_error, check_numeric)
 }

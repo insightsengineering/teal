@@ -169,28 +169,30 @@ srv_check_class_teal_data <- function(id, data) {
   })
 }
 
-#' @keywords internal
-ui_check_module_datanames <- function(id) {
-  ns <- NS(id)
-  uiOutput(NS(id, "message"))
-}
+# See R/module_validate.R
 
-#' @keywords internal
-srv_check_module_datanames <- function(id, data, modules) {
-  checkmate::assert_string(id)
-  moduleServer(id, function(input, output, session) {
-    output$message <- renderUI({
-      if (inherits(data(), "teal_data")) {
-        is_modules_ok <- check_modules_datanames_html(
-          modules = modules, datanames = names(data())
-        )
-        if (!isTRUE(is_modules_ok)) {
-          tags$div(is_modules_ok, class = "teal-output-warning")
-        }
-      }
-    })
-  })
-}
+# #' @keywords internal
+# ui_check_module_datanames <- function(id) {
+#   ns <- NS(id)
+#   uiOutput(NS(id, "message"))
+# }
+
+# #' @keywords internal
+# srv_check_module_datanames <- function(id, data, modules) {
+#   checkmate::assert_string(id)
+#   moduleServer(id, function(input, output, session) {
+#     output$message <- renderUI({
+#       if (inherits(data(), "teal_data")) {
+#         is_modules_ok <- check_modules_datanames_html(
+#           modules = modules, datanames = names(data())
+#         )
+#         if (!isTRUE(is_modules_ok)) {
+#           tags$div(is_modules_ok, class = "teal-output-warning")
+#         }
+#       }
+#     })
+#   })
+# }
 
 .trigger_on_success <- function(data) {
   out <- reactiveVal(NULL)

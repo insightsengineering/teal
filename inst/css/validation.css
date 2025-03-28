@@ -15,23 +15,44 @@
 
 .teal_validated .shiny-output-error,
 .teal_validated .teal-output-warning {
+  display: flex;
   margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.teal_validated .shiny-output-error > div,
+.teal_validated .teal-output-warning > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.teal_validated .shiny-output-error p,
+.teal_validated .teal-output-warning p{
+  margin-bottom: 0;
 }
 
 .teal_validated .teal-output-warning::before {
   content: "\26A0\FE0F";
+  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 
 .teal_validated .shiny-output-error::before {
   content: "\1F6A8";
+  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 
 .teal_primary_col .shiny-output-error::before {
   content: "\1F6A8";
+  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 
 .teal_primary_col .teal-output-warning::before {
   content: "\26A0\FE0F";
+  padding-left: 0.3em;
+  padding-right: 0.3em;
 }
 
 .teal_primary_col .teal_validated:has(.shiny-output-error),
