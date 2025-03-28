@@ -150,54 +150,8 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 }
 
 #' @keywords internal
-ui_validate_error <- function(id) {
-  ns <- NS(id)
-  uiOutput(ns("message"))
-}
-
-#' @keywords internal
-srv_validate_error <- function(id, data, validate_shiny_silent_error) {
-  checkmate::assert_string(id)
-  checkmate::assert_flag(validate_shiny_silent_error)
-  moduleServer(id, function(input, output, session) {
-    output$message <- renderUI({
-      is_shiny_silent_error <- inherits(data(), "shiny.silent.error") && identical(data()$message, "")
-      if (inherits(data(), "qenv.error")) {
-        validate(
-          need(
-            FALSE,
-            paste(
-              "Error when executing the `data` module:",
-              cli::ansi_strip(paste(data()$message, collapse = "\n")),
-              "\nCheck your inputs or contact app developer if error persists.",
-              collapse = "\n"
-            )
-          )
-        )
-      } else if (inherits(data(), "error")) {
-        if (is_shiny_silent_error && !validate_shiny_silent_error) {
-          return(NULL)
-        }
-        validate(
-          need(
-            FALSE,
-            sprintf(
-              "Shiny error when executing the `data` module.\n%s\n%s",
-              data()$message,
-              "Check your inputs or contact app developer if error persists."
-            )
-          )
-        )
-      }
-    })
-  })
-}
-
-
-#' @keywords internal
 ui_check_class_teal_data <- function(id) {
-  ns <- NS(id)
-  uiOutput(ns("message"))
+  uiOutput(NS(id, "message"))
 }
 
 #' @keywords internal
