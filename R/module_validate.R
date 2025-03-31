@@ -60,8 +60,10 @@ module_validate_factory <- function(...) {
   dots <- rlang::list2(...)
   checkmate::check_list(dots, min.len = 1)
 
+  # Capture function names in arguments
   fun_names <- match.call(expand.dots = FALSE)[["..."]]
 
+  # Generate calls to each of the check functions
   check_calls <- lapply(
     seq_len(length(dots)),
     function(fun_ix) {
@@ -80,8 +82,11 @@ module_validate_factory <- function(...) {
     }
   )
 
+  # Empty server template
   new_server_fun = function(id) TRUE
 
+  # Union of formals for all check functions (order of arguments is kept)
+  # Conflicting argument name/default will throw an exception.
   top_level_formals <- Reduce(
     function(u, v) {
       new_formals <- formals(v)
@@ -140,19 +145,21 @@ module_validate_factory <- function(...) {
     x
   }, list(check_calls == as.name(template_str)))
 
+  # Replace template string with check function calls
   new_body_list <- .substitute_template(template_str, module_server_body, check_calls)
 
+  # Generate top-level moduleServer function with default assertions
   server_body <- substitute({
     checkmate::assert_string(id) # Mandatory id parameter
     moduleServer(id, function(input, output, session) server_body)
   }, list(server_body = new_body_list))
 
-  formals(new_server_fun) <- top_level_formals
-  body(new_server_fun) <- server_body
+  formals(new_server_fun) <- top_level_formals # update function formals
+  body(new_server_fun) <- server_body # set the new generated body
 
+  # ui function contains a simple "error" element
   new_ui_fun <- function(id) uiOutput(NS(id, "errors"))
 
-  # todo: check if body need
   list(ui = new_ui_fun, server = new_server_fun)
 }
 
@@ -345,6 +352,8 @@ module_validate_validation_error <- module_validate_factory(srv_module_check_val
 srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
+      print(glue::glue("val: {validate_shiny_silent_error}"))
+      print(glue::glue("classes:", paste(class(x()), collapse = ", ")))
       if (validate_shiny_silent_error && inherits(x(), "shiny.silent.error") && identical(x()$message, "")) {
         "NEW:: Shiny silent error was raised"
       } else {
@@ -470,61 +479,6 @@ module_validate_condition <- module_validate_factory(srv_module_check_condition)
 
     x
   }, list(check_calls = call_inject))
-}
-
-module_validate_factory_single <- function(module_id, check_fun) {
-  fun_name <- if (is.character(check_fun)) check_fun else deparse(substitute(check_fun))
-  fun_formals <- formals(check_fun)
-
-  server_body <- substitute(
-    {
-      moduleServer(module_id, function(input, output, session) {
-        collection <- list()
-        # todo: start with a req() of first argument
-        collection <- append(collection, check_call)
-
-        validate_r <- reactive({
-          message_collection <- Reduce(
-            function(u, v) if (isTRUE(v())) u else c(u, v()),
-            x = collection,
-            init = c()
-          )
-
-          validate(need(length(message_collection) == 0, message_collection))
-          TRUE
-        })
-
-        output$errors <- renderUI({
-          validate_r()
-          NULL
-        })
-
-        x
-      })
-    },
-    list(
-      # Generates call with exact formals of check function
-      check_call = rlang::call2(fun_name, !!!lapply(names(fun_formals), as.name)),
-      module_id = module_id
-    )
-  )
-
-  new_server_fun = function() TRUE
-  formals(new_server_fun) <- formals(check_fun)
-  body(new_server_fun) <- server_body
-
-  new_ui_fun <- function(id) TRUE
-  body(new_ui_fun) <- substitute(
-    {
-      uiOutput(NS(NS(id, module_id), "errors"))
-    },
-    list(module_id = module_id)
-  )
-
-  list(
-    ui = new_ui_fun,
-    server = new_server_fun
-  )
 }
 
 #
