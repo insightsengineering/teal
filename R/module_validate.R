@@ -352,8 +352,6 @@ module_validate_validation_error <- module_validate_factory(srv_module_check_val
 srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
-      print(glue::glue("val: {validate_shiny_silent_error}"))
-      print(glue::glue("classes:", paste(class(x()), collapse = ", ")))
       if (validate_shiny_silent_error && inherits(x(), "shiny.silent.error") && identical(x()$message, "")) {
         "NEW:: Shiny silent error was raised"
       } else {
