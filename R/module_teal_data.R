@@ -110,8 +110,8 @@ ui_validate_reactive_teal_data <- function(id) {
       id = ns("validate_messages"),
       class = "teal_validated",
       ui_validate_error(ns("silent_error")),
-      ui_check_class_teal_data(ns("class_teal_data")),
-      ui_check_module_datanames(ns("shiny_warnings"))
+      module_validate_teal_data$ui(ns("class_teal_data")),
+      module_validate_datanames$ui(ns("shiny_warnings"))
     ),
     div(
       class = "teal_validated",
@@ -133,8 +133,8 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   moduleServer(id, function(input, output, session) {
     # there is an empty reactive cycle on `init` and `data` has `shiny.silent.error` class
     srv_validate_error("silent_error", data, validate_shiny_silent_error)
-    srv_check_class_teal_data("class_teal_data", data)
-    srv_check_module_datanames("shiny_warnings", data, modules)
+    module_validate_teal_data$server("class_teal_data", data)
+    module_validate_datanames$server("shiny_warnings", data, modules)
     output$previous_failed <- renderUI({
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
@@ -149,50 +149,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   })
 }
 
-#' @keywords internal
-ui_check_class_teal_data <- function(id) {
-  uiOutput(NS(id, "message"))
-}
-
-#' @keywords internal
-srv_check_class_teal_data <- function(id, data) {
-  checkmate::assert_string(id)
-  moduleServer(id, function(input, output, session) {
-    output$message <- renderUI({
-      validate(
-        need(
-          inherits(data(), c("teal_data", "error")),
-          "Did not receive `teal_data` object. Cannot proceed further."
-        )
-      )
-    })
-  })
-}
-
 # See R/module_validate.R
-
-# #' @keywords internal
-# ui_check_module_datanames <- function(id) {
-#   ns <- NS(id)
-#   uiOutput(NS(id, "message"))
-# }
-
-# #' @keywords internal
-# srv_check_module_datanames <- function(id, data, modules) {
-#   checkmate::assert_string(id)
-#   moduleServer(id, function(input, output, session) {
-#     output$message <- renderUI({
-#       if (inherits(data(), "teal_data")) {
-#         is_modules_ok <- check_modules_datanames_html(
-#           modules = modules, datanames = names(data())
-#         )
-#         if (!isTRUE(is_modules_ok)) {
-#           tags$div(is_modules_ok, class = "teal-output-warning")
-#         }
-#       }
-#     })
-#   })
-# }
 
 .trigger_on_success <- function(data) {
   out <- reactiveVal(NULL)

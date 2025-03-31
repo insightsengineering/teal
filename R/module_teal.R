@@ -139,13 +139,13 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     validate_ui <- tags$div(
       id = session$ns("validate_messages"),
       class = "teal_validated",
-      ui_check_class_teal_data(session$ns("class_teal_data")),
+      module_validate_teal_data$ui(session$ns("class_teal_data")),
       ui_validate_error(session$ns("silent_error")),
-      ui_check_module_datanames(session$ns("datanames_warning"))
+      module_validate_datanames$ui(session$ns("datanames_warning"))
     )
-    srv_check_class_teal_data("class_teal_data", data_handled)
+    module_validate_teal_data$server("class_teal_data", data_handled)
     srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
-    srv_check_module_datanames("datanames_warning", data_handled, modules)
+    module_validate_datanames$server("datanames_warning", data_handled, modules)
 
     data_validated <- .trigger_on_success(data_handled)
 

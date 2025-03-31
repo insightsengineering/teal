@@ -109,7 +109,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       id = ns("teal_module_ui"),
       tags$div(
         class = "teal_validated",
-        ui_check_module_datanames(ns("validate_datanames"))
+        module_validate_datanames$ui(ns("validate_datanames"))
       ),
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
@@ -365,7 +365,7 @@ srv_teal_module.teal_module <- function(id,
         all_teal_data[c(module_datanames, ".raw_data")]
       })
 
-      srv_check_module_datanames(
+      module_validate_datanames$server(
         "validate_datanames",
         x = module_teal_data,
         modules = modules
