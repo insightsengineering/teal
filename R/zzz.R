@@ -25,8 +25,6 @@
     # we avoid `desc` dependency here to get the version
     read.dcf(system.file("DESCRIPTION", package = "teal"))[, "Version"]
   )
-
-  if (version$minor < 4) `%||%` <<- rlang::`%||%`
 }
 
 # This one is here because setdiff_teal_slice should not be exported from teal.slice.
