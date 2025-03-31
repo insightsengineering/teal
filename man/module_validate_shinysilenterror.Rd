@@ -3,13 +3,22 @@
 \docType{data}
 \name{module_validate_shinysilenterror}
 \alias{module_validate_shinysilenterror}
+\alias{srv_module_check_validation_error}
+\alias{module_validate_validation_error}
 \alias{srv_module_check_shinysilenterror}
-\title{Validate if an argument contains a \code{shiny.silent.error}}
+\title{Validate if an argument contains a \code{shiny.silent.error} validation error}
 \format{
+An object of class \code{list} of length 2.
+
 An object of class \code{list} of length 2.
 }
 \usage{
-srv_module_check_shinysilenterror(x)
+srv_module_check_validation_error(x)
+
+module_validate_shinysilenterror$ui(id)
+module_validate_shinysilenterror$server(x)
+
+srv_module_check_shinysilenterror(x, validate_shiny_silent_error = TRUE)
 
 module_validate_shinysilenterror$ui(id)
 module_validate_shinysilenterror$server(x)
@@ -21,8 +30,12 @@ module_validate_shinysilenterror$server(x)
 }
 \value{
 A module that validates the reactive value.
+
+A module that validates the reactive value.
 }
 \description{
+Validate if an argument contains a \code{shiny.silent.error} validation error
+
 Validate if an argument contains a \code{shiny.silent.error}
 }
 \examples{
@@ -30,8 +43,14 @@ module_validate_shinysilenterror$ui("validate_reactive")
 
 # Show the generated server function
 print(module_validate_shinysilenterror$server)
+module_validate_shinysilenterror$ui("validate_reactive")
+
+# Show the generated server function
+print(module_validate_shinysilenterror$server)
 }
 \seealso{
+\code{\link[=module_validate_factory]{module_validate_factory()}}
+
 \code{\link[=module_validate_factory]{module_validate_factory()}}
 }
 \keyword{datasets}

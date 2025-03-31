@@ -170,7 +170,7 @@ module_validate_factory <- function(...) {
 .substitute_template <- function(template_str, module_server_body, check_calls) {
   # Create server body with expressions for multiple checks
   # note: using substitute directly will add curly braces around body
-  # todo: discuss this approach vs. having curly braces
+  # TODO: discuss this approach vs. having curly braces
   body_list <- as.list(module_server_body)[-1]
   ix <- which(body_list == as.name(template_str))
 
@@ -412,12 +412,13 @@ module_validate_teal_data <- module_validate_factory(srv_module_check_teal_data)
 #
 #  validate condition
 
-srv_module_check_condition <- function(x, validate_shiny_silent_error = TRUE) {
+srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
 
     reactive({
       # TODO: remove qenv.error
-      if (validate_shiny_silent_error && inherits(x(), "error") && !inherits(x(), c("qenv.error", "shiny.silent.error"))) {
+      # shiny.silent.errors are handled in a different module
+      if (inherits(x(), "error") && !inherits(x(), c("qenv.error", "shiny.silent.error"))) {
         c("NEW:: Error detected", x()$message)
       } else {
         TRUE
