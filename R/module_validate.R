@@ -143,7 +143,7 @@ module_validate_factory <- function(...) {
   new_body_list <- .substitute_template(template_str, module_server_body, check_calls)
 
   server_body <- substitute({
-    assert_reactive(x)
+    checkmate::assert_string(id) # Mandatory id parameter
     moduleServer(id, function(input, output, session) server_body)
   }, list(server_body = new_body_list))
 
@@ -342,7 +342,7 @@ module_validate_validation_error <- module_validate_factory(srv_module_check_val
 #' @returns A module that validates the reactive value.
 #'
 #' @export
-srv_module_check_shinysilenterror <- function(x) {
+srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
       if (validate_shiny_silent_error && inherits(x(), "shiny.silent.error") && identical(x()$message, "")) {
@@ -545,62 +545,3 @@ module_validate_error <- module_validate_factory(
   srv_module_check_reactive,
   srv_module_check_condition
 )
-
-#' @keywords internal
-ui_validate_error <- function(id) {
-  ns <- NS(id)
-  tagList(
-    module_validate_shinysilenterror$ui(ns("validate_shinysilent_error")),
-    module_validate_shinysilenterror$ui(ns("validate_validation_error")),
-    module_validate_reactive$ui(ns("validate_reactive")),
-    # module_validate_teal_data$ui(ns("validate_teal_data")),
-    module_validate_condition$ui(ns("validate_condition"))
-  )
-}
-
-#' @keywords internal
-srv_validate_error <- function(id, data, validate_shiny_silent_error) {
-  checkmate::assert_string(id)
-  checkmate::assert_flag(validate_shiny_silent_error)
-  moduleServer(id, function(input, output, session) {
-    module_validate_shinysilenterror$server("validate_shinysilent_error", data)
-    module_validate_validation_error$server("validate_validation_error", data)
-    module_validate_reactive$server("validate_reactive", data)
-    module_validate_condition$server("validate_condition", data)
-
-    # # Uncomment line below and choose "validate error"
-    # module_validate_reactive$server("validate_reactive", data, types = c("simpleError", "teal_data"))
-
-    # # Old
-    # output$message <- renderUI({
-    #   is_shiny_silent_error <- inherits(data(), "shiny.silent.error") && identical(data()$message, "")
-    #   if (inherits(data(), "qenv.error")) {
-    #     validate(
-    #       need(
-    #         FALSE,
-    #         paste(
-    #           "Error when executing the `data` module:",
-    #           cli::ansi_strip(paste(data()$message, collapse = "\n")),
-    #           "\nCheck your inputs or contact app developer if error persists.",
-    #           collapse = "\n"
-    #         )
-    #       )
-    #     )
-    #   } else if (inherits(data(), "error")) {
-    #     if (is_shiny_silent_error && !validate_shiny_silent_error) {
-    #       return(NULL)
-    #     }
-    #     validate(
-    #       need(
-    #         FALSE,
-    #         sprintf(
-    #           "Shiny error when executing the `data` module.\n%s\n%s",
-    #           data()$message,
-    #           "Check your inputs or contact app developer if error persists."
-    #         )
-    #       )
-    #     )
-    #   }
-    # })
-  })
-}

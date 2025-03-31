@@ -111,7 +111,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               any(idx_failures < idx_this)
             })
 
-            srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
+            module_validate_error$server("silent_error", x = data_handled, validate_shiny_silent_error = FALSE)
             module_validate_teal_data$server("class_teal_data", data_handled)
             if (!is.null(modules)) {
               module_validate_datanames$server("datanames_warning", data_handled, modules)
@@ -135,7 +135,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               } else {
                 shinyjs::enable(transform_wrapper_id)
                 shiny::tagList(
-                  ui_validate_error(session$ns("silent_error")),
+                  module_validate_error$ui(session$ns("silent_error")),
                   module_validate_teal_data$ui(session$ns("class_teal_data")),
                   module_validate_datanames$ui(session$ns("datanames_warning"))
                 )

@@ -109,7 +109,7 @@ ui_validate_reactive_teal_data <- function(id) {
     div(
       id = ns("validate_messages"),
       class = "teal_validated",
-      ui_validate_error(ns("silent_error")),
+      module_validate_error$ui(ns("silent_error")),
       module_validate_teal_data$ui(ns("class_teal_data")),
       module_validate_datanames$ui(ns("shiny_warnings"))
     ),
@@ -132,7 +132,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 
   moduleServer(id, function(input, output, session) {
     # there is an empty reactive cycle on `init` and `data` has `shiny.silent.error` class
-    srv_validate_error("silent_error", data, validate_shiny_silent_error)
+    module_validate_error$server("silent_error", x = data, validate_shiny_silent_error = validate_shiny_silent_error)
     module_validate_teal_data$server("class_teal_data", data)
     module_validate_datanames$server("shiny_warnings", data, modules)
     output$previous_failed <- renderUI({
