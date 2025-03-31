@@ -13,6 +13,15 @@
   color: #888;
 }
 
+.teal-output-condition {
+  white-space: normal;
+  line-height: 2em;
+}
+
+.teal-output-condition .prewrap-ws {
+  white-space: pre-wrap;
+}
+
 .teal_validated .shiny-output-error,
 .teal_validated .teal-output-warning {
   display: flex;
@@ -31,28 +40,28 @@
   margin-bottom: 0;
 }
 
-.teal_validated .teal-output-warning::before {
-  content: "\26A0\FE0F";
+.teal_validated .teal-output-warning::before,
+.teal_validated .shiny-output-error::before,
+.teal_primary_col .shiny-output-error::before,
+.teal_primary_col .teal-output-warning::before {
   padding-left: 0.3em;
   padding-right: 0.3em;
+}
+
+.teal_validated .teal-output-warning::before {
+  content: "\26A0\FE0F";
 }
 
 .teal_validated .shiny-output-error::before {
   content: "\1F6A8";
-  padding-left: 0.3em;
-  padding-right: 0.3em;
 }
 
 .teal_primary_col .shiny-output-error::before {
   content: "\1F6A8";
-  padding-left: 0.3em;
-  padding-right: 0.3em;
 }
 
 .teal_primary_col .teal-output-warning::before {
   content: "\26A0\FE0F";
-  padding-left: 0.3em;
-  padding-right: 0.3em;
 }
 
 .teal_primary_col .teal_validated:has(.shiny-output-error),
@@ -67,4 +76,8 @@
   background-color: rgba(223, 70, 97, 0.1);
   border: 1px solid red;
   padding: 1em;
+}
+
+.code-error {
+  margin-left: 1em;
 }

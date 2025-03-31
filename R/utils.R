@@ -175,7 +175,7 @@ check_modules_datanames_html <- function(modules, datanames) {
     lapply(
       check_datanames,
       function(mod) {
-        tagList(
+        tags$p(
           tags$span(
             tags$span(pluralize(mod$missing_datanames, "Dataset")),
             to_html_code_list(mod$missing_datanames),

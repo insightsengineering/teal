@@ -131,11 +131,15 @@ module_validate_factory <- function(...) {
             validate_r(),
             function(.x) {
               html_class <- if (isTRUE(attr(.x[1], "is_warning")) || isTRUE(attr(.x, "is_warning"))) {
-                "teal-output-warning"
+                "teal-output-warning teal-output-condition"
               } else {
-                "shiny-output-error"
+                "shiny-output-error teal-output-condition"
               }
-              tags$div(class = html_class, tags$div(lapply(.x, tags$p)))
+              if (!checkmate::test_multi_class(.x, c("shiny.tag", "shiny.tag.list"))) {
+                html_class <- c(html_class, "prewrap-ws")
+                .x <- lapply(.x, tags$p)
+              }
+              tags$div(class = html_class, tags$div(.x))
             }
           )
         )
@@ -390,14 +394,25 @@ srv_module_check_teal_data <- function(x) {
 
     reactive({
       if (inherits(x(), "qenv.error")) { # TODO: remove qenv.error
-        c(
-          "NEW:: Error when executing the `data` module:",
-          cli::ansi_strip(x()$message),
-          "",
-          "Check your inputs or contact app developer if error persists."
-        )
+        details <- attr(x(), "details", exact = TRUE)
+        if (is.null(details)) {
+          c(
+            "NEW:: Error when executing the `data` module:",
+            cli::ansi_strip(x()$message),
+            "",
+            "Check your inputs or contact app developer if error persists."
+          )
+        } else {
+          tagList(
+            tags$span("NEW:: Error when executing the `data` module:"),
+            tags$span(tags$strong(cli::ansi_strip(details$condition_message))),
+            tags$code(class = "code-error", details$current_code)
+          )
+        }
       } else if (!inherits(x(), c("teal_data", "error"))) {
-        "NEW:: Did not receive `teal_data` object. Cannot proceed further."
+        tags$span(
+          "NEW:: Did not receive", tags$code("teal_data"), "object. Cannot proceed further."
+        )
       } else {
         TRUE
       }
@@ -426,7 +441,10 @@ srv_module_check_condition <- function(x) {
       # TODO: remove qenv.error
       # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error") && !inherits(x(), c("qenv.error", "shiny.silent.error"))) {
-        c("NEW:: Error detected", x()$message)
+        tagList(
+          tags$span("NEW:: Error detected"),
+          tags$code(trimws(x()$message))
+        )
       } else {
         TRUE
       }
