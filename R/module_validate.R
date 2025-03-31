@@ -2,7 +2,8 @@
 ui_validate_error <- function(id) {
   ns <- NS(id)
   tagList(
-    module_validate_shinysilenterror$ui(ns("validate_shinysilenterror")),
+    module_validate_shinysilenterror$ui(ns("validate_shinysilent_error")),
+    module_validate_shinysilenterror$ui(ns("validate_validation_error")),
     module_validate_reactive$ui(ns("validate_reactive")),
     module_validate_teal_data$ui(ns("validate_teal_data")),
     module_validate_error$ui(ns("validate_error"))
@@ -16,9 +17,10 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
   moduleServer(id, function(input, output, session) {
     # New
     module_validate_shinysilenterror$server("validate_shinysilent_error", data)
-    # module_validate_reactive$server("validate_reactive", data)
-    # module_validate_teal_data$server("validate_teal_Data", data)
-    # module_validate_error$server("validate_error", data)
+    module_validate_validation_error$server("validate_validation_error", data)
+    module_validate_reactive$server("validate_reactive", data)
+    module_validate_teal_data$server("validate_teal_Data", data)
+    module_validate_error$server("validate_error", data)
 
     # # Uncomment line below and choose "validate error"
     # module_validate_reactive$server("validate_reactive", data, types = c("simpleError", "teal_data"))
@@ -202,6 +204,7 @@ module_validate_factory <- function(...) {
   new_body_list <- .substitute_template(template_str, module_server_body, check_calls)
 
   server_body <- substitute({
+    assert_reactive(x)
     moduleServer(id, function(input, output, session) server_body)
   }, list(server_body = new_body_list))
 
@@ -352,6 +355,40 @@ module_validate_reactive <- module_validate_factory(srv_module_check_reactive)
 #  shinysilenterror
 # ##########################################################################
 
+#' Validate if an argument contains a `shiny.silent.error` validation error
+#'
+#' @param x (`reactive`) A reactive value.
+#'
+#' @name module_validate_shinysilenterror
+#' @seealso [module_validate_factory()]
+#'
+#' @returns A module that validates the reactive value.
+#'
+#' @export
+srv_module_check_validation_error <- function(x) {
+  moduleServer("check_validation_error", function(input, output, session) {
+    reactive({
+      if (checkmate::test_class(x(), c("shiny.silent.error", "validation")) && !identical(x()$message, "")) {
+        sprintf("NEW: Shiny validation error was raised: %s", x()$message)
+      } else {
+        TRUE
+      }
+    })
+  })
+}
+
+#' @rdname module_validate_shinysilenterror
+#' @param id (`character`) The module id.
+#' @usage module_validate_shinysilenterror$ui(id)
+#' module_validate_shinysilenterror$server(x)
+#' @examples
+#' module_validate_shinysilenterror$ui("validate_reactive")
+#'
+#' # Show the generated server function
+#' print(module_validate_shinysilenterror$server)
+#' @export
+module_validate_validation_error <- module_validate_factory(srv_module_check_validation_error)
+
 #' Validate if an argument contains a `shiny.silent.error`
 #'
 #' @param x (`reactive`) A reactive value.
@@ -365,7 +402,6 @@ module_validate_reactive <- module_validate_factory(srv_module_check_reactive)
 srv_module_check_shinysilenterror <- function(x) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
-      browser()
       if (inherits(x(), "shiny.silent.error") && identical(x()$message, "")) {
         "NEW: Shiny silent error was raised"
       } else {
