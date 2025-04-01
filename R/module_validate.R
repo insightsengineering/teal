@@ -311,7 +311,10 @@ srv_module_check_validation_error <- function(x) {
   moduleServer("check_validation_error", function(input, output, session) {
     reactive({
       if (checkmate::test_class(x(), c("shiny.silent.error", "validation")) && !identical(x()$message, "")) {
-        sprintf("NEW:: Shiny validation error was raised: %s", x()$message)
+        tagList(
+          tags$span("NEW:: Shiny validation error was raised:"),
+          tags$blockquote(tags$em(x()$message))
+        )
       } else {
         TRUE
       }
@@ -404,8 +407,9 @@ srv_module_check_teal_data <- function(x) {
           )
         } else {
           tagList(
-            tags$span("NEW:: Error when executing the `data` module:"),
-            tags$span(tags$strong(cli::ansi_strip(details$condition_message))),
+            tags$span("NEW:: Error when executing the", tags$code("data"), "module:"),
+            tags$blockquote(tags$em(cli::ansi_strip(details$condition_message))),
+            tags$span("from code:"),
             tags$code(class = "code-error", details$current_code)
           )
         }
@@ -442,8 +446,8 @@ srv_module_check_condition <- function(x) {
       # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error") && !inherits(x(), c("qenv.error", "shiny.silent.error"))) {
         tagList(
-          tags$span("NEW:: Error detected"),
-          tags$code(trimws(x()$message))
+          tags$span("NEW:: Error detected:"),
+          tags$blockquote(tags$em(trimws(x()$message)))
         )
       } else {
         TRUE
