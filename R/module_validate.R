@@ -1,18 +1,3 @@
-
-
-
-#
-#   _       _                        _
-#  (_)     | |                      | |
-#   _ _ __ | |_ ___ _ __ _ __   __ _| |
-#  | | '_ \| __/ _ \ '__| '_ \ / _` | |
-#  | | | | | ||  __/ |  | | | | (_| | |
-#  |_|_| |_|\__\___|_|  |_| |_|\__,_|_|
-#
-#
-#
-#  internal
-
 #' Factory to build validate modules
 #'
 #' This function is used to create a module that validates the reactive data
@@ -64,6 +49,7 @@ module_validate_factory <- function(...) {
   fun_names <- match.call(expand.dots = FALSE)[["..."]]
 
   # Generate calls to each of the check functions
+  # TODO: extract from here
   check_calls <- lapply(
     seq_len(length(dots)),
     function(fun_ix) {
@@ -195,18 +181,6 @@ module_validate_factory <- function(...) {
   )
 }
 
-#
-#                        _       _
-#                       | |     | |
-#  __   __            __| | __ _| |_ __ _ _ __   __ _ _ __ ___   ___  ___
-#  \ \ / /           / _` |/ _` | __/ _` | '_ \ / _` | '_ ` _ \ / _ \/ __|
-#   \ V /           | (_| | (_| | || (_| | | | | (_| | | | | | |  __/\__ \
-#    \_/             \__,_|\__,_|\__\__,_|_| |_|\__,_|_| |_| |_|\___||___/
-#           ______
-#          |______|
-#
-#  v_datanames
-
 #' @keywords internal
 srv_module_check_datanames <- function(id, x, modules) {
   checkmate::assert_string(id)
@@ -226,18 +200,6 @@ srv_module_check_datanames <- function(id, x, modules) {
 }
 
 module_validate_datanames <- module_validate_factory(srv_module_check_datanames)
-
-#
-#              _ _     _       _                             _   _
-#             | (_)   | |     | |                           | | (_)
-#  __   ____ _| |_  __| | __ _| |_ ___   _ __ ___  __ _  ___| |_ ___   _____
-#  \ \ / / _` | | |/ _` |/ _` | __/ _ \ | '__/ _ \/ _` |/ __| __| \ \ / / _ \
-#   \ V / (_| | | | (_| | (_| | ||  __/ | | |  __/ (_| | (__| |_| |\ V /  __/
-#    \_/ \__,_|_|_|\__,_|\__,_|\__\___| |_|  \___|\__,_|\___|\__|_| \_/ \___|
-#
-#
-#
-#  validate reactive
 
 #' Validate if an argument is a reactive
 #'
@@ -272,18 +234,6 @@ srv_module_check_reactive <- function(x, types = character(0L), null.ok = FALSE)
     })
   })
 }
-
-#
-#              _ _     _       _   _
-#             | (_)   | |     | | (_)
-#  __   ____ _| |_  __| | __ _| |_ _  ___  _ __    ___ _ __ _ __ ___  _ __
-#  \ \ / / _` | | |/ _` |/ _` | __| |/ _ \| '_ \  / _ \ '__| '__/ _ \| '__|
-#   \ V / (_| | | | (_| | (_| | |_| | (_) | | | ||  __/ |  | | | (_) | |
-#    \_/ \__,_|_|_|\__,_|\__,_|\__|_|\___/|_| |_| \___|_|  |_|  \___/|_|
-#                                             ______
-#                                            |______|
-#
-#  validation_error
 
 #' @rdname module_validate_reactive
 #' @param id (`character`) The module id.
@@ -334,18 +284,6 @@ srv_module_check_validation_error <- function(x) {
 #' @export
 module_validate_validation_error <- module_validate_factory(srv_module_check_validation_error)
 
-#
-#       _     _                 _ _            _
-#      | |   (_)               (_) |          | |
-#   ___| |__  _ _ __  _   _ ___ _| | ___ _ __ | |_ ___ _ __ _ __ ___  _ __
-#  / __| '_ \| | '_ \| | | / __| | |/ _ \ '_ \| __/ _ \ '__| '__/ _ \| '__|
-#  \__ \ | | | | | | | |_| \__ \ | |  __/ | | | ||  __/ |  | | | (_) | |
-#  |___/_| |_|_|_| |_|\__, |___/_|_|\___|_| |_|\__\___|_|  |_|  \___/|_|
-#                      __/ |
-#                     |___/
-#
-#  shinysilenterror
-
 #' Validate if an argument contains a `shiny.silent.error`
 #'
 #' @param x (`reactive`) A reactive value.
@@ -379,18 +317,6 @@ srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = T
 #' print(module_validate_shinysilenterror$server)
 #' @export
 module_validate_shinysilenterror <- module_validate_factory(srv_module_check_shinysilenterror)
-
-#
-#              _ _     _       _         _             _      _       _
-#             | (_)   | |     | |       | |           | |    | |     | |
-#  __   ____ _| |_  __| | __ _| |_ ___  | |_ ___  __ _| |  __| | __ _| |_ __ _
-#  \ \ / / _` | | |/ _` |/ _` | __/ _ \ | __/ _ \/ _` | | / _` |/ _` | __/ _` |
-#   \ V / (_| | | | (_| | (_| | ||  __/ | ||  __/ (_| | || (_| | (_| | || (_| |
-#    \_/ \__,_|_|_|\__,_|\__,_|\__\___|  \__\___|\__,_|_| \__,_|\__,_|\__\__,_|
-#                                                     ______
-#                                                    |______|
-#
-#  validate teal_data
 
 srv_module_check_teal_data <- function(x) {
   moduleServer("check_teal_data", function(input, output, session) {
@@ -426,18 +352,6 @@ srv_module_check_teal_data <- function(x) {
 
 module_validate_teal_data <- module_validate_factory(srv_module_check_teal_data)
 
-#
-#              _ _     _       _
-#             | (_)   | |     | |
-#  __   ____ _| |_  __| | __ _| |_ ___    ___ _ __ _ __ ___  _ __
-#  \ \ / / _` | | |/ _` |/ _` | __/ _ \  / _ \ '__| '__/ _ \| '__|
-#   \ V / (_| | | | (_| | (_| | ||  __/ |  __/ |  | | | (_) | |
-#    \_/ \__,_|_|_|\__,_|\__,_|\__\___|  \___|_|  |_|  \___/|_|
-#
-#
-#
-#  validate condition
-
 srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
 
@@ -457,62 +371,6 @@ srv_module_check_condition <- function(x) {
 }
 
 module_validate_condition <- module_validate_factory(srv_module_check_condition)
-
-#
-#                                    ___
-#                                   |__ \
-#   _ __ ___ _ __ ___   _____   _____  ) |
-#  | '__/ _ \ '_ ` _ \ / _ \ \ / / _ \/ /
-#  | | |  __/ | | | | | (_) \ V /  __/_|
-#  |_|  \___|_| |_| |_|\___/ \_/ \___(_)
-#
-#
-#
-#  todo: remove?
-
-.substitute_template_curly <- function(template_str, module_server_body, check_calls) {
-  call_inject <- if (length(check_calls) > 1) {
-    as.call(c(quote(`{`), check_calls))
-  } else {
-    as.call(check_calls[[1]])
-  }
-
-  vv <- substitute({
-    collection <- list()
-    check_calls
-
-    validate_r <- reactive({
-      message_collection <- Reduce(
-        function(u, v) if (isTRUE(v())) u else c(u, v()),
-        x = collection,
-        init = c()
-      )
-
-      validate(need(length(message_collection) == 0, message_collection))
-      TRUE
-    })
-
-    output$errors <- renderUI({
-      validate_r()
-      NULL
-    })
-
-    x
-  }, list(check_calls = call_inject))
-}
-
-#
-#                  _          __                                    ___
-#                 | |        / _|                                  |__ \
-#    ___ _ __   __| |   ___ | |_   _ __ ___ _ __ ___   _____   _____  ) |
-#   / _ \ '_ \ / _` |  / _ \|  _| | '__/ _ \ '_ ` _ \ / _ \ \ / / _ \/ /
-#  |  __/ | | | (_| | | (_) | |   | | |  __/ | | | | | (_) \ V /  __/_|
-#   \___|_| |_|\__,_|  \___/|_|   |_|  \___|_| |_| |_|\___/ \_/ \___(_)
-#
-#
-#
-#  end of remove?
-
 
 module_validate_error <- module_validate_factory(
   srv_module_check_shinysilenterror,

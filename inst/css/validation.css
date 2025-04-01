@@ -81,3 +81,9 @@
 .code-error {
   margin-left: 1em;
 }
+
+.teal-sidebar .teal-output-condition blockcode,
+.teal-sidebar .teal-output-condition .code-error {
+  padding-left: 0;
+  margin-left: 0;
+}
