@@ -9,15 +9,20 @@
 }
 
 .teal_validated:has(.shiny-output-error) {
-  border-color: red;
-  background-color: rgba(223, 70, 97, 0.05);
+  border-color: var(--bs-danger);
+  background-color: color-mix(in srgb, var(--bs-danger) 5%, transparent);
 }
 
 .teal_validated:has(.teal-output-warning),
-.teal_validated.previous-failed .teal-output-warning-previous {
-  color: rgb(179, 98, 0);
-  border-color: orange;
-  background-color: rgba(255, 165, 0, 0.05);
+.teal_validated.previous-failed:has(.teal-output-warning-previous) {
+  color: color-mix(in srgb, var(--bs-danger), black 20%);
+  border-color: var(--bs-warning)
+  background-color: color-mix(in srgb, var(--bs-danger) 5%, transparent);
+}
+
+.validation-wrapper .accordion-item:has(.teal_validated.previous-failed) {
+  background-color: var(--bs-gray-100);
+  color: var(--bs-gray-600)
 }
 
 .teal-output-condition { white-space: normal; }
@@ -27,14 +32,14 @@
 .teal_validated .teal-output-warning,
 .teal_validated.previous-failed .teal-output-warning-previous {
   display: flex;
-  margin: 0.5em 0, 0em 0;
+  margin: 0.5em 0 0em 0;
 }
 
 .sidebar .teal_validated .shiny-output-error,
 .sidebar .teal_validated .teal-output-warning,
 .sidebar .teal_validated.previous-failed .teal-output-warning-previous {
   display: flex;
-  margin: 0.2em 0, 0.2em 0;
+  margin: 0.2em 0 0.2em 0;
 }
 
 .teal_validated .shiny-output-error > div,
@@ -63,6 +68,10 @@
 .teal-sidebar .teal-output-condition .code-error {
   padding-left: 0;
   margin-left: 0;
+}
+
+.teal_validated p {
+  margin-bottom: 0;
 }
 
 .teal_validated.previous-failed .messages,
