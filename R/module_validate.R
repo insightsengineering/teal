@@ -184,20 +184,7 @@ srv_module_check_datanames <- function(id, x, modules) {
   })
 }
 
-module_validate_datanames <- module_validate_factory(srv_module_check_datanames)
-
-#' Validate if an argument is a reactive
-#'
-#' @param x (`reactive`) A reactive value.
-#' @param types (`character`) A character vector with the types that the reactive.
-#' @param null.ok (`logical`) If `TRUE`, the `x` argument can be `NULL`.
-#'
-#' @name module_validate_reactive
-#' @seealso [module_validate_factory()]
-#'
-#' @returns A module that validates the reactive value.
-#'
-#' @export
+#' @keywords internal
 srv_module_check_reactive <- function(x, types = character(0L), null.ok = FALSE) {
   reactive_message <- check_reactive(x, null.ok = null.ok)
   moduleServer("check_reactive", function(input, output, session) {
@@ -220,28 +207,7 @@ srv_module_check_reactive <- function(x, types = character(0L), null.ok = FALSE)
   })
 }
 
-#' @rdname module_validate_reactive
-#' @param id (`character`) The module id.
-#' @usage module_validate_reactive$server(x, types = character(0L), null.ok = FALSE)
-#' module_validate_reactive$ui(id)
-#' @examples
-#' module_validate_reactive$ui("validate_reactive")
-#'
-#' # Show the generated server function
-#' print(module_validate_reactive$server)
-#' @export
-module_validate_reactive <- module_validate_factory(srv_module_check_reactive)
-
-#' Validate if an argument contains a `shiny.silent.error` validation error
-#'
-#' @param x (`reactive`) A reactive value.
-#'
-#' @name module_validate_shinysilenterror
-#' @seealso [module_validate_factory()]
-#'
-#' @returns A module that validates the reactive value.
-#'
-#' @export
+#' @keywords internal
 srv_module_check_validation_error <- function(x) {
   moduleServer("check_validation_error", function(input, output, session) {
     reactive({
@@ -257,28 +223,7 @@ srv_module_check_validation_error <- function(x) {
   })
 }
 
-#' @rdname module_validate_shinysilenterror
-#' @param id (`character`) The module id.
-#' @usage module_validate_shinysilenterror$ui(id)
-#' module_validate_shinysilenterror$server(x)
-#' @examples
-#' module_validate_shinysilenterror$ui("validate_reactive")
-#'
-#' # Show the generated server function
-#' print(module_validate_shinysilenterror$server)
-#' @export
-module_validate_validation_error <- module_validate_factory(srv_module_check_validation_error)
-
-#' Validate if an argument contains a `shiny.silent.error`
-#'
-#' @param x (`reactive`) A reactive value.
-#'
-#' @name module_validate_shinysilenterror
-#' @seealso [module_validate_factory()]
-#'
-#' @returns A module that validates the reactive value.
-#'
-#' @export
+#' @keywords internal
 srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
@@ -291,18 +236,7 @@ srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = T
   })
 }
 
-#' @rdname module_validate_shinysilenterror
-#' @param id (`character`) The module id.
-#' @usage module_validate_shinysilenterror$ui(id)
-#' module_validate_shinysilenterror$server(x)
-#' @examples
-#' module_validate_shinysilenterror$ui("validate_reactive")
-#'
-#' # Show the generated server function
-#' print(module_validate_shinysilenterror$server)
-#' @export
-module_validate_shinysilenterror <- module_validate_factory(srv_module_check_shinysilenterror)
-
+#' @keywords internal
 srv_module_check_teal_data <- function(x) {
   moduleServer("check_teal_data", function(input, output, session) {
 
@@ -335,8 +269,7 @@ srv_module_check_teal_data <- function(x) {
   })
 }
 
-module_validate_teal_data <- module_validate_factory(srv_module_check_teal_data)
-
+#' @keywords internal
 srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
 
@@ -353,8 +286,12 @@ srv_module_check_condition <- function(x) {
   })
 }
 
+module_validate_reactive <- module_validate_factory(srv_module_check_reactive)
+module_validate_datanames <- module_validate_factory(srv_module_check_datanames)
+module_validate_validation_error <- module_validate_factory(srv_module_check_validation_error)
+module_validate_shinysilenterror <- module_validate_factory(srv_module_check_shinysilenterror)
+module_validate_teal_data <- module_validate_factory(srv_module_check_teal_data)
 module_validate_condition <- module_validate_factory(srv_module_check_condition)
-
 module_validate_error <- module_validate_factory(
   srv_module_check_shinysilenterror,
   srv_module_check_validation_error,
