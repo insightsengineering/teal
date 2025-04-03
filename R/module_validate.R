@@ -6,8 +6,6 @@
 #' Dynamically generation of an `ui` and `server` function that can be used
 #' internally in teal or in a teal module.
 #'
-#'
-#'
 #' @param module_id (`character(1)`) The module id.
 #' @param ... (`function`) 1 or more [`shiny::moduleServer()`] functions that
 #' return a [`shiny::reactive()`] with `TRUE` or a character string detailing
