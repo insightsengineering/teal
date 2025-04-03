@@ -45,12 +45,9 @@ module_validate_factory <- function(...) {
   dots <- rlang::list2(...)
   checkmate::check_list(dots, min.len = 1)
 
-  # Capture function names in arguments
-  fun_names <- match.call(expand.dots = FALSE)[["..."]]
+  fun_names <- match.call(expand.dots = FALSE)[["..."]] # Capture function names in arguments
 
-  # Generate calls to each of the check functions
-  # TODO: extract from here
-  check_calls <- lapply(
+  check_calls <- lapply( # Generate calls to each of the check functions # TODO: extract from here
     seq_len(length(dots)),
     function(fun_ix) {
       fun_name <- fun_names[[fun_ix]]
@@ -68,19 +65,15 @@ module_validate_factory <- function(...) {
     }
   )
 
-  # Empty server template
-  new_server_fun = function(id) TRUE
-
-  # Union of formals for all check functions (order of arguments is kept)
-  # Conflicting argument name/default will throw an exception.
-  top_level_formals <- Reduce(
+  new_server_fun = function(id) TRUE # Empty server template
+  top_level_formals <- Reduce( # Union of formals for all check functions (order of arguments is kept)
     function(u, v) {
       new_formals <- formals(v)
       common <- intersect(names(new_formals), names(u))
       vapply(common, function(x_name) {
         if (identical(new_formals[[x_name]], u[[x_name]])) {
           TRUE
-        } else {
+        } else { # Conflicting argument name/default will throw an exception.
           stop("Arguments for check function have conflicting definitions (different defaults)")
         }
       }, FUN.VALUE = logical(1L))
@@ -91,9 +84,7 @@ module_validate_factory <- function(...) {
   )
 
   template_str = "check_calls"
-
-  # Template moduleServer that supports multiple checks
-  module_server_body <- substitute({
+  module_server_body <- substitute({ # Template moduleServer that supports multiple checks
     collection <- list()
     check_calls
 
@@ -109,9 +100,6 @@ module_validate_factory <- function(...) {
     output$errors <- renderUI({
       error_class <- c("shiny.silent.error", "validation", "error", "condition")
       if (length(validate_r()) > 0) {
-        # Custom rendering of errors instead of validate
-        #  this allows for more control over the output (as some show errors in
-        # html)
         tagList(
           !!!lapply(
             validate_r(),
@@ -135,10 +123,8 @@ module_validate_factory <- function(...) {
     x
   }, list(check_calls == as.name(template_str)))
 
-  # Replace template string with check function calls
   new_body_list <- .substitute_template(template_str, module_server_body, check_calls)
 
-  # Generate top-level moduleServer function with default assertions
   server_body <- substitute({
     checkmate::assert_string(id) # Mandatory id parameter
     moduleServer(id, function(input, output, session) server_body)
@@ -147,8 +133,7 @@ module_validate_factory <- function(...) {
   formals(new_server_fun) <- top_level_formals # update function formals
   body(new_server_fun) <- server_body # set the new generated body
 
-  # ui function contains a simple "error" element
-  new_ui_fun <- function(id) uiOutput(NS(id, "errors"))
+  new_ui_fun <- function(id) uiOutput(NS(id, "errors")) # ui function contains a simple "error" element
 
   list(ui = new_ui_fun, server = new_server_fun)
 }
@@ -355,9 +340,7 @@ module_validate_teal_data <- module_validate_factory(srv_module_check_teal_data)
 srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
 
-    reactive({
-      # TODO: remove qenv.error
-      # shiny.silent.errors are handled in a different module
+    reactive({ # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error") && !inherits(x(), c("qenv.error", "shiny.silent.error"))) {
         tagList(
           tags$span("NEW:: Error detected:"),
