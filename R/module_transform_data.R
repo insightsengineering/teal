@@ -36,12 +36,25 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
 
       result <- bslib::accordion(
         id = ns("wrapper"),
+        class = "validation-wrapper",
         bslib::accordion_panel(
           attr(data_mod, "label", exact = TRUE),
           icon = bsicons::bs_icon("palette-fill"),
           tags$div(
             id = ns(sprintf("wrapper_%s", name)),
-            ui_module_validation(child_id, transform_ui) # Call under same namespace
+            ui_module_validation(
+              id = child_id,
+              body_ui = transform_ui,
+              validation_ui = list(
+                silent_error = module_validate_error$ui,
+                class_teal_data = module_validate_teal_data$ui,
+                datanames_warning = module_validate_datanames$ui
+              ),
+              custom_ui = tags$div(
+                id = ns("previous-failed"),
+                class = "teal-output-warning-previous",
+                "One of the previous transformators failed. Please check its inputs."
+              )) # Call under same namespace
           )
         )
       )
@@ -52,27 +65,24 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
   )
 }
 
-ui_module_validation <- function(id, transform_ui) {
+ui_module_validation <- function(id, body_ui, validation_ui = list(), ...) {
+  dots = rlang::list2(...)
   checkmate::check_string(id)
+  checkmate::assert_list(dots, types = c("shiny.tag", "shiny.tag.list"))
+  checkmate::assert_list(validation_ui, names = "unique", types = "function")
   ns <- NS(id)
 
   result <- tagList(
     div(
       id = ns("validate_messages"),
       class = "teal_validated",
-      tags$div(
-        id = ns("previous-failed"),
-        class = "teal-output-warning-previous",
-        "One of previous transformators failed. Please check its inputs."
-      ),
+      tagList(!!!dots),
       tags$div(
         class = "messages",
-        module_validate_error$ui(ns("silent_error")),
-        module_validate_teal_data$ui(ns("class_teal_data")),
-        module_validate_datanames$ui(ns("datanames_warning"))
+        !!!lapply(names(validation_ui), function(x) validation_ui[[x]](ns(x)))
       )
     ),
-    transform_ui
+    body_ui
   )
 }
 

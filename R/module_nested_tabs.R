@@ -101,7 +101,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         class = "teal_validated",
         div(
           class = "teal-output-warning",
-          "One of transformators failed. Please check its inputs."
+          "One of the transformators failed. Please check its inputs."
         )
       )
     ),
