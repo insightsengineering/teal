@@ -136,10 +136,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_handled <- srv_init_data("data", data = data)
 
-    validate_ui <- tagList(
-      tags$h5("here be mice 🐁"),
-      module_validate_teal_module$ui(session$ns("validation"))
-    )
+    validate_ui <- module_validate_teal_module$ui(session$ns("validation"))
     module_validate_teal_module$server(
       "validation",
       x = data_handled,

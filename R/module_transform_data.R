@@ -48,7 +48,6 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
           icon = bsicons::bs_icon("palette-fill"),
           tags$div(
             id = ns(sprintf("wrapper_%s", name)),
-            tags$h5("Here be horses 🐎"),
             module_validate_teal_module$ui(ns("validation")),
             body_ui
           )

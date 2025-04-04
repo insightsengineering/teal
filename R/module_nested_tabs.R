@@ -95,7 +95,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   args <- c(list(id = ns("module")), modules$ui_args)
 
   ui_teal <- tags$div(
-    tags$h5("Here be bears 🐻"),
     module_validate_datanames$ui(ns("validation")),
     tags$div(
       id = ns("teal_module_ui"),
