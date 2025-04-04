@@ -23,7 +23,7 @@
 a.disabled {
   pointer-events: none;
   cursor: not-allowed;
-  color: grey;
+  color: var(--bs-gray);
 }
 
 .filter_manager_content {
@@ -169,21 +169,21 @@ a.remove {
 .teal-transform-panel .accordion .accordion-button,
 .teal-active-data-summary-panel .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
-  color: #fff;
+  color: var(--bs-white);
 }
 .teal-transform-panel .accordion .accordion-button:hover,
 .teal-active-data-summary-panel .accordion .accordion-button:hover {
   background-color: rgba(var(--bs-primary-rgb), 0.75);
-  color: #fff;
+  color: var(--bs-white);
 }
 
 .teal-transform-panel .accordion-body .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
-  color: #fff;
+  color: var(--bs-white);
 }
 .teal-transform-panel .accordion-body .accordion .accordion-button:hover {
   background-color: rgba(var(--bs-primary-rgb), 0.75);
-  color: #fff;
+  color: var(--bs-white);
 }
 /* .teal-transform-panel .accordion .accordion-body,
 .teal-active-data-summary-panel .accordion .accordion-body {
@@ -205,7 +205,7 @@ a.remove {
 
 .sidebar-toggle-buttons .data-summary-toggle:hover {
   background: rgba(var(--bs-primary-rgb), 1);
-  color: white;
+  color: var(--bs-white);
 }
 
 .sidebar-toggle-buttons .data-transforms-toggle {
@@ -214,5 +214,5 @@ a.remove {
 
 .sidebar-toggle-buttons .data-transforms-toggle:hover {
   background: rgba(var(--bs-primary-rgb), 1);
-  color: white;
+  color: var(--bs-white);
 }
