@@ -235,7 +235,7 @@ srv_module_check_validation_error <- function(x) {
 srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) {
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
-      if (validate_shiny_silent_error) {
+      if (validate_shiny_silent_error && inherits(x(), "shiny.silent.error" && !identical(x()$message, ""))) {
         "NEW:: Shiny silent error was raised"
       } else {
         TRUE
@@ -280,7 +280,7 @@ srv_module_check_teal_data <- function(x) {
 srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
     reactive({ # shiny.silent.errors are handled in a different module
-      if (inherits(x(), "error")) {
+      if (inherits(x(), "error") && !inherits(x(), "shiny.silent.error")) {
         tagList(
           tags$span("NEW:: Error detected:"),
           tags$blockquote(tags$em(trimws(x()$message)))
