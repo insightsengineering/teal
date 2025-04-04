@@ -56,11 +56,10 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button {
-  height: 2.5rem;
   --bs-accordion-btn-bg: #ededed;
   --bs-accordion-active-bg: #ededed;
   --bs-accordion-btn-padding-x: 1rem;
-  --bs-accordion-btn-padding-y: 0.8rem;
+  --bs-accordion-btn-padding-y: 0.7rem;
 }
 
 .teal-sidebar .accordion {
