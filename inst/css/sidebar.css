@@ -82,6 +82,10 @@ a.disabled {
   display: none;
 }
 
+.teal-body .bslib-sidebar-layout {
+  margin-bottom: 0;
+}
+
 .bslib-sidebar-layout > .sidebar-toggle-buttons {
   grid-column: 1 / 2;
   z-index: -1;
