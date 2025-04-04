@@ -43,10 +43,9 @@ ui_teal_data_module <- function(id, data_module = function(id) NULL) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
 
-  ui_module_validation(
-    id = id,
-    body_ui = data_module(id = NS(id, "data")),
-    validation_ui = list(validation = module_validate_teal_module$ui)
+  tagList(
+    validation_ui = list(validation = module_validate_teal_module$ui(NS(id, "validation"))),
+    body_ui = data_module(id = NS(id, "data"))
   )
 }
 
@@ -104,11 +103,9 @@ srv_teal_data_module <- function(id,
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
-  ui_module_validation(
-    id = id,
-    body_ui = NULL,
-    validation_ui = list(errors = module_validate_teal_module$ui)
-  )
+  checkmate::assert_string(id)
+
+  module_validate_teal_module$ui(NS(id, "validation"))
 }
 
 #' @rdname module_teal_data
@@ -124,7 +121,7 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
   moduleServer(id, function(input, output, session) {
     # there is an empty reactive cycle on `init` and `data` has `shiny.silent.error` class
     module_validate_teal_module$server(
-      "shiny_warnings",
+      "validation",
       data,
       modules = modules,
       show_warn = hide_validation_error,
