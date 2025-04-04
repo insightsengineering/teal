@@ -32,7 +32,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
       ns <- NS(child_id)
       data_mod <- transformators[[name]]
 
-      transform_ui <- if (is.null(data_mod$ui)) NULL else data_mod$ui(id = ns("transform"))
+      body_ui <- if (is.null(data_mod$ui)) NULL else data_mod$ui(id = ns("transform"))
 
       result <- bslib::accordion(
         id = ns("wrapper"),
@@ -42,47 +42,15 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
           icon = bsicons::bs_icon("palette-fill"),
           tags$div(
             id = ns(sprintf("wrapper_%s", name)),
-            ui_module_validation(
-              id = child_id,
-              body_ui = transform_ui,
-              validation_ui = list(
-                silent_error = module_validate_error$ui,
-                class_teal_data = module_validate_teal_data$ui,
-                datanames_warning = module_validate_datanames$ui
-              ),
-              custom_ui = tags$div(
-                id = ns("previous-failed"),
-                class = "teal-output-warning-previous",
-                "One of the previous transformators failed. Please check its inputs."
-              )) # Call under same namespace
+            module_validate_teal_module$ui(ns("validation")),
+            body_ui
           )
         )
       )
 
-      if (is.null(transform_ui)) result <- shinyjs::hidden(result)
+      if (is.null(body_ui)) result <- shinyjs::hidden(result)
       result
     }
-  )
-}
-
-ui_module_validation <- function(id, body_ui, validation_ui = list(), ...) {
-  dots = rlang::list2(...)
-  checkmate::check_string(id)
-  checkmate::assert_list(dots, types = c("shiny.tag", "shiny.tag.list"))
-  checkmate::assert_list(validation_ui, names = "unique", types = "function")
-  ns <- NS(id)
-
-  result <- tagList(
-    div(
-      id = ns("validate_messages"),
-      class = "teal_validated",
-      tagList(!!!dots),
-      tags$div(
-        class = "messages",
-        !!!lapply(names(validation_ui), function(x) validation_ui[[x]](ns(x)))
-      )
-    ),
-    body_ui
   )
 }
 
@@ -137,11 +105,14 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               any(idx_failures < idx_this)
             })
 
-            module_validate_error$server("silent_error", x = data_handled, validate_shiny_silent_error = FALSE)
-            module_validate_teal_data$server("class_teal_data", data_handled)
-            if (!is.null(modules)) {
-              module_validate_datanames$server("datanames_warning", data_handled, modules)
-            }
+            module_validate_teal_module$server(
+              "validation",
+              x = data_handled,
+              modules = modules,
+              validate_shiny_silent_error = FALSE,
+              show_warn = is_previous_failed,
+              message_warn = "One of the previous transformators failed. Please check its inputs."
+            )
 
             # When there is no UI (`ui = NULL`) it should still show the errors
             observe({
@@ -149,18 +120,9 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
                 shinyjs::show("wrapper")
               }
             })
-
-            # transform_wrapper_id <- sprintf("wrapper_%s", name)
-
+            # Disable the UI elements in case of previous error
             observe({
-              is_previous_failed()
-              if (is_previous_failed()) {
-                shinyjs::addClass("validate_messages", "previous-failed")
-                shinyjs::disable("wrapper")
-              } else {
-                shinyjs::removeClass("validate_messages", "previous-failed")
-                shinyjs::enable("wrapper")
-              }
+              (if (is_previous_failed()) shinyjs::disable else shinyjs::enable)("wrapper")
             })
           })
 

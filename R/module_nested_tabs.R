@@ -95,22 +95,9 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   args <- c(list(id = ns("module")), modules$ui_args)
 
   ui_teal <- tags$div(
-    shinyjs::hidden(
-      tags$div(
-        id = ns("transform_failure_info"),
-        class = "teal_validated",
-        div(
-          class = "teal-output-warning",
-          "One of the transformators failed. Please check its inputs."
-        )
-      )
-    ),
     tags$div(
       id = ns("teal_module_ui"),
-      tags$div(
-        class = "teal_validated",
-        module_validate_datanames$ui(ns("validate_datanames"))
-      ),
+      module_validate_datanames$ui(ns("validation")),
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
@@ -348,16 +335,6 @@ srv_teal_module.teal_module <- function(id,
         any(unlist(reactiveValuesToList(is_transform_failed)))
       })
 
-      observeEvent(any_transform_failed(), {
-        if (isTRUE(any_transform_failed())) {
-          shinyjs::hide("teal_module_ui")
-          shinyjs::show("transform_failure_info")
-        } else {
-          shinyjs::show("teal_module_ui")
-          shinyjs::hide("transform_failure_info")
-        }
-      })
-
       module_teal_data <- reactive({
         req(inherits(transformed_teal_data(), "teal_data"))
         all_teal_data <- transformed_teal_data()
@@ -368,7 +345,9 @@ srv_teal_module.teal_module <- function(id,
       module_validate_datanames$server(
         "validate_datanames",
         x = module_teal_data,
-        modules = modules
+        modules = modules,
+        show_warn = any_transform_failed,
+        message_warn = "One of the transformators failed. Please check its inputs."
       )
 
       summary_table <- srv_data_summary("data_summary", module_teal_data)

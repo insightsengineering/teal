@@ -136,16 +136,13 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_handled <- srv_init_data("data", data = data)
 
-    validate_ui <- tags$div(
-      id = session$ns("validate_messages"),
-      class = "teal_validated",
-      module_validate_teal_data$ui(session$ns("class_teal_data")),
-      module_validate_error$ui(session$ns("silent_error")),
-      module_validate_datanames$ui(session$ns("datanames_warning"))
+    validate_ui <- module_validate_teal_module$ui(session$ns("validation"))
+    module_validate_teal_module$server(
+      "validation",
+      x = data_handled,
+      validate_shiny_silent_error = FALSE,
+      modules = modules
     )
-    module_validate_teal_data$server("class_teal_data", data_handled)
-    module_validate_error$server("silent_error", x = data_handled, validate_shiny_silent_error = FALSE)
-    module_validate_datanames$server("datanames_warning", data_handled, modules)
 
     data_validated <- .trigger_on_success(data_handled)
 

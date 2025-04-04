@@ -9,15 +9,16 @@
 }
 
 .teal_validated:has(.shiny-output-error) {
+  color: color-mix(in srgb, var(--bs-danger), black 20%);
   border-color: var(--bs-danger);
   background-color: color-mix(in srgb, var(--bs-danger) 5%, transparent);
 }
 
 .teal_validated:has(.teal-output-warning),
 .teal_validated.previous-failed:has(.teal-output-warning-previous) {
-  color: color-mix(in srgb, var(--bs-danger), black 20%);
+  color: color-mix(in srgb, var(--bs-warning), black 50%);
   border-color: var(--bs-warning)
-  background-color: color-mix(in srgb, var(--bs-danger) 5%, transparent);
+  background-color: color-mix(in srgb, var(--bs-warning) 5%, transparent);
 }
 
 .validation-wrapper .accordion-item:has(.teal_validated.previous-failed) {
@@ -32,7 +33,7 @@
 .teal_validated .teal-output-warning,
 .teal_validated.previous-failed .teal-output-warning-previous {
   display: flex;
-  margin: 0.5em 0 0em 0;
+  margin: 0 0 0 0;
 }
 
 .sidebar .teal_validated .shiny-output-error,

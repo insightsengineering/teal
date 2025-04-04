@@ -42,11 +42,11 @@ NULL
 ui_teal_data_module <- function(id, data_module = function(id) NULL) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
-  ns <- NS(id)
 
-  shiny::tagList(
-    tags$div(id = ns("wrapper"), data_module(id = ns("data"))),
-    ui_validate_reactive_teal_data(ns("validate"))
+  ui_module_validation(
+    id = id,
+    body_ui = data_module(id = NS(id, "data")),
+    validation_ui = list(validation = module_validate_teal_module$ui)
   )
 }
 
@@ -104,19 +104,10 @@ srv_teal_data_module <- function(id,
 
 #' @rdname module_teal_data
 ui_validate_reactive_teal_data <- function(id) {
-  ns <- NS(id)
-  tags$div(
-    div(
-      id = ns("validate_messages"),
-      class = "teal_validated",
-      module_validate_error$ui(ns("silent_error")),
-      module_validate_teal_data$ui(ns("class_teal_data")),
-      module_validate_datanames$ui(ns("shiny_warnings"))
-    ),
-    div(
-      class = "teal_validated",
-      uiOutput(ns("previous_failed"))
-    )
+  ui_module_validation(
+    id = id,
+    body_ui = NULL,
+    validation_ui = list(errors = module_validate_teal_module$ui)
   )
 }
 
@@ -132,18 +123,14 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
 
   moduleServer(id, function(input, output, session) {
     # there is an empty reactive cycle on `init` and `data` has `shiny.silent.error` class
-    module_validate_error$server("silent_error", x = data, validate_shiny_silent_error = validate_shiny_silent_error)
-    module_validate_teal_data$server("class_teal_data", data)
-    module_validate_datanames$server("shiny_warnings", data, modules)
-    output$previous_failed <- renderUI({
-      if (hide_validation_error()) {
-        shinyjs::hide("validate_messages")
-        tags$div("One of previous transformators failed. Please check its inputs.", class = "teal-output-warning")
-      } else {
-        shinyjs::show("validate_messages")
-        NULL
-      }
-    })
+    module_validate_teal_module$server(
+      "shiny_warnings",
+      data,
+      modules = modules,
+      show_warn = hide_validation_error,
+      validate_shiny_silent_error = validate_shiny_silent_error,
+      error_message = "One of the transformators failed. Please check its inputs."
+    )
 
     .trigger_on_success(data)
   })
