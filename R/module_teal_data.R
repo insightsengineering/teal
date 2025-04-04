@@ -92,7 +92,7 @@ srv_teal_data_module <- function(id,
     })
 
     srv_validate_reactive_teal_data(
-      "validate",
+      "validation",
       data = try_module_out,
       modules = modules,
       validate_shiny_silent_error = validate_shiny_silent_error,
@@ -105,7 +105,10 @@ srv_teal_data_module <- function(id,
 ui_validate_reactive_teal_data <- function(id) {
   checkmate::assert_string(id)
 
-  module_validate_teal_module$ui(NS(id, "validation"))
+  tagList(
+    tags$h4("here are dragons"),
+    module_validate_teal_module$ui(NS(id, "validation"))
+  )
 }
 
 #' @rdname module_teal_data
