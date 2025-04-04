@@ -71,9 +71,7 @@
   margin-left: 0;
 }
 
-.teal_validated p {
-  margin-bottom: 0;
-}
+.teal_validated p { margin-bottom: 0; }
 
 .teal_validated.previous-failed .messages,
 .teal_validated .teal-output-warning-previous {

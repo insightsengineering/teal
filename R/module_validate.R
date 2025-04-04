@@ -68,13 +68,9 @@ module_validate_factory <- function(..., stop_on_first = TRUE, minimal_ui = FALS
   top_level_formals <- Reduce( # Union of formals for all check functions (order of arguments is kept)
     function(u, v) {
       new_formals <- formals(v)
-      common <- intersect(names(new_formals), names(u))
-      vapply(common, function(x_name) {
-        if (identical(new_formals[[x_name]], u[[x_name]])) {
-          TRUE
-        } else { # Conflicting argument name/default will throw an exception.
+      vapply(intersect(names(new_formals), names(u)), function(x_name) {
+        identical(new_formals[[x_name]], u[[x_name]]) || # Conflicting name/default pair will throw an exception.
           stop("Arguments for check function have conflicting definitions (different defaults)")
-        }
       }, FUN.VALUE = logical(1L))
       append(u, new_formals[setdiff(names(new_formals), names(u))])
     },
@@ -163,23 +159,19 @@ module_validate_factory <- function(..., stop_on_first = TRUE, minimal_ui = FALS
 #' @param check_calls (`list`) A list of expressions to be injected.
 #'
 #' @returns An expression with the `template_str` replaced by the `check_calls`.
-#'
 #' @keywords internal
 .substitute_template <- function(template_str, module_server_body, check_calls) {
   # Create server body with expressions for multiple checks
   # note: using substitute directly will add curly braces around body
-  # TODO: discuss this approach vs. having curly braces
   body_list <- as.list(module_server_body)[-1]
   ix <- which(body_list == as.name(template_str))
 
-  as.call(
-    c(
-      quote(`{`),
-      body_list[seq(1, ix - 1)],
-      check_calls,
-      body_list[seq(ix + 1, length(body_list))]
-    )
-  )
+  as.call(c(
+    quote(`{`),
+    body_list[seq(1, ix - 1)],
+    check_calls,
+    body_list[seq(ix + 1, length(body_list))]
+  ))
 }
 
 #' @keywords internal
@@ -255,7 +247,6 @@ srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = T
 #' @keywords internal
 srv_module_check_teal_data <- function(x) {
   moduleServer("check_teal_data", function(input, output, session) {
-
     reactive({
       if (inherits(x(), "qenv.error")) { # TODO: remove qenv.error
         details <- attr(x(), "details", exact = TRUE)
@@ -288,7 +279,6 @@ srv_module_check_teal_data <- function(x) {
 #' @keywords internal
 srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
-
     reactive({ # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error")) {
         tagList(
@@ -318,7 +308,6 @@ srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE),
 }
 
 module_validate_teal_module <- module_validate_factory(
-  stop_on_first = TRUE,
   srv_module_check_previous_state_warn,
   # Validate_error
   srv_module_check_shinysilenterror,
@@ -331,7 +320,6 @@ module_validate_teal_module <- module_validate_factory(
 )
 
 module_validate_datanames <- module_validate_factory(
-  stop_on_first = TRUE,
   srv_module_check_previous_state_warn,
   srv_module_check_datanames
 )
