@@ -352,12 +352,7 @@ srv_teal_module.teal_module <- function(id,
       )
 
       observe({ # Hide main module UI when there are errors with reactive teal_data
-        print(any_transform_failed())
-        if (any_transform_failed()) {
-          shinyjs::hide("teal_module_ui")
-        } else {
-          shinyjs::show("teal_module_ui")
-        }
+        (if (any_transform_failed()) shinyjs::hide else shinyjs::show)("teal_module_ui")
       })
 
       summary_table <- srv_data_summary("data_summary", module_teal_data)
