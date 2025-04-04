@@ -136,7 +136,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_handled <- srv_init_data("data", data = data)
 
-    validate_ui <- module_validate_teal_module$ui(session$ns("validation"))
+    validate_ui <- tagList(
+      tags$h5("here be mice 🐁"),
+      module_validate_teal_module$ui(session$ns("validation"))
+    )
     module_validate_teal_module$server(
       "validation",
       x = data_handled,
@@ -190,8 +193,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           title = icon("fas fa-database"),
           value = "teal_data_module",
           tags$div(
-            ui_init_data(session$ns("data")),
-            validate_ui
+            validate_ui,
+            ui_init_data(session$ns("data"))
           )
         )
       )
@@ -230,4 +233,18 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   })
 
   invisible(NULL)
+}
+
+
+.trigger_on_success <- function(data) {
+  out <- reactiveVal(NULL)
+  observeEvent(data(), {
+    if (inherits(data(), "teal_data")) {
+      if (!identical(data(), out())) {
+        out(data())
+      }
+    }
+  })
+
+  out
 }

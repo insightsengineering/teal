@@ -3,7 +3,13 @@
 #' Module calls [teal_transform_module()] in sequence so that `reactive teal_data` output
 #' from one module is handed over to the following module's input.
 #'
-#' @inheritParams module_teal_data
+#' @inheritParams module_teal_module
+#' @param data_module (`teal_data_module`)
+#' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
+#' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
+#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transformator.
+#' Help to determine if any previous transformator failed, so that following transformators can be disabled
+#' and display a generic failure message.
 #' @inheritParams teal_modules
 #' @param class (character(1)) CSS class to be added in the `div` wrapper tag.
 
@@ -42,6 +48,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
           icon = bsicons::bs_icon("palette-fill"),
           tags$div(
             id = ns(sprintf("wrapper_%s", name)),
+            tags$h5("Here be horses 🐎"),
             module_validate_teal_module$ui(ns("validation")),
             body_ui
           )

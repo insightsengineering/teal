@@ -4,7 +4,7 @@
 \alias{module_validate_factory}
 \title{Factory to build validate modules}
 \usage{
-module_validate_factory(...)
+module_validate_factory(..., stop_on_first = TRUE, minimal_ui = FALSE)
 }
 \arguments{
 \item{...}{(\code{function}) 1 or more \code{\link[shiny:moduleServer]{shiny::moduleServer()}} functions that

@@ -116,7 +116,6 @@ Collate:
     'module_session_info.R'
     'module_snapshot_manager.R'
     'module_teal.R'
-    'module_teal_data.R'
     'module_teal_lockfile.R'
     'module_teal_with_splash.R'
     'module_transform_data.R'
