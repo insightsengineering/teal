@@ -45,25 +45,8 @@ Since the server of \code{\link[=teal_data_module]{teal_data_module()}} must ret
 methods (1 and 2) produce the same reactive behavior within a \code{teal} application. The distinction
 lies in data control: the first method involves external control, while the second method
 involves control from a custom module within the app.
+
+For more details, see \code{\link{teal_data_module}}.
 }
 }
-\section{data validation}{
-
-
-Executed \code{\link[=teal_data_module]{teal_data_module()}} is validated and output is validated for consistency.
-Output \code{data} is invalid if:
-\enumerate{
-\item \code{\link[=teal_data_module]{teal_data_module()}} is invalid if server doesn't return \code{reactive}. \strong{Immediately crashes an app!}
-\item \code{reactive} throws a \code{shiny.error} - happens when module creating \code{\link[teal.data:teal_data]{teal.data::teal_data()}} fails.
-\item \code{reactive} returns \code{qenv.error} - happens when \code{\link[teal.data:teal_data]{teal.data::teal_data()}} evaluates a failing code.
-\item \code{reactive} object doesn't return \code{\link[teal.data:teal_data]{teal.data::teal_data()}}.
-\item \code{\link[teal.data:teal_data]{teal.data::teal_data()}} object lacks any \code{datanames} specified in the \code{modules} argument.
-}
-
-\code{teal} (observers in \code{srv_teal}) always waits to render an app until \code{reactive} \code{teal_data} is
-returned. If error 2-4 occurs, relevant error message is displayed to the app user. Once the issue is
-resolved, the app will continue to run. \code{teal} guarantees that errors in data don't crash the app
-(except error 1).
-}
-
 \keyword{internal}

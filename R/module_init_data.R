@@ -20,20 +20,7 @@
 #' lies in data control: the first method involves external control, while the second method
 #' involves control from a custom module within the app.
 #'
-#' @section data validation:
-#'
-#' Executed [teal_data_module()] is validated and output is validated for consistency.
-#' Output `data` is invalid if:
-#' 1. [teal_data_module()] is invalid if server doesn't return `reactive`. **Immediately crashes an app!**
-#' 2. `reactive` throws a `shiny.error` - happens when module creating [teal.data::teal_data()] fails.
-#' 3. `reactive` returns `qenv.error` - happens when [teal.data::teal_data()] evaluates a failing code.
-#' 4. `reactive` object doesn't return [teal.data::teal_data()].
-#' 5. [teal.data::teal_data()] object lacks any `datanames` specified in the `modules` argument.
-#'
-#' `teal` (observers in `srv_teal`) always waits to render an app until `reactive` `teal_data` is
-#' returned. If error 2-4 occurs, relevant error message is displayed to the app user. Once the issue is
-#' resolved, the app will continue to run. `teal` guarantees that errors in data don't crash the app
-#' (except error 1).
+#' For more details, see [`teal_data_module`].
 #'
 #' @inheritParams module_teal
 #'
