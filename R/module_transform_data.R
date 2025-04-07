@@ -48,7 +48,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
           icon = bsicons::bs_icon("palette-fill"),
           tags$div(
             id = ns(sprintf("wrapper_%s", name)),
-            module_validate_teal_module$ui(ns("validation")),
+            ui_module_validate(ns("validation")),
             body_ui
           )
         )
@@ -111,7 +111,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               any(idx_failures < idx_this)
             })
 
-            module_validate_teal_module$server(
+            srv_module_validate_teal_module(
               "validation",
               x = data_handled,
               modules = modules,

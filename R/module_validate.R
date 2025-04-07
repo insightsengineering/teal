@@ -39,33 +39,114 @@
 #'
 #' module_validate_factory(check_error, check_numeric)
 #' @export
-module_validate_factory <- function(..., stop_on_first = TRUE, minimal_ui = FALSE) {
+module_validate_factory <- function(..., stop_on_first = TRUE) {
   dots <- rlang::list2(...)
   checkmate::check_list(dots, min.len = 1)
+  checkmate::assert_flag(stop_on_first)
 
   fun_names <- match.call(expand.dots = FALSE)[["..."]] # Capture function names in arguments
-
-  # TODO: extract from here
   check_calls <- lapply( # Generate calls to each of the check functions
-    seq_len(length(dots)),
+    seq_along(dots),
     function(fun_ix) {
-      fun_name <- fun_names[[fun_ix]]
-      fun_formals <- formals(dots[[fun_ix]])
-
       substitute(
-        expr,
-        list(
-          expr = substitute(
-            collection <- append(collection, check_call),
-            list(check_call = rlang::call2(fun_name, !!!lapply(names(fun_formals), as.name)))
-          )
+        collection <- append(collection, check_call),
+        list(check_call = rlang::call2(
+          fun_names[[fun_ix]], !!!lapply(names(formals(dots[[fun_ix]])), as.name))
         )
       )
     }
   )
 
   new_server_fun = function(id) TRUE # Empty server template
-  top_level_formals <- Reduce( # Union of formals for all check functions (order of arguments is kept)
+  server_formals <- .join_formals(formals(new_server_fun), dots)
+  if (stop_on_first) {
+    server_formals <- c(server_formals, pairlist(stop_on_first = stop_on_first))
+  }
+
+  new_body_list <- .generate_module_server_body(check_calls, stop_on_first = stop_on_first)
+
+  server_body <- substitute({
+    checkmate::assert_string(id) # Mandatory id parameter
+    moduleServer(id, function(input, output, session) server_body)
+  }, list(server_body = new_body_list))
+
+  formals(new_server_fun) <- server_formals # update function formals
+  body(new_server_fun) <- server_body # set the new generated body
+
+  server = new_server_fun
+}
+
+ui_module_validate <- function(id) {
+  div(
+    id = NS(id, "validate_messages"),
+    class = "teal_validated",
+    tags$div(class = "messages", uiOutput(NS(id, "errors")))
+  )
+}
+
+#' @keywords internal
+.generate_module_server_body <- function(check_calls,
+                                         stop_on_first,
+                                         template_str = "check_calls") {
+  module_server_body <- substitute(
+    { # Template moduleServer that supports multiple checks
+      collection <- list()
+      check_calls
+
+      fun <- function(u, v) if (isTRUE(v()) || is.null(v())) u else append(u, list(v()))
+      validate_r <- reactive({
+        message_collection <- Reduce(fun, x = collection, init = list())
+        message_collection
+      })
+
+      has_errors <- reactiveVal(TRUE)
+
+      output$errors <- renderUI({
+        error_class <- c("shiny.silent.error", "validation", "error", "condition")
+        if (length(validate_r()) > 0) {
+          has_errors(FALSE)
+          tagList(!!!lapply(validate_r_expr, .render_output_condition))
+        } else {
+          has_errors(TRUE)
+          NULL
+        }
+      })
+
+      has_errors
+    },
+    list(
+      check_calls == as.name(template_str),
+      validate_r_expr = if (stop_on_first) quote(validate_r()[1]) else quote(validate_r())
+    )
+  )
+
+  .substitute_template(template_str, module_server_body, check_calls)
+}
+
+#' @keywords internal
+.render_output_condition <- function(cond) {
+  checkmate::assert_multi_class(cond, c("shiny.tag", "shiny.tag.list", "character"))
+  is_warning <- isTRUE(attr(cond[1], "is_warning")) || isTRUE(attr(cond, "is_warning"))
+
+  html_class <- sprintf(
+    "teal-output-condition %s",
+    ifelse(is_warning, "teal-output-warning", "shiny-output-error")
+  )
+
+  if (!checkmate::test_multi_class(cond, c("shiny.tag", "shiny.tag.list"))) {
+    html_class <- c(html_class, "prewrap-ws")
+    cond <- lapply(cond, tags$p)
+  }
+  tags$div(class = html_class, tags$div(cond))
+}
+
+#' @keywords internal
+.join_formals <- function(current_formals, call_list) {
+  checkmate::assert(
+    checkmate::check_list(current_formals),
+    checkmate::check_class(current_formals, "pairlist")
+  )
+  Reduce( # Union of formals for all check functions (order of arguments is kept)
     function(u, v) {
       new_formals <- formals(v)
       vapply(intersect(names(new_formals), names(u)), function(x_name) {
@@ -74,80 +155,10 @@ module_validate_factory <- function(..., stop_on_first = TRUE, minimal_ui = FALS
       }, FUN.VALUE = logical(1L))
       append(u, new_formals[setdiff(names(new_formals), names(u))])
     },
-    init = formals(new_server_fun),
-    x = dots
+    init = current_formals,
+    x = call_list
   )
 
-  if (stop_on_first) {
-    top_level_formals <- c(top_level_formals, list(stop_on_first = stop_on_first))
-  }
-
-  template_str = "check_calls"
-  module_server_body <- substitute({ # Template moduleServer that supports multiple checks
-    collection <- list()
-    check_calls
-
-    validate_r <- reactive({
-      message_collection <- Reduce(
-        function(u, v) if (isTRUE(v()) || is.null(v())) u else append(u, list(v())),
-        x = collection,
-        init = list()
-      )
-      message_collection
-    })
-
-    output$errors <- renderUI({
-      error_class <- c("shiny.silent.error", "validation", "error", "condition")
-      if (length(validate_r()) > 0) {
-        tagList(
-          !!!lapply(
-            validate_r_expr,
-            function(.x) {
-              html_class <- if (isTRUE(attr(.x[1], "is_warning")) || isTRUE(attr(.x, "is_warning"))) {
-                "teal-output-warning teal-output-condition"
-              } else {
-                "shiny-output-error teal-output-condition"
-              }
-              if (!checkmate::test_multi_class(.x, c("shiny.tag", "shiny.tag.list"))) {
-                html_class <- c(html_class, "prewrap-ws")
-                .x <- lapply(.x, tags$p)
-              }
-              tags$div(class = html_class, tags$div(.x))
-            }
-          )
-        )
-      }
-    })
-
-    x
-  }, list(
-    check_calls == as.name(template_str),
-    validate_r_expr = if (stop_on_first) quote(validate_r()[1]) else quote(validate_r())
-    ))
-
-  new_body_list <- .substitute_template(template_str, module_server_body, check_calls)
-
-  server_body <- substitute({
-    checkmate::assert_string(id) # Mandatory id parameter
-    moduleServer(id, function(input, output, session) server_body)
-  }, list(server_body = new_body_list))
-
-  formals(new_server_fun) <- top_level_formals # update function formals
-  body(new_server_fun) <- server_body # set the new generated body
-
-  new_ui_fun <- if (minimal_ui) {
-    function(id) uiOutput(NS(id, "errors"))
-  } else {
-    function(id) {
-      div(
-        id = NS(id, "validate_messages"),
-        class = "teal_validated",
-        tags$div(class = "messages", uiOutput(NS(id, "errors")))
-      )
-    }
-  }
-
-  list(ui = new_ui_fun, server = new_server_fun)
 }
 
 #' Custom substitute function that injects multiple lines to an expression
@@ -193,23 +204,14 @@ srv_module_check_datanames <- function(id, x, modules) {
 }
 
 #' @keywords internal
-srv_module_check_reactive <- function(x, types = character(0L), null.ok = FALSE) {
+srv_module_check_reactive <- function(x, null.ok = FALSE) {
   reactive_message <- check_reactive(x, null.ok = null.ok)
   moduleServer("check_reactive", function(input, output, session) {
-
     reactive({
       if (isTRUE(reactive_message)) {
-        if (length(types) > 0 && !inherits(x(), types)) {
-          sprintf(
-            "Reactive value's class may only of the following types: %s, but it is '%s'",
-            paste("{", types, "}", sep = "", collapse = ", "),
-            paste("{", class(x()), "}", sep = "", collapse = ", ")
-          )
-        } else {
-          TRUE
-        }
+      reactive_message
       } else {
-        paste0("NEW:: ", reactive_message)
+        TRUE
       }
     })
   })
@@ -221,7 +223,7 @@ srv_module_check_validation_error <- function(x) {
     reactive({
       if (checkmate::test_class(x(), c("shiny.silent.error", "validation")) && !identical(x()$message, "")) {
         tagList(
-          tags$span("NEW:: Shiny validation error was raised:"),
+          tags$span("Shiny validation error was raised:"),
           tags$blockquote(tags$em(x()$message))
         )
       } else {
@@ -236,7 +238,7 @@ srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = T
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
       if (validate_shiny_silent_error && inherits(x(), "shiny.silent.error" && !identical(x()$message, ""))) {
-        "NEW:: Shiny silent error was raised"
+        "Shiny silent error was raised"
       } else {
         TRUE
       }
@@ -252,14 +254,14 @@ srv_module_check_teal_data <- function(x) {
         details <- attr(x(), "details", exact = TRUE)
         if (is.null(details)) {
           c(
-            "NEW:: Error when executing the `data` module:",
+            "Error when executing the `data` module:",
             cli::ansi_strip(x()$message),
             "",
             "Check your inputs or contact app developer if error persists."
           )
         } else {
           tagList(
-            tags$span("NEW:: Error when executing the", tags$code("data"), "module:"),
+            tags$span("Error when executing the", tags$code("data"), "module:"),
             tags$blockquote(tags$em(cli::ansi_strip(details$condition_message))),
             tags$span("from code:"),
             tags$code(class = "code-error", details$current_code)
@@ -267,7 +269,7 @@ srv_module_check_teal_data <- function(x) {
         }
       } else if (!inherits(x(), c("teal_data", "error"))) {
         tags$span(
-          "NEW:: Did not receive", tags$code("teal_data"), "object. Cannot proceed further."
+          "Did not receive", tags$code("teal_data"), "object. Cannot proceed further."
         )
       } else {
         TRUE
@@ -282,7 +284,7 @@ srv_module_check_condition <- function(x) {
     reactive({ # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error") && !inherits(x(), "shiny.silent.error")) {
         tagList(
-          tags$span("NEW:: Error detected:"),
+          tags$span("Error detected:"),
           tags$blockquote(tags$em(trimws(x()$message)))
         )
       } else {
@@ -307,7 +309,7 @@ srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE),
   })
 }
 
-module_validate_teal_module <- module_validate_factory(
+srv_module_validate_teal_module <- module_validate_factory(
   srv_module_check_previous_state_warn,
   # Validate_error
   srv_module_check_shinysilenterror,
@@ -319,7 +321,7 @@ module_validate_teal_module <- module_validate_factory(
   srv_module_check_datanames
 )
 
-module_validate_datanames <- module_validate_factory(
+srv_module_validate_datanames <- module_validate_factory(
   srv_module_check_previous_state_warn,
   srv_module_check_datanames
 )

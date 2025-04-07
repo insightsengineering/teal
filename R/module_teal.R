@@ -136,8 +136,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_handled <- srv_init_data("data", data = data)
 
-    validate_ui <- module_validate_teal_module$ui(session$ns("validation"))
-    module_validate_teal_module$server(
+    validate_ui <- ui_module_validate(session$ns("validation"))
+    srv_module_validate_teal_module(
       "validation",
       x = data_handled,
       validate_shiny_silent_error = FALSE,
