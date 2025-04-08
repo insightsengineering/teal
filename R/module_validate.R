@@ -84,9 +84,7 @@ ui_module_validate <- function(id) {
       collection <- list()
       ..(check_calls) # collection <- append(collection, srv_module_check_condition(x))
 
-      fun <- function(u, v) {
-        if (.(condition)) u else append(u, list(v()))
-      }
+      fun <- function(u, v) if (.(condition)) u else append(u, list(v()))
       validate_r <- reactive(Reduce(fun, x = collection, init = list()))
       has_errors <- reactiveVal(TRUE)
 
