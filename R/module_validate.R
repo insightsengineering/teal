@@ -1,27 +1,23 @@
-#' Factory to build validate modules
+#' Factory to build validate module server function
 #'
-#' This function is used to create a module that validates the reactive data
-#' passed to it.
-#'
-#' Dynamically generation of an `ui` and `server` function that can be used
-#' internally in teal or in a teal module.
+#' Create a module that validates the reactive data.
+#' It dynamically generates a `server` function that can be use internally in teal
+#' or in a teal module. The `ui` function is generic and common to all modules.
 #'
 #' @param module_id (`character(1)`) The module id.
 #' @param ... (`function`) 1 or more [`shiny::moduleServer()`] functions that
+#' @param stop_on_first (`logical(1)`) If `TRUE` (default), only shows the first error.
 #' return a [`shiny::reactive()`] with `TRUE` or a character string detailing
 #' the excpetion.
 #' It can be a named function, a character string or an anonymous function.
 #'
-#' @returns A list with `ui` and `server` functions with code generated from the
-#' arguments.
-#'
+#' @returns A `server` functions with code generated from the function supplied in the arguments.
 #' @examples
-#'
 #' check_error <- function(x, skip_on_empty_message = TRUE) {
 #'   moduleServer("check_error", function(input, output, session) {
 #'     reactive({
 #'       if (inherits(x(), "error") && (!skip_on_empty_message || !identical(x()$message, ""))) {
-#'         c("Error detected", x()$message)
+#'         tagList(tags$strong("Error detected"), tags$blockquote(x()$message))
 #'       } else {
 #'         TRUE
 #'       }
@@ -31,15 +27,15 @@
 #'
 #' module_validate_factory(check_error)
 #'
-#' check_numeric <- function(x, skip = FALSE) {
+#' check_numeric <- function(x) {
 #'   moduleServer("check_numeric", function(input, output, session) {
-#'     reactive(if (inherits(x(), numeric) || skip) TRUE else "Error: is not numeric")
+#'     reactive(if (inherits(x(), numeric)) TRUE else "Error: is not numeric")
 #'   })
 #' }
 #'
 #' module_validate_factory(check_error, check_numeric)
 #' @keywords internal
-module_validate_factory <- function(..., stop_on_first = TRUE) {
+srv_module_validate_factory <- function(..., stop_on_first = TRUE) {
   dots <- rlang::list2(...)
   checkmate::check_list(dots, min.len = 1)
   checkmate::assert_flag(stop_on_first)
@@ -66,6 +62,7 @@ module_validate_factory <- function(..., stop_on_first = TRUE) {
   new_server_fun
 }
 
+#' @rdname module_validate_factory
 ui_module_validate <- function(id) {
   div(
     id = NS(id, "validate_messages"),
@@ -259,7 +256,7 @@ srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE),
   })
 }
 
-srv_module_validate_teal_module <- module_validate_factory( # nolint: object_length.
+srv_module_validate_teal_module <- srv_module_validate_factory( # nolint: object_length.
   srv_module_check_previous_state_warn,
   srv_module_check_shinysilenterror,
   srv_module_check_validation,
@@ -269,7 +266,7 @@ srv_module_validate_teal_module <- module_validate_factory( # nolint: object_len
   srv_module_check_datanames
 )
 
-srv_module_validate_transform <- module_validate_factory(
+srv_module_validate_transform <- srv_module_validate_factory(
   srv_module_check_previous_state_warn,
   srv_module_check_shinysilenterror,
   srv_module_check_validation,
@@ -278,7 +275,7 @@ srv_module_validate_transform <- module_validate_factory(
   srv_module_check_teal_data
 )
 
-srv_module_validate_datanames <- module_validate_factory(
+srv_module_validate_datanames <- srv_module_validate_factory(
   srv_module_check_previous_state_warn,
   srv_module_check_datanames
 )

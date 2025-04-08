@@ -138,10 +138,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     validate_ui <- ui_module_validate(session$ns("validation"))
     srv_module_validate_teal_module(
-      "validation",
-      x = data_handled,
-      validate_shiny_silent_error = FALSE,
-      modules = modules
+      "validation", x = data_handled, validate_shiny_silent_error = FALSE, modules = modules
     )
 
     data_validated <- .trigger_on_success(data_handled)
@@ -178,8 +175,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
-
-
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
       bslib::nav_insert(
@@ -189,10 +184,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         bslib::nav_panel(
           title = icon("fas fa-database"),
           value = "teal_data_module",
-          tags$div(
-            validate_ui,
-            ui_init_data(session$ns("data"))
-          )
+          tags$div(validate_ui, ui_init_data(session$ns("data")))
         )
       )
 
@@ -232,7 +224,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   invisible(NULL)
 }
 
-
 .trigger_on_success <- function(data) {
   out <- reactiveVal(NULL)
   observeEvent(data(), {
@@ -242,6 +233,5 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     }
   })
-
   out
 }
