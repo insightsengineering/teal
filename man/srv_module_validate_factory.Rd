@@ -10,17 +10,14 @@ srv_module_validate_factory(..., stop_on_first = TRUE)
 ui_module_validate(id)
 }
 \arguments{
-\item{...}{(\code{function}) 1 or more \code{\link[shiny:moduleServer]{shiny::moduleServer()}} functions that}
-
-\item{stop_on_first}{(\code{logical(1)}) If \code{TRUE} (default), only shows the first error.
-return a \code{\link[shiny:reactive]{shiny::reactive()}} with \code{TRUE} or a character string detailing
-the excpetion.
+\item{...}{(\code{function}) 1 or more \code{\link[shiny:moduleServer]{shiny::moduleServer()}} functions that
+return a \code{\link[shiny:reactive]{shiny::reactive()}} with \code{TRUE} or a character string detailing the exception.
 It can be a named function, a character string or an anonymous function.}
 
-\item{module_id}{(\code{character(1)}) The module id.}
+\item{stop_on_first}{(\code{logical(1)}) If \code{TRUE} (default), only shows the first error.}
 }
 \value{
-A \code{server} functions with code generated from the function supplied in the arguments.
+A \code{server} function with code generated from the function supplied in the arguments.
 }
 \description{
 Create a module that validates the reactive data.
@@ -41,10 +38,10 @@ check_error <- function(x, skip_on_empty_message = TRUE) {
 }
 srv_module_validate_factory(check_error)
 
-check_numeric <- function(x) {
-  moduleServer("check_numeric", function(input, output, session) {
-    reactive(checkmate::check_numeric(x()))
-  })
+check_numeric <- function(x, null.ok = FALSE) {
+  moduleServer("check_numeric", function(input, output, session)
+    reactive(checkmate::check_numeric(x(), null.ok = null.ok))
+  )
 }
 srv_module_validate_factory(check_error, check_numeric)
 }

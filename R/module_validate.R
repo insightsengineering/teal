@@ -4,14 +4,12 @@
 #' It dynamically generates a `server` function that can be use internally in teal
 #' or in a teal module. The `ui` function is generic and common to all modules.
 #'
-#' @param module_id (`character(1)`) The module id.
 #' @param ... (`function`) 1 or more [`shiny::moduleServer()`] functions that
-#' @param stop_on_first (`logical(1)`) If `TRUE` (default), only shows the first error.
-#' return a [`shiny::reactive()`] with `TRUE` or a character string detailing
-#' the excpetion.
+#' return a [`shiny::reactive()`] with `TRUE` or a character string detailing the exception.
 #' It can be a named function, a character string or an anonymous function.
+#' @param stop_on_first (`logical(1)`) If `TRUE` (default), only shows the first error.
 #'
-#' @returns A `server` functions with code generated from the function supplied in the arguments.
+#' @returns A `server` function with code generated from the function supplied in the arguments.
 #' @examples
 #' check_error <- function(x, skip_on_empty_message = TRUE) {
 #'   moduleServer("check_error", function(input, output, session) {
@@ -26,10 +24,10 @@
 #' }
 #' srv_module_validate_factory(check_error)
 #'
-#' check_numeric <- function(x) {
-#'   moduleServer("check_numeric", function(input, output, session) {
-#'     reactive(checkmate::check_numeric(x()))
-#'   })
+#' check_numeric <- function(x, null.ok = FALSE) {
+#'   moduleServer("check_numeric", function(input, output, session)
+#'     reactive(checkmate::check_numeric(x(), null.ok = null.ok))
+#'   )
 #' }
 #' srv_module_validate_factory(check_error, check_numeric)
 #' @keywords internal
@@ -51,9 +49,6 @@ srv_module_validate_factory <- function(..., stop_on_first = TRUE) {
 
   new_server_fun <- function(id) TRUE # Empty server template
   server_formals <- .join_formals(formals(new_server_fun), dots)
-  if (stop_on_first) {
-    server_formals <- c(server_formals, pairlist(stop_on_first = stop_on_first))
-  }
   server_body <- .validate_module_server(check_calls, stop_on_first = stop_on_first)
   formals(new_server_fun) <- server_formals # update function formals
   body(new_server_fun) <- server_body # set the new generated body
