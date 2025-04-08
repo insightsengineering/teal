@@ -80,12 +80,12 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
-
           data_out <- reactiveVal()
           .call_once_when(inherits(data_previous(), "teal_data"), {
             logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
+            data_previous_handled <- reactive(tryCatch(data_previous(), error = function(e) e))
 
             observeEvent(data_handled(), {
               if (inherits(data_handled(), "teal_data")) {
@@ -97,7 +97,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data")) {
+              if (inherits(data_handled(), "teal_data") || rlang::is_condition(data_previous_handled())) {
                 is_transform_failed[[name]] <- FALSE
               } else {
                 is_transform_failed[[name]] <- TRUE
@@ -132,9 +132,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
           })
 
           # Ignoring unwanted reactivity breaks during initialization
-          reactive({
-            req(data_out())
-          })
+          reactive(req(data_out()))
         })
       },
       x = names(transformators),

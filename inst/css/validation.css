@@ -1,4 +1,4 @@
-.teal_validated { padding: 1em; }
+.teal_validated:has(.shiny-output-error, .teal-output-warning) { padding: 1em; }
 .sidebar .teal_validated { padding: 0.2em; }
 
 .teal_validated:has(.shiny-output-error),
