@@ -38,7 +38,7 @@
 #' }
 #'
 #' module_validate_factory(check_error, check_numeric)
-#' @export
+#' @keywords internal
 module_validate_factory <- function(..., stop_on_first = TRUE) {
   dots <- rlang::list2(...)
   checkmate::check_list(dots, min.len = 1)
@@ -50,14 +50,12 @@ module_validate_factory <- function(..., stop_on_first = TRUE) {
     function(fun_ix) {
       substitute(
         collection <- append(collection, check_call),
-        list(check_call = rlang::call2(
-          fun_names[[fun_ix]], !!!lapply(names(formals(dots[[fun_ix]])), as.name))
-        )
+        list(check_call = rlang::call2(fun_names[[fun_ix]], !!!lapply(names(formals(dots[[fun_ix]])), as.name)))
       )
     }
   )
 
-  new_server_fun = function(id) TRUE # Empty server template
+  new_server_fun <- function(id) TRUE # Empty server template
   server_formals <- .join_formals(formals(new_server_fun), dots)
   if (stop_on_first) {
     server_formals <- c(server_formals, pairlist(stop_on_first = stop_on_first))
@@ -78,12 +76,15 @@ ui_module_validate <- function(id) {
 
 #' @keywords internal
 .validate_module_server <- function(check_calls, stop_on_first) {
-  condition <- if (stop_on_first) quote(length(u) > 0 || isTRUE(v()) || is.null(v())) else quote(isTRUE(v()) || is.null(v()))
+  condition <- if (stop_on_first)
+    quote(length(u) > 0 || isTRUE(v()) || is.null(v()))
+  else
+    quote(isTRUE(v()) || is.null(v()))
   module_server_body <- bquote({ # Template moduleServer that supports multiple checks
     checkmate::assert_string(id) # Mandatory id parameter
     moduleServer(id, function(input, output, session) {
       collection <- list()
-      ..(check_calls) # collection <- append(collection, srv_module_check_condition(x))
+      ..(check_calls) # Generates expressions: "collection <- append(collection, srv_module_check_xxxx(x))"
 
       fun <- function(u, v) if (.(condition)) u else append(u, list(v()))
       validate_r <- reactive(Reduce(fun, x = collection, init = list()))
@@ -159,21 +160,15 @@ srv_module_check_datanames <- function(x, modules) {
 }
 
 #' @keywords internal
-srv_module_check_reactive <- function(x, null.ok = FALSE) {
+srv_module_check_reactive <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
   reactive_message <- check_reactive(x, null.ok = null.ok)
   moduleServer("check_reactive", function(input, output, session) {
-    reactive({
-      if (isTRUE(reactive_message)) {
-      reactive_message
-      } else {
-        TRUE
-      }
-    })
+    reactive(if (isTRUE(reactive_message)) reactive_message else TRUE)
   })
 }
 
 #' @keywords internal
-srv_module_check_validation_error <- function(x) {
+srv_module_check_validation <- function(x) {
   moduleServer("check_validation_error", function(input, output, session) {
     reactive({
       if (checkmate::test_class(x(), c("shiny.silent.error", "validation")) && !identical(x()$message, "")) {
@@ -189,7 +184,7 @@ srv_module_check_validation_error <- function(x) {
 }
 
 #' @keywords internal
-srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) {
+srv_module_check_shinysilenterror <- function(x, validate_shiny_silent_error = TRUE) { # nolint: object_length.
   moduleServer("check_shinysilenterror", function(input, output, session) {
     reactive({
       if (validate_shiny_silent_error && inherits(x(), "shiny.silent.error" && !identical(x()$message, ""))) {
@@ -250,7 +245,7 @@ srv_module_check_condition <- function(x) {
 }
 
 #' @keywords internal
-srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE), message_warn = "not defined") {
+srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE), message_warn = "not defined") { # nolint: object_length,line_length.
   assert_reactive(show_warn)
   checkmate::assert(
     checkmate::check_string(message_warn),
@@ -264,10 +259,10 @@ srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE),
   })
 }
 
-srv_module_validate_teal_module <- module_validate_factory(
+srv_module_validate_teal_module <- module_validate_factory( # nolint: object_length.
   srv_module_check_previous_state_warn,
   srv_module_check_shinysilenterror,
-  srv_module_check_validation_error,
+  srv_module_check_validation,
   srv_module_check_condition,
   srv_module_check_reactive,
   srv_module_check_teal_data,
@@ -277,7 +272,7 @@ srv_module_validate_teal_module <- module_validate_factory(
 srv_module_validate_transform <- module_validate_factory(
   srv_module_check_previous_state_warn,
   srv_module_check_shinysilenterror,
-  srv_module_check_validation_error,
+  srv_module_check_validation,
   srv_module_check_condition,
   srv_module_check_reactive,
   srv_module_check_teal_data
