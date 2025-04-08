@@ -79,8 +79,9 @@ ui_module_validate <- function(id) {
 #' @keywords internal
 .validate_module_server <- function(check_calls, stop_on_first) {
   condition <- if (stop_on_first) quote(length(u) > 0 || isTRUE(v()) || is.null(v())) else quote(isTRUE(v()) || is.null(v()))
-  module_server_body <- bquote(
-    { # Template moduleServer that supports multiple checks
+  module_server_body <- bquote({ # Template moduleServer that supports multiple checks
+    checkmate::assert_string(id) # Mandatory id parameter
+    moduleServer(id, function(input, output, session) {
       collection <- list()
       ..(check_calls) # collection <- append(collection, srv_module_check_condition(x))
 
@@ -98,17 +99,9 @@ ui_module_validate <- function(id) {
           NULL
         }
       })
-
       has_errors
-    },
-    splice = TRUE
-  )
-
-  substitute({
-    checkmate::assert_string(id) # Mandatory id parameter
-    moduleServer(id, function(input, output, session) server_body)
-  }, list(server_body = module_server_body))
-
+    })
+  }, splice = TRUE)
 }
 
 #' @keywords internal
@@ -121,7 +114,7 @@ ui_module_validate <- function(id) {
     ifelse(is_warning, "teal-output-warning", "shiny-output-error")
   )
 
-  if (!checkmate::test_multi_class(cond, c("shiny.tag", "shiny.tag.list"))) {
+  if (!checkmate::test_character(cond)) {
     html_class <- c(html_class, "prewrap-ws")
     cond <- lapply(cond, tags$p)
   }
@@ -146,7 +139,6 @@ ui_module_validate <- function(id) {
     init = current_formals,
     x = call_list
   )
-
 }
 
 #' @keywords internal
