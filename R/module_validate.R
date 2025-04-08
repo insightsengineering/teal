@@ -78,25 +78,23 @@ ui_module_validate <- function(id) {
 
 #' @keywords internal
 .validate_module_server <- function(check_calls, stop_on_first) {
-  validate_r_expr <- if (stop_on_first) quote(validate_r()[1]) else quote(validate_r())
+  condition <- if (stop_on_first) quote(length(u) > 0 || isTRUE(v()) || is.null(v())) else quote(isTRUE(v()) || is.null(v()))
   module_server_body <- bquote(
     { # Template moduleServer that supports multiple checks
       collection <- list()
-      ..(check_calls)
+      ..(check_calls) # collection <- append(collection, srv_module_check_condition(x))
 
-      fun <- function(u, v) if (isTRUE(v()) || is.null(v())) u else append(u, list(v()))
-      validate_r <- reactive({
-        message_collection <- Reduce(fun, x = collection, init = list())
-        message_collection
-      })
-
+      fun <- function(u, v) {
+        if (.(condition)) u else append(u, list(v()))
+      }
+      validate_r <- reactive(Reduce(fun, x = collection, init = list()))
       has_errors <- reactiveVal(TRUE)
 
       output$errors <- renderUI({
         error_class <- c("shiny.silent.error", "validation", "error", "condition")
         if (length(validate_r()) > 0) {
           has_errors(FALSE)
-          tagList(!!!lapply(.(validate_r_expr), .render_output_condition))
+          tagList(!!!lapply(validate_r(), .render_output_condition))
         } else {
           has_errors(TRUE)
           NULL
