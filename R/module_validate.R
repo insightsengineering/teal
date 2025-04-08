@@ -24,16 +24,14 @@
 #'     })
 #'   })
 #' }
-#'
-#' module_validate_factory(check_error)
+#' srv_module_validate_factory(check_error)
 #'
 #' check_numeric <- function(x) {
 #'   moduleServer("check_numeric", function(input, output, session) {
-#'     reactive(if (inherits(x(), numeric)) TRUE else "Error: is not numeric")
+#'     reactive(checkmate::check_numeric(x()))
 #'   })
 #' }
-#'
-#' module_validate_factory(check_error, check_numeric)
+#' srv_module_validate_factory(check_error, check_numeric)
 #' @keywords internal
 srv_module_validate_factory <- function(..., stop_on_first = TRUE) {
   dots <- rlang::list2(...)
@@ -62,7 +60,7 @@ srv_module_validate_factory <- function(..., stop_on_first = TRUE) {
   new_server_fun
 }
 
-#' @rdname module_validate_factory
+#' @rdname srv_module_validate_factory
 ui_module_validate <- function(id) {
   div(
     id = NS(id, "validate_messages"),

@@ -2,9 +2,12 @@
 % Please edit documentation in R/module_validate.R
 \name{srv_module_validate_factory}
 \alias{srv_module_validate_factory}
+\alias{ui_module_validate}
 \title{Factory to build validate module server function}
 \usage{
 srv_module_validate_factory(..., stop_on_first = TRUE)
+
+ui_module_validate(id)
 }
 \arguments{
 \item{...}{(\code{function}) 1 or more \code{\link[shiny:moduleServer]{shiny::moduleServer()}} functions that}
@@ -36,15 +39,13 @@ check_error <- function(x, skip_on_empty_message = TRUE) {
     })
   })
 }
-
-module_validate_factory(check_error)
+srv_module_validate_factory(check_error)
 
 check_numeric <- function(x) {
   moduleServer("check_numeric", function(input, output, session) {
-    reactive(if (inherits(x(), numeric)) TRUE else "Error: is not numeric")
+    reactive(checkmate::check_numeric(x()))
   })
 }
-
-module_validate_factory(check_error, check_numeric)
+srv_module_validate_factory(check_error, check_numeric)
 }
 \keyword{internal}
