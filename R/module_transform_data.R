@@ -111,10 +111,9 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               any(idx_failures < idx_this)
             })
 
-            srv_module_validate_teal_module(
+            srv_module_validate_transform(
               "validation",
               x = data_handled,
-              modules = modules,
               validate_shiny_silent_error = FALSE,
               show_warn = is_previous_failed,
               message_warn = "One of the previous transformators failed. Please check its inputs."

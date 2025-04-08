@@ -62,18 +62,10 @@ module_validate_factory <- function(..., stop_on_first = TRUE) {
   if (stop_on_first) {
     server_formals <- c(server_formals, pairlist(stop_on_first = stop_on_first))
   }
-
-  new_body_list <- .generate_module_server_body(check_calls, stop_on_first = stop_on_first)
-
-  server_body <- substitute({
-    checkmate::assert_string(id) # Mandatory id parameter
-    moduleServer(id, function(input, output, session) server_body)
-  }, list(server_body = new_body_list))
-
+  server_body <- .validate_module_server(check_calls, stop_on_first = stop_on_first)
   formals(new_server_fun) <- server_formals # update function formals
   body(new_server_fun) <- server_body # set the new generated body
-
-  server = new_server_fun
+  new_server_fun
 }
 
 ui_module_validate <- function(id) {
@@ -85,13 +77,12 @@ ui_module_validate <- function(id) {
 }
 
 #' @keywords internal
-.generate_module_server_body <- function(check_calls,
-                                         stop_on_first,
-                                         template_str = "check_calls") {
-  module_server_body <- substitute(
+.validate_module_server <- function(check_calls, stop_on_first) {
+  validate_r_expr <- if (stop_on_first) quote(validate_r()[1]) else quote(validate_r())
+  module_server_body <- bquote(
     { # Template moduleServer that supports multiple checks
       collection <- list()
-      check_calls
+      ..(check_calls)
 
       fun <- function(u, v) if (isTRUE(v()) || is.null(v())) u else append(u, list(v()))
       validate_r <- reactive({
@@ -105,7 +96,7 @@ ui_module_validate <- function(id) {
         error_class <- c("shiny.silent.error", "validation", "error", "condition")
         if (length(validate_r()) > 0) {
           has_errors(FALSE)
-          tagList(!!!lapply(validate_r_expr, .render_output_condition))
+          tagList(!!!lapply(.(validate_r_expr), .render_output_condition))
         } else {
           has_errors(TRUE)
           NULL
@@ -114,13 +105,14 @@ ui_module_validate <- function(id) {
 
       has_errors
     },
-    list(
-      check_calls == as.name(template_str),
-      validate_r_expr = if (stop_on_first) quote(validate_r()[1]) else quote(validate_r())
-    )
+    splice = TRUE
   )
 
-  .substitute_template(template_str, module_server_body, check_calls)
+  substitute({
+    checkmate::assert_string(id) # Mandatory id parameter
+    moduleServer(id, function(input, output, session) server_body)
+  }, list(server_body = module_server_body))
+
 }
 
 #' @keywords internal
@@ -161,34 +153,9 @@ ui_module_validate <- function(id) {
 
 }
 
-#' Custom substitute function that injects multiple lines to an expression
-#'
-#' It must contain the `template_str` on the first level of the expression.
-#'
-#' @param template_str (`character(1)`) The call in the expression to be replaced.
-#' @param module_server_body (`expression`) Any syntactically valid R expression.
-#' @param check_calls (`list`) A list of expressions to be injected.
-#'
-#' @returns An expression with the `template_str` replaced by the `check_calls`.
 #' @keywords internal
-.substitute_template <- function(template_str, module_server_body, check_calls) {
-  # Create server body with expressions for multiple checks
-  # note: using substitute directly will add curly braces around body
-  body_list <- as.list(module_server_body)[-1]
-  ix <- which(body_list == as.name(template_str))
-
-  as.call(c(
-    quote(`{`),
-    body_list[seq(1, ix - 1)],
-    check_calls,
-    body_list[seq(ix + 1, length(body_list))]
-  ))
-}
-
-#' @keywords internal
-srv_module_check_datanames <- function(id, x, modules) {
-  checkmate::assert_string(id)
-  moduleServer(id, function(input, output, session) {
+srv_module_check_datanames <- function(x, modules) {
+  moduleServer("check_datanames", function(input, output, session) {
     reactive({
       if (!is.null(modules) && inherits(x(), "teal_data")) {
         is_modules_ok <- check_modules_datanames_html(
@@ -311,14 +278,21 @@ srv_module_check_previous_state_warn <- function(x, show_warn = reactive(FALSE),
 
 srv_module_validate_teal_module <- module_validate_factory(
   srv_module_check_previous_state_warn,
-  # Validate_error
   srv_module_check_shinysilenterror,
   srv_module_check_validation_error,
   srv_module_check_condition,
   srv_module_check_reactive,
-
   srv_module_check_teal_data,
   srv_module_check_datanames
+)
+
+srv_module_validate_transform <- module_validate_factory(
+  srv_module_check_previous_state_warn,
+  srv_module_check_shinysilenterror,
+  srv_module_check_validation_error,
+  srv_module_check_condition,
+  srv_module_check_reactive,
+  srv_module_check_teal_data
 )
 
 srv_module_validate_datanames <- module_validate_factory(
