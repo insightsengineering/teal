@@ -72,7 +72,9 @@ ui_module_validate <- function(id) {
     quote(isTRUE(v()) || is.null(v()))
   module_server_body <- bquote({ # Template moduleServer that supports multiple checks
     checkmate::assert_string(id) # Mandatory id parameter
+    top_level_x <- x
     moduleServer(id, function(input, output, session) {
+      x <- reactive(tryCatch(top_level_x(), error = function(e) e))
       collection <- list()
       ..(check_calls) # Generates expressions: "collection <- append(collection, srv_module_check_xxxx(x))"
 
@@ -163,7 +165,7 @@ srv_module_check_validation <- function(x) {
     reactive({
       if (checkmate::test_class(x(), c("shiny.silent.error", "validation")) && !identical(x()$message, "")) {
         tagList(
-          tags$span("Shiny validation error was raised:"),
+          tags$span("Validation error:"),
           tags$blockquote(tags$em(x()$message))
         )
       } else {
@@ -271,4 +273,8 @@ srv_module_validate_transform <- srv_module_validate_factory(
 srv_module_validate_datanames <- srv_module_validate_factory(
   srv_module_check_previous_state_warn,
   srv_module_check_datanames
+)
+
+srv_module_validate_validation <- srv_module_validate_factory(
+  srv_module_check_validation
 )
