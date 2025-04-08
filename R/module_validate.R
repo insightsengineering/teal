@@ -225,6 +225,7 @@ srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
     reactive({ # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error") && !inherits(x(), "shiny.silent.error")) {
+        browser()
         tagList(
           tags$span("Error detected:"),
           tags$blockquote(tags$em(trimws(x()$message)))
@@ -265,9 +266,9 @@ srv_module_validate_transform <- srv_module_validate_factory(
   srv_module_check_previous_state_warn,
   srv_module_check_shinysilenterror,
   srv_module_check_validation,
-  srv_module_check_condition,
   srv_module_check_reactive,
-  srv_module_check_teal_data
+  srv_module_check_teal_data,
+  srv_module_check_condition
 )
 
 srv_module_validate_datanames <- srv_module_validate_factory(

@@ -47,6 +47,12 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
           attr(data_mod, "label", exact = TRUE),
           icon = bsicons::bs_icon("palette-fill"),
           tags$div(
+            class = "disabled-info",
+            title = "Disabled until data becomes valid",
+            bsicons::bs_icon("info-circle"),
+            "Disabled until data becomes valid"
+          ),
+          tags$div(
             id = ns(sprintf("wrapper_%s", name)),
             ui_module_validate(ns("validation")),
             body_ui
@@ -76,23 +82,28 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
   names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
   moduleServer(id, function(input, output, session) {
+    data_original_handled <- reactive(tryCatch(data(), error = function(e) e))
     module_output <- Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
           data_out <- reactiveVal()
 
+          # Disable all elements if original data is not yet a teal_data
+          observeEvent(data_original_handled(), {
+            (if (!inherits(data_original_handled(), "teal_data")) shinyjs::disable else shinyjs::enable)("wrapper")
+          })
+
           .call_once_when(inherits(data_previous(), "teal_data"), {
             logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
-            data_original_handled <- reactive(tryCatch(data(), error = function(e) e))
 
             observeEvent({
               data_handled()
               data_original_handled()
             }, {
-              if (rlang::is_condition(data_original_handled())) {
+              if (!inherits(data_original_handled(), "teal_data")) {
                 data_out(
                   within(
                     teal.code::qenv(),
@@ -144,10 +155,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
           })
 
           # Ignoring unwanted reactivity breaks during initialization
-          reactive({
-            print("data_out()")
-            req(data_out())
-          })
+          reactive(req(data_out()))
         })
       },
       x = names(transformators),

@@ -1,9 +1,32 @@
 .teal_validated:has(.shiny-output-error, .teal-output-warning) { padding: 1em; }
 .sidebar .teal_validated { padding: 0.2em; }
 
+.validation-wrapper {
+  --bs-accordion-body-padding-y: 0 1rem;
+}
+
+.validation-wrapper[disabled="disabled"] {
+  --bs-accordion-bg: var(--bs-gray-100);
+  background-color: var(--bs-gray-100);
+}
+
+.validation-wrapper[disabled="disabled"]:has(.shiny-output-error, .teal-output-warning) .disabled-info,
+.validation-wrapper .disabled-info {
+  display: none;
+}
+
+.validation-wrapper[disabled="disabled"] .disabled-info {
+  display: block;
+  border-color: var(--bs-info);
+  padding: 1em;
+  color: color-mix(in srgb, var(--bs-info), black 20%);
+  background-color: color-mix(in srgb, var(--bs-info) 5%, transparent);
+}
+
 .teal_validated:has(.shiny-output-error),
 .teal_validated:has(.teal-output-warning),
-.teal_validated:has(.teal-output-warning-previous) {
+.teal_validated:has(.teal-output-warning-previous),
+.validation-wrapper .disabled-info{
   border: solid 1px transparent;
   border-radius: 4px;
 }
