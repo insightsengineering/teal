@@ -37,9 +37,17 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
 
       display_fun(
         bslib::accordion(
+          id = ns("wrapper"),
+          class = "validation-wrapper",
           bslib::accordion_panel(
             attr(data_mod, "label"),
             icon = bsicons::bs_icon("palette-fill"),
+            tags$div(
+              class = "disabled-info",
+              title = "Disabled until data becomes valid",
+              bsicons::bs_icon("info-circle"),
+              "Disabled until data becomes valid. Check your inputs."
+            ),
             tags$div(
               id = transform_wrapper_id,
               if (is.null(data_mod$ui)) {
@@ -76,19 +84,38 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
   names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
   moduleServer(id, function(input, output, session) {
+    data_original_handled <- reactive(tryCatch(data(), error = function(e) e))
     module_output <- Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
 
           data_out <- reactiveVal()
+          transform_wrapper_id <- sprintf("wrapper_%s", name)
+
+          # Disable all elements if original data is not yet a teal_data
+          observeEvent(data_original_handled(), {
+            (if (!inherits(data_original_handled(), "teal_data")) shinyjs::disable else shinyjs::enable)("wrapper")
+          })
+
           .call_once_when(inherits(data_previous(), "teal_data"), {
             logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 
-            observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data")) {
+            observeEvent({
+              data_handled()
+              data_original_handled()
+            }, {
+              if (!inherits(data_original_handled(), "teal_data")) {
+                data_out(
+                  within(
+                    teal.code::qenv(),
+                    stop("Error with original data: ", message),
+                    message = data_original_handled()$message
+                  )
+                )
+              } else if (inherits(data_handled(), "teal_data")) {
                 if (!identical(data_handled(), data_out())) {
                   data_out(data_handled())
                 }
@@ -97,7 +124,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data")) {
+              if (inherits(data_handled(), "teal_data") || rlang::is_condition(data_original_handled())) {
                 is_transform_failed[[name]] <- FALSE
               } else {
                 is_transform_failed[[name]] <- TRUE
@@ -124,7 +151,6 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               }
             })
 
-            transform_wrapper_id <- sprintf("wrapper_%s", name)
             output$error_wrapper <- renderUI({
               if (is_previous_failed()) {
                 shinyjs::disable(transform_wrapper_id)
