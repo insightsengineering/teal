@@ -50,7 +50,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
             class = "disabled-info",
             title = "Disabled until data becomes valid",
             bsicons::bs_icon("info-circle"),
-            "Disabled until data becomes valid"
+            "Disabled until data becomes valid. Check your inputs."
           ),
           tags$div(
             id = ns(sprintf("wrapper_%s", name)),
