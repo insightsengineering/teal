@@ -648,8 +648,8 @@ append_module <- function(modules, module) {
 #' @rdname module_teal
 #' @keywords internal
 #' @noRd
-append_reporter_module <- function(modules) {
-  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+append_reporter_module <- function(modules, disable) {
+  if (!disable && is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
     modules <- append_module(
       modules,
       reporter_previewer_module(server_args = list(previewer_buttons = c("download", "load", "reset")))

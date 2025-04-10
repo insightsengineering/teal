@@ -118,8 +118,11 @@ modify_teal_module_report_card <- function(teal_module, modify_fun) {
 }
 
 nullify_teal_module_report_card <- function(teal_module) {
-  modify_teal_module_output(teal_module, modify_fun = function() NULL, output_name = 'report_card')
+  modify_teal_module_output(teal_module, modify_fun = function(report_card) NULL, output_name = 'report_card')
 }
+
+disable_teal_module_report <- nullify_teal_module_report_card
+
 
 ############################################################## EXAMPLE
 #
@@ -171,4 +174,5 @@ nullify_teal_module_report_card <- function(teal_module) {
 # if (interactive()) {
 #   shinyApp(app$ui, app$server)
 # }
+
 
