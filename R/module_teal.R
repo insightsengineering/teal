@@ -40,18 +40,20 @@
 #'   `teal_modules` object. These are the specific output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
+#' @param reporter (`Reporter`) object used to store report contents. Set to `NULL` to globally disable reporting.
+#' @param disable Whether to disable `reporter` in `ui_teal`. Useful for using `ui_teal` and `srv_teal` as shiny module.
 #'
 #' @return `NULL` invisibly
 NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id, modules) {
+ui_teal <- function(id, modules, disable = FALSE) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
-  modules <- append_reporter_module(modules)
+  modules <- append_reporter_module(modules, disable = disable)
 
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
@@ -103,13 +105,13 @@ ui_teal <- function(id, modules) {
 
 #' @rdname module_teal
 #' @export
-srv_teal <- function(id, data, modules, filter = teal_slices()) {
+srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
-  modules <- append_reporter_module(modules)
+  modules <- append_reporter_module(modules, disable = is.null(reporter))
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
@@ -215,7 +217,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
     }
 
-    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+    if (!is.null(reporter)) reporter$set_id(attr(filter, "app_id"))
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(

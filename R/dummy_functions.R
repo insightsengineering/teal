@@ -36,7 +36,7 @@ example_module <- function(label = "example teal module",
 
   ans <- module(
     label,
-    server = function(id, data, decorators) {
+    server = function(id, data, reporter, decorators) {
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
         datanames_rv <- reactive(names(req(data())))
@@ -83,7 +83,19 @@ example_module <- function(label = "example teal module",
           title = "Example Code"
         )
 
-        table_data_decorated
+        card_fun <- reactive({
+          req(table_data_decorated())
+          teal.reporter::report_document(
+            "## Table Data",
+            teal.reporter::code_chunk(
+              teal.code::get_code(table_data_decorated())
+            ),
+            table_data_decorated()[["object"]]
+          )
+        })
+        list(
+          report_card = card_fun
+        )
       })
     },
     ui = function(id, decorators) {

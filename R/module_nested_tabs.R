@@ -207,7 +207,11 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         )
       } else {
         ui_teal
-      }
+      },
+      div( # todo: fix the position to the top right of the tab content?
+        uiOutput(ns("reporter_add_container"))
+        # uiOutput(ns("show_rcode_container")) # todo: same mechanism as for the reporter
+      )
     )
   )
 }
@@ -226,7 +230,7 @@ srv_teal_module <- function(id,
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   assert_reactive(datasets, null.ok = TRUE)
   checkmate::assert_class(slices_global, ".slicesGlobal")
-  checkmate::assert_class(reporter, "Reporter")
+  checkmate::assert_class(reporter, "Reporter", null.ok = TRUE)
   assert_reactive(data_load_status)
   UseMethod("srv_teal_module", modules)
 }
@@ -410,6 +414,21 @@ srv_teal_module.teal_module <- function(id,
       }
     })
 
+    if (!is.null(reporter)) {
+      reporter_card_out <- reactive({
+        card <- if (is.list(module_out())) {
+          module_out()$report_card()
+        }
+      })
+
+      output$reporter_add_container <- renderUI({
+        req(reporter_card_out())
+        teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+      })
+
+      add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
+    }
+
     module_out
   })
 }
@@ -420,7 +439,7 @@ srv_teal_module.teal_module <- function(id,
 
   # collect arguments to run teal_module
   args <- c(list(id = "module"), modules$server_args)
-  if (is_arg_used(modules$server, "reporter")) {
+  if (is_arg_used(modules$server, "reporter") && !is.null(reporter)) {
     args <- c(args, list(reporter = reporter))
   }
 
