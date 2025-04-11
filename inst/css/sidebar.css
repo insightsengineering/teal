@@ -23,7 +23,7 @@
 a.disabled {
   pointer-events: none;
   cursor: not-allowed;
-  color: grey;
+  color: var(--bs-gray);
 }
 
 .filter_manager_content {
@@ -56,11 +56,10 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button {
-  height: 2.5rem;
   --bs-accordion-btn-bg: #ededed;
   --bs-accordion-active-bg: #ededed;
   --bs-accordion-btn-padding-x: 1rem;
-  --bs-accordion-btn-padding-y: 0.8rem;
+  --bs-accordion-btn-padding-y: 0.7rem;
 }
 
 .teal-sidebar .accordion {
@@ -81,6 +80,10 @@ a.disabled {
 .teal-transform-accordian .accordion-button:not(.collapsed)::after,
 .teal-transform-accordian .accordion-button::after {
   display: none;
+}
+
+.teal-body .bslib-sidebar-layout {
+  margin-bottom: 0;
 }
 
 .bslib-sidebar-layout > .sidebar-toggle-buttons {
@@ -166,21 +169,21 @@ a.remove {
 .teal-transform-panel .accordion .accordion-button,
 .teal-active-data-summary-panel .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
-  color: #fff;
+  color: var(--bs-white);
 }
 .teal-transform-panel .accordion .accordion-button:hover,
 .teal-active-data-summary-panel .accordion .accordion-button:hover {
   background-color: rgba(var(--bs-primary-rgb), 0.75);
-  color: #fff;
+  color: var(--bs-white);
 }
 
 .teal-transform-panel .accordion-body .accordion .accordion-button {
   background-color: rgba(var(--bs-primary-rgb), 1);
-  color: #fff;
+  color: var(--bs-white);
 }
 .teal-transform-panel .accordion-body .accordion .accordion-button:hover {
   background-color: rgba(var(--bs-primary-rgb), 0.75);
-  color: #fff;
+  color: var(--bs-white);
 }
 /* .teal-transform-panel .accordion .accordion-body,
 .teal-active-data-summary-panel .accordion .accordion-body {
@@ -202,7 +205,7 @@ a.remove {
 
 .sidebar-toggle-buttons .data-summary-toggle:hover {
   background: rgba(var(--bs-primary-rgb), 1);
-  color: white;
+  color: var(--bs-white);
 }
 
 .sidebar-toggle-buttons .data-transforms-toggle {
@@ -211,5 +214,5 @@ a.remove {
 
 .sidebar-toggle-buttons .data-transforms-toggle:hover {
   background: rgba(var(--bs-primary-rgb), 1);
-  color: white;
+  color: var(--bs-white);
 }
