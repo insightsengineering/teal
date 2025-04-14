@@ -86,9 +86,10 @@ srv_data_summary <- function(id, data) {
                 class = c("pull-right", "float-right", "text-secondary"),
                 style = "font-size: 0.8em;",
                 sprintf("And %s more unfilterable object(s)", sum(is_unsupported)),
-                icon(
-                  name = "far fa-circle-question",
-                  title = paste(
+                bslib::tooltip(
+                  trigger = icon(name = "far fa-circle-question"),
+                  options = list(trigger = "hover"),
+                  paste(
                     sep = "",
                     collapse = "\n",
                     shQuote(summary_table()[is_unsupported, "dataname"]),
