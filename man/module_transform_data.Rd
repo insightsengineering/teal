@@ -31,6 +31,10 @@ To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 \item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
+
+\item{data_module}{(\code{teal_data_module})}
+
+\item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and}
 }
 \value{
 \code{reactive} \code{teal_data}
