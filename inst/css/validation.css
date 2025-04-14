@@ -58,9 +58,14 @@
   display: none;
 }
 
+.validation-wrapper .validation-panel[disabled="disabled"] {
+  padding-top: 0;
+}
+
 .validation-wrapper .validation-panel[disabled="disabled"] .disabled-info {
   display: block;
-  border-color: var(--bs-info);
+  border: 1px solid var(--bs-info);
+  border-radius: 4px;
   padding: 1em;
   color: color-mix(in srgb, var(--bs-info), black 20%);
   background-color: color-mix(in srgb, var(--bs-info) 5%, transparent);

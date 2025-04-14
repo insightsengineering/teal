@@ -97,7 +97,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
           # Disable all elements if original data is not yet a teal_data
           observeEvent(data_original_handled(), {
-            (if (!inherits(data_original_handled(), "teal_data")) shinyjs::disable else shinyjs::enable)("wrapper_panel")
+            shinyjs::toggleState("wrapper_panel", condition = inherits(data_original_handled(), "teal_data"))
           })
 
           .call_once_when(inherits(data_previous(), "teal_data"), {
@@ -109,7 +109,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               data_handled()
               data_original_handled()
             }, {
-              if (!inherits(data_original_handled(), "teal_data")) {
+              if (inherits(data_original_handled(), "condition")) {
                 data_out(
                   within(
                     teal.code::qenv(),
@@ -121,6 +121,13 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
                 if (!identical(data_handled(), data_out())) {
                   data_out(data_handled())
                 }
+              } else {
+                data_out(
+                  within(
+                    teal.code::qenv(),
+                    stop("Error: cannot handle class ", paste(collapse(class(data_handled()))))
+                  )
+                )
               }
             })
 
