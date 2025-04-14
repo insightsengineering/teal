@@ -40,6 +40,8 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
           id = ns("wrapper"),
           class = "validation-wrapper",
           bslib::accordion_panel(
+            id = ns("wrapper_panel"),
+            class = "validation-panel",
             attr(data_mod, "label"),
             icon = bsicons::bs_icon("palette-fill"),
             tags$div(
@@ -95,7 +97,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
           # Disable all elements if original data is not yet a teal_data
           observeEvent(data_original_handled(), {
-            (if (!inherits(data_original_handled(), "teal_data")) shinyjs::disable else shinyjs::enable)("wrapper")
+            (if (!inherits(data_original_handled(), "teal_data")) shinyjs::disable else shinyjs::enable)("wrapper_panel")
           })
 
           .call_once_when(inherits(data_previous(), "teal_data"), {
@@ -170,9 +172,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
           })
 
           # Ignoring unwanted reactivity breaks during initialization
-          reactive({
-            req(data_out())
-          })
+          reactive(req(data_out()))
         })
       },
       x = names(transformators),

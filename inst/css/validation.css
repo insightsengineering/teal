@@ -48,17 +48,17 @@
   padding: 1em;
 }
 
-.validation-wrapper[disabled="disabled"] {
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) {
   --bs-accordion-bg: var(--bs-gray-100);
   background-color: var(--bs-gray-100);
 }
 
-.validation-wrapper[disabled="disabled"]:has(.shiny-output-error, .teal-output-warning) .disabled-info,
+.validation-wrapper:has(.validation-panel[disabled="disabled"] .shiny-output-error, .teal-output-warning) .disabled-info,
 .validation-wrapper .disabled-info {
   display: none;
 }
 
-.validation-wrapper[disabled="disabled"] .disabled-info {
+.validation-wrapper .validation-panel[disabled="disabled"] .disabled-info {
   display: block;
   border-color: var(--bs-info);
   padding: 1em;
