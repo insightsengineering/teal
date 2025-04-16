@@ -130,7 +130,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data") || rlang::is_condition(data_original_handled())) {
+              if (inherits(data_handled(), "teal_data") || inherits(data_original_handled(), "condition")) {
                 is_transform_failed[[name]] <- FALSE
               } else {
                 is_transform_failed[[name]] <- TRUE
