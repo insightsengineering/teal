@@ -359,8 +359,8 @@ srv_teal_module.teal_module <- function(id,
       })
 
       module_teal_data <- reactive({
-        req(inherits(transformed_teal_data(), "teal_data"))
-        all_teal_data <- transformed_teal_data()
+        all_teal_data <- tryCatch(transformed_teal_data(), error = function(e) e)
+        req(inherits(all_teal_data, "teal_data"))
         module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
         all_teal_data[c(module_datanames, ".raw_data")]
       })
