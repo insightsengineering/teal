@@ -97,7 +97,10 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
           # Disable all elements if original data is not yet a teal_data
           observeEvent(data_original_handled(), {
-            shinyjs::toggleState("wrapper_panel", condition = inherits(data_original_handled(), "teal_data"))
+            shinyjs::toggleState(
+              "wrapper_panel",
+              condition = inherits(data_original_handled(), "teal_data")
+            )
           })
 
           .call_once_when(inherits(data_previous(), "teal_data"), {
@@ -105,31 +108,25 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 
-            observeEvent({
-              data_handled()
-              data_original_handled()
-            }, {
-              if (inherits(data_original_handled(), "condition")) {
-                data_out(
-                  within(
-                    teal.code::qenv(),
-                    stop("Error with original data: ", message),
-                    message = data_original_handled()$message
-                  )
-                )
-              } else if (inherits(data_handled(), "teal_data")) {
-                if (!identical(data_handled(), data_out())) {
+            observeEvent(
+              {
+                data_handled()
+                data_original_handled()
+              },
+              {
+                if (inherits(data_original_handled(), "condition")) {
+                  data_out(data_original_handled())
+                } else if (inherits(data_handled(), "teal_data")) {
+                  if (!identical(data_handled(), data_out())) {
+                    data_out(data_handled())
+                  }
+                } else if (inherits(data_handled(), "condition")) {
+                  data_out(data_handled())
+                } else {
                   data_out(data_handled())
                 }
-              } else {
-                data_out(
-                  within(
-                    teal.code::qenv(),
-                    stop("Error: cannot handle class ", paste(collapse(class(data_handled()))))
-                  )
-                )
               }
-            })
+            )
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
@@ -154,6 +151,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             }
 
             # When there is no UI (`ui = NULL`) it should still show the errors
+            # It is a 1-way operation as there is no UI to correct the state
             observe({
               if (!inherits(data_handled(), "teal_data") && !is_previous_failed()) {
                 shinyjs::show("wrapper")
@@ -167,7 +165,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
                   "One of previous transformators failed. Please check its inputs.",
                   class = "teal-output-warning"
                 )
-              } else {
+              } else if (inherits(data_original_handled(), "teal_data")) {
                 shinyjs::enable(transform_wrapper_id)
                 shiny::tagList(
                   ui_validate_error(session$ns("silent_error")),
@@ -179,7 +177,10 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
           })
 
           # Ignoring unwanted reactivity breaks during initialization
-          reactive(req(data_out()))
+          reactive({
+            if (inherits(req(data_out()), "condition")) stop(data_out())
+            data_out()
+          })
         })
       },
       x = names(transformators),

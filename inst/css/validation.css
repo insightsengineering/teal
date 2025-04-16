@@ -53,7 +53,12 @@
   background-color: var(--bs-gray-100);
 }
 
-.validation-wrapper:has(.validation-panel[disabled="disabled"] .shiny-output-error, .teal-output-warning) .disabled-info,
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) .teal_validated,
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) .shiny-output-error,
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) .teal-output-warning {
+  display: none;
+}
+
 .validation-wrapper .disabled-info {
   display: none;
 }
