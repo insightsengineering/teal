@@ -19,7 +19,7 @@
 #'
 #' @export
 #'
-reporter_previewer_module <- function(label = "Report previewer", server_args = list()) {
+reporter_previewer_module <- function(label = "Report Previewer", server_args = list()) {
   checkmate::assert_string(label)
   checkmate::assert_list(server_args, names = "named")
   checkmate::assert_true(all(names(server_args) %in% names(formals(teal.reporter::reporter_previewer_srv))))
