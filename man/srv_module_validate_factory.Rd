@@ -39,9 +39,9 @@ check_error <- function(x, skip_on_empty_message = TRUE) {
 srv_module_validate_factory(check_error)
 
 check_numeric <- function(x, null.ok = FALSE) {
-  moduleServer("check_numeric", function(input, output, session)
+  moduleServer("check_numeric", function(input, output, session) {
     reactive(checkmate::check_numeric(x(), null.ok = null.ok))
-  )
+  })
 }
 srv_module_validate_factory(check_error, check_numeric)
 }

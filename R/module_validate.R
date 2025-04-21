@@ -25,9 +25,9 @@
 #' srv_module_validate_factory(check_error)
 #'
 #' check_numeric <- function(x, null.ok = FALSE) {
-#'   moduleServer("check_numeric", function(input, output, session)
+#'   moduleServer("check_numeric", function(input, output, session) {
 #'     reactive(checkmate::check_numeric(x(), null.ok = null.ok))
-#'   )
+#'   })
 #' }
 #' srv_module_validate_factory(check_error, check_numeric)
 #' @keywords internal
@@ -66,35 +66,39 @@ ui_module_validate <- function(id) {
 
 #' @keywords internal
 .validate_module_server <- function(check_calls, stop_on_first) {
-  condition <- if (stop_on_first)
+  condition <- if (stop_on_first) {
     quote(length(u) > 0 || isTRUE(v()) || is.null(v()))
-  else
+  } else {
     quote(isTRUE(v()) || is.null(v()))
-  module_server_body <- bquote({ # Template moduleServer that supports multiple checks
-    checkmate::assert_string(id) # Mandatory id parameter
-    top_level_x <- x
-    moduleServer(id, function(input, output, session) {
-      x <- reactive(tryCatch(top_level_x(), error = function(e) e))
-      collection <- list()
-      ..(check_calls) # Generates expressions: "collection <- append(collection, srv_module_check_xxxx(x))"
+  }
+  module_server_body <- bquote(
+    { # Template moduleServer that supports multiple checks
+      checkmate::assert_string(id) # Mandatory id parameter
+      top_level_x <- x
+      moduleServer(id, function(input, output, session) {
+        x <- reactive(tryCatch(top_level_x(), error = function(e) e))
+        collection <- list()
+        ..(check_calls) # Generates expressions: "collection <- append(collection, srv_module_check_xxxx(x))"
 
-      fun <- function(u, v) if (.(condition)) u else append(u, list(v()))
-      validate_r <- reactive(Reduce(fun, x = collection, init = list()))
-      has_errors <- reactiveVal(TRUE)
+        fun <- function(u, v) if (.(condition)) u else append(u, list(v()))
+        validate_r <- reactive(Reduce(fun, x = collection, init = list()))
+        has_errors <- reactiveVal(TRUE)
 
-      output$errors <- renderUI({
-        error_class <- c("shiny.silent.error", "validation", "error", "condition")
-        if (length(validate_r()) > 0) {
-          has_errors(FALSE)
-          tagList(!!!lapply(validate_r(), .render_output_condition))
-        } else {
-          has_errors(TRUE)
-          NULL
-        }
+        output$errors <- renderUI({
+          error_class <- c("shiny.silent.error", "validation", "error", "condition")
+          if (length(validate_r()) > 0) {
+            has_errors(FALSE)
+            tagList(!!!lapply(validate_r(), .render_output_condition))
+          } else {
+            has_errors(TRUE)
+            NULL
+          }
+        })
+        has_errors
       })
-      has_errors
-    })
-  }, splice = TRUE)
+    },
+    splice = TRUE
+  )
 }
 
 #' @keywords internal
@@ -225,7 +229,6 @@ srv_module_check_condition <- function(x) {
   moduleServer("check_error", function(input, output, session) {
     reactive({ # shiny.silent.errors are handled in a different module
       if (inherits(x(), "error") && !inherits(x(), "shiny.silent.error")) {
-        browser()
         tagList(
           tags$span("Error detected:"),
           tags$blockquote(tags$em(trimws(x()$message)))
