@@ -90,7 +90,7 @@ ui_snapshot_manager_panel <- function(id) {
   tags$button(
     id = ns("show_snapshot_manager"),
     class = "btn action-button wunder_bar_button",
-    title = "View filter mapping",
+    title = "View snapshot manager",
     suppressMessages(icon("fas fa-camera"))
   )
 }
