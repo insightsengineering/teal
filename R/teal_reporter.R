@@ -224,6 +224,13 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
             placeholder = "Add the card title here",
             width = "100%"
           ),
+          shiny::textAreaInput(
+            ns("comment"),
+            "Comment",
+            value = "",
+            placeholder = "Add a comment here...",
+            width = "100%"
+          ),
           shiny::tags$script(
             shiny::HTML(
               sprintf(
@@ -279,6 +286,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
       } else {
 
         card <- r_card_fun()
+        card <- teal.reporter::edit_report_document(card, append = input$comment, after = 0)
         #card <- to_markdown(card)
         lcard <- list(card)
         names(lcard) <- input$label
