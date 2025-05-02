@@ -223,8 +223,7 @@ init <- function(data,
           ),
           ui_teal(
             id = "teal",
-            modules = modules,
-            disable = is.null(reporter)
+            modules = modules
           ),
           tags$footer(
             id = "teal-footer",
@@ -234,7 +233,13 @@ init <- function(data,
         )
       },
       server = function(input, output, session) {
-        srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter), reporter = reporter)
+        srv_teal(
+          id = "teal",
+          data = data,
+          modules = modules,
+          filter = deep_copy_filter(filter),
+          reporter = reporter$clone(deep = TRUE)
+        )
         srv_session_info("teal-footer-session_info")
       }
     ),
