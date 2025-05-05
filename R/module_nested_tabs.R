@@ -399,19 +399,13 @@ srv_teal_module.teal_module <- function(id,
       })
 
       # Call modules.
-      if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- .call_once_when(
-          !is.null(module_teal_data()),
-          ignoreNULL = TRUE,
-          handlerExpr = {
-            module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-          }
-        )
-      } else {
-        # Report previewer must be initiated on app start for report cards to be included in bookmarks.
-        # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-        module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-      }
+      obs_module <- .call_once_when(
+        !is.null(module_teal_data()),
+        ignoreNULL = TRUE,
+        handlerExpr = {
+          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+        }
+      )
     })
 
     if (!is.null(reporter)) {

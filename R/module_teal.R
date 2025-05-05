@@ -48,13 +48,11 @@ NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id, modules, disable = FALSE) {
+ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
-
-  modules <- append_reporter_module(modules, disable = disable)
-
+  modules <- drop_module(modules, "teal_previewer_module")
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
@@ -110,9 +108,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
-
-  modules <- append_reporter_module(modules, disable = is.null(reporter))
-
+  modules <- append_reporter_module(modules)
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
@@ -183,8 +179,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       })
     }
 
-
-
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
       bslib::nav_insert(
@@ -217,7 +211,34 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       )
     }
 
-    if (!is.null(reporter)) reporter$set_id(attr(filter, "app_id"))
+    if (!is.null(reporter)) {
+      reporter$set_id(attr(filter, "app_id"))
+      reporter_module <- extract_module(modules, "teal_module_previewer")[[1]]
+      modules <- drop_module(modules, "teal_module_previewer")
+
+      # call once
+      do.call(
+        reporter_module$server,
+        args = c(list(id = "report_previewer", reporter = reporter), reporter_module$server_args)
+      )
+
+      previewer_ui <- do.call(
+        reporter_module$ui,
+        args = c(list(id = session$ns("report_previewer")), reporter_module$ui_args)
+      )
+
+      observeEvent(reporter$get_reactive_add_card(), {
+        if (reporter$get_reactive_add_card() > 0) {
+          bslib::nav_insert(
+            id = "teal_modules-active_tab",
+            nav = bslib::nav_panel(title = reporter_module$label, previewer_ui)
+          )
+        } else {
+          bslib::nav_remove(id = "teal_modules-active_tab", target = reporter_module$label)
+        }
+      })
+    }
+
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
