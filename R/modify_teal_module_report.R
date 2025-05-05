@@ -1,4 +1,3 @@
-
 # This function is just here, so it is easier to understand what's happening in
 # modify_teal_module_output.
 # We want to have a match in parameter names in new_server and original_server
@@ -11,9 +10,9 @@ modify_teal_module_output_named_params <- function(teal_module, modify_fun, outp
 
   original_server <- teal_module$server
   original_ui <- teal_module$ui
-  new_ui <- function(id, ...){
+  new_ui <- function(id, ...) {
     ns <- NS(id)
-    original_ui(ns('modified'), ...)
+    original_ui(ns("modified"), ...)
   }
 
   new_server <- function(id,
@@ -26,12 +25,10 @@ modify_teal_module_output_named_params <- function(teal_module, modify_fun, outp
                          plot_width,
                          ggplot2_args,
                          default_outlier_label,
-                         decorators)
-
+                         decorators) {
     moduleServer(id, function(input, output, session) {
-
       original_outputs <- original_server(
-        'modified',
+        "modified",
         data,
         filter_panel_api,
         response = response,
@@ -45,6 +42,7 @@ modify_teal_module_output_named_params <- function(teal_module, modify_fun, outp
       )
       # work on original_outputs
     })
+  }
 
   module(
     label = teal_module$label,
@@ -63,9 +61,9 @@ modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
 
   original_server <- teal_module$server
   original_ui <- teal_module$ui
-  new_ui <- function(id, ...){
+  new_ui <- function(id, ...) {
     ns <- NS(id)
-    original_ui(ns('modified'), ...)
+    original_ui(ns("modified"), ...)
   }
 
   original_server <- teal_module$server
@@ -73,19 +71,18 @@ modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
   formals(new_server) <- formals(original_server)
 
   body(new_server) <- quote({
-
     arg_names <- names(formals(original_server))
 
     # Capture current call and evaluate each argument
     call_expr <- match.call()
-    call_args <- as.list(call_expr)[-1]  # remove function name
+    call_args <- as.list(call_expr)[-1] # remove function name
     call_args <- call_args[names(call_args) %in% arg_names]
 
     # Evaluate all arguments in the current environment
     eval_args <- lapply(call_args, eval, envir = parent.frame())
 
     moduleServer(id, function(input, output, session) {
-      eval_args$id <- 'modified'
+      eval_args$id <- "modified"
       original_outputs <- do.call(original_server, eval_args)
       if (!output_name %in% names(original_outputs)) {
         stop(paste0("The provided teal_module does not return ", output_name))
@@ -98,7 +95,6 @@ modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
 
       named_modified_output <- setNames(list(modified_output), output_name)
       return(modifyList(original_outputs, named_modified_output))
-
     })
   })
 
@@ -114,14 +110,14 @@ modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
 }
 
 modify_teal_module_report_card <- function(teal_module, modify_fun) {
-  modify_teal_module_output(teal_module, modify_fun, output_name = 'report_card')
+  modify_teal_module_output(teal_module, modify_fun, output_name = "report_card")
 }
 
 nullify_teal_module_report_card <- function(teal_module) {
-  modify_teal_module_output(teal_module, modify_fun = function(report_card) NULL, output_name = 'report_card')
+  modify_teal_module_output(teal_module, modify_fun = function(report_card) NULL, output_name = "report_card")
 }
 
-disable_teal_module_report <- nullify_teal_module_report_card
+disable_report <- nullify_teal_module_report_card
 
 
 ############################################################## EXAMPLE
@@ -174,5 +170,3 @@ disable_teal_module_report <- nullify_teal_module_report_card
 # if (interactive()) {
 #   shinyApp(app$ui, app$server)
 # }
-
-
