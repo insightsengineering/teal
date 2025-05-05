@@ -185,7 +185,6 @@ init <- function(data,
   landing <- extract_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_landing")
 
-
   if (lifecycle::is_present(id)) {
     lifecycle::deprecate_soft(
       when = "0.16.0",
@@ -238,7 +237,7 @@ init <- function(data,
           data = data,
           modules = modules,
           filter = deep_copy_filter(filter),
-          reporter = reporter$clone(deep = TRUE)
+          reporter = if (!is.null(reporter)) reporter$clone(deep = TRUE)
         )
         srv_session_info("teal-footer-session_info")
       }
