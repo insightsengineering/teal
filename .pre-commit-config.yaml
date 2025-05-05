@@ -38,6 +38,10 @@ repos:
           - insightsengineering/teal.reporter
           - insightsengineering/teal.slice
           - insightsengineering/teal.widgets
+          - insightsengineering/rlistings
+          - insightsengineering/formatters
+          - insightsengineering/rtables
+          - insightsengineering/rtables.officer
           - utils
           - shinytest2 # Necessary for documentation
           - shinyvalidate # Necessary for documentation
