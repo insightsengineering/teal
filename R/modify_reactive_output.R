@@ -1,64 +1,11 @@
 # This function is just here, so it is easier to understand what's happening in
-# modify_teal_module_output.
+# modify_reactive_output
 # We want to have a match in parameter names in new_server and original_server
 # assuming we don't know names of parameters in original_server.
-# modify_teal_module_output is the final implementation that shows how to do it without knowing parameters.
-# modify_teal_module_output_named_params is just here to show how would that look like for a custom and stable
-# set of parameter names.
-modify_teal_module_output_named_params <- function(teal_module, modify_fun, output_name) {
-  stopifnot(inherits(teal_module, "teal_module"))
-
-  original_server <- teal_module$server
-  original_ui <- teal_module$ui
-  new_ui <- function(id, ...) {
-    ns <- NS(id)
-    original_ui(ns("modified"), ...)
-  }
-
-  new_server <- function(id,
-                         data,
-                         filter_panel_api,
-                         response,
-                         regressor,
-                         reporter,
-                         plot_height,
-                         plot_width,
-                         ggplot2_args,
-                         default_outlier_label,
-                         decorators) {
-    moduleServer(id, function(input, output, session) {
-      original_outputs <- original_server(
-        "modified",
-        data,
-        filter_panel_api,
-        response = response,
-        regressor = regressor,
-        reporter,
-        plot_height,
-        plot_width,
-        ggplot2_args,
-        default_outlier_label,
-        decorators
-      )
-      # work on original_outputs
-    })
-  }
-
-  module(
-    label = teal_module$label,
-    server = new_server,
-    ui = new_ui,
-    datanames = teal_module$datanames,
-    server_args = teal_module$server_args,
-    ui_args = teal_module$ui_args,
-    transformators = teal_module$transformators
-  )
-}
-
-
-modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
-  stopifnot(inherits(teal_module, "teal_module"))
-
+# modify_reactive_output is the final implementation that shows how to do it without knowing parameters.
+modify_reactive_output <- function(teal_module, ...) {
+  checkmate::assert_class(teal_module, "teal_module")
+  output_funs <- list(...)
   original_server <- teal_module$server
   original_ui <- teal_module$ui
   new_ui <- function(id, ...) {
@@ -84,17 +31,26 @@ modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
     moduleServer(id, function(input, output, session) {
       eval_args$id <- "modified"
       original_outputs <- do.call(original_server, eval_args)
-      if (!output_name %in% names(original_outputs)) {
-        stop(paste0("The provided teal_module does not return ", output_name))
+
+      missing_output_names <- setdiff(names(output_funs), names(original_outputs))
+      if (length(missing_output_names)) {
+        stop("The provided teal_module does not return: ", toString(missing_output_names))
       }
-      stopifnot(is.reactive(original_outputs[[output_name]]))
 
-      modified_output <- reactive({
-        modify_fun(original_outputs[[output_name]]())
-      })
+      modified_output <- sapply(
+        names(output_funs),
+        function(output_name) {
+          res <- if (is.reactive(original_outputs[[output_name]])) {
+            original_outputs[[output_name]]()
+          } else {
+            original_outputs[[output_name]]
+          }
+          output_funs[[output_name]](res)
+        },
+        USE.NAMES = TRUE
+      )
 
-      named_modified_output <- setNames(list(modified_output), output_name)
-      return(modifyList(original_outputs, named_modified_output))
+      return(modifyList(original_outputs, modified_output))
     })
   })
 
@@ -109,15 +65,13 @@ modify_teal_module_output <- function(teal_module, modify_fun, output_name) {
   )
 }
 
-modify_teal_module_report_card <- function(teal_module, modify_fun) {
-  modify_teal_module_output(teal_module, modify_fun, output_name = "report_card")
+modify_report_card <- function(teal_module, modify_fun) {
+  modify_reactive_output(teal_module, report_card = modify_fun)
 }
 
-nullify_teal_module_report_card <- function(teal_module) {
-  modify_teal_module_output(teal_module, modify_fun = function(report_card) NULL, output_name = "report_card")
+disable_report <- function(teal_module) {
+  modify_reactive_output(teal_module, report_card = function(report_card) NULL)
 }
-
-disable_report <- nullify_teal_module_report_card
 
 
 ############################################################## EXAMPLE

@@ -36,7 +36,7 @@ example_module <- function(label = "example teal module",
 
   ans <- module(
     label,
-    server = function(id, data, reporter, decorators) {
+    server = function(id, data, decorators) {
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
         datanames_rv <- reactive(names(req(data())))
