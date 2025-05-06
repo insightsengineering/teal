@@ -111,6 +111,8 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         class = "teal_validated",
         ui_check_module_datanames(ns("validate_datanames"))
       ),
+      uiOutput(ns("reporter_add_container")),
+      # uiOutput(ns("show_rcode_container")) # todo: same mechanism as for the reporter
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
@@ -207,11 +209,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         )
       } else {
         ui_teal
-      },
-      div( # todo: fix the position to the top right of the tab content?
-        uiOutput(ns("reporter_add_container"))
-        # uiOutput(ns("show_rcode_container")) # todo: same mechanism as for the reporter
-      )
+      }
     )
   )
 }
@@ -417,7 +415,10 @@ srv_teal_module.teal_module <- function(id,
 
       output$reporter_add_container <- renderUI({
         req(reporter_card_out())
-        teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+        tags$div(
+          class = "teal add-reporter-container",
+          teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+        )
       })
 
       add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
