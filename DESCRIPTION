@@ -107,6 +107,7 @@ Collate:
     'modules.R'
     'init.R'
     'landing_popup_module.R'
+    'modify_reactive_output.R'
     'module_bookmark_manager.R'
     'module_data_summary.R'
     'module_filter_data.R'

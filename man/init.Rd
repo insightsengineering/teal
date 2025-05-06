@@ -11,7 +11,8 @@ init(
   title = lifecycle::deprecated(),
   header = lifecycle::deprecated(),
   footer = lifecycle::deprecated(),
-  id = lifecycle::deprecated()
+  id = lifecycle::deprecated(),
+  reporter = teal.reporter::Reporter$new()
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ This parameter is no longer supported. Use \code{modify_footer()} on the teal ap
 a string specifying the \code{shiny} module id in cases it is used as a \code{shiny} module
 rather than a standalone \code{shiny} app.
 This parameter is no longer supported. Use \code{\link[=ui_teal]{ui_teal()}} and \code{\link[=srv_teal]{srv_teal()}} instead.}
+
+\item{reporter}{(\code{Reporter}) object used to store report contents. Set to \code{NULL} to globally disable reporting.}
 }
 \value{
 Named list containing server and UI functions.
