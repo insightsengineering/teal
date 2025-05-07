@@ -85,7 +85,7 @@ srv_teal_data_module <- function(id,
     })
 
     observeEvent(is_previous_failed(), {
-     if (is_previous_failed()) {
+      if (is_previous_failed()) {
         shinyjs::disable("wrapper")
       } else {
         shinyjs::enable("wrapper")
