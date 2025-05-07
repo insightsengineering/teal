@@ -111,7 +111,7 @@ ui_module_validate <- function(id) {
     ifelse(is_warning, "teal-output-warning", "shiny-output-error")
   )
 
-  if (!checkmate::test_character(cond)) {
+  if (checkmate::test_character(cond)) {
     html_class <- c(html_class, "prewrap-ws")
     cond <- lapply(cond, tags$p)
   }
