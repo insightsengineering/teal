@@ -91,7 +91,10 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
           # Disable all elements if original data is not yet a teal_data
           observeEvent(data_original_handled(), {
-            (if (!inherits(data_original_handled(), "teal_data")) shinyjs::disable else shinyjs::enable)("wrapper")
+            shinyjs::toggleState(
+              sprintf("wrapper_%s", name),
+              condition = inherits(data_original_handled(), "teal_data")
+            )
           })
 
           .call_once_when(inherits(data_previous(), "teal_data"), {
@@ -99,24 +102,27 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 
-            observeEvent({
-              data_handled()
-              data_original_handled()
-            }, {
-              if (!inherits(data_original_handled(), "teal_data")) {
-                data_out(
-                  within(
-                    teal.code::qenv(),
-                    stop("Error with original data: ", message),
-                    message = data_original_handled()$message
+            observeEvent(
+              {
+                data_handled()
+                data_original_handled()
+              },
+              {
+                if (!inherits(data_original_handled(), "teal_data")) {
+                  data_out(
+                    within(
+                      teal.code::qenv(),
+                      stop("Error with original data: ", message),
+                      message = data_original_handled()$message
+                    )
                   )
-                )
-              } else if (inherits(data_handled(), "teal_data")) {
-                if (!identical(data_handled(), data_out())) {
-                  data_out(data_handled())
+                } else if (inherits(data_handled(), "teal_data")) {
+                  if (!identical(data_handled(), data_out())) {
+                    data_out(data_handled())
+                  }
                 }
               }
-            })
+            )
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
@@ -150,7 +156,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
             })
             # Disable the UI elements in case of previous error
             observe({
-              (if (is_previous_failed()) shinyjs::disable else shinyjs::enable)("wrapper")
+              shinyjs::toggleState(sprintf("wrapper_%s", name), condition = !is_previous_failed())
             })
           })
 

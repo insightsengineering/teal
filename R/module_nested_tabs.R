@@ -350,7 +350,7 @@ srv_teal_module.teal_module <- function(id,
         message_warn = "One of the transformators failed. Please check its inputs."
       )
 
-      observe({ # Hide main module UI when there are errors with reactive teal_data
+      observe({ # Blur and disable main module UI when there are errors with reactive teal_data
         shinyjs::show("teal_module_ui")
         shinyjs::toggleClass("teal_module_ui", "blurred", condition = any_transform_failed())
         shinyjs::toggleState("teal_module_ui", condition = !any_transform_failed())
