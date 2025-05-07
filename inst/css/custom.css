@@ -16,10 +16,6 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   filter: blur(5px);
 }
 
-.blurred {
-  filter: blur(5px);
-}
-
 #shiny-modal.fade.in:has(.hide_background) {
   transition: background-color 0.3s;
 }

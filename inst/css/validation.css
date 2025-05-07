@@ -102,3 +102,9 @@
 }
 
 .teal_validated.previous-failed .teal-output-warning-previous { display: flex; }
+
+.blurred { filter: blur(5px); }
+.validation-wrapper:has(.shiny-output-error) {
+  border: 3px solid var(--bs-danger);
+  border-radius: var(--bs-accordion-border-radius);
+}
