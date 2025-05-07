@@ -284,17 +284,37 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           type = "error"
         )
       } else {
+        new_card_name <- trimws(input$label)
 
-        card <- r_card_fun()
-        card <- teal.reporter::edit_report_document(card, append = input$comment, after = 0)
-        #card <- to_markdown(card)
-        lcard <- list(card)
-        names(lcard) <- input$label
+        if (nchar(new_card_name) == 0) {
+          shiny::showNotification(
+            "Card name cannot be empty.",
+            type = "error",
+            duration = 5
+          )
+          return(NULL)
+        }
+        existing_card_names <- names(reporter$get_cards())
 
-        reporter$append_cards(lcard)
+        if (new_card_name %in% existing_card_names) {
+          shiny::showNotification(
+            paste("A card with the name '", new_card_name, "' already exists. Please use a different name."),
+            type = "error",
+            duration = 5
+          )
+        } else {
 
-        shiny::showNotification(sprintf("The card added successfully."), type = "message")
-        shiny::removeModal()
+          card <- r_card_fun()
+          card <- teal.reporter::edit_report_document(card, append = input$comment, after = 0)
+          #card <- to_markdown(card)
+          lcard <- list(card)
+          names(lcard) <- input$label
+
+          reporter$append_cards(lcard)
+
+          shiny::showNotification(sprintf("The card added successfully."), type = "message")
+          shiny::removeModal()
+        }
       }
     })
   })
