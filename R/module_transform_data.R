@@ -82,51 +82,28 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
   names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
   moduleServer(id, function(input, output, session) {
-    data_original_handled <- reactive(tryCatch(data(), error = function(e) e))
     module_output <- Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
           data_out <- reactiveVal()
 
-          # Disable all elements if original data is not yet a teal_data
-          observeEvent(data_original_handled(), {
-            shinyjs::toggleState(
-              sprintf("wrapper_%s", name),
-              condition = inherits(data_original_handled(), "teal_data")
-            )
-          })
-
           .call_once_when(inherits(data_previous(), "teal_data"), {
             logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 
-            observeEvent(
-              {
-                data_handled()
-                data_original_handled()
-              },
-              {
-                if (!inherits(data_original_handled(), "teal_data")) {
-                  data_out(
-                    within(
-                      teal.code::qenv(),
-                      stop("Error with original data: ", message),
-                      message = data_original_handled()$message
-                    )
-                  )
-                } else if (inherits(data_handled(), "teal_data")) {
-                  if (!identical(data_handled(), data_out())) {
-                    data_out(data_handled())
-                  }
+            observeEvent(data_handled(), {
+              if (inherits(data_handled(), "teal_data")) {
+                if (!identical(data_handled(), data_out())) {
+                  data_out(data_handled())
                 }
               }
-            )
+            })
 
             is_transform_failed[[name]] <- FALSE
             observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data") || rlang::is_condition(data_original_handled())) {
+              if (inherits(data_handled(), "teal_data")) {
                 is_transform_failed[[name]] <- FALSE
               } else {
                 is_transform_failed[[name]] <- TRUE
