@@ -83,7 +83,19 @@ example_module <- function(label = "example teal module",
           title = "Example Code"
         )
 
-        table_data_decorated
+        card_fun <- reactive({
+          req(table_data_decorated())
+          teal.reporter::report_document(
+            "## Table Data",
+            teal.reporter::code_chunk(
+              teal.code::get_code(table_data_decorated())
+            ),
+            table_data_decorated()[["object"]]
+          )
+        })
+        list(
+          report_card = card_fun
+        )
       })
     },
     ui = function(id, decorators) {
