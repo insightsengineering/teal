@@ -287,6 +287,8 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         new_card_name <- trimws(input$label)
 
         if (nchar(new_card_name) == 0) {
+          shiny::removeModal() # currently the save button is disabled and shinyjs::enable is not working
+          shiny::showModal(add_modal()) # so we show the modal again
           shiny::showNotification(
             "Card name cannot be empty.",
             type = "error",
@@ -297,6 +299,8 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         existing_card_names <- names(reporter$get_cards())
 
         if (new_card_name %in% existing_card_names) {
+          shiny::removeModal() # currently the save button is disabled and shinyjs::enable is not working
+          shiny::showModal(add_modal()) # so we show the modal again
           shiny::showNotification(
             paste("A card with the name '", new_card_name, "' already exists. Please use a different name."),
             type = "error",
