@@ -40,12 +40,15 @@ modify_reactive_output <- function(teal_module, ...) {
       modified_output <- sapply(
         names(output_funs),
         function(output_name) {
-          res <- if (is.reactive(original_outputs[[output_name]])) {
-            original_outputs[[output_name]]()
+          if (is.reactive(original_outputs[[output_name]])) {
+            reactive({
+              res <- original_outputs[[output_name]]()
+              output_funs[[output_name]](res)
+            })
           } else {
-            original_outputs[[output_name]]
+            res <- original_outputs[[output_name]]
+            output_funs[[output_name]](res)
           }
-          output_funs[[output_name]](res)
         },
         USE.NAMES = TRUE
       )
