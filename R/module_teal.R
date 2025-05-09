@@ -97,7 +97,7 @@ ui_teal <- function(id, modules) {
         )
       )
     ),
-    tags$hr()
+    tags$hr(style = "margin: 1rem 0 0.5rem 0;")
   )
 }
 
