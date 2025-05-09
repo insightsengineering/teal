@@ -1,49 +1,110 @@
-/* adding boarder to the validated input */
+.teal_validated:has(.shiny-output-error, .teal-output-warning) { padding: 1em; }
+.sidebar .teal_validated { padding: 0.2em; }
+
+.validation-wrapper {
+  --bs-accordion-body-padding-y: 0 1rem;
+}
+
+.validation-wrapper[disabled="disabled"] {
+  --bs-accordion-bg: var(--bs-gray-100);
+  background-color: var(--bs-gray-100);
+}
+
+.validation-wrapper[disabled="disabled"]:has(.shiny-output-error, .teal-output-warning) .disabled-info,
+.validation-wrapper .disabled-info {
+  display: none;
+}
+
+.validation-wrapper[disabled="disabled"] .disabled-info {
+  display: block;
+  border-color: var(--bs-info);
+  padding: 1em;
+  color: color-mix(in srgb, var(--bs-info), black 20%);
+  background-color: color-mix(in srgb, var(--bs-info) 5%, transparent);
+}
+
+.teal_validated:has(.shiny-output-error),
+.teal_validated:has(.teal-output-warning),
+.teal_validated:has(.teal-output-warning-previous),
+.validation-wrapper .disabled-info{
+  border: solid 1px transparent;
+  border-radius: 4px;
+}
+
 .teal_validated:has(.shiny-output-error) {
-  border: 1px solid red;
-  border-radius: 4px;
+  color: color-mix(in srgb, var(--bs-danger), black 20%);
+  border-color: var(--bs-danger);
+  background-color: color-mix(in srgb, var(--bs-danger) 5%, transparent);
 }
 
-.teal_validated:has(.teal-output-warning) {
-  border: 1px solid orange;
-  border-radius: 4px;
+.teal_validated:has(.teal-output-warning),
+.teal_validated.previous-failed:has(.teal-output-warning-previous) {
+  color: color-mix(in srgb, var(--bs-warning), black 50%);
+  border-color: var(--bs-warning)
+  background-color: color-mix(in srgb, var(--bs-warning) 5%, transparent);
 }
 
-.teal_validated .teal-output-warning {
-  color: #888;
+.validation-wrapper .accordion-item:has(.teal_validated.previous-failed) {
+  background-color: var(--bs-gray-100);
+  color: var(--bs-gray-600)
 }
+
+.teal-output-condition { white-space: normal; }
+.teal-output-condition .prewrap-ws { white-space: pre-wrap; }
 
 .teal_validated .shiny-output-error,
-.teal_validated .teal-output-warning {
-  margin-top: 0.5em;
+.teal_validated .teal-output-warning,
+.teal_validated.previous-failed .teal-output-warning-previous {
+  display: flex;
+  margin: 0 0 0 0;
 }
 
-.teal_validated .teal-output-warning::before {
+.sidebar .teal_validated .shiny-output-error,
+.sidebar .teal_validated .teal-output-warning,
+.sidebar .teal_validated.previous-failed .teal-output-warning-previous {
+  display: flex;
+  margin: 0.2em 0 0.2em 0;
+}
+
+.teal_validated .shiny-output-error > div,
+.teal_validated .teal-output-warning > div,
+.teal_validated.previous-failed .teal-output-warning-previous > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.teal_validated .teal-output-warning::before,
+.teal_validated .teal-output-warning-previous::before {
   content: "\26A0\FE0F";
+  padding: 0 0.3em 0 0.3em;
 }
 
 .teal_validated .shiny-output-error::before {
   content: "\1F6A8";
+  padding: 0 0.3em 0 0.3em;
 }
 
-.teal_primary_col .shiny-output-error::before {
-  content: "\1F6A8";
+.code-error { margin-left: 1em; }
+.sidebar .code-error { margin-left: 0.3em; }
+
+.teal-sidebar .teal-output-condition blockcode,
+.teal-sidebar .teal-output-condition .code-error {
+  padding-left: 0;
+  margin-left: 0;
 }
 
-.teal_primary_col .teal-output-warning::before {
-  content: "\26A0\FE0F";
+.teal_validated p { margin-bottom: 0; }
+
+.teal_validated.previous-failed .messages,
+.teal_validated .teal-output-warning-previous {
+  display: none;
 }
 
-.teal_primary_col .teal_validated:has(.shiny-output-error),
-.teal_primary_col .teal_validated:has(.teal-output-warning) {
-  margin: 1em 0 1em 0;
-  padding: 0.5em 0 0.5em 0.5em;
-}
+.teal_validated.previous-failed .teal-output-warning-previous { display: flex; }
 
-.teal_primary_col > .teal_validated:has(.teal-output-warning),
-.teal_primary_col > .teal_validated:has(.shiny-output-error) {
-  width: 100%;
-  background-color: rgba(223, 70, 97, 0.1);
-  border: 1px solid red;
-  padding: 1em;
+.blurred { filter: blur(5px); }
+.validation-wrapper:has(.shiny-output-error) {
+  border: 3px solid var(--bs-danger);
+  border-radius: var(--bs-accordion-border-radius);
 }
