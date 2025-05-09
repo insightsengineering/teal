@@ -72,7 +72,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
 
 #' @export
 #' @rdname module_transform_data
-srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
+srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
@@ -128,20 +128,9 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
               }
             )
 
-            is_transform_failed[[name]] <- FALSE
-            observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data") || inherits(data_original_handled(), "condition")) {
-                is_transform_failed[[name]] <- FALSE
-              } else {
-                is_transform_failed[[name]] <- TRUE
-              }
-            })
-
             is_previous_failed <- reactive({
-              idx_this <- which(names(is_transform_failed) == name)
-              is_transform_failed_list <- reactiveValuesToList(is_transform_failed)
-              idx_failures <- which(unlist(is_transform_failed_list))
-              any(idx_failures < idx_this)
+              inherits(data_original_handled(), "teal_data") &&
+                !inherits(try(data_previous(), silent = TRUE), "teal_data")
             })
 
             srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
@@ -178,7 +167,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
           # Ignoring unwanted reactivity breaks during initialization
           reactive({
-            if (inherits(req(data_out()), "condition")) stop(data_out())
+            validate(need(inherits(data_out(), "teal_data"), message = data_out()$message)) # rethrow message
             data_out()
           })
         })

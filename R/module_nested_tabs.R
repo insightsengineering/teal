@@ -336,33 +336,26 @@ srv_teal_module.teal_module <- function(id,
         data = data,
         is_active = is_active
       )
-      is_transform_failed <- reactiveValues()
       transformed_teal_data <- srv_transform_teal_data(
         "data_transform",
         data = filtered_teal_data,
         transformators = modules$transformators,
-        modules = modules,
-        is_transform_failed = is_transform_failed
+        modules = modules
       )
       any_transform_failed <- reactive({
-        any(unlist(reactiveValuesToList(is_transform_failed)))
+        !inherits(try(transformed_teal_data(), silent = TRUE), "teal_data") &&
+          inherits(filtered_teal_data(), "teal_data")
       })
 
       observeEvent(any_transform_failed(), {
-        if (isTRUE(any_transform_failed())) {
-          shinyjs::hide("teal_module_ui")
-          shinyjs::show("transform_failure_info")
-        } else {
-          shinyjs::show("teal_module_ui")
-          shinyjs::hide("transform_failure_info")
-        }
+        shinyjs::toggleElement("transform_failure_info", condition = any_transform_failed())
       })
 
-      module_teal_data <- reactive({
-        all_teal_data <- tryCatch(transformed_teal_data(), error = function(e) e)
-        req(inherits(all_teal_data, "teal_data"))
-        module_datanames <- .resolve_module_datanames(data = all_teal_data, modules = modules)
-        all_teal_data[c(module_datanames, ".raw_data")]
+      summary_data <- reactiveVal(NULL)
+      module_teal_data <- eventReactive(transformed_teal_data(), {
+        module_datanames <- .resolve_module_datanames(data = transformed_teal_data(), modules = modules)
+        summary_data(transformed_teal_data()[c(module_datanames, ".raw_data")])
+        summary_data()
       })
 
       srv_check_module_datanames(
@@ -371,7 +364,7 @@ srv_teal_module.teal_module <- function(id,
         modules = modules
       )
 
-      summary_table <- srv_data_summary("data_summary", module_teal_data)
+      summary_table <- srv_data_summary("data_summary", summary_data) # Only updates on success
 
       observeEvent(input$data_summary_toggle, {
         bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
