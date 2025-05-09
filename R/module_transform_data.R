@@ -91,9 +91,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
-
           data_out <- reactiveVal()
-          transform_wrapper_id <- sprintf("wrapper_%s", name)
 
           # Disable all elements if original data is not yet a teal_data
           observeEvent(data_original_handled(), {
@@ -120,8 +118,6 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
                   if (!identical(data_handled(), data_out())) {
                     data_out(data_handled())
                   }
-                } else if (inherits(data_handled(), "condition")) {
-                  data_out(data_handled())
                 } else {
                   data_out(data_handled())
                 }
@@ -147,6 +143,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
               }
             })
 
+            transform_wrapper_id <- sprintf("wrapper_%s", name)
             output$error_wrapper <- renderUI({
               if (is_previous_failed()) {
                 shinyjs::disable(transform_wrapper_id)
@@ -167,7 +164,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
 
           # Ignoring unwanted reactivity breaks during initialization
           reactive({
-            validate(need(inherits(data_out(), "teal_data"), message = data_out()$message)) # rethrow message
+            validate(need(!inherits(data_out(), "condition"), message = data_out()$message)) # rethrow message
             data_out()
           })
         })
