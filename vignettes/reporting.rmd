@@ -235,8 +235,6 @@ Here's a summary of typical changes required within a `teal` module to adapt to 
 4.  **Simplified Conditional Logic**:
     *   If a module conditionally added content (e.g., a plot only if a checkbox was ticked), this logic now translates to conditionally including an item in the list passed to `report_document()`.
 
-5.  **Return the `ReportDocument`**:
-    *   The module's server function, when handling the "add to report" action, will now return this `ReportDocument` object (the list). `teal`'s `add_document_button_srv` (or similar mechanisms) will then take this `ReportDocument` and add it to the central `Reporter` instance.
 
 6.  **Return report_card as reactive in server**: 
     *  The `ReportDocument` should be returned as a reactive object in the server function of the module, wrapped in a names list under `report_card` name.
