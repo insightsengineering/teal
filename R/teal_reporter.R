@@ -305,10 +305,9 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           )
           shinyjs::enable("add_card_ok")
         } else {
-
           card <- r_card_fun()
           card <- teal.reporter::edit_report_document(card, append = input$comment, after = 0)
-          #card <- to_markdown(card)
+          # card <- to_markdown(card)
           lcard <- list(card)
           names(lcard) <- input$label
 
@@ -321,4 +320,3 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
     })
   })
 }
-
