@@ -1,0 +1,396 @@
+---
+title: "New reporting in teal"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3 
+vignette: >
+  %\VignetteIndexEntry{New reporting in teal}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This document outlines a significant refactor of `teal.reporter` and accompanying enhancements in the `teal` framework for improved reporting functionalities.
+
+The primary goals of enhanced reporting were to:`
+
+*   Address limited customization capabilities of the previous `ReportCard` system, which was tightly integrated with `teal` module programming, making user modifications difficult.
+*   Resolve reproducibility challenges associated with the existing `teal.reporter` (see [teal.reporter issue #280](https://github.com/insightsengineering/teal.reporter/issues/280)).
+*   Incorporate solutions for enabling and disabling reporter functions globally and for single modules.
+*   Allow to customize report cards without modifying the `teal` module programming, thus enabling users to create their own report cards (and edit existing ones).
+*   Ensure that the new reporting system is lightweight and does not consume excessive disk space, especially for bookmarking purposes.
+*   Maintain or improve existing functionalities, including the ability to generate fully reproducible reports.
+*   Provide a more flexible and scalable design that can adapt to future needs (Editor module can be extended for new R classes).
+*   Export Editor functionality to allow users to edit report cards directly in the UI.
+*   Introduce a new feature to disable the reporter functionality for one or multiple `teal` modules. 
+*   Improve the user experience by providing a more intuitive interface for report generation and customization (changes in Reporter Previewer UI).
+*   Ensure that the new system is compatible with existing `teal` modules and does not break any existing functionality.
+
+To summarize, the refactor aimed for a more flexible and scalable design, ensuring that the new system supports bookmarking without excessive disk space, allows report card customization without altering `teal` module programming, 
+generates fully reproducible reports, and maintains or improves existing functionalities. Additionally, a key new feature is the ability for users to disable the reporter functionality for one or multiple `teal` modules.
+
+## Key Changes and New Features
+
+### 1. `teal.reporter` - introducing `ReportDocument`
+
+The core of the `teal.reporter` refactor is the introduction of `ReportDocument`, a new S3 class designed to replace the previous R6-based `ReportCard` system.
+
+*   **Motivation**: The `ReportCard` system faced limitations in customization, reproducibility, and storage efficiency. The new `ReportDocument` aims to overcome these by providing a simpler, more flexible, and lightweight approach to report generation.
+
+*   **`ReportDocument`**:
+    *   **Advantages**:
+        *   **Simplified creation**: Implemented as an S3 list, `ReportDocument` is inherently easier to create and manage compared to the R6 `ReportCard`.
+        *   **Reduced storage size**: Being an S3 list, it avoids the overhead of storing methods and parent class environments associated with R6 objects, leading to smaller disk space usage, especially beneficial for bookmarking.
+        *   **Flexible modifications**: `ReportDocument` supports easier reordering, subsetting, and editing of report content, both at the module development level and by the end-user in the Reporter Previewer tab.
+    *   **Creation**: The primary function for creating a `ReportDocument` is `report_document()`. It can store various elements like characters (for text/markdown), data frames, plots, and code blocks.
+    *   **Manipulation**: Standard list operations can be used. Additionally, `c.ReportDocument` and `[.ReportDocument` methods are provided. For robust editing, `edit_report_document()` allows modification and appending while preserving the `ReportDocument` class.
+
+*   **Technical Flow**:
+    1.  **Adding a `ReportDocument`**: When the `Add to Reporter` button (from `teal::add_document_button_srv`) is clicked within a `teal` module, a `ReportDocument` is created and added to the `Reporter`'s list of cards.
+    2.  **Previewing a Report**: Opening the "Report Preview(er)" tab triggers `reporter_previewer_srv`. This server function converts the `ReportDocument` elements into HTML for display using `toHTML`.
+    3.  **Downloading a Report**: Clicking "Download Report" in the previewer executes `report_render_and_compress`. This function uses the `Renderer` to generate an `.Rmd` file from the `ReportDocument` objects. The output is a `.zip` file containing the `.Rmd` report and a JSON file (for restoring the report).
+    4.  **Loading a Report**: Clicking "Load Report" clears the current report and restores it from the JSON file contained within an uploaded `.zip` archive.
+    5.  **Editing a `ReportDocument`**: Users can click an "Edit" button associated with a `ReportDocument` card in the previewer to modify its text elements. Custom edit functionalities can be specified for different content classes.
+
+*   **UI Differences**:
+    *   The only module-specific button for reporting is now "Add Card to Report".
+    *   Global "Load Report", "Reset Report", and "Download Report" buttons are available in the Report Previewer.
+    *   The download report encoding panel has been removed from the Report Previewer. It is now accessible via the "Download Report" button, which opens a modal dialog for encoding selection. This change was made to simplify the UI and reduce clutter.
+
+### 2. Enhancements in `teal` for Reporter Integration
+
+Several enhancements have been made to the `teal` framework to support and leverage the new `teal.reporter` design.
+
+*   **Global Reporter Control**:
+    *   The reporter functionality can be disabled globally by setting `reporter = NULL` in the `init()` function.
+    ```r
+    app_no_reporter <- init(
+      data = within(teal_data(), {iris <- iris}),
+      modules = example_module(label = "example teal module"),
+      reporter = NULL
+    )
+    ```
+
+*   **Module-Level Reporter Control**:
+    *   The reporter's "Add Card to Report" button can be disabled for individual modules using `disable_report()`.
+    ```r
+    app_mixed_reporter <- init(
+      data = within(teal_data(), {iris <- iris}),
+      modules = modules(
+        example_module(label = "module with reporter"),
+        example_module(label = "module without reporter") |> disable_report()
+      )
+    )
+    ```
+
+*   **Custom Report Templates**:
+    *   App developers can define a template function using `reporter$set_template()`. This function is applied to each `ReportDocument` when it's added, allowing for consistent prepending or appending of content (e.g., disclaimers) to all cards.
+    ```r
+    reporter_with_template <- teal.reporter::Reporter$new()
+    template_fun <- function(document) {
+      disclaimer <- teal.reporter::report_document("Here comes disclaimer text")
+      c(disclaimer, document)
+    }
+    reporter_with_template$set_template(template_fun)
+
+    app_with_template <- init(
+      data = within(teal_data(), {iris <- iris}),
+      modules = example_module(label = "example teal module"),
+      reporter = reporter_with_template
+    )
+    ```
+    *   It's also possible to initialize `teal` with a `Reporter` object that already contains cards.
+    ```r
+    reporter_with_card <- teal.reporter::Reporter$new()
+    doc1 <- teal.reporter::report_document("## Header 2 text", "Regular text")
+    reporter_with_card$append_cards(setNames(list(doc1), "Welcome card"))
+
+    app_with_initial_card <- init(
+      data = within(teal_data(), {iris <- iris}),
+      modules = example_module(label = "example teal module"),
+      reporter = reporter_with_card
+    )
+    ```
+
+*   **Modifying Module Output for Reports**:
+    *   The introduction of `modify_reactive_output()` allows developers to programmatically alter or disable report cards generated by modules. This provides fine-grained control over what is reported. Further documentation and a dedicated vignette for `modify_report_output()` are planned: TODO.
+
+
+### 3. Impact on Reproducibility and Code Display
+
+A significant focus of the refactor was to enhance reproducibility and the clarity of code presented in reports.
+
+*   **Reproducibility**: The new design with `ReportDocument` and the refactored download/upload process aims to ensure that reports are fully reproducible.
+*   **Code Display**: Enhancements to `teal.code::eval_code` and `teal.code::get_code` now support code labelling, improving how R code is captured and displayed in the generated reports.
+
+## Code Examples of `ReportDocument` Manipulation
+
+The `ReportDocument` is designed for ease of use. Here are examples demonstrating its creation and manipulation:
+
+```{r example_report_document_manipulation, eval = FALSE}
+library(teal.reporter)
+
+# Create an empty ReportDocument
+report_doc <- report_document()
+class(report_doc)
+#> [1] "ReportDocument"
+
+# Add content using c() - note ReportDocument should be the first argument for S3 dispatch
+report_doc <- c(report_doc, list("## Headline"), list("## Table"), list(summary(iris)))
+# Or use the report_document() function directly
+# report_doc <- c(report_doc, report_document("## Headline", "## Table", summary(iris)))
+
+# Subset the ReportDocument
+report_doc <- report_doc[1:2] # Keeps only the first two elements (Headline and Table header)
+
+# Append content at a specific position
+report_doc <- append(report_doc, c(list("## Table 2"), list(summary(mtcars))), after = 1)
+class(report_doc) # Class is preserved
+#> [1] "ReportDocument"
+
+report_doc2 <- report_document(1, 2, "c")
+new_report_doc2 <- edit_report_document(report_doc2, modify = c(3, 1), append = "d")
+new_report_doc2
+#> [[1]]
+#> [1] "c"
+#>
+#> [[2]]
+#> [1] 1
+#>
+#> [[3]]
+#> [1] "d"
+#>
+#> attr(,"class")
+#> [1] "ReportDocument"
+class(new_report_doc2)
+#> [1] "ReportDocument"
+```
+
+TODO: maybe do not use `edit_report_document()` in the example, but rather show how to use `c()` and `render_document()` directly. Then we can remove the `edit_report_document()` function.
+
+## Deprecations
+
+As a result of this refactor, the following R6 classes in `teal.reporter` are deprecated and will be removed after a suitable period:
+
+*   `ReportCard.R`
+*   `ContentBlock.R`
+*   `FileBlock.R`
+*   `HTMLBlock.R`
+*   `NewpageBlock.R`
+*   `PictureBlock.R`
+*   `RcodeBlock.R`
+*   `TableBlock.R`
+*   `TextBlock.R`
+
+
+## Adapting `teal` Modules to Use `ReportDocument`
+
+The refactor simplifies how `teal` modules interact with the reporting mechanism. 
+Developers no longer need to be concerned with the internal R6 structures of `teal.reporter`, `teal::report_card_template`, or specific `ReportCard` methods like `set_name`, `append_text`, etc. 
+The focus shifts to creating lists of content that form the `ReportDocument`.
+
+The transition from the old `ReportCard` system to the new `ReportDocument` simplifies how modules prepare content for reporting.
+Here's a summary of typical changes required within a `teal` module to adapt to the new reporting system:
+
+1.  **Remove `ReportCard` Object Instantiation**:
+    *   Previously, a module would start by creating a `ReportCard` object: `card <- ReportCard$new()`. This is no longer needed.
+
+2.  **Replace `ReportCard` Methods with Direct Content Creation**:
+    *   Instead of using methods like `card$set_name("Card Title")`, `card$append_text("Some text")`, `card$append_plot(my_plot)`, `card$append_table(my_table)`, or `card$append_src("R_code")`, modules now construct a list of these elements directly.
+
+3.  **Use `report_document()`**:
+    *   The list of content items is then passed to `teal.reporter::report_document()`. For example:
+        ```r
+        # Old way
+        # card <- ReportCard$new()
+        # card$set_name("My Analysis Report")
+        # card$append_text("## Analysis Results")
+        # card$append_text("This is a summary of the analysis.")
+        # card$append_plot(my_ggplot)
+        # card$append_table(my_summary_table)
+        # card$append_src(code_string)
+
+        # New way
+        my_report_content <- teal.reporter::report_document(
+          "## Analysis Results", # Title as markdown
+          "This is a summary of the analysis.", # Text as markdown
+          my_ggplot, # The plot object itself
+          my_summary_table, # The table object itself
+          teal.reporter::code_chunk(code_string) # The code string
+        )
+        # The card name ("My Analysis Report" in the old example) is now typically
+        # set when this `my_report_content` is added to the reporter by `teal`,
+        # often derived from the `card_name` argument in `module_output_srv`.
+        ```
+
+4.  **Simplified Conditional Logic**:
+    *   If a module conditionally added content (e.g., a plot only if a checkbox was ticked), this logic now translates to conditionally including an item in the list passed to `report_document()`.
+
+5.  **Return the `ReportDocument`**:
+    *   The module's server function, when handling the "add to report" action, will now return this `ReportDocument` object (the list). `teal`'s `add_document_button_srv` (or similar mechanisms) will then take this `ReportDocument` and add it to the central `Reporter` instance.
+
+6.  **Return report_card as reactive in server**: 
+    *  The `ReportDocument` should be returned as a reactive object in the server function of the module, wrapped in a names list under `report_card` name.
+    ```r
+    module_server <- function(input, output, session) {
+      report_card <- reactive({
+        my_report_content <- teal.reporter::report_document(
+          "## Analysis Results",
+          "This is a summary of the analysis.",
+          my_ggplot,
+          my_summary_table,
+          teal.reporter::code_chunk(code_string)
+        )     
+      })
+      return(list(report_card = report_card))
+    }
+    ```
+    * This allows to apply the `modify_reactive_output()` function to the report card, enabling further customization and control over what is included in the final report.
+
+7.  **No Need for `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`**:
+    *   The `simple_reporter_ui` and `simple_reporter_srv` functions are no longer necessary. The new system is designed to be more intuitive and user-friendly, allowing developers to focus on the content rather than the underlying structure.
+
+In essence, module developers no longer need to interact with the `ReportCard` R6 class. 
+Instead, they prepare a simple R list containing all the elements (markdown text, plots, tables, code strings) that should appear on the report card. 
+This list is then wrapped with `report_document()` to ensure it has the correct class, making the process more straightforward and aligned with standard R data structures.
+
+
+## Example: A Simple `teal` Module with `ReportDocument`
+
+Let's create a basic `teal` module that generates a `ReportDocument`. This module will have a simple UI and a server function that prepares content for reporting.
+
+```{r example_module_definition, eval = FALSE}
+library(shiny)
+library(teal)
+library(teal.reporter) # For report_document and code_chunk
+library(ggplot2)
+
+example_module_reporting_ui <- function(id) {
+  ns <- NS(id)
+  div(
+    h4("Simple Module Output"),
+    plotOutput(ns("plot"))
+  )
+}
+
+example_module_reporting_srv <- function(id, data) {
+  moduleServer(id, function(input, output, session) {
+    current_plot <- reactive({
+      ggplot(data[["ADSL"]], aes(x = AGE, y = BMRKR1)) +
+        geom_point() +
+        labs(title = "Age vs. Biomarker 1")
+    })
+
+    output$plot <- renderPlot({
+      current_plot()
+    })
+
+    # Prepare the ReportDocument - this must be a reactive
+    report_card_content <- reactive({
+      code_str <-
+        "ggplot(ADSL, aes(x = AGE, y = BMRKR1)) + geom_point() + labs(title = \"Age vs. Biomarker 1 (Report)\")"
+
+      teal.reporter::report_document(
+        "## Scatter Plot: Age vs. Biomarker 1",
+        "This plot shows the relationship between Age and Biomarker 1 from the ADSL dataset.",
+        current_plot(),
+        teal.reporter::code_chunk(code_str)
+      )
+    })
+
+    # Return the reactive ReportDocument, named 'report_card'
+    list(
+      report_card = report_card_content
+    )
+  })
+}
+
+example_module_reporting <-
+  teal::module(
+    label = "Reporting example module",
+    server = example_module_reporting_srv,
+    ui = example_module_reporting_ui
+  )
+
+adsl_data <- data.frame(
+  USUBJID = paste0("S", 1:10),
+  AGE = round(rnorm(10, 50, 5)),
+  BMRKR1 = rnorm(10, 10, 2),
+  stringsAsFactors = FALSE
+)
+
+example_teal_data <- within(teal_data(), {
+  ADSL <- adsl_data
+})
+
+app <- teal::init(
+  data = example_teal_data,
+  modules = example_module_reporting()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+This module, when integrated into a `teal` app, will display a plot and an "Add Card to Report" button. 
+When the button is clicked, the `ReportDocument` defined in `report_card_content` will be sent to the reporter.
+When accesing the "Report Previewer" tab, the report will include the plot and the code used to generate it.
+
+## Example: `teal` App with Predefined `Reporter` and `modify_reactive_output`
+
+Now, let's create a `teal` Shiny app that uses the `example_module_ui` and `example_module_srv` defined above. This app will:
+1.  Initialize a `Reporter` object with a custom welcome card.
+2.  Use `modify_reactive_output` to add a disclaimer to the report card generated by our `example_module_srv`.
+
+```{r example_app_with_modification, eval = FALSE}
+# 1. Create a predefined Reporter object
+my_reporter <- teal.reporter::Reporter$new()
+welcome_doc <- teal.reporter::report_document(
+  "## Welcome to the Custom Report!",
+  "This report is generated by a teal application with a predefined reporter."
+)
+my_reporter$append_cards(list("Welcome" = welcome_doc))
+
+
+# 2. Define the teal module with a modification
+#    The modify_reactive_output to is applied to the server function of the module
+modified_example_module_reporting <- example_module_reporting |>
+  modify_reactive_output(report_card = function(card) {
+    disclaimer_doc_elements <- teal.reporter::report_document(
+      "**Disclaimer**: This plot is for illustrative purposes only and has been modified."
+    )
+    c(card, disclaimer_doc_elements)
+  })
+
+# 3. Initialize the teal app
+app <- init(
+  data = example_teal_data,
+  modules = modules(
+    modified_example_module_reporting
+  ),
+  reporter = my_reporter # Pass the predefined reporter
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+In this app:
+
+*   The reporter will start with a "Welcome" card.
+*   When you add the card from "My Analysis Module", the `modify_reactive_output` function will intercept the `ReportDocument` that `example_module_reporting_srv` would normally produce.
+*   It will then append the disclaimer text to the content originally generated by `example_module_reporting_srv` before it's added to the reporter's list of cards.
+
+This demonstrates how to customize reporter behavior at the app level and modify module outputs without changing the module's source code directly.
+
