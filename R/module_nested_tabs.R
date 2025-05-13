@@ -111,8 +111,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         class = "teal_validated",
         ui_check_module_datanames(ns("validate_datanames"))
       ),
-      uiOutput(ns("reporter_add_container")),
-      # uiOutput(ns("show_rcode_container")) # todo: same mechanism as for the reporter
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
@@ -120,6 +118,8 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   div(
     id = id,
     class = "teal_module",
+    uiOutput(ns("reporter_add_container")),
+    # uiOutput(ns("show_rcode_container")), # todo: same mechanism as for the reporter
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) tags$div(),
