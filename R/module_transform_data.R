@@ -44,7 +44,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
             class = "validation-panel",
             attr(data_mod, "label"),
             icon = bsicons::bs_icon("palette-fill"),
-            tags$div(
+            tags$div( # visibility controlled via css selector (visible when .validation-panel[disabled="disabled"])
               class = "disabled-info",
               title = "Disabled until data becomes valid",
               bsicons::bs_icon("info-circle"),
@@ -86,22 +86,22 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
   names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
   moduleServer(id, function(input, output, session) {
-    data_original_handled <- reactive(tryCatch(data(), error = function(e) e))
     module_output <- Reduce(
       function(data_previous, name) {
         moduleServer(name, function(input, output, session) {
+          data_previous_handled <- reactive(tryCatch(data_previous(), error = function(e) e))
           logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
-          data_out <- reactiveVal()
+          data_out <- reactiveVal(errorCondition("", class = "shiny.silent.error"))
 
           # Disable all elements if original data is not yet a teal_data
-          observeEvent(data_original_handled(), {
+          observeEvent(data_previous_handled(), {
             shinyjs::toggleState(
               "wrapper_panel",
-              condition = inherits(data_original_handled(), "teal_data")
+              condition = inherits(data_previous_handled(), "teal_data")
             )
           })
 
-          .call_once_when(inherits(data_previous(), "teal_data"), {
+          .call_once_when(inherits(data_previous_handled(), "teal_data"), {
             logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
@@ -109,25 +109,22 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
             observeEvent(
               {
                 data_handled()
-                data_original_handled()
+                data_previous_handled()
               },
               {
-                if (inherits(data_original_handled(), "condition")) {
-                  data_out(data_original_handled())
+                if (inherits(data_previous_handled(), "condition")) {
+                  data_out(data_previous_handled())
                 } else if (inherits(data_handled(), "teal_data")) {
                   if (!identical(data_handled(), data_out())) {
                     data_out(data_handled())
                   }
                 } else {
-                  data_out(data_handled())
+                  data_out(data_handled()) # todo: what if it returns error?
                 }
               }
             )
 
-            is_previous_failed <- reactive({
-              inherits(data_original_handled(), "teal_data") &&
-                !inherits(try(data_previous(), silent = TRUE), "teal_data")
-            })
+            is_previous_failed <- reactive(!inherits(data_previous_handled(), "teal_data"))
 
             srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
             srv_check_class_teal_data("class_teal_data", data_handled)
@@ -151,7 +148,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
                   "One of previous transformators failed. Please check its inputs.",
                   class = "teal-output-warning"
                 )
-              } else if (inherits(data_original_handled(), "teal_data")) {
+              } else if (inherits(data_previous_handled(), "teal_data")) {
                 shinyjs::enable(transform_wrapper_id)
                 shiny::tagList(
                   ui_validate_error(session$ns("silent_error")),
