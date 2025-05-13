@@ -86,10 +86,15 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
 
   moduleServer(id, function(input, output, session) {
     module_output <- Reduce(
+      x = names(transformators),
+      init = data,
       function(data_previous, name) {
-        moduleServer(name, function(input, output, session) {
+        id <- name
+        data_mod <- transformators[[name]]
+
+        moduleServer(id, function(input, output, session) {
           data_previous_handled <- reactive(tryCatch(data_previous(), error = function(e) e))
-          logger::log_debug("srv_transform_teal_data@1 initializing module for { name }.")
+          logger::log_debug("srv_transform_teal_data@1 initializing module for { data_mod$label }.")
           data_out <- reactiveVal(errorCondition("", class = "shiny.silent.error"))
 
           # Disable all elements if original data is not yet a teal_data
@@ -101,8 +106,8 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
           })
 
           .call_once_when(inherits(data_previous_handled(), "teal_data"), {
-            logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
-            data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
+            logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { data_mod$label }.")
+            data_unhandled <- data_mod$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 
             observeEvent(
@@ -163,9 +168,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
             data_out()
           })
         })
-      },
-      x = names(transformators),
-      init = data
+      }
     )
 
     module_output
