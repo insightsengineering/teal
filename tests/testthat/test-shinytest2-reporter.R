@@ -101,7 +101,6 @@ testthat::test_that("e2e: reporter_previewer_module has download, load and reset
   testthat::expect_true(
     app$is_visible(app$active_module_element("resetButtonPreviewer-reset_reporter"))
   )
-
 })
 
 testthat::test_that("e2e: reporter_previewer_module do not show data_summary nor filter_panel", {
