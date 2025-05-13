@@ -29,8 +29,18 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
   mapply(
     id = ns_parent(names(transformators)),
     data_mod = transformators,
+    name = names(transformators),
     SIMPLIFY = FALSE,
-    .ui_call_module
+    function(id, data_mod, name) {
+      bslib::accordion(
+        class = "validation-wrapper",
+        bslib::accordion_panel(
+          title = name,
+          icon = bsicons::bs_icon("palette-fill"),
+          .ui_call_module(id, data_mod$ui)
+        )
+      )
+    }
   )
 }
 
@@ -54,11 +64,10 @@ srv_transform_teal_data <- function(id, data, transformators, datanames_required
       x = names(transformators),
       init = data,
       function(data_previous, name) {
-        data_mod <- transformators[[name]]
         .srv_call_module(
           id = name,
-          data_previous = data_previous,
-          data_mod = data_mod,
+          data = data_previous,
+          server = transformators[[name]]$server,
           datanames_required = datanames_required
         )
       }

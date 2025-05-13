@@ -92,26 +92,16 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 #' @export
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-  args <- c(list(id = ns("module")), modules$ui_args)
+  args <- c(
+    list(id = ns("module"), ui = modules$ui),
+    modules$ui_args
+  )
 
   ui_teal <- tags$div(
-    shinyjs::hidden(
-      tags$div(
-        id = ns("transform_failure_info"),
-        class = "teal_validated",
-        div(
-          class = "teal-output-warning",
-          "One of transformators failed. Please check its inputs."
-        )
-      )
-    ),
     tags$div(
       id = ns("teal_module_ui"),
-      tags$div(
-        class = "teal_validated",
-        ui_check_required_datanames(ns("validate_datanames"))
-      ),
-      do.call(what = modules$ui, args = args, quote = TRUE)
+      class = "validation-wrapper",
+      do.call(what = .ui_call_module, args = args, quote = TRUE)
     )
   )
 
@@ -357,12 +347,6 @@ srv_teal_module.teal_module <- function(id,
         summary_data()
       })
 
-      srv_check_required_datanames(
-        "validate_datanames",
-        data = module_teal_data,
-        datanames_required = list(modules$datanames),
-        show_modules_info = FALSE
-      )
 
       summary_table <- srv_data_summary("data_summary", summary_data) # Only updates on success
 
@@ -389,13 +373,18 @@ srv_teal_module.teal_module <- function(id,
 
       # Call modules.
       if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- .call_once_when(
-          !is.null(module_teal_data()),
-          ignoreNULL = TRUE,
-          handlerExpr = {
-            module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-          }
+        args <- c(
+          list(
+            id = "module",
+            data_previous = module_teal_data,
+            server = modules$server,
+            reporter = reporter,
+            datasets = datasets,
+            filter_panel_api = teal.slice::FilterPanelAPI$new(datasets())
+          ),
+          modules$server_args
         )
+        module_out(do.call(.srv_call_module, args = args, quote = TRUE))
       } else {
         # Report previewer must be initiated on app start for report cards to be included in bookmarks.
         # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
