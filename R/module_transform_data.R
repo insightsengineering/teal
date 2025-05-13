@@ -25,12 +25,13 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
   checkmate::assert_list(transformators, "teal_transform_module")
   names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
 
-  lapply(
-    names(transformators),
-    function(name) {
-      child_id <- NS(id, name)
-      ns <- NS(child_id)
-      data_mod <- transformators[[name]]
+  ns_parent <- NS(id)
+  mapply(
+    id = ns_parent(names(transformators)),
+    data_mod = transformators,
+    SIMPLIFY = FALSE,
+    function(id, data_mod) {
+      ns <- NS(id)
       display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
 
       display_fun(
@@ -58,7 +59,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
               div(
                 id = ns("validate_messages"),
                 class = "teal_validated",
-                uiOutput(ns("error_wrapper"))
+                uiOutput(ns("error"))
               )
             )
           )
@@ -138,7 +139,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
               }
             })
 
-            output$error_wrapper <- renderUI({
+            output$error <- renderUI({
               if (is_previous_failed()) {
                 shinyjs::disable("transform_wrapper")
                 tags$div(
