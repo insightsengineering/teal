@@ -118,16 +118,17 @@ report_card_template <- function(title, label, description = NULL, with_filter, 
 #' These functions check if specified `datanames` in modules match those in the data object,
 #' returning error messages or `TRUE` for successful validation. Two functions return error message
 #' in different forms:
-#' - `check_modules_datanames` returns `character(1)` for basic assertion usage
-#' - `check_modules_datanames_html` returns `shiny.tag.list` to display it in the app.
+#' - `check_required_datanames` returns `character(1)` for basic assertion usage
+#' - `check_required_datanames_html` returns `shiny.tag.list` to display it in the app.
 #'
-#' @param modules (`teal_modules`) object
-#' @param datanames (`character`) names of datasets available in the `data` object
+#' @param datanames_required (`named list`) list of datanames required by modules. List element per module, named
+#'  after module's label.
+#' @param datanames_available (`character`) names of datasets available in the `data` object
 #'
 #' @return `TRUE` if validation passes, otherwise `character(1)` or `shiny.tag.list`
 #' @keywords internal
-check_modules_datanames <- function(modules, datanames) {
-  out <- check_modules_datanames_html(modules, datanames)
+check_required_datanames <- function(datanames_required, datanames_available, show_modules_info = FALSE) {
+  out <- check_required_datanames_html(datanames_required, datanames_available, show_modules_info)
   if (inherits(out, "shiny.tag.list")) {
     out_with_ticks <- gsub("<code>|</code>", "`", toString(out))
     out_text <- gsub("<[^<>]+>", "", toString(out_with_ticks))
@@ -137,7 +138,7 @@ check_modules_datanames <- function(modules, datanames) {
   }
 }
 
-#' @rdname check_modules_datanames
+#' @rdname check_required_datanames
 check_reserved_datanames <- function(datanames) {
   reserved_datanames <- datanames[datanames %in% c("all", ".raw_data")]
   if (length(reserved_datanames) == 0L) {
@@ -155,45 +156,53 @@ check_reserved_datanames <- function(datanames) {
   )
 }
 
-#' @rdname check_modules_datanames
-check_modules_datanames_html <- function(modules, datanames) {
-  check_datanames <- check_modules_datanames_recursive(modules, datanames)
-  show_module_info <- inherits(modules, "teal_modules") # used in two contexts - module and app
+#' @rdname check_required_datanames
+check_required_datanames_html <- function(datanames_required = list(), datanames_available, show_modules_info = FALSE) {
+  checkmate::assert_list(datanames_required, types = c("character", "NULL"))
+  datanames_missing_list <- Filter(
+    f = length,
+    lapply(datanames_required, function(module_datanames) {
+      setdiff(module_datanames, c("all", datanames_available))
+    })
+  )
+  datanames_reserved <- check_reserved_datanames(datanames_available)
 
-  reserved_datanames <- check_reserved_datanames(datanames)
-
-  if (!length(check_datanames)) {
-    out <- if (is.null(reserved_datanames)) {
+  if (!length(datanames_missing_list)) {
+    out <- if (is.null(datanames_reserved)) {
       TRUE
     } else {
-      shiny::tagList(reserved_datanames)
+      shiny::tagList(datanames_reserved)
     }
     return(out)
   }
+
+
+
   shiny::tagList(
-    reserved_datanames,
-    lapply(
-      check_datanames,
-      function(mod) {
+    datanames_reserved,
+    mapply(
+      datanames_missing = datanames_missing_list,
+      module_label = if (!is.null(names(datanames_missing_list))) names(datanames_missing_list) else "><ignored",
+      function(module_label, datanames_missing) {
         tagList(
           tags$span(
-            tags$span(pluralize(mod$missing_datanames, "Dataset")),
-            to_html_code_list(mod$missing_datanames),
+            tags$span(pluralize(datanames_missing, "Dataset")),
+            to_html_code_list(datanames_missing),
             tags$span(
               sprintf(
                 "%s missing%s.",
-                pluralize(mod$missing_datanames, "is", "are"),
-                if (show_module_info) sprintf(" for module '%s'", mod$label) else ""
+                pluralize(datanames_missing, "is", "are"),
+                if (show_modules_info) sprintf(" for module '%s'", module_label) else ""
               )
             )
           ),
-          if (length(datanames) >= 1) {
+          if (length(datanames_available) >= 1) {
             tagList(
-              tags$span(pluralize(datanames, "Dataset")),
+              tags$span(pluralize(datanames_available, "Dataset")),
               tags$span("available in data:"),
               tagList(
                 tags$span(
-                  to_html_code_list(datanames),
+                  to_html_code_list(datanames_available),
                   tags$span(".", .noWS = "outside"),
                   .noWS = c("outside")
                 )
@@ -207,27 +216,6 @@ check_modules_datanames_html <- function(modules, datanames) {
       }
     )
   )
-}
-
-#' Recursively checks modules and returns list for every datanames mismatch between module and data
-#' @noRd
-check_modules_datanames_recursive <- function(modules, datanames) { # nolint: object_name_length
-  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
-  checkmate::assert_character(datanames)
-  if (inherits(modules, "teal_modules")) {
-    unlist(
-      lapply(modules$children, check_modules_datanames_recursive, datanames = datanames),
-      recursive = FALSE
-    )
-  } else {
-    missing_datanames <- setdiff(modules$datanames, c("all", datanames))
-    if (length(missing_datanames)) {
-      list(list(
-        label = modules$label,
-        missing_datanames = missing_datanames
-      ))
-    }
-  }
 }
 
 #' Convert character vector to html code separated with commas and "and"
@@ -489,5 +477,13 @@ pluralize <- function(x, singular, plural = NULL) {
     } else {
       plural
     }
+  }
+}
+
+.flatten_list <- function(x) {
+  if (is.list(x)) {
+    unlist(lapply(x, .flatten_list), recursive = FALSE)
+  } else {
+    list(x)
   }
 }

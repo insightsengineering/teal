@@ -30,51 +30,16 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
     id = ns_parent(names(transformators)),
     data_mod = transformators,
     SIMPLIFY = FALSE,
-    function(id, data_mod) {
-      ns <- NS(id)
-      display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
-
-      display_fun(
-        bslib::accordion(
-          id = ns("wrapper"),
-          class = "validation-wrapper",
-          bslib::accordion_panel(
-            id = ns("wrapper_panel"),
-            class = "validation-panel",
-            attr(data_mod, "label"),
-            icon = bsicons::bs_icon("palette-fill"),
-            tags$div( # visibility controlled via css selector (visible when .validation-panel[disabled="disabled"])
-              class = "disabled-info",
-              title = "Disabled until data becomes valid",
-              bsicons::bs_icon("info-circle"),
-              "Disabled until data becomes valid. Check your inputs."
-            ),
-            tags$div(
-              id = "transform_wrapper",
-              if (is.null(data_mod$ui)) {
-                return(NULL)
-              } else {
-                data_mod$ui(id = ns("transform"))
-              },
-              div(
-                id = ns("validate_messages"),
-                class = "teal_validated",
-                uiOutput(ns("error"))
-              )
-            )
-          )
-        )
-      )
-    }
+    .ui_call_module
   )
 }
 
 #' @export
 #' @rdname module_transform_data
-srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
+srv_transform_teal_data <- function(id, data, transformators, datanames_required = list()) {
   checkmate::assert_string(id)
   assert_reactive(data)
-  checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
+  checkmate::assert_list(datanames_required, types = c("character", "NULL"))
   if (length(transformators) == 0L) {
     return(data)
   }
@@ -89,85 +54,13 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL) {
       x = names(transformators),
       init = data,
       function(data_previous, name) {
-        id <- name
         data_mod <- transformators[[name]]
-
-        moduleServer(id, function(input, output, session) {
-          data_previous_handled <- reactive(tryCatch(data_previous(), error = function(e) e))
-          logger::log_debug("srv_transform_teal_data@1 initializing module for { data_mod$label }.")
-          data_out <- reactiveVal(errorCondition("", class = "shiny.silent.error"))
-
-          # Disable all elements if original data is not yet a teal_data
-          observeEvent(data_previous_handled(), {
-            shinyjs::toggleState(
-              "wrapper_panel",
-              condition = inherits(data_previous_handled(), "teal_data")
-            )
-          })
-
-          .call_once_when(inherits(data_previous_handled(), "teal_data"), {
-            logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { data_mod$label }.")
-            data_unhandled <- data_mod$server("transform", data = data_previous)
-            data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
-
-            observeEvent(
-              {
-                data_handled()
-                data_previous_handled()
-              },
-              {
-                if (inherits(data_previous_handled(), "condition")) {
-                  data_out(data_previous_handled())
-                } else if (inherits(data_handled(), "teal_data")) {
-                  if (!identical(data_handled(), data_out())) {
-                    data_out(data_handled())
-                  }
-                } else {
-                  data_out(data_handled()) # todo: what if it returns error?
-                }
-              }
-            )
-
-            is_previous_failed <- reactive(!inherits(data_previous_handled(), "teal_data"))
-
-            srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
-            srv_check_class_teal_data("class_teal_data", data_handled)
-            if (!is.null(modules)) {
-              srv_check_module_datanames("datanames_warning", data_handled, modules)
-            }
-
-            # When there is no UI (`ui = NULL`) it should still show the errors
-            # It is a 1-way operation as there is no UI to correct the state
-            observe({
-              if (!inherits(data_handled(), "teal_data") && !is_previous_failed()) {
-                shinyjs::show("wrapper")
-              }
-            })
-
-            output$error <- renderUI({
-              if (is_previous_failed()) {
-                shinyjs::disable("transform_wrapper")
-                tags$div(
-                  "One of previous transformators failed. Please check its inputs.",
-                  class = "teal-output-warning"
-                )
-              } else if (inherits(data_previous_handled(), "teal_data")) {
-                shinyjs::enable("transform_wrapper")
-                shiny::tagList(
-                  ui_validate_error(session$ns("silent_error")),
-                  ui_check_class_teal_data(session$ns("class_teal_data")),
-                  ui_check_module_datanames(session$ns("datanames_warning"))
-                )
-              }
-            })
-          })
-
-          # Ignoring unwanted reactivity breaks during initialization
-          reactive({
-            validate(need(!inherits(data_out(), "condition"), message = data_out()$message)) # rethrow message
-            data_out()
-          })
-        })
+        .srv_call_module(
+          id = name,
+          data_previous = data_previous,
+          data_mod = data_mod,
+          datanames_required = datanames_required
+        )
       }
     )
 

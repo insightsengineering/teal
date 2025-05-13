@@ -109,7 +109,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       id = ns("teal_module_ui"),
       tags$div(
         class = "teal_validated",
-        ui_check_module_datanames(ns("validate_datanames"))
+        ui_check_required_datanames(ns("validate_datanames"))
       ),
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
@@ -309,7 +309,6 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-
     active_datanames <- reactive({
       .resolve_module_datanames(data = data(), modules = modules)
     })
@@ -340,7 +339,7 @@ srv_teal_module.teal_module <- function(id,
         "data_transform",
         data = filtered_teal_data,
         transformators = modules$transformators,
-        modules = modules
+        datanames_required = list(modules$datanames)
       )
       any_transform_failed <- reactive({
         !inherits(try(transformed_teal_data(), silent = TRUE), "teal_data") &&
@@ -358,10 +357,11 @@ srv_teal_module.teal_module <- function(id,
         summary_data()
       })
 
-      srv_check_module_datanames(
+      srv_check_required_datanames(
         "validate_datanames",
         data = module_teal_data,
-        modules = modules
+        datanames_required = list(modules$datanames),
+        show_modules_info = FALSE
       )
 
       summary_table <- srv_data_summary("data_summary", summary_data) # Only updates on success

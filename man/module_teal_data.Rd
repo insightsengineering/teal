@@ -15,7 +15,7 @@ ui_teal_data_module(id, data_module = function(id) NULL)
 srv_teal_data_module(
   id,
   data_module = function(id) NULL,
-  modules = NULL,
+  datanames_required = list(),
   validate_shiny_silent_error = TRUE,
   is_transform_failed = reactiveValues()
 )
@@ -25,7 +25,7 @@ ui_validate_reactive_teal_data(id)
 srv_validate_reactive_teal_data(
   id,
   data,
-  modules = NULL,
+  datanames_required = list(),
   validate_shiny_silent_error = FALSE,
   hide_validation_error = reactive(FALSE)
 )
@@ -35,7 +35,8 @@ srv_validate_reactive_teal_data(
 
 \item{data_module}{(\code{teal_data_module})}
 
-\item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
+\item{datanames_required}{(\verb{named list}) list of datanames required by modules. List element per module, named
+after module's label.}
 
 \item{validate_shiny_silent_error}{(\code{logical}) If \code{TRUE}, then \code{shiny.silent.error} is validated and}
 

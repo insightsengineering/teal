@@ -165,7 +165,15 @@ init <- function(data,
       stop("The environment of `data` is empty.")
     }
 
-    is_modules_ok <- check_modules_datanames(modules, names(data))
+    datanames_required <- setNames(
+      .flatten_list(module_attribute(modules, "datanames")),
+      .flatten_list(module_attribute(modules, "label"))
+    )
+    is_modules_ok <- check_required_datanames(
+      datanames_required,
+      datanames_available = names(data),
+      show_modules_info = TRUE
+    )
     if (!isTRUE(is_modules_ok) && length(unlist(extract_transformators(modules))) == 0) {
       warning(is_modules_ok, call. = FALSE)
     }

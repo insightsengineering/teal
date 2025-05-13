@@ -8,7 +8,7 @@
 \usage{
 ui_transform_teal_data(id, transformators, class = "well")
 
-srv_transform_teal_data(id, data, transformators, modules = NULL)
+srv_transform_teal_data(id, data, transformators, datanames_required = list())
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
@@ -20,7 +20,8 @@ To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 
 \item{data}{(\code{reactive} returning \code{teal_data})}
 
-\item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
+\item{datanames_required}{(\verb{named list}) list of datanames required by modules. List element per module, named
+after module's label.}
 }
 \value{
 \code{reactive} \code{teal_data}

@@ -745,10 +745,14 @@ modules_depth <- function(modules, depth = 0L) {
 #' the function returns a nested `list` of labels.
 #' @keywords internal
 module_labels <- function(modules) {
+  module_attribute(modules, "label")
+}
+
+module_attribute <- function(modules, attr) {
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules$children, module_attribute, attr = attr)
   } else {
-    modules$label
+    modules[[attr]]
   }
 }
 

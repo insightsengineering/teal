@@ -22,7 +22,8 @@
 #'
 #' @inheritParams module_teal_module
 #' @param data_module (`teal_data_module`)
-#' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
+#' @param datanames_required (`named list`) list of datanames required by modules. List element per module, named
+#'  after module's label.
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
 #' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transformator.
 #' Help to determine if any previous transformator failed, so that following transformators can be disabled
@@ -56,12 +57,12 @@ ui_teal_data_module <- function(id, data_module = function(id) NULL) {
 #' `srv_teal_data_module` was renamed from `srv_teal_data`.
 srv_teal_data_module <- function(id,
                                  data_module = function(id) NULL,
-                                 modules = NULL,
+                                 datanames_required = list(),
                                  validate_shiny_silent_error = TRUE,
                                  is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   checkmate::assert_function(data_module, args = "id")
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
+  checkmate::assert_list(datanames_required, types = c("character", "NULL"))
   checkmate::assert_class(is_transform_failed, "reactivevalues")
 
   moduleServer(id, function(input, output, session) {
@@ -95,7 +96,7 @@ srv_teal_data_module <- function(id,
     srv_validate_reactive_teal_data(
       "validate",
       data = try_module_out,
-      modules = modules,
+      datanames_required = datanames_required,
       validate_shiny_silent_error = validate_shiny_silent_error,
       hide_validation_error = is_previous_failed
     )
@@ -111,7 +112,7 @@ ui_validate_reactive_teal_data <- function(id) {
       class = "teal_validated",
       ui_validate_error(ns("silent_error")),
       ui_check_class_teal_data(ns("class_teal_data")),
-      ui_check_module_datanames(ns("shiny_warnings"))
+      ui_check_required_datanames(ns("shiny_warnings"))
     ),
     div(
       class = "teal_validated",
@@ -123,18 +124,23 @@ ui_validate_reactive_teal_data <- function(id) {
 #' @rdname module_teal_data
 srv_validate_reactive_teal_data <- function(id, # nolint: object_length
                                             data,
-                                            modules = NULL,
+                                            datanames_required = list(),
                                             validate_shiny_silent_error = FALSE,
                                             hide_validation_error = reactive(FALSE)) {
   checkmate::assert_string(id)
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"), null.ok = TRUE)
+  checkmate::assert_list(datanames_required, types = c("character", "NULL"))
   checkmate::assert_flag(validate_shiny_silent_error)
 
   moduleServer(id, function(input, output, session) {
     # there is an empty reactive cycle on `init` and `data` has `shiny.silent.error` class
     srv_validate_error("silent_error", data, validate_shiny_silent_error)
     srv_check_class_teal_data("class_teal_data", data)
-    srv_check_module_datanames("shiny_warnings", data, modules)
+    srv_check_required_datanames(
+      "shiny_warnings",
+      data = data,
+      datanames_required = datanames_required,
+      show_modules_info = TRUE
+    )
     output$previous_failed <- renderUI({
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
@@ -216,22 +222,26 @@ srv_check_class_teal_data <- function(id, data) {
 }
 
 #' @keywords internal
-ui_check_module_datanames <- function(id) {
+ui_check_required_datanames <- function(id) {
   ns <- NS(id)
   uiOutput(NS(id, "message"))
 }
 
 #' @keywords internal
-srv_check_module_datanames <- function(id, data, modules) {
+srv_check_required_datanames <- function(id, data, datanames_required = list(), show_modules_info = FALSE) {
   checkmate::assert_string(id)
+  checkmate::assert_class(data, "reactive")
+  checkmate::assert_list(datanames_required, types = c("character", "NULL"))
   moduleServer(id, function(input, output, session) {
     output$message <- renderUI({
       if (inherits(data(), "teal_data")) {
-        is_modules_ok <- check_modules_datanames_html(
-          modules = modules, datanames = names(data())
+        is_datanames_ok <- check_required_datanames_html(
+          datanames_required = datanames_required,
+          datanames_available = names(data()),
+          show_modules_info = show_modules_info
         )
-        if (!isTRUE(is_modules_ok)) {
-          tags$div(is_modules_ok, class = "teal-output-warning")
+        if (!isTRUE(is_datanames_ok)) {
+          tags$div(is_datanames_ok, class = "teal-output-warning")
         }
       }
     })

@@ -141,11 +141,20 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       class = "teal_validated",
       ui_check_class_teal_data(session$ns("class_teal_data")),
       ui_validate_error(session$ns("silent_error")),
-      ui_check_module_datanames(session$ns("datanames_warning"))
+      ui_check_required_datanames(session$ns("datanames_warning"))
     )
     srv_check_class_teal_data("class_teal_data", data_handled)
     srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
-    srv_check_module_datanames("datanames_warning", data_handled, modules)
+    datanames_required <- setNames(
+      .flatten_list(module_attribute(modules, "datanames")),
+      .flatten_list(module_attribute(modules, "label"))
+    )
+    srv_check_required_datanames(
+      "datanames_warning",
+      data_handled,
+      datanames_required = datanames_required,
+      show_modules_info = TRUE
+    )
 
     data_validated <- .trigger_on_success(data_handled)
 
