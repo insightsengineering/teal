@@ -37,7 +37,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
         bslib::accordion_panel(
           title = name,
           icon = bsicons::bs_icon("palette-fill"),
-          .ui_call_teal_module(id, data_mod$ui)
+          .ui_call_teal_module(id = id, ui = data_mod$ui)
         )
       )
     }

@@ -480,6 +480,11 @@ pluralize <- function(x, singular, plural = NULL) {
   }
 }
 
+#' Flatten a nested list
+#'
+#' @param x (`list`)
+#' @return `list` unnested
+#' @keywords internal
 .flatten_list <- function(x) {
   if (is.list(x)) {
     unlist(lapply(x, .flatten_list), recursive = FALSE)
@@ -488,13 +493,23 @@ pluralize <- function(x, singular, plural = NULL) {
   }
 }
 
-.do_call_teal_module <- function(what, args) {
-  if (!"..." %in% names(formals(what))) {
-    args <- args[names(formals(what))]
+#' Call a function
+#'
+#' Call a `what` with `...` which are in formals of the function
+#' @inheritParams base::do.call
+#' @param ... (`dots`) any argument which is then matched with formals of `what`. Allows to use [rlang::`!!!`]
+#' @return return value of `what`
+#' @keywords internal
+.do_call_fun <- function(what, ...) {
+  checkmate::assert_function(what)
+  args <- rlang::list2(...)
+  fun_formals <- names(formals(what))
+  if (!"..." %in% fun_formals) {
+    args <- args[names(args) %in% fun_formals] # using args[fun_formals] directly fails some module calls
   }
-  if ("id" %in% names(formals(what))) {
-    do.call(what = what, args = args, quote = TRUE)
-  } else {
+  if ("session" %in% fun_formals) {
     do.call(what = shiny::callModule, args = c(args, list(module = what)), quote = TRUE)
+  } else {
+    do.call(what = what, args = args, quote = TRUE)
   }
 }

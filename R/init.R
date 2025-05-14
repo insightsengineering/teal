@@ -293,7 +293,7 @@ init <- function(data,
       )
     )
     res <- teal_extend_server(res, function(input, output, session) {
-      do.call(landing[[1L]]$server, c(list(id = "landing_module_shiny_id")))
+      landing[[1L]]$server(id = "landing_module_shiny_id")
     })
   } else if (length(landing) > 1L) {
     stop("Only one `landing_popup_module` can be used.")

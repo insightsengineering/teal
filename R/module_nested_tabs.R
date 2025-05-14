@@ -96,7 +96,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     tags$div(
       id = ns("teal_module_ui"),
       class = "validation-wrapper",
-      .ui_call_teal_module(id = ns("module"), ui = modules$ui, args = modules$ui_args)
+      .ui_call_teal_module(id = ns("module"), ui = modules$ui, !!!modules$ui_args)
     )
   )
 
@@ -364,16 +364,15 @@ srv_teal_module.teal_module <- function(id,
         data = module_teal_data,
         server = modules$server,
         datanames_required = list(modules$datanames),
-        args = c(
-          list(
-            reporter = reporter,
-            datasets = datasets,
-            filter_panel_api = teal.slice::FilterPanelAPI$new(datasets())
-          ),
-          modules$server_args
-        )
+        reporter = reporter,
+        datasets = datasets,
+        filter_panel_api = teal.slice::FilterPanelAPI$new(datasets()),
+        !!!modules$server_args
       )
-      module_out(out)
+      observeEvent(out(), {
+        req(out())
+        if (!identical(out(), module_out())) module_out(out())
+      })
       # todo: fix reporter bookmarking - set bookmarks somewhere else where reporter is available
     })
 
