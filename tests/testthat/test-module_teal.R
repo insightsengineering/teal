@@ -137,7 +137,7 @@ testthat::describe("srv_teal arguments", {
   })
 
   testthat::it("app fails when teal_data_module doesn't return a reactive", {
-    testthat::expect_error(
+    testthat::expect_warning(
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -146,6 +146,7 @@ testthat::describe("srv_teal arguments", {
           modules = modules(example_module())
         ),
         expr = {
+          # todo: data_handled() should return error message <handled>
           session$flushReact()
         }
       ),
@@ -342,8 +343,11 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         testthat::expect_s3_class(data_handled(), "shiny.silent.error")
+        testthat::expect_identical(data_handled()$message, "")
         session$setInputs(`teal_modules-active_tab` = "module_1")
         testthat::expect_null(modules_output$module_1())
+        testthat::expect_s3_class(data_handled(), "shiny.silent.error")
+        testthat::expect_identical(data_handled()$message, "my error")
       }
     )
   })

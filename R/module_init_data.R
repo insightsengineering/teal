@@ -58,9 +58,9 @@ srv_init_data <- function(id, data, datanames_required) {
       datanames_required = datanames_required,
       validate_shiny_silent_error = FALSE
     )
-
+    data_handled <- reactive(tryCatch(data_out(), error = function(e) e))
     # We want to exclude teal_data_module elements from bookmarking as they might have some secrets
-    observeEvent(data_out(), {
+    observeEvent(data_handled(), {
       app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
       setBookmarkExclude(
         session$ns(
@@ -73,8 +73,7 @@ srv_init_data <- function(id, data, datanames_required) {
         session = app_session
       )
     })
-
-    reactive(tryCatch(data_out(), error = function(e) e))
+    data_handled
   })
 }
 

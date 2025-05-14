@@ -134,7 +134,6 @@ teal_transform_module <- function(ui = function(id) NULL,
       ui = ui,
       server = function(id, data) {
         data_out <- server(id, data)
-
         if (inherits(data_out, "reactive.event")) {
           # This warning message partially detects when `eventReactive` is used in `data_module`.
           warning(
@@ -145,13 +144,7 @@ teal_transform_module <- function(ui = function(id) NULL,
             call. = FALSE
           )
         }
-
-
-        decorate_err_msg(
-          assert_reactive(data_out),
-          pre = sprintf("From: 'teal_transform_module()':\nA 'teal_transform_module' with \"%s\" label:", label),
-          post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
-        )
+        data_out
       }
     ),
     label = label,
