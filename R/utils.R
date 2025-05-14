@@ -487,3 +487,14 @@ pluralize <- function(x, singular, plural = NULL) {
     list(x)
   }
 }
+
+.do_call_teal_module <- function(what, args) {
+  if (!"..." %in% names(formals(what))) {
+    args <- args[names(formals(what))]
+  }
+  if ("id" %in% names(formals(what))) {
+    do.call(what = what, args = args, quote = TRUE)
+  } else {
+    do.call(what = shiny::callModule, args = c(args, list(module = what)), quote = TRUE)
+  }
+}

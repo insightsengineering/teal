@@ -1,28 +1,28 @@
 /* adding boarder to the validated input */
-.teal_validated:has(.shiny-output-error) {
+.validation-output-info:has(.shiny-output-error) {
   border: 1px solid red;
   border-radius: 4px;
 }
 
-.teal_validated:has(.teal-output-warning) {
+.validation-output-info:has(.teal-output-warning) {
   border: 1px solid orange;
   border-radius: 4px;
 }
 
-.teal_validated .teal-output-warning {
+.validation-output-info .teal-output-warning {
   color: #888;
 }
 
-.teal_validated .shiny-output-error,
-.teal_validated .teal-output-warning {
+.validation-output-info .shiny-output-error,
+.validation-output-info .teal-output-warning {
   margin-top: 0.5em;
 }
 
-.teal_validated .teal-output-warning::before {
+.validation-output-info .teal-output-warning::before {
   content: "\26A0\FE0F";
 }
 
-.teal_validated .shiny-output-error::before {
+.validation-output-info .shiny-output-error::before {
   content: "\1F6A8";
 }
 
@@ -34,40 +34,40 @@
   content: "\26A0\FE0F";
 }
 
-.teal_primary_col .teal_validated:has(.shiny-output-error),
-.teal_primary_col .teal_validated:has(.teal-output-warning) {
+.teal_primary_col .validation-output-info:has(.shiny-output-error),
+.teal_primary_col .validation-output-info:has(.teal-output-warning) {
   margin: 1em 0 1em 0;
   padding: 0.5em 0 0.5em 0.5em;
 }
 
-.teal_primary_col>.teal_validated:has(.teal-output-warning),
-.teal_primary_col>.teal_validated:has(.shiny-output-error) {
+.teal_primary_col>.validation-output-info:has(.teal-output-warning),
+.teal_primary_col>.validation-output-info:has(.shiny-output-error) {
   width: 100%;
   background-color: rgba(223, 70, 97, 0.1);
   border: 1px solid red;
   padding: 1em;
 }
 
-.validation-wrapper .validation-panel[disabled="disabled"] {
+.validation-container[disabled="disabled"] {
   --bs-accordion-bg: var(--bs-gray-100);
   background-color: var(--bs-gray-100);
 }
 
-.validation-wrapper .validation-panel[disabled="disabled"] .teal_validated,
-.validation-wrapper .validation-panel[disabled="disabled"] .shiny-output-error,
-.validation-wrapper .validation-panel[disabled="disabled"] .teal-output-warning {
+.validation-container[disabled="disabled"] .validation-output-info,
+.validation-container[disabled="disabled"] .shiny-output-error,
+.validation-container[disabled="disabled"] .teal-output-warning {
   display: none;
 }
 
-.validation-wrapper .disabled-info {
+.validation-input-info {
   display: none;
 }
 
-.validation-wrapper .validation-panel[disabled="disabled"] {
+.validation-container[disabled="disabled"] {
   padding-top: 0;
 }
 
-.validation-wrapper .validation-panel[disabled="disabled"] .disabled-info {
+.validation-container[disabled="disabled"] .validation-input-info {
   display: block;
   border: 1px solid var(--bs-info);
   border-radius: 4px;

@@ -26,18 +26,18 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
 
   message("Initializing reporter_previewer_module")
 
-  srv <- function(id, reporter, ...) {
-    teal.reporter::reporter_previewer_srv(id, reporter, ...)
+  srv <- function(id, reporter) {
+    teal.reporter::reporter_previewer_srv(id = id, reporter = reporter)
   }
 
-  ui <- function(id, ...) {
-    teal.reporter::reporter_previewer_ui(id, ...)
+  ui <- function(id) {
+    teal.reporter::reporter_previewer_ui(id = id)
   }
 
   module <- module(
     label = "temporary label",
     server = srv, ui = ui,
-    server_args = server_args, ui_args = list(), datanames = NULL
+    datanames = NULL
   )
   # Module is created with a placeholder label and the label is changed later.
   # This is to prevent another module being labeled "Report previewer".

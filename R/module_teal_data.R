@@ -109,13 +109,13 @@ ui_validate_reactive_teal_data <- function(id) {
   tags$div(
     div(
       id = ns("validate_messages"),
-      class = "teal_validated",
+      class = "validation-output-info",
       ui_validate_error(ns("silent_error")),
       ui_check_class_teal_data(ns("class_teal_data")),
       ui_check_required_datanames(ns("shiny_warnings"))
     ),
     div(
-      class = "teal_validated",
+      class = "validation-output-info",
       uiOutput(ns("previous_failed"))
     )
   )

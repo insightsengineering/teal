@@ -37,7 +37,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
         bslib::accordion_panel(
           title = name,
           icon = bsicons::bs_icon("palette-fill"),
-          .ui_call_module(id, data_mod$ui)
+          .ui_call_teal_module(id, data_mod$ui)
         )
       )
     }
@@ -63,11 +63,11 @@ srv_transform_teal_data <- function(id, data, transformators, datanames_required
     module_output <- Reduce(
       x = names(transformators),
       init = data,
-      function(data_previous, name) {
-        .srv_call_module(
-          id = name,
+      function(data_previous, x) {
+        .srv_call_teal_module(
+          id = x,
           data = data_previous,
-          server = transformators[[name]]$server,
+          server = transformators[[x]]$server,
           datanames_required = datanames_required
         )
       }

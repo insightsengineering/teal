@@ -138,7 +138,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     validate_ui <- tags$div(
       id = session$ns("validate_messages"),
-      class = "teal_validated",
+      class = "validation-output-info",
       ui_check_class_teal_data(session$ns("class_teal_data")),
       ui_validate_error(session$ns("silent_error")),
       ui_check_required_datanames(session$ns("datanames_warning"))

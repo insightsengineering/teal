@@ -92,16 +92,11 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
 #' @export
 ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   ns <- NS(id)
-  args <- c(
-    list(id = ns("module"), ui = modules$ui),
-    modules$ui_args
-  )
-
   ui_teal <- tags$div(
     tags$div(
       id = ns("teal_module_ui"),
       class = "validation-wrapper",
-      do.call(what = .ui_call_module, args = args, quote = TRUE)
+      .ui_call_teal_module(id = ns("module"), ui = modules$ui, args = modules$ui_args)
     )
   )
 
@@ -331,14 +326,6 @@ srv_teal_module.teal_module <- function(id,
         transformators = modules$transformators,
         datanames_required = list(modules$datanames)
       )
-      any_transform_failed <- reactive({
-        !inherits(try(transformed_teal_data(), silent = TRUE), "teal_data") &&
-          inherits(filtered_teal_data(), "teal_data")
-      })
-
-      observeEvent(any_transform_failed(), {
-        shinyjs::toggleElement("transform_failure_info", condition = any_transform_failed())
-      })
 
       summary_data <- reactiveVal(NULL)
       module_teal_data <- eventReactive(transformed_teal_data(), {
@@ -372,59 +359,28 @@ srv_teal_module.teal_module <- function(id,
       })
 
       # Call modules.
-      if (!inherits(modules, "teal_module_previewer")) {
-        args <- c(
+      out <- .srv_call_teal_module(
+        id = "module",
+        data = module_teal_data,
+        server = modules$server,
+        datanames_required = list(modules$datanames),
+        args = c(
           list(
-            id = "module",
-            data_previous = module_teal_data,
-            server = modules$server,
             reporter = reporter,
             datasets = datasets,
             filter_panel_api = teal.slice::FilterPanelAPI$new(datasets())
           ),
           modules$server_args
         )
-        module_out(do.call(.srv_call_module, args = args, quote = TRUE))
-      } else {
-        # Report previewer must be initiated on app start for report cards to be included in bookmarks.
-        # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-        module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-      }
+      )
+      module_out(out)
+      # todo: fix reporter bookmarking - set bookmarks somewhere else where reporter is available
     })
 
     module_out
   })
 }
 
-# This function calls a module server function.
-.call_teal_module <- function(modules, datasets, data, reporter) {
-  assert_reactive(data)
-
-  # collect arguments to run teal_module
-  args <- c(list(id = "module"), modules$server_args)
-  if (is_arg_used(modules$server, "reporter")) {
-    args <- c(args, list(reporter = reporter))
-  }
-
-  if (is_arg_used(modules$server, "datasets")) {
-    args <- c(args, datasets = datasets())
-    warning("datasets argument is not reactive and therefore it won't be updated when data is refreshed.")
-  }
-
-  if (is_arg_used(modules$server, "data")) {
-    args <- c(args, data = list(data))
-  }
-
-  if (is_arg_used(modules$server, "filter_panel_api")) {
-    args <- c(args, filter_panel_api = teal.slice::FilterPanelAPI$new(datasets()))
-  }
-
-  if (is_arg_used(modules$server, "id")) {
-    do.call(what = modules$server, args = args, quote = TRUE)
-  } else {
-    do.call(what = callModule, args = c(args, list(module = modules$server)), quote = TRUE)
-  }
-}
 
 .resolve_module_datanames <- function(data, modules) {
   stopifnot("data must be teal_data object." = inherits(data, "teal_data"))
