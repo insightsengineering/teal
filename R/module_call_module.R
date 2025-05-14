@@ -1,36 +1,41 @@
 .ui_call_teal_module <- function(id, ui, ...) {
+  checkmate::assert_string(id)
+  checkmate::assert_function(ui)
   ns <- NS(id)
-  display_fun <- if (is.null(ui)) shinyjs::hidden else function(x) x
-  display_fun(
+  tags$div(
+    id = ns("validation_panel"),
+    class = "validation-container",
+    tags$div( # visibility controlled via css selector (visible when .validation-container[disabled="disabled"])
+      class = "validation-input-info",
+      title = "Disabled until data becomes valid",
+      tags$span(bsicons::bs_icon("info-circle"), "Disabled until data becomes valid. Check your inputs.")
+    ),
     tags$div(
-      id = ns("validation_panel"),
-      class = "validation-container",
-      tags$div( # visibility controlled via css selector (visible when .validation-container[disabled="disabled"])
-        class = "validation-input-info",
-        title = "Disabled until data becomes valid",
-        tags$span(bsicons::bs_icon("info-circle"), "Disabled until data becomes valid. Check your inputs.")
-      ),
-      tags$div(
-        id = "module_container",
-        if (is.null(ui)) {
-          return(NULL)
-        } else {
-          .do_call_fun(ui, id = ns("module_content"), !!!rlang::list2(...))
-        },
-        div(
-          id = ns("validate_messages"),
-          class = "validation-output-info",
-          uiOutput(ns("error"))
-        )
+      id = "module_container",
+      if (is.null(ui)) {
+        return(NULL)
+      } else {
+        .do_call_fun(ui, id = ns("module_content"), !!!rlang::list2(...))
+      },
+      div(
+        id = ns("validate_messages"),
+        class = "validation-output-info",
+        uiOutput(ns("error"))
       )
     )
   )
 }
 
-.srv_call_teal_module <- function(id, data, server, datanames_required, ...) {
+.srv_call_teal_module <- function(id, data, server, datanames_required, validate_shiny_silent_error = TRUE, ...) {
+  checkmate::assert_string(id)
+  assert_reactive(data)
+  checkmate::assert_function(server)
+  checkmate::assert_list(datanames_required)
+  checkmate::assert_flag(validate_shiny_silent_error)
   moduleServer(id, function(input, output, session) {
-    data_in_handled <- reactive(tryCatch(data(), error = function(e) e))
     logger::log_debug(".srv_call_teal_module@1 initializing module for { id }.")
+
+    data_in_handled <- reactive(tryCatch(data(), error = function(e) e))
     data_out <- reactiveVal(errorCondition("", class = "shiny.silent.error"))
 
     # Disable all elements if input data is not teal_data
@@ -41,6 +46,7 @@
       )
     })
 
+    # Don't show errors if reason is somewhere before this module (show only if data input is valid)
     output$error <- renderUI({
       if (inherits(data_in_handled(), "teal_data")) {
         shiny::tagList(
@@ -56,7 +62,7 @@
       data_out_unhandled <- .do_call_fun(server, id = "module_content", data = data, !!!rlang::list2(...))
       if (is.reactive(data_out_unhandled)) {
         data_out_handled <- reactive(tryCatch(data_out_unhandled(), error = function(e) e))
-        srv_validate_error("silent_error", data_out_handled, validate_shiny_silent_error = FALSE)
+        srv_validate_error("silent_error", data_out_handled, validate_shiny_silent_error = validate_shiny_silent_error)
         srv_check_class_teal_data("class_teal_data", data_out_handled)
         srv_check_required_datanames("datanames_warning", data_out_handled, datanames_required = datanames_required)
         observeEvent(
@@ -76,14 +82,6 @@
             }
           }
         )
-        # todo: When there is no UI (`ui = NULL`) it should still show the errors
-        # is_previous_failed <- reactive(!inherits(data_in_handled(), "teal_data"))
-        # It is a 1-way operation as there is no UI to correct the state
-        # observe({
-        #   if (!inherits(data_out_handled(), "teal_data") && !is_previous_failed()) {
-        #     shinyjs::show("wrapper")
-        #   }
-        # })
       }
     })
 

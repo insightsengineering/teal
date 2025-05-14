@@ -367,6 +367,7 @@ srv_teal_module.teal_module <- function(id,
         reporter = reporter,
         datasets = datasets,
         filter_panel_api = teal.slice::FilterPanelAPI$new(datasets()),
+        validate_shiny_silent_error = TRUE,
         !!!modules$server_args
       )
       observeEvent(out(), {

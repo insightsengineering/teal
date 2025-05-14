@@ -59,7 +59,7 @@
 #' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]
 #'
 #' @export
-teal_data_module <- function(ui, server, label = "data module", once = TRUE) {
+teal_data_module <- function(ui = function(id) NULL, server = function(id) NULL, label = "data module", once = TRUE) {
   checkmate::assert_function(ui, args = "id", nargs = 1)
   checkmate::assert_function(server, args = "id", nargs = 1)
   checkmate::assert_string(label)

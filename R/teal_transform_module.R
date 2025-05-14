@@ -125,7 +125,7 @@
 #' @name teal_transform_module
 #'
 #' @export
-teal_transform_module <- function(ui = NULL,
+teal_transform_module <- function(ui = function(id) NULL,
                                   server = function(id, data) data,
                                   label = "transform module",
                                   datanames = "all") {

@@ -134,28 +134,49 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     )
 
-    data_handled <- srv_init_data("data", data = data)
+    data_mod <- if (inherits(data, "teal_data_module")) {
+      data
+    } else if (inherits(data, "teal_data")) {
+      teal_data_module(server = function(id) reactiveVal(data))
+    } else if (inherits(data, "reactive")) {
+      teal_data_module(server = function(id) data)
+    }
 
-    validate_ui <- tags$div(
-      id = session$ns("validate_messages"),
-      class = "validation-output-info",
-      ui_check_class_teal_data(session$ns("class_teal_data")),
-      ui_validate_error(session$ns("silent_error")),
-      ui_check_required_datanames(session$ns("datanames_warning"))
-    )
-    srv_check_class_teal_data("class_teal_data", data_handled)
-    srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
+    data_init_content <- ui_init_data(session$ns("data"))
+    if (inherits(data, "teal_data_module")) {
+      setBookmarkExclude(c("teal_modules-active_tab"))
+      bslib::nav_insert(
+        id = "teal_modules-active_tab",
+        position = "before",
+        select = TRUE,
+        bslib::nav_panel(
+          title = icon("fas fa-database"),
+          value = "teal_data_module",
+          data_init_content
+        )
+      )
+
+      if (attr(data, "once")) {
+        observeEvent(data_signatured(), once = TRUE, {
+          logger::log_debug("srv_teal@2 removing data tab.")
+          # when once = TRUE we pull data once and then remove data tab
+          removeTab("teal_modules-active_tab", target = "teal_data_module")
+        })
+      }
+    } else {
+      # when no teal_data_module then we want to display messages above tabsetPanel (because there is no data-tab)
+      insertUI(
+        selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
+        where = "beforeBegin",
+        ui = data_init_content
+      )
+    }
+
     datanames_required <- setNames(
       .flatten_list(module_attribute(modules, "datanames")),
       .flatten_list(module_attribute(modules, "label"))
     )
-    srv_check_required_datanames(
-      "datanames_warning",
-      data_handled,
-      datanames_required = datanames_required,
-      show_modules_info = TRUE
-    )
-
+    data_handled <- srv_init_data("data", data = data_mod, datanames_required = datanames_required)
     data_validated <- .trigger_on_success(data_handled)
 
     data_signatured <- reactive({
@@ -188,40 +209,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         logger::log_debug("srv_teal@1 initializing FilteredData")
         teal_data_to_filtered_data(data_signatured())
       })
-    }
-
-
-
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab"))
-      bslib::nav_insert(
-        id = "teal_modules-active_tab",
-        position = "before",
-        select = TRUE,
-        bslib::nav_panel(
-          title = icon("fas fa-database"),
-          value = "teal_data_module",
-          tags$div(
-            ui_init_data(session$ns("data")),
-            validate_ui
-          )
-        )
-      )
-
-      if (attr(data, "once")) {
-        observeEvent(data_signatured(), once = TRUE, {
-          logger::log_debug("srv_teal@2 removing data tab.")
-          # when once = TRUE we pull data once and then remove data tab
-          removeTab("teal_modules-active_tab", target = "teal_data_module")
-        })
-      }
-    } else {
-      # when no teal_data_module then we want to display messages above tabsetPanel (because there is no data-tab)
-      insertUI(
-        selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
-        where = "beforeBegin",
-        ui = tags$div(validate_ui, tags$br())
-      )
     }
 
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))

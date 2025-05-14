@@ -44,43 +44,37 @@ ui_init_data <- function(id) {
 }
 
 #' @rdname module_init_data
-srv_init_data <- function(id, data) {
+srv_init_data <- function(id, data, datanames_required) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_data initializing.")
-    data_out <- if (inherits(data, "teal_data_module")) {
-      output$data <- renderUI(data$ui(id = session$ns("teal_data_module")))
-      data$server("teal_data_module")
-    } else if (inherits(data, "teal_data")) {
-      reactiveVal(data)
-    } else if (test_reactive(data)) {
-      data
-    }
-
-    data_handled <- reactive({
-      tryCatch(data_out(), error = function(e) e)
-    })
+    output$data <- renderUI(.ui_call_teal_module(id = session$ns("teal_data_module"), ui = data$ui))
+    data_out <- .srv_call_teal_module(
+      id = "teal_data_module",
+      server = data$server,
+      data = reactive(teal_data()), # just to trigger .call_once_when
+      datanames_required = datanames_required,
+      validate_shiny_silent_error = FALSE
+    )
 
     # We want to exclude teal_data_module elements from bookmarking as they might have some secrets
-    observeEvent(data_handled(), {
-      if (inherits(data_handled(), "teal_data")) {
-        app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
-        setBookmarkExclude(
-          session$ns(
-            grep(
-              pattern = "teal_data_module-",
-              x = names(reactiveValuesToList(input)),
-              value = TRUE
-            )
-          ),
-          session = app_session
-        )
-      }
+    observeEvent(data_out(), {
+      app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+      setBookmarkExclude(
+        session$ns(
+          grep(
+            pattern = "teal_data_module-",
+            x = names(reactiveValuesToList(input)),
+            value = TRUE
+          )
+        ),
+        session = app_session
+      )
     })
 
-    data_handled
+    reactive(tryCatch(data_out(), error = function(e) e))
   })
 }
 

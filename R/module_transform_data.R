@@ -68,7 +68,8 @@ srv_transform_teal_data <- function(id, data, transformators, datanames_required
           id = x,
           data = data_previous,
           server = transformators[[x]]$server,
-          datanames_required = datanames_required
+          datanames_required = datanames_required,
+          validate_shiny_silent_error = TRUE
         )
       }
     )
