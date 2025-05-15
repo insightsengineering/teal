@@ -408,7 +408,7 @@ srv_teal_module.teal_module <- function(id,
 
     if (!is.null(reporter)) {
       reporter_card_out <- reactive({
-        card <- if (is.list(module_out())) {
+        if (is.list(module_out())) {
           module_out()$report_card()
         }
       })

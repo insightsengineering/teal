@@ -273,10 +273,10 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
     # please check the ui part for more information
     shiny::observeEvent(input$add_card_ok, {
       if (inherits(r_card_fun, "try-error")) {
-        msg <- paste0(
-          "The card could not be added to the report. ",
-          "Have the outputs for the report been created yet? If not please try again when they ",
-          "are ready. Otherwise contact your application developer"
+        msg <- paste(
+          "The card could not be added to the report.",
+          "Have the outputs for the report been created yet? If not please try again when they",
+          "are ready. Otherwise contact your application developer."
         )
         warning(msg)
         shiny::showNotification(
@@ -305,15 +305,11 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           )
           shinyjs::enable("add_card_ok")
         } else {
-          card <- r_card_fun()
-          card <- teal.reporter::edit_report_document(card, append = input$comment, after = 0)
+          card <- c(report_document(input$comment), r_card_fun())
           # card <- to_markdown(card)
-          lcard <- list(card)
-          names(lcard) <- input$label
+          reporter$append_cards(structure(list(card), names = input$label))
 
-          reporter$append_cards(lcard)
-
-          shiny::showNotification(sprintf("The card added successfully."), type = "message")
+          shiny::showNotification("The card added successfully.", type = "message")
           shiny::removeModal()
         }
       }

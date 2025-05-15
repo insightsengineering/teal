@@ -79,7 +79,7 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.reporter@redesign@main,
+    insightsengineering/teal.reporter@redesign%40main,
     insightsengineering/teal.slice@main,
     insightsengineering/teal.widgets@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
