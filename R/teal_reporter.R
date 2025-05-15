@@ -233,14 +233,8 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           ),
           shiny::tags$script(
             shiny::HTML(
-              sprintf(
-                "
-                $('#shiny-modal').on('shown.bs.modal', () => {
-                  $('#%s').focus()
-                })
-                ",
-                ns("label")
-              )
+              sprintf("shinyjs.autoFocusModal('%s');", ns("label")),
+              sprintf("shinyjs.enterToSubmit('%s', '%s');", ns("label"), ns("add_card_ok"))
             )
           ),
           footer = shiny::div(
