@@ -294,7 +294,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         } else {
           card <- c(report_document(input$comment), r_card_fun())
           # card <- to_markdown(card)
-          reporter$append_cards(structure(list(card), names = input$label))
+          reporter$append_cards(structure(list(card), names = new_card_name))
 
           shiny::showNotification("The card added successfully.", type = "message")
           shiny::removeModal()
