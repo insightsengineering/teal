@@ -26,12 +26,19 @@
   )
 }
 
-.srv_call_teal_module <- function(id, data, server, datanames_required, validate_shiny_silent_error = TRUE, ...) {
+.srv_call_teal_module <- function(id,
+                                  data,
+                                  server,
+                                  datanames_required,
+                                  validate_shiny_silent_error = TRUE,
+                                  validate_reactive = TRUE,
+                                  ...) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_function(server)
   checkmate::assert_list(datanames_required)
   checkmate::assert_flag(validate_shiny_silent_error)
+  checkmate::assert_flag(validate_reactive)
   moduleServer(id, function(input, output, session) {
     logger::log_debug(".srv_call_teal_module@1 initializing module for { id }.")
 
@@ -59,30 +66,29 @@
     .call_once_when(inherits(data_in_handled(), "teal_data"), {
       logger::log_debug(".srv_call_teal_module@2 triggering a module call for { id }.")
       data_out_unhandled <- .do_call_fun(server, id = "module_content", data = data, !!!rlang::list2(...))
-      if (is.reactive(data_out_unhandled)) {
-        # todo: validate message should be included in the data out object: for example id object is not teal_data
-        #       if object is not a reactive
-        data_out_handled <- reactive(tryCatch(data_out_unhandled(), error = function(e) e)) |>
-          srv_check_teal_data(id = "class_teal_data", validate_shiny_silent_error = validate_shiny_silent_error) |>
-          srv_check_required_datanames(id = "datanames_warning", datanames_required = datanames_required)
-        observeEvent(
-          {
-            data_out_handled()
-            data_in_handled()
-          },
-          {
-            if (inherits(data_in_handled(), "condition")) {
-              logger::log_debug(".srv_call_teal_module@3 update error output for module { id }.")
-              data_out(data_in_handled())
-            } else if (
-              inherits(data_in_handled(), c("condition", "teal_data")) && !identical(data_out_handled(), data_out())
-            ) {
-              logger::log_debug(".srv_call_teal_module@3 update output for module { id }.")
-              data_out(data_out_handled())
-            }
-          }
-        )
+      if (!is.reactive(data_out_unhandled) && !validate_reactive) {
+        return(data_out_unhandled)
       }
+      data_out_handled <- reactive(tryCatch(data_out_unhandled(), error = function(e) e)) |>
+        srv_check_teal_data(id = "class_teal_data", validate_shiny_silent_error = validate_shiny_silent_error) |>
+        srv_check_required_datanames(id = "datanames_warning", datanames_required = datanames_required)
+      observeEvent(
+        {
+          data_out_handled()
+          data_in_handled()
+        },
+        {
+          if (inherits(data_in_handled(), "condition")) {
+            logger::log_debug(".srv_call_teal_module@3 update error output for module { id }.")
+            data_out(data_in_handled())
+          } else if (
+            inherits(data_in_handled(), c("condition", "teal_data")) && !identical(data_out_handled(), data_out())
+          ) {
+            logger::log_debug(".srv_call_teal_module@3 update output for module { id }.")
+            data_out(data_out_handled())
+          }
+        }
+      )
     })
 
     # Ignoring unwanted reactivity breaks during initialization
