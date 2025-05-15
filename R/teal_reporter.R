@@ -273,19 +273,12 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           "are ready. Otherwise contact your application developer."
         )
         warning(msg)
-        shiny::showNotification(
-          msg,
-          type = "error"
-        )
+        shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
 
         if (nchar(new_card_name) == 0) {
-          shiny::showNotification(
-            "Card name cannot be empty.",
-            type = "error",
-            duration = 5
-          )
+          shiny::showNotification("Card name cannot be empty.", type = "error", duration = 5)
           shinyjs::enable("add_card_ok")
           return(NULL)
         }
@@ -293,7 +286,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
 
         if (new_card_name %in% existing_card_names) {
           shiny::showNotification(
-            paste("A card with the name '", new_card_name, "' already exists. Please use a different name."),
+            sprintf("A card with the name '%s' already exists. Please use a different name.", new_card_name),
             type = "error",
             duration = 5
           )
