@@ -310,3 +310,30 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
     })
   })
 }
+
+#' @noRd
+ui_add_reporter <- function(id) uiOutput(NS(id, "reporter_add_container"))
+
+#' @noRd
+srv_add_reporter <- function(id, module_out, reporter) {
+  if (is.null(reporter)) {
+    return(FALSE)
+  } # early exit
+  moduleServer(id, function(input, output, session) {
+    reporter_card_out <- reactive({
+      if (is.list(module_out())) {
+        module_out()$report_card()
+      }
+    })
+
+    output$reporter_add_container <- renderUI({
+      req(reporter_card_out())
+      tags$div(
+        class = "teal add-reporter-container",
+        teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+      )
+    })
+
+    add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
+  })
+}

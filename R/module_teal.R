@@ -223,46 +223,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       reporter = reporter
     )
 
-    if (!is.null(reporter)) {
-      reporter$set_id(attr(filter, "app_id"))
-      reporter_module <- extract_module(modules, "teal_module_previewer")[[1]]
-      modules <- drop_module(modules, "teal_module_previewer")
-
-      previewer_out <- do.call( # out for testing
-        reporter_module$server,
-        args = c(list(id = "report_previewer", reporter = reporter), reporter_module$server_args)
-      )
-      previewer_ui <- do.call(
-        reporter_module$ui,
-        args = c(list(id = session$ns("report_previewer")), reporter_module$ui_args)
-      )
-
-      # Report Previewer tab needs to be shown only if any module has a reporter functionality
-      any_use_reporter <- reactive({
-        f <- function(x) {
-          if (is.function(x)) {
-            f(x())
-          } else if ("report_card" %in% names(x)) {
-            TRUE
-          } else if (is.list(x)) {
-            sapply(x, f)
-          }
-        }
-        any(unlist(f(modules_output))) || is_arg_used(modules, "reporter")
-      })
-      # always insert reporter
-      bslib::nav_insert(
-        id = "teal_modules-active_tab",
-        nav = bslib::nav_panel(title = reporter_module$label, previewer_ui)
-      )
-      observeEvent(any_use_reporter(), {
-        if (any_use_reporter()) {
-          bslib::nav_show(id = "teal_modules-active_tab", target = reporter_module$label)
-        } else {
-          bslib::nav_hide(id = "teal_modules-active_tab", target = reporter_module$label)
-        }
-      })
-    }
+    srv_reporter_previewer_tab("reporter_manager", modules, modules_output, reporter, session)
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
