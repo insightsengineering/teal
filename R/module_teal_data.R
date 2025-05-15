@@ -37,76 +37,38 @@
 NULL
 
 #' @keywords internal
-ui_validate_error <- function(id) {
+ui_check_teal_data <- function(id) {
   ns <- NS(id)
   uiOutput(ns("message"))
 }
 
 #' @keywords internal
-srv_validate_error <- function(id, data, validate_shiny_silent_error) {
-  checkmate::assert_string(id)
-  checkmate::assert_flag(validate_shiny_silent_error)
-  moduleServer(id, function(input, output, session) {
-    data_handled <- reactive({
-      tryCatch(data(), error = function(e) e)
-    })
-    output$message <- renderUI({
-      is_shiny_silent_error <- inherits(data_handled(), "shiny.silent.error") && identical(data()$message, "")
-      if (inherits(data_handled(), "qenv.error")) {
-        validate(
-          need(
-            FALSE,
-            paste(
-              "Error when executing the `data` module:",
-              cli::ansi_strip(paste(data_handled()$message, collapse = "\n")),
-              "\nCheck your inputs or contact app developer if error persists.",
-              collapse = "\n"
-            )
-          )
-        )
-      } else if (inherits(data_handled(), "error")) {
-        if (is_shiny_silent_error && !validate_shiny_silent_error) {
-          return(NULL)
-        }
-        validate(
-          need(
-            FALSE,
-            sprintf(
-              "Shiny error when executing the `data` module.\n%s\n%s",
-              data_handled()$message,
-              "Check your inputs or contact app developer if error persists."
-            )
-          )
-        )
-      }
-    })
-    data_handled
-  })
-}
-
-
-#' @keywords internal
-ui_check_class_teal_data <- function(id) {
-  ns <- NS(id)
-  uiOutput(ns("message"))
-}
-
-#' @keywords internal
-srv_check_class_teal_data <- function(id, data) {
+srv_check_teal_data <- function(id, data, validate_shiny_silent_error) {
   checkmate::assert_string(id)
   moduleServer(id, function(input, output, session) {
     data_handled <- reactive({
       d <- tryCatch(data(), error = function(e) e)
-      if (!inherits(d, "teal_data")) {
+      if (inherits(d, "shiny.silent.error") && identical(d$message, "")) {
+        if (validate_shiny_silent_error) {
+          simpleError(message = "Error when evaluating a module. Please contact an app developer if error persist")
+        } else {
+          d
+        }
+      } else if (inherits(d, "error")) {
+        simpleError(
+          message = sprintf(
+            "Error when evaluating a module:\n\n %s \n\nPlease contact an app developer if error persist",
+            trimws(paste(d$message, collapse = " "))
+          )
+        )
+      } else if (!inherits(d, "teal_data")) {
         simpleError(message = "Did not receive `teal_data` object. Cannot proceed further.")
       } else {
         d
       }
     })
     output$message <- renderUI({
-      if (!inherits(data_handled(), "teal_data")) {
-        req(data_handled())
-      }
+      validate(need(!inherits(data_handled(), "error"), data_handled()$message))
     })
     data_handled
   })

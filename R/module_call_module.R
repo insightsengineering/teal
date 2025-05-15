@@ -50,8 +50,7 @@
     output$error <- renderUI({
       if (inherits(data_in_handled(), "teal_data")) {
         shiny::tagList(
-          ui_validate_error(session$ns("silent_error")),
-          ui_check_class_teal_data(session$ns("class_teal_data")),
+          ui_check_teal_data(session$ns("class_teal_data")),
           ui_check_required_datanames(session$ns("datanames_warning"))
         )
       }
@@ -64,8 +63,7 @@
         # todo: validate message should be included in the data out object: for example id object is not teal_data
         #       if object is not a reactive
         data_out_handled <- reactive(tryCatch(data_out_unhandled(), error = function(e) e)) |>
-          srv_validate_error(id = "silent_error", validate_shiny_silent_error = validate_shiny_silent_error) |>
-          srv_check_class_teal_data(id = "class_teal_data") |>
+          srv_check_teal_data(id = "class_teal_data", validate_shiny_silent_error = validate_shiny_silent_error) |>
           srv_check_required_datanames(id = "datanames_warning", datanames_required = datanames_required)
         observeEvent(
           {
