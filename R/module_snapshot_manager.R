@@ -171,6 +171,12 @@ srv_snapshot_manager <- function(id, slices_global) {
       showModal(
         modalDialog(
           textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
+          tags$script(
+            shiny::HTML(
+              sprintf("shinyjs.autoFocusModal('%s');", ns("snapshot_name")),
+              sprintf("shinyjs.enterToSubmit('%s', '%s');", ns("snapshot_name"), ns("snapshot_name_accept"))
+            )
+          ),
           footer = tagList(
             actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("far fa-thumbs-up")),
             modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))

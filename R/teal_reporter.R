@@ -233,14 +233,8 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           ),
           shiny::tags$script(
             shiny::HTML(
-              sprintf(
-                "
-                $('#shiny-modal').on('shown.bs.modal', () => {
-                  $('#%s').focus()
-                })
-                ",
-                ns("label")
-              )
+              sprintf("shinyjs.autoFocusModal('%s');", ns("label")),
+              sprintf("shinyjs.enterToSubmit('%s', '%s');", ns("label"), ns("add_card_ok"))
             )
           ),
           footer = shiny::div(
@@ -273,25 +267,18 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
     # please check the ui part for more information
     shiny::observeEvent(input$add_card_ok, {
       if (inherits(r_card_fun, "try-error")) {
-        msg <- paste0(
-          "The card could not be added to the report. ",
-          "Have the outputs for the report been created yet? If not please try again when they ",
-          "are ready. Otherwise contact your application developer"
+        msg <- paste(
+          "The card could not be added to the report.",
+          "Have the outputs for the report been created yet? If not please try again when they",
+          "are ready. Otherwise contact your application developer."
         )
         warning(msg)
-        shiny::showNotification(
-          msg,
-          type = "error"
-        )
+        shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
 
         if (nchar(new_card_name) == 0) {
-          shiny::showNotification(
-            "Card name cannot be empty.",
-            type = "error",
-            duration = 5
-          )
+          shiny::showNotification("Card name cannot be empty.", type = "error", duration = 5)
           shinyjs::enable("add_card_ok")
           return(NULL)
         }
@@ -299,24 +286,47 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
 
         if (new_card_name %in% existing_card_names) {
           shiny::showNotification(
-            paste("A card with the name '", new_card_name, "' already exists. Please use a different name."),
+            sprintf("A card with the name '%s' already exists. Please use a different name.", new_card_name),
             type = "error",
             duration = 5
           )
           shinyjs::enable("add_card_ok")
         } else {
-          card <- r_card_fun()
-          card <- teal.reporter::edit_report_document(card, append = input$comment, after = 0)
+          card <- c(report_document(input$comment), r_card_fun())
           # card <- to_markdown(card)
-          lcard <- list(card)
-          names(lcard) <- input$label
+          reporter$append_cards(structure(list(card), names = new_card_name))
 
-          reporter$append_cards(lcard)
-
-          shiny::showNotification(sprintf("The card added successfully."), type = "message")
+          shiny::showNotification("The card added successfully.", type = "message")
           shiny::removeModal()
         }
       }
     })
+  })
+}
+
+#' @noRd
+ui_add_reporter <- function(id) uiOutput(NS(id, "reporter_add_container"))
+
+#' @noRd
+srv_add_reporter <- function(id, module_out, reporter) {
+  if (is.null(reporter)) {
+    return(FALSE)
+  } # early exit
+  moduleServer(id, function(input, output, session) {
+    reporter_card_out <- reactive({
+      if (is.list(module_out())) {
+        module_out()$report_card()
+      }
+    })
+
+    output$reporter_add_container <- renderUI({
+      req(reporter_card_out())
+      tags$div(
+        class = "teal add-reporter-container",
+        teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+      )
+    })
+
+    add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
   })
 }

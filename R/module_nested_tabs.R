@@ -111,8 +111,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
         class = "teal_validated",
         ui_check_module_datanames(ns("validate_datanames"))
       ),
-      uiOutput(ns("reporter_add_container")),
-      # uiOutput(ns("show_rcode_container")) # todo: same mechanism as for the reporter
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
@@ -120,6 +118,8 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
   div(
     id = id,
     class = "teal_module",
+    ui_add_reporter(ns("add_reporter_wrapper")),
+    # uiOutput(ns("show_rcode_container")), # todo: same mechanism as for the reporter
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       if (depth >= 2L) tags$div(),
@@ -406,24 +406,7 @@ srv_teal_module.teal_module <- function(id,
       )
     })
 
-    if (!is.null(reporter)) {
-      reporter_card_out <- reactive({
-        card <- if (is.list(module_out())) {
-          module_out()$report_card()
-        }
-      })
-
-      output$reporter_add_container <- renderUI({
-        req(reporter_card_out())
-        tags$div(
-          class = "teal add-reporter-container",
-          teal.reporter::add_card_button_ui(session$ns("reporter_add"))
-        )
-      })
-
-      add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
-    }
-
+    srv_add_reporter("add_reporter_wrapper", module_out, reporter)
     module_out
   })
 }
