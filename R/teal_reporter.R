@@ -260,6 +260,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
     }
 
     shiny::observeEvent(input$add_report_card_button, {
+      shiny::removeModal()
       shiny::showModal(add_modal())
     })
 
@@ -293,8 +294,8 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           shinyjs::enable("add_card_ok")
         } else {
           card <- c(report_document(input$comment), r_card_fun())
-          # card <- to_markdown(card)
-          reporter$append_cards(structure(list(card), names = new_card_name))
+          label(card) <- new_card_name
+          reporter$append_cards(card)
 
           shiny::showNotification("The card added successfully.", type = "message")
           shiny::removeModal()
