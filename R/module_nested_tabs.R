@@ -272,7 +272,7 @@ srv_teal_module.teal_modules <- function(id,
       }
     })
 
-    modules_output <- sapply(
+    lapply(
       names(modules$children),
       function(module_id) {
         srv_teal_module(
@@ -288,11 +288,8 @@ srv_teal_module.teal_modules <- function(id,
               identical(data_load_status(), "ok")
           )
         )
-      },
-      simplify = FALSE
+      }
     )
-
-    modules_output
   })
 }
 
