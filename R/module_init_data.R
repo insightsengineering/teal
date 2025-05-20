@@ -103,7 +103,7 @@ srv_init_data <- function(id, data) {
       )
     )
   )
-
+  tdata@report <- data@report
   tdata@verified <- data@verified
   tdata
 }
