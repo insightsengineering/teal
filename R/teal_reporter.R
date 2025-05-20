@@ -283,23 +283,25 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
           shinyjs::enable("add_card_ok")
           return(NULL)
         }
-        existing_card_names <- names(reporter$get_cards())
 
-        if (new_card_name %in% existing_card_names) {
-          shiny::showNotification(
-            sprintf("A card with the name '%s' already exists. Please use a different name.", new_card_name),
-            type = "error",
-            duration = 5
-          )
-          shinyjs::enable("add_card_ok")
-        } else {
-          card <- c(report_document(input$comment), r_card_fun())
-          label(card) <- new_card_name
-          reporter$append_cards(card)
+        card <- c(report_document(input$comment), r_card_fun())
+        label(card) <- new_card_name
 
-          shiny::showNotification("The card added successfully.", type = "message")
-          shiny::removeModal()
-        }
+        tryCatch(
+          {
+            reporter$append_cards(card)
+            shiny::showNotification("The card added successfully.", type = "message")
+            shiny::removeModal()
+          },
+          error = function(err) {
+            shiny::showNotification(
+              sprintf("A card with the name '%s' already exists. Please use a different name.", new_card_name),
+              type = "error",
+              duration = 5
+            )
+            shinyjs::enable("add_card_ok")
+          }
+        )
       }
     })
   })
