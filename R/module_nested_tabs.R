@@ -56,8 +56,10 @@ ui_teal_module.teal_modules <- function(id, modules, ..., depth = 0L) {
   l <- list(...)
   add_ui <- !is.null(modules$children) && isTRUE(l$ok)
   id_wrapper <- ns("wrapper")
-  id_tab <- NS(id, "active_tab")
-  ui <- tags$div(
+
+  logger::log_info("teal_moduleSS wrapper:", id_wrapper)
+  logger::log_info("teal_moduleSS tab: ", ns("active_tab"))
+  tags$div(
     id = id_wrapper,
     do.call(
       switch(as.character(depth),
@@ -68,7 +70,7 @@ ui_teal_module.teal_modules <- function(id, modules, ..., depth = 0L) {
       c(
         # by giving an id, we can reactively respond to tab changes
         list(
-          id = id_tab
+          id = ns("active_tab")
         ),
         if (add_ui) {
           lapply(
@@ -82,7 +84,7 @@ ui_teal_module.teal_modules <- function(id, modules, ..., depth = 0L) {
                 title = module_label,
                 value = module_id, # when clicked this tab value changes input$<tabset panel id>
                 ui_teal_module(
-                  id = NS(id_tab, module_id),
+                  id = ns(module_id),
                   modules = modules$children[[module_id]],
                   depth = depth + 1L
                 )
@@ -93,7 +95,6 @@ ui_teal_module.teal_modules <- function(id, modules, ..., depth = 0L) {
       )
     )
   )
-  ui
 }
 
 #' @rdname module_teal_module
@@ -102,7 +103,7 @@ ui_teal_module.teal_module <- function(id, modules, ..., depth = 0L) {
   checkmate::assert_count(depth)
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
-
+  logger::log_info("ns_teal_module: ", ns(NULL))
   ui_teal <- tags$div(
     shinyjs::hidden(
       tags$div(
@@ -266,11 +267,18 @@ srv_teal_module.teal_modules <- function(id,
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     observeEvent(data_load_status(), {
-      tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
+      tabs_selector <- sprintf("#%s", session$ns("active_tab"))
       if (identical(data_load_status(), "ok")) {
+        logger::log_info(session$ns("module"))
+        ui_modules <- ui_teal_module(id = session$ns("module"),
+                                     modules = modules,
+                                     ok = TRUE)
         shiny::insertUI(selector = tabs_selector,
                         where = "beforeEnd",
                         ui = ui_modules)
+
+        # shinyjs::show("wrapper")
+        # shinyjs::enable(selector = tabs_selector)
       } else if (identical(data_load_status(), "teal_data_module failed")) {
         logger::log_debug("srv_teal_module@1 disabling modules tabs.")
         shinyjs::disable(selector = tabs_selector)
