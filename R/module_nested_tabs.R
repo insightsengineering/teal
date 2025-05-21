@@ -13,6 +13,8 @@
 #' @param slices_global (`reactiveVal` returning `modules_teal_slices`)
 #'   see [`module_filter_manager`]
 #'
+#' @param ... Other arguments depending on the method.
+#'
 #' @param depth (`integer(1)`)
 #'  number which helps to determine depth of the modules nesting.
 #'
@@ -36,24 +38,27 @@
 NULL
 
 #' @rdname module_teal_module
-ui_teal_module <- function(id, modules, depth = 0L) {
+ui_teal_module <- function(id, modules, ...) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
-  checkmate::assert_count(depth)
   UseMethod("ui_teal_module", modules)
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.default <- function(id, modules, depth = 0L) {
+ui_teal_module.default <- function(id, modules, ...) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
+ui_teal_module.teal_modules <- function(id, modules, ..., depth = 0L) {
   ns <- NS(id)
-  tags$div(
-    id = ns("wrapper"),
+  l <- list(...)
+  add_ui <- !is.null(modules$children) && isTRUE(l$ok)
+  id_wrapper <- ns("wrapper")
+  id_tab <- NS(id, "active_tab")
+  ui <- tags$div(
+    id = id_wrapper,
     do.call(
       switch(as.character(depth),
         "0" = bslib::navset_pill,
@@ -63,34 +68,38 @@ ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
       c(
         # by giving an id, we can reactively respond to tab changes
         list(
-          id = ns("active_tab")
+          id = id_tab
         ),
-        lapply(
-          names(modules$children),
-          function(module_id) {
-            module_label <- modules$children[[module_id]]$label
-            if (is.null(module_label)) {
-              module_label <- icon("fas fa-database")
-            }
-            bslib::nav_panel(
-              title = module_label,
-              value = module_id, # when clicked this tab value changes input$<tabset panel id>
-              ui_teal_module(
-                id = ns(module_id),
-                modules = modules$children[[module_id]],
-                depth = depth + 1L
+        if (add_ui) {
+          lapply(
+            names(modules$children),
+            function(module_id) {
+              module_label <- modules$children[[module_id]]$label
+              if (is.null(module_label)) {
+                module_label <- icon("fas fa-database")
+              }
+              bslib::nav_panel(
+                title = module_label,
+                value = module_id, # when clicked this tab value changes input$<tabset panel id>
+                ui_teal_module(
+                  id = NS(id_tab, module_id),
+                  modules = modules$children[[module_id]],
+                  depth = depth + 1L
+                )
               )
-            )
-          }
-        )
+            }
+          )
+        }
       )
     )
   )
+  ui
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
+ui_teal_module.teal_module <- function(id, modules, ..., depth = 0L) {
+  checkmate::assert_count(depth)
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
 
@@ -114,7 +123,6 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
-
   div(
     id = id,
     class = "teal_module",
@@ -260,15 +268,15 @@ srv_teal_module.teal_modules <- function(id,
     observeEvent(data_load_status(), {
       tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
       if (identical(data_load_status(), "ok")) {
-        logger::log_debug("srv_teal_module@1 enabling modules tabs.")
-        shinyjs::show("wrapper")
-        shinyjs::enable(selector = tabs_selector)
+        shiny::insertUI(selector = tabs_selector,
+                        where = "beforeEnd",
+                        ui = ui_modules)
       } else if (identical(data_load_status(), "teal_data_module failed")) {
         logger::log_debug("srv_teal_module@1 disabling modules tabs.")
         shinyjs::disable(selector = tabs_selector)
       } else if (identical(data_load_status(), "external failed")) {
         logger::log_debug("srv_teal_module@1 hiding modules tabs.")
-        shinyjs::hide("wrapper")
+        shinyjs::hide(session$ns("wrapper"))
       }
     })
 
@@ -306,7 +314,6 @@ srv_teal_module.teal_module <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
     module_out <- reactiveVal()
-
     active_datanames <- reactive({
       .resolve_module_datanames(data = data(), modules = modules)
     })
