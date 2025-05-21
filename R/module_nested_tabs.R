@@ -303,8 +303,8 @@ srv_teal_module.teal_module <- function(id,
                                         reporter = teal.reporter::Reporter$new(),
                                         data_load_status = reactive("ok"),
                                         is_active = reactive(TRUE)) {
-  logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
+    logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
     module_out <- reactiveVal()
 
     active_datanames <- reactive({
