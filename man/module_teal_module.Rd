@@ -12,13 +12,13 @@
 \alias{srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-ui_teal_module(id, modules, depth = 0L)
+ui_teal_module(id, modules, ...)
 
-\method{ui_teal_module}{default}(id, modules, depth = 0L)
+\method{ui_teal_module}{default}(id, modules, ...)
 
-\method{ui_teal_module}{teal_modules}(id, modules, depth = 0L)
+\method{ui_teal_module}{teal_modules}(id, modules, ..., depth = 0L)
 
-\method{ui_teal_module}{teal_module}(id, modules, depth = 0L)
+\method{ui_teal_module}{teal_module}(id, modules, ..., depth = 0L)
 
 srv_teal_module(
   id,
@@ -71,6 +71,8 @@ srv_teal_module(
 \code{teal_modules} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
+
+\item{...}{Other arguments depending on the method.}
 
 \item{depth}{(\code{integer(1)})
 number which helps to determine depth of the modules nesting.}
