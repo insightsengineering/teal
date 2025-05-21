@@ -285,7 +285,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         }
 
         card <- c(report_document(input$comment), r_card_fun())
-        label(card) <- new_card_name
+        metadata(card, "title") <- new_card_name
 
         tryCatch(
           {
