@@ -111,8 +111,7 @@ ui_teal_module.teal_module <- function(id, modules, ..., depth = 0L) {
         "One of transformators failed. Please check its inputs.",
         class = "teal-output-warning"
       )
-    )
-    ),
+    )),
     tags$div(
       id = ns("teal_module_ui"),
       tags$div(
@@ -267,13 +266,16 @@ srv_teal_module.teal_modules <- function(id,
     observeEvent(data_load_status(), {
       tabs_selector <- sprintf("#%s", session$ns("active_tab"))
       if (identical(data_load_status(), "ok")) {
-        ui_modules <- ui_teal_module(id = session$ns("module"),
-                                     modules = modules,
-                                     ok = TRUE)
-        shiny::insertUI(selector = tabs_selector,
-                        where = "beforeEnd",
-                        ui = ui_modules)
-
+        ui_modules <- ui_teal_module(
+          id = session$ns("module"),
+          modules = modules,
+          ok = TRUE
+        )
+        shiny::insertUI(
+          selector = tabs_selector,
+          where = "beforeEnd",
+          ui = ui_modules
+        )
       } else if (identical(data_load_status(), "teal_data_module failed")) {
         logger::log_debug("srv_teal_module@1 disabling modules tabs.")
         shinyjs::disable(selector = tabs_selector)
