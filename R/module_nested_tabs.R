@@ -102,17 +102,19 @@ ui_teal_module.teal_modules <- function(id, modules, ..., depth = 0L) {
 ui_teal_module.teal_module <- function(id, modules, ..., depth = 0L) {
   checkmate::assert_count(depth)
   ns <- NS(id)
+  l <- list(...)
+  ok <- !is.null(l) && isTRUE(l$ok)
+  # browser()
+  # #teal-teal_modules-module-example_teal_module
   args <- c(list(id = ns("module")), modules$ui_args)
   logger::log_info("ns_teal_module: ", ns(NULL))
   ui_teal <- tags$div(
-    shinyjs::hidden(
-      tags$div(
-        id = ns("transform_failure_info"),
-        class = "teal_validated",
-        div(
-          class = "teal-output-warning",
-          "One of transformators failed. Please check its inputs."
-        )
+    tags$div(
+      id = ns("transform_failure_info"),
+      class = "teal_validated",
+      div(
+        class = "teal-output-warning",
+        "One of transformators failed. Please check its inputs."
       )
     ),
     tags$div(
@@ -280,9 +282,11 @@ srv_teal_module.teal_modules <- function(id,
         # shinyjs::show("wrapper")
         # shinyjs::enable(selector = tabs_selector)
       } else if (identical(data_load_status(), "teal_data_module failed")) {
+        shiny::removeUI(selector = tabs_selector)
         logger::log_debug("srv_teal_module@1 disabling modules tabs.")
         shinyjs::disable(selector = tabs_selector)
       } else if (identical(data_load_status(), "external failed")) {
+        shiny::removeUI(selector = tabs_selector)
         logger::log_debug("srv_teal_module@1 hiding modules tabs.")
         shinyjs::hide(session$ns("wrapper"))
       }
