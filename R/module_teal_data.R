@@ -139,7 +139,8 @@ srv_validate_reactive_teal_data <- function(id, # nolint: object_length
       if (hide_validation_error()) {
         shinyjs::hide("validate_messages")
         tags$div("One of previous transformators failed. Please check its inputs.",
-                 class = "teal-output-warning")
+          class = "teal-output-warning"
+        )
       } else {
         shinyjs::show("validate_messages")
         NULL
