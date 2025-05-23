@@ -209,7 +209,6 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
     ))
 
     ns <- session$ns
-
     add_modal <- function() {
       div(
         class = "teal-widgets reporter-modal",
@@ -277,31 +276,12 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
-
-        if (nchar(new_card_name) == 0) {
-          shiny::showNotification("Card name cannot be empty.", type = "error", duration = 5)
-          shinyjs::enable("add_card_ok")
-          return(NULL)
-        }
-
         card <- c(report_document(input$comment), r_card_fun())
         metadata(card, "title") <- new_card_name
 
-        tryCatch(
-          {
-            reporter$append_cards(card)
-            shiny::showNotification("The card added successfully.", type = "message")
-            shiny::removeModal()
-          },
-          error = function(err) {
-            shiny::showNotification(
-              sprintf("A card with the name '%s' already exists. Please use a different name.", new_card_name),
-              type = "error",
-              duration = 5
-            )
-            shinyjs::enable("add_card_ok")
-          }
-        )
+        reporter$append_cards(card)
+        shiny::showNotification("The card added successfully.", type = "message")
+        shiny::removeModal()
       }
     })
   })
@@ -330,6 +310,10 @@ srv_add_reporter <- function(id, module_out, reporter) {
       )
     })
 
-    add_document_button_srv("reporter_add", reporter = reporter, r_card_fun = reporter_card_out)
+    add_document_button_srv(
+      "reporter_add",
+      reporter = reporter,
+      r_card_fun = reporter_card_out
+    )
   })
 }
