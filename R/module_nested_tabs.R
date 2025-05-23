@@ -107,7 +107,6 @@ ui_teal_module.teal_module <- function(id, modules, ..., depth = 0L) {
   # browser()
   # #teal-teal_modules-module-example_teal_module
   args <- c(list(id = ns("module")), modules$ui_args)
-  logger::log_info("ns_teal_module: ", ns(NULL))
   ui_teal <- tags$div(
     tags$div(
       id = ns("transform_failure_info"),
