@@ -296,7 +296,7 @@ srv_teal_module.teal_modules <- function(id,
       names(modules$children),
       function(module_id) {
         srv_teal_module(
-          id = module_id,
+          id = paste0("module-", module_id),
           data = data,
           modules = modules$children[[module_id]],
           datasets = datasets,
