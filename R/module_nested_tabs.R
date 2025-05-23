@@ -108,14 +108,14 @@ ui_teal_module.teal_module <- function(id, modules, ..., depth = 0L) {
   # #teal-teal_modules-module-example_teal_module
   args <- c(list(id = ns("module")), modules$ui_args)
   ui_teal <- tags$div(
-    tags$div(
+    shinyjs::hidden(tags$div(
       id = ns("transform_failure_info"),
       class = "teal_validated",
       div(
-        class = "teal-output-warning",
-        "One of transformators failed. Please check its inputs."
+        "One of transformators failed. Please check its inputs.",
+        class = "teal-output-warning"
       )
-    ),
+    )),
     tags$div(
       id = ns("teal_module_ui"),
       tags$div(
