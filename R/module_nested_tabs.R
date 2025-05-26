@@ -264,7 +264,7 @@ srv_teal_module.teal_modules <- function(id,
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     observeEvent(data_load_status(), {
-      tabs_selector <- sprintf("#%s", session$ns("active_tab"))
+      tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
       if (identical(data_load_status(), "ok")) {
         ui_modules <- ui_teal_module(
           id = session$ns("module"),
@@ -282,6 +282,10 @@ srv_teal_module.teal_modules <- function(id,
       } else if (identical(data_load_status(), "external failed")) {
         logger::log_debug("srv_teal_module@1 hiding modules tabs.")
         shinyjs::hide(session$ns("wrapper"))
+      } else {
+        logger::log_debug("srv_teal_module@1 enabling modules tabs.")
+        shinyjs::show(selector = tabs_selector)
+        shinyjs::enable(selector = tabs_selector)
       }
     })
 
@@ -289,7 +293,7 @@ srv_teal_module.teal_modules <- function(id,
       names(modules$children),
       function(module_id) {
         srv_teal_module(
-          id = paste0("module-", module_id),
+          id = module_id,
           data = data,
           modules = modules$children[[module_id]],
           datasets = datasets,
@@ -329,6 +333,34 @@ srv_teal_module.teal_module <- function(id,
         teal_data_to_filtered_data(data(), datanames = active_datanames())
       })
     }
+
+    observeEvent(data_load_status(), {
+      tabs_selector <- sprintf("#%s", "teal-teal_modules-wrapper > div")
+      if (identical(data_load_status(), "ok")) {
+        logger::log_info("logging ok; id ", id, " session id ", session$ns(NULL))
+        ui_modules <- ui_teal_module(
+          id = session$ns(NULL),
+          modules = modules,
+          ok = TRUE
+        )
+        #teal-teal_modules-active_tab > li:nth-child(2) > a
+        shiny::insertUI(
+          selector = tabs_selector,
+          where = "beforeEnd",
+          ui = ui_modules
+        )
+      } else if (identical(data_load_status(), "teal_data_module failed")) {
+        logger::log_debug("srv_teal_module@1 disabling modules tabs.")
+        shinyjs::disable(selector = tabs_selector)
+      } else if (identical(data_load_status(), "external failed")) {
+        logger::log_debug("srv_teal_module@1 hiding modules tabs.")
+        shinyjs::hide(session$ns("wrapper"))
+      } else {
+        logger::log_debug("srv_teal_module@1 enabling modules tabs.")
+        shinyjs::show(selector = tabs_selector)
+        shinyjs::enable(selector = tabs_selector)
+      }
+    })
 
     # manage module filters on the module level
     # important:
