@@ -343,7 +343,7 @@ srv_teal_module.teal_module <- function(id,
           modules = modules,
           ok = TRUE
         )
-        #teal-teal_modules-active_tab > li:nth-child(2) > a
+        # teal-teal_modules-active_tab > li:nth-child(2) > a
         shiny::insertUI(
           selector = tabs_selector,
           where = "beforeEnd",
