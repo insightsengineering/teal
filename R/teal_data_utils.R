@@ -20,8 +20,8 @@ NULL
 .append_evaluated_code <- function(data, code) {
   checkmate::assert_class(data, "teal_data")
   data@code <- c(data@code, code2list(code))
-  teal.data::report(data) <- c(
-    teal.data::report(data),
+  teal.reporter::report(data) <- c(
+    teal.reporter::report(data),
     "# Data filtering",
     teal.reporter::code_chunk(code)
   )

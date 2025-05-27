@@ -300,8 +300,8 @@ srv_add_reporter <- function(id, module_out, reporter) {
       req(module_out())
       if (is.reactive(module_out())) {
         req(module_out()())
-        if (inherits(module_out()(), "teal_data")) {
-          .collapse_subsequent_chunks(teal.data::report(module_out()()))
+        if (inherits(module_out()(), "teal_reportable")) {
+          .collapse_subsequent_chunks(teal.reporter::report(module_out()()))
         }
       }
     })
