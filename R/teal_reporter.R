@@ -296,14 +296,18 @@ srv_add_reporter <- function(id, module_out, reporter) {
     return(FALSE)
   } # early exit
   moduleServer(id, function(input, output, session) {
-    reporter_card_out <- reactive({
-      if (is.list(module_out())) {
-        module_out()$report_card()
+    report_document_out <- reactive({
+      req(module_out())
+      if (is.reactive(module_out())) {
+        req(module_out()())
+        if (inherits(module_out()(), "teal_data")) {
+          .collapse_subsequent_chunks(teal.data::report(module_out()()))
+        }
       }
     })
 
     output$reporter_add_container <- renderUI({
-      req(reporter_card_out())
+      req(report_document_out())
       tags$div(
         class = "teal add-reporter-container",
         teal.reporter::add_card_button_ui(session$ns("reporter_add"))
