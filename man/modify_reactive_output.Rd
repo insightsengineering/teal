@@ -4,7 +4,7 @@
 \alias{modify_reactive_output}
 \title{Modify Reactive Outputs of a \code{teal} Module}
 \usage{
-modify_reactive_output(teal_module, ...)
+modify_reactive_output(teal_module, fun = function(data) data)
 }
 \arguments{
 \item{teal_module}{(\code{teal_module})}
