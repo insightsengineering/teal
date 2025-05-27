@@ -317,7 +317,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
     add_document_button_srv(
       "reporter_add",
       reporter = reporter,
-      r_card_fun = reporter_card_out
+      r_card_fun = report_document_out
     )
   })
 }
