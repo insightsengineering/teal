@@ -92,7 +92,7 @@ srv_init_data <- function(id, data) {
   hashes <- .get_hashes_code(data)
   data_reportable <- as.reportable(data)
   tdata <- do.call(
-    teal.reporter::teal_reportable,
+    teal.reporter::teal_report,
     c(
       list(
         code = trimws(c(teal.code::get_code(data), hashes), which = "right"),
