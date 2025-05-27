@@ -25,21 +25,9 @@
 #'   original `teal_module`.
 #'
 #' @export
-modify_reactive_output <- function(teal_module, ...) {
+modify_reactive_output <- function(teal_module, fun = function(data) data) {
   checkmate::assert_class(teal_module, "teal_module")
-  output_funs <- list(...)
-
-  if (length(output_funs) == 0) {
-    warning("No output transformations specified for modify_reactive_output. Returning original module.")
-    return(teal_module)
-  }
-  if (is.null(names(output_funs)) || any(names(output_funs) == "" | duplicated(names(output_funs)))) {
-    stop("All transformations supplied to modify_reactive_output must be uniquely named.")
-  }
-  are_functions <- vapply(output_funs, is.function, logical(1))
-  if (!all(are_functions)) {
-    stop("All transformations supplied to modify_reactive_output must be functions.")
-  }
+  checkmate::assert_function(fun)
 
   original_server <- teal_module$server
   original_ui <- teal_module$ui
@@ -65,30 +53,8 @@ modify_reactive_output <- function(teal_module, ...) {
 
     moduleServer(id, function(input, output, session) {
       eval_args$id <- "modified"
-      original_outputs <- do.call(original_server, eval_args)
-
-      missing_output_names <- setdiff(names(output_funs), names(original_outputs))
-      if (length(missing_output_names)) {
-        stop("The provided teal_module does not return: ", toString(missing_output_names))
-      }
-
-      modified_output <- sapply(
-        names(output_funs),
-        function(output_name) {
-          if (is.reactive(original_outputs[[output_name]])) {
-            reactive({
-              res <- original_outputs[[output_name]]()
-              output_funs[[output_name]](res)
-            })
-          } else {
-            res <- original_outputs[[output_name]]
-            output_funs[[output_name]](res)
-          }
-        },
-        USE.NAMES = TRUE
-      )
-
-      return(modifyList(original_outputs, modified_output))
+      out <- do.call(original_server, eval_args)
+      reactive(fun(out()))
     })
   })
 
@@ -103,62 +69,9 @@ modify_reactive_output <- function(teal_module, ...) {
   )
 }
 
-modify_report_card <- function(teal_module, modify_fun) {
-  modify_reactive_output(teal_module, report_card = modify_fun)
-}
-
 disable_report <- function(teal_module) {
-  modify_reactive_output(teal_module, report_card = function(report_card) NULL)
+  modify_reactive_output(teal_module, fun = function(data) {
+    report(data) <- report_document()
+    data
+  })
 }
-
-
-############################################################## EXAMPLE
-#
-# take_3_elements <- function(x){
-#   teal.reporter::edit_report_document(x, modify = 1:3)
-# }
-#
-# devtools::load_all('../teal.reporter')
-# devtools::load_all('../teal.widgets')
-# devtools::load_all('../teal.code')
-# devtools::load_all('.')
-# devtools::load_all('../teal.modules.general')
-#
-# data <- teal_data()
-# data <- within(data, {
-#   require(nestcolor)
-#   CO2 <- CO2
-# })
-#
-# app <- init(
-#   data = data,
-#   modules = modules(
-#     tm_a_regression(
-#       label = "Regression",
-#       response = data_extract_spec(
-#         dataname = "CO2",
-#         select = select_spec(
-#           label = "Select variable:",
-#           choices = "uptake",
-#           selected = "uptake",
-#           multiple = FALSE,
-#           fixed = TRUE
-#         )
-#       ),
-#       regressor = data_extract_spec(
-#         dataname = "CO2",
-#         select = select_spec(
-#           label = "Select variables:",
-#           choices = variable_choices(data[["CO2"]], c("conc", "Treatment")),
-#           selected = "conc",
-#           multiple = TRUE,
-#           fixed = FALSE
-#         )
-#       )
-#     ) |> modify_teal_module_report_card(take_3_elements)
-#   )
-# )
-#
-# if (interactive()) {
-#   shinyApp(app$ui, app$server)
-# }
