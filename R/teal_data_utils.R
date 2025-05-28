@@ -19,13 +19,15 @@ NULL
 #' @rdname teal_data_utilities
 .append_evaluated_code <- function(data, code) {
   checkmate::assert_class(data, "teal_data")
-  data@code <- c(data@code, code2list(code))
-  teal.reporter::report(data) <- c(
-    teal.reporter::report(data),
-    "# Data filtering",
-    teal.reporter::code_chunk(code)
-  )
-  methods::validObject(data)
+  if (length(code) && !identical(code, "")) {
+    data@code <- c(data@code, code2list(code))
+    teal.reporter::report(data) <- c(
+      teal.reporter::report(data),
+      "# Data filtering",
+      teal.reporter::code_chunk(code)
+    )
+    methods::validObject(data)
+  }
   data
 }
 
