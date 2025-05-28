@@ -217,13 +217,18 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       id = "teal_modules",
       data = data_signatured,
       datasets = datasets_rv,
-      modules = modules,
+      modules = drop_module(modules, "teal_previewer_module"),
       slices_global = slices_global,
       data_load_status = data_load_status,
       reporter = reporter
     )
 
-    srv_reporter_previewer_tab("reporter_manager", modules, modules_output, reporter, session)
+    insert_reporter_previewer_tab(
+      session = session,
+      modules = modules,
+      modules_output = modules_output,
+      reporter = reporter
+    )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
