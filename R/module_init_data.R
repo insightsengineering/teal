@@ -96,7 +96,7 @@ srv_init_data <- function(id, data) {
     c(
       list(
         code = trimws(c(teal.code::get_code(data), hashes), which = "right"),
-        join_keys = teal.data::join_keys(data)
+        join_keys = teal.data::join_keys(data),
         report = teal.reporter::report(data)
       ),
       sapply(
