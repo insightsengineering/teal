@@ -101,13 +101,13 @@ Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
 RoxygenNote: 7.3.2
 Collate:
     'TealAppDriver.R'
+    'after.R'
     'checkmate.R'
     'dummy_functions.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
     'landing_popup_module.R'
-    'modify_reactive_output.R'
     'module_bookmark_manager.R'
     'module_data_summary.R'
     'module_filter_data.R'

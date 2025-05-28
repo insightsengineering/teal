@@ -300,7 +300,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
       req(module_out())
       if (is.reactive(module_out())) {
         req(module_out()())
-        if (inherits(module_out()(), "teal_report")) {
+        if (inherits(module_out()(), "teal_report") || length(teal.reporter::report(module_out()()))) {
           .collapse_subsequent_chunks(teal.reporter::report(module_out()()))
         }
       }
@@ -319,5 +319,14 @@ srv_add_reporter <- function(id, module_out, reporter) {
       reporter = reporter,
       r_card_fun = report_document_out
     )
+  })
+}
+
+#' @export
+disable_report <- function(x) {
+  checkmate::assert_class(x, "teal_module")
+  after(x, server = function(data) {
+    teal.reporter::report(data) <- teal.reporter::report_document()
+    NULL
   })
 }
