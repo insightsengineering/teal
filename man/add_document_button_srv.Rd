@@ -2,11 +2,11 @@
 % Please edit documentation in R/teal_reporter.R
 \name{add_document_button_srv}
 \alias{add_document_button_srv}
-\title{Server function for \code{doc} card class.}
+\title{Server function for \code{doc} class.}
 \usage{
 add_document_button_srv(id, reporter, r_card_fun)
 }
 \description{
-Server function for \code{doc} card class.
+Server function for \code{doc} class.
 }
 \keyword{internal}

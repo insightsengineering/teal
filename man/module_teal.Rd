@@ -31,8 +31,6 @@ The data which application will depend on.}
 specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 
 \item{reporter}{(\code{Reporter}) object used to store report contents. Set to \code{NULL} to globally disable reporting.}
-
-\item{disable}{Whether to disable \code{reporter} in \code{ui_teal}. Useful for using \code{ui_teal} and \code{srv_teal} as shiny module.}
 }
 \value{
 \code{NULL} invisibly

@@ -40,8 +40,6 @@
 #'   `teal_modules` object. These are the specific output modules which
 #'   will be displayed in the `teal` application. See [modules()] and [module()] for
 #'   more details.
-#' @param reporter (`Reporter`) object used to store report contents. Set to `NULL` to globally disable reporting.
-#' @param disable Whether to disable `reporter` in `ui_teal`. Useful for using `ui_teal` and `srv_teal` as shiny module.
 #'
 #' @return `NULL` invisibly
 NULL
