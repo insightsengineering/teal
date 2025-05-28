@@ -276,7 +276,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
-        card <- c(report_document(input$comment), r_card_fun())
+        card <- c(doc(input$comment), r_card_fun())
         metadata(card, "title") <- new_card_name
 
         reporter$append_cards(card)
@@ -296,7 +296,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
     return(FALSE)
   } # early exit
   moduleServer(id, function(input, output, session) {
-    report_document_out <- reactive({
+    doc_out <- reactive({
       req(module_out())
       if (is.reactive(module_out())) {
         req(module_out()())
@@ -307,7 +307,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
     })
 
     output$reporter_add_container <- renderUI({
-      req(report_document_out())
+      req(doc_out())
       tags$div(
         class = "teal add-reporter-container",
         teal.reporter::add_card_button_ui(session$ns("reporter_add"))
@@ -317,7 +317,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
     add_document_button_srv(
       "reporter_add",
       reporter = reporter,
-      r_card_fun = report_document_out
+      r_card_fun = doc_out
     )
   })
 }
@@ -326,7 +326,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 disable_report <- function(x) {
   checkmate::assert_class(x, "teal_module")
   after(x, server = function(data) {
-    teal.reporter::report(data) <- teal.reporter::report_document()
+    teal.reporter::report(data) <- teal.reporter::doc()
     NULL
   })
 }

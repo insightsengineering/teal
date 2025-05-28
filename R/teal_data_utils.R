@@ -60,7 +60,7 @@ NULL
         c(x, this)
       }
     },
-    init = teal.reporter::report_document(),
+    init = teal.reporter::doc(),
     x = report
   )
 }
