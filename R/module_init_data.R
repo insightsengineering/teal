@@ -91,6 +91,13 @@ srv_init_data <- function(id, data) {
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
   data_teal_report <- as.teal_report(data)
+  if (!inherits(data, "teal_report")) {
+    teal.reporter::report(data_teal_report) <- c(
+      teal.reporter::doc(),
+      "# Code preparation",
+      teal.reporter::report(data_teal_report)
+    )
+  }
   tdata <- do.call(
     teal.reporter::teal_report,
     c(
