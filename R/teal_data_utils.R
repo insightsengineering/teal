@@ -21,8 +21,8 @@ NULL
   checkmate::assert_class(data, "teal_data")
   if (length(code) && !identical(code, "")) {
     data@code <- c(data@code, code2list(code))
-    teal.reporter::document(data) <- c(
-      teal.reporter::document(data),
+    teal.reporter::teal_document(data) <- c(
+      teal.reporter::teal_document(data),
       "# Data filtering",
       teal.reporter::code_chunk(code)
     )
