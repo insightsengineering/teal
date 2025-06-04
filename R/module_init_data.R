@@ -93,7 +93,7 @@ srv_init_data <- function(id, data) {
   data_teal_report <- as.teal_report(data)
   if (!inherits(data, "teal_report")) {
     teal.reporter::report(data_teal_report) <- c(
-      teal.reporter::doc(),
+      teal.reporter::document(data_teal_report),
       "# Code preparation",
       teal.reporter::report(data_teal_report)
     )
