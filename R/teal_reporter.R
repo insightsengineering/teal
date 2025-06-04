@@ -195,7 +195,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   )
 )
 
-#' Server function for `doc` class.
+#' Server function for `teal_document` class.
 #' @keywords internal
 add_document_button_srv <- function(id, reporter, r_card_fun) {
   checkmate::assert_class(r_card_fun, "reactive")
