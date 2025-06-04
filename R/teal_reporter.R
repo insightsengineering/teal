@@ -276,8 +276,8 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
-        card <- c(doc(input$comment), r_card_fun())
-        metadata(card, "title") <- new_card_name
+        card <- c(teal.reporter::doc(input$comment), r_card_fun())
+        teal.reporter::metadata(card, "title") <- new_card_name
 
         reporter$append_cards(card)
         shiny::showNotification("The card added successfully.", type = "message")
@@ -322,11 +322,30 @@ srv_add_reporter <- function(id, module_out, reporter) {
   })
 }
 
+#' Disable `teal_module`(s) report
+#'
+#' Disables "Add to report" functionality of `teal_module`(s).
+#' @param x (`teal_module`, `teal_modules`)
 #' @export
 disable_report <- function(x) {
-  checkmate::assert_class(x, "teal_module")
-  after(x, server = function(data) {
-    teal.reporter::report(data) <- teal.reporter::doc()
-    NULL
-  })
+  checkmate::assert_multi_class(x, c("teal_module", "teal_modules"))
+  if (inherits(x, "teal_modules")) {
+    x$children <- lapply(x$children, disable_report)
+    x
+  } else if (inherits(x, "teal_module")) {
+    if ("reporter" %in% names(formals(x$server))) {
+      new_x <- x
+      new_x$server <- function() {
+        args <- as.list(environment())
+        do.call(x$server, args[names(args) != "reporter"])
+      }
+      formals(new_x$server) <- formals(x$server)
+      new_x
+    } else {
+      after(x, server = function(data) {
+        teal.reporter::report(data) <- teal.reporter::doc()
+        NULL
+      })
+    }
+  }
 }

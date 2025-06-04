@@ -4,7 +4,7 @@
 \name{teal_data_module}
 \alias{teal_data_module}
 \alias{eval_code}
-\alias{eval_code,teal_data_module}
+\alias{eval_code,teal_data_module-method}
 \alias{within}
 \alias{within.teal_data_module}
 \title{Data module for \code{teal} applications}

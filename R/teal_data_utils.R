@@ -49,7 +49,7 @@ NULL
       if (l && inherits(x[[l]], "code_chunk") && inherits(this, "code_chunk") &&
         identical(attr(x[[l]], "params"), attr(this, "params"))) {
         x[[length(x)]] <- do.call(
-          code_chunk,
+          teal.reporter::code_chunk,
           args = c(
             list(code = paste(x[[l]], this, sep = "\n")),
             attr(x[[l]], "params")

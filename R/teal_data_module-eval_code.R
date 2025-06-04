@@ -18,7 +18,7 @@ setOldClass("teal_data_module")
 #' @include teal_data_module.R
 #' @name eval_code
 #' @rdname teal_data_module
-#' @aliases eval_code,teal_data_module
+#' @aliases eval_code,teal_data_module-method
 #'
 #' @importFrom methods setMethod
 #' @importMethodsFrom teal.code eval_code

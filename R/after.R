@@ -1,7 +1,37 @@
+#' Modify `teal_module`
+#'
+#' Modify `ui` or `server` of `teal_module` to create a new UI elements or modify `teal_data`.
+#'
 #' @param x (`teal_data`)
 #' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`
-#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`
+#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`.
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
+#' @examples
+#' new_mod <- example_module() |>
+#'   after(
+#'     ui = function(id, elem) {
+#'       tags$div(
+#'         tags$header("This is a module's header"),
+#'         elem
+#'       )
+#'     },
+#'     server = function(data) {
+#'       teal.reporter::report(data) <- c(
+#'         teal.reporter::report(data),
+#'         "# added content",
+#'         "This content has been added through `after`"
+#'       )
+#'       data
+#'     }
+#'   )
+#'
+#' app <- init(
+#'   data = teal_data(iris = iris),
+#'   modules = modules(new_mod)
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 #' @export
 after <- function(x,
                   ui = function(id, elem) elem,
@@ -28,7 +58,7 @@ after <- function(x,
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
   `_x` <- x
   `_y` <- y
-  new_x <- function() {
+  new_x <- function(id, ...) { # rcmdcheck complains that id, ... are no visible bindings in this function
     original_args <- as.list(environment())
     if ("..." %in% names(formals(`_x`))) {
       original_args <- c(original_args, list(...))
@@ -51,7 +81,7 @@ after <- function(x,
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
   `_x` <- x
   `_y` <- y
-  new_x <- function() {
+  new_x <- function(id, ...) { # rcmdcheck complains that id, ... are no visible bindings in this function
     original_args <- as.list(environment())
     original_args$id <- "wrapped"
     if ("..." %in% names(formals(`_x`))) {
@@ -60,7 +90,7 @@ after <- function(x,
     moduleServer(id, function(input, output, session) {
       original_out <- if (all(c("input", "output", "session") %in% names(formals(`_x`)))) {
         original_args$module <- `_x`
-        do.call(call_module, args = original_args)
+        do.call(shiny::callModule, args = original_args)
       } else {
         do.call(`_x`, original_args)
       }
@@ -71,7 +101,7 @@ after <- function(x,
           original_out
         }
       )
-      wrapper_args <- modifyList(
+      wrapper_args <- utils::modifyList(
         additional_args,
         list(id = "wrapper", input = input, output = output, session = session)
       )

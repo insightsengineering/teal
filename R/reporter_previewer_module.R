@@ -55,7 +55,6 @@ insert_reporter_previewer_tab <- function(session, modules, modules_output, repo
   if (is.null(reporter)) {
     return(FALSE)
   }
-  reporter$set_id(attr(filter, "app_id"))
   reporter_module <- extract_module(modules, "teal_module_previewer")[[1]]
   modules <- drop_module(modules, "teal_module_previewer")
 
