@@ -92,10 +92,10 @@ srv_init_data <- function(id, data) {
   hashes <- .get_hashes_code(data)
   data_teal_report <- as.teal_report(data)
   if (!inherits(data, "teal_report")) {
-    teal.reporter::report(data_teal_report) <- c(
+    teal.reporter::card(data_teal_report) <- c(
       teal.reporter::card(data_teal_report),
       "# Code preparation",
-      teal.reporter::report(data_teal_report)
+      teal.reporter::card(data_teal_report)
     )
   }
   tdata <- do.call(
@@ -104,7 +104,7 @@ srv_init_data <- function(id, data) {
       list(
         code = trimws(c(teal.code::get_code(data_teal_report), hashes), which = "right"),
         join_keys = teal.data::join_keys(data_teal_report),
-        report = teal.reporter::report(data_teal_report)
+        report = teal.reporter::card(data_teal_report)
       ),
       sapply(
         names(data_teal_report),
