@@ -276,7 +276,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
-        card <- c(doc(input$comment), r_card_fun())
+        card <- c(teal.reporter::teal_document(input$comment), r_card_fun())
         metadata(card, "title") <- new_card_name
 
         reporter$append_cards(card)
