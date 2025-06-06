@@ -106,7 +106,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
-  modules <- append_reporter_module(modules)
+  if (!is.null(reporter)) {
+    modules <- append_reporter_module(modules)
+  }
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
@@ -144,7 +146,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
     srv_check_module_datanames("datanames_warning", data_handled, modules)
 
     data_validated <- .trigger_on_success(data_handled)
-
     data_signatured <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
