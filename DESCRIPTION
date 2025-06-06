@@ -37,7 +37,7 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
-    teal.data (>= 0.7.0),
+    teal.data (>= 0.7.0.9002),
     teal.slice (>= 0.6.0.9001)
 Imports:
     bsicons,
@@ -52,7 +52,7 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.code (>= 0.6.1),
+    teal.code (>= 0.6.1.9002),
     teal.logger (>= 0.3.2),
     teal.reporter (>= 0.4.0.9004),
     teal.widgets (>= 0.4.3.9001),
