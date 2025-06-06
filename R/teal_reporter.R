@@ -333,7 +333,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 #' app <- init(
 #'   data = within(teal_data(), iris <- iris),
 #'   modules = modules(
-#'     example_module(label = "example teal module") |> disable_report(),
+#'     example_module(label = "example teal module") |> disable_report()
 #'   )
 #' )
 #' if (interactive()) {

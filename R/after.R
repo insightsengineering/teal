@@ -55,7 +55,7 @@ after <- function(x,
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
   `_x` <- x # nolint: object_name.
   `_y` <- y # nolint: object_name.
-  new_x <- function(id) {
+  new_x <- function(id, ...) {
     original_args <- as.list(environment())
     original_args$id <- "wrapped"
     if ("..." %in% names(formals(`_x`))) {
@@ -64,7 +64,7 @@ after <- function(x,
     moduleServer(id, function(input, output, session) {
       original_out <- if (all(c("input", "output", "session") %in% names(formals(`_x`)))) {
         original_args$module <- `_x`
-        do.call(call_module, args = original_args)
+        do.call(shiny::callModule, args = original_args)
       } else {
         do.call(`_x`, original_args)
       }
