@@ -76,8 +76,6 @@ Suggests:
 VignetteBuilder:
     knitr,
     rmarkdown
-RdMacros:
-    lifecycle
 Remotes:
     insightsengineering/teal.code@teal_reportable,
     insightsengineering/teal.data@teal_reportable,

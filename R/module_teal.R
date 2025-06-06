@@ -227,7 +227,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       session = session,
       modules = modules,
       modules_output = modules_output,
-      reporter = reporter
+      reporter = reporter,
+      app_id = attr(filter, "app_id")
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
