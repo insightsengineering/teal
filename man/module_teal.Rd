@@ -8,7 +8,13 @@
 \usage{
 ui_teal(id, modules)
 
-srv_teal(id, data, modules, filter = teal_slices())
+srv_teal(
+  id,
+  data,
+  modules,
+  filter = teal_slices(),
+  reporter = teal.reporter::Reporter$new()
+)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
@@ -23,6 +29,8 @@ The data which application will depend on.}
 
 \item{filter}{(\code{teal_slices}) Optionally,
 specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
+
+\item{reporter}{(\code{Reporter}) object used to store report contents. Set to \code{NULL} to globally disable reporting.}
 }
 \value{
 \code{NULL} invisibly

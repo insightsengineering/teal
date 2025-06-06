@@ -50,9 +50,7 @@ ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
-
-  modules <- append_reporter_module(modules)
-
+  modules <- drop_module(modules, "teal_previewer_module")
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
@@ -103,14 +101,14 @@ ui_teal <- function(id, modules) {
 
 #' @rdname module_teal
 #' @export
-srv_teal <- function(id, data, modules, filter = teal_slices()) {
+srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
-
-  modules <- append_reporter_module(modules)
-
+  if (!is.null(reporter)) {
+    modules <- append_reporter_module(modules)
+  }
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
@@ -148,7 +146,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     srv_check_module_datanames("datanames_warning", data_handled, modules)
 
     data_validated <- .trigger_on_success(data_handled)
-
     data_signatured <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
@@ -180,8 +177,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         teal_data_to_filtered_data(data_signatured())
       })
     }
-
-
 
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
@@ -215,17 +210,25 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
     }
 
-    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
-    module_labels <- unlist(module_labels(modules), use.names = FALSE)
+    module_labels <- unlist(module_labels(drop_module(modules, "teal_module_previewer")), use.names = FALSE)
+
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_module(
       id = "teal_modules",
       data = data_signatured,
       datasets = datasets_rv,
-      modules = modules,
+      modules = drop_module(modules, "teal_module_previewer"),
       slices_global = slices_global,
       data_load_status = data_load_status,
       reporter = reporter
+    )
+
+    insert_reporter_previewer_tab(
+      session = session,
+      modules = modules,
+      modules_output = modules_output,
+      reporter = reporter,
+      app_id = attr(filter, "app_id")
     )
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
