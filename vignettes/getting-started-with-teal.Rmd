@@ -191,6 +191,27 @@ app_custom <- init(
 )
 ```
 
+#### Module-Level Reporting Control
+
+While the `reporter` parameter controls reporting globally, you can also disable reporting for specific modules using `disable_report()`. This allows you to have fine-grained control over which modules support reporting:
+
+```{r module_level_control}
+# App with global reporting enabled, but specific modules excluded
+app_selective <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = modules(
+    example_module("Analysis 1"),                    # Reporting enabled
+    disable_report(example_module("Analysis 2")),   # Reporting disabled for this module
+    example_module("Analysis 3")                     # Reporting enabled
+  )
+)
+```
+
+In this example:
+- "Analysis 1" and "Analysis 3" modules can add content to reports
+- "Analysis 2" module cannot add content to reports (no "Add to Report" buttons appear)
+- The "Report previewer" tab is still available since reporting is globally enabled
+
 #### Choosing the Right Configuration
 
 * **Use default reporting** (omit parameter) for most applications where you want standard reporting functionality
@@ -202,6 +223,10 @@ app_custom <- init(
   - Special report formatting
   - Custom report templates
   - Integration with external reporting systems
+* **Use `disable_report()`** for individual modules when you want:
+  - Most modules to support reporting but exclude specific ones
+  - To disable reporting for modules that don't produce meaningful report content
+  - Fine-grained control over the reporting experience
 
 For more details on reporting functionality and how to implement it in your modules, see [this vignette](adding-support-for-reporting.html) and the [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) package documentation.
 
