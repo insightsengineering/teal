@@ -11,7 +11,7 @@
 \usage{
 teal_data_module(ui, server, label = "data module", once = TRUE)
 
-\S4method{eval_code}{teal_data_module}(object, code)
+\S4method{eval_code}{teal_data_module,ANY}(object, code)
 
 \method{within}{teal_data_module}(data, expr, ...)
 }
