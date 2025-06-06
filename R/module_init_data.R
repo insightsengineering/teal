@@ -104,7 +104,7 @@ srv_init_data <- function(id, data) {
       list(
         code = trimws(c(teal.code::get_code(data_teal_report), hashes), which = "right"),
         join_keys = teal.data::join_keys(data_teal_report),
-        report = teal.reporter::card(data_teal_report)
+        card = teal.reporter::card(data_teal_report)
       ),
       sapply(
         names(data_teal_report),
