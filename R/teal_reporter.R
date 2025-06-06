@@ -195,7 +195,7 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   )
 )
 
-#' Server function for `card` class.
+#' Server function for `teal_card` class.
 #' @keywords internal
 add_document_button_srv <- function(id, reporter, r_card_fun) {
   checkmate::assert_class(r_card_fun, "reactive")
@@ -276,7 +276,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
         shiny::showNotification(msg, type = "error")
       } else {
         new_card_name <- trimws(input$label)
-        card <- c(teal.reporter::card(input$comment), r_card_fun())
+        card <- c(teal.reporter::teal_card(input$comment), r_card_fun())
         metadata(card, "title") <- new_card_name
 
         reporter$append_cards(card)
@@ -300,8 +300,8 @@ srv_add_reporter <- function(id, module_out, reporter) {
       req(module_out())
       if (is.reactive(module_out())) {
         req(module_out()())
-        if (inherits(module_out()(), "teal_report") || length(teal.reporter::card(module_out()()))) {
-          .collapse_subsequent_chunks(teal.reporter::card(module_out()()))
+        if (inherits(module_out()(), "teal_report") || length(teal.reporter::teal_card(module_out()()))) {
+          .collapse_subsequent_chunks(teal.reporter::teal_card(module_out()()))
         }
       }
     })
@@ -326,7 +326,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 disable_report <- function(x) {
   checkmate::assert_class(x, "teal_module")
   after(x, server = function(data) {
-    teal.reporter::card(data) <- teal.reporter::card()
+    teal.reporter::teal_card(data) <- teal.reporter::teal_card()
     NULL
   })
 }
