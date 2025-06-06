@@ -46,8 +46,12 @@ NULL
   Reduce(
     function(x, this) {
       l <- length(x)
-      if (l && inherits(x[[l]], "code_chunk") && inherits(this, "code_chunk") &&
-        identical(attr(x[[l]], "params"), attr(this, "params"))) {
+      if (
+        l &&
+          inherits(x[[l]], "code_chunk") &&
+          inherits(this, "code_chunk") &&
+          identical(attr(x[[l]], "params"), attr(this, "params"))
+      ) {
         x[[length(x)]] <- do.call(
           code_chunk,
           args = c(

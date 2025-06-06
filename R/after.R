@@ -26,8 +26,8 @@ after <- function(x,
 
 .after_ui <- function(x, y, additional_args) {
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
-  `_x` <- x
-  `_y` <- y
+  `_x` <- x # nolint: object_name.
+  `_y` <- y # nolint: object_name.
   new_x <- function() {
     original_args <- as.list(environment())
     if ("..." %in% names(formals(`_x`))) {
@@ -49,8 +49,8 @@ after <- function(x,
 
 .after_server <- function(x, y, additional_args) {
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
-  `_x` <- x
-  `_y` <- y
+  `_x` <- x # nolint: object_name.
+  `_y` <- y # nolint: object_name.
   new_x <- function() {
     original_args <- as.list(environment())
     original_args$id <- "wrapped"
