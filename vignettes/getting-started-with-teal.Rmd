@@ -171,8 +171,8 @@ When `reporter = NULL`:
 - Modules cannot add content to reports
 - All reporting-related UI elements are hidden
 
-##### 3. Custom Reporter (R6 object)
-For advanced use cases, you can provide a custom reporter object that inherits from the appropriate R6 class:
+##### 3. Custom Reporter 
+For advanced use cases, you can provide a custom initial reporter object:
 
 ```{r custom_reporter}
 library(teal.reporter)
