@@ -34,6 +34,8 @@ app_default <- init(
     example_module("Analysis 2")
   )
 )
+# Start app with
+# if (interactive()) shinyApp(app$ui, app$server)
 ```
 
 With default reporting enabled:
@@ -54,6 +56,8 @@ app_no_reporting <- init(
   ),
   reporter = NULL
 )
+# Start app with
+# if (interactive()) shinyApp(app_no_reporting$ui, app_no_reporting$server)
 ```
 
 When `reporter = NULL`:
@@ -68,7 +72,9 @@ For advanced use cases, you can provide a custom initial reporter object:
 library(teal.reporter)
 
 # Create a custom reporter with specific configuration
-custom_reporter <- teal.reporter::Reporter$new()
+custom_reporter <- Reporter$new()
+custom_card <- teal_card("## Welome", "Welcome message", head(iris))
+custom_reporter$append_cards(list(WelcomeCard = custom_card))
 
 # Use the custom reporter in your app
 app_custom <- init(
@@ -77,8 +83,34 @@ app_custom <- init(
     example_module("Analysis 1"),
     example_module("Analysis 2")
   ),
-  reporter = custom_reporter
+  reporter = custom_reporter                        # TODO: doesn't work yet, app do not start with a predefined card
 )
+# Start app with
+# if (interactive()) shinyApp(app_custom$ui, app_custom$server)
+```
+
+##### 4. Custom Reporter with a template
+
+Custom initial reporter can also include a template function that will be applied to every card:
+
+```{r custom_reporter_template}
+library(teal.reporter)
+
+# Create a custom reporter with specific configuration
+custom_reporter_template <- Reporter$new()
+custom_reporter_template$set_template()                      # TODO: set the template function
+
+# Use the custom reporter in your app
+app_custom <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = modules(
+    example_module("Analysis 1"),
+    example_module("Analysis 2")
+  ),
+  reporter = custom_reporter_template
+)
+# Start app with
+# if (interactive()) shinyApp(custom_reporter_template$ui, custom_reporter_template$server)
 ```
 
 #### Module-Level Reporting Control
@@ -95,6 +127,8 @@ app_selective <- init(
     example_module("Analysis 3")                    # Reporting enabled
   )
 )
+# Start app with
+# if (interactive()) shinyApp(app_selective$ui, app_selective$server)
 ```
 
 In this example:
@@ -142,10 +176,16 @@ app_after <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = modules(
     example_module("Analysis 1") |> 
-      after(server = function(input, output, session, data) {
-        teal_card(data()) <- teal_card(data(), "## Custom Analysis Summary", head(iris))
+      after(server = function(input, output, session, data) {           # TODO: after does not work this?
+        
+        rdata <- reactive({
+          obj <- data()
+          teal_card(obj) <- c(teal_card(obj), "## Custom Analysis Summary", head(iris))
+        })
         return(data)
       })
   )
 )
+# Start app with
+# if (interactive()) shinyApp(app_after$ui, app_after$server)
 ```
