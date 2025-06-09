@@ -128,108 +128,16 @@ For further details see [Filter Panel vignette](filter-panel.html).
 
 The `init` function includes a `reporter` parameter that controls the global reporting functionality of your `teal` application. This parameter determines whether and how users can generate reports from the analyses performed in your application.
 
-#### Configuring the Reporter Parameter
-
 The `reporter` parameter in `init` accepts three types of values:
 
-##### 1. Default Reporting (parameter omitted)
-When you don't specify the `reporter` parameter, `teal` automatically enables default reporting functionality:
+* `NULL`: reporting is disabled globally.
+* `teal.reporter::Report$new()`: predefined reporter object.
+* `missing value`: reporting is enabled by default globally.
 
-```{r default_reporting}
-# Default reporting - automatically enabled
-app_default <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = modules(
-    example_module("Analysis 1"),
-    example_module("Analysis 2")
-  )
-)
-```
-
-With default reporting enabled:
-- A "Report previewer" tab is automatically added to your application
-- Users can add module outputs to reports and download them
-- Reports include reproducible code for all analyses
-
-##### 2. Disabled Reporting (`reporter = NULL`)
-To completely disable reporting functionality across your entire application:
-
-```{r disabled_reporting}
-# Reporting disabled - no report functionality available
-app_no_reporting <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = modules(
-    example_module("Analysis 1"),
-    example_module("Analysis 2")
-  ),
-  reporter = NULL
-)
-```
-
-When `reporter = NULL`:
-- No "Report previewer" tab appears
-- Modules cannot add content to reports
-- All reporting-related UI elements are hidden
-
-##### 3. Custom Reporter 
-For advanced use cases, you can provide a custom initial reporter object:
-
-```{r custom_reporter}
-library(teal.reporter)
-
-# Create a custom reporter with specific configuration
-custom_reporter <- teal.reporter::Reporter$new()
-
-# Use the custom reporter in your app
-app_custom <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = modules(
-    example_module("Analysis 1"),
-    example_module("Analysis 2")
-  ),
-  reporter = custom_reporter
-)
-```
-
-#### Module-Level Reporting Control
-
-While the `reporter` parameter controls reporting globally, you can also disable reporting for specific modules using `disable_report()`. This allows you to have fine-grained control over which modules support reporting:
-
-```{r module_level_control}
-# App with global reporting enabled, but specific modules excluded
-app_selective <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = modules(
-    example_module("Analysis 1"),                    # Reporting enabled
-    disable_report(example_module("Analysis 2")),   # Reporting disabled for this module
-    example_module("Analysis 3")                     # Reporting enabled
-  )
-)
-```
-
-In this example:
-- "Analysis 1" and "Analysis 3" modules can add content to reports
-- "Analysis 2" module cannot add content to reports (no "Add to Report" buttons appear)
-- The "Report previewer" tab is still available since reporting is globally enabled
-
-#### Choosing the Right Configuration
-
-* **Use default reporting** (omit parameter) for most applications where you want standard reporting functionality
-* **Use `reporter = NULL`** when you want to disable reporting entirely, perhaps for:
-  - Demo applications
-  - Apps where reporting is not needed
-  - Performance-critical applications
-* **Use a custom reporter** when you need:
-  - Special report formatting
-  - Custom report templates
-  - Integration with external reporting systems
-* **Use `disable_report()`** for individual modules when you want:
-  - Most modules to support reporting but exclude specific ones
-  - To disable reporting for modules that don't produce meaningful report content
-  - Fine-grained control over the reporting experience
-
-For more details on reporting functionality and how to implement it in your modules, see [this vignette](adding-support-for-reporting.html) and the [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) package documentation.
-
+For more details on reporting functionality and how to implement it in your modules, see:
+- [adding support for reporting](adding-support-for-reporting.html),
+- [managing reproducible report documents in teal](managing-reproducible-report-documents-in-teal.html),
+- [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) package documentation.
 
 ### Reproducible code
 
