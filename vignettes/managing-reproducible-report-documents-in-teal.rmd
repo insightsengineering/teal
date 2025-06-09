@@ -176,12 +176,8 @@ app_after <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = modules(
     example_module("Analysis 1") |> 
-      after(server = function(input, output, session, data) {           # TODO: after does not work this?
-        
-        rdata <- reactive({
-          obj <- data()
-          teal_card(obj) <- c(teal_card(obj), "## Custom Analysis Summary", head(iris))
-        })
+      after(server = function(data) {
+        teal_card(data) <- c(teal_card(data), "## Custom Analysis Summary", head(iris))
         return(data)
       })
   )
