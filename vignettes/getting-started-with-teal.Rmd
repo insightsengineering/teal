@@ -130,9 +130,9 @@ The `init` function includes a `reporter` parameter that controls the global rep
 
 The `reporter` parameter in `init` accepts three types of values:
 
+* `parameter is omitted`: reporting is enabled by default globally.
 * `NULL`: reporting is disabled globally.
 * `teal.reporter::Report$new()`: predefined reporter object.
-* `missing value`: reporting is enabled by default globally.
 
 For more details on reporting functionality and how to implement it in your modules, see:
 - [adding support for reporting](adding-support-for-reporting.html),
