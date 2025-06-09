@@ -16,12 +16,12 @@ The `teal` package offers an integrated reporting feature utilizing the `teal.re
 For a comprehensive explanation of the reporting functionality itself, please refer to the documentation therein.
 
 This article is intended for module developers and aims to provide guidance on enhancing a custom `teal` module with an automatic reporting feature.
-This enhancement enables users to incorporate snapshots of the module outputs into a report which can then be reviewed in another module automatically provided by `teal`.
+This enhancement enables users to incorporate snapshots of the module outputs into a report, which can be viewed in another module called `Reporter previewer` (automatically provided by `teal`).
 Thus the app user can interact with the report.
 
 The responsibilities of a module developer include:
 
-- Adding support for reporting to their module, by returning a reactive `teal_data` object from the `server` function of the module.
+- Adding support for reporting to their module, by returning a reactive `teal_data` object from the module's `server` function.
 - Specifying the outputs that constitute a snapshot of their module.
 
 The entire life cycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
@@ -170,7 +170,8 @@ my_module_with_reporting <- function(label = "example teal module") {
         })
 
         rdata <- reactive({
-          teal_card(data()) <- teal_card(data(), "## Example heading", head(iris))
+          obj <- data()
+          teal_card(obj) <- c(teal_card(obj), "## Example heading", head(iris))
         })
         return(rdata)
       })
@@ -200,7 +201,7 @@ if (interactive()) {
 ```
 
 Now, an application user can see the text and `data.frame` added inside the `teal_card` in the `Report previewer` module.
-You can also add other objects, like ggplot2, rtables, rlistings, etc.
+You can also add other objects, like `ggplot2`, `rtables`, `rlistings`, etc.
 
 ```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
@@ -238,8 +239,8 @@ tm_simple_regression <- function(label = "Simple Regression") {
       
       report_data <- reactive({
         obj <- data()
-        teal.reporter::teal_card(obj) <- 
-          c(teal.reporter::teal_card(obj), "# Module's computation")
+        teal_card(obj) <- 
+          c(teal_card(obj), "# Module's computation")
         eval_code(
           obj, 
           sprintf(
