@@ -98,7 +98,14 @@ library(teal.reporter)
 
 # Create a custom reporter with specific configuration
 custom_reporter_template <- Reporter$new()
-custom_reporter_template$set_template()                      # TODO: set the template function
+custom_reporter_template$set_template(
+  # Need to return named `teal_card`
+  function(card) {
+    tcard <- c("Templated information", card)
+    attributes(tcard) <-  attributes(card)
+    tcard
+  }
+)
 
 # Use the custom reporter in your app
 app_custom <- init(
@@ -110,7 +117,7 @@ app_custom <- init(
   reporter = custom_reporter_template
 )
 # Start app with
-# if (interactive()) shinyApp(custom_reporter_template$ui, custom_reporter_template$server)
+# if (interactive()) shinyApp(app_custom$ui, app_custom$server)
 ```
 
 #### Module-Level Reporting Control
