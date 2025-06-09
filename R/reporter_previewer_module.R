@@ -51,11 +51,11 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
 #'
 #' Creates navigation for reporter previewer in main tab of the teal UI
 #' @noRd
-insert_reporter_previewer_tab <- function(session, modules, modules_output, reporter) {
+insert_reporter_previewer_tab <- function(session, modules, modules_output, reporter, app_id) {
   if (is.null(reporter)) {
     return(FALSE)
   }
-  reporter$set_id(attr(filter, "app_id"))
+  reporter$set_id(app_id)
   reporter_module <- extract_module(modules, "teal_module_previewer")[[1]]
   modules <- drop_module(modules, "teal_module_previewer")
 

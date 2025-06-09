@@ -19,6 +19,7 @@ setOldClass("teal_data_module")
 #' @name eval_code
 #' @rdname teal_data_module
 #' @aliases eval_code,teal_data_module
+#' @aliases \S4method{eval_code}{teal_data_module}
 #'
 #' @importFrom methods setMethod
 #' @importMethodsFrom teal.code eval_code

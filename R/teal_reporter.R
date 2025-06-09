@@ -277,7 +277,7 @@ add_document_button_srv <- function(id, reporter, r_card_fun) {
       } else {
         new_card_name <- trimws(input$label)
         card <- c(teal.reporter::teal_card(input$comment), r_card_fun())
-        metadata(card, "title") <- new_card_name
+        teal.reporter::metadata(card, "title") <- new_card_name
 
         reporter$append_cards(card)
         shiny::showNotification("The card added successfully.", type = "message")
@@ -322,7 +322,23 @@ srv_add_reporter <- function(id, module_out, reporter) {
   })
 }
 
+#' Disable the report for a `teal_module`
+#'
+#' Convenience function that disables the user's ability to add the module
+#' to the report previewer.
+#' @param x (`teal_module`) a `teal_module` object.
+#' @return `NULL` that indicates that it should disable the reporter functionality.
 #' @export
+#' @examples
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = modules(
+#'     example_module(label = "example teal module") |> disable_report()
+#'   )
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 disable_report <- function(x) {
   checkmate::assert_class(x, "teal_module")
   after(x, server = function(data) {

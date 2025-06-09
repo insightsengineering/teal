@@ -53,7 +53,7 @@ NULL
           identical(attr(x[[l]], "params"), attr(this, "params"))
       ) {
         x[[length(x)]] <- do.call(
-          code_chunk,
+          teal.reporter::code_chunk,
           args = c(
             list(code = paste(x[[l]], this, sep = "\n")),
             attr(x[[l]], "params")
