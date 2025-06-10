@@ -10,7 +10,7 @@ vignette: >
 
 ## Introduction
 
-`teal` provides comprehensive reporting capabilities that allow users to generate reproducible documents from their analysis modules. This vignette covers the key components for managing report documents in `teal` applications.
+`teal` provides reporting capabilities that allow app users to compose reproducible documents from their analysis modules. This vignette covers the key components for managing report documents in `teal` applications.
 
 The reporting system offers three levels of control:
 
