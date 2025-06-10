@@ -12,11 +12,10 @@ vignette: >
 
 `teal` provides reporting capabilities that allow app users to compose reproducible documents from their analysis modules. This vignette covers the key components for managing report documents in `teal` applications.
 
-The reporting system offers three levels of control:
+The reporting system offers two types of control:
 
 1. **Global reporting control** via the `reporter` parameter in `init()`
-2. **Module-level control** using `disable_report()` to exclude specific modules  
-3. **Report customization** with the `after` function to enhance report content
+2. **Module-level control** via `after()` and `disable_report()`
 
 This vignette demonstrates how to use these features effectively to create flexible and customized reporting workflows.
 
