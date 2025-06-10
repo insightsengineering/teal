@@ -95,7 +95,7 @@ knitr::include_url(url, height = "800px")
 
 ### Modify the body of the server function
 
-To inform `teal` that the module requires reporting, return interactive `teal_data` from the `server` function.
+To inform `teal` that the module requires reporting, return `reactive` containing `teal_report` from the `server` function.
 Outputs of the module will be included in the report when the module is called.
 See below:
 
