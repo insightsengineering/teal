@@ -26,211 +26,34 @@ The responsibilities of a module developer include:
 
 The entire life cycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
 
-## Custom module
-
-```{r setup, include=FALSE}
-library(teal)
-library(teal.reporter)
-```
-```{r as_interactive, eval=FALSE, echo=FALSE}
-interactive <- function() TRUE
-```
-
-Let us consider an example module, based on the example module from `teal`:
-```{r module_1}
-library(teal)
-library(teal.reporter)
-
-my_module <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data) {
-      checkmate::assert_class(isolate(data()), "teal_data")
-
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(names(data())))
-        output$dataset <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
-        })
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-```
-
-Using `teal`, you can launch this example module with the following:
-
-```{r app_1}
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
-
-```{r shinylive_iframe_1, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
-code <- paste0(c(
-  knitr::knit_code$get("as_interactive"),
-  knitr::knit_code$get("module_1"),
-  knitr::knit_code$get("app_1")
-), collapse = "\n")
-
-url <- roxy.shinylive::create_shinylive_url(code)
-knitr::include_url(url, height = "800px")
-```
-
-
 ## Add support for reporting
 
-### Modify the body of the server function
+To inform `teal` that the module requires reporting, return a `reactive` containing `teal_report` from the `server` function.
+Current outputs of the modules and reproducible code will be included in the module when "add to report" button is clicked.
 
-To inform `teal` that the module requires reporting, return `reactive` containing `teal_report` from the `server` function.
-Current outputs of the modules and a reproducible code will be included in the module when "add to report" button is clicked.
-See below:
+Every input `teal_data` object in `teal` gets converted to a `teal_report` object, which you can then enhance with additional content.
 
-```{r module_2}
-my_module_with_reporting <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(names(data())))
-        output$dataset <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
-        })
-        return(data)
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-```
-
-With these modifications, the module is now ready to be launched with `teal`:
-
-```{r app_2}
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_reporting()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
-
-```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
-code <- paste0(c(
-  knitr::knit_code$get("as_interactive"),
-  knitr::knit_code$get("setup"),
-  knitr::knit_code$get("module_2"),
-  knitr::knit_code$get("app_2")
-), collapse = "\n")
-
-url <- roxy.shinylive::create_shinylive_url(code)
-knitr::include_url(url, height = "800px")
-```
-
-### Add content to the report card
-
-To add content to a report card, we will utilize the `teal_report` class and its convenience function `teal_card`.
-You can read about it [here](https://insightsengineering.github.io/teal.reporter/latest-tag/articles/teal-report-class.html).
-
-Every input `teal_data` object in `teal` gets converted to a `teal_report` object.
-This means that we can use the `teal_report` class to add content to the report card.
-
-```{r module_4}
-my_module_with_reporting <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data, reporter) {
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(names(data())))
-        output$dataset <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
-        })
-
-        rdata <- reactive({
-          obj <- data()
-          teal_card(obj) <- c(teal_card(obj), "## Example heading", head(iris))
-        })
-        return(rdata)
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(
-          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
-        ),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-```
-
-```{r app_4}
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_reporting()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
-
-Now, an application user can see the text and `data.frame` added inside the `teal_card` in the `Report previewer` module.
-You can also add other objects, like `ggplot2`, `rtables`, `rlistings`, etc.
-
-```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
-code <- paste0(c(
-  knitr::knit_code$get("as_interactive"),
-  knitr::knit_code$get("setup"),
-  knitr::knit_code$get("module_4"),
-  knitr::knit_code$get("app_4")
-), collapse = "\n")
-
-url <- roxy.shinylive::create_shinylive_url(code)
-knitr::include_url(url, height = "800px")
-```
+For detailed information about the `teal_report` class and its capabilities, see the [teal_report Class vignette](https://insightsengineering.github.io/teal.reporter/latest-tag/articles/teal-report-class.html).
 
 ## Example
 
-In conclusion, we have demonstrated how to build a standard `teal` app with code reproducibility and reporter functionalities.
+Below is an example demonstrating how to build a `teal` module with reporting functionality.
 
-In the final example, we have incorporated `teal.code` snippets.
-`teal.code` is an `R` library that offers utilities for storing code and associating it with an execution environment.
-This allows `teal_report` to store the code necessary to generate the table along with the table itself.
-To learn more about `teal.code` see the vignette _`qenv`_ in  `teal.code`.
+The key aspects of this implementation are:
+
+1. **Return a reactive `teal_report`**: The module's server function returns a reactive containing an enhanced `teal_report` object
+2. **Add content with `teal_card()`**: Commentary and section headers are added using `teal_card()`
+3. **Capture computations with `eval_code()`**: Code execution and results are captured for reproducibility
 
 ```{r app_5}
+library(teal)
+library(teal.reporter)
+
 tm_simple_regression <- function(label = "Simple Regression") {
   module(
     label = label,
     server = function(input, output, session, data, reporter, ...) {
       
-      # Create the plot
       output$plot <- renderPlot({
         req(input$x_var, input$y_var)
         dataset <- data()[["iris"]]
