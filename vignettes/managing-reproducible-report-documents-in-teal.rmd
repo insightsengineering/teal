@@ -19,7 +19,7 @@ The reporting system offers two types of control:
 
 This vignette demonstrates how to use these features effectively to create flexible and customized reporting workflows.
 
-## Global and Local Reporting Control
+## Global Reporting Control
 
 ##### 1. Default Reporting (parameter omitted)
 When you don't specify the `reporter` parameter, `teal` automatically enables default reporting functionality:
