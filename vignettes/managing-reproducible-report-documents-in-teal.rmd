@@ -92,7 +92,7 @@ app_custom <- init(
 ##### 4. Custom Reporter with a template
 
 Custom initial reporter can also include a template function that will be applied to every card.
-With templated approach you can included disclaimers, data sources, data privacy information, etc.
+With the templated approach, you can included disclaimers, data sources, data privacy information, etc.
 
 ```{r custom_reporter_template}
 library(teal.reporter)
