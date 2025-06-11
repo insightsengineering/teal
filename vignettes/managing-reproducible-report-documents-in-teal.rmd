@@ -72,7 +72,7 @@ library(teal.reporter)
 
 # Create a custom reporter with specific configuration
 custom_reporter <- Reporter$new()
-custom_card <- teal_card("## Welome", "Welcome message", head(iris))
+custom_card <- teal_card("## Welcome", "Welcome message", head(iris))
 metadata(custom_card, "title") <- "The title"
 custom_reporter$append_cards(list(WelcomeCard = custom_card))
 
