@@ -4,16 +4,15 @@
 \name{teal_data_module}
 \alias{teal_data_module}
 \alias{eval_code}
-\alias{eval_code,teal_data_module,character-method}
-\alias{eval_code,teal_data_module,language-method}
-\alias{eval_code,teal_data_module,expression-method}
+\alias{eval_code,teal_data_module}
+\alias{\S4method{eval_code}{teal_data_module}}
 \alias{within}
 \alias{within.teal_data_module}
 \title{Data module for \code{teal} applications}
 \usage{
 teal_data_module(ui, server, label = "data module", once = TRUE)
 
-\S4method{eval_code}{teal_data_module,character}(object, code)
+\S4method{eval_code}{teal_data_module}(object, code)
 
 \method{within}{teal_data_module}(data, expr, ...)
 }
