@@ -296,29 +296,33 @@ srv_add_reporter <- function(id, module_out, reporter) {
     return(FALSE)
   } # early exit
   moduleServer(id, function(input, output, session) {
-    doc_out <- reactive({
+    mod_out_r <- reactive({
       req(module_out())
       if (is.reactive(module_out())) {
-        req(module_out()())
-        if (inherits(module_out()(), "teal_report") || length(teal.reporter::teal_card(module_out()()))) {
-          .collapse_subsequent_chunks(teal.reporter::teal_card(module_out()()))
-        }
+        module_out()()
       }
     })
 
-    output$reporter_add_container <- renderUI({
-      req(doc_out())
-      tags$div(
-        class = "teal add-reporter-container",
-        teal.reporter::add_card_button_ui(session$ns("reporter_add"))
-      )
+    doc_out <- reactive({
+      teal_data_handled <- tryCatch(mod_out_r(), error = function(e) e)
+      if (inherits(teal_data_handled, "teal_report") && length(teal.reporter::teal_card(teal_data_handled))) {
+        .collapse_subsequent_chunks(teal.reporter::teal_card(teal_data_handled))
+      }
     })
 
-    add_document_button_srv(
-      "reporter_add",
-      reporter = reporter,
-      r_card_fun = doc_out
-    )
+    .call_once_when(!is.null(doc_out()), {
+      output$reporter_add_container <- renderUI({
+        tags$div(
+          class = "teal add-reporter-container",
+          teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+        )
+      })
+      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
+    })
+
+    observeEvent(doc_out(), ignoreNULL = FALSE, {
+      shinyjs::toggleState("reporter_add_container", condition = inherits(doc_out(), "teal_card"))
+    })
   })
 }
 
