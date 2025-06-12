@@ -306,6 +306,25 @@ modules <- function(..., label = "root") {
   }
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
+
+  nested_modules <- vapply(submodules, function(x) inherits(x, "teal_modules"), FUN.VALUE = logical(1))
+  if (any(nested_modules)) {
+    for (i in which(nested_modules)) {
+      nested_children <- vapply(
+        submodules[[i]]$children,
+        function(x) inherits(x, "teal_modules"),
+        FUN.VALUE = logical(1)
+      )
+      if (any(nested_children)) {
+        stop(
+          "Deep nesting of modules is not allowed. ",
+          "The modules group '", submodules[[i]]$label, "' contains nested modules groups, ",
+          "which would create more than one level of nesting."
+        )
+      }
+    }
+  }
+
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   labels <- vapply(submodules, function(submodule) submodule$label, character(1))

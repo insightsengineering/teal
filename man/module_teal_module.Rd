@@ -97,12 +97,12 @@ panel.
 output of currently active module.
 \itemize{
 \item \code{srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
-\item \code{srv_teal_module.teal_modules} returns output of module selected by \code{input$active_tab}.
+\item \code{srv_teal_module.teal_modules} returns output of module selected by dropdown.
 }
 }
 \description{
-On the UI side each \code{teal_modules} is translated to a \code{tabsetPanel} and each \code{teal_module} is a
-\code{tabPanel}. Both, UI and server are called recursively so that each tab is a separate module and
+On the UI side each \code{teal_modules} is translated to a custom dropdown navigation and each \code{teal_module} is a
+panel that shows/hides based on dropdown selection. Both, UI and server are called recursively so that each tab is a separate module and
 reflect nested structure of \code{modules} argument.
 }
 \keyword{internal}
