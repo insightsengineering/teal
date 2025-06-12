@@ -321,11 +321,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
     })
 
     observeEvent(doc_out(), ignoreNULL = FALSE, {
-      if (inherits(doc_out(), "teal_card")) {
-        shinyjs::enable("reporter_add_container")
-      } else {
-        shinyjs::disable("reporter_add_container")
-      }
+      shinyjs::toggleState("reporter_add_container", condition = inherits(doc_out(), "teal_card"))
     })
   })
 }
