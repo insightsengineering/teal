@@ -586,51 +586,48 @@ testthat::test_that("module datanames stays 'all' regardless of transformators",
 })
 
 testthat::test_that("modules allows one level of nesting", {
-  test_module <- module(
-    label = "test_module",
-    server = module_server_fun,
-    ui = ui_fun1,
-    datanames = ""
-  )
-
   nested_modules <- modules(
     label = "Nested",
-    test_module
+    module(
+      label = "test_module",
+      server = module_server_fun,
+      ui = ui_fun1,
+      datanames = ""
+    )
   )
 
   testthat::expect_no_error(
     modules(
       label = "root",
-      test_module,
       nested_modules
     )
   )
 })
 
 testthat::test_that("modules prevents deep nesting of teal_modules", {
-  test_module <- module(
-    label = "test_module",
-    server = module_server_fun,
-    ui = ui_fun1,
-    datanames = ""
-  )
-
-  inception_modules <- modules(
-    label = "Inception",
-    test_module
-  )
-
-  double_nested <- modules(
+  double_nested_modules <- modules(
     label = "Double Nested",
-    test_module,
-    inception_modules
+    module(
+      label = "test_module",
+      server = module_server_fun,
+      ui = ui_fun1,
+      datanames = ""
+    ),
+    modules(
+      label = "Inception",
+      module(
+        label = "test_module",
+        server = module_server_fun,
+        ui = ui_fun1,
+        datanames = ""
+      )
+    )
   )
 
   testthat::expect_error(
     modules(
       label = "root",
-      test_module,
-      double_nested
+      double_nested_modules
     ),
     "Deep nesting of modules is not allowed.*Double Nested.*contains nested modules groups"
   )
