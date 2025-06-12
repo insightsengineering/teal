@@ -44,6 +44,16 @@
 #' @return `NULL` invisibly
 NULL
 
+REFACTOR_deps <- function() {
+  htmltools::htmlDependency(
+    name = "teal-sidebar",
+    version = utils::packageVersion("teal"),
+    package = "teal",
+    src = "REFACTOR",
+    stylesheet = "REFACTOR.css"
+  )
+}
+
 #' @rdname module_teal
 #' @export
 ui_teal <- function(id, modules) {
@@ -71,18 +81,19 @@ ui_teal <- function(id, modules) {
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
+    REFACTOR_deps(),
     shiny_busy_message_panel,
-    tags$div(
-      id = ns("tabpanel_wrapper"),
-      class = "teal-body",
-      ui_teal_module(id = ns("teal_modules"), modules = modules)
-    ),
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
       ui_bookmark_panel(ns("bookmark_manager"), modules),
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
+    ),
+    tags$div(
+      id = ns("tabpanel_wrapper"),
+      class = "teal-body",
+      ui_teal_module(id = ns("teal_modules"), modules = modules)
     ),
     tags$script(
       HTML(
