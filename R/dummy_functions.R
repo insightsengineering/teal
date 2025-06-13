@@ -11,6 +11,16 @@
 #' @inheritParams teal_modules
 #' @param decorators `r lifecycle::badge("experimental")` (`list` of `teal_transform_module`) optional,
 #' decorator for `object` included in the module.
+#' 
+#' @section Reporting:
+#'
+#' This module returns an object of class `teal_module`, that contains a `server` function.
+#' Since the server function returns a `teal_report` object, this makes this module reportable, which means that
+#' the reporting functionality will be turned on automatically by the `teal` framework.
+#'
+#' For more information on reporting in `teal`, see the vignettes:
+#' - `vignette("managing-reproducible-report-documents-in-teal", package = "teal")`
+#' - `vignette("adding-support-for-reporting-to-custom-modules", package = "teal")`
 #'
 #' @return A `teal` module which can be included in the `modules` argument to [init()].
 #'
