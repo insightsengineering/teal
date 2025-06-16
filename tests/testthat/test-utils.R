@@ -76,7 +76,7 @@ test_that("validate_app_title_tag works on validating the title tag", {
 })
 
 test_that("build_app_title builts a valid tag", {
-  testthat::expect_warning(valid_title_local <- build_app_title("title", "logo.png"))
+  lifecycle::expect_deprecated(valid_title_local <- build_app_title("title", "logo.png"))
   valid_title_remote <- build_app_title("title", "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") # nolint
   testthat::expect_silent(validate_app_title_tag(valid_title_local))
   testthat::expect_silent(validate_app_title_tag(valid_title_remote))
