@@ -234,10 +234,6 @@ srv_teal_module.teal_modules <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
-    observeEvent(input$active_module_id, {
-      print(input$active_module_id)
-    })
-
     observeEvent(data_load_status(), {
       nav_buttons_selector <- sprintf("[id*='%s'][id*='nav_']", session$ns(""))
       if (identical(data_load_status(), "ok")) {

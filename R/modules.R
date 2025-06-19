@@ -657,7 +657,7 @@ get_module_ids <- function(modules) {
 #' @keywords internal
 #' @noRd
 append_reporter_module <- function(modules) {
-  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+  if (is_arg_used(modules, "reporter") && length(extract_reporter_module(modules)) == 0) {
     modules <- modules(
       modules,
       reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
@@ -672,6 +672,14 @@ append_reporter_module <- function(modules) {
 #' @keywords internal
 extract_landing_module <- function(modules) {
   modules[which(vapply(modules, inherits, logical(1), "teal_module_landing"))]
+}
+
+#' Extract report previewer module
+#'
+#' @param modules (`teal_modules`)
+#' @keywords internal
+extract_reporter_module <- function(modules) {
+  modules[which(vapply(modules, inherits, logical(1), "teal_module_previewer"))]
 }
 
 #' Drop landing popup module
