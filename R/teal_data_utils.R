@@ -23,7 +23,7 @@ NULL
     data@code <- c(data@code, code2list(code))
     teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(data),
-      "# Data filtering",
+      "## Data filtering",
       teal.reporter::code_chunk(code)
     )
     methods::validObject(data)
