@@ -13,9 +13,6 @@
 #' @param slices_global (`reactiveVal` returning `modules_teal_slices`)
 #'   see [`module_filter_manager`]
 #'
-#' @param depth (`integer(1)`)
-#'  number which helps to determine depth of the modules nesting.
-#'
 #' @param datasets (`reactive` returning `FilteredData` or `NULL`)
 #'  When `datasets` is passed from the parent module (`srv_teal`) then `dataset` is a singleton
 #'  which implies in filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
@@ -36,216 +33,41 @@
 NULL
 
 #' @rdname module_teal_module
-ui_teal_module <- function(id, modules, depth = 0L) {
+ui_teal_module <- function(id, modules) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
-  checkmate::assert_count(depth)
   UseMethod("ui_teal_module", modules)
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.default <- function(id, modules, depth = 0L) {
+ui_teal_module.default <- function(id, modules) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
-flatten_modules_for_dropdown <- function(modules, group_name = "") {
-  all_modules <- list()
-
-  for (i in seq_along(modules$children)) {
-    child_name <- names(modules$children)[i]
-    child <- modules$children[[i]]
-
-    if (inherits(child, "teal_modules")) {
-      nested_group_name <- if (is.null(child$label)) child_name else child$label
-      nested_modules <- flatten_modules_for_dropdown(child, nested_group_name)
-      all_modules <- c(all_modules, nested_modules)
-    } else {
-      current_group <- if (group_name != "") group_name else "Main"
-      module_info <- list(
-        id = child_name,
-        label = if (is.null(child$label)) child_name else child$label,
-        icon = icon("fas fa-chart-bar"),
-        group = current_group,
-        module_obj = child
-      )
-      all_modules[[child_name]] <- module_info
-    }
-  }
-
-  return(all_modules)
-}
-
-create_modules_dropdown <- function(ns, modules) {
-  all_modules <- flatten_modules_for_dropdown(modules)
-  grouped_modules <- split(all_modules, sapply(all_modules, function(x) x$group))
-
-  dropdown_content <- tagList()
-
-  for (group_name in names(grouped_modules)) {
-    group_modules <- grouped_modules[[group_name]]
-
-    dropdown_content <- tagAppendChild(
-      dropdown_content,
-      tags$div(
-        class = "dropdown-group",
-        if (group_name != "Main") tags$h6(class = "group-header", group_name),
-        tags$div(
-          class = "button-grid",
-          lapply(group_modules, function(module_info) {
-            actionButton(
-              inputId = ns(paste0("nav_", module_info$id)),
-              class = "module-button",
-              `data-value` = module_info$id,
-              `data-label` = module_info$label,
-              `data-group` = module_info$group,
-              label = tags$div(
-                tags$span(class = "button-text", module_info$icon, module_info$label)
-              )
-            )
-          })
-        )
-      )
-    )
-  }
-
-  dropdown_content
-}
-
-create_all_module_panels <- function(ns, modules, depth = 0L) {
-  all_modules <- flatten_modules_for_dropdown(modules)
-
-  lapply(names(all_modules), function(module_id) {
-    module_info <- all_modules[[module_id]]
-    tags$div(
-      id = ns(paste0("panel_", module_id)),
-      class = "custom-module-panel",
-      style = "display: none;",
-      ui_teal_module(
-        id = ns(module_id),
-        modules = module_info$module_obj,
-        depth = depth + 1L
-      )
-    )
-  })
-}
-
-create_breadcrumb <- function(path_items) {
-  breadcrumb_items <- tagList()
-
-  for (i in seq_along(path_items)) {
-    is_last <- i == length(path_items)
-
-    if (is_last) {
-      breadcrumb_items <- tagAppendChild(
-        breadcrumb_items,
-        tags$li(class = "breadcrumb-item active", `aria-current` = "page", path_items[i])
-      )
-    } else {
-      breadcrumb_items <- tagAppendChild(
-        breadcrumb_items,
-        tags$li(class = "breadcrumb-item", path_items[i])
-      )
-    }
-  }
-
-  tags$nav(
-    `aria-label` = "breadcrumb",
-    tags$ol(class = "breadcrumb mb-3", breadcrumb_items)
-  )
-}
-
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
+ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
+  modules_ui <- lapply(names(modules), function(module_id) {
+    ui_teal_module(ns(module_id), modules[[module_id]])
+  })
+  names(modules_ui) <- names(modules)
+  .teal_custom_nav(ns("active_module_id"), modules, modules_ui)
+}
 
-  module_panels <- create_all_module_panels(ns, modules, depth)
 
-  tags$div(
-    id = ns("wrapper"),
-    class = "custom-navigation-container",
-    if (depth == 0L) {
-      tags$div(
-        class = "top-navbar",
-        tags$div(
-          tags$h1(class = "app-title", "Teal Application"),
-          tags$div(
-            class = "nav-items",
-            tags$div(
-              class = "dropdown",
-              tags$a(
-                class = "nav-item-custom dropdown-toggle active",
-                href = "#",
-                role = "button",
-                `data-bs-toggle` = "dropdown",
-                `aria-expanded` = "false",
-                id = ns("modulesDropdown"),
-                "Modules"
-              ),
-              tags$div(
-                class = "dropdown-menu",
-                `aria-labelledby` = ns("modulesDropdown"),
-                create_modules_dropdown(ns, modules)
-              )
-            )
-          )
-        )
-      )
-    },
-    tags$div(
-      class = "main-container",
-      uiOutput(ns("breadcrumb_nav")),
-      tags$div(
-        class = "custom-module-content",
-        module_panels
-      )
-    ),
-    tags$script(HTML(sprintf("
-      $(document).ready(function() {
-        // Handle module button clicks
-        $('[id*=\"%s\"][id*=\"nav_\"]').click(function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          var buttonId = $(this).attr('id');
-          var moduleId = $(this).data('value');
-          var moduleLabel = $(this).data('label');
-          var moduleGroup = $(this).data('group');
-
-          // Send to Shiny
-          Shiny.setInputValue('%s', {
-            id: moduleId,
-            label: moduleLabel,
-            group: moduleGroup
-          }, {priority: 'event'});
-
-          // Close dropdown
-          $('.dropdown-menu').removeClass('show');
-          $('#%s').removeClass('show').attr('aria-expanded', 'false');
-
-          // Update active state
-          $('[id*=\"%s\"][id*=\"nav_\"]').removeClass('active');
-          $(this).addClass('active');
-        });
-
-        // Prevent dropdown from closing when clicking inside
-        $('.dropdown-menu').click(function(e) {
-          e.stopPropagation();
-        });
-
-        // Initialize first module as active
-        var firstButton = $('[id*=\"%s\"][id*=\"nav_\"]:first');
-        if (firstButton.length) {
-          firstButton.addClass('active');
-        }
-      });
-    ", ns(""), ns("selected_module"), ns("modulesDropdown"), ns(""), ns(""))))
-  )
+get_breadcrum <- function(module) {
+  if (is.null(module$group)) {
+    breadcrumb_items <- c("Home", module$label)
+  } else {
+    breadcrumb_items <- c("Home", module$group, module$label)
+  }
+  paste(breadcrumb_items, collapse = " / ")
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
+ui_teal_module.teal_module <- function(id, modules) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
 
@@ -275,7 +97,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      if (depth >= 2L) tags$div(),
+      get_breadcrum(modules),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
@@ -412,56 +234,8 @@ srv_teal_module.teal_modules <- function(id,
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
-    all_modules <- flatten_modules_for_dropdown(modules)
-    first_module_id <- names(all_modules)[1]
-    active_module <- reactiveVal(first_module_id)
-    current_module_info <- reactiveVal(list(
-      id = first_module_id,
-      label = all_modules[[first_module_id]]$label,
-      group = all_modules[[first_module_id]]$group
-    ))
-
-    observeEvent(input$selected_module, {
-      module_info <- input$selected_module
-      if (!is.null(module_info) && !is.null(module_info$id)) {
-        lapply(names(all_modules), function(mid) {
-          shinyjs::hide(paste0("panel_", mid))
-        })
-        shinyjs::show(paste0("panel_", module_info$id))
-        active_module(module_info$id)
-        current_module_info(module_info)
-      }
-    })
-
-    observe({
-      if (length(names(all_modules)) > 0) {
-        first_module_id <- names(all_modules)[1]
-        shinyjs::show(paste0("panel_", first_module_id))
-        current_module_info(list(
-          id = first_module_id,
-          label = all_modules[[first_module_id]]$label,
-          group = all_modules[[first_module_id]]$group
-        ))
-      }
-    })
-
-    output$breadcrumb_nav <- renderUI({
-      module_info <- current_module_info()
-      if (module_info$group == "Main") {
-        breadcrumb_items <- c("Home", module_info$label)
-      } else {
-        breadcrumb_items <- c("Home", module_info$group, module_info$label)
-      }
-      create_breadcrumb(breadcrumb_items)
-    })
-
-    output$module_title <- renderText({
-      module_info <- current_module_info()
-      if (module_info$group == "Main") {
-        paste("Module >", module_info$label)
-      } else {
-        paste("Module >", module_info$group, ">", module_info$label)
-      }
+    observeEvent(input$active_module_id, {
+      print(input$active_module_id)
     })
 
     observeEvent(data_load_status(), {
@@ -480,19 +254,19 @@ srv_teal_module.teal_modules <- function(id,
     })
 
     modules_output <- sapply(
-      names(all_modules),
+      names(modules),
       function(module_id) {
-        module_info <- all_modules[[module_id]]
+        module_info <- modules[[module_id]]
         srv_teal_module(
           id = module_id,
           data = data,
-          modules = module_info$module_obj,
+          modules = module_info,
           datasets = datasets,
           slices_global = slices_global,
           reporter = reporter,
           is_active = reactive(
             is_active() &&
-              active_module() == module_id &&
+              input$active_module_id == module_id &&
               identical(data_load_status(), "ok")
           )
         )
@@ -697,5 +471,118 @@ srv_teal_module.teal_module <- function(id,
     once = TRUE,
     handlerExpr = rlang::eval_tidy(handler_quo),
     ...
+  )
+}
+
+#' Custom Navigation Widget for `teal_modules`
+#'
+#' @param id (`character(1)`) The ID of the navigation widget. Which returns the `module_id` of the active module.
+#' @param modules (`list`) A `teal_modules` object.
+#' @param modules_ui (`list`) A list of UI elements that should be linked with the `module_id` of the.`teal_modules`
+#' @keywords internal
+.teal_custom_nav <- function(id, modules, modules_ui) {
+  active_module_id <- names(modules)[1]
+  tags$div(
+    class = "teal-modules-wrapper tabbable",
+    tags$style(
+      HTML(
+        "
+        .teal-modules-wrapper .nav-link {
+          margin: 2px;
+          border: 1px solid #dee2e6;
+          border-radius: 12px;
+          background: white;
+          color: #495057;
+          display: inline-flex;
+        }
+        .teal-modules-wrapper .nav-link:hover {
+          background: #e7f3ff;
+          border-color: #4dabf7;
+          color: #1971c2;
+        }
+        .teal-modules-wrapper .nav-link.active {
+          color: var(--bs-btn-active-color);
+          background: var(--bs-btn-active-bg);
+          border-color: var(--bs-btn-active-border-color);
+        }
+        .teal-modules-wrapper .nav-link:active {
+          background: #cfe2ff !important;
+          border-color: #4c8bf5 !important;
+          color: #1a73e8 !important;
+        }
+        .teal-modules-wrapper .dropdown-menu {
+          z-index: 1001;
+          width: 700px;
+          max-width: calc(100vw - 2rem);
+          max-height: 80vh;
+          padding: 1.5rem;
+          overflow-y: auto;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border: 1px solid #dee2e6;
+          border-radius: 8px;
+        }
+        "
+      )
+    ),
+    tags$ul(
+      id = id,
+      style = "background: light-green",
+      class = "nav shiny-tab-input",
+      `data-tabsetid` = "test",
+      tags$div(
+        class = "dropdown",
+        onmouseover = paste0(
+          "this.classList.add('show');",
+          "this.querySelector('.dropdown-toggle').classList.add('show');",
+          "this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'true');",
+          "this.querySelector('.dropdown-menu').classList.add('show');"
+        ),
+        onmouseout = paste0(
+          "this.classList.remove('show');",
+          "this.querySelector('.dropdown-toggle').classList.remove('show');",
+          "this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');",
+          "this.querySelector('.dropdown-menu').classList.remove('show');"
+        ),
+        tags$a(
+          class = "nav-item-custom dropdown-toggle active",
+          role = "button",
+          id = "modulesDropdown",
+          "Modules"
+        ),
+        tags$div(
+          class = "dropdown-menu",
+          !!!lapply(names(modules), function(module_id) {
+            module <- modules[[module_id]]
+            tags$a(
+              href = paste0("#", id, module_id),
+              `data-bs-toggle` = "tab",
+              `data-value` = module_id,
+              `class` = ifelse(
+                module_id == active_module_id,
+                "nav-link btn-default active",
+                "nav-link btn-default"
+              ),
+              module$label
+            )
+          })
+        )
+      )
+    ),
+    tags$div(
+      class = "tab-content",
+      `data-tabsetid` = "test",
+      !!!lapply(names(modules), function(module_id) {
+        module <- modules[[module_id]]
+        tags$div(
+          id = paste0(id, module_id),
+          class = ifelse(
+            module_id == active_module_id,
+            "tab-pane active",
+            "tab-pane"
+          ),
+          modules_ui[[module_id]]
+        )
+      })
+    )
   )
 }

@@ -178,11 +178,7 @@ init <- function(data,
     }
   }
 
-  # argument transformations
-  ## `modules` - landing module
-  landing <- extract_module(modules, "teal_module_landing")
-  modules <- drop_module(modules, "teal_module_landing")
-
+  landing <- extract_landing_module(modules)
 
   if (lifecycle::is_present(id)) {
     lifecycle::deprecate_soft(

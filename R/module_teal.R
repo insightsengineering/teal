@@ -44,16 +44,6 @@
 #' @return `NULL` invisibly
 NULL
 
-REFACTOR_deps <- function() {
-  htmltools::htmlDependency(
-    name = "teal-sidebar",
-    version = utils::packageVersion("teal"),
-    package = "teal",
-    src = "REFACTOR",
-    stylesheet = "REFACTOR.css"
-  )
-}
-
 #' @rdname module_teal
 #' @export
 ui_teal <- function(id, modules) {
@@ -61,6 +51,7 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
+  modules <- drop_landing_module(modules)
   modules <- append_reporter_module(modules)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -81,7 +72,6 @@ ui_teal <- function(id, modules) {
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
-    REFACTOR_deps(),
     shiny_busy_message_panel,
     tags$div(
       id = ns("options_buttons"),
@@ -120,6 +110,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
+  modules <- drop_landing_module(modules)
   modules <- append_reporter_module(modules)
 
   moduleServer(id, function(input, output, session) {

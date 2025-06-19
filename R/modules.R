@@ -286,7 +286,8 @@ module <- function(label = "module",
       datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
-      transformators = transformators
+      transformators = transformators,
+      group = NULL
     ),
     class = "teal_module"
   )
@@ -294,9 +295,8 @@ module <- function(label = "module",
 
 #' @rdname teal_modules
 #' @export
-#'
-modules <- function(..., label = "root") {
-  checkmate::assert_string(label)
+modules <- function(..., label = NULL) {
+  checkmate::assert_string(label, null.ok = TRUE)
   submodules <- list(...)
   if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
     stop(
@@ -307,33 +307,24 @@ modules <- function(..., label = "root") {
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
 
-  nested_modules <- vapply(submodules, function(x) inherits(x, "teal_modules"), FUN.VALUE = logical(1))
-  if (any(nested_modules)) {
-    for (i in which(nested_modules)) {
-      nested_children <- vapply(
-        submodules[[i]]$children,
-        function(x) inherits(x, "teal_modules"),
-        FUN.VALUE = logical(1)
-      )
-      if (any(nested_children)) {
-        stop(
-          "Deep nesting of modules is not allowed. ",
-          "The modules group '", submodules[[i]]$label, "' contains nested modules groups, ",
-          "which would create more than one level of nesting."
-        )
+  flattened <- list()
+
+  for (submodule in submodules) {
+    if (inherits(submodule, "teal_module")) {
+      submodule$group <- c(label, submodule$group)
+      flattened <- append(flattened, list(submodule))
+    } else if (inherits(submodule, "teal_modules")) {
+      for (child in submodule) {
+        child$group <- c(label, child$group)
+        flattened <- append(flattened, list(child))
       }
     }
   }
 
-  # name them so we can more easily access the children
-  # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- get_unique_labels(labels)
+  names(flattened) <- get_module_ids(flattened)
+
   structure(
-    list(
-      label = label,
-      children = submodules
-    ),
+    flattened,
     class = "teal_modules"
   )
 }
@@ -345,8 +336,6 @@ modules <- function(..., label = "root") {
 #'   Affects the tree branch character used (L- vs |-)
 #' @param parent_prefix (`character(1)`) The prefix inherited from parent nodes,
 #'   used to maintain the tree structure in nested levels
-#' @param is_root (`logical(1)`) Whether this is the root node of the tree. Only used in
-#'   format.teal_modules(). Determines whether to show "TEAL ROOT" header
 #' @param what (`character`) Specifies which metadata to display.
 #'   Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"
 #' @examples
@@ -456,9 +445,14 @@ format.teal_module <- function(
   if ("transformators" %in% what) {
     output <- paste0(
       output,
-      content_prefix, "L- ", cli::col_magenta("Transformators   : "), transformators, "\n"
+      content_prefix, "|- ", cli::col_magenta("Transformators   : "), transformators, "\n"
     )
   }
+
+  output <- paste0(
+    output,
+    content_prefix, "L- ", cli::col_yellow("Groups           : "), paste(x$group, collapse = ", "), "\n"
+  )
 
   output
 }
@@ -582,48 +576,37 @@ format.teal_module <- function(
 #' cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 #' cat(format(complete_modules, what = c("decorators", "transformators")))
 #' @export
-format.teal_modules <- function(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...) {
-  if (is_root) {
-    header <- pasten(cli::style_bold("TEAL ROOT"))
-    new_parent_prefix <- "  " #' Initial indent for root level
+format.teal_modules <- function(x, is_last = FALSE, parent_prefix = "", ...) {
+  if (!is.null(x$label)) {
+    branch <- if (is_last) "L-" else "|-"
+    header <- pasten(parent_prefix, branch, " ", cli::style_bold(x$label))
+    new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
   } else {
-    if (!is.null(x$label)) {
-      branch <- if (is_last) "L-" else "|-"
-      header <- pasten(parent_prefix, branch, " ", cli::style_bold(x$label))
-      new_parent_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
-    } else {
-      header <- ""
-      new_parent_prefix <- parent_prefix
-    }
+    header <- ""
+    new_parent_prefix <- parent_prefix
   }
 
-  if (length(x$children) > 0) {
+  if (length(x) > 0) {
     children_output <- character(0)
-    n_children <- length(x$children)
+    n_children <- length(x)
 
-    for (i in seq_along(x$children)) {
-      child <- x$children[[i]]
+    for (i in seq_along(x)) {
+      child <- x[[i]]
       is_last_child <- (i == n_children)
 
-      if (inherits(child, "teal_modules")) {
+      # Since we now have a flat structure, all children should be teal_module objects
+      if (inherits(child, "teal_module")) {
         children_output <- c(
           children_output,
           format(child,
-            is_root = FALSE,
             is_last = is_last_child,
             parent_prefix = new_parent_prefix,
             ...
           )
         )
       } else {
-        children_output <- c(
-          children_output,
-          format(child,
-            is_last = is_last_child,
-            parent_prefix = new_parent_prefix,
-            ...
-          )
-        )
+        # This shouldn't happen with the new flat structure, but keep for safety
+        warning("Unexpected object type in teal_modules: ", class(child)[1])
       }
     }
 
@@ -650,18 +633,24 @@ print.teal_modules <- function(x, ...) {
 # utilities ----
 ## subset or modify modules ----
 
-#' Append a `teal_module` to `children` of a `teal_modules` object
+#' Get unique ids
+#'
+#' Get unique ids for the module to avoid namespace conflicts.
+#'
+#' @param modules (`character`) list of `teal_module`
+#'
+#' @return (`character`) vector of unique ids
+#'
 #' @keywords internal
-#' @param modules (`teal_modules`)
-#' @param module (`teal_module`) object to be appended onto the children of `modules`
-#' @return A `teal_modules` object with `module` appended.
-append_module <- function(modules, module) {
-  checkmate::assert_class(modules, "teal_modules")
-  checkmate::assert_class(module, "teal_module")
-  modules$children <- c(modules$children, list(module))
-  labels <- vapply(modules$children, function(submodule) submodule$label, character(1))
-  names(modules$children) <- get_unique_labels(labels)
-  modules
+get_module_ids <- function(modules) {
+  group_labels <- sapply(modules, function(module) {
+    if (is.null(module$group)) {
+      module$label
+    } else {
+      paste(c(module$group, module$label), collapse = shiny::ns.sep)
+    }
+  })
+  make.unique(gsub("[^[:alnum:]]", "_", tolower(group_labels)), sep = "_")
 }
 
 #' @rdname module_teal
@@ -669,7 +658,7 @@ append_module <- function(modules, module) {
 #' @noRd
 append_reporter_module <- function(modules) {
   if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
-    modules <- append_module(
+    modules <- modules(
       modules,
       reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
     )
@@ -677,41 +666,23 @@ append_reporter_module <- function(modules) {
   modules
 }
 
-#' Extract/Remove module(s) of specific class
-#'
-#' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.
+#' Extract landing popup module
 #'
 #' @param modules (`teal_modules`)
-#' @param class The class name of `teal_module` to be extracted or dropped.
 #' @keywords internal
-#' @return
-#' - For `extract_module`, a `teal_module` of class `class` or `teal_modules` containing modules of class `class`.
-#' - For `drop_module`, the opposite, which is all `teal_modules` of  class other than `class`.
-#' @rdname module_management
-extract_module <- function(modules, class) {
-  if (inherits(modules, class)) {
-    modules
-  } else if (inherits(modules, "teal_module")) {
-    NULL
-  } else if (inherits(modules, "teal_modules")) {
-    Filter(function(x) length(x) > 0L, lapply(modules$children, extract_module, class))
-  }
+extract_landing_module <- function(modules) {
+  modules[which(vapply(modules, inherits, logical(1), "teal_module_landing"))]
 }
 
+#' Drop landing popup module
+#'
+#' @param modules (`teal_modules`)
 #' @keywords internal
 #' @return `teal_modules`
 #' @rdname module_management
-drop_module <- function(modules, class) {
-  if (inherits(modules, class)) {
-    NULL
-  } else if (inherits(modules, "teal_module")) {
-    modules
-  } else if (inherits(modules, "teal_modules")) {
-    do.call(
-      "modules",
-      c(Filter(function(x) length(x) > 0L, lapply(modules$children, drop_module, class)), label = modules$label)
-    )
-  }
+drop_landing_module <- function(modules) {
+  modules[which(vapply(modules, inherits, logical(1), "teal_module_landing"))] <- NULL
+  modules
 }
 
 ## read modules ----
@@ -726,7 +697,7 @@ drop_module <- function(modules, class) {
 is_arg_used <- function(modules, arg) {
   checkmate::assert_string(arg)
   if (inherits(modules, "teal_modules")) {
-    any(unlist(lapply(modules$children, is_arg_used, arg)))
+    any(unlist(lapply(modules, is_arg_used, arg)))
   } else if (inherits(modules, "teal_module")) {
     is_arg_used(modules$server, arg) || is_arg_used(modules$ui, arg)
   } else if (is.function(modules)) {
@@ -736,41 +707,32 @@ is_arg_used <- function(modules, arg) {
   }
 }
 
-
-#' Get module depth
+#' Retrieve labels from `teal_modules`
 #'
-#' Depth starts at 0, so a single `teal.module` has depth 0.
-#' Nesting it increases overall depth by 1.
-#'
-#' @inheritParams init
-#' @param depth optional integer determining current depth level
-#'
-#' @return Depth level for given module.
+#' @param modules (`teal_modules` or `teal_module`) object
 #' @keywords internal
-modules_depth <- function(modules, depth = 0L) {
-  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
-  checkmate::assert_int(depth, lower = 0)
+get_modules_attributes <- function(modules, key) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   if (inherits(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
-  } else {
-    depth
+    lapply(modules, function(module) module[[key]])
+  } else if (inherits(modules, "teal_module")) {
+    modules[[key]]
   }
 }
 
 #' Retrieve labels from `teal_modules`
 #'
-#' @param modules (`teal_modules`)
+#' @param modules (`teal_modules` or `teal_module`) object
 #' @return A `list` containing the labels of the modules. If the modules are nested,
 #' the function returns a nested `list` of labels.
 #' @keywords internal
 module_labels <- function(modules) {
-  if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
-  } else {
-    modules$label
-  }
+  get_modules_attributes(modules, "label")
 }
 
+module_group <- function(modules) {
+  get_modules_attributes(modules, "group")
+}
 #' Retrieve `teal_bookmarkable` attribute from `teal_modules`
 #'
 #' @param modules (`teal_modules` or `teal_module`) object
@@ -781,8 +743,8 @@ modules_bookmarkable <- function(modules) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   if (inherits(modules, "teal_modules")) {
     setNames(
-      lapply(modules$children, modules_bookmarkable),
-      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))
+      lapply(modules, function(module) attr(module, "teal_bookmarkable", exact = TRUE)),
+      vapply(modules, function(module) paste(c(module$group, module$label), collapse = " / "), FUN.VALUE = character(1))
     )
   } else {
     attr(modules, "teal_bookmarkable", exact = TRUE)

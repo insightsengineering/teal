@@ -216,7 +216,7 @@ check_modules_datanames_recursive <- function(modules, datanames) { # nolint: ob
   checkmate::assert_character(datanames)
   if (inherits(modules, "teal_modules")) {
     unlist(
-      lapply(modules$children, check_modules_datanames_recursive, datanames = datanames),
+      lapply(modules, check_modules_datanames_recursive, datanames = datanames),
       recursive = FALSE
     )
   } else {
@@ -373,19 +373,6 @@ defunction <- function(x) {
   } else {
     x
   }
-}
-
-#' Get unique labels
-#'
-#' Get unique labels for the modules to avoid namespace conflicts.
-#'
-#' @param labels (`character`) vector of labels
-#'
-#' @return (`character`) vector of unique labels
-#'
-#' @keywords internal
-get_unique_labels <- function(labels) {
-  make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
 }
 
 #' @keywords internal
