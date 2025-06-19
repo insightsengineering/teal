@@ -55,16 +55,6 @@ ui_teal_module.teal_modules <- function(id, modules) {
   .teal_custom_nav(ns("active_module_id"), modules, modules_ui)
 }
 
-
-get_breadcrum <- function(module) {
-  if (is.null(module$group)) {
-    breadcrumb_items <- c("Home", module$label)
-  } else {
-    breadcrumb_items <- c("Home", module$group, module$label)
-  }
-  paste(breadcrumb_items, collapse = " / ")
-}
-
 #' @rdname module_teal_module
 #' @export
 ui_teal_module.teal_module <- function(id, modules) {
@@ -97,7 +87,7 @@ ui_teal_module.teal_module <- function(id, modules) {
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      get_breadcrum(modules),
+      .get_breadcrum(modules),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
@@ -470,6 +460,29 @@ srv_teal_module.teal_module <- function(id,
   )
 }
 
+#' @param module (`teal_module`) A module to fetch breadcrum text for.
+#' @keywords internal
+.get_breadcrum <- function(module) {
+  if (is.null(module$group)) {
+    breadcrumb_items <- c("Home", module$label)
+  } else {
+    breadcrumb_items <- c("Home", module$group, module$label)
+  }
+  paste(breadcrumb_items, collapse = " / ")
+}
+
+
+.teal_custom_nav_deps <- function() {
+  htmltools::htmlDependency(
+    name = "module-navigation",
+    version = utils::packageVersion("teal"),
+    package = "teal",
+    src = "module-navigation",
+    stylesheet = "module-navigation.css",
+    script = "module-navigation.js"
+  )
+}
+
 #' Custom Navigation Widget for `teal_modules`
 #'
 #' @param id (`character(1)`) The ID of the navigation widget. Which returns the `module_id` of the active module.
@@ -480,46 +493,7 @@ srv_teal_module.teal_module <- function(id,
   active_module_id <- names(modules)[1]
   tags$div(
     class = "teal-modules-wrapper tabbable",
-    tags$style(
-      HTML(
-        "
-        .teal-modules-wrapper .nav-link {
-          margin: 2px;
-          border: 1px solid #dee2e6;
-          border-radius: 12px;
-          background: white;
-          color: #495057;
-          display: inline-flex;
-        }
-        .teal-modules-wrapper .nav-link:hover {
-          background: #e7f3ff;
-          border-color: #4dabf7;
-          color: #1971c2;
-        }
-        .teal-modules-wrapper .nav-link.active {
-          color: var(--bs-btn-active-color);
-          background: var(--bs-btn-active-bg);
-          border-color: var(--bs-btn-active-border-color);
-        }
-        .teal-modules-wrapper .nav-link:active {
-          background: #cfe2ff !important;
-          border-color: #4c8bf5 !important;
-          color: #1a73e8 !important;
-        }
-        .teal-modules-wrapper .dropdown-menu {
-          z-index: 1001;
-          width: 700px;
-          max-width: calc(100vw - 2rem);
-          max-height: 80vh;
-          padding: 1.5rem;
-          overflow-y: auto;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          border: 1px solid #dee2e6;
-          border-radius: 8px;
-        }
-        "
-      )
-    ),
+    .teal_custom_nav_deps(),
     tags$ul(
       id = id,
       style = "background: light-green",
@@ -527,18 +501,8 @@ srv_teal_module.teal_module <- function(id,
       `data-tabsetid` = "test",
       tags$div(
         class = "dropdown",
-        onmouseover = paste0(
-          "this.classList.add('show');",
-          "this.querySelector('.dropdown-toggle').classList.add('show');",
-          "this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'true');",
-          "this.querySelector('.dropdown-menu').classList.add('show');"
-        ),
-        onmouseout = paste0(
-          "this.classList.remove('show');",
-          "this.querySelector('.dropdown-toggle').classList.remove('show');",
-          "this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');",
-          "this.querySelector('.dropdown-menu').classList.remove('show');"
-        ),
+        onmouseover = "initNavigationMouseOver.call(this)",
+        onmouseout = "initNavigationMouseOut.call(this)",
         tags$a(
           class = "nav-item-custom dropdown-toggle active",
           role = "button",
