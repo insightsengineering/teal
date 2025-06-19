@@ -649,7 +649,7 @@ append_module <- function(modules, module) {
 #' @keywords internal
 #' @noRd
 append_reporter_module <- function(modules) {
-  if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+  if (length(extract_module(modules, "teal_module_previewer")) == 0) {
     modules <- append_module(
       modules,
       reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
