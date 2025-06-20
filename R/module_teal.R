@@ -51,6 +51,7 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
+  modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -73,16 +74,16 @@ ui_teal <- function(id, modules) {
     include_teal_css_js(),
     shiny_busy_message_panel,
     tags$div(
-      id = ns("tabpanel_wrapper"),
-      class = "teal-body",
-      ui_teal_module(id = ns("teal_modules"), modules = modules)
-    ),
-    tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
       ui_bookmark_panel(ns("bookmark_manager"), modules),
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
+    ),
+    tags$div(
+      id = ns("tabpanel_wrapper"),
+      class = "teal-body",
+      ui_teal_module(id = ns("teal_modules"), modules = modules)
     ),
     tags$script(
       HTML(
@@ -109,6 +110,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
+  modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
 
   moduleServer(id, function(input, output, session) {

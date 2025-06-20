@@ -122,7 +122,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_s3_class(test_module, "teal_module")
   testthat::expect_named(
     test_module,
-    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators")
+    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators", "group")
   )
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
@@ -221,7 +221,7 @@ testthat::test_that("modules returns children as list with list named after labe
     datanames = ""
   )
   test_modules <- modules(label = "modules", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)$children
+  out <- modules(label = "tabs", test_module, test_modules)
   testthat::expect_named(out, c("module", "modules"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$modules, test_modules)
@@ -250,131 +250,11 @@ testthat::test_that("modules returns children as list with unique names if label
     datanames = ""
   )
   test_modules <- modules(label = "module", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)$children
+  out <- modules(label = "tabs", test_module, test_modules)
   testthat::expect_named(out, c("module", "module_1"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$module_1, test_modules)
 })
-
-
-testthat::test_that("modules_depth accepts depth as integer", {
-  testthat::expect_no_error(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      ),
-      depth = 3L
-    )
-  )
-
-  testthat::expect_error(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      ),
-      depth = "1"
-    ),
-    "Assertion on 'depth' failed.+'character'"
-  )
-})
-
-testthat::test_that("modules_depth returns depth=0 by default", {
-  testthat::expect_identical(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      )
-    ),
-    0L
-  )
-})
-
-testthat::test_that("modules_depth accepts modules to be teal_module or teal_modules", {
-  testthat::expect_no_error(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      )
-    )
-  )
-  testthat::expect_no_error(
-    modules_depth(
-      modules(
-        label = "tabs",
-        module(
-          label = "label",
-          server = module_server_fun,
-          ui = ui_fun1,
-          datanames = ""
-        )
-      )
-    )
-  )
-})
-
-testthat::test_that("modules_depth returns depth same as input for teal_module", {
-  testthat::expect_identical(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      )
-    ),
-    0L
-  )
-})
-
-testthat::test_that("modules_depth increases depth by 1 for each teal_modules", {
-  testthat::expect_identical(
-    modules_depth(
-      modules(
-        label = "tabs",
-        module(
-          label = "label",
-          server = module_server_fun,
-          ui = ui_fun1,
-          datanames = ""
-        )
-      ),
-      depth = 1L
-    ),
-    2L
-  )
-
-  testthat::expect_identical(
-    modules_depth(
-      modules(
-        label = "tabs",
-        modules(
-          label = "tabs",
-          module(
-            label = "label",
-            server = module_server_fun,
-            ui = ui_fun1,
-            datanames = ""
-          )
-        )
-      ),
-      depth = 1L
-    ),
-    3L
-  )
-})
-
 
 # is_arg_used -----
 get_srv_and_ui <- function() {
@@ -472,7 +352,7 @@ testthat::test_that("append_module appends a module to children of not nested te
   mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods, mod3)
-  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
+  testthat::expect_equal(appended_mods, list(a = mod, b = mod2, d = mod3))
 })
 
 
@@ -484,7 +364,7 @@ testthat::test_that("append_module appends a module to children of nested teal_m
   mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods2, mod3)
-  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
+  testthat::expect_equal(appended_mods, list(c = mods, b = mod2, d = mod3))
 })
 
 testthat::test_that("append_module produces teal_modules with unique named children", {
@@ -494,7 +374,7 @@ testthat::test_that("append_module produces teal_modules with unique named child
   mod3 <- module(label = "c")
 
   appended_mods <- append_module(mods, mod3)
-  mod_names <- names(appended_mods$children)
+  mod_names <- names(appended_mods)
   testthat::expect_equal(mod_names, unique(mod_names))
 })
 
