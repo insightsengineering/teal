@@ -53,7 +53,7 @@ Imports:
     shinyjs,
     stats,
     teal.code (>= 0.6.1),
-    teal.logger (>= 0.3.2),
+    teal.logger (>= 0.3.2.9001),
     teal.reporter (>= 0.4.0.9004),
     teal.widgets (>= 0.4.3.9001),
     tools,
@@ -79,6 +79,7 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
+    insightsengineering/teal.logger@main,
     insightsengineering/teal.reporter@main,
     insightsengineering/teal.slice@main,
     insightsengineering/teal.widgets@main
