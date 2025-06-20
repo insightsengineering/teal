@@ -7,7 +7,7 @@
 module_labels(modules)
 }
 \arguments{
-\item{modules}{(\code{teal_modules} or \code{teal_module}) object}
+\item{modules}{(\code{teal_modules})}
 }
 \value{
 A \code{list} containing the labels of the modules. If the modules are nested,

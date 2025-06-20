@@ -10,7 +10,7 @@ extract_transformators(modules)
 \item{modules}{\code{teal_modules} or \code{teal_module}}
 }
 \value{
-A list of \code{teal_transform_module}.
+A list of \code{teal_transform_module} nested in the same way as input \code{modules}.
 }
 \description{
 Extract all \code{transformators} from \code{modules}.

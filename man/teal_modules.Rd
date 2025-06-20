@@ -23,7 +23,7 @@ module(
   transformators = list()
 )
 
-modules(..., label = NULL)
+modules(..., label = "root")
 
 \method{format}{teal_module}(
   x,
@@ -34,7 +34,7 @@ modules(..., label = NULL)
   ...
 )
 
-\method{format}{teal_modules}(x, is_last = FALSE, parent_prefix = "", ...)
+\method{format}{teal_modules}(x, is_root = TRUE, is_last = FALSE, parent_prefix = "", ...)
 
 \method{print}{teal_module}(x, ...)
 
@@ -102,6 +102,9 @@ used to maintain the tree structure in nested levels}
 
 \item{what}{(\code{character}) Specifies which metadata to display.
 Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"}
+
+\item{is_root}{(\code{logical(1)}) Whether this is the root node of the tree. Only used in
+format.teal_modules(). Determines whether to show "TEAL ROOT" header}
 }
 \value{
 \code{module()} returns an object of class \code{teal_module}.
