@@ -460,7 +460,6 @@ srv_teal_module.teal_module <- function(id,
   )
 }
 
-#' @param module (`teal_module`) A module to fetch breadcrum text for.
 #' @keywords internal
 .get_breadcrum <- function(module) {
   if (is.null(module$group)) {
@@ -472,6 +471,7 @@ srv_teal_module.teal_module <- function(id,
 }
 
 
+#' @keywords internal
 .teal_custom_nav_deps <- function() {
   htmltools::htmlDependency(
     name = "module-navigation",
@@ -489,8 +489,8 @@ srv_teal_module.teal_module <- function(id,
 #' @param modules (`list`) A `teal_modules` object.
 #' @param modules_ui (`list`) A list of UI elements that should be linked with the `module_id` of the.`teal_modules`
 #' @keywords internal
-.teal_custom_nav <- function(id, modules, modules_ui) {
-  active_module_id <- names(modules)[1]
+.teal_custom_nav <- function(id, modules, modules_ui, selected_module = NULL) {
+  active_module_id <- shiny::restoreInput(id, default = names(modules)[1])
   tags$div(
     class = "teal-modules-wrapper tabbable",
     .teal_custom_nav_deps(),

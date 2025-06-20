@@ -4,7 +4,7 @@
 \alias{.teal_custom_nav}
 \title{Custom Navigation Widget for \code{teal_modules}}
 \usage{
-.teal_custom_nav(id, modules, modules_ui)
+.teal_custom_nav(id, modules, modules_ui, selected_module = NULL)
 }
 \arguments{
 \item{id}{(\code{character(1)}) The ID of the navigation widget. Which returns the \code{module_id} of the active module.}
