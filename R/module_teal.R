@@ -51,7 +51,7 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
-  modules <- drop_landing_module(modules)
+  modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
 
   # show busy icon when `shiny` session is busy computing stuff
@@ -110,7 +110,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
-  modules <- drop_landing_module(modules)
+  modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
 
   moduleServer(id, function(input, output, session) {

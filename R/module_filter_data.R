@@ -87,7 +87,7 @@ srv_filter_data <- function(id, datasets, active_datanames, data, is_active) {
 
   trigger_data <- reactiveVal(NULL)
   observe({
-    if (isTRUE(filter_changed())) {
+    if (isTRUE(is_active() && filter_changed())) {
       isolate({
         if (is.null(trigger_data())) {
           trigger_data(0)

@@ -223,8 +223,12 @@ make_teal_transform_server <- function(expr) {
 #' Extract all `transformators` from `modules`.
 #'
 #' @param modules `teal_modules` or `teal_module`
-#' @return A list of `teal_transform_module`.
+#' @return A list of `teal_transform_module` nested in the same way as input `modules`.
 #' @keywords internal
 extract_transformators <- function(modules) {
-  get_modules_attributes(modules, "transformators")
+  if (inherits(modules, "teal_module")) {
+    modules$transformators
+  } else if (inherits(modules, "teal_modules")) {
+    lapply(modules$children, extract_transformators)
+  }
 }

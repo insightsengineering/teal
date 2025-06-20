@@ -48,11 +48,12 @@ ui_teal_module.default <- function(id, modules) {
 #' @export
 ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
-  modules_ui <- lapply(names(modules), function(module_id) {
-    ui_teal_module(ns(module_id), modules[[module_id]])
+  flat_modules <- flatten_modules(modules)
+  modules_ui <- lapply(names(flat_modules), function(module_id) {
+    ui_teal_module(ns(module_id), flat_modules[[module_id]])
   })
-  names(modules_ui) <- names(modules)
-  .teal_custom_nav(ns("active_module_id"), modules, modules_ui)
+  names(modules_ui) <- names(flat_modules)
+  .teal_custom_nav(ns("active_module_id"), flat_modules, modules_ui)
 }
 
 #' @rdname module_teal_module
@@ -222,6 +223,7 @@ srv_teal_module.teal_modules <- function(id,
                                          data_load_status = reactive("ok"),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
+    flat_modules <- flatten_modules(modules)
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     observeEvent(data_load_status(), {
@@ -240,9 +242,9 @@ srv_teal_module.teal_modules <- function(id,
     })
 
     modules_output <- sapply(
-      names(modules),
+      names(flat_modules),
       function(module_id) {
-        module_info <- modules[[module_id]]
+        module_info <- flat_modules[[module_id]]
         srv_teal_module(
           id = module_id,
           data = data,
