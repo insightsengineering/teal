@@ -718,26 +718,6 @@ is_arg_used <- function(modules, arg) {
 }
 
 
-#' Get module depth
-#'
-#' Depth starts at 0, so a single `teal.module` has depth 0.
-#' Nesting it increases overall depth by 1.
-#'
-#' @inheritParams init
-#' @param depth optional integer determining current depth level
-#'
-#' @return Depth level for given module.
-#' @keywords internal
-modules_depth <- function(modules, depth = 0L) {
-  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
-  checkmate::assert_int(depth, lower = 0)
-  if (inherits(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
-  } else {
-    depth
-  }
-}
-
 #' Retrieve labels from `teal_modules`
 #'
 #' @param modules (`teal_modules`)
