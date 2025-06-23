@@ -6,21 +6,27 @@
   color: #495057;
   display: inline-flex;
 }
+
 .teal-modules-wrapper .module-button:hover {
   background: #e7f3ff;
   border-color: #4dabf7;
   color: #1971c2;
 }
+
 .teal-modules-wrapper .module-button.active {
   color: var(--bs-btn-active-color);
   background: var(--bs-btn-active-bg);
   border-color: var(--bs-btn-active-border-color);
 }
+
 .teal-modules-wrapper .module-button:active {
   background: #cfe2ff !important;
-  border-color: #4c8bf5 !important;
-  color: #1a73e8 !important;
 }
+
+.teal-modules-wrapper .dropdown.nav-item-custom {
+  border-bottom: 2px solid #4dabf7;
+}
+
 .teal-modules-wrapper .dropdown-menu {
   z-index: 1046;
   width: 700px;

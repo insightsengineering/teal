@@ -499,7 +499,7 @@ srv_teal_module.teal_module <- function(id,
     .teal_custom_nav_deps(),
     tags$ul(
       id = id,
-      style = "background: light-green",
+      style = "align-items: center;",
       class = "nav shiny-tab-input",
       `data-tabsetid` = "test",
       tags$div(
@@ -509,6 +509,7 @@ srv_teal_module.teal_module <- function(id,
         tags$a(
           class = "dropdown-toggle active",
           role = "button",
+          style = "text-decoration: none; border-bottom-color: #0d6efd;",
           "Modules"
         ),
         tags$div(

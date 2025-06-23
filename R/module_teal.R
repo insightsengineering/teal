@@ -51,56 +51,7 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
-  modules <- drop_module(modules, "teal_module_landing")
-  modules <- append_reporter_module(modules)
-
-  # show busy icon when `shiny` session is busy computing stuff
-  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
-  shiny_busy_message_panel <- conditionalPanel(
-    condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
-    tags$div(
-      icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
-      "Computing ...",
-      style = "position: fixed; bottom: 0; right: 0;
-      width: 140px; margin: 15px; padding: 5px 0 5px 10px;
-      text-align: left; font-weight: bold; font-size: 100%;
-      color: #ffffff; background-color: #347ab7; z-index: 105;"
-    )
-  )
-
-  bslib::page_fluid(
-    id = id,
-    theme = get_teal_bs_theme(),
-    include_teal_css_js(),
-    shiny_busy_message_panel,
-    tags$div(
-      id = ns("options_buttons"),
-      style = "position: absolute; right: 10px;",
-      ui_bookmark_panel(ns("bookmark_manager"), modules),
-      ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
-      ui_filter_manager_panel(ns("filter_manager_panel"))
-    ),
-    uiOutput(ns("teal_data_module_ui")),
-    tags$div(
-      id = ns("tabpanel_wrapper"),
-      class = "teal-body",
-      ui_teal_module(id = ns("teal_modules"), modules = modules)
-    ),
-    tags$script(
-      HTML(
-        sprintf(
-          "
-            $(document).ready(function() {
-              $('#%s').appendTo('#%s');
-            });
-          ",
-          ns("options_buttons"),
-          ns("teal_modules-active_tab")
-        )
-      )
-    ),
-    tags$hr(style = "margin: 1rem 0 0.5rem 0;")
-  )
+  uiOutput(ns("main_teal_ui"))
 }
 
 #' @rdname module_teal
@@ -121,8 +72,57 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    # `JavaScript` code
-    run_js_files(files = "init.js")
+    output$main_teal_ui <- renderUI({
+      modules <- drop_module(modules, "teal_module_landing")
+      modules <- append_reporter_module(modules)
+
+      # show busy icon when `shiny` session is busy computing stuff
+      # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
+      shiny_busy_message_panel <- conditionalPanel(
+        condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
+        tags$div(
+          icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
+          "Computing ...",
+          style = "position: fixed; bottom: 0; right: 0;
+          width: 140px; margin: 15px; padding: 5px 0 5px 10px;
+          text-align: left; font-weight: bold; font-size: 100%;
+          color: #ffffff; background-color: #347ab7; z-index: 105;"
+        )
+      )
+      bslib::page_fluid(
+        id = id,
+        theme = get_teal_bs_theme(),
+        include_teal_css_js(),
+        shiny_busy_message_panel,
+        tags$div(
+          id = session$ns("options_buttons"),
+          style = "position: absolute; right: 10px;",
+          ui_bookmark_panel(session$ns("bookmark_manager"), modules),
+          ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
+          ui_filter_manager_panel(session$ns("filter_manager_panel"))
+        ),
+        uiOutput(session$ns("teal_data_module_ui")),
+        tags$div(
+          id = session$ns("tabpanel_wrapper"),
+          class = "teal-body",
+          ui_teal_module(id = session$ns("teal_modules"), modules = modules)
+        ),
+        tags$script(
+          HTML(
+            sprintf(
+              "
+            $(document).ready(function() {
+              $('#%s').appendTo('#%s');
+            });
+          ",
+              session$ns("options_buttons"),
+              session$ns("teal_modules-active_tab")
+            )
+          )
+        ),
+        tags$hr(style = "margin: 1rem 0 0.5rem 0;")
+      )
+    })
 
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
@@ -186,16 +186,25 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
 
     if (inherits(data, "teal_data_module")) {
+      observeEvent(data_handled(), {
+        if (inherits(data_handled(), "teal_data")) {
+          showNotification("Data updated")
+          .enable_sidebar_overlay_close(session$ns("teal_data_module_sidebar"))
+          .glow_sidebar_overlay_close(session$ns("teal_data_module_sidebar"))
+        }
+      })
       setBookmarkExclude(c("teal_modules-active_tab"))
       insertUI(
         selector = ".teal-modules-wrapper .nav-item-custom",
         where = "beforeBegin",
         .sidebar_overlay(
-          toggle_ui = actionButton(session$ns("show_teal_data_module"), "Data Load"),
+          id = session$ns("teal_data_module_sidebar"),
+          toggle_ui = actionButton(session$ns("show_teal_data_module"), NULL, icon = icon("database")),
           ui_content = tags$div(
             ui_init_data(session$ns("data")),
             validate_ui
-          )
+          ),
+          shown = TRUE
         )
       )
 
@@ -203,8 +212,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
-          print("removing")
-          removeUI(sprintf("#%s", session$ns("teal_data_module")))
+          .hide_sidebar_overlay(session$ns("teal_data_module_sidebar"))
+          removeUI(sprintf("#%s", session$ns("show_teal_data_module")))
         })
       }
     } else {
@@ -248,7 +257,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 }
 
 #' @keywords internal
-.sidebar_overlay <- function(toggle_ui, ui_content, shown = FALSE, direction = "left") {
+.sidebar_overlay <- function(id, toggle_ui, ui_content, shown = FALSE, direction = "left") {
   if (!direction %in% c("left", "right")) {
     stop("direction must be either 'left' or 'right'")
   }
@@ -263,15 +272,47 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       onclick = 'this.nextElementSibling.classList.add("show");'
     ),
     div(
+      id = id,
       class = paste(sidebar_classes, collapse = " "),
       div(
         class = "sidebar-content",
-        tags$button("x",
-          class = "close-button",
-          onclick = 'this.parentElement.parentElement.classList.remove("show");'
+        shinyjs::disabled(
+          tags$button(
+            bsicons::bs_icon("x"),
+            class = "btn close-button",
+            onclick = 'this.parentElement.parentElement.classList.remove("show");'
+          )
         ),
         ui_content
       )
     )
   )
+}
+
+.hide_sidebar_overlay <- function(id) {
+  shinyjs::runjs(
+    sprintf("document.getElementById('%s').classList.remove('show')", id)
+  )
+}
+
+.show_sidebar_overlay <- function(id) {
+  shinyjs::runjs(
+    sprintf("document.getElementById('%s').classList.add('show')", id)
+  )
+}
+
+.glow_sidebar_overlay_close <- function(id) {
+  shinyjs::runjs(
+    sprintf(
+      "document.getElementById('%s').querySelector('.close-button').classList.remove('glow');
+      requestAnimationFrame(() => {
+        document.getElementById('%s').querySelector('.close-button').classList.add('glow');
+      });",
+      id, id
+    )
+  )
+}
+
+.enable_sidebar_overlay_close <- function(id) {
+  shinyjs::enable(selector = sprintf("#%s .close-button", id))
 }
