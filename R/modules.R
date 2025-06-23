@@ -803,10 +803,22 @@ flatten_modules <- function(modules, parent_group = NULL) {
       flattened <- append(flattened, nested_flattened)
     }
   }
+
+  flattened <- flattened[order(
+    vapply(flattened, function(x) length(x$group) > 0, logical(1)),
+    vapply(flattened, function(x) {
+      if (length(x$group) == 0) {
+        ""
+      } else {
+        paste(x$group, collapse = " > ")
+      }
+    }, character(1))
+  )]
+
   names(flattened) <- get_module_ids(flattened)
 
   structure(
     flattened,
-    class = "teal_modules"
+    class = "flat_teal_modules"
   )
 }

@@ -493,6 +493,7 @@ srv_teal_module.teal_module <- function(id,
 #' @keywords internal
 .teal_custom_nav <- function(id, modules, modules_ui, selected_module = NULL) {
   active_module_id <- shiny::restoreInput(id, default = names(modules)[1])
+  last_group <- modules[[1]]$group
   tags$div(
     class = "teal-modules-wrapper tabbable",
     .teal_custom_nav_deps(),
@@ -515,17 +516,28 @@ srv_teal_module.teal_module <- function(id,
           class = "dropdown-menu",
           !!!lapply(names(modules), function(module_id) {
             module <- modules[[module_id]]
-            tags$a(
-              href = paste0("#", id, module_id),
-              `data-bs-toggle` = "tab",
-              `data-value` = module_id,
-              `class` = ifelse(
-                module_id == active_module_id,
-                "nav-link btn-default active",
-                "nav-link btn-default"
-              ),
-              module$label
+            ui <- tags$span(
+              if (!identical(module$group, last_group) && !is.null(module$group)) {
+                tags$span(
+                  tags$br(), tags$br(),
+                  tags$span(paste(module$group, collapse = " > ")),
+                  tags$br()
+                )
+              },
+              tags$a(
+                href = paste0("#", id, module_id),
+                `data-bs-toggle` = "tab",
+                `data-value` = module_id,
+                `class` = ifelse(
+                  module_id == active_module_id,
+                  "nav-link btn-default active",
+                  "nav-link btn-default"
+                ),
+                module$label
+              )
             )
+            last_group <<- module$group
+            ui
           })
         )
       )

@@ -221,7 +221,7 @@ testthat::test_that("modules returns children as list with list named after labe
     datanames = ""
   )
   test_modules <- modules(label = "modules", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)
+  out <- modules(label = "tabs", test_module, test_modules)$children
   testthat::expect_named(out, c("module", "modules"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$modules, test_modules)
@@ -250,7 +250,7 @@ testthat::test_that("modules returns children as list with unique names if label
     datanames = ""
   )
   test_modules <- modules(label = "module", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)
+  out <- modules(label = "tabs", test_module, test_modules)$children
   testthat::expect_named(out, c("module", "module_1"))
   testthat::expect_identical(out$module, test_module)
   testthat::expect_identical(out$module_1, test_modules)
@@ -352,7 +352,7 @@ testthat::test_that("append_module appends a module to children of not nested te
   mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods, mod3)
-  testthat::expect_equal(appended_mods, list(a = mod, b = mod2, d = mod3))
+  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
 })
 
 
@@ -364,7 +364,7 @@ testthat::test_that("append_module appends a module to children of nested teal_m
   mod3 <- module(label = "d")
 
   appended_mods <- append_module(mods2, mod3)
-  testthat::expect_equal(appended_mods, list(c = mods, b = mod2, d = mod3))
+  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
 })
 
 testthat::test_that("append_module produces teal_modules with unique named children", {
@@ -374,7 +374,7 @@ testthat::test_that("append_module produces teal_modules with unique named child
   mod3 <- module(label = "c")
 
   appended_mods <- append_module(mods, mod3)
-  mod_names <- names(appended_mods)
+  mod_names <- names(appended_mods$children)
   testthat::expect_equal(mod_names, unique(mod_names))
 })
 
