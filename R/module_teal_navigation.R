@@ -503,13 +503,12 @@ srv_teal_module.teal_module <- function(id,
       class = "nav shiny-tab-input",
       `data-tabsetid` = "test",
       tags$div(
-        class = "dropdown",
+        class = "dropdown nav-item-custom",
         onmouseover = "initNavigationMouseOver.call(this)",
         onmouseout = "initNavigationMouseOut.call(this)",
         tags$a(
-          class = "nav-item-custom dropdown-toggle active",
+          class = "dropdown-toggle active",
           role = "button",
-          id = "modulesDropdown",
           "Modules"
         ),
         tags$div(
@@ -530,8 +529,8 @@ srv_teal_module.teal_module <- function(id,
                 `data-value` = module_id,
                 `class` = ifelse(
                   module_id == active_module_id,
-                  "nav-link btn-default active",
-                  "nav-link btn-default"
+                  "nav-link module-button btn-default active",
+                  "nav-link module-button btn-default"
                 ),
                 module$label
               )

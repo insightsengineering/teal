@@ -80,6 +80,7 @@ ui_teal <- function(id, modules) {
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
     ),
+    uiOutput(ns("teal_data_module_ui")),
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
@@ -184,17 +185,14 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
 
-
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
-      bslib::nav_insert(
-        id = "teal_modules-active_tab",
-        position = "before",
-        select = TRUE,
-        bslib::nav_panel(
-          title = icon("fas fa-database"),
-          value = "teal_data_module",
-          tags$div(
+      insertUI(
+        selector = ".teal-modules-wrapper .nav-item-custom",
+        where = "beforeBegin",
+        .sidebar_overlay(
+          toggle_ui = actionButton(session$ns("show_teal_data_module"), "Data Load"),
+          ui_content = tags$div(
             ui_init_data(session$ns("data")),
             validate_ui
           )
@@ -205,7 +203,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
-          removeTab("teal_modules-active_tab", target = "teal_data_module")
+          print("removing")
+          removeUI(sprintf("#%s", session$ns("teal_data_module")))
         })
       }
     } else {
@@ -235,4 +234,44 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   })
 
   invisible(NULL)
+}
+
+
+.sidebar_overlay_deps <- function() {
+  htmltools::htmlDependency(
+    name = "sidebar-navigation",
+    version = utils::packageVersion("teal"),
+    package = "teal",
+    src = "sidebar-navigation",
+    stylesheet = "sidebar-navigation.css"
+  )
+}
+
+#' @keywords internal
+.sidebar_overlay <- function(toggle_ui, ui_content, shown = FALSE, direction = "left") {
+  if (!direction %in% c("left", "right")) {
+    stop("direction must be either 'left' or 'right'")
+  }
+
+  sidebar_classes <- c("teal-custom-sidebar", direction)
+  if (shown) sidebar_classes <- c(sidebar_classes, "show")
+
+  tags$div(
+    .sidebar_overlay_deps(),
+    tags$div(
+      toggle_ui,
+      onclick = 'this.nextElementSibling.classList.add("show");'
+    ),
+    div(
+      class = paste(sidebar_classes, collapse = " "),
+      div(
+        class = "sidebar-content",
+        tags$button("x",
+          class = "close-button",
+          onclick = 'this.parentElement.parentElement.classList.remove("show");'
+        ),
+        ui_content
+      )
+    )
+  )
 }
