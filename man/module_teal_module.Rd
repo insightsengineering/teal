@@ -98,8 +98,9 @@ output of currently active module.
 }
 }
 \description{
-On the UI side each \code{teal_modules} is translated to a custom dropdown navigation and each \code{teal_module} is a
-panel that shows/hides based on dropdown selection. Both, UI and server are called recursively so that each tab is a separate module and
-reflect nested structure of \code{modules} argument.
+The main \code{teal_modules} is a container of \code{teal_module} objects.
+The nested structure of \code{teal_modules} helps to group the \code{teal_module} objects.
+Each \code{teal_module} creates a navigation tab button inside a modules dropdown menu with the label of the module.
+If the \code{teal_module} is grouped inside one or more \code{teal_modules} object, the label of the group is displayed above.
 }
 \keyword{internal}

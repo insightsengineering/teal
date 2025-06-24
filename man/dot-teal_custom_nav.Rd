@@ -2,18 +2,40 @@
 % Please edit documentation in R/module_teal_navigation.R
 \name{.teal_custom_nav}
 \alias{.teal_custom_nav}
-\title{Custom Navigation Widget for \code{teal_modules}}
+\title{Create Bootstrap based Navigation for Teal Modules}
 \usage{
-.teal_custom_nav(id, modules, modules_ui, selected_module = NULL)
+.teal_custom_nav(id, modules, modules_ui)
 }
 \arguments{
-\item{id}{(\code{character(1)}) The ID of the navigation widget. Which returns the \code{module_id} of the active module.}
+\item{id}{(\code{character(1)}) Unique identifier for the navigation widget. This ID is used
+to create the Shiny input binding that tracks which module is currently active.}
 
-\item{modules}{(\code{list}) A \code{teal_modules} object.}
+\item{modules}{(\code{teal_modules}) A teal modules object containing the module definitions.
+Each module should have \code{label} and optionally \code{group} attributes.}
 
-\item{modules_ui}{(\code{list}) A list of UI elements that should be linked with the \code{module_id} of the.\code{teal_modules}}
+\item{modules_ui}{(\verb{named list}) List of UI elements corresponding to each module.
+Names must match the module IDs from the \code{modules} parameter.}
 }
 \description{
-Custom Navigation Widget for \code{teal_modules}
+Generates a dropdown navigation interface that allows users to switch
+between different teal modules. The function creates both the navigation dropdown menu
+and the corresponding tab content containers.
+}
+\details{
+This function constructs a complete navigation system with the following components:
+\itemize{
+\item A dropdown button labeled "Modules" that reveals module options on hover
+\item Individual navigation links for each module, grouped by their \code{group} attribute
+\item Tab content containers that house the actual module UI elements
+\item Automatic tab switching via Bootstrap's tab functionality
+}
+
+The navigation leverages Shiny's built-in tab system by using the \code{shiny-tab-input} class,
+which automatically handles showing/hiding content when navigation links are clicked.
+Each module's UI is wrapped in a \code{.tab-pane} container with an ID that corresponds to
+the navigation link's href attribute.
+
+Module grouping is supported - when modules belong to different groups, visual separators
+and group labels are automatically inserted in the dropdown menu.
 }
 \keyword{internal}

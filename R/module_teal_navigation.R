@@ -1,8 +1,9 @@
 #' Calls all `modules`
 #'
-#' On the UI side each `teal_modules` is translated to a custom dropdown navigation and each `teal_module` is a
-#' panel that shows/hides based on dropdown selection. Both, UI and server are called recursively so that each tab is a separate module and
-#' reflect nested structure of `modules` argument.
+#' The main `teal_modules` is a container of `teal_module` objects.
+#' The nested structure of `teal_modules` helps to group the `teal_module` objects.
+#' Each `teal_module` creates a navigation tab button inside a modules dropdown menu with the label of the module.
+#' If the `teal_module` is grouped inside one or more `teal_modules` object, the label of the group is displayed above.
 #'
 #' @name module_teal_module
 #'
@@ -485,17 +486,39 @@ srv_teal_module.teal_module <- function(id,
   )
 }
 
-#' Custom Navigation Widget for `teal_modules`
+#' Create Bootstrap based Navigation for Teal Modules
 #'
-#' @param id (`character(1)`) The ID of the navigation widget. Which returns the `module_id` of the active module.
-#' @param modules (`list`) A `teal_modules` object.
-#' @param modules_ui (`list`) A list of UI elements that should be linked with the `module_id` of the.`teal_modules`
+#' Generates a dropdown navigation interface that allows users to switch
+#' between different teal modules. The function creates both the navigation dropdown menu
+#' and the corresponding tab content containers.
+#'
+#' @details
+#' This function constructs a complete navigation system with the following components:
+#' - A dropdown button labeled "Modules" that reveals module options on hover
+#' - Individual navigation links for each module, grouped by their `group` attribute
+#' - Tab content containers that house the actual module UI elements
+#' - Automatic tab switching via Bootstrap's tab functionality
+#'
+#' The navigation leverages Shiny's built-in tab system by using the `shiny-tab-input` class,
+#' which automatically handles showing/hiding content when navigation links are clicked.
+#' Each module's UI is wrapped in a `.tab-pane` container with an ID that corresponds to
+#' the navigation link's href attribute.
+#'
+#' Module grouping is supported - when modules belong to different groups, visual separators
+#' and group labels are automatically inserted in the dropdown menu.
+#'
+#' @param id (`character(1)`) Unique identifier for the navigation widget. This ID is used
+#'   to create the Shiny input binding that tracks which module is currently active.
+#' @param modules (`teal_modules`) A teal modules object containing the module definitions.
+#'   Each module should have `label` and optionally `group` attributes.
+#' @param modules_ui (`named list`) List of UI elements corresponding to each module.
+#'   Names must match the module IDs from the `modules` parameter.
 #' @keywords internal
-.teal_custom_nav <- function(id, modules, modules_ui, selected_module = NULL) {
+.teal_custom_nav <- function(id, modules, modules_ui) {
   active_module_id <- shiny::restoreInput(id, default = names(modules)[1])
   last_group <- modules[[1]]$group
   tags$div(
-    class = "teal-modules-wrapper tabbable",
+    class = "teal-modules-wrapper",
     .teal_custom_nav_deps(),
     tags$ul(
       id = id,
@@ -544,7 +567,6 @@ srv_teal_module.teal_module <- function(id,
     ),
     tags$div(
       class = "tab-content",
-      `data-tabsetid` = "test",
       !!!lapply(names(modules), function(module_id) {
         module <- modules[[module_id]]
         tags$div(
