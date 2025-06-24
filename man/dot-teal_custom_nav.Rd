@@ -30,10 +30,10 @@ This function constructs a complete navigation system with the following compone
 \item Automatic tab switching via Bootstrap's tab functionality
 }
 
-The navigation leverages Shiny's built-in tab system by using the \code{shiny-tab-input} class,
+The navigation leverages \code{shiny}'s built-in tab system by using the \code{shiny-tab-input} class,
 which automatically handles showing/hiding content when navigation links are clicked.
 Each module's UI is wrapped in a \code{.tab-pane} container with an ID that corresponds to
-the navigation link's href attribute.
+the navigation link's \code{href} attribute.
 
 Module grouping is supported - when modules belong to different groups, visual separators
 and group labels are automatically inserted in the dropdown menu.

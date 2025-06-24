@@ -499,10 +499,10 @@ srv_teal_module.teal_module <- function(id,
 #' - Tab content containers that house the actual module UI elements
 #' - Automatic tab switching via Bootstrap's tab functionality
 #'
-#' The navigation leverages Shiny's built-in tab system by using the `shiny-tab-input` class,
+#' The navigation leverages `shiny`'s built-in tab system by using the `shiny-tab-input` class,
 #' which automatically handles showing/hiding content when navigation links are clicked.
 #' Each module's UI is wrapped in a `.tab-pane` container with an ID that corresponds to
-#' the navigation link's href attribute.
+#' the navigation link's `href` attribute.
 #'
 #' Module grouping is supported - when modules belong to different groups, visual separators
 #' and group labels are automatically inserted in the dropdown menu.
