@@ -246,6 +246,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 }
 
 
+#' @keywords internal
 .sidebar_overlay_deps <- function() {
   htmltools::htmlDependency(
     name = "sidebar-navigation",
@@ -256,6 +257,43 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   )
 }
 
+#' Create Sidebar Overlay Widget
+#'
+#' Generates a slide-out sidebar overlay that can be toggled open and closed.
+#' The sidebar slides in from the left or right side of the screen and contains
+#' custom UI content with a close button.
+#'
+#' @details
+#' This function creates a complete sidebar overlay system with the following components:
+#' - A toggle ui (provided as input) that opens the sidebar when clicked
+#' - A sidebar panel that slides in from the specified direction
+#' - A close button (X) within the sidebar to hide it
+#' - Automatic CSS class management for show/hide animations
+#' - Required CSS dependencies for styling and animations
+#'
+#' The sidebar uses CSS classes to control visibility and animations:
+#' - `teal-custom-sidebar`: Base styling for the sidebar
+#' - `show`: Controls visibility (added/removed to show/hide)
+#' - `left`/`right`: Controls which side the sidebar slides from
+#'
+#' JavaScript click handlers are attached inline to manage the show/hide behavior
+#' without requiring additional server-side logic.
+#'
+#' @param id (`character(1)`) Unique identifier for the sidebar overlay element.
+#'   Used to target the sidebar for programmatic show/hide operations.
+#'   This id can later be used to perform actions on the sidebar with the help of the helper functions:
+#'   - `.hide_sidebar_overlay(id)`
+#'   - `.show_sidebar_overlay(id)`
+#'   - `.glow_sidebar_overlay_close(id)`
+#'   - `.enable_sidebar_overlay_close(id)`
+#' @param toggle_ui (`shiny.tag`) UI element that will trigger the sidebar to open
+#'   when clicked. Typically an `actionButton` or similar interactive element.
+#' @param ui_content (`shiny.tag` or `tagList`) The content to display inside the
+#'   sidebar panel. Can be any valid Shiny UI elements.
+#' @param shown (`logical(1)`) Whether the sidebar should be initially visible.
+#'   Defaults to `FALSE` (hidden).
+#' @param direction (`character(1)`) Side of the screen from which the sidebar slides.
+#'   Must be either `"left"` or `"right"`. Defaults to `"left"`.
 #' @keywords internal
 .sidebar_overlay <- function(id, toggle_ui, ui_content, shown = FALSE, direction = "left") {
   if (!direction %in% c("left", "right")) {
@@ -289,18 +327,21 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   )
 }
 
+#' @keywords internal
 .hide_sidebar_overlay <- function(id) {
   shinyjs::runjs(
     sprintf("document.getElementById('%s').classList.remove('show')", id)
   )
 }
 
+#' @keywords internal
 .show_sidebar_overlay <- function(id) {
   shinyjs::runjs(
     sprintf("document.getElementById('%s').classList.add('show')", id)
   )
 }
 
+#' @keywords internal
 .glow_sidebar_overlay_close <- function(id) {
   shinyjs::runjs(
     sprintf(
@@ -313,6 +354,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   )
 }
 
+#' @keywords internal
 .enable_sidebar_overlay_close <- function(id) {
   shinyjs::enable(selector = sprintf("#%s .close-button", id))
 }
