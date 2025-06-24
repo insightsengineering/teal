@@ -73,9 +73,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     output$main_teal_ui <- renderUI({
-      modules <- drop_module(modules, "teal_module_landing")
-      modules <- append_reporter_module(modules)
-
       # show busy icon when `shiny` session is busy computing stuff
       # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
       shiny_busy_message_panel <- conditionalPanel(
