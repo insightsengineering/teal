@@ -47,3 +47,31 @@
   border: 1px solid red;
   padding: 1em;
 }
+
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) {
+  --bs-accordion-bg: var(--bs-gray-100);
+  background-color: var(--bs-gray-100);
+}
+
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) .teal_validated,
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) .shiny-output-error,
+.validation-wrapper:has(.validation-panel[disabled="disabled"]) .teal-output-warning {
+  display: none;
+}
+
+.validation-wrapper .disabled-info {
+  display: none;
+}
+
+.validation-wrapper .validation-panel[disabled="disabled"] {
+  padding-top: 0;
+}
+
+.validation-wrapper .validation-panel[disabled="disabled"] .disabled-info {
+  display: block;
+  border: 1px solid var(--bs-info);
+  border-radius: 4px;
+  padding: 1em;
+  color: color-mix(in srgb, var(--bs-info), black 20%);
+  background-color: color-mix(in srgb, var(--bs-info) 5%, transparent);
+}
