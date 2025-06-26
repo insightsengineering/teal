@@ -146,7 +146,6 @@ teal_transform_module <- function(ui = NULL,
           )
         }
 
-
         decorate_err_msg(
           assert_reactive(data_out),
           pre = sprintf("From: 'teal_transform_module()':\nA 'teal_transform_module' with \"%s\" label:", label),
