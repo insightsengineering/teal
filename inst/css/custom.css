@@ -58,9 +58,10 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   --bs-modal-margin: 20px;
 }
 
-.teal-data-module-popup .modal-body {
+.teal-data-module-popup .modal-content {
   overflow: auto;
   max-height: 90vh;
+  height: 90vh;
 }
 
 @media (min-width: 576px) {
