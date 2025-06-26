@@ -186,22 +186,25 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       observeEvent(data_handled(), {
         if (inherits(data_handled(), "teal_data")) {
           showNotification("Data updated")
-          .enable_sidebar_overlay_close(session$ns("teal_data_module_sidebar"))
-          .glow_sidebar_overlay_close(session$ns("teal_data_module_sidebar"))
+          shinyjs::enable(id = "close_teal_data_module_modal")
         }
       })
       setBookmarkExclude(c("teal_modules-active_tab"))
-      insertUI(
-        selector = ".teal-modules-wrapper .nav-item-custom",
-        where = "beforeBegin",
-        .sidebar_overlay(
-          id = session$ns("teal_data_module_sidebar"),
-          toggle_ui = actionButton(session$ns("show_teal_data_module"), NULL, icon = icon("database")),
-          ui_content = tags$div(
-            ui_init_data(session$ns("data")),
-            validate_ui
-          ),
-          shown = TRUE
+      showModal(
+        div(
+          class = "teal teal-data-module-popup",
+          modalDialog(
+            id = session$ns("teal_data_module_ui"),
+            size = "xl",
+            tags$div(
+              ui_init_data(session$ns("data")),
+              validate_ui
+            ),
+            easyClose = FALSE,
+            footer = shinyjs::disabled(
+              tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+            )
+          )
         )
       )
 
@@ -209,7 +212,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
-          .hide_sidebar_overlay(session$ns("teal_data_module_sidebar"))
+          shinyjs::enable(id = "close_teal_data_module_modal")
+          shinyjs::click(id = "close_teal_data_module_modal")
           removeUI(sprintf("#%s", session$ns("show_teal_data_module")))
         })
       }
@@ -240,118 +244,4 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   })
 
   invisible(NULL)
-}
-
-
-#' @keywords internal
-.sidebar_overlay_deps <- function() {
-  htmltools::htmlDependency(
-    name = "sidebar-navigation",
-    version = utils::packageVersion("teal"),
-    package = "teal",
-    src = "sidebar-navigation",
-    stylesheet = "sidebar-navigation.css"
-  )
-}
-
-#' Create Sidebar Overlay Widget
-#'
-#' Generates a slide-out sidebar overlay that can be toggled open and closed.
-#' The sidebar slides in from the left or right side of the screen and contains
-#' custom UI content with a close button.
-#'
-#' @details
-#' This function creates a complete sidebar overlay system with the following components:
-#' - A toggle ui (provided as input) that opens the sidebar when clicked
-#' - A sidebar panel that slides in from the specified direction
-#' - A close button (X) within the sidebar to hide it
-#' - Automatic CSS class management for show/hide animations
-#' - Required CSS dependencies for styling and animations
-#'
-#' The sidebar uses CSS classes to control visibility and animations:
-#' - `teal-custom-sidebar`: Base styling for the sidebar
-#' - `show`: Controls visibility (added/removed to show/hide)
-#' - `left`/`right`: Controls which side the sidebar slides from
-#'
-#' JavaScript click handlers are attached inline to manage the show/hide behavior
-#' without requiring additional server-side logic.
-#'
-#' @param id (`character(1)`) Unique identifier for the sidebar overlay element.
-#'   Used to target the sidebar for programmatic show/hide operations.
-#'   This id can later be used to perform actions on the sidebar with the help of the helper functions:
-#'   - `.hide_sidebar_overlay(id)`
-#'   - `.show_sidebar_overlay(id)`
-#'   - `.glow_sidebar_overlay_close(id)`
-#'   - `.enable_sidebar_overlay_close(id)`
-#' @param toggle_ui (`shiny.tag`) UI element that will trigger the sidebar to open
-#'   when clicked. Typically an `actionButton` or similar interactive element.
-#' @param ui_content (`shiny.tag` or `tagList`) The content to display inside the
-#'   sidebar panel. Can be any valid Shiny UI elements.
-#' @param shown (`logical(1)`) Whether the sidebar should be initially visible.
-#'   Defaults to `FALSE` (hidden).
-#' @param direction (`character(1)`) Side of the screen from which the sidebar slides.
-#'   Must be either `"left"` or `"right"`. Defaults to `"left"`.
-#' @keywords internal
-.sidebar_overlay <- function(id, toggle_ui, ui_content, shown = FALSE, direction = "left") {
-  if (!direction %in% c("left", "right")) {
-    stop("direction must be either 'left' or 'right'")
-  }
-
-  sidebar_classes <- c("teal-custom-sidebar", direction)
-  if (shown) sidebar_classes <- c(sidebar_classes, "show")
-
-  tags$div(
-    .sidebar_overlay_deps(),
-    tags$div(
-      toggle_ui,
-      onclick = 'this.nextElementSibling.classList.add("show");'
-    ),
-    div(
-      id = id,
-      class = paste(sidebar_classes, collapse = " "),
-      div(
-        class = "sidebar-content",
-        shinyjs::disabled(
-          tags$button(
-            bsicons::bs_icon("x"),
-            class = "btn close-button",
-            onclick = 'this.parentElement.parentElement.classList.remove("show");'
-          )
-        ),
-        ui_content
-      )
-    )
-  )
-}
-
-#' @keywords internal
-.hide_sidebar_overlay <- function(id) {
-  shinyjs::runjs(
-    sprintf("document.getElementById('%s').classList.remove('show')", id)
-  )
-}
-
-#' @keywords internal
-.show_sidebar_overlay <- function(id) {
-  shinyjs::runjs(
-    sprintf("document.getElementById('%s').classList.add('show')", id)
-  )
-}
-
-#' @keywords internal
-.glow_sidebar_overlay_close <- function(id) {
-  shinyjs::runjs(
-    sprintf(
-      "document.getElementById('%s').querySelector('.close-button').classList.remove('glow');
-      requestAnimationFrame(() => {
-        document.getElementById('%s').querySelector('.close-button').classList.add('glow');
-      });",
-      id, id
-    )
-  )
-}
-
-#' @keywords internal
-.enable_sidebar_overlay_close <- function(id) {
-  shinyjs::enable(selector = sprintf("#%s .close-button", id))
 }
