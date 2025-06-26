@@ -84,6 +84,8 @@ which implies in filter-panel to be "global". When \code{NULL} then filter-panel
 \item{slices_global}{(\code{reactiveVal} returning \code{modules_teal_slices})
 see \code{\link{module_filter_manager}}}
 
+\item{reporter}{(\code{Reporter}) object used to store report contents. Set to \code{NULL} to globally disable reporting.}
+
 \item{data_load_status}{(\code{reactive} returning \code{character})
 Determines action dependent on a data loading status:
 \itemize{
