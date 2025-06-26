@@ -2390,6 +2390,7 @@ testthat::describe("srv_teal summary table", {
   })
 
   testthat::it("summary table displays MAE dataset added in transformators", {
+    testthat::skip_if_not_installed("MultiAssayExperiment")
     data <- within(teal.data::teal_data(), {
       iris <- iris
       mtcars <- mtcars

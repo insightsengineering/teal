@@ -304,10 +304,17 @@ srv_add_reporter <- function(id, module_out, reporter) {
     })
 
     doc_out <- reactive({
+      req(mod_out_r())
       teal_data_handled <- tryCatch(mod_out_r(), error = function(e) e)
-      if (inherits(teal_data_handled, "teal_report") && length(teal.reporter::teal_card(teal_data_handled))) {
-        .collapse_subsequent_chunks(teal.reporter::teal_card(teal_data_handled))
+      tcard <- if (inherits(teal_data_handled, "teal_report")) {
+        teal.reporter::teal_card(teal_data_handled)
+      } else if (inherits(teal_data_handled, "teal_data")) {
+        teal.reporter::teal_card(teal.reporter::as.teal_report(teal_data_handled))
+      } else if (inherits(teal_data_handled, "teal_card")) {
+        teal_data_handled
       }
+
+      if (length(tcard)) .collapse_subsequent_chunks(tcard)
     })
 
     .call_once_when(!is.null(doc_out()), {
@@ -319,6 +326,8 @@ srv_add_reporter <- function(id, module_out, reporter) {
       })
       teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
     })
+
+
 
     observeEvent(doc_out(), ignoreNULL = FALSE, {
       shinyjs::toggleState("reporter_add_container", condition = inherits(doc_out(), "teal_card"))
