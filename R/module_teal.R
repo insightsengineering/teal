@@ -156,6 +156,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         teal_data_resolved_state(TRUE)
         "ok"
       } else if (inherits(data, "teal_data_module")) {
+        shinyjs::disable(id = "close_teal_data_module_modal")
         teal_data_resolved_state(FALSE)
         "teal_data_module failed"
       } else {
