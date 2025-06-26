@@ -183,30 +183,39 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
 
     if (inherits(data, "teal_data_module")) {
+      teal_data_resolved_state <- reactiveVal(FALSE)
       observeEvent(data_handled(), {
         if (inherits(data_handled(), "teal_data")) {
-          showNotification("Data updated")
+          teal_data_resolved_state(TRUE)
           shinyjs::enable(id = "close_teal_data_module_modal")
         }
       })
       setBookmarkExclude(c("teal_modules-active_tab"))
-      showModal(
-        div(
-          class = "teal teal-data-module-popup",
-          modalDialog(
-            id = session$ns("teal_data_module_ui"),
-            size = "xl",
-            tags$div(
-              ui_init_data(session$ns("data")),
-              validate_ui
-            ),
-            easyClose = FALSE,
-            footer = shinyjs::disabled(
-              tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+      insertUI(
+        selector = ".teal-modules-wrapper .nav-item-custom",
+        where = "beforeBegin",
+        actionButton(session$ns("open_teal_data_module_ui"), NULL, icon = icon("database"))
+      )
+      observeEvent(input$open_teal_data_module_ui, ignoreInit = TRUE, ignoreNULL = FALSE, {
+        showModal(
+          div(
+            class = "teal teal-data-module-popup",
+            modalDialog(
+              id = session$ns("teal_data_module_ui"),
+              size = "xl",
+              tags$div(
+                ui_init_data(session$ns("data")),
+                validate_ui
+              ),
+              easyClose = FALSE,
+              footer = do.call(
+                ifelse(teal_data_resolved_state(), tagList, shinyjs::disabled),
+                list(tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss")))
+              )
             )
           )
         )
-      )
+      })
 
       if (attr(data, "once")) {
         observeEvent(data_signatured(), once = TRUE, {
@@ -219,7 +228,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
               session$ns("close_teal_data_module_modal")
             )
           )
-          removeUI(sprintf("#%s", session$ns("show_teal_data_module")))
+          teal_data_resolved_state(TRUE)
+          removeUI(sprintf("#%s", session$ns("open_teal_data_module_ui")))
         })
       }
     } else {
