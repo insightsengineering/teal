@@ -90,31 +90,34 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
-  data_teal_report <- teal.reporter::as.teal_report(data)
-  if (!inherits(data, "teal_report")) {
-    teal.reporter::teal_card(data_teal_report) <- c(
+  if (inherits(data, "teal_report")) {
+    teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(),
       "## Code preparation",
-      teal.reporter::teal_card(data_teal_report)
+      teal.reporter::teal_card(data)
     )
   }
   tdata <- do.call(
-    teal.reporter::teal_report,
+    teal.data::teal_data,
     c(
       list(
-        code = trimws(c(teal.code::get_code(data_teal_report), hashes), which = "right"),
-        join_keys = teal.data::join_keys(data_teal_report),
-        teal_card = teal.reporter::teal_card(data_teal_report)
+        code = trimws(c(teal.code::get_code(data), hashes), which = "right"),
+        join_keys = teal.data::join_keys(data)
       ),
       sapply(
-        names(data_teal_report),
+        names(data),
         teal.code::get_var,
-        object = data_teal_report,
+        object = data,
         simplify = FALSE
       )
     )
   )
-  tdata@verified <- data_teal_report@verified
+
+  if (inherits(data, "teal_report")) {
+    tdata <- as.teal_report(tdata)
+    teal.reporter::teal_card(tdata) <- teal.reporter::teal_card(data)
+  }
+  tdata@verified <- data@verified
   tdata
 }
 

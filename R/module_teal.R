@@ -157,7 +157,12 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         )
         warning(is_filter_ok)
       }
-      .add_signature_to_data(data_validated())
+      temp_data <- if (reporter$get_preprocessing_with_titles_flag()) {
+        teal.reporter::as.teal_report(data_validated())
+      } else {
+        data_validated()
+      }
+      .add_signature_to_data(temp_data)
     })
 
     data_load_status <- reactive({

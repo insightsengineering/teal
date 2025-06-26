@@ -21,11 +21,13 @@ NULL
   checkmate::assert_class(data, "teal_data")
   if (length(code) && !identical(code, "")) {
     data@code <- c(data@code, code2list(code))
-    teal.reporter::teal_card(data) <- c(
-      teal.reporter::teal_card(data),
-      "## Data filtering",
-      teal.reporter::code_chunk(code, "data-filtering")
-    )
+    if (inherits(data, "teal_report")) {
+      teal.reporter::teal_card(data) <- c(
+        teal.reporter::teal_card(data),
+        "## Data filtering",
+        teal.reporter::code_chunk(code, "data-filtering")
+      )
+    }
     methods::validObject(data)
   }
   data
