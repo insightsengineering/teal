@@ -68,6 +68,7 @@ articles:
     contents:
       - creating-custom-modules
       - adding-support-for-reporting
+      - managing-reproducible-report-documents-in-teal
       - transform-module-output
   - title: Using `teal`
     navbar: Using `teal`
