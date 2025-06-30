@@ -93,7 +93,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
   modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
-  teal_data_resolved_state <- reactiveVal(FALSE)
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
@@ -148,11 +147,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     data_load_status <- reactive({
       if (inherits(data_handled(), "teal_data")) {
         shinyjs::enable(id = "close_teal_data_module_modal")
-        teal_data_resolved_state(TRUE)
         "ok"
       } else if (inherits(data, "teal_data_module")) {
         shinyjs::disable(id = "close_teal_data_module_modal")
-        teal_data_resolved_state(FALSE)
         "teal_data_module failed"
       } else {
         "external failed"
@@ -191,7 +188,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
             )
           )
         )
-        if (teal_data_resolved_state()) {
+        if (data_load_status() == "ok0") {
           shinyjs::enable(id = "close_teal_data_module_modal")
         } else {
           shinyjs::disable(id = "close_teal_data_module_modal")
