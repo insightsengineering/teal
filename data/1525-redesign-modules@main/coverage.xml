@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.63011816433086" branch-rate="0" lines-covered="2293" lines-valid="3639" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-06-26 14:18:30.082616">
+<coverage line-rate="0.62873594735399" branch-rate="0" lines-covered="2293" lines-valid="3647" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-06-30 05:11:12.588438">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.63011816433086" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.62873594735399" branch-rate="0" complexity="0">
       <classes>
         <class name="checkmate.R" filename="R/checkmate.R" line-rate="1" branch-rate="0" complexity="0">
           <methods>
@@ -5683,6 +5683,14 @@
                 <line number="39" hits="0" branch="false"/>
                 <line number="40" hits="0" branch="false"/>
                 <line number="41" hits="0" branch="false"/>
+                <line number="42" hits="0" branch="false"/>
+                <line number="43" hits="0" branch="false"/>
+                <line number="44" hits="0" branch="false"/>
+                <line number="45" hits="0" branch="false"/>
+                <line number="46" hits="0" branch="false"/>
+                <line number="47" hits="0" branch="false"/>
+                <line number="48" hits="0" branch="false"/>
+                <line number="49" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -5710,6 +5718,14 @@
             <line number="39" hits="0" branch="false"/>
             <line number="40" hits="0" branch="false"/>
             <line number="41" hits="0" branch="false"/>
+            <line number="42" hits="0" branch="false"/>
+            <line number="43" hits="0" branch="false"/>
+            <line number="44" hits="0" branch="false"/>
+            <line number="45" hits="0" branch="false"/>
+            <line number="46" hits="0" branch="false"/>
+            <line number="47" hits="0" branch="false"/>
+            <line number="48" hits="0" branch="false"/>
+            <line number="49" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="tdata.R" filename="R/tdata.R" line-rate="0" branch-rate="0" complexity="0">
