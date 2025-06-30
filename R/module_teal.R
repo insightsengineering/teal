@@ -50,6 +50,7 @@ ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
+  modules <- append_reporter_module(modules)
 
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
