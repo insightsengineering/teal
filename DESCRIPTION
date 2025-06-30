@@ -77,10 +77,10 @@ VignetteBuilder:
     knitr,
     rmarkdown
 Remotes:
-    insightsengineering/teal.code@teal_reportable,
-    insightsengineering/teal.data@teal_reportable,
+    insightsengineering/teal.code@main,
+    insightsengineering/teal.data@main,
     insightsengineering/teal.logger@main,
-    insightsengineering/teal.reporter@teal_reportable,
+    insightsengineering/teal.reporter@main,
     insightsengineering/teal.slice@main,
     insightsengineering/teal.widgets@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
