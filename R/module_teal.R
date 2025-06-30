@@ -189,7 +189,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
             )
           )
         )
-        if (data_load_status() == "ok0") {
+        if (data_load_status() == "ok") {
           shinyjs::enable(id = "close_teal_data_module_modal")
         } else {
           shinyjs::disable(id = "close_teal_data_module_modal")
