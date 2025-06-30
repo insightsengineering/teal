@@ -89,7 +89,7 @@ ui_teal_module.teal_module <- function(id, modules) {
     class = "teal_module",
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      .get_breadcrum(modules),
+      .modules_breadcrumb(modules),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
