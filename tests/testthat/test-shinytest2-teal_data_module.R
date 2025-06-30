@@ -1,6 +1,128 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
+testthat::test_that("e2e: teal_data_module auto resolves when `once=TRUE` and data is passed", {
+  testthat::skip("chromium")
+  skip_if_too_deep(5)
+  tdm <- teal_data_module(
+    ui = function(id) {
+      numericInput(NS(id, "iris_rows"), "iris rows", min = 0, max = 150, step = 1, value = 10)
+    },
+    server = function(id, ...) {
+      moduleServer(id, function(input, output, session) {
+        reactive(
+          teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars)
+        )
+      })
+    },
+    once = TRUE
+  )
+
+  app <- TealAppDriver$new(
+    data = tdm,
+    modules = example_module(label = "Example Module")
+  )
+
+  testthat::expect_true(app$get_js("document.querySelector('.teal-data-module-popup') === null"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module only resolves when `once=TRUE` and data is passed", {
+  testthat::skip("chromium")
+  skip_if_too_deep(5)
+  tdm <- teal_data_module(
+    ui = function(id) {
+      tagList(
+        numericInput(NS(id, "iris_rows"), "iris rows", min = 0, max = 150, step = 1, value = 10),
+        actionButton(NS(id, "submit"), "Submit")
+      )
+    },
+    server = function(id, ...) {
+      moduleServer(id, function(input, output, session) {
+        eventReactive(input$submit, {
+          teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars)
+        })
+      })
+    },
+    once = TRUE
+  )
+
+  app <- TealAppDriver$new(
+    data = tdm,
+    modules = example_module(label = "Example Module")
+  )
+
+  testthat::expect_false(app$get_js("document.querySelector('.teal-data-module-popup') === null"))
+  app$click("teal-data-teal_data_module-submit")
+  testthat::expect_true(app$get_js("document.querySelector('.teal-data-module-popup') === null"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module modal is still open when `once=FALSE` and data is passed", {
+  testthat::skip("chromium")
+  skip_if_too_deep(5)
+  tdm <- teal_data_module(
+    ui = function(id) {
+      numericInput(NS(id, "iris_rows"), "iris rows", min = 0, max = 150, step = 1, value = 10)
+    },
+    server = function(id, ...) {
+      moduleServer(id, function(input, output, session) {
+        reactive(
+          teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars)
+        )
+      })
+    },
+    once = FALSE
+  )
+
+  app <- TealAppDriver$new(
+    data = tdm,
+    modules = example_module(label = "Example Module")
+  )
+
+  testthat::expect_false(app$get_js("document.querySelector('.teal-data-module-popup') === null"))
+  app$click(selector = "#teal-close_teal_data_module_modal button")
+  testthat::expect_true(app$get_js("document.querySelector('.teal-data-module-popup') === null"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module modal close is disabled `once=FALSE` and data is passed", {
+  testthat::skip("chromium")
+  skip_if_too_deep(5)
+  tdm <- teal_data_module(
+    ui = function(id) {
+      tagList(
+        numericInput(NS(id, "iris_rows"), "iris rows", min = 0, max = 150, step = 1, value = 10),
+        actionButton(NS(id, "submit"), "Submit")
+      )
+    },
+    server = function(id, ...) {
+      moduleServer(id, function(input, output, session) {
+        eventReactive(input$submit, {
+          teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars)
+        })
+      })
+    },
+    once = FALSE
+  )
+
+  app <- TealAppDriver$new(
+    data = tdm,
+    modules = example_module(label = "Example Module")
+  )
+
+  testthat::expect_false(
+    app$get_js("document.querySelector('#teal-close_teal_data_module_modal button.disabled') === null")
+  )
+  app$click("teal-data-teal_data_module-submit")
+  app$click(selector = "#teal-close_teal_data_module_modal button")
+  testthat::expect_true(
+    app$get_js("document.querySelector('#teal-close_teal_data_module_modal button.disabled') === null")
+  )
+  testthat::expect_true(app$get_js("document.querySelector('.teal-data-module-popup') === null"))
+  app$stop()
+})
+
 testthat::test_that("e2e: teal_data_module will have a delayed load of datasets", {
   testthat::skip("chromium")
   skip_if_too_deep(5)
