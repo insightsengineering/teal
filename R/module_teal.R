@@ -51,7 +51,36 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
 
-  uiOutput(ns("main_teal_ui"))
+  shiny_busy_message_panel <- conditionalPanel(
+    condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
+    tags$div(
+      icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
+      "Computing ...",
+      style = "position: fixed; bottom: 0; right: 0;
+          width: 140px; margin: 15px; padding: 5px 0 5px 10px;
+          text-align: left; font-weight: bold; font-size: 100%;
+          color: #ffffff; background-color: #347ab7; z-index: 105;"
+    )
+  )
+  bslib::page_fluid(
+    id = id,
+    theme = get_teal_bs_theme(),
+    include_teal_css_js(),
+    shiny_busy_message_panel,
+    tags$div(
+      id = ns("options_buttons"),
+      style = "position: absolute; right: 10px;",
+      ui_bookmark_panel(ns("bookmark_manager"), modules),
+      ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
+      ui_filter_manager_panel(ns("filter_manager_panel"))
+    ),
+    tags$div(
+      id = ns("tabpanel_wrapper"),
+      class = "teal-body",
+      ui_teal_module(id = ns("teal_modules"), modules = modules)
+    ),
+    tags$hr(style = "margin: 1rem 0 0.5rem 0;")
+  )
 }
 
 #' @rdname module_teal
@@ -73,40 +102,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    output$main_teal_ui <- renderUI({
-      # show busy icon when `shiny` session is busy computing stuff
-      # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
-      shiny_busy_message_panel <- conditionalPanel(
-        condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
-        tags$div(
-          icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
-          "Computing ...",
-          style = "position: fixed; bottom: 0; right: 0;
-          width: 140px; margin: 15px; padding: 5px 0 5px 10px;
-          text-align: left; font-weight: bold; font-size: 100%;
-          color: #ffffff; background-color: #347ab7; z-index: 105;"
-        )
-      )
-      bslib::page_fluid(
-        id = id,
-        theme = get_teal_bs_theme(),
-        include_teal_css_js(),
-        shiny_busy_message_panel,
-        tags$div(
-          id = session$ns("options_buttons"),
-          style = "position: absolute; right: 10px;",
-          ui_bookmark_panel(session$ns("bookmark_manager"), modules),
-          ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
-          ui_filter_manager_panel(session$ns("filter_manager_panel"))
-        ),
-        tags$div(
-          id = session$ns("tabpanel_wrapper"),
-          class = "teal-body",
-          ui_teal_module(id = session$ns("teal_modules"), modules = modules)
-        ),
-        tags$hr(style = "margin: 1rem 0 0.5rem 0;")
-      )
-    })
 
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
