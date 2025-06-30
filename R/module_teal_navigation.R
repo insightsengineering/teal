@@ -464,7 +464,7 @@ srv_teal_module.teal_module <- function(id,
 }
 
 #' @keywords internal
-.get_breadcrum <- function(module) {
+.modules_breadcrumb <- function(module) {
   if (is.null(module$group)) {
     breadcrumb_items <- c("Home", module$label)
   } else {
