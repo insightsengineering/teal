@@ -24,7 +24,7 @@ NULL
     teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(data),
       "## Data filtering",
-      teal.reporter::code_chunk(code, "data-filtering")
+      teal.reporter::code_chunk(code)
     )
     methods::validObject(data)
   }
