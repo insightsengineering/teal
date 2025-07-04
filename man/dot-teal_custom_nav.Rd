@@ -4,7 +4,7 @@
 \alias{.teal_custom_nav}
 \title{Create Bootstrap based Navigation for Teal Modules}
 \usage{
-.teal_custom_nav(id, modules, modules_ui)
+.teal_custom_nav(id, modules)
 }
 \arguments{
 \item{id}{(\code{character(1)}) Unique identifier for the navigation widget. This ID is used
