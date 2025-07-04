@@ -759,46 +759,5 @@ get_module_ids <- function(modules) {
       paste(c(module$group, module$label), collapse = shiny::ns.sep)
     }
   })
-  make.unique(gsub("[^[:alnum:]]", "_", tolower(group_labels)), sep = "_")
-}
-
-
-#' @keywords internal
-flatten_modules <- function(modules, parent_group = NULL) {
-  checkmate::assert_class(modules, "teal_modules")
-
-  flattened <- list()
-
-  current_group <- if (!is.null(modules$label) && modules$label != "root") {
-    c(parent_group, modules$label)
-  } else {
-    parent_group
-  }
-  for (child in modules$children) {
-    if (inherits(child, "teal_module")) {
-      child$group <- c(current_group, child$group)
-      flattened <- append(flattened, list(child))
-    } else if (inherits(child, "teal_modules")) {
-      nested_flattened <- flatten_modules(child, parent_group = current_group)
-      flattened <- append(flattened, nested_flattened)
-    }
-  }
-
-  flattened <- flattened[order(
-    vapply(flattened, function(x) length(x$group) > 0, logical(1)),
-    vapply(flattened, function(x) {
-      if (length(x$group) == 0) {
-        ""
-      } else {
-        paste(x$group, collapse = " > ")
-      }
-    }, character(1))
-  )]
-
-  names(flattened) <- get_module_ids(flattened)
-
-  structure(
-    flattened,
-    class = "flat_teal_modules"
-  )
+  make.unique(gsub("[^[:alnum:]]", shiny::ns.sep, tolower(group_labels)), sep = shiny::ns.sep)
 }

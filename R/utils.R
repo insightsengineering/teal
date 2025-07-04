@@ -385,7 +385,7 @@ defunction <- function(x) {
 #'
 #' @keywords internal
 get_unique_labels <- function(labels) {
-  make.unique(gsub("[^[:alnum:]]", "_", tolower(labels)), sep = "_")
+  make.unique(gsub("[^[:alnum:]]", shiny::ns.sep, tolower(labels)), sep = shiny::ns.sep)
 }
 
 #' @keywords internal
