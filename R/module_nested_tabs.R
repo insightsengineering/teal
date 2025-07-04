@@ -524,12 +524,14 @@ nav_input_buttons <- function(modules, ns, parent_label = NULL) {
         id <- module_name
       }
 
-      html_elements[[length(html_elements) + 1]] <- tags$a(
-        href = paste0("#", ns(id)),
-        `data-bs-toggle` = "tab",
-        `data-value` = id,
-        `class` = "nav-link module-button btn-default",
-        module$label
+      html_elements[[length(html_elements) + 1]] <- tags$li(
+        tags$a(
+          href = paste0("#", ns(id)),
+          `data-bs-toggle` = "tab",
+          `data-value` = id,
+          `class` = "nav-link module-button btn-default",
+          module$label
+        )
       )
     } else if (inherits(module, "teal_modules")) {
       nested_parent_label <- ifelse(
@@ -539,13 +541,20 @@ nav_input_buttons <- function(modules, ns, parent_label = NULL) {
       )
       nested_content <- nav_input_buttons(module, ns, nested_parent_label)
       html_elements[[length(html_elements) + 1]] <- tags$li(
-        tags$span(module$label),
+        tags$span(
+          class = "module-group-label",
+          module$label
+        ),
         nested_content
       )
     }
   }
 
-  return(do.call(tags$ul, html_elements))
+  if (is.null(parent_label)) {
+    return(tags$ul(class = "teal-modules-tree", html_elements))
+  } else {
+    return(do.call(tags$ul, html_elements))
+  }
 }
 
 #' @keywords internal
