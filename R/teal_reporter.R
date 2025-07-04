@@ -34,7 +34,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
     append_fs = function(fs) {
       checkmate::assert_class(fs, "teal_slices")
       if (length(fs) > 0) {
-        self$append_content(code_chunk(.teal_slice_to_yaml(fs), eval = FALSE))
+        self$append_content(code_chunk(.teal_slice_to_yaml(fs), eval = FALSE, lang = "verbatim"))
       }
       invisible(self)
     },
