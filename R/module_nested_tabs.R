@@ -49,8 +49,37 @@ ui_teal_module.default <- function(id, modules) {
 #' @export
 ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
-  is_root <- modules$label == "root"
-  .teal_custom_nav("active_module_id", modules, ns)
+  active_module_id <- shiny::restoreInput(ns(id), default = "one")
+
+  tags$div(
+    class = "teal-modules-wrapper",
+    .teal_custom_nav_deps(),
+    tags$ul(
+      id = ns(id),
+      style = "align-items: center;",
+      class = "nav shiny-tab-input",
+      `data-tabsetid` = "test",
+      tags$div(
+        class = "dropdown nav-item-custom",
+        onmouseover = "initNavigationMouseOver.call(this)",
+        onmouseout = "initNavigationMouseOut.call(this)",
+        tags$a(
+          class = "dropdown-toggle active",
+          role = "button",
+          style = "text-decoration: none; border-bottom-color: #0d6efd;",
+          "Modules"
+        ),
+        tags$div(
+          class = "dropdown-menu",
+          nav_input_buttons(modules, ns = ns)
+        )
+      )
+    ),
+    tags$div(
+      class = "tab-content",
+      nav_content_div(modules, ns = ns)
+    )
+  )
 }
 
 #' @rdname module_teal_module
@@ -480,6 +509,7 @@ srv_teal_module.teal_module <- function(id,
   )
 }
 
+# TODO: Write docs for `nav_input_buttons` and `nav_content_div` mentioning how they are linked by shiny.
 #' @keywords internal
 nav_input_buttons <- function(modules, ns, parent_label = NULL) {
   html_elements <- list()
@@ -550,67 +580,4 @@ nav_content_div <- function(modules, ns, parent_label = NULL) {
   }
 
   return(html_elements)
-}
-
-#' Create Bootstrap based Navigation for Teal Modules
-#'
-#' Generates a dropdown navigation interface that allows users to switch
-#' between different teal modules. The function creates both the navigation dropdown menu
-#' and the corresponding tab content containers.
-#'
-#' @details
-#' This function constructs a complete navigation system with the following components:
-#' - A dropdown button labeled "Modules" that reveals module options on hover
-#' - Individual navigation links for each module, grouped by their `group` attribute
-#' - Tab content containers that house the actual module UI elements
-#' - Automatic tab switching via Bootstrap's tab functionality
-#'
-#' The navigation leverages `shiny`'s built-in tab system by using the `shiny-tab-input` class,
-#' which automatically handles showing/hiding content when navigation links are clicked.
-#' Each module's UI is wrapped in a `.tab-pane` container with an ID that corresponds to
-#' the navigation link's `href` attribute.
-#'
-#' Module grouping is supported - when modules belong to different groups, visual separators
-#' and group labels are automatically inserted in the dropdown menu.
-#'
-#' @param id (`character(1)`) Unique identifier for the navigation widget. This ID is used
-#'   to create the Shiny input binding that tracks which module is currently active.
-#' @param modules (`teal_modules`) A teal modules object containing the module definitions.
-#'   Each module should have `label` and optionally `group` attributes.
-#' @param ns (`function`) The shiny namespace function.
-#' @keywords internal
-.teal_custom_nav <- function(id, modules, ns) {
-  # TODO: get module id and auto select here.
-  # Also, pass the active_selection to `nav_input_buttons` and `nav_content_div`
-  active_module_id <- shiny::restoreInput(ns(id), default = "one")
-
-  tags$div(
-    class = "teal-modules-wrapper",
-    .teal_custom_nav_deps(),
-    tags$ul(
-      id = ns(id),
-      style = "align-items: center;",
-      class = "nav shiny-tab-input",
-      `data-tabsetid` = "test",
-      tags$div(
-        class = "dropdown nav-item-custom",
-        onmouseover = "initNavigationMouseOver.call(this)",
-        onmouseout = "initNavigationMouseOut.call(this)",
-        tags$a(
-          class = "dropdown-toggle active",
-          role = "button",
-          style = "text-decoration: none; border-bottom-color: #0d6efd;",
-          "Modules"
-        ),
-        tags$div(
-          class = "dropdown-menu",
-          nav_input_buttons(modules, ns = ns)
-        )
-      )
-    ),
-    tags$div(
-      class = "tab-content",
-      nav_content_div(modules, ns = ns)
-    )
-  )
 }
