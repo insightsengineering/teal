@@ -49,8 +49,12 @@ ui_teal_module.default <- function(id, modules) {
 #' @export
 ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
-  is_root <- modules$label == "root"
-  .teal_custom_nav(ns("active_module_id"), modules)
+  flat_modules <- flatten_modules(modules)
+  modules_ui <- lapply(names(flat_modules), function(module_id) {
+    ui_teal_module(ns(module_id), flat_modules[[module_id]])
+  })
+  names(modules_ui) <- names(flat_modules)
+  .teal_custom_nav(ns("active_module_id"), flat_modules, modules_ui)
 }
 
 #' @rdname module_teal_module
@@ -220,6 +224,7 @@ srv_teal_module.teal_modules <- function(id,
                                          data_load_status = reactive("ok"),
                                          is_active = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
+    flat_modules <- flatten_modules(modules)
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     observeEvent(data_load_status(), {
@@ -238,18 +243,19 @@ srv_teal_module.teal_modules <- function(id,
     })
 
     modules_output <- sapply(
-      names(modules$children),
+      names(flat_modules),
       function(module_id) {
+        module_info <- flat_modules[[module_id]]
         srv_teal_module(
           id = module_id,
           data = data,
-          modules = modules$children[[module_id]],
+          modules = module_info,
           datasets = datasets,
           slices_global = slices_global,
           reporter = reporter,
           is_active = reactive(
             is_active() &&
-              TRUE &&
+              input$active_module_id == module_id &&
               identical(data_load_status(), "ok")
           )
         )
@@ -480,78 +486,6 @@ srv_teal_module.teal_module <- function(id,
   )
 }
 
-#' @keywords internal
-nav_input_buttons <- function(modules, ns, parent_label = NULL) {
-  html_elements <- list()
-
-  for (module_name in names(modules$children)) {
-    module <- modules$children[[module_name]]
-
-    if (inherits(module, "teal_module")) {
-      if (!is.null(parent_label)) {
-        id <- paste(parent_label, module_name, sep = shiny::ns.sep)
-      } else {
-        id <- module_name
-      }
-
-      html_elements[[length(html_elements) + 1]] <- tags$a(
-        href = paste0("#", ns(id)),
-        `data-bs-toggle` = "tab",
-        `data-value` = id,
-        `class` = "nav-link module-button btn-default",
-        module$label
-      )
-    } else if (inherits(module, "teal_modules")) {
-      nested_parent_label <- ifelse(
-        is.null(parent_label),
-        module_name,
-        paste(parent_label, module_name, sep = shiny::ns.sep)
-      )
-      nested_content <- nav_input_buttons(module, ns, nested_parent_label)
-      html_elements[[length(html_elements) + 1]] <- tags$li(
-        tags$span(module$label),
-        nested_content
-      )
-    }
-  }
-
-  return(do.call(tags$ul, html_elements))
-}
-
-#' @keywords internal
-nav_content_div <- function(modules, ns, parent_label = NULL) {
-  html_elements <- list()
-
-  for (module_name in names(modules$children)) {
-    module <- modules$children[[module_name]]
-
-    if (inherits(module, "teal_module")) {
-      if (!is.null(parent_label)) {
-        id <- paste(parent_label, module_name, sep = shiny::ns.sep)
-      } else {
-        id <- module_name
-      }
-
-      html_elements[[length(html_elements) + 1]] <- tags$div(
-        id = ns(id),
-        class = "tab-pane",
-        ui_teal_module(ns(id), module)
-      )
-    } else if (inherits(module, "teal_modules")) {
-      nested_parent_label <- ifelse(
-        is.null(parent_label),
-        module_name,
-        paste(parent_label, module_name, sep = shiny::ns.sep)
-      )
-
-      nested_elements <- nav_content_div(module, ns, nested_parent_label)
-      html_elements <- c(html_elements, nested_elements)
-    }
-  }
-
-  return(html_elements)
-}
-
 #' Create Bootstrap based Navigation for Teal Modules
 #'
 #' Generates a dropdown navigation interface that allows users to switch
@@ -580,16 +514,14 @@ nav_content_div <- function(modules, ns, parent_label = NULL) {
 #' @param modules_ui (`named list`) List of UI elements corresponding to each module.
 #'   Names must match the module IDs from the `modules` parameter.
 #' @keywords internal
-.teal_custom_nav <- function(id, modules) {
-  active_module_id <- shiny::restoreInput(id, default = "one")
-
-  ns <- NS(gsub("-active_module_id$", "", id))
-
+.teal_custom_nav <- function(id, modules, modules_ui) {
+  active_module_id <- shiny::restoreInput(id, default = names(modules)[1])
+  last_group <- modules[[1]]$group
   tags$div(
     class = "teal-modules-wrapper",
     .teal_custom_nav_deps(),
     tags$ul(
-      id = "id",
+      id = id,
       style = "align-items: center;",
       class = "nav shiny-tab-input",
       `data-tabsetid` = "test",
@@ -605,13 +537,48 @@ nav_content_div <- function(modules, ns, parent_label = NULL) {
         ),
         tags$div(
           class = "dropdown-menu",
-          nav_input_buttons(modules, ns = ns)
+          !!!lapply(names(modules), function(module_id) {
+            module <- modules[[module_id]]
+            ui <- tags$span(
+              if (!identical(module$group, last_group) && !is.null(module$group)) {
+                tags$span(
+                  tags$br(), tags$br(),
+                  tags$span(paste(module$group, collapse = " > ")),
+                  tags$br()
+                )
+              },
+              tags$a(
+                href = paste0("#", id, module_id),
+                `data-bs-toggle` = "tab",
+                `data-value` = module_id,
+                `class` = ifelse(
+                  module_id == active_module_id,
+                  "nav-link module-button btn-default active",
+                  "nav-link module-button btn-default"
+                ),
+                module$label
+              )
+            )
+            last_group <<- module$group
+            ui
+          })
         )
       )
     ),
     tags$div(
       class = "tab-content",
-      nav_content_div(modules, ns = ns)
+      !!!lapply(names(modules), function(module_id) {
+        module <- modules[[module_id]]
+        tags$div(
+          id = paste0(id, module_id),
+          class = ifelse(
+            module_id == active_module_id,
+            "tab-pane active",
+            "tab-pane"
+          ),
+          modules_ui[[module_id]]
+        )
+      })
     )
   )
 }
