@@ -82,7 +82,7 @@ ui_teal_module.teal_modules <- function(id, modules) {
         )
       },
       tags$a(
-        href = paste0("#", input_id, module_id),
+        href = paste0("#", input_id, module_id), # links button with module content in `tab-content` with the same id.
         `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
         `data-value` = module_id, # this links module-content with this button.
         `class` = ifelse( # `nav-link` is required to mimic bslib tab panel.
@@ -100,7 +100,7 @@ ui_teal_module.teal_modules <- function(id, modules) {
   tab_content <- lapply(names(flat_modules), function(module_id) {
     module <- flat_modules[[module_id]]
     tags$div(
-      id = paste0(input_id, module_id),
+      id = paste0(input_id, module_id), # this content in is linked with the button with the same `href`.
       class = ifelse(
         module_id == active_module_id,
         "tab-pane active",
