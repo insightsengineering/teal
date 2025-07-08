@@ -103,7 +103,7 @@ Module call \code{modules} with \code{id} according to their location in the thr
 
 On the UI side drop-down is created listing buttons with labels of all \code{teal_module}(s).
 Buttons in a drop-down are grouped according to their group belonging.
-These UI components are created in a way to utilize Shiny's navigation-bar functionality.
+These UI components are created in a way to utilize navigation-bar functionality of shiny.
 To achieve this the buttons need to be placed inside a \code{ul} with a class \code{"nav shiny-tab-input"}.
 \enumerate{
 \item Each module button has following attributes:

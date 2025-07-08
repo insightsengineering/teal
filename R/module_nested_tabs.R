@@ -4,7 +4,7 @@
 #' ### UI
 #' On the UI side drop-down is created listing buttons with labels of all `teal_module`(s).
 #' Buttons in a drop-down are grouped according to their group belonging.
-#' These UI components are created in a way to utilize Shiny's navigation-bar functionality.
+#' These UI components are created in a way to utilize navigation-bar functionality of shiny.
 #' To achieve this the buttons need to be placed inside a `ul` with a class `"nav shiny-tab-input"`.
 #' 1. Each module button has following attributes:
 #'   - `href = "#<module id>` links button with the specific module content
