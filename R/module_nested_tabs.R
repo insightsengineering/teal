@@ -64,7 +64,87 @@ ui_teal_module.default <- function(id, modules) {
 ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
   flat_modules <- flatten_modules(modules)
-  .teal_custom_nav(ns, flat_modules)
+  modules_ui <- lapply(names(flat_modules), function(module_id) {
+    ui_teal_module(ns(module_id), flat_modules[[module_id]])
+  })
+  names(modules_ui) <- names(flat_modules)
+  input_id <- ns("active_module_id")
+  active_module_id <- shiny::restoreInput(input_id, default = names(flat_modules)[1])
+  last_group <- flat_modules[[1]]$group
+  tab_buttons <- lapply(names(flat_modules), function(module_id) {
+    module <- flat_modules[[module_id]]
+    ui <- tags$span(
+      if (!identical(module$group, last_group) && !is.null(module$group)) {
+        tags$span(
+          tags$br(), tags$br(),
+          tags$span(paste(module$group, collapse = " > ")),
+          tags$br()
+        )
+      },
+      tags$a(
+        href = paste0("#", input_id, module_id),
+        `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
+        `data-value` = module_id, # this links module-content with this button.
+        `class` = ifelse( # `nav-link` is required to mimic bslib tab panel.
+          module_id == active_module_id,
+          "nav-link module-button btn-default active", # `active` class shows the tab content.
+          "nav-link module-button btn-default"
+        ),
+        module$label
+      )
+    )
+    last_group <<- module$group
+    ui
+  })
+
+  tab_content <- lapply(names(flat_modules), function(module_id) {
+    module <- flat_modules[[module_id]]
+    tags$div(
+      id = paste0(input_id, module_id),
+      class = ifelse(
+        module_id == active_module_id,
+        "tab-pane active",
+        "tab-pane" # this is located by bootstrap and auto toggled according to current selection
+      ),
+      modules_ui[[module_id]]
+    )
+  })
+  tags$div(
+    class = "teal-modules-wrapper",
+    htmltools::htmlDependency(
+      name = "module-navigation",
+      version = utils::packageVersion("teal"),
+      package = "teal",
+      src = "module-navigation",
+      stylesheet = "module-navigation.css",
+      script = "module-navigation.js"
+    ),
+    tags$ul(
+      id = input_id,
+      style = "align-items: center;",
+      class = "nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
+      `data-tabsetid` = "test",
+      tags$div(
+        class = "dropdown nav-item-custom",
+        onmouseover = "initNavigationMouseOver.call(this)",
+        onmouseout = "initNavigationMouseOut.call(this)",
+        tags$a(
+          class = "dropdown-toggle active",
+          role = "button",
+          style = "text-decoration: none; border-bottom-color: #0d6efd;",
+          "Modules"
+        ),
+        tags$div(
+          class = "dropdown-menu",
+          !!!tab_buttons
+        )
+      )
+    ),
+    tags$div(
+      class = "tab-content",
+      !!!tab_content
+    )
+  )
 }
 
 #' @rdname module_teal_module
@@ -481,118 +561,4 @@ srv_teal_module.teal_module <- function(id,
     breadcrumb_items <- c("Home", module$group, module$label)
   }
   paste(breadcrumb_items, collapse = " / ")
-}
-
-
-#' @keywords internal
-.teal_custom_nav_deps <- function() {
-  htmltools::htmlDependency(
-    name = "module-navigation",
-    version = utils::packageVersion("teal"),
-    package = "teal",
-    src = "module-navigation",
-    stylesheet = "module-navigation.css",
-    script = "module-navigation.js"
-  )
-}
-
-#' Create Bootstrap based Navigation for Teal Modules
-#'
-#' Generates a drop-down navigation interface that allows users to switch
-#' between different teal modules. The function creates both the navigation drop-down menu
-#' and the corresponding tab content containers.
-#'
-#' @details
-#' This function constructs a complete navigation system with the following components:
-#' - A drop-down button labeled "Modules" that reveals module options on hover
-#' - Individual navigation links for each module, grouped by their `group` attribute
-#' - Tab content containers that house the actual module UI elements
-#' - Automatic tab switching via Bootstrap's tab functionality
-#'
-#' The navigation leverages `shiny`'s built-in tab system by using the `shiny-tab-input` class,
-#' which automatically handles showing/hiding content when navigation links are clicked.
-#' Each module's UI is wrapped in a `.tab-pane` container with an ID that corresponds to
-#' the navigation link's `href` attribute.
-#'
-#' Module grouping is supported - when modules belong to different groups, visual separators
-#' and group labels are automatically inserted in the drop-down menu.
-#'
-#' @param ns (`function`) A namespace function from the shiny module it is used in.
-#' @param modules (`flat_teal_modules`) A teal modules object that has been flattened by `flat_teal_modules()`.
-#' @keywords internal
-.teal_custom_nav <- function(ns, modules) {
-  modules_ui <- lapply(names(modules), function(module_id) {
-    ui_teal_module(ns(module_id), modules[[module_id]])
-  })
-  names(modules_ui) <- names(modules)
-  input_id <- ns("active_module_id")
-  active_module_id <- shiny::restoreInput(input_id, default = names(modules)[1])
-  last_group <- modules[[1]]$group
-  tab_buttons <- lapply(names(modules), function(module_id) {
-    module <- modules[[module_id]]
-    ui <- tags$span(
-      if (!identical(module$group, last_group) && !is.null(module$group)) {
-        tags$span(
-          tags$br(), tags$br(),
-          tags$span(paste(module$group, collapse = " > ")),
-          tags$br()
-        )
-      },
-      tags$a(
-        href = paste0("#", input_id, module_id),
-        `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
-        `data-value` = module_id, # this links module-content with this button.
-        `class` = ifelse( # `nav-link` is required to mimic bslib tab panel.
-          module_id == active_module_id,
-          "nav-link module-button btn-default active", # `active` class shows the tab content.
-          "nav-link module-button btn-default"
-        ),
-        module$label
-      )
-    )
-    last_group <<- module$group
-    ui
-  })
-
-  tab_content <- lapply(names(modules), function(module_id) {
-    module <- modules[[module_id]]
-    tags$div(
-      id = paste0(input_id, module_id),
-      class = ifelse(
-        module_id == active_module_id,
-        "tab-pane active",
-        "tab-pane" # this is located by bootstrap and auto toggled according to current selection
-      ),
-      modules_ui[[module_id]]
-    )
-  })
-  tags$div(
-    class = "teal-modules-wrapper",
-    .teal_custom_nav_deps(),
-    tags$ul(
-      id = input_id,
-      style = "align-items: center;",
-      class = "nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
-      `data-tabsetid` = "test",
-      tags$div(
-        class = "dropdown nav-item-custom",
-        onmouseover = "initNavigationMouseOver.call(this)",
-        onmouseout = "initNavigationMouseOut.call(this)",
-        tags$a(
-          class = "dropdown-toggle active",
-          role = "button",
-          style = "text-decoration: none; border-bottom-color: #0d6efd;",
-          "Modules"
-        ),
-        tags$div(
-          class = "dropdown-menu",
-          !!!tab_buttons
-        )
-      )
-    ),
-    tags$div(
-      class = "tab-content",
-      !!!tab_content
-    )
-  )
 }
