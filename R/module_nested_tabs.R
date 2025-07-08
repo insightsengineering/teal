@@ -2,8 +2,8 @@
 #'
 #' Module call `modules` with `id` according to their location in the three.
 #' ### UI
-#' On the UI side drop-down is created listing buttons with labels of all `teal_module`(s).
-#' Buttons in a drop-down are grouped according to their group belonging.
+#' On the UI side, a drop-down is created that lists buttons labeled with the names of all `teal_module`s.
+#' The buttons in the drop-down are grouped according to their respective groups.
 #' These UI components are created in a way to utilize navigation-bar functionality of shiny.
 #' To achieve this, the buttons need to be placed inside a `<ul class = "nav shiny-tab-input">`.
 #' 1. Each module button has following attributes:
@@ -12,8 +12,8 @@
 #'   - `data-value = "<module id>` returns this value to the shiny server as an input
 #'         linked to the `id` of the `ul` which is `input$active_module_id`.
 #' 2. Each module content is wrapped in a container with the `class = "tab-pane"` with a unique `id`.
-#' This tells Bootstrap library that clicking clicking a button with a `href`
-#' should toggle relevant "tab" with the same `id`.
+#' This tells Bootstrap library that clicking a button should toggle relevant "tab"
+#' with an `id` matching button's `href` attribute.
 #' ### Server
 #'  On the server side, `teal_module`(s) are called with `id` respective to their label and group.
 #' `input$active_module_id` determines which module is currently active and only this module

@@ -101,10 +101,10 @@ output of currently active module.
 Module call \code{modules} with \code{id} according to their location in the three.
 \subsection{UI}{
 
-On the UI side drop-down is created listing buttons with labels of all \code{teal_module}(s).
-Buttons in a drop-down are grouped according to their group belonging.
+On the UI side, a drop-down is created that lists buttons labeled with the names of all \code{teal_module}s.
+The buttons in the drop-down are grouped according to their respective groups.
 These UI components are created in a way to utilize navigation-bar functionality of shiny.
-To achieve this the buttons need to be placed inside a \code{ul} with a class \code{"nav shiny-tab-input"}.
+To achieve this, the buttons need to be placed inside a \verb{<ul class = "nav shiny-tab-input">}.
 \enumerate{
 \item Each module button has following attributes:
 }
@@ -116,8 +116,8 @@ linked to the \code{id} of the \code{ul} which is \code{input$active_module_id}.
 }
 \enumerate{
 \item Each module content is wrapped in a container with the \code{class = "tab-pane"} with a unique \code{id}.
-This tells Bootstrap library that clicking clicking a button with a \code{href}
-should toggle relevant "tab" with the same \code{id}.
+This tells Bootstrap library that clicking a button should toggle relevant "tab"
+with an \code{id} matching button's \code{href} attribute.
 }
 }
 
