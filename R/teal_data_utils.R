@@ -19,8 +19,15 @@ NULL
 #' @rdname teal_data_utilities
 .append_evaluated_code <- function(data, code) {
   checkmate::assert_class(data, "teal_data")
-  data@code <- c(data@code, code2list(code))
-  methods::validObject(data)
+  if (length(code) && !identical(code, "")) {
+    data@code <- c(data@code, code2list(code))
+    teal.reporter::teal_card(data) <- c(
+      teal.reporter::teal_card(data),
+      "## Data filtering",
+      teal.reporter::code_chunk(code)
+    )
+    methods::validObject(data)
+  }
   data
 }
 
@@ -32,4 +39,32 @@ NULL
   rlang::env_coalesce(new_env, as.environment(data))
   data@.xData <- new_env
   data
+}
+
+#' @rdname teal_data_utilities
+.collapse_subsequent_chunks <- function(report) {
+  Reduce(
+    function(x, this) {
+      l <- length(x)
+      if (
+        l &&
+          inherits(x[[l]], "code_chunk") &&
+          inherits(this, "code_chunk") &&
+          identical(attr(x[[l]], "params"), attr(this, "params"))
+      ) {
+        x[[length(x)]] <- do.call(
+          teal.reporter::code_chunk,
+          args = c(
+            list(code = paste(x[[l]], this, sep = "\n")),
+            attr(x[[l]], "params")
+          )
+        )
+        x
+      } else {
+        c(x, this)
+      }
+    },
+    init = teal.reporter::teal_card(),
+    x = report
+  )
 }

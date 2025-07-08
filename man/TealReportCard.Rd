@@ -57,6 +57,7 @@ card$get_content()[[1]]$get_content()
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_name"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_name'><code>teal.reporter::ReportCard$get_name()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="initialize"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-initialize'><code>teal.reporter::ReportCard$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="reset"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-reset'><code>teal.reporter::ReportCard$reset()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_content_names"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-set_content_names'><code>teal.reporter::ReportCard$set_content_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_name"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-set_name'><code>teal.reporter::ReportCard$set_name()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="to_list"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-to_list'><code>teal.reporter::ReportCard$to_list()</code></a></span></li>
 </ul>
