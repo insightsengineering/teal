@@ -401,11 +401,11 @@ srv_teal_module.teal_module <- function(id,
         !is.null(module_teal_data()),
         ignoreNULL = TRUE,
         handlerExpr = {
-          module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
+          out <- .call_teal_module(modules, datasets, module_teal_data, reporter)
+          srv_add_reporter("add_reporter_wrapper", out, reporter)
+          module_out(out)
         }
       )
-
-      srv_add_reporter("add_reporter_wrapper", module_out, reporter)
     })
     module_out
   })

@@ -195,98 +195,6 @@ TealSlicesBlock <- R6::R6Class( # nolint: object_name_linter.
   )
 )
 
-#' Server function for `teal_card` class.
-#' @keywords internal
-add_document_button_srv <- function(id, reporter, r_card_fun) {
-  checkmate::assert_class(r_card_fun, "reactive")
-  checkmate::assert_class(reporter, "Reporter")
-
-  shiny::moduleServer(id, function(input, output, session) {
-    shiny::setBookmarkExclude(c(
-      "add_report_card_button", "download_button", "reset_reporter",
-      "add_card_ok", "download_data", "reset_reporter_ok",
-      "label", "comment"
-    ))
-
-    ns <- session$ns
-    add_modal <- function() {
-      div(
-        class = "teal-widgets reporter-modal",
-        shiny::modalDialog(
-          easyClose = TRUE,
-          shiny::tags$h3("Add a Card to the Report"),
-          shiny::tags$hr(),
-          shiny::textInput(
-            ns("label"),
-            "Card Name",
-            value = "",
-            placeholder = "Add the card title here",
-            width = "100%"
-          ),
-          shiny::textAreaInput(
-            ns("comment"),
-            "Comment",
-            value = "",
-            placeholder = "Add a comment here...",
-            width = "100%"
-          ),
-          shiny::tags$script(
-            shiny::HTML(
-              sprintf("shinyjs.autoFocusModal('%s');", ns("label")),
-              sprintf("shinyjs.enterToSubmit('%s', '%s');", ns("label"), ns("add_card_ok"))
-            )
-          ),
-          footer = shiny::div(
-            shiny::tags$button(
-              type = "button",
-              class = "btn btn-secondary",
-              `data-dismiss` = "modal",
-              `data-bs-dismiss` = "modal",
-              NULL,
-              "Cancel"
-            ),
-            shiny::tags$button(
-              id = ns("add_card_ok"),
-              type = "button",
-              class = "btn btn-primary action-button",
-              `data-val` = shiny::restoreInput(id = ns("add_card_ok"), default = NULL),
-              NULL,
-              "Add Card"
-            )
-          )
-        )
-      )
-    }
-
-    shiny::observeEvent(input$add_report_card_button, {
-      shiny::removeModal()
-      shiny::showModal(add_modal())
-    })
-
-    # the add card button is disabled when clicked to prevent multi-clicks
-    # please check the ui part for more information
-    shiny::observeEvent(input$add_card_ok, {
-      if (inherits(r_card_fun, "try-error")) {
-        msg <- paste(
-          "The card could not be added to the report.",
-          "Have the outputs for the report been created yet? If not please try again when they",
-          "are ready. Otherwise contact your application developer."
-        )
-        warning(msg)
-        shiny::showNotification(msg, type = "error")
-      } else {
-        new_card_name <- trimws(input$label)
-        card <- c(teal.reporter::teal_card(input$comment), r_card_fun())
-        teal.reporter::metadata(card, "title") <- new_card_name
-
-        reporter$append_cards(card)
-        shiny::showNotification("The card added successfully.", type = "message")
-        shiny::removeModal()
-      }
-    })
-  })
-}
-
 #' @noRd
 ui_add_reporter <- function(id) uiOutput(NS(id, "reporter_add_container"))
 
@@ -297,17 +205,24 @@ srv_add_reporter <- function(id, module_out, reporter) {
   } # early exit
   moduleServer(id, function(input, output, session) {
     mod_out_r <- reactive({
-      req(module_out())
-      if (is.reactive(module_out())) {
-        module_out()()
+      req(module_out)
+      if (is.reactive(module_out)) {
+        module_out()
       }
     })
 
     doc_out <- reactive({
+      req(mod_out_r())
       teal_data_handled <- tryCatch(mod_out_r(), error = function(e) e)
-      if (inherits(teal_data_handled, "teal_report") && length(teal.reporter::teal_card(teal_data_handled))) {
-        .collapse_subsequent_chunks(teal.reporter::teal_card(teal_data_handled))
+      tcard <- if (inherits(teal_data_handled, "teal_report")) {
+        teal.reporter::teal_card(teal_data_handled)
+      } else if (inherits(teal_data_handled, "teal_data")) {
+        teal.reporter::teal_card(teal.reporter::as.teal_report(teal_data_handled))
+      } else if (inherits(teal_data_handled, "teal_card")) {
+        teal_data_handled
       }
+
+      if (length(tcard)) .collapse_subsequent_chunks(tcard)
     })
 
     .call_once_when(!is.null(doc_out()), {
@@ -319,6 +234,8 @@ srv_add_reporter <- function(id, module_out, reporter) {
       })
       teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
     })
+
+
 
     observeEvent(doc_out(), ignoreNULL = FALSE, {
       shinyjs::toggleState("reporter_add_container", condition = inherits(doc_out(), "teal_card"))
