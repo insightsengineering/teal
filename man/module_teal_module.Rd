@@ -94,13 +94,38 @@ panel.
 output of currently active module.
 \itemize{
 \item \code{srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
-\item \code{srv_teal_module.teal_modules} returns output of module selected by dropdown.
+\item \code{srv_teal_module.teal_modules} returns output of module selected by drop-down.
 }
 }
 \description{
-The main \code{teal_modules} is a container of \code{teal_module} objects.
-The nested structure of \code{teal_modules} helps to group the \code{teal_module} objects.
-Each \code{teal_module} creates a navigation tab button inside a modules dropdown menu with the label of the module.
-If the \code{teal_module} is grouped inside one or more \code{teal_modules} object, the label of the group is displayed above.
+Module call \code{modules} with \code{id} according to their location in the three.
+\subsection{UI}{
+
+On the UI side drop-down is created listing buttons with labels of all \code{teal_module}(s).
+Buttons in a drop-down are grouped according to their group belonging.
+These UI components are created in a way to utilize Shiny's navigation-bar functionality.
+To achieve this the buttons need to be placed inside a \code{ul} with a class \code{"nav shiny-tab-input"}.
+\enumerate{
+\item Each module button has following attributes:
+}
+\itemize{
+\item \verb{href = "#<module id>} links button with the specific module content
+\item \code{data-bs-toggle = "tab"} tells Bootstrap to hide or show module's content
+\item \verb{data-value = "<module id>} returns this value to the shiny server as an input
+linked to the \code{id} of the \code{ul} which is \code{input$active_module_id}.
+}
+\enumerate{
+\item Each module content is wrapped in a container with the \code{class = "tab-pane"} with a unique \code{id}.
+This tells Bootstrap library that clicking clicking a button with a \code{href}
+should toggle relevant "tab" with the same \code{id}.
+}
+}
+
+\subsection{Server}{
+
+On the server side, \code{teal_module}(s) are called with \code{id} respective to their label and group.
+\code{input$active_module_id} determines which module is currently active and only this module
+observes reactive changes.
+}
 }
 \keyword{internal}

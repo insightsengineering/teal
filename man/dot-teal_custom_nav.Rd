@@ -12,14 +12,14 @@
 \item{modules}{(\code{flat_teal_modules}) A teal modules object that has been flattened by \code{flat_teal_modules()}.}
 }
 \description{
-Generates a dropdown navigation interface that allows users to switch
-between different teal modules. The function creates both the navigation dropdown menu
+Generates a drop-down navigation interface that allows users to switch
+between different teal modules. The function creates both the navigation drop-down menu
 and the corresponding tab content containers.
 }
 \details{
 This function constructs a complete navigation system with the following components:
 \itemize{
-\item A dropdown button labeled "Modules" that reveals module options on hover
+\item A drop-down button labeled "Modules" that reveals module options on hover
 \item Individual navigation links for each module, grouped by their \code{group} attribute
 \item Tab content containers that house the actual module UI elements
 \item Automatic tab switching via Bootstrap's tab functionality
@@ -31,6 +31,6 @@ Each module's UI is wrapped in a \code{.tab-pane} container with an ID that corr
 the navigation link's \code{href} attribute.
 
 Module grouping is supported - when modules belong to different groups, visual separators
-and group labels are automatically inserted in the dropdown menu.
+and group labels are automatically inserted in the drop-down menu.
 }
 \keyword{internal}
