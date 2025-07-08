@@ -4,7 +4,7 @@
 \alias{.teal_custom_nav}
 \title{Create Bootstrap based Navigation for Teal Modules}
 \usage{
-.teal_custom_nav(id, modules, ns)
+.teal_custom_nav(id, modules)
 }
 \arguments{
 \item{id}{(\code{character(1)}) Unique identifier for the navigation widget. This ID is used
@@ -13,7 +13,8 @@ to create the Shiny input binding that tracks which module is currently active.}
 \item{modules}{(\code{teal_modules}) A teal modules object containing the module definitions.
 Each module should have \code{label} and optionally \code{group} attributes.}
 
-\item{ns}{(\code{function}) The shiny namespace function.}
+\item{modules_ui}{(\verb{named list}) List of UI elements corresponding to each module.
+Names must match the module IDs from the \code{modules} parameter.}
 }
 \description{
 Generates a dropdown navigation interface that allows users to switch

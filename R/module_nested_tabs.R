@@ -50,7 +50,7 @@ ui_teal_module.default <- function(id, modules) {
 ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
   is_root <- modules$label == "root"
-  .teal_custom_nav("active_module_id", modules, ns)
+  .teal_custom_nav(ns("active_module_id"), modules)
 }
 
 #' @rdname module_teal_module
@@ -249,7 +249,7 @@ srv_teal_module.teal_modules <- function(id,
           reporter = reporter,
           is_active = reactive(
             is_active() &&
-              TRUE && # TODO: check if the module_id == input$active_module_id
+              TRUE &&
               identical(data_load_status(), "ok")
           )
         )
@@ -577,18 +577,19 @@ nav_content_div <- function(modules, ns, parent_label = NULL) {
 #'   to create the Shiny input binding that tracks which module is currently active.
 #' @param modules (`teal_modules`) A teal modules object containing the module definitions.
 #'   Each module should have `label` and optionally `group` attributes.
-#' @param ns (`function`) The shiny namespace function.
+#' @param modules_ui (`named list`) List of UI elements corresponding to each module.
+#'   Names must match the module IDs from the `modules` parameter.
 #' @keywords internal
-.teal_custom_nav <- function(id, modules, ns) {
-  # TODO: get module id and auto select here.
-  # Also, pass the active_selection to `nav_input_buttons` and `nav_content_div`
-  active_module_id <- shiny::restoreInput(ns(id), default = "one")
+.teal_custom_nav <- function(id, modules) {
+  active_module_id <- shiny::restoreInput(id, default = "one")
+
+  ns <- NS(gsub("-active_module_id$", "", id))
 
   tags$div(
     class = "teal-modules-wrapper",
     .teal_custom_nav_deps(),
     tags$ul(
-      id = ns(id),
+      id = "id",
       style = "align-items: center;",
       class = "nav shiny-tab-input",
       `data-tabsetid` = "test",
