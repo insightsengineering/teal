@@ -50,11 +50,7 @@ ui_teal_module.default <- function(id, modules) {
 ui_teal_module.teal_modules <- function(id, modules) {
   ns <- NS(id)
   flat_modules <- flatten_modules(modules)
-  modules_ui <- lapply(names(flat_modules), function(module_id) {
-    ui_teal_module(ns(module_id), flat_modules[[module_id]])
-  })
-  names(modules_ui) <- names(flat_modules)
-  .teal_custom_nav(ns("active_module_id"), flat_modules, modules_ui)
+  .teal_custom_nav(ns, flat_modules)
 }
 
 #' @rdname module_teal_module
@@ -507,21 +503,22 @@ srv_teal_module.teal_module <- function(id,
 #' Module grouping is supported - when modules belong to different groups, visual separators
 #' and group labels are automatically inserted in the dropdown menu.
 #'
-#' @param id (`character(1)`) Unique identifier for the navigation widget. This ID is used
-#'   to create the Shiny input binding that tracks which module is currently active.
-#' @param modules (`teal_modules`) A teal modules object containing the module definitions.
-#'   Each module should have `label` and optionally `group` attributes.
-#' @param modules_ui (`named list`) List of UI elements corresponding to each module.
-#'   Names must match the module IDs from the `modules` parameter.
+#' @param ns (`function`) A namespace function from the shiny module it is used in.
+#' @param modules (`flat_teal_modules`) A teal modules object that has been flattened by `flat_teal_modules()`.
 #' @keywords internal
-.teal_custom_nav <- function(id, modules, modules_ui) {
-  active_module_id <- shiny::restoreInput(id, default = names(modules)[1])
+.teal_custom_nav <- function(ns, modules) {
+  modules_ui <- lapply(names(modules), function(module_id) {
+    ui_teal_module(ns(module_id), modules[[module_id]])
+  })
+  names(modules_ui) <- names(modules)
+  input_id <- ns("active_module_id")
+  active_module_id <- shiny::restoreInput(input_id, default = names(modules)[1])
   last_group <- modules[[1]]$group
   tags$div(
     class = "teal-modules-wrapper",
     .teal_custom_nav_deps(),
     tags$ul(
-      id = id,
+      id = input_id,
       style = "align-items: center;",
       class = "nav shiny-tab-input",
       `data-tabsetid` = "test",
@@ -548,7 +545,7 @@ srv_teal_module.teal_module <- function(id,
                 )
               },
               tags$a(
-                href = paste0("#", id, module_id),
+                href = paste0("#", input_id, module_id),
                 `data-bs-toggle` = "tab",
                 `data-value` = module_id,
                 `class` = ifelse(
@@ -570,7 +567,7 @@ srv_teal_module.teal_module <- function(id,
       !!!lapply(names(modules), function(module_id) {
         module <- modules[[module_id]]
         tags$div(
-          id = paste0(id, module_id),
+          id = paste0(input_id, module_id),
           class = ifelse(
             module_id == active_module_id,
             "tab-pane active",
