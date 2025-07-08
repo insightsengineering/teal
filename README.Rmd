@@ -140,15 +140,17 @@ cat(sprintf("[Open in Shinylive](%s)\n\n", url))
 ```{r shinylive_iframe, echo = FALSE, eval = requireNamespace("roxy.shinylive", quietly = TRUE)}
 # code from https://github.com/RinteRface/shinyMobile/blob/90e09384c040ba69c14293a49fc182e8d6ef26a8/R/utils.R#L232
 bslib::card(
-  htmltools::tags$iframe(class = "html-fill-item",
-                         src = paste0(url, "&h=0"),
-                         width = "100%",
-                         height = 600,
-                         allowfullscreen = "",
-                         allow = "autoplay",
-                         `data-external` = "1"
-  ), 
-full_screen = TRUE)
+  htmltools::tags$iframe(
+    class = "html-fill-item",
+    src = paste0(url, "&h=0"),
+    width = "100%",
+    height = 600,
+    allowfullscreen = "",
+    allow = "autoplay",
+    `data-external` = "1"
+  ),
+  full_screen = TRUE
+)
 ```
 
 ## More resources
