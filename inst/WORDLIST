@@ -4,7 +4,6 @@ Forkers
 Hoffmann
 MAEs
 ORCID
-Reproducibility
 Shinylive
 TLG
 Transformators
@@ -12,8 +11,6 @@ UI
 UX
 args
 bookmarkable
-cloneable
-customizable
 favicon
 favicons
 funder
@@ -21,11 +18,8 @@ lockfile
 modularized
 omics
 pre
-programmatically
 quosure
 reactively
-repo
-reproducibility
 summarization
 tabset
 themer

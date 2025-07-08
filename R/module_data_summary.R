@@ -23,34 +23,7 @@ NULL
 #' @rdname module_data_summary
 ui_data_summary <- function(id) {
   ns <- NS(id)
-  content_id <- ns("filters_overview_contents")
-  tags$div(
-    id = id,
-    class = "well",
-    tags$div(
-      class = "row",
-      tags$div(
-        class = "col-sm-9",
-        tags$label("Active Filter Summary", class = "text-primary mb-4")
-      ),
-      tags$div(
-        class = "col-sm-3",
-        tags$i(
-          class = "remove pull-right fa fa-angle-down",
-          style = "cursor: pointer;",
-          title = "fold/expand data summary panel",
-          onclick = sprintf("togglePanelItems(this, '%s', 'fa-angle-right', 'fa-angle-down');", content_id)
-        )
-      )
-    ),
-    tags$div(
-      id = content_id,
-      tags$div(
-        class = "teal_active_summary_filter_panel",
-        tableOutput(ns("table"))
-      )
-    )
-  )
+  tableOutput(ns("table"))
 }
 
 #' @rdname module_data_summary
@@ -113,9 +86,10 @@ srv_data_summary <- function(id, data) {
                 class = c("pull-right", "float-right", "text-secondary"),
                 style = "font-size: 0.8em;",
                 sprintf("And %s more unfilterable object(s)", sum(is_unsupported)),
-                icon(
-                  name = "far fa-circle-question",
-                  title = paste(
+                bslib::tooltip(
+                  trigger = icon(name = "far fa-circle-question"),
+                  options = list(trigger = "hover"),
+                  paste(
                     sep = "",
                     collapse = "\n",
                     shQuote(summary_table()[is_unsupported, "dataname"]),

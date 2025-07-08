@@ -43,7 +43,7 @@ library(teal)
 data <- teal_data(iris = iris, cars = mtcars)
 ```
 
-Note that `iris` and `cars` have been added to the `datanames` property of `data` (see [`datanames` property](#datanames)).
+Note that `iris` and `cars` have been added to the `datanames` property of `data` (see [`datanames` property](#teal_data-properties)).
 
 This is sufficient to run a `teal` app.
 

@@ -1,78 +1,6 @@
 /* teal custom css */
 
-.flex-grow {
-  flex-grow: 1;
-}
-
-.my-2 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.mt-6 {
-  margin-top: 1.5rem;
-}
-
-.overflow-auto {
-  overflow: auto;
-}
-
-/* display waiting box at bottom right corner when Shiny is computing */
-.shinybusymessage {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 140px;
-  margin: 15px;
-  padding: 5px 0 5px 10px;
-  text-align: left;
-  font-weight: bold;
-  font-size: 100%;
-  color: #ffffff;
-  background-color: #347ab7;
-  z-index: 105;
-}
-
-/* DataTable connected if any exists */
-.dataTables_wrapper {
-  overflow: auto;
-}
-
-/* to set the alignment of pickerInput dropdowns */
-.dropdown-menu.open {
-  width: 100%;
-}
-
 /* per tag */
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  width: calc(100% - 160px);
-}
-
-header {
-  display: flow-root;
-}
-
-footer {
-  text-align: left;
-  padding: 5px;
-  font-size: 0.8em;
-  opacity: 0.6;
-}
-
-#teal_secondary_col .well {
-  margin: 0 0 15px 0;
-}
-
-#shiny-modal:has(> .modal-dialog > .modal-content > #landingpopup) {
-  backdrop-filter: blur(10px);
-}
 
 body:not(.modal-open) {
   padding-right: 0 !important;
@@ -93,5 +21,35 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 }
 
 #shiny-modal:has(.hide_background) {
-  background-color: white;
+  background-color: var(--bs-white);
+}
+
+.btn {
+  --bs-btn-padding-x: 0.7em;
+  --bs-btn-padding-y: 0.4em;
+}
+
+:root {
+  --bs-body-font-size: 0.875rem;
+}
+
+.accordion-button {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.teal-body .tabbable > .nav-pills {
+  width: calc(100% - 5rem);
+}
+
+.teal.bookmark-popup .modal-body {
+  padding: 0 1.5rem;
+}
+
+.modal-dialog:has(.teal-filter-manager-modal) {
+  width: fit-content;
+}
+
+.teal-body .bslib-mb-spacing {
+  --bslib-mb-spacer: 0;
 }

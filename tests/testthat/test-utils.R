@@ -1,14 +1,14 @@
 testthat::test_that("get_teal_bs_theme", {
   testthat::skip_if_not_installed("bslib")
-  testthat::expect_true(is.null(get_teal_bs_theme()))
+  testthat::expect_identical(get_teal_bs_theme(), bslib::bs_theme())
   withr::with_options(list("teal.bs_theme" = bslib::bs_theme(version = "5")), {
     testthat::expect_s3_class(get_teal_bs_theme(), "bs_theme")
   })
   withr::with_options(list("teal.bs_theme" = 1), {
-    testthat::expect_warning(get_teal_bs_theme(), ".*The default Shiny Bootstrap theme will be used.")
+    testthat::expect_warning(get_teal_bs_theme(), ".*The default bslib Bootstrap theme will be used.")
   })
   withr::with_options(list("teal.bs_theme" = "bs_theme"), {
-    testthat::expect_warning(get_teal_bs_theme(), ".*The default Shiny Bootstrap theme will be used.")
+    testthat::expect_warning(get_teal_bs_theme(), ".*The default bslib Bootstrap theme will be used.")
   })
 })
 
@@ -76,7 +76,7 @@ test_that("validate_app_title_tag works on validating the title tag", {
 })
 
 test_that("build_app_title builts a valid tag", {
-  valid_title_local <- build_app_title("title", "logo.png")
+  lifecycle::expect_deprecated(valid_title_local <- build_app_title("title", "logo.png"))
   valid_title_remote <- build_app_title("title", "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") # nolint
   testthat::expect_silent(validate_app_title_tag(valid_title_local))
   testthat::expect_silent(validate_app_title_tag(valid_title_remote))
@@ -152,7 +152,7 @@ testthat::test_that("defunction recursively goes down a list", {
   # styler: off
   x <- list(
     "character" = "character",
-    "function1" = function(x) return(x),
+    "function1" = function(x) x,
     "list2" = list(
       "function2" = function(x) mean(x),
       "list3" = list(
@@ -163,7 +163,7 @@ testthat::test_that("defunction recursively goes down a list", {
   # styler: on
   y <- list(
     "character" = "character",
-    "function1" = "return(x)",
+    "function1" = "x",
     "list2" = list(
       "function2" = "mean(x)",
       "list3" = list(
