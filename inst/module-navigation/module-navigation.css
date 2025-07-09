@@ -1,5 +1,12 @@
+.teal-modules-wrapper .module-button,
+.teal-modules-tree .module-group-label {
+  --bs-nav-link-padding-x: 0.5rem;
+  --bs-nav-link-padding-y: 0.25rem;
+}
+
 .teal-modules-wrapper .module-button {
   margin: 2px;
+  padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
   border: 1px solid #dee2e6;
   border-radius: 12px;
   background: white;
@@ -57,12 +64,12 @@
 .teal-modules-tree li::before {
   content: "";
   position: absolute;
-  top: -0.25rem;
+  top: -1rem;
   left: -1.25rem;
   border-left: 1px solid var(--bs-border-color);
   border-bottom: 1px solid var(--bs-border-color);
   width: 1.25rem;
-  height: 0.9375rem;
+  height: 2rem;
 }
 
 .teal-modules-tree li::after {
@@ -79,11 +86,17 @@
   display: none;
 }
 
-ul.teal-modules-tree > li:first-child::before {
-  display: none;
-}
-
 .teal-modules-tree li:hover::before,
 .teal-modules-tree li:hover::after {
   border-color: var(--bs-primary);
+}
+
+.teal-modules-tree .module-group-label {
+  margin-left: 0 !important;
+  font-weight: bold;
+  color: var(--bs-secondary);
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+  display: inline-block;
 }
