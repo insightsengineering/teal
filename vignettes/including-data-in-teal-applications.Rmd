@@ -92,7 +92,7 @@ This creates an object with an error like in a interactive R session (and will c
 Inspecting object reveals it:
 
 ```{r}
-m <- diag(5) 
+m <- diag(5)
 data_populated_3 <- eval_code(data_empty, code = "D5 <- m")
 data_populated_3
 ```
@@ -222,8 +222,6 @@ The `verified` property designates whether or not reproducibility has been confi
 Those created with data objects alone or with data objects and code are not verified by default, but can become verified by running the `verify` function.
 
 ```{r}
-data_with_code
-
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 
