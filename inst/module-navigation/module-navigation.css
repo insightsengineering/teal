@@ -7,27 +7,21 @@
 .teal-modules-wrapper .module-button {
   margin: 2px;
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--bs-primary-border-subtle);
   border-radius: 12px;
   background: white;
-  color: #495057;
+  color: var(--bs-primary);
   display: inline-flex;
 }
 
 .teal-modules-wrapper .module-button:hover {
-  background: #e7f3ff;
-  border-color: #4dabf7;
-  color: #1971c2;
+  background: var(--bs-primary-border-subtle);
 }
 
 .teal-modules-wrapper .module-button.active {
   color: var(--bs-btn-active-color);
   background: var(--bs-btn-active-bg);
   border-color: var(--bs-btn-active-border-color);
-}
-
-.teal-modules-wrapper .module-button:active {
-  background: #cfe2ff !important;
 }
 
 .teal-modules-wrapper .dropdown.nav-item-custom {
