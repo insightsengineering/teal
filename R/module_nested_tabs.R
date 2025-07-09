@@ -71,28 +71,47 @@ ui_teal_module.teal_modules <- function(id, modules) {
   input_id <- ns("active_module_id")
   active_module_id <- shiny::restoreInput(input_id, default = names(flat_modules)[1])
 
-  build_module_tree <- function(flat_modules, group_path = NULL) {
-    is_direct_child <- vapply(flat_modules, function(module) {
-      identical(module$group, group_path)
-    }, logical(1))
-    direct_children <- flat_modules[is_direct_child]
 
-    subgroup_paths <- unique(
-      lapply(flat_modules, function(module) {
-        if (
-          length(module$group) > length(group_path %||% character(0)) &&
-            (length(group_path) == 0 || identical(head(module$group, length(group_path)), group_path))
-        ) {
-          module$group[seq_len(length(group_path %||% character(0)) + 1)]
-        } else {
-          NULL
+  build_module_tree <- function(flat_modules) {
+    # Returns the length of the shared prefix between two group paths
+    common_prefix_length <- function(previous_group_path, current_group_path) {
+      shared_length <- min(length(previous_group_path), length(current_group_path))
+      for (i in seq_len(shared_length)) {
+        if (!identical(previous_group_path[[i]], current_group_path[[i]])) {
+          return(i - 1)
         }
-      })
-    )
-    subgroup_paths <- Filter(Negate(is.null), subgroup_paths)
+      }
+      shared_length
+    }
 
-    nodes <- lapply(direct_children, function(module) {
-      tags$li(
+    html_elements <- list()
+    previous_group_path <- character(0)
+    open_group_depth <- 0
+
+    for (module in flat_modules) {
+      current_group_path <- module$group
+      if (is.null(current_group_path)) current_group_path <- character(0)
+
+      shared_group_levels <- common_prefix_length(previous_group_path, current_group_path)
+
+      if (open_group_depth > shared_group_levels) {
+        for (level in seq(open_group_depth, shared_group_levels + 1)) {
+          html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
+        }
+        open_group_depth <- shared_group_levels
+      }
+
+      if (length(current_group_path) > shared_group_levels) {
+        for (level in seq(shared_group_levels + 1, length(current_group_path))) {
+          group_label <- current_group_path[[level]]
+          html_elements[[length(html_elements) + 1]] <- htmltools::HTML(
+            sprintf('<li><span class="module-group-label">%s</span><ul>', htmltools::htmlEscape(group_label))
+          )
+          open_group_depth <- open_group_depth + 1
+        }
+      }
+
+      html_elements[[length(html_elements) + 1]] <- tags$li(
         tags$a(
           href = paste0("#", input_id, module$id), # links button with module content in `tab-content` with same id.
           `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
@@ -105,21 +124,19 @@ ui_teal_module.teal_modules <- function(id, modules) {
           module$label
         )
       )
-    })
 
-    for (subgroup_path in subgroup_paths) {
-      subgroup_label <- tail(subgroup_path, 1)
-      subtree <- build_module_tree(flat_modules, group_path = subgroup_path)
-      nodes <- c(nodes, list(
-        tags$li(
-          tags$span(class = "module-group-label", subgroup_label),
-          tags$ul(subtree)
-        )
-      ))
+      previous_group_path <- current_group_path
     }
 
-    nodes
+    if (open_group_depth > 0) {
+      for (level in seq(open_group_depth, 1)) {
+        html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
+      }
+    }
+
+    tagList(html_elements)
   }
+
 
   tab_content <- lapply(names(flat_modules), function(module_id) {
     module <- flat_modules[[module_id]]
