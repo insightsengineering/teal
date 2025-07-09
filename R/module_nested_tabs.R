@@ -72,6 +72,11 @@ ui_teal_module.teal_modules <- function(id, modules) {
   active_module_id <- shiny::restoreInput(input_id, default = names(flat_modules)[1])
 
 
+  # Build a Nested HTML Module Tree from a Flat Module List
+  # Iterates through the flat list of modules and builds a nested HTML structure
+  # that represents the module hierarchy:
+  # 1. Each module represents a `tags$a` element with a link to its content.
+  # 2. The previous and current group paths determines whether to open or close the module group label tag `<ul`
   build_module_tree <- function(flat_modules) {
     # Returns the length of the shared prefix between two group paths
     common_prefix_length <- function(previous_group_path, current_group_path) {
@@ -94,6 +99,7 @@ ui_teal_module.teal_modules <- function(id, modules) {
 
       shared_group_levels <- common_prefix_length(previous_group_path, current_group_path)
 
+      # Reduce in depth signifies that we need to close the opened `<ul>` tag
       if (open_group_depth > shared_group_levels) {
         for (level in seq(open_group_depth, shared_group_levels + 1)) {
           html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
@@ -101,6 +107,7 @@ ui_teal_module.teal_modules <- function(id, modules) {
         open_group_depth <- shared_group_levels
       }
 
+      # Increase in path length signifies that we need to open a new `<ul>` tag
       if (length(current_group_path) > shared_group_levels) {
         for (level in seq(shared_group_levels + 1, length(current_group_path))) {
           group_label <- current_group_path[[level]]
@@ -128,10 +135,10 @@ ui_teal_module.teal_modules <- function(id, modules) {
       previous_group_path <- current_group_path
     }
 
-    if (open_group_depth > 0) {
-      for (level in seq(open_group_depth, 1)) {
-        html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
-      }
+    # Closing any opened `<ul>` tags
+    while (open_group_depth > 0) {
+      html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
+      open_group_depth <- open_group_depth - 1
     }
 
     tagList(html_elements)
