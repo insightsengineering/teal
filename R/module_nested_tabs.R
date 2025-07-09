@@ -102,9 +102,6 @@ ui_teal_module.teal_modules <- function(id, modules) {
             "nav-link module-button btn-default active", # `active` class shows the tab content.
             "nav-link module-button btn-default"
           ),
-          `aria-selected` = if (module$id == active_module_id) "true" else "false",
-          tabindex = if (module$id == active_module_id) NULL else "-1",
-          role = "tab",
           module$label
         )
       )
