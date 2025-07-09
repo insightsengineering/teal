@@ -70,32 +70,59 @@ ui_teal_module.teal_modules <- function(id, modules) {
   names(modules_ui) <- names(flat_modules)
   input_id <- ns("active_module_id")
   active_module_id <- shiny::restoreInput(input_id, default = names(flat_modules)[1])
-  last_group <- flat_modules[[1]]$group
-  tab_buttons <- lapply(names(flat_modules), function(module_id) {
-    module <- flat_modules[[module_id]]
-    ui <- tags$span(
-      if (!identical(module$group, last_group) && !is.null(module$group)) {
-        tags$span(
-          tags$br(), tags$br(),
-          tags$span(paste(module$group, collapse = " > ")),
-          tags$br()
-        )
-      },
-      tags$a(
-        href = paste0("#", input_id, module_id), # links button with module content in `tab-content` with the same id.
-        `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
-        `data-value` = module_id, # this links module-content with this button.
-        `class` = ifelse( # `nav-link` is required to mimic bslib tab panel.
-          module_id == active_module_id,
-          "nav-link module-button btn-default active", # `active` class shows the tab content.
-          "nav-link module-button btn-default"
-        ),
-        module$label
-      )
+
+  build_module_tree <- function(flat_modules, group_path = NULL) {
+    is_direct_child <- vapply(flat_modules, function(module) {
+      identical(module$group, group_path)
+    }, logical(1))
+    direct_children <- flat_modules[is_direct_child]
+
+    subgroup_paths <- unique(
+      lapply(flat_modules, function(module) {
+        if (
+          length(module$group) > length(group_path %||% character(0)) &&
+            (length(group_path) == 0 || identical(head(module$group, length(group_path)), group_path))
+        ) {
+          module$group[seq_len(length(group_path %||% character(0)) + 1)]
+        } else {
+          NULL
+        }
+      })
     )
-    last_group <<- module$group
-    ui
-  })
+    subgroup_paths <- Filter(Negate(is.null), subgroup_paths)
+
+    nodes <- lapply(direct_children, function(module) {
+      tags$li(
+        tags$a(
+          href = paste0("#", input_id, module$id), # links button with module content in `tab-content` with same id.
+          `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
+          `data-value` = module$id, # this links module-content with this button.
+          class = ifelse( # `nav-link` is required to mimic bslib tab panel.
+            module$id == active_module_id,
+            "nav-link module-button btn-default active", # `active` class shows the tab content.
+            "nav-link module-button btn-default"
+          ),
+          `aria-selected` = if (module$id == active_module_id) "true" else "false",
+          tabindex = if (module$id == active_module_id) NULL else "-1",
+          role = "tab",
+          module$label
+        )
+      )
+    })
+
+    for (subgroup_path in subgroup_paths) {
+      subgroup_label <- tail(subgroup_path, 1)
+      subtree <- build_module_tree(flat_modules, group_path = subgroup_path)
+      nodes <- c(nodes, list(
+        tags$li(
+          tags$span(class = "module-group-label", subgroup_label),
+          tags$ul(subtree)
+        )
+      ))
+    }
+
+    nodes
+  }
 
   tab_content <- lapply(names(flat_modules), function(module_id) {
     module <- flat_modules[[module_id]]
@@ -109,6 +136,7 @@ ui_teal_module.teal_modules <- function(id, modules) {
       modules_ui[[module_id]]
     )
   })
+
   tags$div(
     class = "teal-modules-wrapper",
     htmltools::htmlDependency(
@@ -136,7 +164,10 @@ ui_teal_module.teal_modules <- function(id, modules) {
         ),
         tags$div(
           class = "dropdown-menu",
-          !!!tab_buttons
+          tags$ul(
+            class = "teal-modules-tree",
+            build_module_tree(flat_modules)
+          )
         )
       )
     ),

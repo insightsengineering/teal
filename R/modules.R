@@ -784,18 +784,12 @@ flatten_modules <- function(modules, parent_group = NULL) {
     }
   }
 
-  flattened <- flattened[order(
-    vapply(flattened, function(x) length(x$group) > 0, logical(1)),
-    vapply(flattened, function(x) {
-      if (length(x$group) == 0) {
-        ""
-      } else {
-        paste(x$group, collapse = " > ")
-      }
-    }, character(1))
-  )]
+  module_ids <- get_module_ids(flattened)
+  names(flattened) <- module_ids
 
-  names(flattened) <- get_module_ids(flattened)
+  for (i in seq_along(flattened)) {
+    flattened[[i]]$id <- module_ids[i]
+  }
 
   structure(
     flattened,
