@@ -295,8 +295,8 @@ module <- function(label = "module",
 #' @rdname teal_modules
 #' @export
 #'
-modules <- function(..., label = "root") {
-  checkmate::assert_string(label)
+modules <- function(..., label = character(0)) {
+  checkmate::assert_character(label, max.len = 1)
   submodules <- list(...)
   if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
     stop(
@@ -306,10 +306,7 @@ modules <- function(..., label = "root") {
   }
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
-  # name them so we can more easily access the children
-  # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- get_unique_labels(labels)
+
   structure(
     list(
       label = label,
@@ -750,49 +747,4 @@ modules_bookmarkable <- function(modules) {
   }
 }
 
-#' @keywords internal
-get_module_ids <- function(modules) {
-  group_labels <- sapply(modules, function(module) {
-    if (is.null(module$group)) {
-      module$label
-    } else {
-      paste(c(module$group, module$label), collapse = shiny::ns.sep)
-    }
-  })
-  make.unique(gsub("[^[:alnum:]]", "_", tolower(group_labels)), sep = "_")
-}
-
-
-#' @keywords internal
-flatten_modules <- function(modules, parent_group = NULL) {
-  checkmate::assert_class(modules, "teal_modules")
-
-  flattened <- list()
-
-  current_group <- if (!is.null(modules$label) && modules$label != "root") {
-    c(parent_group, modules$label)
-  } else {
-    parent_group
-  }
-  for (child in modules$children) {
-    if (inherits(child, "teal_module")) {
-      child$group <- c(current_group, child$group)
-      flattened <- append(flattened, list(child))
-    } else if (inherits(child, "teal_modules")) {
-      nested_flattened <- flatten_modules(child, parent_group = current_group)
-      flattened <- append(flattened, nested_flattened)
-    }
-  }
-
-  module_ids <- get_module_ids(flattened)
-  names(flattened) <- module_ids
-
-  for (i in seq_along(flattened)) {
-    flattened[[i]]$id <- module_ids[i]
-  }
-
-  structure(
-    flattened,
-    class = "flat_teal_modules"
-  )
-}
+.label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", label), sep = "_")

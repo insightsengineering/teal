@@ -47,116 +47,12 @@
 #' @keywords internal
 NULL
 
-#' @rdname module_teal_module
-ui_teal_module <- function(id, modules) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
-  UseMethod("ui_teal_module", modules)
-}
-
-#' @rdname module_teal_module
-#' @export
-ui_teal_module.default <- function(id, modules) {
-  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
-}
-
-#' @rdname module_teal_module
-#' @export
-ui_teal_module.teal_modules <- function(id, modules) {
+ui_teal_modules_nav <- function(id, modules) {
   ns <- NS(id)
-  flat_modules <- flatten_modules(modules)
-  modules_ui <- lapply(names(flat_modules), function(module_id) {
-    ui_teal_module(ns(module_id), flat_modules[[module_id]])
-  })
-  names(modules_ui) <- names(flat_modules)
   input_id <- ns("active_module_id")
-  active_module_id <- shiny::restoreInput(input_id, default = names(flat_modules)[1])
-
-
-  # Build a Nested HTML Module Tree from a Flat Module List
-  # Iterates through the flat list of modules and builds a nested HTML structure
-  # that represents the module hierarchy:
-  # 1. Each module represents a `tags$a` element with a link to its content.
-  # 2. The previous and current group paths determines whether to open or close the module group label tag `<ul`
-  build_module_tree <- function(flat_modules) {
-    # Returns the length of the shared prefix between two group paths
-    common_prefix_length <- function(previous_group_path, current_group_path) {
-      shared_length <- min(length(previous_group_path), length(current_group_path))
-      for (i in seq_len(shared_length)) {
-        if (!identical(previous_group_path[[i]], current_group_path[[i]])) {
-          return(i - 1)
-        }
-      }
-      shared_length
-    }
-
-    html_elements <- list()
-    previous_group_path <- character(0)
-    open_group_depth <- 0
-
-    for (module in flat_modules) {
-      current_group_path <- module$group
-      if (is.null(current_group_path)) current_group_path <- character(0)
-
-      shared_group_levels <- common_prefix_length(previous_group_path, current_group_path)
-
-      # Reduce in depth signifies that we need to close the opened `<ul>` tag
-      if (open_group_depth > shared_group_levels) {
-        for (level in seq(open_group_depth, shared_group_levels + 1)) {
-          html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
-        }
-        open_group_depth <- shared_group_levels
-      }
-
-      # Increase in path length signifies that we need to open a new `<ul>` tag
-      if (length(current_group_path) > shared_group_levels) {
-        for (level in seq(shared_group_levels + 1, length(current_group_path))) {
-          group_label <- current_group_path[[level]]
-          html_elements[[length(html_elements) + 1]] <- htmltools::HTML(
-            sprintf('<li><span class="module-group-label">%s</span><ul>', htmltools::htmlEscape(group_label))
-          )
-          open_group_depth <- open_group_depth + 1
-        }
-      }
-
-      html_elements[[length(html_elements) + 1]] <- tags$li(
-        tags$a(
-          href = paste0("#", input_id, module$id), # links button with module content in `tab-content` with same id.
-          `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
-          `data-value` = module$id, # this links module-content with this button.
-          class = ifelse( # `nav-link` is required to mimic bslib tab panel.
-            module$id == active_module_id,
-            "nav-link module-button btn-default active", # `active` class shows the tab content.
-            "nav-link module-button btn-default"
-          ),
-          module$label
-        )
-      )
-
-      previous_group_path <- current_group_path
-    }
-
-    # Closing any opened `<ul>` tags
-    while (open_group_depth > 0) {
-      html_elements[[length(html_elements) + 1]] <- htmltools::HTML("</ul></li>")
-      open_group_depth <- open_group_depth - 1
-    }
-
-    tagList(html_elements)
-  }
-
-
-  tab_content <- lapply(names(flat_modules), function(module_id) {
-    module <- flat_modules[[module_id]]
-    tags$div(
-      id = paste0(input_id, module_id), # this content in is linked with the button with the same `href`.
-      class = ifelse(
-        module_id == active_module_id,
-        "tab-pane active",
-        "tab-pane" # this is located by bootstrap and auto toggled according to current selection
-      ),
-      modules_ui[[module_id]]
-    )
-  })
+  active_module_id <- substring(rlang::hash(modules$children[[1]]), 1, 8) # todo: replace with extract_module(index = 1)
+  tab_content <- ui_teal_module(id = input_id, modules = modules, active_module_id = active_module_id)
+  nav_buttons <- ui_teal_modules_nav_dropdown(id = id, modules = modules, input_id = input_id, active_module_id)
 
   tags$div(
     class = "teal-modules-wrapper",
@@ -185,26 +81,109 @@ ui_teal_module.teal_modules <- function(id, modules) {
         ),
         tags$div(
           class = "dropdown-menu",
-          tags$ul(
-            class = "teal-modules-tree",
-            build_module_tree(flat_modules)
-          )
+          tags$ul(class = "teal-modules-tree", !!!nav_buttons)
         )
       )
     ),
-    tags$div(
-      class = "tab-content",
-      !!!tab_content
+    tags$div(class = "tab-content", !!!tab_content)
+  )
+}
+
+#' @rdname module_teal_module
+ui_teal_modules_nav_dropdown <- function(id, modules, input_id, active_module_id) {
+  UseMethod("ui_teal_modules_nav_dropdown", modules)
+}
+
+#' @rdname module_teal_module
+#' @export
+ui_teal_modules_nav_dropdown.teal_modules <- function(id, modules, input_id, active_module_id) {
+  ns <- NS(id)
+  tagList(
+    tags$li(tags$span(modules$label, class = "module-group-label")),
+    tags$ul(
+      mapply(
+        ui_teal_modules_nav_dropdown,
+        id = ns(.label_to_id(sapply(modules$children, `[[`, "label"))),
+        modules = modules$children,
+        input_id = input_id,
+        active_module_id = active_module_id
+      )
     )
   )
 }
 
 #' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_module <- function(id, modules) {
+ui_teal_modules_nav_dropdown.teal_module <- function(id, modules, input_id, active_module_id) {
+  ns <- NS(id)
+  module_id <- substring(rlang::hash(modules), 1, 8)
+  tags$li(
+    tags$a(
+      href = paste0("#", module_id), # links button with module content in `tab-content` with same id.
+      `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
+      `data-value` = module_id, # this links module-content with this button.
+      class = c("nav-link", "module-button", "btn-default", if (identical(module_id, active_module_id)) "active"),
+      # `nav-link` is required to mimic bslib tab panel.
+      modules$label
+    )
+  )
+}
+
+#' @rdname module_teal_module
+#' @export
+srv_teal_modules_nav <- function(id,
+                                 data,
+                                 modules,
+                                 datasets = NULL,
+                                 slices_global,
+                                 reporter = teal.reporter::Reporter$new(),
+                                 data_load_status = reactive("ok")) {
+  moduleServer(id, function(input, output, session) {
+    srv_teal_module(
+      "active_module_id",
+      data = data,
+      modules = modules,
+      datasets = datasets,
+      slices_global = slices_global,
+      reporter = reporter,
+      data_load_status = data_load_status,
+      active_module_id = reactive(input$active_module_id)
+    )
+  })
+}
+
+
+#' @rdname module_teal_module
+ui_teal_module <- function(id, modules, active_module_id) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
+  UseMethod("ui_teal_module", modules)
+}
+
+#' @rdname module_teal_module
+#' @export
+ui_teal_module.default <- function(id, modules, active_module_id) {
+  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
+}
+
+#' @rdname module_teal_module
+#' @export
+ui_teal_module.teal_modules <- function(id, modules, active_module_id) {
+  tagList(
+    mapply(
+      FUN = ui_teal_module,
+      id = NS(id, .label_to_id(sapply(modules$children, `[[`, "label"))),
+      modules = modules$children,
+      active_module_id = active_module_id,
+      SIMPLIFY = FALSE
+    )
+  )
+}
+
+#' @rdname module_teal_module
+#' @export
+ui_teal_module.teal_module <- function(id, modules, active_module_id) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
-
   ui_teal <- tags$div(
     shinyjs::hidden(
       tags$div(
@@ -226,12 +205,13 @@ ui_teal_module.teal_module <- function(id, modules) {
     )
   )
 
+  module_id <- substring(rlang::hash(modules), 1, 8)
   div(
-    id = id,
-    class = "teal_module",
+    id = module_id,
+    class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
-      .modules_breadcrumb(modules),
+      .modules_breadcrumb(modules), # todo:
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
@@ -331,7 +311,7 @@ srv_teal_module <- function(id,
                             slices_global,
                             reporter = teal.reporter::Reporter$new(),
                             data_load_status = reactive("ok"),
-                            is_active = reactive(TRUE)) {
+                            active_module_id = reactive(TRUE)) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
@@ -351,7 +331,7 @@ srv_teal_module.default <- function(id,
                                     slices_global,
                                     reporter = teal.reporter::Reporter$new(),
                                     data_load_status = reactive("ok"),
-                                    is_active = reactive(TRUE)) {
+                                    active_module_id = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
@@ -364,45 +344,41 @@ srv_teal_module.teal_modules <- function(id,
                                          slices_global,
                                          reporter = teal.reporter::Reporter$new(),
                                          data_load_status = reactive("ok"),
-                                         is_active = reactive(TRUE)) {
+                                         active_module_id = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
-    flat_modules <- flatten_modules(modules)
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
 
     observeEvent(data_load_status(), {
-      nav_buttons_selector <- sprintf("[id*='%s'][id*='nav_']", session$ns(""))
+      tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
       if (identical(data_load_status(), "ok")) {
-        logger::log_debug("srv_teal_module@1 enabling modules navigation.")
+        logger::log_debug("srv_teal_module@1 enabling modules tabs.")
         shinyjs::show("wrapper")
-        shinyjs::enable(selector = nav_buttons_selector)
+        shinyjs::enable(selector = tabs_selector)
       } else if (identical(data_load_status(), "teal_data_module failed")) {
-        logger::log_debug("srv_teal_module@1 disabling modules navigation.")
-        shinyjs::disable(selector = nav_buttons_selector)
+        logger::log_debug("srv_teal_module@1 disabling modules tabs.")
+        shinyjs::disable(selector = tabs_selector)
       } else if (identical(data_load_status(), "external failed")) {
-        logger::log_debug("srv_teal_module@1 hiding modules navigation.")
+        logger::log_debug("srv_teal_module@1 hiding modules tabs.")
         shinyjs::hide("wrapper")
       }
     })
 
-    modules_output <- sapply(
-      names(flat_modules),
-      function(module_id) {
-        module_info <- flat_modules[[module_id]]
+    modules_output <- mapply(
+      function(id, modules) {
         srv_teal_module(
-          id = module_id,
+          id = id,
+          modules = modules,
           data = data,
-          modules = module_info,
           datasets = datasets,
           slices_global = slices_global,
           reporter = reporter,
-          is_active = reactive(
-            is_active() &&
-              input$active_module_id == module_id &&
-              identical(data_load_status(), "ok")
-          )
+          data_load_status = data_load_status,
+          active_module_id = active_module_id
         )
       },
-      simplify = FALSE
+      id = .label_to_id(sapply(modules$children, `[[`, "label")),
+      modules = modules$children,
+      SIMPLIFY = FALSE
     )
 
     modules_output
@@ -418,11 +394,14 @@ srv_teal_module.teal_module <- function(id,
                                         slices_global,
                                         reporter = teal.reporter::Reporter$new(),
                                         data_load_status = reactive("ok"),
-                                        is_active = reactive(TRUE)) {
+                                        active_module_id = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-
+    module_id <- substring(rlang::hash(modules), 1, 8)
+    is_active <- reactive({
+      identical(data_load_status(), "ok") && identical(module_id, active_module_id())
+    })
     active_datanames <- reactive({
       .resolve_module_datanames(data = data(), modules = modules)
     })

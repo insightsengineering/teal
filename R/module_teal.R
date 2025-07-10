@@ -79,7 +79,7 @@ ui_teal <- function(id, modules) {
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
-      ui_teal_module(id = ns("teal_modules"), modules = modules)
+      ui_teal_modules_nav(id = ns("teal_modules"), modules = modules)
     ),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
   )
@@ -222,7 +222,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     module_labels <- unlist(module_labels(modules), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
-    modules_output <- srv_teal_module(
+    modules_output <- srv_teal_modules_nav(
       id = "teal_modules",
       data = data_signatured,
       datasets = datasets_rv,
