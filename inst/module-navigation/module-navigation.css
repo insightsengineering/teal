@@ -90,7 +90,7 @@
   pointer-events: none;
 }
 
-.teal-modules-tree ul > li:last-child::before {
+.teal-modules-tree ul > li:has(a):last-child::before {
   border-left: 1px solid transparent;
 }
 
@@ -120,9 +120,17 @@ ul.teal-modules-tree > li > ul > li:last-child:before {
   display: inline-block;
   background: #fff;
   position: relative;
-  z-index: 1;
 }
 
-.teal-modules-tree li:hover::before {
+.teal-modules-tree li:has(a:hover)::before,
+.teal-modules-tree li:has(a:active)::before {
   border-color: var(--bs-primary, #0d6efd);
+}
+
+.teal-modules-tree li:has(a.active)::before {
+  border-color: var(--bs-secondary, #6c757d);
+}
+
+.teal-modules-tree ul > li:has(a.active):last-child::before {
+  border-left: 1px solid transparent;
 }
