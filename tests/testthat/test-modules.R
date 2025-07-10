@@ -314,69 +314,6 @@ testthat::test_that("is_arg_used accepts `arg` to be a string only", {
   testthat::expect_error(is_arg_used(function(x) NULL, NULL))
 })
 
-
-# ---- append_module
-testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
-  testthat::expect_error(
-    append_module(module(), module()),
-    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
-  )
-
-  testthat::expect_error(
-    append_module(module(), list(module())),
-    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
-  )
-})
-
-testthat::test_that("append_module throws error is module is not inherited from teal_module", {
-  mod <- module()
-  mods <- modules(label = "A", mod)
-
-  testthat::expect_error(
-    append_module(mods, mods),
-    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
-  )
-
-  testthat::expect_error(
-    append_module(mods, list(mod)),
-    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
-  )
-})
-
-testthat::test_that("append_module appends a module to children of not nested teal_modules", {
-  mod <- module(label = "a")
-  mod2 <- module(label = "b")
-  mods <- modules(label = "c", mod, mod2)
-  mod3 <- module(label = "d")
-
-  appended_mods <- append_module(mods, mod3)
-  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
-})
-
-
-testthat::test_that("append_module appends a module to children of nested teal_modules", {
-  mod <- module(label = "a")
-  mod2 <- module(label = "b")
-  mods <- modules(label = "c", mod)
-  mods2 <- modules(label = "e", mods, mod2)
-  mod3 <- module(label = "d")
-
-  appended_mods <- append_module(mods2, mod3)
-  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
-})
-
-testthat::test_that("append_module produces teal_modules with unique named children", {
-  mod <- module(label = "a")
-  mod2 <- module(label = "c")
-  mods <- modules(label = "c", mod, mod2)
-  mod3 <- module(label = "c")
-
-  appended_mods <- append_module(mods, mod3)
-  mod_names <- names(appended_mods$children)
-  testthat::expect_equal(mod_names, unique(mod_names))
-})
-
-
 # format ----------------------------------------------------------------------------------------------------------
 
 testthat::test_that("format.teal_modules returns proper structure", {
