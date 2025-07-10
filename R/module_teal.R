@@ -136,16 +136,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_handled <- srv_init_data("data", data = data)
 
-    validate_ui <- tags$div(
-      id = session$ns("validate_messages"),
-      class = "teal_validated",
-      ui_check_class_teal_data(session$ns("class_teal_data")),
-      ui_validate_error(session$ns("silent_error")),
-      ui_check_module_datanames(session$ns("datanames_warning"))
+    validate_ui <- ui_module_validate(session$ns("validation"))
+    srv_module_validate_teal_module(
+      "validation", x = data_handled, validate_shiny_silent_error = FALSE, modules = modules
     )
-    srv_check_class_teal_data("class_teal_data", data_handled)
-    srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
-    srv_check_module_datanames("datanames_warning", data_handled, modules)
 
     data_validated <- .trigger_on_success(data_handled)
 
@@ -181,8 +175,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       })
     }
 
-
-
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
       bslib::nav_insert(
@@ -192,10 +184,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         bslib::nav_panel(
           title = icon("fas fa-database"),
           value = "teal_data_module",
-          tags$div(
-            ui_init_data(session$ns("data")),
-            validate_ui
-          )
+          tags$div(validate_ui, ui_init_data(session$ns("data")))
         )
       )
 
@@ -233,4 +222,16 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   })
 
   invisible(NULL)
+}
+
+.trigger_on_success <- function(data) {
+  out <- reactiveVal(NULL)
+  observeEvent(data(), {
+    if (inherits(data(), "teal_data")) {
+      if (!identical(data(), out())) {
+        out(data())
+      }
+    }
+  })
+  out
 }

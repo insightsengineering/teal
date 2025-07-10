@@ -20,7 +20,7 @@
 #' lies in data control: the first method involves external control, while the second method
 #' involves control from a custom module within the app.
 #'
-#' For more details, see [`module_teal_data`].
+#' For more details, see [`teal_data_module`].
 #'
 #' @inheritParams module_teal
 #'

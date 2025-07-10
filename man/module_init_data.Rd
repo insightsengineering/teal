@@ -46,7 +46,7 @@ methods (1 and 2) produce the same reactive behavior within a \code{teal} applic
 lies in data control: the first method involves external control, while the second method
 involves control from a custom module within the app.
 
-For more details, see \code{\link{module_teal_data}}.
+For more details, see \code{\link{teal_data_module}}.
 }
 }
 \keyword{internal}
