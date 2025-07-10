@@ -1250,7 +1250,9 @@ testthat::describe("srv_teal filters", {
         expr = {
           session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$setInputs(`teal_modules-active_module_id` = "module_2")
-          session$setInputs(`teal_modules-active_module_id-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species")
+          session$setInputs(
+            `teal_modules-active_module_id-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species"
+          )
           testthat::expect_true(is_slices_equivalent(
             x = slices_global$all_slices(),
             y = teal_slices(
@@ -2068,7 +2070,9 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "mod1")
         session$setInputs(`teal_modules-active_module_id-mod1-module-dataname` = "x1")
-        session$setInputs(`teal_modules-active_module_id-mod1-module-decorate-transform_1-transform-text` = "lorem ipsum dolor")
+        session$setInputs(
+          `teal_modules-active_module_id-mod1-module-decorate-transform_1-transform-text` = "lorem ipsum dolor"
+        )
         session$flushReact()
 
         testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum dolor")

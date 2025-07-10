@@ -764,7 +764,7 @@ modules_bookmarkable <- function(modules) {
   } else if (inherits(modules, "teal_module")) {
     new_label <- shiny::NS(parent_label, .label_to_id(modules$label))
     if (new_label %in% ids$values) {
-      new_label <- tail(make.unique(c(ids$values, new_label), sep = "_"), 1)
+      new_label <- utils::tail(make.unique(c(ids$values, new_label), sep = "_"), 1)
     }
     modules$id <- new_label
     ids$values <- c(ids$values, new_label)
