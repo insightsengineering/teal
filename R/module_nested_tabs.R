@@ -100,14 +100,16 @@ ui_teal_modules_nav_dropdown.teal_modules <- function(id, modules, input_id, act
   ns <- NS(id)
   tagList(
     if (length(modules$label)) tags$li(tags$span(modules$label, class = "module-group-label")),
-    tags$ul(
-      mapply(
-        ui_teal_modules_nav_dropdown,
-        id = ns(.label_to_id(sapply(modules$children, `[[`, "label"))),
-        modules = modules$children,
-        input_id = input_id,
-        active_module_id = active_module_id,
-        SIMPLIFY = FALSE
+    tags$li(
+      tags$ul(
+        mapply(
+          ui_teal_modules_nav_dropdown,
+          id = ns(.label_to_id(sapply(modules$children, `[[`, "label"))),
+          modules = modules$children,
+          input_id = input_id,
+          active_module_id = active_module_id,
+          SIMPLIFY = FALSE
+        )
       )
     )
   )
