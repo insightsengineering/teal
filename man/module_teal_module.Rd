@@ -2,6 +2,10 @@
 % Please edit documentation in R/module_nested_tabs.R
 \name{module_teal_module}
 \alias{module_teal_module}
+\alias{ui_teal_modules_nav_dropdown}
+\alias{ui_teal_modules_nav_dropdown.teal_modules}
+\alias{ui_teal_modules_nav_dropdown.teal_module}
+\alias{srv_teal_modules_nav}
 \alias{ui_teal_module}
 \alias{ui_teal_module.default}
 \alias{ui_teal_module.teal_modules}
@@ -12,13 +16,29 @@
 \alias{srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-ui_teal_module(id, modules)
+ui_teal_modules_nav_dropdown(id, modules, input_id, active_module_id)
 
-\method{ui_teal_module}{default}(id, modules)
+\method{ui_teal_modules_nav_dropdown}{teal_modules}(id, modules, input_id, active_module_id)
 
-\method{ui_teal_module}{teal_modules}(id, modules)
+\method{ui_teal_modules_nav_dropdown}{teal_module}(id, modules, input_id, active_module_id)
 
-\method{ui_teal_module}{teal_module}(id, modules)
+srv_teal_modules_nav(
+  id,
+  data,
+  modules,
+  datasets = NULL,
+  slices_global,
+  reporter = teal.reporter::Reporter$new(),
+  data_load_status = reactive("ok")
+)
+
+ui_teal_module(id, modules, active_module_id)
+
+\method{ui_teal_module}{default}(id, modules, active_module_id)
+
+\method{ui_teal_module}{teal_modules}(id, modules, active_module_id)
+
+\method{ui_teal_module}{teal_module}(id, modules, active_module_id)
 
 srv_teal_module(
   id,
@@ -28,7 +48,7 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
 )
 
 \method{srv_teal_module}{default}(
@@ -39,7 +59,7 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
 )
 
 \method{srv_teal_module}{teal_modules}(
@@ -50,7 +70,7 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
 )
 
 \method{srv_teal_module}{teal_module}(
@@ -61,7 +81,7 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
 )
 }
 \arguments{

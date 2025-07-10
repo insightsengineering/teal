@@ -286,7 +286,8 @@ module <- function(label = "module",
       datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
-      transformators = transformators
+      transformators = transformators,
+      id = .label_to_id(label)
     ),
     class = "teal_module"
   )
@@ -295,8 +296,8 @@ module <- function(label = "module",
 #' @rdname teal_modules
 #' @export
 #'
-modules <- function(..., label = "root") {
-  checkmate::assert_string(label)
+modules <- function(..., label = character(0)) {
+  checkmate::assert_character(label, max.len = 1)
   submodules <- list(...)
   if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
     stop(
@@ -306,16 +307,15 @@ modules <- function(..., label = "root") {
   }
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
-  # name them so we can more easily access the children
-  # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- get_unique_labels(labels)
-  structure(
-    list(
-      label = label,
-      children = submodules
-    ),
-    class = "teal_modules"
+
+  .make_sure_unique_id(
+    structure(
+      list(
+        label = label,
+        children = submodules
+      ),
+      class = "teal_modules"
+    )
   )
 }
 
@@ -717,18 +717,19 @@ is_arg_used <- function(modules, arg) {
   }
 }
 
-
-#' Retrieve labels from `teal_modules`
+#' Retrieve slot from `teal_modules`
 #'
 #' @param modules (`teal_modules`)
-#' @return A `list` containing the labels of the modules. If the modules are nested,
-#' the function returns a nested `list` of labels.
+#' @param slot (`character(1)`)
+#' @return A `list` containing the `slot` of the modules.
+#' If the modules are nested, the function returns a nested `list` of values.
 #' @keywords internal
-module_labels <- function(modules) {
+modules_slot <- function(modules, slot) {
+  checkmate::assert_string(slot)
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules$children, modules_slot, slot = slot)
   } else {
-    modules$label
+    modules[[slot]]
   }
 }
 
@@ -750,49 +751,23 @@ modules_bookmarkable <- function(modules) {
   }
 }
 
-#' @keywords internal
-get_module_ids <- function(modules) {
-  group_labels <- sapply(modules, function(module) {
-    if (is.null(module$group)) {
-      module$label
-    } else {
-      paste(c(module$group, module$label), collapse = shiny::ns.sep)
+.label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", tolower(label)), sep = "_")
+
+.make_sure_unique_id <- function(modules, parent_label = NULL, ids = new.env()) {
+  if (inherits(modules, "teal_modules")) {
+    modules$children <- lapply(
+      modules$children,
+      .make_sure_unique_id,
+      parent_label = shiny::NS(parent_label, .label_to_id(modules$label)),
+      ids = ids
+    )
+  } else if (inherits(modules, "teal_module")) {
+    new_label <- shiny::NS(parent_label, .label_to_id(modules$label))
+    if (new_label %in% ids$values) {
+      new_label <- tail(make.unique(c(ids$values, new_label), sep = "_"), 1)
     }
-  })
-  make.unique(gsub("[^[:alnum:]]", "_", tolower(group_labels)), sep = "_")
-}
-
-
-#' @keywords internal
-flatten_modules <- function(modules, parent_group = NULL) {
-  checkmate::assert_class(modules, "teal_modules")
-
-  flattened <- list()
-
-  current_group <- if (!is.null(modules$label) && modules$label != "root") {
-    c(parent_group, modules$label)
-  } else {
-    parent_group
+    modules$id <- new_label
+    ids$values <- c(ids$values, new_label)
   }
-  for (child in modules$children) {
-    if (inherits(child, "teal_module")) {
-      child$group <- c(current_group, child$group)
-      flattened <- append(flattened, list(child))
-    } else if (inherits(child, "teal_modules")) {
-      nested_flattened <- flatten_modules(child, parent_group = current_group)
-      flattened <- append(flattened, nested_flattened)
-    }
-  }
-
-  module_ids <- get_module_ids(flattened)
-  names(flattened) <- module_ids
-
-  for (i in seq_along(flattened)) {
-    flattened[[i]]$id <- module_ids[i]
-  }
-
-  structure(
-    flattened,
-    class = "flat_teal_modules"
-  )
+  modules
 }

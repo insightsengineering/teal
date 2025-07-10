@@ -134,7 +134,7 @@ init <- function(data,
   # argument checking (interdependent)
   ## `filter` - `modules`
   if (isTRUE(attr(filter, "module_specific"))) {
-    module_names <- unlist(c(module_labels(modules), "global_filters"))
+    module_names <- unlist(c(modules_slot(modules, "label"), "global_filters"))
     failed_mod_names <- setdiff(names(attr(filter, "mapping")), module_names)
     if (length(failed_mod_names)) {
       stop(

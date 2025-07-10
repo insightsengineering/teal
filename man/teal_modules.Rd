@@ -23,7 +23,7 @@ module(
   transformators = list()
 )
 
-modules(..., label = "root")
+modules(..., label = character(0))
 
 \method{format}{teal_module}(
   x,
