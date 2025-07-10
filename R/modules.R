@@ -278,17 +278,19 @@ module <- function(label = "module",
     union(datanames, transform_datanames)
   }
 
-  obj <- list(
-    label = label,
-    server = server,
-    ui = ui,
-    datanames = combined_datanames,
-    server_args = server_args,
-    ui_args = ui_args,
-    transformators = transformators
+  structure(
+    list(
+      label = label,
+      server = server,
+      ui = ui,
+      datanames = combined_datanames,
+      server_args = server_args,
+      ui_args = ui_args,
+      transformators = transformators,
+      id = .label_to_id(label)
+    ),
+    class = "teal_module"
   )
-  obj$id <- substring(rlang::hash(obj), 1, 8)
-  structure(obj, class = "teal_module")
 }
 
 #' @rdname teal_modules
@@ -306,12 +308,14 @@ modules <- function(..., label = character(0)) {
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
 
-  structure(
-    list(
-      label = label,
-      children = .make_sure_unique_id(submodules)
-    ),
-    class = "teal_modules"
+  .make_sure_unique_id(
+    structure(
+      list(
+        label = label,
+        children = submodules
+      ),
+      class = "teal_modules"
+    )
   )
 }
 
@@ -747,18 +751,23 @@ modules_bookmarkable <- function(modules) {
   }
 }
 
-.label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", label), sep = "_")
+.label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", tolower(label)), sep = "_")
 
-.make_sure_unique_id <- function(modules, ids = new.env()) {
+.make_sure_unique_id <- function(modules, parent_label = NULL, ids = new.env()) {
   if (inherits(modules, "teal_modules")) {
-    modules$children <- .make_sure_unique_id(modules$children)
+    modules$children <- lapply(
+      modules$children,
+      .make_sure_unique_id,
+      parent_label = shiny::NS(parent_label, .label_to_id(modules$label)),
+      ids = ids
+    )
   } else if (inherits(modules, "teal_module")) {
-    if (attr(modules, "id") %in% ids$values) {
-      attr(modules, "id") <- tail(make.unique(c(ids$values, attr(modules, "id")), sep = ""), 1)
+    new_label <- shiny::NS(parent_label, .label_to_id(modules$label))
+    if (new_label %in% ids$values) {
+      new_label <- tail(make.unique(c(ids$values, new_label), sep = "_"), 1)
     }
-    ids$values <- c(ids$values, attr(modules, "id"))
-  } else if (is.list(modules)) {
-    lapply(modules$children, .make_sure_unique_id, ids = ids)
+    modules$id <- new_label
+    ids$values <- c(ids$values, new_label)
   }
   modules
 }

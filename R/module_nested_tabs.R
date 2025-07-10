@@ -51,8 +51,8 @@ ui_teal_modules_nav <- function(id, modules) {
   ns <- NS(id)
   input_id <- ns("active_module_id")
   active_module_id <- unlist(modules_slot(modules, "id"), use.names = FALSE)[1]
-  tab_content <- ui_teal_module(id = input_id, modules = modules, active_module_id = active_module_id)
   nav_buttons <- ui_teal_modules_nav_dropdown(id = input_id, modules = modules, input_id = input_id, active_module_id)
+  tab_content <- ui_teal_module(id = input_id, modules = modules, active_module_id = active_module_id)
 
   tags$div(
     class = "teal-modules-wrapper",
