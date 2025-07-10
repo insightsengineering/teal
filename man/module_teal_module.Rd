@@ -16,11 +16,11 @@
 \alias{srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-ui_teal_modules_nav_dropdown(id, modules, input_id)
+ui_teal_modules_nav_dropdown(id, modules, input_id, active_module_id)
 
-\method{ui_teal_modules_nav_dropdown}{teal_modules}(id, modules, input_id)
+\method{ui_teal_modules_nav_dropdown}{teal_modules}(id, modules, input_id, active_module_id)
 
-\method{ui_teal_modules_nav_dropdown}{teal_module}(id, modules, input_id)
+\method{ui_teal_modules_nav_dropdown}{teal_module}(id, modules, input_id, active_module_id)
 
 srv_teal_modules_nav(
   id,

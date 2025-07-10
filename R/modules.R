@@ -278,18 +278,17 @@ module <- function(label = "module",
     union(datanames, transform_datanames)
   }
 
-  structure(
-    list(
-      label = label,
-      server = server,
-      ui = ui,
-      datanames = combined_datanames,
-      server_args = server_args,
-      ui_args = ui_args,
-      transformators = transformators
-    ),
-    class = "teal_module"
+  obj <- list(
+    label = label,
+    server = server,
+    ui = ui,
+    datanames = combined_datanames,
+    server_args = server_args,
+    ui_args = ui_args,
+    transformators = transformators
   )
+  obj$id <- substring(rlang::hash(obj), 1, 8)
+  structure(obj, class = "teal_module")
 }
 
 #' @rdname teal_modules
@@ -310,7 +309,7 @@ modules <- function(..., label = character(0)) {
   structure(
     list(
       label = label,
-      children = submodules
+      children = .make_sure_unique_id(submodules)
     ),
     class = "teal_modules"
   )
@@ -714,18 +713,19 @@ is_arg_used <- function(modules, arg) {
   }
 }
 
-
-#' Retrieve labels from `teal_modules`
+#' Retrieve slot from `teal_modules`
 #'
 #' @param modules (`teal_modules`)
-#' @return A `list` containing the labels of the modules. If the modules are nested,
-#' the function returns a nested `list` of labels.
+#' @param slot (`character(1)`)
+#' @return A `list` containing the `slot` of the modules.
+#' If the modules are nested, the function returns a nested `list` of values.
 #' @keywords internal
-module_labels <- function(modules) {
+modules_slot <- function(modules, slot) {
+  checkmate::assert_string(slot)
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules$children, modules_slot, slot = slot)
   } else {
-    modules$label
+    modules[[slot]]
   }
 }
 
@@ -748,3 +748,17 @@ modules_bookmarkable <- function(modules) {
 }
 
 .label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", label), sep = "_")
+
+.make_sure_unique_id <- function(modules, ids = new.env()) {
+  if (inherits(modules, "teal_modules")) {
+    modules$children <- .make_sure_unique_id(modules$children)
+  } else if (inherits(modules, "teal_module")) {
+    if (attr(modules, "id") %in% ids$values) {
+      attr(modules, "id") <- tail(make.unique(c(ids$values, attr(modules, "id")), sep = ""), 1)
+    }
+    ids$values <- c(ids$values, attr(modules, "id"))
+  } else if (is.list(modules)) {
+    lapply(modules$children, .make_sure_unique_id, ids = ids)
+  }
+  modules
+}

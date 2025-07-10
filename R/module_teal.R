@@ -220,7 +220,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
-    module_labels <- unlist(module_labels(modules), use.names = FALSE)
+    module_labels <- unlist(modules_slot(modules, "label"), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_modules_nav(
       id = "teal_modules",

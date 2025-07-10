@@ -50,7 +50,7 @@ NULL
 ui_teal_modules_nav <- function(id, modules) {
   ns <- NS(id)
   input_id <- ns("active_module_id")
-  active_module_id <- substring(rlang::hash(modules$children[[1]]), 1, 8) # todo: replace with extract_module(index = 1)
+  active_module_id <- unlist(modules_slot(modules, "id"), use.names = FALSE)[1]
   tab_content <- ui_teal_module(id = input_id, modules = modules, active_module_id = active_module_id)
   nav_buttons <- ui_teal_modules_nav_dropdown(id = input_id, modules = modules, input_id = input_id, active_module_id)
 
@@ -117,7 +117,7 @@ ui_teal_modules_nav_dropdown.teal_modules <- function(id, modules, input_id, act
 #' @export
 ui_teal_modules_nav_dropdown.teal_module <- function(id, modules, input_id, active_module_id) {
   ns <- NS(id)
-  module_id <- substring(rlang::hash(modules), 1, 8)
+  module_id <- modules$id
   tags$li(
     tags$a(
       href = paste0("#", ns("wrapper")), # links button with module content in `tab-content` with same id.
@@ -206,7 +206,7 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
     )
   )
 
-  module_id <- substring(rlang::hash(modules), 1, 8)
+  module_id <- modules$id
   div(
     id = ns("wrapper"),
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
@@ -399,7 +399,7 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-    module_id <- substring(rlang::hash(modules), 1, 8)
+    module_id <- modules$id
     is_active <- reactive({
       identical(data_load_status(), "ok") && identical(module_id, active_module_id())
     })
