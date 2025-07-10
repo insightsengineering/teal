@@ -52,7 +52,7 @@ ui_teal_modules_nav <- function(id, modules) {
   input_id <- ns("active_module_id")
   active_module_id <- substring(rlang::hash(modules$children[[1]]), 1, 8) # todo: replace with extract_module(index = 1)
   tab_content <- ui_teal_module(id = input_id, modules = modules, active_module_id = active_module_id)
-  nav_buttons <- ui_teal_modules_nav_dropdown(id = id, modules = modules, input_id = input_id, active_module_id)
+  nav_buttons <- ui_teal_modules_nav_dropdown(id = input_id, modules = modules, input_id = input_id, active_module_id)
 
   tags$div(
     class = "teal-modules-wrapper",
@@ -99,14 +99,15 @@ ui_teal_modules_nav_dropdown <- function(id, modules, input_id, active_module_id
 ui_teal_modules_nav_dropdown.teal_modules <- function(id, modules, input_id, active_module_id) {
   ns <- NS(id)
   tagList(
-    tags$li(tags$span(modules$label, class = "module-group-label")),
+    if (length(modules$label)) tags$li(tags$span(modules$label, class = "module-group-label")),
     tags$ul(
       mapply(
         ui_teal_modules_nav_dropdown,
         id = ns(.label_to_id(sapply(modules$children, `[[`, "label"))),
         modules = modules$children,
         input_id = input_id,
-        active_module_id = active_module_id
+        active_module_id = active_module_id,
+        SIMPLIFY = FALSE
       )
     )
   )
@@ -119,7 +120,7 @@ ui_teal_modules_nav_dropdown.teal_module <- function(id, modules, input_id, acti
   module_id <- substring(rlang::hash(modules), 1, 8)
   tags$li(
     tags$a(
-      href = paste0("#", module_id), # links button with module content in `tab-content` with same id.
+      href = paste0("#", ns("wrapper")), # links button with module content in `tab-content` with same id.
       `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
       `data-value` = module_id, # this links module-content with this button.
       class = c("nav-link", "module-button", "btn-default", if (identical(module_id, active_module_id)) "active"),
@@ -207,7 +208,7 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
 
   module_id <- substring(rlang::hash(modules), 1, 8)
   div(
-    id = module_id,
+    id = ns("wrapper"),
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
     uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
