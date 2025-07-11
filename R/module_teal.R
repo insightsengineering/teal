@@ -221,7 +221,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = ".teal-modules-wrapper .nav-item-custom",
         where = "beforeBegin",
-        expand_buttons(
+        popover_buttons(
           id = session$ns("open_teal_data_module_ui"),
           label = "Load Data",
           icon = "database-fill"
