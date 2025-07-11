@@ -16,7 +16,7 @@
 #' 1. Each module button has following attributes:
 #'   - `href = "#<teal_module container id>"` links button with the container of the specific `teal_module`
 #'   - `data-bs-toggle = "tab"` tells Bootstrap to hide or show `teal_module`'s content
-#'   - `data-value = "<teal_module$id>"` This attribute is taken by shiny from all buttons of class "active"
+#'   - `data-value = "<teal_module$path>"` This attribute is taken by shiny from all buttons of class "active"
 #'     and used as `input$active_module_id` in the namespace of [srv_teal_modules_nav()].
 #' 2. Each module content is wrapped in a container with the `class = "tab-pane"` with a unique `id`.
 #' This tells Bootstrap library that clicking a button should toggle relevant "tab"
@@ -72,7 +72,7 @@ ui_teal_modules_nav <- function(id, modules) {
   ns <- NS(id)
   active_module_id <- restoreInput(
     ns("active_module_id"),
-    unlist(modules_slot(modules, "id"), use.names = FALSE)[1]
+    unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
   )
   nav_buttons <- ui_teal_modules_nav_dropdown(id = ns("nav"), modules = modules, active_module_id)
   tab_content <- ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
@@ -162,7 +162,7 @@ ui_teal_modules_nav_dropdown.teal_modules <- function(id, modules, active_module
 #' @export
 ui_teal_modules_nav_dropdown.teal_module <- function(id, modules, active_module_id) {
   ns <- NS(id)
-  module_id <- modules$id
+  module_id <- modules$path
   tags$li(
     tags$a(
       href = paste0("#", ns("wrapper")), # links button with module content in `tab-content` with same id.
@@ -226,7 +226,7 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
-  module_id <- modules$id
+  module_id <- modules$path
   div(
     id = ns("wrapper"),
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
@@ -402,7 +402,7 @@ srv_teal_module.teal_module <- function(id,
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-    module_id <- modules$id
+    module_id <- modules$path
     is_active <- reactive({
       identical(data_load_status(), "ok") && identical(module_id, active_module_id())
     })
@@ -590,7 +590,7 @@ srv_teal_module.teal_module <- function(id,
 
 #' @keywords internal
 .modules_breadcrumb <- function(module) {
-  breadcrumb_items <- c("Home", module$id)
+  breadcrumb_items <- c("Home", module$path)
   tags$span(
     style = "color: var(--bs-secondary); font-size: medium;",
     paste(breadcrumb_items, collapse = " / ")

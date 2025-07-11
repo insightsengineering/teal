@@ -287,7 +287,7 @@ module <- function(label = "module",
       server_args = server_args,
       ui_args = ui_args,
       transformators = transformators,
-      id = label
+      path = label
     ),
     class = "teal_module"
   )
@@ -766,7 +766,7 @@ modules_bookmarkable <- function(modules) {
     if (new_label %in% ids$values) {
       new_label <- utils::tail(make.unique(c(ids$values, new_label), sep = " - "), 1)
     }
-    modules$id <- new_label
+    modules$path <- new_label
     ids$values <- c(ids$values, new_label)
   }
   modules

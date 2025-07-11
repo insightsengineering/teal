@@ -122,7 +122,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_s3_class(test_module, "teal_module")
   testthat::expect_named(
     test_module,
-    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators", "id")
+    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators", "path")
   )
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
@@ -130,7 +130,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_identical(test_module$datanames, "all")
   testthat::expect_identical(test_module$server_args, NULL)
   testthat::expect_identical(test_module$ui_args, NULL)
-  testthat::expect_identical(test_module$id, "aaa1")
+  testthat::expect_identical(test_module$path, "aaa1")
 })
 
 testthat::test_that("modules gives error if no arguments other than label are used", {
@@ -214,7 +214,7 @@ testthat::test_that("modules returns teal_modules object with label and children
   testthat::expect_named(out, c("label", "children"))
 })
 
-testthat::test_that("modules returns children as list and changes their id to match group they are grouped by", {
+testthat::test_that("modules returns children as list and changes their path to match group they are grouped by", {
   test_module <- module(
     label = "module",
     server = module_server_fun,
@@ -223,8 +223,8 @@ testthat::test_that("modules returns children as list and changes their id to ma
   )
   test_modules <- modules(label = "modules", test_module)
   out <- modules(label = "tabs", test_module, test_modules)
-  test_module$id <- "tabs / module"
-  test_modules$children[[1]]$id <- "tabs / modules / module"
+  test_module$path <- "tabs / module"
+  test_modules$children[[1]]$path <- "tabs / modules / module"
   testthat::expect_identical(out$children, list(test_module, test_modules))
 })
 
@@ -243,7 +243,7 @@ testthat::test_that("modules returns useful error message if label argument not 
 })
 
 
-testthat::test_that("modules returns children as list with unique id if labels are duplicated", {
+testthat::test_that("modules returns children as list with unique path if labels are duplicated", {
   test_module <- module(
     label = "module",
     server = module_server_fun,
@@ -251,7 +251,7 @@ testthat::test_that("modules returns children as list with unique id if labels a
     datanames = ""
   )
   out <- modules(label = "modules", test_module, test_module)
-  testthat::expect_identical(sapply(out$children, `[[`, "id"), c("modules / module", "modules / module - 1"))
+  testthat::expect_identical(sapply(out$children, `[[`, "path"), c("modules / module", "modules / module - 1"))
 })
 
 # is_arg_used -----
