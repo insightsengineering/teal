@@ -228,7 +228,6 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
   div(
     id = ns("wrapper"),
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
-    uiOutput(ns("data_reactive"), inline = TRUE),
     tagList(
       .modules_breadcrumb(modules), # todo:
       if (!is.null(modules$datanames)) {
@@ -594,5 +593,8 @@ srv_teal_module.teal_module <- function(id,
   } else {
     breadcrumb_items <- c("Home", module$group, module$label)
   }
-  paste(breadcrumb_items, collapse = " / ")
+  tags$span(
+    style = "color: var(--bs-secondary); font-size: medium;",
+    paste(breadcrumb_items, collapse = " / ")
+  )
 }
