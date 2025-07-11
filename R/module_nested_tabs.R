@@ -590,9 +590,8 @@ srv_teal_module.teal_module <- function(id,
 
 #' @keywords internal
 .modules_breadcrumb <- function(module) {
-  breadcrumb_items <- c("Home", module$path)
   tags$span(
     style = "color: var(--bs-secondary); font-size: medium;",
-    paste(breadcrumb_items, collapse = " / ")
+    paste("Home", module$path, sep = " / ")
   )
 }
