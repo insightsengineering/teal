@@ -70,7 +70,10 @@ NULL
 
 ui_teal_modules_nav <- function(id, modules) {
   ns <- NS(id)
-  active_module_id <- unlist(modules_slot(modules, "id"), use.names = FALSE)[1]
+  active_module_id <- restoreInput(
+    ns("active_module_id"),
+    unlist(modules_slot(modules, "id"), use.names = FALSE)[1]
+  )
   nav_buttons <- ui_teal_modules_nav_dropdown(id = ns("nav"), modules = modules, active_module_id)
   tab_content <- ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
   tags$div(
