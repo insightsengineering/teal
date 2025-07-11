@@ -2,7 +2,7 @@
 #          testing of srv_data is not needed.
 module_summary_table <<- function(output, id) {
   testthat::skip_if_not_installed("rvest")
-  table_id <- sprintf("teal_modules-active_module_id-%s-data_summary-table", id)
+  table_id <- sprintf("teal_modules-nav-%s-data_summary-table", id)
   html <- output[[table_id]]$html
   as.data.frame(rvest::html_table(rvest::read_html(html), header = TRUE)[[1]])
 }
@@ -519,7 +519,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-active_module_id-module_1-validate_datanames-message"]]$html
+                  output[["teal_modules-nav-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -554,7 +554,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-active_module_id-module_1-validate_datanames-message"]]$html
+                  output[["teal_modules-nav-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -583,7 +583,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-active_module_id-module_1-validate_datanames-message"]]$html
+                  output[["teal_modules-nav-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -611,7 +611,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-active_module_id-module_1-validate_datanames-message"]]$html
+                  output[["teal_modules-nav-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -638,7 +638,7 @@ testthat::describe("srv_teal teal_modules", {
             trimws(
               rvest::html_text2(
                 rvest::read_html(
-                  output[["teal_modules-active_module_id-module_1-validate_datanames-message"]]$html
+                  output[["teal_modules-nav-module_1-validate_datanames-message"]]$html
                 )
               )
             ),
@@ -1183,9 +1183,7 @@ testthat::describe("srv_teal filters", {
         expr = {
           session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$setInputs(`teal_modules-active_module_id` = "module_2")
-          session$setInputs(
-            `teal_modules-active_module_id-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species"
-          )
+          session$setInputs(`teal_modules-nav-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species")
           testthat::expect_true(is_slices_equivalent(
             x = slices_global$all_slices(),
             y = teal_slices(
@@ -1219,7 +1217,7 @@ testthat::describe("srv_teal filters", {
           session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$setInputs(`teal_modules-active_module_id` = "module_2")
           session$setInputs(
-            `teal_modules-active_module_id-module_2-filter_panel-filters-iris-filter-iris_Species-remove` = "Species"
+            `teal_modules-nav-module_2-filter_panel-filters-iris-filter-iris_Species-remove` = "Species"
           )
           testthat::expect_true(is_slices_equivalent(
             x = slices_global$all_slices(),
@@ -1250,9 +1248,7 @@ testthat::describe("srv_teal filters", {
         expr = {
           session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$setInputs(`teal_modules-active_module_id` = "module_2")
-          session$setInputs(
-            `teal_modules-active_module_id-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species"
-          )
+          session$setInputs(`teal_modules-nav-module_2-filter_panel-filters-iris-iris-filter-var_to_add` = "Species")
           testthat::expect_true(is_slices_equivalent(
             x = slices_global$all_slices(),
             y = teal_slices(
@@ -1284,9 +1280,7 @@ testthat::describe("srv_teal filters", {
         ),
         expr = {
           session$setInputs(`teal_modules-active_module_id` = "module_1")
-          session$setInputs(
-            `teal_modules-active_module_id-module_1-filter_panel-filters-iris-iris-filter-var_to_add` = "Species"
-          )
+          session$setInputs(`teal_modules-nav-module_1-filter_panel-filters-iris-iris-filter-var_to_add` = "Species")
           session$flushReact()
           testthat::expect_true(is_slices_equivalent(
             x = slices_global$all_slices(),
@@ -1326,7 +1320,7 @@ testthat::describe("srv_teal filters", {
           session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$setInputs(`teal_modules-active_module_id` = "module_2")
           session$setInputs(
-            `teal_modules-active_module_id-module_2-filter_panel-filters-iris-filter-iris_Species-remove` = "Species"
+            `teal_modules-nav-module_2-filter_panel-filters-iris-filter-iris_Species-remove` = "Species"
           )
           testthat::expect_true(is_slices_equivalent(
             x = slices_global$all_slices(),
@@ -1984,7 +1978,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "mod1")
-        session$setInputs(`teal_modules-active_module_id-mod1-module-dataname` = "object")
+        session$setInputs(`teal_modules-nav-mod1-module-dataname` = "object")
         session$flushReact()
         testthat::expect_identical(
           modules_output$mod1()()[["object"]],
@@ -2027,7 +2021,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "mod1")
-        session$setInputs(`teal_modules-active_module_id-mod1-module-dataname` = "x1")
+        session$setInputs(`teal_modules-nav-mod1-module-dataname` = "x1")
         session$flushReact()
 
         testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum")
@@ -2069,10 +2063,8 @@ testthat::describe("srv_teal teal_module(s) transformator", {
       ),
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "mod1")
-        session$setInputs(`teal_modules-active_module_id-mod1-module-dataname` = "x1")
-        session$setInputs(
-          `teal_modules-active_module_id-mod1-module-decorate-transform_1-transform-text` = "lorem ipsum dolor"
-        )
+        session$setInputs(`teal_modules-nav-mod1-module-dataname` = "x1")
+        session$setInputs(`teal_modules-nav-mod1-module-decorate-transform_1-transform-text` = "lorem ipsum dolor")
         session$flushReact()
 
         testthat::expect_identical(modules_output$mod1()()[["object"]], "ABC lorem ipsum dolor")
