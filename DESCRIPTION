@@ -15,7 +15,6 @@ Authors@R: c(
     person("Vedha", "Viyash", , "vedha.viyash@roche.com", role = "aut"),
     person("Marcin", "Kosinski", , "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
-    person("Chendi", "Liao", , "chendi.liao@roche.com", role = "rev"),
     person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
     person("Nina", "Qi", , "qi.ting@gene.com", role = "rev"),
     person("Nikolas", "Burkoff", role = "aut"),
@@ -24,6 +23,7 @@ Authors@R: c(
     person("Konrad", "Pagacz", role = "aut"),
     person("Junlue", "Zhao", role = "aut"),
     person("Tadeusz", "Lewandowski", role = "aut"),
+    person("Chendi", "Liao", , role = "rev"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
