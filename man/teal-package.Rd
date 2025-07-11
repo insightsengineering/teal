@@ -46,6 +46,7 @@ Other contributors:
 \itemize{
   \item Chendi Liao \email{chendi.liao@roche.com} [reviewer]
   \item Dony Unardi \email{unardid@gene.com} [reviewer]
+  \item Nina Qi \email{qi.ting@gene.com} [reviewer]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
   \item Maximilian Mordig [contributor]
 }

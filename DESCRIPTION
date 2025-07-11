@@ -17,6 +17,7 @@ Authors@R: c(
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
     person("Chendi", "Liao", , "chendi.liao@roche.com", role = "rev"),
     person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
+    person("Nina", "Qi", , "qi.ting@gene.com", role = "rev"),
     person("Nikolas", "Burkoff", role = "aut"),
     person("Mahmoud", "Hallal", role = "aut"),
     person("Maciej", "Nasinski", role = "aut"),
