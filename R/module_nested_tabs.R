@@ -310,7 +310,7 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
                   });
                 ",
                 ns("sidebar_toggle_buttons"),
-                id
+                ns("wrapper")
               )
             )
           )
