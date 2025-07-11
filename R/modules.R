@@ -287,7 +287,7 @@ module <- function(label = "module",
       server_args = server_args,
       ui_args = ui_args,
       transformators = transformators,
-      id = .label_to_id(label)
+      id = label
     ),
     class = "teal_module"
   )
@@ -308,7 +308,7 @@ modules <- function(..., label = character(0)) {
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
 
-  .make_sure_unique_id(
+  .update_modules_paths(
     structure(
       list(
         label = label,
@@ -753,18 +753,18 @@ modules_bookmarkable <- function(modules) {
 
 .label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", tolower(label)), sep = "_")
 
-.make_sure_unique_id <- function(modules, parent_label = NULL, ids = new.env()) {
+.update_modules_paths <- function(modules, parent_label = NULL, ids = new.env()) {
   if (inherits(modules, "teal_modules")) {
     modules$children <- lapply(
       modules$children,
-      .make_sure_unique_id,
-      parent_label = shiny::NS(parent_label, .label_to_id(modules$label)),
+      .update_modules_paths,
+      parent_label = if (length(parent_label)) paste(parent_label, modules$label, sep = " / ") else modules$label,
       ids = ids
     )
   } else if (inherits(modules, "teal_module")) {
-    new_label <- shiny::NS(parent_label, .label_to_id(modules$label))
+    new_label <- if (length(parent_label)) paste(parent_label, modules$label, sep = " / ") else modules$label
     if (new_label %in% ids$values) {
-      new_label <- utils::tail(make.unique(c(ids$values, new_label), sep = "_"), 1)
+      new_label <- utils::tail(make.unique(c(ids$values, new_label), sep = " - "), 1)
     }
     modules$id <- new_label
     ids$values <- c(ids$values, new_label)

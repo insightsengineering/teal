@@ -224,7 +224,7 @@ testthat::test_that("modules returns children as list and changes their id to ma
   test_modules <- modules(label = "modules", test_module)
   out <- modules(label = "tabs", test_module, test_modules)
   test_module$id <- "tabs-module"
-  test_modules$children[[1]]$id <- "tabs-modules-module"
+  test_modules$children[[1]]$id <- "tabs / modules / module"
   testthat::expect_identical(out$children, list(test_module, test_modules))
 })
 
@@ -251,7 +251,7 @@ testthat::test_that("modules returns children as list with unique id if labels a
     datanames = ""
   )
   out <- modules(label = "modules", test_module, test_module)
-  testthat::expect_identical(sapply(out$children, `[[`, "id"), c("modules-module", "modules-module_1"))
+  testthat::expect_identical(sapply(out$children, `[[`, "id"), c("modules / module", "modules / module_1"))
 })
 
 # is_arg_used -----
