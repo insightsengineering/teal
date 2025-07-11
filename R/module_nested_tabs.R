@@ -366,22 +366,6 @@ srv_teal_module.teal_modules <- function(id,
                                          active_module_id = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
-
-    observeEvent(data_load_status(), {
-      tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
-      if (identical(data_load_status(), "ok")) {
-        logger::log_debug("srv_teal_module@1 enabling modules tabs.")
-        shinyjs::show("wrapper")
-        shinyjs::enable(selector = tabs_selector)
-      } else if (identical(data_load_status(), "teal_data_module failed")) {
-        logger::log_debug("srv_teal_module@1 disabling modules tabs.")
-        shinyjs::disable(selector = tabs_selector)
-      } else if (identical(data_load_status(), "external failed")) {
-        logger::log_debug("srv_teal_module@1 hiding modules tabs.")
-        shinyjs::hide("wrapper")
-      }
-    })
-
     modules_output <- mapply(
       function(id, modules) {
         srv_teal_module(
