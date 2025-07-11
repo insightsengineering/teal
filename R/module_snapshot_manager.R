@@ -87,11 +87,10 @@ NULL
 #' @rdname module_snapshot_manager
 ui_snapshot_manager_panel <- function(id) {
   ns <- NS(id)
-  tags$button(
+  wunder_buttons(
     id = ns("show_snapshot_manager"),
-    class = "btn action-button wunder_bar_button",
-    title = "View snapshot manager",
-    suppressMessages(icon("fas fa-camera"))
+    label = "Snapshot Manager",
+    icon = "camera-fill"
   )
 }
 

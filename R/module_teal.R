@@ -69,13 +69,32 @@ ui_teal <- function(id, modules) {
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shiny_busy_message_panel,
-    tags$div(
-      id = ns("options_buttons"),
-      style = "position: absolute; right: 10px;",
-      ui_bookmark_panel(ns("bookmark_manager"), modules),
-      ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
-      ui_filter_manager_panel(ns("filter_manager_panel"))
-    ),
+    # tags$div(
+    #   id = ns("options_buttons"),
+    #   # style = "position: absolute; right: 10px;",
+    #   tags$span(
+    #     class = "dropdown nav-item-custom",
+    #     onmouseover = "initNavigationMouseOver.call(this)",
+    #     onmouseout = "initNavigationMouseOut.call(this)",
+    #     # actionLink(ns("show_reporter_menu"), bsicons::bs_icon("file-earmark-text-fill", size = "2em")),
+    #     tags$a(
+    #       class = "active",
+    #       role = "button",
+    #       style = "text-decoration: none; border-bottom-color: var(--bs-primary, #0d6efd);",
+    #       "Report"
+    #     ),
+    #     tags$div(
+    #       class = "dropdown-menu",
+    #       style = "padding: 20px;",
+    #       download_report_button_ui(ns("download_report")),
+    #       report_load_ui(ns("load_report")),
+    #       actionButton(ns("open_reporter_ui"), "Preview report", icon = icon("file-lines"))
+    #     )
+    #   ),
+    #   ui_bookmark_panel(ns("bookmark_manager"), modules),
+    #   ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
+    #   ui_filter_manager_panel(ns("filter_manager_panel"))
+    # ),
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
@@ -102,6 +121,35 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
+
+    insertUI(
+      selector = ".teal-modules-wrapper .nav-item-custom",
+      where = "afterEnd",
+      tagList(
+        tags$span(
+          class = "dropdown nav-item-custom",
+          onmouseover = "initNavigationMouseOver.call(this)",
+          onmouseout = "initNavigationMouseOut.call(this)",
+          # actionLink(session$ns("show_reporter_menu"), bsicons::bs_icon("file-earmark-text-fill", size = "2em")),
+          wunder_buttons(
+            id = session$ns("show_reporter_menu"),
+            label = "Report",
+            icon = "file-text-fill",
+            add_dropdown = TRUE
+          ),
+          tags$div(
+            class = "dropdown-menu",
+            style = "padding: 20px;",
+            teal.reporter::download_report_button_ui(session$ns("download_report")),
+            teal.reporter::report_load_ui(session$ns("load_report")),
+            actionButton(session$ns("open_reporter_ui"), "Preview report", icon = icon("file-lines"))
+          )
+        ),
+        ui_bookmark_panel(session$ns("bookmark_manager"), modules),
+        ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
+        ui_filter_manager_panel(session$ns("filter_manager_panel"))
+      ),
+    )
 
 
     # set timezone in shiny app
@@ -172,7 +220,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = ".teal-modules-wrapper .nav-item-custom",
         where = "beforeBegin",
-        actionButton(session$ns("open_teal_data_module_ui"), NULL, icon = icon("database"))
+        wunder_buttons(
+          id = session$ns("open_teal_data_module_ui"),
+          label = "Load Data",
+          icon = "database-fill"
+        )
       )
       observeEvent(input$open_teal_data_module_ui, ignoreInit = TRUE, ignoreNULL = FALSE, {
         showModal(
@@ -220,6 +272,23 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+    teal.reporter::report_load_srv("load_report", reporter)
+    teal.reporter::download_report_button_srv("download_report", reporter)
+    observeEvent(input$open_reporter_ui, {
+      showModal(
+        div(
+          class = "teal teal-data-module-popup",
+          modalDialog(
+            id = session$ns("teal_data_module_ui"),
+            size = "xl",
+            teal.reporter::reporter_previewer_ui(session$ns("reporter")),
+            easyClose = TRUE
+          )
+        )
+      )
+    })
+    setBookmarkExclude(c("open_reporter_ui", "teal_data_module_ui"))
+    teal.reporter::reporter_previewer_srv("reporter", reporter)
     module_labels <- unlist(modules_slot(modules, "label"), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
     modules_output <- srv_teal_modules_nav(

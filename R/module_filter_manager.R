@@ -54,11 +54,10 @@ NULL
 #' @rdname module_filter_manager
 ui_filter_manager_panel <- function(id) {
   ns <- NS(id)
-  tags$button(
+  wunder_buttons(
     id = ns("show_filter_manager"),
-    class = "btn action-button wunder_bar_button",
-    title = "View filter mapping",
-    suppressMessages(icon("fas fa-grip"))
+    label = "Filter Manager",
+    icon = "funnel-fill"
   )
 }
 

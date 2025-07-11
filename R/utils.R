@@ -491,3 +491,22 @@ pluralize <- function(x, singular, plural = NULL) {
     }
   }
 }
+
+
+#' @keywords internal
+wunder_buttons <- function(id, label, icon, add_dropdown = FALSE) {
+  tags$span(
+    class = "teal wunder-buttons",
+    tags$a(
+      id = id,
+      class = "action-button",
+      role = "button",
+      style = "text-decoration: none;",
+      bsicons::bs_icon(icon, class = "text-primary"),
+      label,
+      if (add_dropdown) {
+        bsicons::bs_icon("chevron-down", class = "text-primary dropdown-arrow")
+      }
+    )
+  )
+}

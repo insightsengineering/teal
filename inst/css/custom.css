@@ -75,3 +75,32 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
     --bs-modal-width: 90vw;
   }
 }
+
+.teal.wunder-buttons {
+  border: 2px solid transparent;
+  /* border: solid 1px var(--bs-primary); */
+  margin: 0.25em;
+  cursor: pointer;
+}
+
+.teal.wunder-buttons .dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.teal.wunder-buttons:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.teal.wunder-buttons:hover {
+  /* background: var(--bs-primary-border-subtle); */
+  /* border-bottom: 2px solid var(--bs-primary); */
+  border-bottom: 2px solid var(--bs-primary-border-subtle);
+}
+
+.asdf.qwerty {
+  /* border: solid 1px var(--bs-primary); */
+}
+.asdf.qwerty:hover {
+  /* border-bottom: 1px solid var(--bs-primary-border-subtle); */
+  /* background: var(--bs-primary-border-subtle); */
+}

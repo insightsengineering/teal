@@ -25,11 +25,49 @@
 }
 
 .teal-modules-wrapper .dropdown.nav-item-custom {
-  border-bottom: 2px solid #4dabf7;
+  padding: 0.25rem;
+}
+
+.dropdown.nav-item-custom:not(.dropdown-menu) {
+  cursor: pointer;
+}
+
+.dropdown.nav-item-custom > .dropdown-menu {
+  cursor: auto;
+}
+
+.dropdown.nav-item-custom:hover > .dropdown-menu {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+.dropdown.nav-item-custom:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown.nav-item-custom::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: transparent;
+  z-index: 1045;
+}
+
+.dropdown.nav-item-custom {
+  position: relative;
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
 }
 
 .nav-item-custom > .dropdown-menu {
   opacity: 0;
+  margin-top: 5px;
   transform: scale(0.8, 0.8);
   transform-origin: top left;
   transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1),
