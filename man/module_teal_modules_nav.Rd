@@ -144,7 +144,7 @@ To achieve this, the buttons need to be placed inside a \verb{<ul class = "nav s
 \itemize{
 \item \code{href = "#<teal_module container id>"} links button with the container of the specific \code{teal_module}
 \item \code{data-bs-toggle = "tab"} tells Bootstrap to hide or show \code{teal_module}'s content
-\item \code{data-value = "<teal_module$id>"} This attribute is taken by shiny from all buttons of class "active"
+\item \code{data-value = "<teal_module$path>"} This attribute is taken by shiny from all buttons of class "active"
 and used as \code{input$active_module_id} in the namespace of \code{\link[=srv_teal_modules_nav]{srv_teal_modules_nav()}}.
 }
 \enumerate{
