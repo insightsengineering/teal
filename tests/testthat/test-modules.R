@@ -122,7 +122,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_s3_class(test_module, "teal_module")
   testthat::expect_named(
     test_module,
-    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators")
+    c("label", "server", "ui", "datanames", "server_args", "ui_args", "transformators", "path")
   )
   testthat::expect_identical(test_module$label, "aaa1")
   testthat::expect_identical(test_module$server, call_module_server_fun)
@@ -130,6 +130,7 @@ testthat::test_that("module() returns list of class 'teal_module' containing inp
   testthat::expect_identical(test_module$datanames, "all")
   testthat::expect_identical(test_module$server_args, NULL)
   testthat::expect_identical(test_module$ui_args, NULL)
+  testthat::expect_identical(test_module$path, "aaa1")
 })
 
 testthat::test_that("modules gives error if no arguments other than label are used", {
@@ -149,7 +150,7 @@ testthat::test_that("modules requires label argument to be a string ", {
   testthat::expect_error(modules(label = NULL, test_module), "Assertion on 'label' failed.+'NULL'")
   testthat::expect_error(
     modules(label = c("label", "label"), test_module),
-    "Assertion on 'label' failed: Must have length 1"
+    "Assertion on 'label' failed: Must have length <= 1"
   )
 })
 
@@ -213,7 +214,7 @@ testthat::test_that("modules returns teal_modules object with label and children
   testthat::expect_named(out, c("label", "children"))
 })
 
-testthat::test_that("modules returns children as list with list named after label attributes", {
+testthat::test_that("modules returns children as list and changes their path to match group they are grouped by", {
   test_module <- module(
     label = "module",
     server = module_server_fun,
@@ -221,10 +222,10 @@ testthat::test_that("modules returns children as list with list named after labe
     datanames = ""
   )
   test_modules <- modules(label = "modules", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)$children
-  testthat::expect_named(out, c("module", "modules"))
-  testthat::expect_identical(out$module, test_module)
-  testthat::expect_identical(out$modules, test_modules)
+  out <- modules(label = "tabs", test_module, test_modules)
+  test_module$path <- "tabs / module"
+  test_modules$children[[1]]$path <- "tabs / modules / module"
+  testthat::expect_identical(out$children, list(test_module, test_modules))
 })
 
 
@@ -242,139 +243,16 @@ testthat::test_that("modules returns useful error message if label argument not 
 })
 
 
-testthat::test_that("modules returns children as list with unique names if labels are duplicated", {
+testthat::test_that("modules returns children as list with unique path if labels are duplicated", {
   test_module <- module(
     label = "module",
     server = module_server_fun,
     ui = ui_fun1,
     datanames = ""
   )
-  test_modules <- modules(label = "module", test_module)
-  out <- modules(label = "tabs", test_module, test_modules)$children
-  testthat::expect_named(out, c("module", "module_1"))
-  testthat::expect_identical(out$module, test_module)
-  testthat::expect_identical(out$module_1, test_modules)
+  out <- modules(label = "modules", test_module, test_module)
+  testthat::expect_identical(sapply(out$children, `[[`, "path"), c("modules / module", "modules / module - 1"))
 })
-
-
-testthat::test_that("modules_depth accepts depth as integer", {
-  testthat::expect_no_error(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      ),
-      depth = 3L
-    )
-  )
-
-  testthat::expect_error(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      ),
-      depth = "1"
-    ),
-    "Assertion on 'depth' failed.+'character'"
-  )
-})
-
-testthat::test_that("modules_depth returns depth=0 by default", {
-  testthat::expect_identical(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      )
-    ),
-    0L
-  )
-})
-
-testthat::test_that("modules_depth accepts modules to be teal_module or teal_modules", {
-  testthat::expect_no_error(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      )
-    )
-  )
-  testthat::expect_no_error(
-    modules_depth(
-      modules(
-        label = "tabs",
-        module(
-          label = "label",
-          server = module_server_fun,
-          ui = ui_fun1,
-          datanames = ""
-        )
-      )
-    )
-  )
-})
-
-testthat::test_that("modules_depth returns depth same as input for teal_module", {
-  testthat::expect_identical(
-    modules_depth(
-      module(
-        label = "label",
-        server = module_server_fun,
-        ui = ui_fun1,
-        datanames = ""
-      )
-    ),
-    0L
-  )
-})
-
-testthat::test_that("modules_depth increases depth by 1 for each teal_modules", {
-  testthat::expect_identical(
-    modules_depth(
-      modules(
-        label = "tabs",
-        module(
-          label = "label",
-          server = module_server_fun,
-          ui = ui_fun1,
-          datanames = ""
-        )
-      ),
-      depth = 1L
-    ),
-    2L
-  )
-
-  testthat::expect_identical(
-    modules_depth(
-      modules(
-        label = "tabs",
-        modules(
-          label = "tabs",
-          module(
-            label = "label",
-            server = module_server_fun,
-            ui = ui_fun1,
-            datanames = ""
-          )
-        )
-      ),
-      depth = 1L
-    ),
-    3L
-  )
-})
-
 
 # is_arg_used -----
 get_srv_and_ui <- function() {
@@ -435,69 +313,6 @@ testthat::test_that("is_arg_used accepts `arg` to be a string only", {
   testthat::expect_error(is_arg_used(function(x) NULL, 1))
   testthat::expect_error(is_arg_used(function(x) NULL, NULL))
 })
-
-
-# ---- append_module
-testthat::test_that("append_module throws error when modules is not inherited from teal_modules", {
-  testthat::expect_error(
-    append_module(module(), module()),
-    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
-  )
-
-  testthat::expect_error(
-    append_module(module(), list(module())),
-    "Assertion on 'modules' failed: Must inherit from class 'teal_modules'"
-  )
-})
-
-testthat::test_that("append_module throws error is module is not inherited from teal_module", {
-  mod <- module()
-  mods <- modules(label = "A", mod)
-
-  testthat::expect_error(
-    append_module(mods, mods),
-    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
-  )
-
-  testthat::expect_error(
-    append_module(mods, list(mod)),
-    "Assertion on 'module' failed: Must inherit from class 'teal_module'"
-  )
-})
-
-testthat::test_that("append_module appends a module to children of not nested teal_modules", {
-  mod <- module(label = "a")
-  mod2 <- module(label = "b")
-  mods <- modules(label = "c", mod, mod2)
-  mod3 <- module(label = "d")
-
-  appended_mods <- append_module(mods, mod3)
-  testthat::expect_equal(appended_mods$children, list(a = mod, b = mod2, d = mod3))
-})
-
-
-testthat::test_that("append_module appends a module to children of nested teal_modules", {
-  mod <- module(label = "a")
-  mod2 <- module(label = "b")
-  mods <- modules(label = "c", mod)
-  mods2 <- modules(label = "e", mods, mod2)
-  mod3 <- module(label = "d")
-
-  appended_mods <- append_module(mods2, mod3)
-  testthat::expect_equal(appended_mods$children, list(c = mods, b = mod2, d = mod3))
-})
-
-testthat::test_that("append_module produces teal_modules with unique named children", {
-  mod <- module(label = "a")
-  mod2 <- module(label = "c")
-  mods <- modules(label = "c", mod, mod2)
-  mod3 <- module(label = "c")
-
-  appended_mods <- append_module(mods, mod3)
-  mod_names <- names(appended_mods$children)
-  testthat::expect_equal(mod_names, unique(mod_names))
-})
-
 
 # format ----------------------------------------------------------------------------------------------------------
 

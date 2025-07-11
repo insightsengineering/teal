@@ -26,14 +26,22 @@ show_rcode_modal <- function(title = NULL, rcode, session = getDefaultReactiveDo
   showModal(modalDialog(
     tagList(
       tags$div(
-        actionButton(ns("copyRCode"), "Copy to Clipboard", `data-clipboard-target` = paste0("#", ns("r_code"))),
+        actionButton(
+          ns("copyRCode"),
+          "Copy to Clipboard",
+          onclick = sprintf("copyToClipboard('%s')", ns("r_code"))
+        ),
         modalButton("Dismiss")
       ),
       tags$div(tags$pre(id = ns("r_code"), rcode)),
     ),
     title = title,
     footer = tagList(
-      actionButton(ns("copyRCode"), "Copy to Clipboard", `data-clipboard-target` = paste0("#", ns("r_code"))),
+      actionButton(
+        ns("copyRCode"),
+        "Copy to Clipboard",
+        onclick = sprintf("copyToClipboard('%s')", ns("r_code"))
+      ),
       modalButton("Dismiss")
     ),
     size = "l",
