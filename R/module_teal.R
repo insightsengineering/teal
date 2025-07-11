@@ -145,6 +145,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
             actionButton(session$ns("open_reporter_ui"), "Preview report", icon = icon("file-lines"))
           )
         ),
+        tags$span(style = "margin-left: auto;"),
         ui_bookmark_panel(session$ns("bookmark_manager"), modules),
         ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
         ui_filter_manager_panel(session$ns("filter_manager_panel"))
@@ -220,7 +221,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = ".teal-modules-wrapper .nav-item-custom",
         where = "beforeBegin",
-        wunder_buttons(
+        expand_buttons(
           id = session$ns("open_teal_data_module_ui"),
           label = "Load Data",
           icon = "database-fill"

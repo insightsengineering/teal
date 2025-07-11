@@ -78,7 +78,6 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 
 .teal.wunder-buttons {
   border: 2px solid transparent;
-  /* border: solid 1px var(--bs-primary); */
   margin: 0.25em;
   cursor: pointer;
 }
@@ -92,15 +91,37 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 }
 
 .teal.wunder-buttons:hover {
-  /* background: var(--bs-primary-border-subtle); */
-  /* border-bottom: 2px solid var(--bs-primary); */
   border-bottom: 2px solid var(--bs-primary-border-subtle);
 }
 
-.asdf.qwerty {
-  /* border: solid 1px var(--bs-primary); */
+.teal.expand-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 40px;
+  transition: max-width 0.3s ease;
 }
-.asdf.qwerty:hover {
-  /* border-bottom: 1px solid var(--bs-primary-border-subtle); */
-  /* background: var(--bs-primary-border-subtle); */
+
+.teal.expand-button a {
+  border: 2px solid transparent;
+  padding: 0.5rem;
+}
+
+.teal.expand-button .label {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.teal.expand-button:hover {
+  max-width: 200px;
+}
+
+.teal.expand-button:hover a {
+  border-bottom: 2px solid var(--bs-primary-border-subtle);
+}
+
+.teal.expand-button:hover .label {
+  opacity: 1;
 }

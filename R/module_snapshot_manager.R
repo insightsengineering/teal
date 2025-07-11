@@ -87,7 +87,7 @@ NULL
 #' @rdname module_snapshot_manager
 ui_snapshot_manager_panel <- function(id) {
   ns <- NS(id)
-  wunder_buttons(
+  expand_buttons(
     id = ns("show_snapshot_manager"),
     label = "Snapshot Manager",
     icon = "camera-fill"

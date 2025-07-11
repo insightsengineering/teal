@@ -51,7 +51,7 @@ ui_bookmark_panel <- function(id, modules) {
   shinyOptions(bookmarkStore = bookmark_option)
 
   if (!all(is_unbookmarkable) && identical(bookmark_option, "server")) {
-    wunder_buttons(
+    expand_buttons(
       id = ns("do_bookmark"),
       label = "Bookmark",
       icon = "bookmark-fill"
