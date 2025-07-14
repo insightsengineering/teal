@@ -83,23 +83,20 @@ ui_teal_modules_nav <- function(id, modules) {
       version = utils::packageVersion("teal"),
       package = "teal",
       src = "module-navigation",
-      stylesheet = "module-navigation.css",
-      script = "module-navigation.js"
+      stylesheet = "module-navigation.css"
     ),
     tags$ul(
       id = ns("active_module_id"),
-      style = "align-items: center;",
+      style = "align-items: center; gap: 1em; font-size: large;",
       class = "nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
       `data-tabsetid` = "test",
       tags$div(
         class = "dropdown nav-item-custom",
-        onmouseover = "initNavigationMouseOver.call(this)",
-        onmouseout = "initNavigationMouseOut.call(this)",
-        tags$a(
-          class = "dropdown-toggle active",
-          role = "button",
-          style = "text-decoration: none; border-bottom-color: #0d6efd;",
-          "Modules"
+        wunder_buttons(
+          id = NULL,
+          label = "Module",
+          icon = "diagram-3-fill",
+          add_dropdown = TRUE
         ),
         tags$div(
           class = "dropdown-menu",

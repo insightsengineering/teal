@@ -491,3 +491,37 @@ pluralize <- function(x, singular, plural = NULL) {
     }
   }
 }
+
+
+#' @keywords internal
+wunder_buttons <- function(id, label, icon, add_dropdown = FALSE) {
+  tags$span(
+    class = "teal wunder-buttons",
+    tags$a(
+      id = id,
+      class = "action-button",
+      role = "button",
+      style = "text-decoration: none;",
+      bsicons::bs_icon(icon, class = "text-primary"),
+      label,
+      if (add_dropdown) {
+        bsicons::bs_icon("chevron-down", class = "text-primary dropdown-arrow")
+      }
+    )
+  )
+}
+
+#' @keywords internal
+expand_buttons <- function(id, label, icon) {
+  tags$span(
+    class = "teal expand-button",
+    tags$a(
+      id = id,
+      class = "action-button expand-button",
+      role = "button",
+      style = "text-decoration: none;",
+      tags$span(class = "icon", bsicons::bs_icon(icon, class = "text-primary")),
+      tags$span(class = "label", label)
+    )
+  )
+}

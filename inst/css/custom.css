@@ -75,3 +75,53 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
     --bs-modal-width: 90vw;
   }
 }
+
+.teal.wunder-buttons {
+  border: 2px solid transparent;
+  margin: 0.25em;
+  cursor: pointer;
+}
+
+.teal.wunder-buttons .dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.teal.wunder-buttons:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.teal.wunder-buttons:hover {
+  border-bottom: 2px solid var(--bs-primary-border-subtle);
+}
+
+.teal.expand-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 40px;
+  transition: max-width 0.3s ease;
+}
+
+.teal.expand-button a {
+  border: 2px solid transparent;
+  padding: 0.5rem;
+}
+
+.teal.expand-button .label {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.teal.expand-button:hover {
+  max-width: 200px;
+}
+
+.teal.expand-button:hover a {
+  border-bottom: 2px solid var(--bs-primary-border-subtle);
+}
+
+.teal.expand-button:hover .label {
+  opacity: 1;
+}
