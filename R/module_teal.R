@@ -51,7 +51,6 @@ ui_teal <- function(id, modules) {
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
   modules <- drop_module(modules, "teal_module_landing")
-  modules <- append_reporter_module(modules)
 
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
@@ -69,32 +68,6 @@ ui_teal <- function(id, modules) {
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shiny_busy_message_panel,
-    # tags$div(
-    #   id = ns("options_buttons"),
-    #   # style = "position: absolute; right: 10px;",
-    #   tags$span(
-    #     class = "dropdown nav-item-custom",
-    #     onmouseover = "initNavigationMouseOver.call(this)",
-    #     onmouseout = "initNavigationMouseOut.call(this)",
-    #     # actionLink(ns("show_reporter_menu"), bsicons::bs_icon("file-earmark-text-fill", size = "2em")),
-    #     tags$a(
-    #       class = "active",
-    #       role = "button",
-    #       style = "text-decoration: none; border-bottom-color: var(--bs-primary, #0d6efd);",
-    #       "Report"
-    #     ),
-    #     tags$div(
-    #       class = "dropdown-menu",
-    #       style = "padding: 20px;",
-    #       download_report_button_ui(ns("download_report")),
-    #       report_load_ui(ns("load_report")),
-    #       actionButton(ns("open_reporter_ui"), "Preview report", icon = icon("file-lines"))
-    #     )
-    #   ),
-    #   ui_bookmark_panel(ns("bookmark_manager"), modules),
-    #   ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
-    #   ui_filter_manager_panel(ns("filter_manager_panel"))
-    # ),
     tags$div(
       id = ns("tabpanel_wrapper"),
       class = "teal-body",
@@ -113,7 +86,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(filter, "teal_slices")
 
   modules <- drop_module(modules, "teal_module_landing")
-  modules <- append_reporter_module(modules)
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
@@ -128,15 +100,14 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       tagList(
         tags$span(
           class = "dropdown nav-item-custom",
-          onmouseover = "initNavigationMouseOver.call(this)",
-          onmouseout = "initNavigationMouseOut.call(this)",
-          # actionLink(session$ns("show_reporter_menu"), bsicons::bs_icon("file-earmark-text-fill", size = "2em")),
-          wunder_buttons(
-            id = session$ns("show_reporter_menu"),
-            label = "Report",
-            icon = "file-text-fill",
-            add_dropdown = TRUE
-          ),
+          if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
+            wunder_buttons(
+              id = session$ns("show_reporter_menu"),
+              label = "Report",
+              icon = "file-text-fill",
+              add_dropdown = TRUE
+            )
+          },
           tags$div(
             class = "dropdown-menu",
             style = "padding: 20px;",

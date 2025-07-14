@@ -83,8 +83,7 @@ ui_teal_modules_nav <- function(id, modules) {
       version = utils::packageVersion("teal"),
       package = "teal",
       src = "module-navigation",
-      stylesheet = "module-navigation.css",
-      script = "module-navigation.js"
+      stylesheet = "module-navigation.css"
     ),
     tags$ul(
       id = ns("active_module_id"),
@@ -93,8 +92,6 @@ ui_teal_modules_nav <- function(id, modules) {
       `data-tabsetid` = "test",
       tags$div(
         class = "dropdown nav-item-custom",
-        onmouseover = "initNavigationMouseOver.call(this)",
-        onmouseout = "initNavigationMouseOut.call(this)",
         wunder_buttons(
           id = NULL,
           label = "Module",

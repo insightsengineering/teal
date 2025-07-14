@@ -168,7 +168,3 @@ ul.teal-modules-tree > li > ul > li:last-child:before {
 .teal-modules-tree li:has(a.active)::before {
   border-color: var(--bs-secondary, #6c757d);
 }
-
-.teal-modules-tree ul > li:has(a.active):last-child::before {
-  border-left: 1px solid transparent;
-}

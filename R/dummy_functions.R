@@ -39,7 +39,6 @@ example_module <- function(label = "example teal module",
     server = function(id, data, decorators) {
       checkmate::assert_class(isolate(data()), "teal_data")
       moduleServer(id, function(input, output, session) {
-        print("server is executed")
         datanames_rv <- reactive(names(req(data())))
         observeEvent(datanames_rv(), {
           selected <- input$dataname
