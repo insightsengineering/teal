@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.16.0.9009
-Date: 2025-06-24
+Version: 0.16.0.9012
+Date: 2025-07-11
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -15,14 +15,15 @@ Authors@R: c(
     person("Vedha", "Viyash", , "vedha.viyash@roche.com", role = "aut"),
     person("Marcin", "Kosinski", , "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
-    person("Chendi", "Liao", , "chendi.liao@roche.com", role = "rev"),
     person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
+    person("Nina", "Qi", , "qi.ting@gene.com", role = "rev"),
     person("Nikolas", "Burkoff", role = "aut"),
     person("Mahmoud", "Hallal", role = "aut"),
     person("Maciej", "Nasinski", role = "aut"),
     person("Konrad", "Pagacz", role = "aut"),
     person("Junlue", "Zhao", role = "aut"),
     person("Tadeusz", "Lewandowski", role = "aut"),
+    person("Chendi", "Liao", role = "rev"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
@@ -53,7 +54,7 @@ Imports:
     shinyjs,
     stats,
     teal.code (>= 0.6.1),
-    teal.logger (>= 0.3.2.9001),
+    teal.logger (>= 0.4.0),
     teal.reporter (>= 0.4.0.9004),
     teal.widgets (>= 0.4.3.9001),
     tools,
@@ -79,7 +80,6 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.logger@main,
     insightsengineering/teal.reporter@main,
     insightsengineering/teal.slice@main,
     insightsengineering/teal.widgets@main

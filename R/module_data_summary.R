@@ -12,7 +12,7 @@
 #' Module includes also "Show/Hide unsupported" button to toggle rows of the summary table
 #' containing datasets where number of observations are not calculated.
 #'
-#' @inheritParams module_teal_module
+#' @inheritParams module_teal_modules_nav
 #'
 #' @name module_data_summary
 #' @rdname module_data_summary

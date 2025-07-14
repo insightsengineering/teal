@@ -50,33 +50,25 @@ ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
-
+  modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
 
-  # show busy icon when `shiny` session is busy computing stuff
-  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
     tags$div(
       icon("arrows-rotate", class = "fa-spin", prefer_type = "solid"),
       "Computing ...",
       style = "position: fixed; bottom: 0; right: 0;
-      width: 140px; margin: 15px; padding: 5px 0 5px 10px;
-      text-align: left; font-weight: bold; font-size: 100%;
-      color: #ffffff; background-color: #347ab7; z-index: 105;"
+          width: 140px; margin: 15px; padding: 5px 0 5px 10px;
+          text-align: left; font-weight: bold; font-size: 100%;
+          color: #ffffff; background-color: #347ab7; z-index: 105;"
     )
   )
-
   bslib::page_fluid(
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shiny_busy_message_panel,
-    tags$div(
-      id = ns("tabpanel_wrapper"),
-      class = "teal-body",
-      ui_teal_module(id = ns("teal_modules"), modules = modules)
-    ),
     tags$div(
       id = ns("options_buttons"),
       style = "position: absolute; right: 10px;",
@@ -84,18 +76,10 @@ ui_teal <- function(id, modules) {
       ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
       ui_filter_manager_panel(ns("filter_manager_panel"))
     ),
-    tags$script(
-      HTML(
-        sprintf(
-          "
-            $(document).ready(function() {
-              $('#%s').appendTo('#%s');
-            });
-          ",
-          ns("options_buttons"),
-          ns("teal_modules-active_tab")
-        )
-      )
+    tags$div(
+      id = ns("tabpanel_wrapper"),
+      class = "teal-body",
+      ui_teal_modules_nav(id = ns("teal_modules"), modules = modules)
     ),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
   )
@@ -109,6 +93,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
+  modules <- drop_module(modules, "teal_module_landing")
   modules <- append_reporter_module(modules)
 
   moduleServer(id, function(input, output, session) {
@@ -118,8 +103,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    # `JavaScript` code
-    run_js_files(files = "init.js")
 
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
@@ -165,8 +148,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     data_load_status <- reactive({
       if (inherits(data_handled(), "teal_data")) {
+        shinyjs::enable(id = "close_teal_data_module_modal")
         "ok"
       } else if (inherits(data, "teal_data_module")) {
+        shinyjs::disable(id = "close_teal_data_module_modal")
         "teal_data_module failed"
       } else {
         "external failed"
@@ -182,28 +167,47 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
 
-
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_modules-active_tab"))
-      bslib::nav_insert(
-        id = "teal_modules-active_tab",
-        position = "before",
-        select = TRUE,
-        bslib::nav_panel(
-          title = icon("fas fa-database"),
-          value = "teal_data_module",
-          tags$div(
-            ui_init_data(session$ns("data")),
-            validate_ui
+      insertUI(
+        selector = ".teal-modules-wrapper .nav-item-custom",
+        where = "beforeBegin",
+        actionButton(session$ns("open_teal_data_module_ui"), NULL, icon = icon("database"))
+      )
+      observeEvent(input$open_teal_data_module_ui, ignoreInit = TRUE, ignoreNULL = FALSE, {
+        showModal(
+          div(
+            class = "teal teal-data-module-popup",
+            modalDialog(
+              id = session$ns("teal_data_module_ui"),
+              size = "xl",
+              tags$div(
+                ui_init_data(session$ns("data")),
+                validate_ui
+              ),
+              easyClose = FALSE,
+              footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+            )
           )
         )
-      )
+        if (data_load_status() == "ok") {
+          shinyjs::enable(id = "close_teal_data_module_modal")
+        } else {
+          shinyjs::disable(id = "close_teal_data_module_modal")
+        }
+      })
 
       if (attr(data, "once")) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
-          removeTab("teal_modules-active_tab", target = "teal_data_module")
+          shinyjs::runjs(
+            sprintf(
+              "document.querySelector('#%s button').click();",
+              session$ns("close_teal_data_module_modal")
+            )
+          )
+          removeUI(sprintf("#%s", session$ns("open_teal_data_module_ui")))
         })
       }
     } else {
@@ -216,9 +220,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
-    module_labels <- unlist(module_labels(modules), use.names = FALSE)
+    module_labels <- unlist(modules_slot(modules, "label"), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
-    modules_output <- srv_teal_module(
+    modules_output <- srv_teal_modules_nav(
       id = "teal_modules",
       data = data_signatured,
       datasets = datasets_rv,
