@@ -2,7 +2,6 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: module content is updated when data is filtered in filter panel", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -30,7 +29,6 @@ testthat::test_that("e2e: module content is updated when data is filtered in fil
 })
 
 testthat::test_that("e2e: filtering a module-specific filter is reflected in other shared module", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -56,21 +54,15 @@ testthat::test_that("e2e: filtering a module-specific filter is reflected in oth
   )
 
   app$navigate_teal_tab("Module_2")
-
-  app$set_active_filter_selection("iris", "Species", c("setosa"))
+  app$set_active_filter_selection("iris", "Species", "setosa")
 
   app$navigate_teal_tab("Module_1")
-
-  testthat::expect_equal(
-    app$get_active_data_filters("iris")$Species,
-    c("setosa")
-  )
+  testthat::expect_equal(app$get_active_data_filters("iris")$Species, "setosa")
 
   app$stop()
 })
 
-testthat::test_that("e2e: filtering a module-specific filter is not refected in other unshared modules", {
-  testthat::skip("chromium")
+testthat::test_that("e2e: filtering a module-specific filter is not reflected in other unshared modules", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -93,11 +85,9 @@ testthat::test_that("e2e: filtering a module-specific filter is not refected in 
   testthat::expect_setequal(app$get_active_data_filters("mtcars")$cyl, c("4", "6"))
 
   app$navigate_teal_tab("Module_2")
-
   app$set_active_filter_selection("mtcars", "cyl", c("4"))
 
   app$navigate_teal_tab("Module_1")
-
   testthat::expect_setequal(app$get_active_data_filters("mtcars")$cyl, c("4", "6"))
 
   app$stop()
