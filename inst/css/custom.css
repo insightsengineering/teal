@@ -76,24 +76,6 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   }
 }
 
-.teal.wunder-buttons {
-  border: 2px solid transparent;
-  margin: 0.25em;
-  cursor: pointer;
-}
-
-.teal.wunder-buttons .dropdown-arrow {
-  transition: transform 0.3s ease;
-}
-
-.teal.wunder-buttons:hover .dropdown-arrow {
-  transform: rotate(180deg);
-}
-
-.teal.wunder-buttons:hover {
-  border-bottom: 2px solid var(--bs-primary-border-subtle);
-}
-
 .teal.expand-button {
   display: inline-flex;
   align-items: center;

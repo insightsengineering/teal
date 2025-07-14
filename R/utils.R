@@ -494,9 +494,9 @@ pluralize <- function(x, singular, plural = NULL) {
 
 
 #' @keywords internal
-wunder_buttons <- function(id, label, icon, add_dropdown = FALSE) {
+.dropdown_button <- function(id, label, icon, add_dropdown = FALSE) {
   tags$span(
-    class = "teal wunder-buttons",
+    class = "teal dropdown-button",
     tags$a(
       id = id,
       class = "action-button",
@@ -512,12 +512,13 @@ wunder_buttons <- function(id, label, icon, add_dropdown = FALSE) {
 }
 
 #' @keywords internal
-expand_buttons <- function(id, label, icon) {
+.expand_button <- function(id, label, icon) {
   tags$span(
     class = "teal expand-button",
+    
     tags$a(
       id = id,
-      class = "action-button expand-button",
+      class = "action-button",
       role = "button",
       style = "text-decoration: none;",
       tags$span(class = "icon", bsicons::bs_icon(icon, class = "text-primary")),

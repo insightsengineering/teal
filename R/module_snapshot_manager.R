@@ -87,7 +87,7 @@ NULL
 #' @rdname module_snapshot_manager
 ui_snapshot_manager_panel <- function(id) {
   ns <- NS(id)
-  expand_buttons(
+  .expand_button(
     id = ns("show_snapshot_manager"),
     label = "Snapshot Manager",
     icon = "camera-fill"

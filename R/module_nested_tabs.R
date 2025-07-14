@@ -78,13 +78,6 @@ ui_teal_modules_nav <- function(id, modules) {
   tab_content <- ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
   tags$div(
     class = "teal-modules-wrapper",
-    htmltools::htmlDependency(
-      name = "module-navigation",
-      version = utils::packageVersion("teal"),
-      package = "teal",
-      src = "module-navigation",
-      stylesheet = "module-navigation.css"
-    ),
     tags$ul(
       id = ns("active_module_id"),
       style = "align-items: center; gap: 1em; font-size: large;",
@@ -92,7 +85,7 @@ ui_teal_modules_nav <- function(id, modules) {
       `data-tabsetid` = "test",
       tags$div(
         class = "dropdown nav-item-custom",
-        wunder_buttons(
+        .dropdown_button(
           id = NULL,
           label = "Module",
           icon = "diagram-3-fill",
@@ -228,7 +221,7 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
     id = ns("wrapper"),
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
     tagList(
-      .modules_breadcrumb(modules), # todo:
+      .modules_breadcrumb(modules),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(

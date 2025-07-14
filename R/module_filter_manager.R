@@ -54,7 +54,7 @@ NULL
 #' @rdname module_filter_manager
 ui_filter_manager_panel <- function(id) {
   ns <- NS(id)
-  expand_buttons(
+  .expand_button(
     id = ns("show_filter_manager"),
     label = "Filter Manager",
     icon = "funnel-fill"

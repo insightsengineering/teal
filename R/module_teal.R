@@ -67,6 +67,13 @@ ui_teal <- function(id, modules) {
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
+    htmltools::htmlDependency(
+      name = "module-navigation",
+      version = utils::packageVersion("teal"),
+      package = "teal",
+      src = "module-navigation",
+      stylesheet = "module-navigation.css"
+    ),
     shiny_busy_message_panel,
     tags$div(
       id = ns("tabpanel_wrapper"),
@@ -101,7 +108,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         tags$span(
           class = "dropdown nav-item-custom",
           if (is_arg_used(modules, "reporter") && length(extract_module(modules, "teal_module_previewer")) == 0) {
-            wunder_buttons(
+            .dropdown_button(
               id = session$ns("show_reporter_menu"),
               label = "Report",
               icon = "file-text-fill",
@@ -192,7 +199,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = ".teal-modules-wrapper .nav-item-custom",
         where = "beforeBegin",
-        expand_buttons(
+        .expand_button(
           id = session$ns("open_teal_data_module_ui"),
           label = "Load Data",
           icon = "database-fill"
