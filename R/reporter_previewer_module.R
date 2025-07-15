@@ -43,6 +43,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   # This is to prevent another module being labeled "Report previewer".
   class(module) <- c(class(module), "teal_module_previewer")
   module$label <- label
+  module$path <- label
   attr(module, "teal_bookmarkable") <- TRUE
   module
 }

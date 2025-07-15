@@ -2,60 +2,45 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: reporter tab is created when a module has reporter", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
   )
 
-  teal_tabs <- rvest::html_elements(app$get_html_rvest(selector = "#teal-teal_modules-active_tab"), "a")
-  tab_names <- setNames(
-    rvest::html_attr(teal_tabs, "data-value"),
-    rvest::html_text(teal_tabs)
-  )
+  teal_tabs <- rvest::html_elements(app$get_html_rvest(selector = "#teal-teal_modules-active_module_id .dropdown-menu"), "a")
   testthat::expect_identical(
-    tab_names,
-    c("Module with Reporter" = "module_with_reporter", "Report previewer" = "report_previewer")
+    rvest::html_text(teal_tabs),
+    c("Module with Reporter", "Report previewer")
   )
 
   app$stop()
 })
 
 testthat::test_that("e2e: reporter tab is not created when a module has no reporter", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
   teal_tabs <- rvest::html_elements(
-    app$get_html_rvest(selector = "#teal-teal_modules-active_tab"),
+    app$get_html_rvest(selector = "#teal-teal_modules-active_module_id .dropdown-menu"),
     "a"
   )
-  tab_names <- setNames(
-    rvest::html_attr(teal_tabs, "data-value"),
-    rvest::html_text(teal_tabs)
-  )
-
-  testthat::expect_identical(
-    tab_names,
-    c("Example Module" = "example_module")
-  )
+  testthat::expect_identical(rvest::html_text(teal_tabs), "Example Module")
 
   app$stop()
 })
 
 testthat::test_that("e2e: adding a report card in a module adds it in the report previewer tab", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = report_module(label = "Module with Reporter")
   )
 
+  # Add new card with label and comment
   app$click(NS(app$active_module_ns(), "reporter-add_report_card_simple-add_report_card_button"))
-
   app$set_input(
     NS(app$active_module_ns(), "reporter-add_report_card_simple-label"),
     "Card name"
@@ -64,30 +49,20 @@ testthat::test_that("e2e: adding a report card in a module adds it in the report
     NS(app$active_module_ns(), "reporter-add_report_card_simple-comment"),
     "Card comment"
   )
-
   app$click(NS(app$active_module_ns(), "reporter-add_report_card_simple-add_card_ok"))
 
+  # Check whether card was added
   app$navigate_teal_tab("Report previewer")
-
   accordian_selector <- sprintf("#%s-pcards .accordion-toggle", app$active_module_ns())
   app$click(selector = accordian_selector)
 
-
-  testthat::expect_match(
-    app$get_text(selector = accordian_selector),
-    "Card 1: Card name"
-  )
-
-  testthat::expect_match(
-    app$get_text(selector = "#card1 pre"),
-    "Card comment"
-  )
+  testthat::expect_match(app$get_text(selector = accordian_selector), "Card 1: Card name")
+  testthat::expect_match(app$get_text(selector = "#card1 pre"), "Card comment")
 
   app$stop()
 })
 
 testthat::test_that("e2e: reporter_previewer_module do not show data_summary nor filter_panel", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- teal:::TealAppDriver$new(
     data = simple_teal_data(),
@@ -97,7 +72,6 @@ testthat::test_that("e2e: reporter_previewer_module do not show data_summary nor
   app$navigate_teal_tab("Report previewer")
 
   testthat::expect_null(app$is_visible(app$active_data_summary_element("table")))
-
   testthat::expect_null(app$get_active_filter_vars())
 
   app$stop()
