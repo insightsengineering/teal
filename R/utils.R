@@ -515,7 +515,6 @@ pluralize <- function(x, singular, plural = NULL) {
 .expand_button <- function(id, label, icon) {
   tags$span(
     class = "teal expand-button",
-    
     tags$a(
       id = id,
       class = "action-button",
