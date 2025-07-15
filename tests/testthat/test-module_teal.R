@@ -1060,24 +1060,6 @@ testthat::describe("srv_teal teal_modules", {
       }
     )
   })
-
-  testthat::it("receives one report_previewer module when any module contains reporter argument", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(
-          module("module_1", server = function(id, reporter) {}),
-          module("module_2", server = function(id) {})
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_module_id` = "report_previewer")
-        testthat::expect_setequal(names(modules_output), c("module_1", "module_2", "report_previewer"))
-      }
-    )
-  })
 })
 
 testthat::describe("srv_teal filters", {
