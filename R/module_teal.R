@@ -67,6 +67,7 @@ ui_teal <- function(id, modules) {
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
+    shinyjs::useShinyjs(),
     htmltools::htmlDependency(
       name = "module-navigation",
       version = utils::packageVersion("teal"),
@@ -116,11 +117,15 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
             )
           },
           tags$div(
-            class = "dropdown-menu",
-            style = "padding: 20px;",
-            teal.reporter::download_report_button_ui(session$ns("download_report")),
+            class = "dropdown-menu reporter-menu",
+            shinyjs::disabled(
+              .primary_button(session$ns("open_reporter_ui"), "Preview report", icon = "file-earmark-text")
+            ),
+            tags$hr(style = "margin: 0.5rem;"),
+            shinyjs::disabled(teal.reporter::download_report_button_ui(session$ns("download_report"))),
             teal.reporter::report_load_ui(session$ns("load_report")),
-            actionButton(session$ns("open_reporter_ui"), "Preview report", icon = icon("file-lines"))
+            tags$hr(style = "margin: 0.5rem;"),
+            teal.reporter::reset_report_button_ui(session$ns("reset_reports"), label = "Reset Report")
           )
         ),
         tags$span(style = "margin-left: auto;"),
@@ -253,6 +258,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     teal.reporter::report_load_srv("load_report", reporter)
     teal.reporter::download_report_button_srv("download_report", reporter)
+    teal.reporter::reset_report_button_srv("reset_reports", reporter)
     observeEvent(input$open_reporter_ui, {
       showModal(
         div(
@@ -265,6 +271,14 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           )
         )
       )
+    })
+
+    observeEvent(reporter$get_reactive_add_card(), {
+      if (reporter$get_reactive_add_card() > 0) {
+        shinyjs::enable(id = "open_reporter_ui")
+      } else {
+        shinyjs::disable(id = "open_reporter_ui")
+      }
     })
     setBookmarkExclude(c("open_reporter_ui", "teal_data_module_ui"))
     teal.reporter::reporter_previewer_srv("reporter", reporter)

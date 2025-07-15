@@ -525,3 +525,18 @@ pluralize <- function(x, singular, plural = NULL) {
     )
   )
 }
+
+
+#' @keywords internal
+.primary_button <- function(id, label, icon = NULL) {
+  tags$a(
+    id = id,
+    class = "teal primary-button action-button",
+    role = "button",
+    style = "text-decoration: none;",
+    if (!is.null(icon)) {
+      bsicons::bs_icon(icon, class = "text-primary")
+    },
+    label
+  )
+}

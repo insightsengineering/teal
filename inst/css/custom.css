@@ -107,3 +107,29 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 .teal.expand-button:hover .label {
   opacity: 1;
 }
+
+.teal.primary-button {
+  border: solid 1px var(--bs-primary);
+  padding: 0.3em;
+  border-radius: 5px;
+}
+
+.teal.primary-button.disabled {
+  color: var(--bs-primary);
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.teal.primary-button:not(.disabled):hover {
+  background: var(--bs-primary-bg-subtle);
+}
+
+.teal-modules-wrapper .dropdown-menu.reporter-menu {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
