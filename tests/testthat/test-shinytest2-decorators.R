@@ -43,7 +43,7 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
   )
 
   testthat::expect_identical(
-    app$active_module_element_text(paste0(input_id, "-label")),
+    app$active_module_element_text(sprintf("%s-label", input_id)),
     "Append text"
   )
 
@@ -70,7 +70,6 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
 })
 
 testthat::test_that("e2e: module with decorator, where server fails,  shows shiny error message", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   failing_decorator <- teal_transform_module(
     ui = function(id) {
