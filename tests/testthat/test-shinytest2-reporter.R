@@ -8,7 +8,10 @@ testthat::test_that("e2e: reporter tab is created when a module has reporter", {
     modules = report_module(label = "Module with Reporter")
   )
 
-  teal_tabs <- rvest::html_elements(app$get_html_rvest(selector = "#teal-teal_modules-active_module_id .dropdown-menu"), "a")
+  teal_tabs <- rvest::html_elements(
+    app$get_html_rvest(selector = "#teal-teal_modules-active_module_id .dropdown-menu"),
+    "a"
+  )
   testthat::expect_identical(
     rvest::html_text(teal_tabs),
     c("Module with Reporter", "Report previewer")

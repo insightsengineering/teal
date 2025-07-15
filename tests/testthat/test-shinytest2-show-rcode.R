@@ -12,12 +12,12 @@ testthat::describe("e2e: Module with 'Show R Code'", {
 
     # Check if button exists.
     testthat::expect_identical(
-      app$get_text(app$active_module_element("rcode-button")), 
+      app$get_text(app$active_module_element("rcode-button")),
       "Show R code"
     )
     app$stop()
   })
-    
+
   it("has modal with dismiss and copy to clipboard buttons", {
     app <- TealAppDriver$new(
       data = simple_teal_data(),
@@ -25,7 +25,7 @@ testthat::describe("e2e: Module with 'Show R Code'", {
     )
 
     app$click(selector = app$active_module_element("rcode-button"))
-    
+
     # Check header and title content.
     testthat::expect_equal(
       app$get_text("#shiny-modal div.modal-header > h4"),
@@ -57,7 +57,7 @@ testthat::describe("e2e: Module with 'Show R Code'", {
     )
 
     app$click(selector = app$active_module_element("rcode-button"))
-    
+
     # Check R code output.
     testthat::expect_identical(
       strsplit(app$get_text(app$active_module_element("rcode-verbatim_content")), "\n")[[1]],

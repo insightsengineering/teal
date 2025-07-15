@@ -31,7 +31,7 @@ testthat::test_that("e2e: teal_data_module modal is still open when `once=FALSE`
     modules = example_module(label = "Example Module")
   )
 
-  testthat::expect_type(app$get_html(".teal-data-module-popup"), "character")  
+  testthat::expect_type(app$get_html(".teal-data-module-popup"), "character")
   app$click(selector = "#teal-close_teal_data_module_modal button")
   testthat::expect_null(app$get_html(".teal-data-module-popup"), "character")
   app$stop()
@@ -50,7 +50,7 @@ testthat::test_that("e2e: teal_data_module modal close is disabled `once=FALSE` 
   )
   app$click("teal-data-teal_data_module-submit")
   app$click(selector = "#teal-close_teal_data_module_modal button")
-  
+
   testthat::expect_null(
     app$get_html("#teal-close_teal_data_module_modal button.disabled")
   )
@@ -64,7 +64,7 @@ testthat::test_that("e2e: datasets from teal_data_module show in filter panel", 
     ui = function(id) shiny::actionButton(shiny::NS(id, "submit"), label = "Load data"),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
-        shiny::eventReactive(input$submit, within(teal_data(),{
+        shiny::eventReactive(input$submit, within(teal_data(), {
           dataset1 <- iris
           dataset2 <- mtcars
         }))
@@ -89,8 +89,8 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
   tdm <- teal_data_module(
     ui = function(id) {
       shiny::tagList(
-        shiny::textInput(shiny::NS(id,"new_column"), label = "New column name"),
-        shiny::actionButton(shiny::NS(id,"submit"), label = "Load data")
+        shiny::textInput(shiny::NS(id, "new_column"), label = "New column name"),
+        shiny::actionButton(shiny::NS(id, "submit"), label = "Load data")
       )
     },
     server = function(id) {
@@ -121,8 +121,8 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
   tdm <- teal_data_module(
     ui = function(id) {
       shiny::tagList(
-        shiny::textInput(shiny::NS(id,"new_column"), label = "New column name"),
-        shiny::actionButton(shiny::NS(id,"submit"), label = "Load data")
+        shiny::textInput(shiny::NS(id, "new_column"), label = "New column name"),
+        shiny::actionButton(shiny::NS(id, "submit"), label = "Load data")
       )
     },
     server = function(id) {
@@ -167,7 +167,7 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
 testthat::test_that("e2e: teal_data_module gets removed after successful data load, when once = TRUE", {
   skip_if_too_deep(5)
   tdm <- teal_data_module(
-    ui = function(id) shiny::actionButton(shiny::NS(id,"submit"), label = "Load data"),
+    ui = function(id) shiny::actionButton(shiny::NS(id, "submit"), label = "Load data"),
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         shiny::eventReactive(input$submit, {
@@ -189,7 +189,7 @@ testthat::test_that("e2e: teal_data_module gets removed after successful data lo
   submit <- "teal-data-teal_data_module-submit"
   app$click(submit)
 
-  testthat::expect_null(app$get_html('#teal-open_teal_data_module_ui'))
+  testthat::expect_null(app$get_html("#teal-open_teal_data_module_ui"))
   testthat::expect_null(app$is_visible(sprintf("#%s", submit)))
 
   app$stop()
