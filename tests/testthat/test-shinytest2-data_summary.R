@@ -128,3 +128,17 @@ testthat::test_that("e2e: data summary table displays datasets by names() order 
 
   app$stop()
 })
+
+testthat::test_that("e2e: data summary UI can be collpased and expanded (`bslib` regression)", {
+  skip_if_too_deep(5)
+
+  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+  app <- TealAppDriver$new(data = data, modules = example_module())
+
+  # Visible by default
+  testthat::expect_true(app$is_visible(".teal-active-data-summary-panel .accordion-collapse"))
+  app$click(selector = ".teal-active-data-summary-panel .accordion-header button")
+  testthat::expect_false(app$is_visible(".teal-active-data-summary-panel .accordion-collapse"))
+
+  app$stop()
+})

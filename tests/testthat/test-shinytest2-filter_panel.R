@@ -92,3 +92,24 @@ testthat::test_that("e2e: filtering a module-specific filter is not reflected in
 
   app$stop()
 })
+
+testthat::test_that("e2e: filter panel UI can be collpased and expanded (`bslib` regression)", {
+  skip_if_too_deep(5)
+
+  data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
+  app <- TealAppDriver$new(data = data, modules = example_module())
+
+  # Visible by default
+  appfilter_panel_accordion_selector <- paste(
+    ".teal-filter-panel [id$=\\'filters-main_filter_accordian\\']",
+    "> .accordion-item > .accordion-collapse"
+  )
+  testthat::expect_true(app$is_visible(filter_panel_accordion_selector))
+  app$click(selector = paste(
+    ".teal-filter-panel [id$='filters-main_filter_accordian']",
+    "> .accordion-item > .accordion-header button"
+  ))
+  testthat::expect_false(app$is_visible(filter_panel_accordion_selector))
+
+  app$stop()
+})
