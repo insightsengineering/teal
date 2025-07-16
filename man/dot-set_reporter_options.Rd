@@ -4,7 +4,7 @@
 \alias{.set_reporter_options}
 \title{Temporary function to server before hard deprecate report_previewer_module}
 \usage{
-.set_reporter_options(args)
+.set_reporter_options(reporter_module)
 }
 \description{
 Temporary function to server before hard deprecate report_previewer_module
