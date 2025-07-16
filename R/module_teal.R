@@ -218,8 +218,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
               id = session$ns("teal_data_module_ui"),
               size = "xl",
               tags$div(
-                class = "this-needs-to-change",
-                ui_init_data(session$ns("data"))
+                ui_init_data(session$ns("data")),
+                validate_ui
               ),
               easyClose = FALSE,
               footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
