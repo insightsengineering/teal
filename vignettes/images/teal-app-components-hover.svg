@@ -8,6 +8,9 @@
    id="svg62"
    sodipodi:docname="teal-app-components-hover.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:export-filename="teal-app-components-hover.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -24,14 +27,14 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.017175"
-     inkscape:cx="380.95706"
-     inkscape:cy="305.25721"
+     inkscape:cx="381.44862"
+     inkscape:cy="335.73377"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g61" />
+     inkscape:current-layer="g65" />
   <defs
      id="defs1">
     <rect
@@ -50,7 +53,7 @@
   <g
      id="g61">
     <path
-       d="M 0,0 H 880 V 560 H 0 Z"
+       d="M 0.99930297,-0.17379182 H 880.9993 V 559.82621 H 0.99930297 Z"
        fill="#ffffff"
        stroke="#919191"
        stroke-miterlimit="10"
@@ -512,22 +515,141 @@
                      id="teal-main_ui-root-Module_1-module-text"
                      aria-live="polite"
                      style="box-sizing: border-box; overflow: auto; font-family: Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace; font-size: 10px; display: block; padding: 9.5px; margin: 0px 0px 10px; line-height: 1.42857; color: rgb(51, 51, 51); word-break: break-all; overflow-wrap: normal; background-color: rgb(245, 245, 245); border: 1px solid rgb(204, 204, 204); border-radius: 4px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">   Sepal.Length Sepal.Width Petal.Length Petal.Width Species<xhtml:br />
+
+
+
+
+
+
+
 1           5.1         3.5          1.4         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 2           4.9         3.0          1.4         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 3           4.7         3.2          1.3         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 4           4.6         3.1          1.5         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 5           5.0         3.6          1.4         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 6           5.4         3.9          1.7         0.4  setosa<xhtml:br />
+
+
+
+
+
+
+
 7           4.6         3.4          1.4         0.3  setosa<xhtml:br />
+
+
+
+
+
+
+
 8           5.0         3.4          1.5         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 9           4.4         2.9          1.4         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 10          4.9         3.1          1.5         0.1  setosa<xhtml:br />
+
+
+
+
+
+
+
 11          5.4         3.7          1.5         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 12          4.8         3.4          1.6         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 13          4.8         3.0          1.4         0.1  setosa<xhtml:br />
+
+
+
+
+
+
+
 14          4.3         3.0          1.1         0.1  setosa<xhtml:br />
+
+
+
+
+
+
+
 15          5.8         4.0          1.2         0.2  setosa<xhtml:br />
+
+
+
+
+
+
+
 16          5.7         4.4          1.5         0.4  setosa<xhtml:br />
+
+
+
+
+
+
+
 17          5.4         3.9          1.3         0.4  setosa<xhtml:br />
 </xhtml:pre>
                 </xhtml:div>
@@ -1214,13 +1336,13 @@
              font-family="Helvetica"
              font-size="10px"
              id="text43"
-             style="white-space:pre;inline-size:11.5779"
+             style="white-space:pre;inline-size:11.5779;display:inline"
              xml:space="preserve"><tspan
                x="691"
                y="398"
-               id="tspan2"><tspan
+               id="tspan6"><tspan
                  dx="0 2.7783203 2.2216797 2.2216797 2.7783203"
-                 id="tspan1">filte</tspan></tspan></text>
+                 id="tspan5">filte</tspan></tspan></text>
         </switch>
       </g>
       <g
@@ -1332,7 +1454,7 @@
          xml:space="preserve"
          transform="translate(598.7342,-8.8420074)"
          id="text66"
-         style="fill:#008fff;text-orientation:auto;stroke:#000000;stroke-width:0.5;text-align:start;writing-mode:lr-tb;direction:ltr;fill-opacity:1;white-space:pre;shape-inside:url(#rect66)" />
+         style="text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect66);display:inline;fill:#008fff;fill-opacity:1;stroke:#000000;stroke-width:0.5" />
     </g>
     <image
        x="39.5"
@@ -1365,14 +1487,14 @@
        xml:space="preserve"
        transform="translate(-0.5,-0.5)"
        id="text67"
-       style="text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect67);fill:#008fff;fill-opacity:1;stroke:#000000;stroke-width:0.5"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:Helvetica;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect67);display:inline;fill:#008fff;fill-opacity:1;stroke:#000000;stroke-width:0.5"><tspan
          x="34.408203"
-         y="180.99655"
-         id="tspan3">Modules
+         y="180.88718"
+         id="tspan7">Modules
 </tspan><tspan
          x="34.408203"
-         y="195.99655"
-         id="tspan4">Home / Module 1</tspan></text>
+         y="195.88718"
+         id="tspan8">Home / Module 1</tspan></text>
   </g>
   <switch
      id="switch62">

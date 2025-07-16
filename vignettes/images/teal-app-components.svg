@@ -6,7 +6,7 @@
    viewBox="-0.5 -0.5 881 561"
    content="&lt;mxfile&gt;&lt;diagram name=&quot;Page-1&quot; id=&quot;Af2CoAbSZcckCuTcOnmQ&quot;&gt;7VnZbts4FP0aA52HGCKpLY+xE7cPLTBoAvSZlqgFlUSXpmNnvn5Ikdqpxq3kOJipBdji5X7OueQlvUDr/PSR4V3yhYYkW0ArPC3Q/QJCFyHxLQ0vygCAaytLzNJQ2xrDY/oP0UZLWw9pSPadgpzSjKe7rjGgRUEC3rFhxuixWyyiWbfXHY7JwPAY4Gxo/ZaGPFFWH3qN/RNJ44TX87tVOTmuCuuZ7BMc0mPLhB4WaM0o5eotP61JJsGrcFH1NiO59cAYKfg5FaCq8Iyzg56bHhd/qSa754x+r+cJFmhVD9oSiRDvExLqBM7SuBDvgeieMGFIeJ41tXayyfwUS1Uscxp8P+yWgiOO04Kw/XIrmSHsW1qUza+YZl62rEaxphll5bCQW366OVBlWZYfRFE3C6mswJaPyMpFn0/kpEBay85IcGD79Jl8Jfum23p0Oj3EV0P+TBgnp5ZJ4/2R0Jxw9iKK6Fwbae61+mGVPrak5Gtb0pKR42oj1vKN67YbhsWLJtlMOBoQ/pRyQfX1WMdFkEhSV5GwacaBp9MmwqvuMhIJZFbHJOXkcYcDWfEoOpmJptseTTYc0ASAgSboTmfJHrAEoLe0xCMwvUM+8t8DYW3//E3yZiCqdouKqNuhP0HnQkRVAugsoG7GNQIditwfB1pl3Kg15k4UENM/lUhU+eItlr+fCA4FO7o5MRLVosp8a/4FGbz8WtHT+fT2VbEXbpoW8ecy995uLE9UuO39DRrx5/HVv7OOT3d6p6sl5BjWZtugJTTD0gzA5bS0ERHFHy1dVUueDd5OS86olARIhVFKgUJEyojF2w/AgjIwglb75S+juGZT6V3ARQAmSogjw0EGJdZa1CSlUs3Crc1qWtfRc2tvzDGL0+KrOHRAFVPyL6VFaRLBn+pPNBqmpHGGghZkRMR9Z7jE2ncLls5AsS40KdaeQbLw1eUvqDFrhFOhN9BSLSFw7qrH6KEISx2AEdRbUugtWlvLjuzIxO6DKx9ZI80yk30O6tw+ddBAnecYYiCvKjiJOtMx8nXqovLzE+rgdamrz5E96mr7HNEr8nrUWW9L3fhOMcnr0H/f61xgX9frXAN1V9v5ON2tDpzTonUwdH7Lq0a2QVbey7SnktNnvM2qE2hIMsJ1GlxmS7SBe+6W6E3nFw03xE2alWG89Tcu5J3qqC9Zr/vSeBzSCi6gNfS6plyXwE35mQd5YPn9Lc1wqjddv6DqnmYS9MNrsokLVxeq1QZ5GzSudSpPMvylIqBLlS6DWaBJmisAdGEHcuONl+nAAv0ZEB9eec2K+GblQge8N8QHR8RzrxvADIibdv7/G+JvesGDztiwpyAewa2HoutB2wuH/OFWCS8mZu+y0PooCGzwy9DCC8UhEJ19NLfmWJz9y6KL7nx/83AtdKfEGr++Kohk8/dumdf6kxw9/As=&lt;/diagram&gt;&lt;/mxfile&gt;"
    id="svg28"
-   sodipodi:docname="teal-app-components2.svg"
+   sodipodi:docname="teal-app-components.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -22,9 +22,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.71925134"
-     inkscape:cx="310.04461"
-     inkscape:cy="128.60595"
+     inkscape:zoom="5.7540107"
+     inkscape:cx="818.55948"
+     inkscape:cy="548.2263"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -36,20 +36,21 @@
     <rect
        x="40.319703"
        y="168.92565"
-       width="76.468401"
-       height="18.074349"
+       width="163.01673"
+       height="15.988847"
        id="rect33" />
   </defs>
   <g
      id="g27"
      transform="translate(3.4758364,5.5613383)">
     <path
-       d="M -5.5613383,0.69516729 H 874.43866 V 560.69517 H -5.5613383 Z"
+       d="M -3.5613383,-5.3048327 H 876.43866 V 554.69517 H -3.5613383 Z"
        fill="#ffffff"
        stroke="#666666"
        stroke-miterlimit="10"
        pointer-events="all"
        id="path1"
+       inkscape:label="border"
        sodipodi:insensitive="true" />
     <circle
        cx="815"
@@ -167,7 +168,7 @@
     <g
        transform="translate(-0.5,-0.5)"
        id="g12"
-       sodipodi:insensitive="true">
+       inkscape:label="tab_title">
       <switch
          id="switch12">
         <foreignObject
@@ -194,11 +195,24 @@
            font-size="17px"
            id="text12">Title</text>
       </switch>
+      <rect
+         x="32"
+         y="12"
+         width="140"
+         height="28"
+         rx="1.96"
+         ry="1.96"
+         fill-opacity="0.2"
+         fill="#bf37f3"
+         stroke="none"
+         pointer-events="all"
+         id="rect22"
+         transform="translate(0.5,0.5)" />
     </g>
     <g
        transform="translate(-0.5,-0.5)"
        id="g13"
-       sodipodi:insensitive="true">
+       inkscape:label="URL">
       <switch
          id="switch13">
         <foreignObject
@@ -226,17 +240,29 @@
            id="text13">127.0.0.1:3838</text>
       </switch>
     </g>
-    <rect
-       x="20.000813"
-       y="112.35397"
-       width="842.77905"
-       height="29.998375"
-       fill="#ffffff"
-       stroke="#666666"
-       pointer-events="all"
-       id="rect13"
-       inkscape:label="header"
-       style="fill:#fb6150;fill-opacity:0.2;stroke-width:1.00163" />
+    <g
+       id="g1"
+       inkscape:label="header">
+      <text
+         xml:space="preserve"
+         transform="translate(-10.232342,-47.771375)"
+         id="text33"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect33);display:inline;fill:#000000;fill-opacity:1"><tspan
+           x="40.320312"
+           y="179.73483"
+           id="tspan2">Header &amp; navigation</tspan></text>
+      <rect
+         x="20.000813"
+         y="112.35397"
+         width="842.77905"
+         height="29.998375"
+         fill="#ffffff"
+         stroke="#666666"
+         pointer-events="all"
+         id="rect13"
+         inkscape:label="header"
+         style="fill:#fb6150;fill-opacity:0.2;stroke-width:1.00163" />
+    </g>
     <g
        transform="translate(-0.5,-42.210037)"
        id="g17"
@@ -282,6 +308,19 @@
            style="display:inline"
            sodipodi:insensitive="true" />
       </switch>
+      <rect
+         x="21.390335"
+         y="469.6803"
+         width="840"
+         height="31"
+         rx="2.1700001"
+         ry="2.1700001"
+         fill-opacity="0.2"
+         fill="#fb6251"
+         stroke="none"
+         pointer-events="all"
+         id="rect23"
+         transform="translate(0.5,42.210037)" />
     </g>
     <g
        id="g30"
@@ -381,39 +420,6 @@
         </switch>
       </g>
     </g>
-    <rect
-       x="32"
-       y="12"
-       width="140"
-       height="28"
-       rx="1.96"
-       ry="1.96"
-       fill-opacity="0.2"
-       fill="#bf37f3"
-       stroke="none"
-       pointer-events="all"
-       id="rect22"
-       sodipodi:insensitive="true" />
-    <rect
-       x="21.390335"
-       y="469.6803"
-       width="840"
-       height="31"
-       rx="2.1700001"
-       ry="2.1700001"
-       fill-opacity="0.2"
-       fill="#fb6251"
-       stroke="none"
-       pointer-events="all"
-       id="rect23" />
-    <text
-       xml:space="preserve"
-       transform="translate(-10.232342,-47.771375)"
-       id="text33"
-       style="text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect33);fill:#000000;fill-opacity:1"><tspan
-         x="40.320312"
-         y="179.84421"
-         id="tspan1">Header</tspan></text>
   </g>
   <switch
      id="switch28" />
