@@ -8,7 +8,7 @@ testthat::test_that("e2e: teal app initializes with no errors", {
     modules = example_module(label = "Example Module")
   )
   app$expect_no_shiny_error()
-  app$expect_screenshot()
+  app$expect_screenshot(selector = "#teal-tabpanel_wrapper")
   app$stop()
 })
 

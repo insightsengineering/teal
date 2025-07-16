@@ -46,7 +46,7 @@ testthat::test_that("e2e: collapsing wunderbar hides filter and data summary", {
   app$click(selector = ".teal_module.active > .bslib-sidebar-layout > button.collapse-toggle")
   testthat::expect_false(app$is_visible(".teal-filter-panel"))
   testthat::expect_false(app$is_visible(".teal-active-data-summary-panel"))
-
+  app$expect_screenshot(selector = ".bslib-sidebar-layout .main")
   app$stop()
 })
 
