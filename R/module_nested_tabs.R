@@ -76,6 +76,16 @@ ui_teal_modules_nav <- function(id, modules) {
   )
   nav_buttons <- ui_teal_modules_nav_dropdown(id = ns("nav"), modules = modules, active_module_id)
   tab_content <- ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
+
+  count_modules <- function(x) {
+    if (inherits(x, "teal_module")) {
+      1L
+    } else if (inherits(x, "teal_modules")) {
+      sum(vapply(x$children, count_modules, integer(1L)))
+    }
+  }
+  module_count <- count_modules(modules)
+  dropdown_label <- sprintf("Module%s (%d)", ifelse(module_count > 1, "s", ""), module_count)
   tags$div(
     class = "teal-modules-wrapper",
     tags$ul(
@@ -87,7 +97,7 @@ ui_teal_modules_nav <- function(id, modules) {
         class = "dropdown nav-item-custom",
         .dropdown_button(
           id = NULL,
-          label = "Module",
+          label = dropdown_label,
           icon = "diagram-3-fill",
           add_dropdown = TRUE
         ),
