@@ -218,8 +218,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
               id = session$ns("teal_data_module_ui"),
               size = "xl",
               tags$div(
-                ui_init_data(session$ns("data")),
-                validate_ui
+                class = "this-needs-to-change",
+                ui_init_data(session$ns("data"))
               ),
               easyClose = FALSE,
               footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
@@ -251,7 +251,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       insertUI(
         selector = sprintf("#%s", session$ns("tabpanel_wrapper")),
         where = "beforeBegin",
-        ui = tags$div(validate_ui, tags$br())
+        ui = tags$div(validate_ui)
       )
     }
 
