@@ -94,9 +94,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
-  reporter_module <- extract_module(modules, class = "teal_module_previewer")
-  server_args <- ifelse(length(reporter_module), reporter_module[[1]]$server_args, list())
-  .set_reporter_options(server_args)
+  
+  .set_reporter_options(extract_module(modules, class = "teal_module_previewer"))
   modules <- drop_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_previewer")
 

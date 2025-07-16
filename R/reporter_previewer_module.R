@@ -55,7 +55,8 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
 }
 
 #' Temporary function to server before hard deprecate report_previewer_module
-.set_reporter_options <- function(args) {
+.set_reporter_options <- function(reporter_module) {
+  args <- ifelse(length(reporter_module), reporter_module[[1]]$server_args, list())
   if (length(args$previewer_buttons)) {
     options(teal.reporter.nav_buttons = args$previewer_buttons)
   }
