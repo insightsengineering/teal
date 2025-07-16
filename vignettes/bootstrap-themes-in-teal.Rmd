@@ -31,7 +31,7 @@ Please install `bslib` package before you run the code below.
 
 ### `teal.bs_theme` `R` option
 
-```         
+```
 options("teal.bs_theme" = bslib::bs_theme("Custom Options"))
 
 #######################
@@ -47,7 +47,7 @@ When you already have a `shiny` app and you want to test different Bootstrap the
 
 Available Bootstrap versions could be checked with `bslib::versions()` and Bootstrap themes (`bootswatch`) with `bslib::bootswatch_themes(version = "5")`.
 
-```         
+```
 # bslib::versions()
 # bslib::bootswatch_themes(version = "5")
 options("teal.bs_theme" = bslib::bs_theme(version = "5", bootswatch = "lux"))
@@ -61,7 +61,7 @@ When using the default `bslib` theme for any version (3, 4 or 5), its styling mi
 Please run the interactive themer (recommended) or apply a custom theme to explore all the theme options.
 **In many scenarios updating only the theme might not be enough and e.g. font color and other specifications should be updated too.**
 
-```         
+```
 # instead of
 options("teal.bs_theme" =  bslib::bs_theme(version = "5"))
 # try non-default themes
@@ -83,7 +83,7 @@ Please, use the `Cmd+Shift+R` (Mac) or `Ctrl+F5` (Windows) to hard refresh the w
 The most important HTML tags in `teal` have a specific id or class, so they can be directly styled.
 The `bslib::bs_add_rules` function could be used around the `bslib::bs_theme` object to apply custom `CSS` rules.
 
-```         
+```
 library(magrittr)
 options("teal.bs_theme" = bslib::bs_add_rules(
   bslib::bs_theme(version = "5"),
