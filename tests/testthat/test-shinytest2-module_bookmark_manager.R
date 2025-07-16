@@ -33,7 +33,7 @@ testthat::test_that("bookmark_manager_button is rendered when enableBookmarking 
     options = list(shiny.bookmarkStore = "server")
   )
   on.exit(app$stop())
-  testthat::expect_false(is.null(app$get_html(".bookmark_manager_button")))
+  testthat::expect_type(app$get_html(".bookmark_manager_button"), "character")
 })
 
 testthat::test_that("bookmark_manager_button shows modal with url containing state_id when clicked", {
