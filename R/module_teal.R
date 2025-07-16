@@ -106,44 +106,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       shinyjs::showLog()
     }
 
-    # todo: bring back the condition to not display reporter menu when no report is possible
-    insertUI(
-      selector = ".teal-modules-wrapper .nav-item-custom",
-      where = "afterEnd",
-      tagList(
-        tags$span(
-          class = "dropdown nav-item-custom",
-          .dropdown_button(
-            id = session$ns("show_reporter_menu"),
-            label = "Report",
-            icon = "file-text-fill",
-            add_dropdown = TRUE
-          ),
-          tags$div(
-            class = "dropdown-menu reporter-menu",
-            if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
-              teal.reporter::preview_report_button_ui(session$ns("preview_report"))
-            },
-            tags$hr(style = "margin: 0.5rem;"),
-            if ("download" %in% getOption("teal.reporter.nav_buttons")) {
-              teal.reporter::download_report_button_ui(session$ns("download_report"))
-            },
-            if ("load" %in% getOption("teal.reporter.nav_buttons")) {
-              teal.reporter::report_load_ui(session$ns("load_report"))
-            },
-            tags$hr(style = "margin: 0.5rem;"),
-            if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
-              teal.reporter::reset_report_button_ui(session$ns("reset_reports"), label = "Reset Report")
-            }
-          )
-        ),
-        tags$span(style = "margin-left: auto;"),
-        ui_bookmark_panel(session$ns("bookmark_manager"), modules),
-        ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
-        ui_filter_manager_panel(session$ns("filter_manager_panel"))
-      ),
-    )
-
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
     # for `DDL` and all shiny modules
@@ -264,6 +226,45 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
 
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+    if (is_arg_used(modules, "reporter")) {
+      insertUI(
+        selector = ".teal-modules-wrapper .nav-item-custom",
+        where = "afterEnd",
+        tagList(
+          tags$span(
+            class = "dropdown nav-item-custom",
+            .dropdown_button(
+              id = session$ns("show_reporter_menu"),
+              label = "Report",
+              icon = "file-text-fill",
+              add_dropdown = TRUE
+            ),
+            tags$div(
+              class = "dropdown-menu reporter-menu",
+              if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
+                teal.reporter::preview_report_button_ui(session$ns("preview_report"))
+              },
+              tags$hr(style = "margin: 0.5rem;"),
+              if ("download" %in% getOption("teal.reporter.nav_buttons")) {
+                teal.reporter::download_report_button_ui(session$ns("download_report"))
+              },
+              if ("load" %in% getOption("teal.reporter.nav_buttons")) {
+                teal.reporter::report_load_ui(session$ns("load_report"))
+              },
+              tags$hr(style = "margin: 0.5rem;"),
+              if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
+                teal.reporter::reset_report_button_ui(session$ns("reset_reports"), label = "Reset Report")
+              }
+            )
+          ),
+          tags$span(style = "margin-left: auto;"),
+          ui_bookmark_panel(session$ns("bookmark_manager"), modules),
+          ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
+          ui_filter_manager_panel(session$ns("filter_manager_panel"))
+        )
+      )
+    }
+
     teal.reporter::preview_report_button_srv("preview_report", reporter)
     teal.reporter::report_load_srv("load_report", reporter)
     teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
