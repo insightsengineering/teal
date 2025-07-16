@@ -121,6 +121,7 @@ Collate:
     'module_teal_lockfile.R'
     'module_teal_with_splash.R'
     'module_transform_data.R'
+    'reporter_previewer_module.R'
     'show_rcode_modal.R'
     'tdata.R'
     'teal.R'
