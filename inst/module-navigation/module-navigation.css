@@ -147,8 +147,12 @@
   border-bottom: 2px solid transparent;
 }
 
-.teal-modules-tree > li > ul > li:has(a)::before {
+.teal-modules-tree > li > ul > li:has(> a) ~ li::before {
   border-left: 2px solid var(--bs-border-color, #bbb);
+}
+
+.teal-modules-tree > li > ul > li:last-child:has(> ul)::before {
+  border-left: 2px solid transparent;
 }
 
 .teal-modules-tree li > a,
