@@ -99,7 +99,7 @@ testthat::test_that("e2e: nested modules layout in navigation respect order and 
       "Nested 1.1", # Depth: 2
       "Nested 1.2", # Depth: 2
       "Sub Nested Modules", # Depth: 2
-      "Nested 2.1",  # Depth: 3
+      "Nested 2.1", # Depth: 3
       "Nested 2.2" # Depth: 3
     )
   )
