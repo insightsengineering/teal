@@ -452,7 +452,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             replacement = "",
             self$get_text(
               sprintf(
-                "#%s-filters-%s .filter-card-varname",
+                "#%s-filters-%s-container .filter-card-varname",
                 self$active_filters_ns(),
                 x
               )
@@ -694,7 +694,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       tab_ns <- unlist(lapply(names(active_tab_inputs), function(name) {
         gsub(
           pattern = "-active_module_id$",
-          replacement = sprintf("-%s", active_tab_inputs[[name]]),
+          replacement = sprintf("-nav-%s", .label_to_id(active_tab_inputs[[name]])),
           name
         )
       }))
@@ -707,19 +707,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           }
         }
       }
-      private$ns$module <- sprintf("%s-%s", active_ns, "module")
-
-      components <- c("filter_panel", "data_summary")
-      for (component in components) {
-        if (
-          !is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component))) ||
-            !is.null(self$get_html(sprintf("#%s-%s-table", active_ns, component)))
-        ) {
-          private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
-        } else {
-          private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
-        }
-      }
+      private$ns$module <- sprintf("%s-module", active_ns)
+      private$ns$filter_panel <- sprintf("%s-filter_panel", active_ns)
+      private$ns$data_summary <- sprintf("%s-data_summary", active_ns)
     },
     # @description
     # Get the active filter values from the active filter selection of dataset from the filter panel.

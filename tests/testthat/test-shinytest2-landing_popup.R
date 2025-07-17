@@ -2,13 +2,10 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: teal app with landing_popup_module initializes with no errors", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
-    modules = modules(
-      example_module()
-    ),
+    modules = modules(example_module()),
     landing_popup_args = list(
       title = "Welcome",
       content = tags$b("A welcome message!", style = "color: red;")
@@ -23,7 +20,6 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
 })
 
 testthat::test_that("e2e: app with default landing_popup_module creates modal containing a button", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -42,7 +38,6 @@ testthat::test_that("e2e: app with default landing_popup_module creates modal co
 })
 
 testthat::test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -67,7 +62,6 @@ testthat::test_that("e2e: when default landing_popup_module is closed, it shows 
 testthat::test_that(
   "e2e: app with customized landing_popup_module creates modal containing specified title, content and buttons",
   {
-    testthat::skip("chromium")
     skip_if_too_deep(5)
 
     app <- TealAppDriver$new(
@@ -134,7 +128,6 @@ testthat::test_that(
 )
 
 testthat::test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
