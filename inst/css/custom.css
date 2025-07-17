@@ -53,3 +53,25 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 .teal-body .bslib-mb-spacing {
   --bslib-mb-spacer: 0;
 }
+
+.teal-data-module-popup .modal-dialog {
+  --bs-modal-margin: 20px;
+}
+
+.teal-data-module-popup .modal-content {
+  overflow: auto;
+  max-height: 90vh;
+  height: 90vh;
+}
+
+@media (min-width: 576px) {
+  .teal-data-module-popup .modal-dialog {
+    --bs-modal-width: 500px;
+  }
+}
+
+@media (min-width: 992px) {
+  .teal-data-module-popup .modal-dialog {
+    --bs-modal-width: 90vw;
+  }
+}

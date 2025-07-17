@@ -20,7 +20,7 @@
 #' resolved, the app will continue to run. `teal` guarantees that errors in data don't crash the app
 #' (except error 1).
 #'
-#' @inheritParams module_teal_module
+#' @inheritParams module_teal
 #' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and

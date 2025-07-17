@@ -286,7 +286,8 @@ module <- function(label = "module",
       datanames = combined_datanames,
       server_args = server_args,
       ui_args = ui_args,
-      transformators = transformators
+      transformators = transformators,
+      path = label
     ),
     class = "teal_module"
   )
@@ -295,8 +296,8 @@ module <- function(label = "module",
 #' @rdname teal_modules
 #' @export
 #'
-modules <- function(..., label = "root") {
-  checkmate::assert_string(label)
+modules <- function(..., label = character(0)) {
+  checkmate::assert_character(label, max.len = 1)
   submodules <- list(...)
   if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {
     stop(
@@ -306,16 +307,15 @@ modules <- function(..., label = "root") {
   }
 
   checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))
-  # name them so we can more easily access the children
-  # beware however that the label of the submodules should not be changed as it must be kept synced
-  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
-  names(submodules) <- get_unique_labels(labels)
-  structure(
-    list(
-      label = label,
-      children = submodules
-    ),
-    class = "teal_modules"
+
+  .update_modules_paths(
+    structure(
+      list(
+        label = label,
+        children = submodules
+      ),
+      class = "teal_modules"
+    )
   )
 }
 
@@ -717,38 +717,19 @@ is_arg_used <- function(modules, arg) {
   }
 }
 
-
-#' Get module depth
-#'
-#' Depth starts at 0, so a single `teal.module` has depth 0.
-#' Nesting it increases overall depth by 1.
-#'
-#' @inheritParams init
-#' @param depth optional integer determining current depth level
-#'
-#' @return Depth level for given module.
-#' @keywords internal
-modules_depth <- function(modules, depth = 0L) {
-  checkmate::assert_multi_class(modules, c("teal_module", "teal_modules"))
-  checkmate::assert_int(depth, lower = 0)
-  if (inherits(modules, "teal_modules")) {
-    max(vapply(modules$children, modules_depth, integer(1), depth = depth + 1L))
-  } else {
-    depth
-  }
-}
-
-#' Retrieve labels from `teal_modules`
+#' Retrieve slot from `teal_modules`
 #'
 #' @param modules (`teal_modules`)
-#' @return A `list` containing the labels of the modules. If the modules are nested,
-#' the function returns a nested `list` of labels.
+#' @param slot (`character(1)`)
+#' @return A `list` containing the `slot` of the modules.
+#' If the modules are nested, the function returns a nested `list` of values.
 #' @keywords internal
-module_labels <- function(modules) {
+modules_slot <- function(modules, slot) {
+  checkmate::assert_string(slot)
   if (inherits(modules, "teal_modules")) {
-    lapply(modules$children, module_labels)
+    lapply(modules$children, modules_slot, slot = slot)
   } else {
-    modules$label
+    modules[[slot]]
   }
 }
 
@@ -768,4 +749,25 @@ modules_bookmarkable <- function(modules) {
   } else {
     attr(modules, "teal_bookmarkable", exact = TRUE)
   }
+}
+
+.label_to_id <- function(label) make.unique(gsub("[^[:alnum:]]", "_", tolower(label)), sep = "_")
+
+.update_modules_paths <- function(modules, parent_label = NULL, ids = new.env()) {
+  if (inherits(modules, "teal_modules")) {
+    modules$children <- lapply(
+      modules$children,
+      .update_modules_paths,
+      parent_label = if (length(parent_label)) paste(parent_label, modules$label, sep = " / ") else modules$label,
+      ids = ids
+    )
+  } else if (inherits(modules, "teal_module")) {
+    new_label <- if (length(parent_label)) paste(parent_label, modules$label, sep = " / ") else modules$label
+    if (new_label %in% ids$values) {
+      new_label <- utils::tail(make.unique(c(ids$values, new_label), sep = " - "), 1)
+    }
+    modules$path <- new_label
+    ids$values <- c(ids$values, new_label)
+  }
+  modules
 }
