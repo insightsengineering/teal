@@ -2,7 +2,6 @@
 % Please edit documentation in R/module_nested_tabs.R
 \name{module_teal_modules_nav}
 \alias{module_teal_modules_nav}
-\alias{srv_teal_modules_nav}
 \alias{ui_teal_modules_nav_dropdown}
 \alias{ui_teal_modules_nav_dropdown.teal_modules}
 \alias{ui_teal_modules_nav_dropdown.teal_module}
@@ -16,16 +15,6 @@
 \alias{srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-srv_teal_modules_nav(
-  id,
-  data,
-  modules,
-  datasets = NULL,
-  slices_global,
-  reporter = teal.reporter::Reporter$new(),
-  data_load_status = reactive("ok")
-)
-
 ui_teal_modules_nav_dropdown(id, modules, active_module_id)
 
 \method{ui_teal_modules_nav_dropdown}{teal_modules}(id, modules, active_module_id)
@@ -87,12 +76,15 @@ srv_teal_module(
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{data}{(\code{reactive} returning \code{teal_data})}
-
 \item{modules}{(\code{teal_modules})
 \code{teal_modules} object. These are the specific output modules which
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
+
+\item{active_module_id}{(\code{reactive} returning \code{character(1)})
+\code{id} of the currently active module. This helps to determine which module can listen to reactive events.}
+
+\item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton
@@ -109,9 +101,6 @@ Determines action dependent on a data loading status:
 \item \code{"external failed"} when a \code{reactive} passed to \code{srv_teal(data)} didn't return \code{teal_data}. Hides the whole tab
 panel.
 }}
-
-\item{active_module_id}{(\code{reactive} returning \code{character(1)})
-\code{id} of the currently active module. This helps to determine which module can listen to reactive events.}
 }
 \value{
 Output of currently active module.
