@@ -204,6 +204,8 @@ init <- function(data,
     list(
       ui = function(request) {
         bslib::page_fluid(
+          theme = get_teal_bs_theme(),
+          style = "--bs-gutter-x: 0;",
           title = tags$div(
             id = "teal-app-title",
             tags$head(

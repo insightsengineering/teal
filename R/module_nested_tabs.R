@@ -68,71 +68,6 @@
 #' @keywords internal
 NULL
 
-ui_teal_modules_nav <- function(id, modules) {
-  ns <- NS(id)
-  active_module_id <- restoreInput(
-    ns("active_module_id"),
-    unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
-  )
-  nav_buttons <- ui_teal_modules_nav_dropdown(id = ns("nav"), modules = modules, active_module_id)
-  tab_content <- ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
-  tags$div(
-    class = "teal-modules-wrapper",
-    htmltools::htmlDependency(
-      name = "module-navigation",
-      version = utils::packageVersion("teal"),
-      package = "teal",
-      src = "module-navigation",
-      stylesheet = "module-navigation.css",
-      script = "module-navigation.js"
-    ),
-    tags$ul(
-      id = ns("active_module_id"),
-      style = "align-items: center;",
-      class = "nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
-      `data-tabsetid` = "test",
-      tags$div(
-        class = "dropdown nav-item-custom",
-        onmouseover = "initNavigationMouseOver.call(this)",
-        onmouseout = "initNavigationMouseOut.call(this)",
-        tags$a(
-          class = "dropdown-toggle active",
-          role = "button",
-          style = "text-decoration: none; border-bottom-color: #0d6efd;",
-          "Modules"
-        ),
-        tags$div(
-          class = "dropdown-menu",
-          tags$ul(class = "teal-modules-tree", !!!nav_buttons)
-        )
-      )
-    ),
-    tags$div(class = "tab-content", !!!tab_content)
-  )
-}
-
-#' @rdname module_teal_modules_nav
-srv_teal_modules_nav <- function(id,
-                                 data,
-                                 modules,
-                                 datasets = NULL,
-                                 slices_global,
-                                 reporter = teal.reporter::Reporter$new(),
-                                 data_load_status = reactive("ok")) {
-  moduleServer(id, function(input, output, session) {
-    srv_teal_module(
-      "nav",
-      data = data,
-      modules = modules,
-      datasets = datasets,
-      slices_global = slices_global,
-      reporter = reporter,
-      data_load_status = data_load_status,
-      active_module_id = reactive(input$active_module_id)
-    )
-  })
-}
-
 #' @rdname module_teal_modules_nav
 ui_teal_modules_nav_dropdown <- function(id, modules, active_module_id) {
   UseMethod("ui_teal_modules_nav_dropdown", modules)
@@ -167,7 +102,7 @@ ui_teal_modules_nav_dropdown.teal_module <- function(id, modules, active_module_
     tags$a(
       href = paste0("#", ns("wrapper")), # links button with module content in `tab-content` with same id.
       `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
-      `data-value` = module_id, # this links module-content with this button.
+      `data-value` = module_id, # this data is set as the shiny input.
       class = c("nav-link", "module-button", "btn-default", if (identical(module_id, active_module_id)) "active"),
       # `nav-link` is required to mimic bslib tab panel.
       modules$label
@@ -231,7 +166,7 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
     id = ns("wrapper"),
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
     tagList(
-      .modules_breadcrumb(modules), # todo:
+      .modules_breadcrumb(modules),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
@@ -591,7 +526,7 @@ srv_teal_module.teal_module <- function(id,
 #' @keywords internal
 .modules_breadcrumb <- function(module) {
   tags$span(
-    style = "color: var(--bs-secondary); font-size: medium;",
+    style = "color: var(--bs-secondary); font-size: medium;opacity: 0.6; margin-left: 0.5em;",
     paste("Home", module$path, sep = " / ")
   )
 }
