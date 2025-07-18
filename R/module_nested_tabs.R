@@ -68,62 +68,6 @@
 #' @keywords internal
 NULL
 
-ui_teal_modules_nav <- function(id, modules) {
-  ns <- NS(id)
-  active_module_id <- restoreInput(
-    ns("active_module_id"),
-    unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
-  )
-  nav_buttons <- ui_teal_modules_nav_dropdown(id = ns("nav"), modules = modules, active_module_id)
-  tab_content <- ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
-
-  tags$div(
-    class = "teal-modules-wrapper",
-    tags$ul(
-      id = ns("active_module_id"),
-      style = "align-items: center; gap: 1em; font-size: large;",
-      class = "nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
-      `data-tabsetid` = "test",
-      tags$div(
-        class = "dropdown nav-item-custom",
-        .dropdown_button(
-          id = NULL,
-          label = "Module",
-          icon = "diagram-3-fill",
-          add_dropdown = TRUE
-        ),
-        tags$div(
-          class = "dropdown-menu",
-          tags$ul(class = "teal-modules-tree", !!!nav_buttons)
-        )
-      )
-    ),
-    tags$div(class = "tab-content", !!!tab_content)
-  )
-}
-
-#' @rdname module_teal_modules_nav
-srv_teal_modules_nav <- function(id,
-                                 data,
-                                 modules,
-                                 datasets = NULL,
-                                 slices_global,
-                                 reporter = teal.reporter::Reporter$new(),
-                                 data_load_status = reactive("ok")) {
-  moduleServer(id, function(input, output, session) {
-    srv_teal_module(
-      "nav",
-      data = data,
-      modules = modules,
-      datasets = datasets,
-      slices_global = slices_global,
-      reporter = reporter,
-      data_load_status = data_load_status,
-      active_module_id = reactive(input$active_module_id)
-    )
-  })
-}
-
 #' @rdname module_teal_modules_nav
 ui_teal_modules_nav_dropdown <- function(id, modules, active_module_id) {
   UseMethod("ui_teal_modules_nav_dropdown", modules)

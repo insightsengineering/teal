@@ -492,9 +492,8 @@ pluralize <- function(x, singular, plural = NULL) {
   }
 }
 
-
 #' @keywords internal
-.dropdown_button <- function(id, label, icon, add_dropdown = FALSE) {
+.dropdown_button <- function(id = NULL, label, icon) {
   tags$span(
     class = "teal dropdown-button",
     tags$a(
@@ -504,9 +503,7 @@ pluralize <- function(x, singular, plural = NULL) {
       style = "text-decoration: none;",
       bsicons::bs_icon(icon, class = "text-primary"),
       label,
-      if (add_dropdown) {
-        bsicons::bs_icon("chevron-down", class = "text-primary dropdown-arrow")
-      }
+      bsicons::bs_icon("chevron-down", class = "text-primary dropdown-arrow")
     )
   )
 }

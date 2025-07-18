@@ -55,21 +55,23 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
 }
 
 #' Temporary function to server before hard deprecate report_previewer_module
-.set_reporter_options <- function(reporter_module) {
-  args <- ifelse(length(reporter_module), reporter_module[[1]]$server_args, list())
+.get_reporter_options <- function(args) {
+  opts <- list()
   if (length(args$previewer_buttons)) {
-    options(teal.reporter.nav_buttons = args$previewer_buttons)
+    opts <- c(opts, list(teal.reporter.nav_buttons = args$previewer_buttons))
   }
 
   if (length(args$global_knitr)) {
-    options(teal.reporter.global_knitr = args$global_knitr)
+    opts <- c(opts, list(teal.reporter.global_knitr = args$global_knitr))
   }
 
   if (length(args$rmd_output)) {
-    options(teal.reporter.rmd_output = args$rmd_output)
+    opts <- c(opts, list(teal.reporter.rmd_output = args$rmd_output))
   }
 
   if (length(args$rmd_yaml_args)) {
-    options(teal.reporter.rmd_yaml_args = args$rmd_yaml_args)
+    opts <- c(opts, (teal.reporter.rmd_yaml_args <- args$rmd_yaml_args))
   }
+
+  opts
 }

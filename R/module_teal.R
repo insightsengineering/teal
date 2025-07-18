@@ -50,6 +50,9 @@ ui_teal <- function(id, modules) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   ns <- NS(id)
+
+  mod <- extract_module(modules, class = "teal_module_previewer")
+  reporter_opts <- if (length(mod)) .get_reporter_options(mod[[1]]$server_args)
   modules <- drop_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_previewer")
 
@@ -64,24 +67,59 @@ ui_teal <- function(id, modules) {
           color: #ffffff; background-color: #347ab7; z-index: 105;"
     )
   )
+
+  active_module_id <- restoreInput(
+    ns("active_module_id"),
+    unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
+  )
+
+  tab_content <- ui_teal_module(id = ns("teal_modules"), modules = modules, active_module_id = active_module_id)
+  nav_elements <- list(
+    .teal_navbar_menu(
+      ui_teal_modules_nav_dropdown(id = ns("teal_modules"), modules = modules, active_module_id),
+      label = "Module",
+      class = "teal-modules-tree",
+      icon = "diagram-3-fill"
+    ),
+    withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
+      .teal_navbar_menu(
+        label = "Report",
+        icon = "file-text-fill",
+        if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
+          teal.reporter::preview_report_button_ui(ns("preview_report"))
+        },
+        tags$hr(style = "margin: 0.5rem;"),
+        if ("download" %in% getOption("teal.reporter.nav_buttons")) {
+          teal.reporter::download_report_button_ui(ns("download_report"))
+        },
+        if ("load" %in% getOption("teal.reporter.nav_buttons")) {
+          teal.reporter::report_load_ui(ns("load_report"))
+        },
+        tags$hr(style = "margin: 0.5rem;"),
+        if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
+          teal.reporter::reset_report_button_ui(ns("reset_reports"), label = "Reset Report")
+        }
+      )
+    }),
+    tags$span(style = "margin-left: auto;"),
+    ui_bookmark_panel(ns("bookmark_manager"), modules),
+    ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
+    ui_filter_manager_panel(ns("filter_manager_panel"))
+  )
+
+  navbar <- .teal_navbar(
+    id = ns("active_module_id"),
+    nav_items = nav_elements,
+    tab_content
+  )
+
   bslib::page_fluid(
     id = id,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),
-    htmltools::htmlDependency(
-      name = "module-navigation",
-      version = utils::packageVersion("teal"),
-      package = "teal",
-      src = "module-navigation",
-      stylesheet = "module-navigation.css"
-    ),
     shiny_busy_message_panel,
-    tags$div(
-      id = ns("tabpanel_wrapper"),
-      class = "teal-body",
-      ui_teal_modules_nav(id = ns("teal_modules"), modules = modules)
-    ),
+    tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
   )
 }
@@ -94,8 +132,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
-
-  .set_reporter_options(extract_module(modules, class = "teal_module_previewer"))
   modules <- drop_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_previewer")
 
@@ -160,18 +196,16 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       }
     })
 
-    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
-      eventReactive(data_signatured(), {
-        req(inherits(data_signatured(), "teal_data"))
-        logger::log_debug("srv_teal@1 initializing FilteredData")
-        teal_data_to_filtered_data(data_signatured())
-      })
-    }
-
     if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_modules-active_tab", "teal_data_module_ui", "open_teal_data_module_ui"))
+      setBookmarkExclude(
+        c(
+          "teal_modules-active_tab", # todo: this exlusion is not needed now as the first module is active anyway
+          "teal_data_module_ui",
+          "open_teal_data_module_ui"
+        )
+      )
       insertUI(
-        selector = ".teal-modules-wrapper .nav-item-custom",
+        selector = c(".teal-modules-wrapper .nav-item-custom"),
         where = "beforeBegin",
         .expand_button(
           id = session$ns("open_teal_data_module_ui"),
@@ -179,30 +213,35 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
           icon = "database-fill"
         )
       )
-      observeEvent(input$open_teal_data_module_ui, ignoreInit = TRUE, ignoreNULL = FALSE, {
-        showModal(
-          div(
-            class = "teal teal-data-module-popup",
-            modalDialog(
-              id = session$ns("teal_data_module_ui"),
-              size = "xl",
-              tags$div(
-                ui_init_data(session$ns("data")),
-                validate_ui
-              ),
-              easyClose = FALSE,
-              footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+      observeEvent(
+        input$open_teal_data_module_ui,
+        ignoreInit = TRUE,
+        ignoreNULL = FALSE, # should be shown on startup
+        {
+          showModal(
+            div(
+              class = "teal teal-data-module-popup",
+              modalDialog(
+                id = session$ns("teal_data_module_ui"),
+                size = "xl",
+                tags$div(
+                  ui_init_data(session$ns("data")),
+                  validate_ui
+                ),
+                easyClose = FALSE,
+                footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+              )
             )
           )
-        )
-        if (data_load_status() == "ok") {
-          shinyjs::enable(id = "close_teal_data_module_modal")
-        } else {
-          shinyjs::disable(id = "close_teal_data_module_modal")
+          if (data_load_status() == "ok") {
+            shinyjs::enable(id = "close_teal_data_module_modal")
+          } else {
+            shinyjs::disable(id = "close_teal_data_module_modal")
+          }
         }
-      })
+      )
 
-      if (attr(data, "once")) {
+      if (isTRUE(attr(data, "once"))) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
@@ -225,62 +264,37 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
 
 
-    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     if (is_arg_used(modules, "reporter")) {
-      insertUI(
-        selector = ".teal-modules-wrapper .nav-item-custom",
-        where = "afterEnd",
-        tagList(
-          tags$span(
-            class = "dropdown nav-item-custom",
-            .dropdown_button(
-              id = session$ns("show_reporter_menu"),
-              label = "Report",
-              icon = "file-text-fill",
-              add_dropdown = TRUE
-            ),
-            tags$div(
-              class = "dropdown-menu reporter-menu",
-              if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
-                teal.reporter::preview_report_button_ui(session$ns("preview_report"))
-              },
-              tags$hr(style = "margin: 0.5rem;"),
-              if ("download" %in% getOption("teal.reporter.nav_buttons")) {
-                teal.reporter::download_report_button_ui(session$ns("download_report"))
-              },
-              if ("load" %in% getOption("teal.reporter.nav_buttons")) {
-                teal.reporter::report_load_ui(session$ns("load_report"))
-              },
-              tags$hr(style = "margin: 0.5rem;"),
-              if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
-                teal.reporter::reset_report_button_ui(session$ns("reset_reports"), label = "Reset Report")
-              }
-            )
-          ),
-          tags$span(style = "margin-left: auto;"),
-          ui_bookmark_panel(session$ns("bookmark_manager"), modules),
-          ui_snapshot_manager_panel(session$ns("snapshot_manager_panel")),
-          ui_filter_manager_panel(session$ns("filter_manager_panel"))
-        )
-      )
+      shinyjs::show("reporter_menu_container")
+    } else {
+      removeUI("reporter_menu_container")
     }
-
+    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     teal.reporter::preview_report_button_srv("preview_report", reporter)
     teal.reporter::report_load_srv("load_report", reporter)
     teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
     teal.reporter::reset_report_button_srv("reset_reports", reporter)
 
+    datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
+      eventReactive(data_signatured(), {
+        req(inherits(data_signatured(), "teal_data"))
+        logger::log_debug("srv_teal@1 initializing FilteredData")
+        teal_data_to_filtered_data(data_signatured())
+      })
+    }
     module_labels <- unlist(modules_slot(modules, "label"), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
-    modules_output <- srv_teal_modules_nav(
-      id = "teal_modules",
+    modules_output <- srv_teal_module(
+      "teal_modules",
       data = data_signatured,
-      datasets = datasets_rv,
       modules = modules,
+      datasets = datasets_rv,
       slices_global = slices_global,
+      reporter = reporter,
       data_load_status = data_load_status,
-      reporter = reporter
+      active_module_id = reactive(input$active_module_id)
     )
+
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
