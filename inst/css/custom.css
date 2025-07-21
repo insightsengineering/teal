@@ -123,13 +123,3 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 .teal.primary-button:not(.disabled):hover {
   background: var(--bs-primary-bg-subtle);
 }
-
-.teal-modules-wrapper .dropdown-menu.reporter-menu {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  padding: 1rem;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-width: 200px;
-}

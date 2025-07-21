@@ -42,7 +42,7 @@
     ),
     tags$div(
       class = "dropdown-menu",
-      tags$ul(class = class, !!!list2(...))
+      tags$ul(class = class, !!!rlang::list2(...))
     )
   )
 }

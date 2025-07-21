@@ -98,14 +98,28 @@
 
 .teal-modules-wrapper .dropdown-menu {
   z-index: 1046;
-  width: 700px;
   max-width: calc(100vw - 2rem);
   max-height: 80vh;
-  padding: 1.5rem;
+  padding: 1rem;
   overflow-y: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border: 1px solid #dee2e6;
   border-radius: 8px;
+}
+
+.teal-modules-wrapper .dropdown-menu > .teal-modules-tree {
+  width: 700px;
+}
+
+.teal-modules-wrapper .dropdown-menu > .reporter-menu {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+  padding: 0;
 }
 
 .teal-modules-wrapper .dropdown-toggle {

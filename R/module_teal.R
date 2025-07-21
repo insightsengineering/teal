@@ -85,6 +85,7 @@ ui_teal <- function(id, modules) {
       .teal_navbar_menu(
         label = "Report",
         icon = "file-text-fill",
+        class = "reporter-menu",
         if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
           teal.reporter::preview_report_button_ui(ns("preview_report"))
         },
