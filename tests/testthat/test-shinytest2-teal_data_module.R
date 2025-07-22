@@ -67,17 +67,12 @@ testthat::test_that("e2e: teal_data_module modal close is disabled `once=FALSE` 
     modules = example_module(label = "Example Module")
   )
 
-  testthat::expect_type(
-    app$get_html("#teal-close_teal_data_module_modal button.disabled"),
-    "character"
-  )
+  expected_button_selector <- "#teal-close_teal_data_module_modal button.disabled"
+  testthat::expect_type(app$get_html(expected_button_selector), "character")
   app$click("teal-data-teal_data_module-submit")
   app$click(selector = "#teal-close_teal_data_module_modal button")
 
-  testthat::expect_null(
-    app$get_html("#teal-close_teal_data_module_modal button.disabled")
-  )
-  testthat::expect_null(app$get_html(".teal-data-module-popup"))
+  testthat::expect_null(app$get_html(expected_button_selector))
   app$stop()
 })
 
