@@ -359,7 +359,9 @@ create_app_id <- function(data, modules) {
   }
   modules <- lapply(modules, defunction)
 
-  rlang::hash(list(data = data, modules = modules))
+  # Suppress warnings of type: `package:MultiAssayExperiment' may not be available when loading`
+  # This is because the package namespace may be part of the `data` object
+  suppressWarnings(rlang::hash(list(data = data, modules = modules)))
 }
 
 #' Go through list and extract bodies of encountered functions as string, recursively.
