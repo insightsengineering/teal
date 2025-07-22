@@ -35,26 +35,3 @@ report_module <- function(label = "example teal module") {
     }
   )
 }
-
-example_teal_data_module <- function(with_submit = FALSE, once = TRUE) {
-  teal_data_module(
-    ui = function(id) {
-      tagList(
-        numericInput(NS(id, "iris_rows"), "iris rows", min = 0, max = 150, step = 1, value = 10),
-        if (with_submit) actionButton(NS(id, "submit"), "Submit")
-      )
-    },
-    server = function(id, ...) {
-      moduleServer(id, function(input, output, session) {
-        if (with_submit) {
-          eventReactive(input$submit, {
-            teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars)
-          })
-        } else {
-          reactive(teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars))
-        }
-      })
-    },
-    once = once
-  )
-}
