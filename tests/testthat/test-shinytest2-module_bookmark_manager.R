@@ -50,5 +50,6 @@ testthat::test_that("bookmark_manager_button shows modal with url containing sta
   testthat::expect_match(
     rvest::html_text(app$get_html_rvest("div[id$=bookmark_modal] pre")),
     "_state_id_=[a-zA-Z0-9]+", # bookmark link has `_state_id_=<hex code from shiny bookmark>`
+  )
   app$stop()
 })
