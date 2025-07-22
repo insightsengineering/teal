@@ -56,10 +56,10 @@ testthat::test_that("e2e: adding a report card in a module adds it in the report
 
   # Check whether card was added
   app$navigate_teal_tab("Report previewer")
-  accordian_selector <- sprintf("#%s-pcards .accordion-toggle", app$active_module_ns())
-  app$click(selector = accordian_selector)
+  accordion_selector <- sprintf("#%s-pcards .accordion-toggle", app$active_module_ns())
+  app$click(selector = accordion_selector)
 
-  testthat::expect_match(app$get_text(selector = accordian_selector), "Card 1: Card name")
+  testthat::expect_match(app$get_text(selector = accordion_selector), "Card 1: Card name")
   testthat::expect_match(app$get_text(selector = "#card1 pre"), "Card comment")
 
   app$stop()

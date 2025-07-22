@@ -72,13 +72,13 @@ a.disabled {
   --bs-accordion-active-bg: #c5c5c5;
 }
 
-.teal-transform-accordian .accordion-button {
+.teal-transform-accordion .accordion-button {
   --bs-accordion-btn-padding-y: 0.5rem;
   --bs-accordion-btn-padding-x: 0.5rem;
 }
 
-.teal-transform-accordian .accordion-button:not(.collapsed)::after,
-.teal-transform-accordian .accordion-button::after {
+.teal-transform-accordion .accordion-button:not(.collapsed)::after,
+.teal-transform-accordion .accordion-button::after {
   display: none;
 }
 
