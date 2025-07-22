@@ -119,24 +119,27 @@ srv_snapshot_manager_panel <- function(id, slices_global) {
 ui_snapshot_manager <- function(id) {
   ns <- NS(id)
   tags$div(
-    class = "manager_content",
     tags$div(
-      class = "manager_table_row",
+      class = "teal manager_table_row",
       tags$span(tags$b("Snapshot manager")),
       bslib::tooltip(
-        actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera")),
-        "Add snapshot"
+        tags$span(actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera"))),
+        "Add snapshot",
+        placement = "top"
       ),
       bslib::tooltip(
-        actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload")),
-        "Upload snapshot"
+        tags$span(actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload"))),
+        "Upload snapshot",
+        placement = "top"
       ),
       bslib::tooltip(
-        actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo")),
-        "Reset initial state"
+        tags$span(actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo"))),
+        "Reset initial state",
+        placement = "top"
       ),
       NULL
     ),
+    tags$br(),
     uiOutput(ns("snapshot_list"))
   )
 }
@@ -252,16 +255,22 @@ srv_snapshot_manager <- function(id, slices_global) {
               NULL,
               "Dismiss"
             ),
-            shiny::tags$button(
-              id = ns("snapshot_file_accept"),
-              type = "button",
-              class = "btn btn-primary action-button",
-              NULL,
-              "Accept"
+            shinyjs::disabled(
+              shiny::tags$button(
+                id = ns("snapshot_file_accept"),
+                type = "button",
+                class = "btn btn-primary action-button",
+                NULL,
+                "Accept"
+              )
             )
           )
         )
       )
+    })
+
+    observeEvent(input$snapshot_file, {
+      shinyjs::enable("snapshot_file_accept")
     })
     # Store new snapshot to list and restore filter states.
     observeEvent(input$snapshot_file_accept, {
@@ -367,10 +376,18 @@ srv_snapshot_manager <- function(id, slices_global) {
         # Create a row for the snapshot table.
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- tags$div(
-            class = "manager_table_row",
+            class = "teal manager_table_row",
             tags$span(tags$h5(s)),
-            actionLink(inputId = ns(id_pickme), label = icon("far fa-circle-check"), title = "select"),
-            downloadLink(outputId = ns(id_saveme), label = icon("far fa-save"), title = "save to file")
+            bslib::tooltip(
+              actionLink(inputId = ns(id_pickme), label = icon("far fa-circle-check")),
+              "select",
+              placement = "top"
+            ),
+            bslib::tooltip(
+              downloadLink(outputId = ns(id_saveme), label = icon("far fa-save")),
+              "save to file",
+              placement = "top"
+            )
           )
         }
       })
@@ -381,7 +398,6 @@ srv_snapshot_manager <- function(id, slices_global) {
       rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
         tags$div(
-          class = "manager_placeholder",
           "Snapshots will appear here."
         )
       } else {
