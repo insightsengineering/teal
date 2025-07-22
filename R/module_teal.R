@@ -87,14 +87,14 @@ ui_teal <- function(id, modules) {
         icon = "file-text-fill",
         class = "reporter-menu",
         if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::preview_report_button_ui(ns("preview_report"))
+          teal.reporter::preview_report_button_ui(ns("preview_report"), label = "Preview Report")
         },
         tags$hr(style = "margin: 0.5rem;"),
         if ("download" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::download_report_button_ui(ns("download_report"))
+          teal.reporter::download_report_button_ui(ns("download_report"), label = "Download Report")
         },
         if ("load" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::report_load_ui(ns("load_report"))
+          teal.reporter::report_load_ui(ns("load_report"), label = "Load Report")
         },
         tags$hr(style = "margin: 0.5rem;"),
         if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
