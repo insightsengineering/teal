@@ -2,9 +2,6 @@
 % Please edit documentation in R/module_nested_tabs.R
 \name{module_teal_modules_nav}
 \alias{module_teal_modules_nav}
-\alias{ui_teal_modules_nav_dropdown}
-\alias{ui_teal_modules_nav_dropdown.teal_modules}
-\alias{ui_teal_modules_nav_dropdown.teal_module}
 \alias{ui_teal_module}
 \alias{ui_teal_module.default}
 \alias{ui_teal_module.teal_modules}
@@ -15,12 +12,6 @@
 \alias{srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-ui_teal_modules_nav_dropdown(id, modules, active_module_id)
-
-\method{ui_teal_modules_nav_dropdown}{teal_modules}(id, modules, active_module_id)
-
-\method{ui_teal_modules_nav_dropdown}{teal_module}(id, modules, active_module_id)
-
 ui_teal_module(id, modules, active_module_id)
 
 \method{ui_teal_module}{default}(id, modules, active_module_id)
@@ -93,6 +84,9 @@ which implies the filter-panel to be "global". When \code{NULL} then filter-pane
 \item{slices_global}{(\code{reactiveVal} returning \code{modules_teal_slices})
 see \code{\link{module_filter_manager}}}
 
+\item{reporter}{(\code{Reporter}, singleton)
+Stores reporter-cards appended in the server of \code{teal_module}.}
+
 \item{data_load_status}{(\code{reactive} returning \code{character(1)})
 Determines action dependent on a data loading status:
 \itemize{
@@ -106,50 +100,24 @@ panel.
 Output of currently active module.
 \itemize{
 \item \code{srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
-\item \code{srv_teal_module.teal_modules} returns output of module selected by drop-down.
-\item \code{srv_teal_modules_nav} bypasses output of \code{srv_teal_module.teal_modules}.
+\item \code{srv_teal_module.teal_modules} returns output of modules in a list following the hierarchy of \code{modules}
 }
 }
 \description{
-Module calls \code{modules} with \code{id} according to their location in the tree. There are multiple modules
-managing this process:
-\itemize{
-\item \code{ui/srv_teal_modules_nav} container module where \code{input$active_module_id} exists.
-\item \code{ui_teal_modules_nav_dropdown} creates drop-down menu to select active module.
-\item \code{ui/srv_teal_module} creates tab containers for each module. Only one module is visible at the time as a result
-of selecting in \code{ui_teal_modules_nav_dropdown}.
+Modules are called recursively following the hierarchy of \code{modules} (\code{\link[=teal_modules]{teal_modules()}}). \code{modules} are called
+with an \code{id} derived from \code{teal_module}'s label and labels of its ancestors (if any).
+Module is not self-contained, it needs \code{\link{module_teal}} to include items into \code{\link[=.teal_navbar]{.teal_navbar()}} and establish
+\code{input$active_module_id}.
 }
-}
-\details{
-\subsection{UI}{
-
-On the UI side, a drop-down is created that lists buttons labeled with the labels of all \code{teal_module}s.
-The buttons in the drop-down are grouped according to their respective groups.
-These UI components are created in a way to utilize navigation-bar functionality of shiny.
-To achieve this, the buttons need to be placed inside a \verb{<ul class = "nav shiny-tab-input">}.
-\enumerate{
-\item Each module button has following attributes:
-}
-\itemize{
-\item \code{href = "#<teal_module container id>"} links button with the container of the specific \code{teal_module}
-\item \code{data-bs-toggle = "tab"} tells Bootstrap to hide or show \code{teal_module}'s content
-\item \code{data-value = "<teal_module$path>"} This attribute is taken by shiny from all buttons of class "active"
-and used as \code{input$active_module_id} in the namespace of \code{\link[=srv_teal_modules_nav]{srv_teal_modules_nav()}}.
-}
-\enumerate{
-\item Each module content is wrapped in a container with the \code{class = "tab-pane"} with a unique \code{id}.
-This tells Bootstrap library that clicking a button should toggle relevant "tab"
-with an \code{id} matching button's \code{href} attribute.
-}
+\section{UI}{
+UI functions return a list with \code{link}, \code{tab_content} slots which are linked together with the same
+reference id. Links contain \verb{href = #<module container id>} attribute which links the click action
+with specific module to toggle.
 }
 
-\subsection{Server}{
-
-On the server side, \code{teal_module}(s) are called with \code{id} respective to their label and group.
-\code{input$active_module_id} determines which module is currently active and only this module
-observes reactive changes.
-}
-
+\section{Server}{
+Server functions return a list of \code{reactiveValues} containing all \code{teal_module}(s) outputs.
+List structure follows the same hierarchy as one provided in the \code{modules} argument.
 \subsection{Initialization and isolation of the \code{teal_module}(s)}{
 
 Modules are initialized only when they are active. This speeds up app initialization and on
@@ -159,4 +127,5 @@ one can run at any given time. This makes the app more efficient by reducing unn
 computations on server side.
 }
 }
+
 \keyword{internal}

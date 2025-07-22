@@ -1,32 +1,21 @@
 #' Calls all `modules`
 #'
-#' Module calls `modules` with `id` according to their location in the tree. There are multiple modules
-#' managing this process:
-#' - `ui/srv_teal_modules_nav` container module where `input$active_module_id` exists.
-#' - `ui_teal_modules_nav_dropdown` creates drop-down menu to select active module.
-#' - `ui/srv_teal_module` creates tab containers for each module. Only one module is visible at the time as a result
-#'   of selecting in `ui_teal_modules_nav_dropdown`.
 #'
-#' ### UI
+#' Modules are called recursively following the hierarchy of `modules` ([teal_modules()]). `modules` are called
+#' with an `id` derived from `teal_module`'s label and labels of its ancestors (if any).
+#' Module is not self-contained, it needs [`module_teal`] to include items into [.teal_navbar()] and establish
+#' `input$active_module_id`.
 #'
-#' On the UI side, a drop-down is created that lists buttons labeled with the labels of all `teal_module`s.
-#' The buttons in the drop-down are grouped according to their respective groups.
-#' These UI components are created in a way to utilize navigation-bar functionality of shiny.
-#' To achieve this, the buttons need to be placed inside a `<ul class = "nav shiny-tab-input">`.
-#' 1. Each module button has following attributes:
-#'   - `href = "#<teal_module container id>"` links button with the container of the specific `teal_module`
-#'   - `data-bs-toggle = "tab"` tells Bootstrap to hide or show `teal_module`'s content
-#'   - `data-value = "<teal_module$path>"` This attribute is taken by shiny from all buttons of class "active"
-#'     and used as `input$active_module_id` in the namespace of [srv_teal_modules_nav()].
-#' 2. Each module content is wrapped in a container with the `class = "tab-pane"` with a unique `id`.
-#' This tells Bootstrap library that clicking a button should toggle relevant "tab"
-#' with an `id` matching button's `href` attribute.
+#' # UI
 #'
-#' ### Server
+#' UI functions return a list with `link`, `tab_content` slots which are linked together with the same
+#' reference id. Links contain `href = #<module container id>` attribute which links the click action
+#' with specific module to toggle.
 #'
-#'  On the server side, `teal_module`(s) are called with `id` respective to their label and group.
-#' `input$active_module_id` determines which module is currently active and only this module
-#'  observes reactive changes.
+#' # Server
+#'
+#' Server functions return a list of `reactiveValues` containing all `teal_module`(s) outputs.
+#' List structure follows the same hierarchy as one provided in the `modules` argument.
 #'
 #' ### Initialization and isolation of the `teal_module`(s)
 #'
@@ -49,6 +38,9 @@
 #'  When `datasets` is passed from the parent module (`srv_teal`) then `dataset` is a singleton
 #'  which implies the filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
 #'
+#' @param reporter (`Reporter`, singleton)
+#'  Stores reporter-cards appended in the server of `teal_module`.
+#'
 #' @param data_load_status (`reactive` returning `character(1)`)
 #'  Determines action dependent on a data loading status:
 #'  - `"ok"` when `teal_data` is returned from the data loading.
@@ -62,53 +54,10 @@
 #' @return
 #' Output of currently active module.
 #' - `srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
-#' - `srv_teal_module.teal_modules` returns output of module selected by drop-down.
-#' - `srv_teal_modules_nav` bypasses output of `srv_teal_module.teal_modules`.
+#' - `srv_teal_module.teal_modules` returns output of modules in a list following the hierarchy of `modules`
 #'
 #' @keywords internal
 NULL
-
-#' @rdname module_teal_modules_nav
-ui_teal_modules_nav_dropdown <- function(id, modules, active_module_id) {
-  UseMethod("ui_teal_modules_nav_dropdown", modules)
-}
-
-#' @rdname module_teal_modules_nav
-#' @export
-ui_teal_modules_nav_dropdown.teal_modules <- function(id, modules, active_module_id) {
-  ns <- NS(id)
-  tagList(
-    if (length(modules$label)) tags$li(tags$span(modules$label, class = "module-group-label")),
-    tags$li(
-      tags$ul(
-        mapply(
-          ui_teal_modules_nav_dropdown,
-          id = ns(.label_to_id(sapply(modules$children, `[[`, "label"))),
-          modules = modules$children,
-          active_module_id = active_module_id,
-          SIMPLIFY = FALSE
-        )
-      )
-    )
-  )
-}
-
-#' @rdname module_teal_modules_nav
-#' @export
-ui_teal_modules_nav_dropdown.teal_module <- function(id, modules, active_module_id) {
-  ns <- NS(id)
-  module_id <- modules$path
-  tags$li(
-    tags$a(
-      href = paste0("#", ns("wrapper")), # links button with module content in `tab-content` with same id.
-      `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
-      `data-value` = module_id, # this data is set as the shiny input.
-      class = c("nav-link", "module-button", "btn-default", if (identical(module_id, active_module_id)) "active"),
-      # `nav-link` is required to mimic bslib tab panel.
-      modules$label
-    )
-  )
-}
 
 #' @rdname module_teal_modules_nav
 ui_teal_module <- function(id, modules, active_module_id) {
@@ -125,14 +74,20 @@ ui_teal_module.default <- function(id, modules, active_module_id) {
 #' @rdname module_teal_modules_nav
 #' @export
 ui_teal_module.teal_modules <- function(id, modules, active_module_id) {
-  tagList(
-    mapply(
-      FUN = ui_teal_module,
-      id = NS(id, .label_to_id(sapply(modules$children, `[[`, "label"))),
-      modules = modules$children,
-      active_module_id = active_module_id,
-      SIMPLIFY = FALSE
-    )
+  items <- mapply(
+    FUN = ui_teal_module,
+    id = NS(id, .label_to_id(sapply(modules$children, `[[`, "label"))),
+    modules = modules$children,
+    active_module_id = active_module_id,
+    SIMPLIFY = FALSE
+  )
+
+  list(
+    link = tagList(
+      if (length(modules$label)) tags$li(tags$span(modules$label, class = "module-group-label")),
+      tags$li(tags$ul(lapply(items, `[[`, "link")))
+    ),
+    tab_content = tagList(lapply(items, `[[`, "tab_content"))
   )
 }
 
@@ -161,9 +116,22 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
+  container_id <- ns("wrapper")
   module_id <- modules$path
-  div(
-    id = ns("wrapper"),
+
+  link <- tags$li(
+    tags$a(
+      href = paste0("#", container_id), # links button with module content in `tab-content` with same id.
+      `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
+      `data-value` = module_id, # this data is set as the shiny input.
+      class = c("nav-link", "module-button", "btn-default", if (identical(module_id, active_module_id)) "active"),
+      # `nav-link` is required to mimic bslib tab panel.
+      modules$label
+    )
+  )
+
+  tab_content <- div(
+    id = container_id,
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
     tagList(
       .modules_breadcrumb(modules),
@@ -256,6 +224,8 @@ ui_teal_module.teal_module <- function(id, modules, active_module_id) {
       }
     )
   )
+
+  list(link = link, tab_content = tab_content)
 }
 
 #' @rdname module_teal_modules_nav

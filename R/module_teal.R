@@ -73,10 +73,10 @@ ui_teal <- function(id, modules) {
     unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
   )
 
-  tab_content <- ui_teal_module(id = ns("teal_modules"), modules = modules, active_module_id = active_module_id)
+  module_items <- ui_teal_module(id = ns("teal_modules"), modules = modules, active_module_id = active_module_id)
   nav_elements <- list(
     .teal_navbar_menu(
-      ui_teal_modules_nav_dropdown(id = ns("teal_modules"), modules = modules, active_module_id),
+      !!!module_items$link,
       label = "Module",
       class = "teal-modules-tree",
       icon = "diagram-3-fill"
@@ -111,7 +111,7 @@ ui_teal <- function(id, modules) {
   navbar <- .teal_navbar(
     id = ns("active_module_id"),
     nav_items = nav_elements,
-    tab_content
+    tab_content = module_items$tab_content
   )
 
   bslib::page_fluid(
@@ -198,13 +198,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     })
 
     if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(
-        c(
-          "teal_modules-active_tab", # todo: this exlusion is not needed now as the first module is active anyway
-          "teal_data_module_ui",
-          "open_teal_data_module_ui"
-        )
-      )
+      setBookmarkExclude(c("teal_data_module_ui", "open_teal_data_module_ui"))
       insertUI(
         selector = c(".teal-modules-wrapper .nav-item-custom"),
         where = "beforeBegin",
@@ -285,6 +279,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     }
     module_labels <- unlist(modules_slot(modules, "label"), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
+
     modules_output <- srv_teal_module(
       "teal_modules",
       data = data_signatured,

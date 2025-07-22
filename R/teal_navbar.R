@@ -9,9 +9,6 @@
 #'
 #'
 .teal_navbar <- function(id, nav_items, tab_content) {
-  # todo: possible determine active item here?
-  #       - we could run through nav_items and mark the first one as active (in page_navbar arg is named `selected`)
-  #       - then we can find a tab_content which has the same id
   tags$div(
     class = "teal-modules-wrapper",
     htmltools::htmlDependency(
