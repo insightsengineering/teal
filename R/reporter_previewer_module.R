@@ -54,7 +54,11 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   module
 }
 
-#' Temporary function to server before hard deprecate report_previewer_module
+#' Temporary function to handle server_args of the report_previewer_module before its hard
+#' deprecation.
+#' @param args (`list`)
+#'
+#' @keywords internal
 .get_reporter_options <- function(args) {
   opts <- list()
   if (length(args$previewer_buttons)) {

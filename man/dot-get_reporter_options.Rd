@@ -2,10 +2,16 @@
 % Please edit documentation in R/reporter_previewer_module.R
 \name{.get_reporter_options}
 \alias{.get_reporter_options}
-\title{Temporary function to server before hard deprecate report_previewer_module}
+\title{Temporary function to handle server_args of the report_previewer_module before its hard
+deprecation.}
 \usage{
 .get_reporter_options(args)
 }
-\description{
-Temporary function to server before hard deprecate report_previewer_module
+\arguments{
+\item{args}{(\code{list})}
 }
+\description{
+Temporary function to handle server_args of the report_previewer_module before its hard
+deprecation.
+}
+\keyword{internal}

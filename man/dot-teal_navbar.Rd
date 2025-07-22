@@ -19,3 +19,4 @@ Creates a navigation bar with consistent styling
 \item \code{.teal_navbar} creates a container for modules navigation in \code{teal}
 }
 }
+\keyword{internal}

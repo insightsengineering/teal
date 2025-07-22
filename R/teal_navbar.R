@@ -7,7 +7,7 @@
 #' @param tab_content (`tagList`) list of panels which will be displayed if respective navigation
 #'  button will be clicked.
 #'
-#'
+#' @keywords internal
 .teal_navbar <- function(id, nav_items, tab_content) {
   tags$div(
     class = "teal-modules-wrapper",
