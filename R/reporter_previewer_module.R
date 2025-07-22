@@ -2,10 +2,10 @@
 #'
 #' @description `r lifecycle::badge("deprecated")`
 #'
-#' This function controls the appearance of the dropdown menu for the reporter.
-#' It is now deprecated in favour of the options:
+#' This function controls the appearance of the drop-down menu for the reporter.
+#' It is now deprecated in favor of the options:
 #' - `teal.reporter.nav_buttons = c("preview", "load", "download", "reset")` to control which
-#'  buttons will be displayed in the dropdown.
+#'  buttons will be displayed in the drop-down.
 #' - `teal.reporter.rmd_outputs`: passed to [teal.reporter::download_report_button_srv()]
 #' - `teal.reporter.rmd_yaml_args`: passed to [teal.reporter::download_report_button_srv()]
 #' - `teal.reporter.knitr_global`: passed to [teal.reporter::download_report_button_srv()]
@@ -70,7 +70,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   }
 
   if (length(args$rmd_yaml_args)) {
-    opts <- c(opts, (teal.reporter.rmd_yaml_args <- args$rmd_yaml_args))
+    opts <- c(opts, list(teal.reporter.rmd_yaml_args <- args$rmd_yaml_args))
   }
 
   opts

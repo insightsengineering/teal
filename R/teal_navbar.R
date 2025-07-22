@@ -2,7 +2,7 @@
 #'
 #' Creates a navigation bar with consistent styling
 #' - `.teal_navbar` creates a container for modules navigation in `teal`
-#' @param nav_items (`tagList`) list of elements (e.g. buttons, dropdowns) which will be placed in
+#' @param nav_items (`tagList`) list of elements (e.g. buttons, drop-downs) which will be placed in
 #'  the navbar.
 #' @param tab_content (`tagList`) list of panels which will be displayed if respective navigation
 #'  button will be clicked.

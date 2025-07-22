@@ -7,7 +7,7 @@
 .teal_navbar(id, nav_items, tab_content)
 }
 \arguments{
-\item{nav_items}{(\code{tagList}) list of elements (e.g. buttons, dropdowns) which will be placed in
+\item{nav_items}{(\code{tagList}) list of elements (e.g. buttons, drop-downs) which will be placed in
 the navbar.}
 
 \item{tab_content}{(\code{tagList}) list of panels which will be displayed if respective navigation
