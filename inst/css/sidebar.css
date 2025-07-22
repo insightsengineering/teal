@@ -56,8 +56,8 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button {
-  --bs-accordion-btn-bg: #ededed;
-  --bs-accordion-active-bg: #ededed;
+  --bs-accordion-btn-bg: rgba(var(--bs-secondary-rgb), 0.1);
+  --bs-accordion-active-bg: rgba(var(--bs-secondary-rgb), 0.1);
   --bs-accordion-btn-padding-x: 1rem;
   --bs-accordion-btn-padding-y: 0.7rem;
 }
@@ -68,8 +68,8 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button:hover {
-  --bs-accordion-btn-bg: #c5c5c5;
-  --bs-accordion-active-bg: #c5c5c5;
+  --bs-accordion-btn-bg: rgba(var(--bs-secondary-rgb), 0.3);
+  --bs-accordion-active-bg: rgba(var(--bs-secondary-rgb), 0.3);
 }
 
 .teal-transform-accordian .accordion-button {
