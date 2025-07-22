@@ -218,7 +218,7 @@ testthat::test_that("e2e: teal_data_module is still visible after successful dat
   )
 
   app$click("teal-data-teal_data_module-submit")
-  app$click(selector = "#teal-close_teal_data_module_modal button[data-dismiss='modal']")
+  app$click(selector = "#teal-close_teal_data_module_modal button")
   testthat::expect_true(app$is_visible("#teal-open_teal_data_module_ui"))
 
   app$stop()
