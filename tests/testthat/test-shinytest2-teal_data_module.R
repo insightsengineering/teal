@@ -202,7 +202,7 @@ testthat::test_that("e2e: teal_data_module is still visible after successful dat
     server = function(id) {
       shiny::moduleServer(id, function(input, output, session) {
         shiny::eventReactive(input$submit, {
-          data <- within(teal_data(), {
+          within(teal_data(), {
             dataset1 <- iris
             dataset2 <- mtcars
           })
