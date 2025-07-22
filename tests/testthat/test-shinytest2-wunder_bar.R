@@ -43,6 +43,8 @@ testthat::test_that("e2e: collapsing wunderbar hides filter and data summary", {
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
   app <- TealAppDriver$new(data = data, modules = example_module())
+  testthat::expect_true(app$is_visible(".teal-filter-panel"))
+  testthat::expect_true(app$is_visible(".teal-active-data-summary-panel"))
   app$click(selector = ".teal_module.active > .bslib-sidebar-layout > button.collapse-toggle")
   testthat::expect_false(app$is_visible(".teal-filter-panel"))
   testthat::expect_false(app$is_visible(".teal-active-data-summary-panel"))
