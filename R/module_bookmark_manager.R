@@ -126,7 +126,8 @@ srv_bookmark_panel <- function(id, modules) {
             id = ns("bookmark_modal"),
             title = "Bookmarked teal app url",
             modal_content,
-            easyClose = TRUE
+            easyClose = TRUE,
+            footer = NULL
           )
         )
       )

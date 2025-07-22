@@ -8,7 +8,7 @@
   margin: 2px;
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
   border: 1px solid var(--bs-primary-border-subtle);
-  border-radius: 12px;
+  border-radius: 5px;
   background: white;
   color: var(--bs-primary);
   display: inline-flex;

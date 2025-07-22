@@ -123,9 +123,18 @@ ui_snapshot_manager <- function(id) {
     tags$div(
       class = "manager_table_row",
       tags$span(tags$b("Snapshot manager")),
-      actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera"), title = "add snapshot"),
-      actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload"), title = "upload snapshot"),
-      actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo"), title = "reset initial state"),
+      bslib::tooltip(
+        actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera")),
+        "Add snapshot"
+      ),
+      bslib::tooltip(
+        actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload")),
+        "Upload snapshot"
+      ),
+      bslib::tooltip(
+        actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo")),
+        "Reset initial state"
+      ),
       NULL
     ),
     uiOutput(ns("snapshot_list"))
@@ -143,7 +152,7 @@ srv_snapshot_manager <- function(id, slices_global) {
     # Register bookmark exclusions (all buttons and text fields).
     setBookmarkExclude(c(
       "snapshot_add", "snapshot_load", "snapshot_reset",
-      "snapshot_name_accept", "snaphot_file_accept",
+      "snapshot_name_accept", "snapshot_file_accept",
       "snapshot_name", "snapshot_file"
     ))
     # Add snapshot history to bookmark.
@@ -164,21 +173,34 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
 
     # Snapshot current application state ----
-    # Name snaphsot.
+    # Name snapshot.
     observeEvent(input$snapshot_add, {
       logger::log_debug("srv_snapshot_manager: snapshot_add button clicked")
       showModal(
         modalDialog(
+          easyClose = TRUE,
           textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
-          footer = tagList(
-            actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("far fa-thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))
+          footer = shiny::div(
+            shiny::tags$button(
+              type = "button",
+              class = "btn btn-outline-secondary",
+              `data-bs-dismiss` = "modal",
+              NULL,
+              "Dismiss"
+            ),
+            shiny::tags$button(
+              id = ns("snapshot_name_accept"),
+              type = "button",
+              class = "btn btn-primary action-button",
+              NULL,
+              "Accept"
+            )
           ),
           size = "s"
         )
       )
     })
-    # Store snaphsot.
+    # Store snapshot.
     observeEvent(input$snapshot_name_accept, {
       logger::log_debug("srv_snapshot_manager: snapshot_name_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
@@ -214,6 +236,7 @@ srv_snapshot_manager <- function(id, slices_global) {
       logger::log_debug("srv_snapshot_manager: snapshot_load button clicked")
       showModal(
         modalDialog(
+          easyClose = TRUE,
           fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
           textInput(
             ns("snapshot_name"),
@@ -221,15 +244,27 @@ srv_snapshot_manager <- function(id, slices_global) {
             width = "100%",
             placeholder = "Meaningful, unique name"
           ),
-          footer = tagList(
-            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("far fa-thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))
+          footer = shiny::div(
+            shiny::tags$button(
+              type = "button",
+              class = "btn btn-outline-secondary",
+              `data-bs-dismiss` = "modal",
+              NULL,
+              "Dismiss"
+            ),
+            shiny::tags$button(
+              id = ns("snapshot_file_accept"),
+              type = "button",
+              class = "btn btn-primary action-button",
+              NULL,
+              "Accept"
+            )
           )
         )
       )
     })
     # Store new snapshot to list and restore filter states.
-    observeEvent(input$snaphot_file_accept, {
+    observeEvent(input$snapshot_file_accept, {
       logger::log_debug("srv_snapshot_manager: snapshot_file_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
