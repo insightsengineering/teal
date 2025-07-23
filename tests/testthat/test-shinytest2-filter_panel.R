@@ -100,15 +100,10 @@ testthat::test_that("e2e: filter panel UI can be collpased and expanded (`bslib`
   app <- TealAppDriver$new(data = data, modules = example_module())
 
   # Visible by default
-  filterpanel_accordion_selector <- paste(
-    ".teal-filter-panel [id$=\\'filters-main_filter_accordion\\']",
-    "> .accordion-item > .accordion-collapse"
-  )
+  filter_panel_id <- "#teal-teal_modules-nav-example_teal_module-filter_panel-filters-main_filter_accordion"
+  filterpanel_accordion_selector <- paste(filter_panel_id, "> .accordion-item > .accordion-collapse")
   testthat::expect_true(app$is_visible(filterpanel_accordion_selector))
-  app$click(selector = paste(
-    ".teal-filter-panel [id$='filters-main_filter_accordion']",
-    "> .accordion-item > .accordion-header button"
-  ))
+  app$click(selector = paste(filter_panel_id, "> .accordion-item > .accordion-header button"))
   testthat::expect_false(app$is_visible(filterpanel_accordion_selector))
 
   app$stop()
