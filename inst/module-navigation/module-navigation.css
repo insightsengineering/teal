@@ -118,8 +118,11 @@
   padding: 1rem;
   flex-direction: column;
   gap: 0.5rem;
-  min-width: 200px;
   padding: 0;
+}
+
+.teal-modules-wrapper .dropdown-menu > .reporter-menu .teal-reporter {
+  white-space: nowrap;
 }
 
 .teal-modules-wrapper .dropdown-toggle {
