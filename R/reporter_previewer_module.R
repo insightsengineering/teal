@@ -18,8 +18,6 @@
 #' `teal_module` (extended with `teal_module_previewer` class) containing the `teal.reporter` previewer functionality.
 #'
 #' @export
-#'
-#'
 reporter_previewer_module <- function(label = "Report previewer", server_args = list()) {
   checkmate::assert_string(label)
   checkmate::assert_list(server_args, names = "named")
@@ -28,7 +26,13 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   lifecycle::deprecate_soft(
     when = "",
     what = "reporter_previewer_module()",
-    details = "Please use `options()`"
+    details = paste(
+      "Please use `options()` to customize the reporter options:\n",
+      "`teal.reporter.nav_buttons` to control which buttons will be displayed in the 'Report' drop-down.\n",
+      "`teal.reporter.rmd_outputs` to customize the R Markdown outputs types for the report.\n",
+      "`teal.reporter.rmd_yaml_args` to customize the widget inputs in the download report modal.\n",
+      "`teal.reporter.knitr_global` to customize the global knitr options for the report."
+    )
   )
 
   message("Initializing reporter_previewer_module")
