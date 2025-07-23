@@ -74,10 +74,17 @@ ui_teal <- function(id, modules) {
   )
 
   module_items <- ui_teal_module(id = ns("teal_modules"), modules = modules, active_module_id = active_module_id)
+  count_modules <- function(x) {
+    if (inherits(x, "teal_module")) {
+      1L
+    } else if (inherits(x, "teal_modules")) {
+      sum(vapply(x$children, count_modules, integer(1L)))
+    }
+  }
   nav_elements <- list(
     .teal_navbar_menu(
       !!!module_items$link,
-      label = "Module",
+      label = sprintf("Module (%d)", count_modules(modules)),
       class = "teal-modules-tree",
       icon = "diagram-3-fill"
     ),
