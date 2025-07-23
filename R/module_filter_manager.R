@@ -193,7 +193,7 @@ srv_module_filter_manager <- function(id, module_fd, slices_global) {
       slices <- slices_global_module()
 
       # Clean up previous filter states and refresh cache of previous module_fd with current
-      if (!is.null(module_fd_previous())) module_fd_previous()$finalize()
+      if (!is.null(module_fd_previous())) module_fd_previous()$destroy()
       module_fd_previous(module_fd())
 
       # Setting filter states from slices_global:
