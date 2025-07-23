@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.534995977473854" branch-rate="0" lines-covered="1995" lines-valid="3729" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-07-23 09:30:03.911875">
+<coverage line-rate="0.534136546184739" branch-rate="0" lines-covered="1995" lines-valid="3735" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-07-23 11:16:41.245995">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.534995977473854" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.534136546184739" branch-rate="0" complexity="0">
       <classes>
         <class name="checkmate.R" filename="R/checkmate.R" line-rate="1" branch-rate="0" complexity="0">
           <methods>
@@ -5606,17 +5606,20 @@
           <methods>
             <method name="reporter_previewer_module" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
+                <line number="22" hits="0" branch="false"/>
+                <line number="23" hits="0" branch="false"/>
                 <line number="24" hits="0" branch="false"/>
-                <line number="25" hits="0" branch="false"/>
                 <line number="26" hits="0" branch="false"/>
+                <line number="27" hits="0" branch="false"/>
                 <line number="28" hits="0" branch="false"/>
                 <line number="29" hits="0" branch="false"/>
                 <line number="30" hits="0" branch="false"/>
                 <line number="31" hits="0" branch="false"/>
                 <line number="32" hits="0" branch="false"/>
+                <line number="33" hits="0" branch="false"/>
                 <line number="34" hits="0" branch="false"/>
+                <line number="35" hits="0" branch="false"/>
                 <line number="36" hits="0" branch="false"/>
-                <line number="37" hits="0" branch="false"/>
                 <line number="38" hits="0" branch="false"/>
                 <line number="40" hits="0" branch="false"/>
                 <line number="41" hits="0" branch="false"/>
@@ -5624,19 +5627,20 @@
                 <line number="44" hits="0" branch="false"/>
                 <line number="45" hits="0" branch="false"/>
                 <line number="46" hits="0" branch="false"/>
-                <line number="47" hits="0" branch="false"/>
                 <line number="48" hits="0" branch="false"/>
+                <line number="49" hits="0" branch="false"/>
+                <line number="50" hits="0" branch="false"/>
                 <line number="51" hits="0" branch="false"/>
                 <line number="52" hits="0" branch="false"/>
-                <line number="53" hits="0" branch="false"/>
-                <line number="54" hits="0" branch="false"/>
+                <line number="55" hits="0" branch="false"/>
+                <line number="56" hits="0" branch="false"/>
+                <line number="57" hits="0" branch="false"/>
+                <line number="58" hits="0" branch="false"/>
               </lines>
             </method>
             <method name=".get_reporter_options" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="63" hits="0" branch="false"/>
-                <line number="64" hits="0" branch="false"/>
-                <line number="65" hits="0" branch="false"/>
+                <line number="67" hits="0" branch="false"/>
                 <line number="68" hits="0" branch="false"/>
                 <line number="69" hits="0" branch="false"/>
                 <line number="72" hits="0" branch="false"/>
@@ -5644,21 +5648,26 @@
                 <line number="76" hits="0" branch="false"/>
                 <line number="77" hits="0" branch="false"/>
                 <line number="80" hits="0" branch="false"/>
+                <line number="81" hits="0" branch="false"/>
+                <line number="84" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
           <lines>
+            <line number="22" hits="0" branch="false"/>
+            <line number="23" hits="0" branch="false"/>
             <line number="24" hits="0" branch="false"/>
-            <line number="25" hits="0" branch="false"/>
             <line number="26" hits="0" branch="false"/>
+            <line number="27" hits="0" branch="false"/>
             <line number="28" hits="0" branch="false"/>
             <line number="29" hits="0" branch="false"/>
             <line number="30" hits="0" branch="false"/>
             <line number="31" hits="0" branch="false"/>
             <line number="32" hits="0" branch="false"/>
+            <line number="33" hits="0" branch="false"/>
             <line number="34" hits="0" branch="false"/>
+            <line number="35" hits="0" branch="false"/>
             <line number="36" hits="0" branch="false"/>
-            <line number="37" hits="0" branch="false"/>
             <line number="38" hits="0" branch="false"/>
             <line number="40" hits="0" branch="false"/>
             <line number="41" hits="0" branch="false"/>
@@ -5666,15 +5675,16 @@
             <line number="44" hits="0" branch="false"/>
             <line number="45" hits="0" branch="false"/>
             <line number="46" hits="0" branch="false"/>
-            <line number="47" hits="0" branch="false"/>
             <line number="48" hits="0" branch="false"/>
+            <line number="49" hits="0" branch="false"/>
+            <line number="50" hits="0" branch="false"/>
             <line number="51" hits="0" branch="false"/>
             <line number="52" hits="0" branch="false"/>
-            <line number="53" hits="0" branch="false"/>
-            <line number="54" hits="0" branch="false"/>
-            <line number="63" hits="0" branch="false"/>
-            <line number="64" hits="0" branch="false"/>
-            <line number="65" hits="0" branch="false"/>
+            <line number="55" hits="0" branch="false"/>
+            <line number="56" hits="0" branch="false"/>
+            <line number="57" hits="0" branch="false"/>
+            <line number="58" hits="0" branch="false"/>
+            <line number="67" hits="0" branch="false"/>
             <line number="68" hits="0" branch="false"/>
             <line number="69" hits="0" branch="false"/>
             <line number="72" hits="0" branch="false"/>
@@ -5682,6 +5692,8 @@
             <line number="76" hits="0" branch="false"/>
             <line number="77" hits="0" branch="false"/>
             <line number="80" hits="0" branch="false"/>
+            <line number="81" hits="0" branch="false"/>
+            <line number="84" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="show_rcode_modal.R" filename="R/show_rcode_modal.R" line-rate="0" branch-rate="0" complexity="0">
