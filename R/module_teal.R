@@ -68,26 +68,9 @@ ui_teal <- function(id, modules) {
     )
   )
 
-  active_module_id <- restoreInput(
-    ns("active_module_id"),
-    unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
-  )
-
-  module_items <- ui_teal_module(id = ns("teal_modules"), modules = modules, active_module_id = active_module_id)
-  count_modules <- function(x) {
-    if (inherits(x, "teal_module")) {
-      1L
-    } else if (inherits(x, "teal_modules")) {
-      sum(vapply(x$children, count_modules, integer(1L)))
-    }
-  }
+  navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules)
+  module_items <- ui_teal_module(id = ns("teal_modules"), modules = modules)
   nav_elements <- list(
-    .teal_navbar_menu(
-      !!!module_items$link,
-      label = sprintf("Module (%d)", count_modules(modules)),
-      class = "teal-modules-tree",
-      icon = "diagram-3-fill"
-    ),
     withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
       .teal_navbar_menu(
         label = "Report",
@@ -114,12 +97,7 @@ ui_teal <- function(id, modules) {
     ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
     ui_filter_manager_panel(ns("filter_manager_panel"))
   )
-
-  navbar <- .teal_navbar(
-    id = ns("active_module_id"),
-    nav_items = nav_elements,
-    tab_content = module_items$tab_content
-  )
+  navbar <- .teal_navbar_append(navbar, nav_elements)
 
   bslib::page_fluid(
     id = id,
@@ -206,10 +184,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
 
     if (inherits(data, "teal_data_module")) {
       setBookmarkExclude(c("teal_data_module_ui", "open_teal_data_module_ui"))
-      insertUI(
-        selector = c(".teal-modules-wrapper .nav-item-custom"),
-        where = "beforeBegin",
-        .expand_button(
+      .teal_navbar_insert_ui(
+        ui = .expand_button(
           id = session$ns("open_teal_data_module_ui"),
           label = "Load Data",
           icon = "database-fill"
@@ -294,8 +270,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       datasets = datasets_rv,
       slices_global = slices_global,
       reporter = reporter,
-      data_load_status = data_load_status,
-      active_module_id = reactive(input$active_module_id)
+      data_load_status = data_load_status
     )
 
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)

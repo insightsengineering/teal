@@ -130,7 +130,6 @@ Collate:
     'teal_data_module-within.R'
     'teal_data_utils.R'
     'teal_modifiers.R'
-    'teal_navbar.R'
     'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'
