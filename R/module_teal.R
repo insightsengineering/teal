@@ -72,24 +72,29 @@ ui_teal <- function(id, modules) {
   module_items <- ui_teal_module(id = ns("teal_modules"), modules = modules)
   nav_elements <- list(
     withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
-      .teal_navbar_menu(
-        label = "Report",
-        icon = "file-text-fill",
-        class = "reporter-menu",
-        if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::preview_report_button_ui(ns("preview_report"), label = "Preview Report")
-        },
-        tags$hr(style = "margin: 0.5rem;"),
-        if ("download" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::download_report_button_ui(ns("download_report"), label = "Download Report")
-        },
-        if ("load" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::report_load_ui(ns("load_report"), label = "Load Report")
-        },
-        tags$hr(style = "margin: 0.5rem;"),
-        if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
-          teal.reporter::reset_report_button_ui(ns("reset_reports"), label = "Reset Report")
-        }
+      shinyjs::hidden(
+        tags$div(
+          id = ns("reporter_menu_container"),
+          .teal_navbar_menu(
+            label = "Report",
+            icon = "file-text-fill",
+            class = "reporter-menu",
+            if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::preview_report_button_ui(ns("preview_report"), label = "Preview Report")
+            },
+            tags$hr(style = "margin: 0.5rem;"),
+            if ("download" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::download_report_button_ui(ns("download_report"), label = "Download Report")
+            },
+            if ("load" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::report_load_ui(ns("load_report"), label = "Load Report")
+            },
+            tags$hr(style = "margin: 0.5rem;"),
+            if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::reset_report_button_ui(ns("reset_reports"), label = "Reset Report")
+            }
+          )
+        )
       )
     }),
     tags$span(style = "margin-left: auto;"),
@@ -241,11 +246,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
       )
     }
 
-
     if (is_arg_used(modules, "reporter")) {
       shinyjs::show("reporter_menu_container")
     } else {
-      removeUI("reporter_menu_container")
+      removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
     }
     reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
     teal.reporter::preview_report_button_srv("preview_report", reporter)
