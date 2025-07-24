@@ -219,6 +219,7 @@ init <- function(data,
           ),
           tags$header(
             id = "teal-header",
+            style = "margin: 0.5em",
             tags$div(id = "teal-header-content")
           ),
           ui_teal(
@@ -227,6 +228,7 @@ init <- function(data,
           ),
           tags$footer(
             id = "teal-footer",
+            style = "margin: 0.5em",
             tags$div(id = "teal-footer-content"),
             ui_session_info("teal-footer-session_info")
           )

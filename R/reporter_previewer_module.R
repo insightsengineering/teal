@@ -24,7 +24,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   checkmate::assert_true(all(names(server_args) %in% names(formals(teal.reporter::reporter_previewer_srv))))
 
   lifecycle::deprecate_soft(
-    when = "",
+    when = "1.0.0",
     what = "reporter_previewer_module()",
     details = paste(
       "Please use `options()` to customize the reporter options:\n",
