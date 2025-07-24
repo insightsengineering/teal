@@ -466,7 +466,7 @@ testthat::describe("srv_teal teal_modules", {
           `teal_modules-active_module_id` = "module_1"
         )
         out <- modules_output$module_1()
-        testthat::expect_true(!is.null(out))
+        testthat::expect_type(out, "double")
         session$setInputs(`data-teal_data_module-dataset` = "mtcars")
         testthat::expect_identical(out, modules_output$module_1())
       }

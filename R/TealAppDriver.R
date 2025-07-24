@@ -452,7 +452,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             replacement = "",
             self$get_text(
               sprintf(
-                "#%s-filters-%s .filter-card-varname",
+                "#%s-filters-%s-container .filter-card-varname",
                 self$active_filters_ns(),
                 x
               )
