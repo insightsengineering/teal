@@ -122,7 +122,7 @@ srv_teal_module <- function(id,
 
 #' @rdname module_teal_module
 .teal_navbar_append <- function(navbar, child) {
-  tagAppendChild(tag = navbar, child = child, .cssSelector = ".nav")
+  tagAppendChild(tag = navbar, child = child, .cssSelector = ".teal-modules-wrapper .nav")
 }
 
 #' @rdname module_teal_module
