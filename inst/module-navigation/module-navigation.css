@@ -61,6 +61,10 @@
   position: relative;
 }
 
+.dropdown.nav-item-custom .teal-reporter.outline-button .badge {
+  margin-left: 1em;
+}
+
 .teal.dropdown-button {
   border: 2px solid transparent;
   margin: 0.25em;
