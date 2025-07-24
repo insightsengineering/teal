@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.53671562082777" branch-rate="0" lines-covered="2010" lines-valid="3745" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-07-24 13:15:19.398902">
+<coverage line-rate="0.53728949478749" branch-rate="0" lines-covered="2010" lines-valid="3741" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-07-24 14:24:37.554319">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.53671562082777" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.53728949478749" branch-rate="0" complexity="0">
       <classes>
         <class name="checkmate.R" filename="R/checkmate.R" line-rate="1" branch-rate="0" complexity="0">
           <methods>
@@ -7358,6 +7358,7 @@
                 <line number="695" hits="0" branch="false"/>
                 <line number="696" hits="0" branch="false"/>
                 <line number="697" hits="0" branch="false"/>
+                <line number="698" hits="0" branch="false"/>
                 <line number="699" hits="0" branch="false"/>
                 <line number="700" hits="0" branch="false"/>
                 <line number="701" hits="0" branch="false"/>
@@ -7365,45 +7366,40 @@
                 <line number="704" hits="0" branch="false"/>
                 <line number="705" hits="0" branch="false"/>
                 <line number="706" hits="0" branch="false"/>
-                <line number="707" hits="0" branch="false"/>
-                <line number="709" hits="0" branch="false"/>
-                <line number="710" hits="0" branch="false"/>
-                <line number="711" hits="0" branch="false"/>
-                <line number="712" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="get_active_filter_selection" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
+                <line number="716" hits="0" branch="false"/>
+                <line number="717" hits="0" branch="false"/>
+                <line number="718" hits="0" branch="false"/>
+                <line number="719" hits="0" branch="false"/>
+                <line number="720" hits="0" branch="false"/>
+                <line number="721" hits="0" branch="false"/>
                 <line number="722" hits="0" branch="false"/>
                 <line number="723" hits="0" branch="false"/>
                 <line number="724" hits="0" branch="false"/>
-                <line number="725" hits="0" branch="false"/>
-                <line number="726" hits="0" branch="false"/>
                 <line number="727" hits="0" branch="false"/>
                 <line number="728" hits="0" branch="false"/>
                 <line number="729" hits="0" branch="false"/>
                 <line number="730" hits="0" branch="false"/>
-                <line number="733" hits="0" branch="false"/>
                 <line number="734" hits="0" branch="false"/>
-                <line number="735" hits="0" branch="false"/>
-                <line number="736" hits="0" branch="false"/>
-                <line number="740" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="wait_for_page_stability" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="749" hits="0" branch="false"/>
+                <line number="743" hits="0" branch="false"/>
+                <line number="744" hits="0" branch="false"/>
+                <line number="746" hits="0" branch="false"/>
+                <line number="747" hits="0" branch="false"/>
+                <line number="748" hits="0" branch="false"/>
                 <line number="750" hits="0" branch="false"/>
+                <line number="751" hits="0" branch="false"/>
                 <line number="752" hits="0" branch="false"/>
                 <line number="753" hits="0" branch="false"/>
                 <line number="754" hits="0" branch="false"/>
+                <line number="755" hits="0" branch="false"/>
                 <line number="756" hits="0" branch="false"/>
-                <line number="757" hits="0" branch="false"/>
-                <line number="758" hits="0" branch="false"/>
-                <line number="759" hits="0" branch="false"/>
-                <line number="760" hits="0" branch="false"/>
-                <line number="761" hits="0" branch="false"/>
-                <line number="762" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -7751,6 +7747,7 @@
             <line number="695" hits="0" branch="false"/>
             <line number="696" hits="0" branch="false"/>
             <line number="697" hits="0" branch="false"/>
+            <line number="698" hits="0" branch="false"/>
             <line number="699" hits="0" branch="false"/>
             <line number="700" hits="0" branch="false"/>
             <line number="701" hits="0" branch="false"/>
@@ -7758,37 +7755,32 @@
             <line number="704" hits="0" branch="false"/>
             <line number="705" hits="0" branch="false"/>
             <line number="706" hits="0" branch="false"/>
-            <line number="707" hits="0" branch="false"/>
-            <line number="709" hits="0" branch="false"/>
-            <line number="710" hits="0" branch="false"/>
-            <line number="711" hits="0" branch="false"/>
-            <line number="712" hits="0" branch="false"/>
+            <line number="716" hits="0" branch="false"/>
+            <line number="717" hits="0" branch="false"/>
+            <line number="718" hits="0" branch="false"/>
+            <line number="719" hits="0" branch="false"/>
+            <line number="720" hits="0" branch="false"/>
+            <line number="721" hits="0" branch="false"/>
             <line number="722" hits="0" branch="false"/>
             <line number="723" hits="0" branch="false"/>
             <line number="724" hits="0" branch="false"/>
-            <line number="725" hits="0" branch="false"/>
-            <line number="726" hits="0" branch="false"/>
             <line number="727" hits="0" branch="false"/>
             <line number="728" hits="0" branch="false"/>
             <line number="729" hits="0" branch="false"/>
             <line number="730" hits="0" branch="false"/>
-            <line number="733" hits="0" branch="false"/>
             <line number="734" hits="0" branch="false"/>
-            <line number="735" hits="0" branch="false"/>
-            <line number="736" hits="0" branch="false"/>
-            <line number="740" hits="0" branch="false"/>
-            <line number="749" hits="0" branch="false"/>
+            <line number="743" hits="0" branch="false"/>
+            <line number="744" hits="0" branch="false"/>
+            <line number="746" hits="0" branch="false"/>
+            <line number="747" hits="0" branch="false"/>
+            <line number="748" hits="0" branch="false"/>
             <line number="750" hits="0" branch="false"/>
+            <line number="751" hits="0" branch="false"/>
             <line number="752" hits="0" branch="false"/>
             <line number="753" hits="0" branch="false"/>
             <line number="754" hits="0" branch="false"/>
+            <line number="755" hits="0" branch="false"/>
             <line number="756" hits="0" branch="false"/>
-            <line number="757" hits="0" branch="false"/>
-            <line number="758" hits="0" branch="false"/>
-            <line number="759" hits="0" branch="false"/>
-            <line number="760" hits="0" branch="false"/>
-            <line number="761" hits="0" branch="false"/>
-            <line number="762" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="utils.R" filename="R/utils.R" line-rate="0.787985865724382" branch-rate="0" complexity="0">
