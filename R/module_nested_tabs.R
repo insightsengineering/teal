@@ -122,13 +122,13 @@ srv_teal_module <- function(id,
 
 #' @rdname module_teal_module
 .teal_navbar_append <- function(navbar, child) {
-  tagAppendChild(tag = navbar, child = child, .cssSelector = ".teal-modules-wrapper .nav")
+  tagAppendChild(tag = navbar, child = child, .cssSelector = ".teal-modules-wrapper > ul.nav")
 }
 
 #' @rdname module_teal_module
 .teal_navbar_insert_ui <- function(ui, where = "afterBegin", session = getDefaultReactiveDomain()) {
   insertUI(
-    selector = c(".teal-modules-wrapper .nav"),
+    selector = c(".teal-modules-wrapper > ul.nav"),
     where = where,
     ui = ui,
     session = session
