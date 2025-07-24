@@ -691,35 +691,25 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
-      tab_ns <- unlist(lapply(names(active_tab_inputs), function(name) {
-        gsub(
-          pattern = "-active_module_id$",
-          replacement = sprintf("-%s", active_tab_inputs[[name]]),
-          name
-        )
-      }))
-      active_ns <- tab_ns[1]
-      if (length(tab_ns) > 1) {
-        for (i in 2:length(tab_ns)) {
-          next_ns <- tab_ns[i]
-          if (grepl(pattern = active_ns, next_ns)) {
-            active_ns <- next_ns
-          }
-        }
-      }
-      private$ns$module <- sprintf("%s-%s", active_ns, "module")
+      active_wrapper_id <- sub("^#", "", self$get_attr(
+        selector = ".teal-modules-tree li a.module-button",
+        attribute = "href"
+      ))
 
-      components <- c("filter_panel", "data_summary")
-      for (component in components) {
-        if (
-          !is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component))) ||
-            !is.null(self$get_html(sprintf("#%s-%s-table", active_ns, component)))
-        ) {
-          private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
-        } else {
-          private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
-        }
-      }
+      private$ns$module <- sub(
+        "-wrapper$", "-module",
+        active_wrapper_id
+      )
+
+      private$ns$filter_panel <- sub(
+        "-wrapper$", "-filter_panel",
+        active_wrapper_id
+      )
+
+      private$ns$data_summary <- sub(
+        "-wrapper$", "-module_data_summary",
+        active_wrapper_id
+      )
     },
     # @description
     # Get the active filter values from the active filter selection of dataset from the filter panel.
