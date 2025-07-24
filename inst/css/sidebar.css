@@ -32,23 +32,15 @@ a.disabled {
   justify-content: center;
 }
 
-.manager_table_row {
+.teal.manager_table_row {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-content: space-around;
+  gap: 2em;
+  margin-top: 10px;
 }
 
-.manager_table_row *:first-child {
-  flex: 1 1 80%;
-}
-
-.manager_table_row * + * {
-  flex: 0 0 0px;
-  padding: 0em 1.5em;
-}
-
-.manager_placeholder {
-  margin-top: 1em;
+.teal.manager_table_row > span {
+  margin-right: auto;
 }
 
 .teal-sidebar {
@@ -56,8 +48,8 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button {
-  --bs-accordion-btn-bg: #ededed;
-  --bs-accordion-active-bg: #ededed;
+  --bs-accordion-btn-bg: rgba(var(--bs-secondary-rgb), 0.1);
+  --bs-accordion-active-bg: rgba(var(--bs-secondary-rgb), 0.1);
   --bs-accordion-btn-padding-x: 1rem;
   --bs-accordion-btn-padding-y: 0.7rem;
 }
@@ -68,8 +60,8 @@ a.disabled {
 }
 
 .teal-sidebar .accordion-button:hover {
-  --bs-accordion-btn-bg: #c5c5c5;
-  --bs-accordion-active-bg: #c5c5c5;
+  --bs-accordion-btn-bg: rgba(var(--bs-secondary-rgb), 0.3);
+  --bs-accordion-active-bg: rgba(var(--bs-secondary-rgb), 0.3);
 }
 
 .teal-transform-accordian .accordion-button {

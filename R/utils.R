@@ -491,3 +491,49 @@ pluralize <- function(x, singular, plural = NULL) {
     }
   }
 }
+
+#' @keywords internal
+.dropdown_button <- function(id = NULL, label, icon) {
+  tags$span(
+    class = "teal dropdown-button",
+    tags$a(
+      id = id,
+      class = "action-button",
+      role = "button",
+      style = "text-decoration: none;",
+      bsicons::bs_icon(icon, class = "text-primary"),
+      label,
+      bsicons::bs_icon("chevron-down", class = "text-primary dropdown-arrow")
+    )
+  )
+}
+
+#' @keywords internal
+.expand_button <- function(id, label, icon) {
+  tags$span(
+    class = "teal expand-button",
+    tags$a(
+      id = id,
+      class = "action-button",
+      role = "button",
+      style = "text-decoration: none;",
+      tags$span(class = "icon", bsicons::bs_icon(icon, class = "text-primary")),
+      tags$span(class = "label", label)
+    )
+  )
+}
+
+
+#' @keywords internal
+.primary_button <- function(id, label, icon = NULL) {
+  tags$a(
+    id = id,
+    class = "teal primary-button action-button",
+    role = "button",
+    style = "text-decoration: none;",
+    if (!is.null(icon)) {
+      bsicons::bs_icon(icon, class = "text-primary")
+    },
+    label
+  )
+}

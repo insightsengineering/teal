@@ -1,5 +1,20 @@
 # teal 0.16.0.9015
 
+### Breaking changes
+
+* The `reporter_previewer_module()` is deprecated and will be removed in the future release. The custom `server_args` values can be set using `options()`:
+    - `teal.reporter.nav_buttons` to control which buttons will be displayed in the "Report" drop-down.
+    - `teal.reporter.rmd_outputs` to customize the R Markdown outputs types for the report.
+    - `teal.reporter.rmd_yaml_args` to customize the widget inputs in the download report modal.
+    - `teal.reporter.knitr_global` to customize the global `knitr` options for the report.
+
+### Enhancement
+
+* General repositioning of key navigation components across the app:
+    - Modules: The module navigation is moved from a nested tab selection to a "Module" drop-down selection. The module selection can be done from the nested button of modules.
+    - Reporter: The Report previewer is no longer displayed as yet another teal module, it is placed inside a "Report" drop-down right next to the "Module" drop-down. The Report previewer is a modal that displays the added report cards. The "Report" drop-down also contains other global report options like download/load/reset the Report.
+    - Teal Data Module: The UI created by the `teal_data_module()` is now placed inside a modal that can only be closed when it returns `teal_data`.
+
 # teal 0.16.0
 
 ### New features
