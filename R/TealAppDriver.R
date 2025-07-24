@@ -692,8 +692,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
       active_wrapper_id <- sub(
-        "^#", 
-        "", 
+        "^#",
+        "",
         self$get_attr(
           selector = ".teal-modules-tree li a.module-button",
           attribute = "href"
