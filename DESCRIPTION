@@ -81,7 +81,7 @@ RdMacros:
     lifecycle
 Remotes:
     insightsengineering/teal.reporter@main,
-    insightsengineering/teal.slice@651_regr_test@main,
+    insightsengineering/teal.slice@main,
     insightsengineering/teal.widgets@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
