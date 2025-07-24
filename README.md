@@ -106,7 +106,7 @@ app <- init(
 shinyApp(app$ui, app$server)
 ```
 
-![App recording](man/figures/readme_app.mp4)
+![App recording](man/figures/readme_app.webp)
 
 Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to see examples of `teal` apps.
 
