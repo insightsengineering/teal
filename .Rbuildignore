@@ -46,3 +46,4 @@ coverage.*
 ^.revdeprefs\.yaml$
 ^revdep$
 ^\.covrignore$
+^README\.Rmd$
