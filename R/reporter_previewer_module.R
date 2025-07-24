@@ -78,7 +78,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
   }
 
   if (length(args$rmd_yaml_args)) {
-    opts <- c(opts, list(teal.reporter.rmd_yaml_args <- args$rmd_yaml_args))
+    opts <- c(opts, list(teal.reporter.rmd_yaml_args = args$rmd_yaml_args))
   }
 
   opts
