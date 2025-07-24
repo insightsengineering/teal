@@ -691,25 +691,19 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
-      tab_ns <- unlist(lapply(names(active_tab_inputs), function(name) {
-        gsub(
-          pattern = "-active_module_id$",
-          replacement = sprintf("-nav-%s", .label_to_id(active_tab_inputs[[name]])),
-          name
+      active_wrapper_id <- sub(
+        "^#",
+        "",
+        self$get_attr(
+          selector = ".teal-modules-tree li a.module-button",
+          attribute = "href"
         )
-      }))
-      active_ns <- tab_ns[1]
-      if (length(tab_ns) > 1) {
-        for (i in 2:length(tab_ns)) {
-          next_ns <- tab_ns[i]
-          if (grepl(pattern = active_ns, next_ns)) {
-            active_ns <- next_ns
-          }
-        }
-      }
-      private$ns$module <- sprintf("%s-module", active_ns)
-      private$ns$filter_panel <- sprintf("%s-filter_panel", active_ns)
-      private$ns$data_summary <- sprintf("%s-data_summary", active_ns)
+      )
+      active_base_id <- sub("-wrapper$", "", active_wrapper_id)
+
+      private$ns$module <- shiny::NS(active_base_id, "module")
+      private$ns$filter_panel <- shiny::NS(active_base_id, "filter_panel")
+      private$ns$data_summary <- shiny::NS(active_base_id, "module_data_summary")
     },
     # @description
     # Get the active filter values from the active filter selection of dataset from the filter panel.
