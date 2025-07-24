@@ -85,7 +85,7 @@ ui_teal_module <- function(id, modules) {
     tags$ul(
       id = ns("active_module_id"),
       style = "align-items: center; gap: 1em; font-size: large;",
-      class = "nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
+      class = "teal-navbar nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
       `data-tabsetid` = "test",
       .teal_navbar_menu(
         !!!module_items$link,
@@ -122,13 +122,13 @@ srv_teal_module <- function(id,
 
 #' @rdname module_teal_module
 .teal_navbar_append <- function(navbar, child) {
-  tagAppendChild(tag = navbar, child = child, .cssSelector = ".teal-modules-wrapper > ul.nav")
+  tagAppendChild(tag = navbar, child = child, .cssSelector = ".teal-navbar")
 }
 
 #' @rdname module_teal_module
 .teal_navbar_insert_ui <- function(ui, where = "afterBegin", session = getDefaultReactiveDomain()) {
   insertUI(
-    selector = c(".teal-modules-wrapper > ul.nav"),
+    selector = ".teal-navbar",
     where = where,
     ui = ui,
     session = session
