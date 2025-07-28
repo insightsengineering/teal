@@ -586,8 +586,8 @@ srv_teal_module <- function(id,
 }
 
 .modules_breadcrumb <- function(module) {
-  tags$span(
-    style = "color: var(--bs-secondary); font-size: medium;opacity: 0.6; margin-left: 0.5em;",
+  tags$div(
+    style = "color: var(--bs-secondary); font-size: large; opacity: 0.6; margin: 0 0.5em 0.5em 0.5em;",
     paste("Home", module$path, sep = " / ")
   )
 }
