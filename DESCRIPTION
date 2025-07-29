@@ -102,6 +102,7 @@ Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
 RoxygenNote: 7.3.2
 Collate:
     'TealAppDriver.R'
+    'brush_filter.R'
     'checkmate.R'
     'dummy_functions.R'
     'include_css_js.R'
