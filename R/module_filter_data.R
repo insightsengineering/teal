@@ -11,7 +11,7 @@
 #'  - tab is selected (`is_active`)
 #'  - when filters are changed (`get_filter_expr` is different than previous)
 #'
-#' @inheritParams module_teal_modules_nav
+#' @inheritParams module_teal_module
 #' @param active_datanames (`reactive` returning `character`) this module's data names
 #' @name module_filter_data
 #' @keywords internal

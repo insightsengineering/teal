@@ -466,7 +466,7 @@ testthat::describe("srv_teal teal_modules", {
           `teal_modules-active_module_id` = "module_1"
         )
         out <- modules_output$module_1()
-        testthat::expect_true(!is.null(out))
+        testthat::expect_type(out, "double")
         session$setInputs(`data-teal_data_module-dataset` = "mtcars")
         testthat::expect_identical(out, modules_output$module_1())
       }
@@ -514,7 +514,7 @@ testthat::describe("srv_teal teal_modules", {
           modules = modules(module("module_1", server = function(id, data) data))
         ),
         expr = {
-          session$setInputs("teal_modules-active_module_id" = "module_1")
+          session$setInputs(`teal_modules-active_module_id` = "module_1")
           testthat::expect_equal(
             trimws(
               rvest::html_text2(
@@ -547,7 +547,7 @@ testthat::describe("srv_teal teal_modules", {
           )
         ),
         expr = {
-          session$setInputs("teal_modules-active_module_id" = "module_1")
+          session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$flushReact()
 
           testthat::expect_equal(
@@ -1060,24 +1060,6 @@ testthat::describe("srv_teal teal_modules", {
       }
     )
   })
-
-  testthat::it("receives one report_previewer module when any module contains reporter argument", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
-        modules = modules(
-          module("module_1", server = function(id, reporter) {}),
-          module("module_2", server = function(id) {})
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_module_id` = "report_previewer")
-        testthat::expect_setequal(names(modules_output), c("module_1", "module_2", "report_previewer"))
-      }
-    )
-  })
 })
 
 testthat::describe("srv_teal filters", {
@@ -1525,7 +1507,7 @@ testthat::describe("srv_teal filters", {
           modules = modules(module("module_1", server = function(id, data) data))
         ),
         expr = {
-          session$setInputs("teal_modules-active_module_id" = "module_1")
+          session$setInputs(`teal_modules-active_module_id` = "module_1")
           session$flushReact()
           testthat::expect_equal(
             mapping_table(),
@@ -1557,7 +1539,7 @@ testthat::describe("srv_teal filters", {
         ),
         expr = {
           testthat::expect_warning(
-            session$setInputs("teal_modules-active_module_id" = "module_1"),
+            session$setInputs(`teal_modules-active_module_id` = "module_1"),
             "Filter 'unknown unavailable' refers to dataname not available in 'data'"
           )
           session$flushReact()
@@ -1593,7 +1575,7 @@ testthat::describe("srv_teal filters", {
         ),
         expr = {
           testthat::expect_warning(
-            session$setInputs("teal_modules-active_module_id" = "module_1"),
+            session$setInputs(`teal_modules-active_module_id` = "module_1"),
             "Filter 'unknown unavailable' refers to dataname not available in 'data'"
           )
           session$flushReact()
@@ -1806,7 +1788,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
           )
         ),
         expr = {
-          session$setInputs("teal_modules-active_module_id" = "module")
+          session$setInputs(`teal_modules-active_module_id` = "module")
           session$flushReact()
         }
       ),
@@ -1838,7 +1820,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             )
           ),
           expr = {
-            session$setInputs("teal_modules-active_module_id" = "module")
+            session$setInputs(`teal_modules-active_module_id` = "module")
             session$flushReact()
           }
         ),
@@ -2086,7 +2068,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2116,7 +2098,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2148,7 +2130,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2181,7 +2163,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2215,7 +2197,7 @@ testthat::describe("srv_teal summary table", {
         filter = teal_slices(teal_slice("a", "name", selected = "a"))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2248,7 +2230,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         slices_global$slices_set(teal_slices(teal_slice("a", "name", selected = "a")))
         session$flushReact()
         testthat::expect_identical(
@@ -2289,7 +2271,7 @@ testthat::describe("srv_teal summary table", {
         )
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2318,7 +2300,7 @@ testthat::describe("srv_teal summary table", {
           )
         ),
         expr = {
-          session$setInputs("teal_modules-active_module_id" = "module_1")
+          session$setInputs(`teal_modules-active_module_id` = "module_1")
           testthat::expect_identical(
             module_summary_table(output, "module_1"),
             data.frame(
@@ -2342,7 +2324,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data, datanames = "iris"))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2372,7 +2354,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1")[["Data Name"]],
@@ -2392,7 +2374,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data, datanames = c("iris", "iris2")))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
@@ -2434,7 +2416,7 @@ testthat::describe("srv_teal summary table", {
       ),
       expr = {
         # throws warning as data("miniACC") hasn't been detected as miniACC dependency
-        suppressWarnings(session$setInputs("teal_modules-active_module_id" = "module_1"))
+        suppressWarnings(session$setInputs(`teal_modules-active_module_id` = "module_1"))
         testthat::expect_equal(
           module_summary_table(output, "module_1"),
           data.frame(
@@ -2465,7 +2447,7 @@ testthat::describe("srv_teal summary table", {
         modules = modules(module("module_1", server = function(id, data) data, datanames = "all"))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
         testthat::expect_identical(
           module_summary_table(output, "module_1"),
@@ -2499,7 +2481,7 @@ testthat::describe("srv_teal snapshot manager", {
       ),
       expr = {
         initial_slices <- slices_global$all_slices()
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         slices_global$slices_set(teal_slices())
         session$flushReact()
         session$setInputs("snapshot_manager_panel-module-snapshot_reset" = TRUE)
@@ -2540,8 +2522,8 @@ testthat::describe("srv_teal snapshot manager", {
       ),
       expr = {
         initial_slices <- slices_global$all_slices()
-        session$setInputs("teal_modules-active_module_id" = "module_1")
-        session$setInputs("teal_modules-active_module_id" = "module_2")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_2")
         slices_global$slices_set(teal_slices())
         session$flushReact()
         session$setInputs("snapshot_manager_panel-module-snapshot_reset" = TRUE)
@@ -2587,7 +2569,7 @@ testthat::describe("Datanames with special symbols", {
         )
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
 
         testthat::expect_setequal(
@@ -2617,7 +2599,7 @@ testthat::describe("Datanames with special symbols", {
         )
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
 
         testthat::expect_setequal(
@@ -2650,7 +2632,7 @@ testthat::describe("Datanames with special symbols", {
         )
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
 
         testthat::expect_contains(
@@ -2683,7 +2665,7 @@ testthat::describe("teal.data code with a function defined", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
 
         # Need to evaluate characters to preserve indentation
@@ -2715,7 +2697,7 @@ testthat::describe("teal.data code with a function defined", {
         modules = modules(module("module_1", server = function(id, data) data))
       ),
       expr = {
-        session$setInputs("teal_modules-active_module_id" = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
 
         # Need to evaluate characters to preserve indentation
