@@ -5,7 +5,7 @@
     teal.show_js_log = FALSE,
     teal.lockfile.mode = "auto",
     shiny.sanitize.errors = FALSE,
-    teal.reporter.nav_buttons = c("preview", "load", "download", "reset")
+    teal.reporter.nav_buttons = c("preview", "download", "load", "reset")
   )
 
   op <- options()
