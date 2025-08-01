@@ -4,7 +4,7 @@
 
 * The `reporter_previewer_module()` is deprecated and will be removed in the future release. The custom `server_args` values can be set using `options()`:
     - `teal.reporter.nav_buttons` to control which buttons will be displayed in the "Report" drop-down.
-    - `teal.reporter.rmd_outputs` to customize the R Markdown outputs types for the report.
+    - `teal.reporter.rmd_output` to customize the R Markdown outputs types for the report.
     - `teal.reporter.rmd_yaml_args` to customize the widget inputs in the download report modal.
     - `teal.reporter.knitr_global` to customize the global `knitr` options for the report.
 

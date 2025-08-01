@@ -125,7 +125,7 @@ c(
 
 ### `teal.reporter.rmd_yaml_args` (`character`)
 
-It allows customizing the R Markdown YAML arguments for the report. It should be a named vector and the names should be a subset of the suported YAML args: "author", "title", "date", "output", "toc".
+It allows customizing the R Markdown YAML arguments for the report. It should be a named vector and the names should be a subset of the supported YAML args: "author", "title", "date", "output", "toc".
 
 Default:
 ```r
