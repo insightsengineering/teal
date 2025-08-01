@@ -86,9 +86,19 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   transition: max-width 0.3s ease;
 }
 
-.teal.expand-button a {
+.teal.expand-button button {
+  color: var(--bs-primary);
+  background-color: transparent;
   border: 2px solid transparent;
   padding: 0.5rem;
+}
+
+.teal.expand-button button:disabled {
+  color: var(--bs-dark-text-emphasis);
+}
+
+.teal.expand-button:hover button:disabled {
+  border-bottom: 2px solid var(--bs-dark-bg-subtle);
 }
 
 .teal.expand-button .label {
@@ -100,7 +110,7 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   max-width: 200px;
 }
 
-.teal.expand-button:hover a {
+.teal.expand-button:hover button {
   border-bottom: 2px solid var(--bs-primary-border-subtle);
 }
 
