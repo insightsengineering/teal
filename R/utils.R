@@ -514,9 +514,17 @@ pluralize <- function(x, singular, plural = NULL) {
 .expand_button <- function(id, label, icon) {
   tags$span(
     class = "teal expand-button",
-    tags$a(
+    htmltools::htmlDependency(
+      name = "teal-busy-disable",
+      version = utils::packageVersion("teal"),
+      package = "teal",
+      src = "js",
+      script = "busy-disable.js"
+    ),
+    shinyjs::useShinyjs(),
+    tags$button(
       id = id,
-      class = "action-button",
+      class = "action-button teal-busy-disable",
       role = "button",
       style = "text-decoration: none;",
       tags$span(class = "icon", bsicons::bs_icon(icon, class = "text-primary")),
