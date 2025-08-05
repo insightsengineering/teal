@@ -234,10 +234,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
               session$ns("close_teal_data_module_modal")
             )
           )
-          shinyjs::runjs(
-            sprintf(
-              "document.querySelector('#%s')?.parentElement.remove();",
-              session$ns("open_teal_data_module_ui")
+          shiny::removeUI(
+            selector = sprintf(
+              ".teal.expand-button:has(#%s)",
+              session$ns("teal_data_module_ui")
             )
           )
         })
