@@ -228,13 +228,13 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           # when once = TRUE we pull data once and then remove data tab
-          shinyjs::runjs(
-            sprintf(
-              "document.querySelector('#%s button').click();",
-              session$ns("close_teal_data_module_modal")
+          shiny::removeModal()
+          shiny::removeUI(
+            selector = sprintf(
+              ".teal.expand-button:has(#%s)",
+              session$ns("teal_data_module_ui")
             )
           )
-          removeUI(sprintf("#%s", session$ns("open_teal_data_module_ui")))
         })
       }
     } else {
