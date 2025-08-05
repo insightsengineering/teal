@@ -81,7 +81,7 @@ Every `teal` application is composed of the following elements, all of which can
 
 * <span style="color: #BF37F3;">Application Title</span> _(browser's tab title)_: is the title of the application.
 * <span style="color: #FB6251;">Application Header and Footer</span> _(the top and the bottom of the app)_: any content to be placed at the top and bottom of the application.
-* <span style="color: #f2b73f;">Teal Modules</span> _(tabs under the header)_: tab for each module included in the application.
+* <span style="color: #f2b73f;">Teal Navigation</span> _(tabs under the header)_: drop-down widgets to navigate to different teal modules along with other application navigation buttons.
   * In the example code: there are two modules named "Module 1" and "Module 2".
 * <span style="color: #83cc41;">Module Content</span> _(panel on the middle)_: the outputs of the currently active module.
 * <span style="color: #3A88FE;">Filter Panel</span> _(panel on the right hand side)_: for filtering the data to be passed into all `teal` modules.

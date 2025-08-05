@@ -4,11 +4,11 @@
 #'
 #' This function controls the appearance of the drop-down menu for the reporter.
 #' It is now deprecated in favor of the options:
-#' - `teal.reporter.nav_buttons = c("preview", "load", "download", "reset")` to control which
+#' - `teal.reporter.nav_buttons = c("preview", "download", "load", "reset")` to control which
 #'  buttons will be displayed in the drop-down.
-#' - `teal.reporter.rmd_outputs`: passed to [teal.reporter::download_report_button_srv()]
+#' - `teal.reporter.rmd_output`: passed to [teal.reporter::download_report_button_srv()]
 #' - `teal.reporter.rmd_yaml_args`: passed to [teal.reporter::download_report_button_srv()]
-#' - `teal.reporter.knitr_global`: passed to [teal.reporter::download_report_button_srv()]
+#' - `teal.reporter.global_knitr`: passed to [teal.reporter::download_report_button_srv()]
 #'
 #' @inheritParams teal_modules
 #' @param server_args (named `list`) Arguments will overwrite the default `teal.reporter` options
@@ -29,9 +29,9 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
     details = paste(
       "Please use `options()` to customize the reporter options:\n",
       "`teal.reporter.nav_buttons` to control which buttons will be displayed in the 'Report' drop-down.\n",
-      "`teal.reporter.rmd_outputs` to customize the R Markdown outputs types for the report.\n",
+      "`teal.reporter.rmd_output` to customize the R Markdown outputs types for the report.\n",
       "`teal.reporter.rmd_yaml_args` to customize the widget inputs in the download report modal.\n",
-      "`teal.reporter.knitr_global` to customize the global knitr options for the report."
+      "`teal.reporter.global_knitr` to customize the global knitr options for the report."
     )
   )
 
