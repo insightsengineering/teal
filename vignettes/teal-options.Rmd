@@ -104,6 +104,53 @@ This sets the sidebar width in pixels in the teal app.
 
 Default: `250`
 
+### `teal.reporter.nav_buttons` (`character`)
+
+This option controls which of the four reporter navigation buttons (Preview Report, Download Report, Load Report, and Reset Report) should be displayed.
+
+Default: `c("preview", "download", "load", "reset")`.
+
+### `teal.reporter.rmd_output` (`character`)
+
+This option allows customizing the R Markdown output types when a report is downloaded. It should be a subset of "html_document", "pdf_document", "powerpoint_presentation", "word_document".
+
+Default:
+```r
+c(
+  "html" = "html_document", "pdf" = "pdf_document",
+  "powerpoint" = "powerpoint_presentation",
+  "word" = "word_document"
+)
+```
+
+### `teal.reporter.rmd_yaml_args` (`character`)
+
+It allows customizing the R Markdown YAML arguments for the report. It should be a named vector and the names should be a subset of the supported YAML args: "author", "title", "date", "output", "toc".
+
+Default:
+```r
+list(
+  author = "NEST",
+  title = "Report",
+  date = as.character(Sys.Date()),
+  output = "html_document",
+  toc = FALSE
+)
+```
+
+### `teal.reporter.global_knitr` (`list`)
+
+It allows customizing the global `knitr` parameters which are passed to `knitr::opts_chunk$set` for customizing the rendering process.
+
+Default:
+```r
+list(
+  echo = TRUE,
+  tidy.opts = list(width.cutoff = 60),
+  tidy = requireNamespace("formatR", quietly = TRUE)
+)
+```
+
 # Deprecated options
 
 ### `teal_logging`
