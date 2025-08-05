@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.537145911277392" branch-rate="0" lines-covered="2010" lines-valid="3742" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-08-01 10:25:38.677664">
+<coverage line-rate="0.538133333333333" branch-rate="0" lines-covered="2018" lines-valid="3750" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-08-05 08:08:26.99932">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
   <packages>
-    <package name="teal" line-rate="0.537145911277392" branch-rate="0" complexity="0">
+    <package name="teal" line-rate="0.538133333333333" branch-rate="0" complexity="0">
       <classes>
         <class name="checkmate.R" filename="R/checkmate.R" line-rate="1" branch-rate="0" complexity="0">
           <methods>
@@ -7785,7 +7785,7 @@
             <line number="756" hits="0" branch="false"/>
           </lines>
         </class>
-        <class name="utils.R" filename="R/utils.R" line-rate="0.787985865724382" branch-rate="0" complexity="0">
+        <class name="utils.R" filename="R/utils.R" line-rate="0.793814432989691" branch-rate="0" complexity="0">
           <methods>
             <method name="get_client_timezone" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
@@ -8150,20 +8150,28 @@
                 <line number="523" hits="9" branch="false"/>
                 <line number="524" hits="9" branch="false"/>
                 <line number="525" hits="9" branch="false"/>
+                <line number="526" hits="9" branch="false"/>
+                <line number="527" hits="9" branch="false"/>
+                <line number="528" hits="9" branch="false"/>
+                <line number="529" hits="9" branch="false"/>
+                <line number="530" hits="9" branch="false"/>
+                <line number="531" hits="9" branch="false"/>
+                <line number="532" hits="9" branch="false"/>
+                <line number="533" hits="9" branch="false"/>
               </lines>
             </method>
             <method name=".primary_button" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="531" hits="0" branch="false"/>
-                <line number="532" hits="0" branch="false"/>
-                <line number="533" hits="0" branch="false"/>
-                <line number="534" hits="0" branch="false"/>
-                <line number="535" hits="0" branch="false"/>
-                <line number="536" hits="0" branch="false"/>
-                <line number="537" hits="0" branch="false"/>
-                <line number="538" hits="0" branch="false"/>
                 <line number="539" hits="0" branch="false"/>
                 <line number="540" hits="0" branch="false"/>
+                <line number="541" hits="0" branch="false"/>
+                <line number="542" hits="0" branch="false"/>
+                <line number="543" hits="0" branch="false"/>
+                <line number="544" hits="0" branch="false"/>
+                <line number="545" hits="0" branch="false"/>
+                <line number="546" hits="0" branch="false"/>
+                <line number="547" hits="0" branch="false"/>
+                <line number="548" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -8441,16 +8449,24 @@
             <line number="523" hits="9" branch="false"/>
             <line number="524" hits="9" branch="false"/>
             <line number="525" hits="9" branch="false"/>
-            <line number="531" hits="0" branch="false"/>
-            <line number="532" hits="0" branch="false"/>
-            <line number="533" hits="0" branch="false"/>
-            <line number="534" hits="0" branch="false"/>
-            <line number="535" hits="0" branch="false"/>
-            <line number="536" hits="0" branch="false"/>
-            <line number="537" hits="0" branch="false"/>
-            <line number="538" hits="0" branch="false"/>
+            <line number="526" hits="9" branch="false"/>
+            <line number="527" hits="9" branch="false"/>
+            <line number="528" hits="9" branch="false"/>
+            <line number="529" hits="9" branch="false"/>
+            <line number="530" hits="9" branch="false"/>
+            <line number="531" hits="9" branch="false"/>
+            <line number="532" hits="9" branch="false"/>
+            <line number="533" hits="9" branch="false"/>
             <line number="539" hits="0" branch="false"/>
             <line number="540" hits="0" branch="false"/>
+            <line number="541" hits="0" branch="false"/>
+            <line number="542" hits="0" branch="false"/>
+            <line number="543" hits="0" branch="false"/>
+            <line number="544" hits="0" branch="false"/>
+            <line number="545" hits="0" branch="false"/>
+            <line number="546" hits="0" branch="false"/>
+            <line number="547" hits="0" branch="false"/>
+            <line number="548" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="validate_inputs.R" filename="R/validate_inputs.R" line-rate="1" branch-rate="0" complexity="0">
