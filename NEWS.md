@@ -6,7 +6,7 @@
     - `teal.reporter.nav_buttons` to control which buttons will be displayed in the "Report" drop-down.
     - `teal.reporter.rmd_output` to customize the R Markdown outputs types for the report.
     - `teal.reporter.rmd_yaml_args` to customize the widget inputs in the download report modal.
-    - `teal.reporter.knitr_global` to customize the global `knitr` options for the report.
+    - `teal.reporter.global_knitr` to customize the global `knitr` options for the report.
 
 ### Enhancement
 
