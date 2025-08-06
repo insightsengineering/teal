@@ -10,8 +10,25 @@ vignette: >
 
 ## Introduction
 
-<a href="../../reference/figures/filterpanel.png" target="_blank">
-  <img src="../../man/figures/filterpanel.png" align="right" style="max-width: 33%;"/>
+<style>
+  .filter-image {
+    float: right;
+    max-width: 33%;
+    max-height: 300px;
+    transition: transform 0.3s ease, max-height 0.3s ease;
+    transform-origin: top right;
+    cursor: zoom-in;
+  }
+
+  .filter-image:hover {
+    transform: scale(3);
+    z-index: 10;
+  }
+</style>
+
+
+<a href="images/filterpanel.png" target="_blank">
+  <img src="images/filterpanel.png" class="filter-image"/>
 </a>
 
 The `teal.slice` package provides `teal` applications with the **filter panel**, a powerful tool for exploring and analyzing data, and a key component of the `teal` framework.
