@@ -47,12 +47,13 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 <!-- markdownlint-disable MD007 MD030 -->
 
+- [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
+- [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/): handles reproducibility of outputs.
 - [`teal.data`](https://insightsengineering.github.io/teal.data/latest-tag/): creating and loading the data needed for `teal` applications.
 - [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/): `shiny` components used within `teal`.
 - [`teal.slice`](https://insightsengineering.github.io/teal.slice/latest-tag/): provides a filtering panel to allow filtering of data.
-- [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/): handles reproducibility of outputs.
-- [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
 - [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/): allows `teal` applications to generate reports.
+- [`teal.transform`](https://insightsengineering.github.io/teal.transform/latest-tag/): allows the creation of reproducible transform and merge module for teal applications.
 
 Dive deeper into `teal` with our comprehensive video guide.
 Please click the image below to start learning:
