@@ -1,7 +1,5 @@
 #' Validate that dataset has a minimum number of observations
 #'
-#' `r lifecycle::badge("stable")`
-#'
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param x (`data.frame`)
@@ -77,8 +75,6 @@ validate_has_data <- function(x,
 
 #' Validate that dataset has unique rows for key variables
 #'
-#' `r lifecycle::badge("stable")`
-#'
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param x (`data.frame`)
@@ -120,8 +116,6 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 
 #' Validates that vector includes all expected values
 #'
-#' `r lifecycle::badge("stable")`
-#'
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param x Vector of values to test.
@@ -161,8 +155,6 @@ validate_in <- function(x, choices, msg) {
 }
 
 #' Validates that vector has length greater than 0
-#'
-#' `r lifecycle::badge("stable")`
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
@@ -212,8 +204,6 @@ validate_has_elements <- function(x, msg) {
 }
 
 #' Validates no intersection between two vectors
-#'
-#' `r lifecycle::badge("stable")`
 #'
 #' This function is a wrapper for `shiny::validate`.
 #'
@@ -271,8 +261,6 @@ validate_no_intersection <- function(x, y, msg) {
 
 #' Validates that dataset contains specific variable
 #'
-#' `r lifecycle::badge("stable")`
-#'
 #' This function is a wrapper for `shiny::validate`.
 #'
 #' @param data (`data.frame`)
@@ -327,8 +315,6 @@ validate_has_variable <- function(data, varname, msg) {
 }
 
 #' Validate that variables has expected number of levels
-#'
-#' `r lifecycle::badge("stable")`
 #'
 #' If the number of levels of `x` is less than `min_levels`
 #' or greater than `max_levels` the validation will fail.
