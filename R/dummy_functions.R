@@ -1,7 +1,5 @@
 #' An example `teal` module
 #'
-#' `r lifecycle::badge("experimental")`
-#'
 #' This module creates an object called `object` that can be modified with decorators.
 #' The `object` is determined by what's selected in `Choose a dataset` input in UI.
 #' The object can be anything that can be handled by `renderPrint()`.

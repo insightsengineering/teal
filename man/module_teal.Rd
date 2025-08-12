@@ -28,7 +28,6 @@ specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
 \code{NULL} invisibly
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Module to create a \code{teal} app as a Shiny Module.
 }
 \details{

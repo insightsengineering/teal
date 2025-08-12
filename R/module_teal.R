@@ -1,7 +1,6 @@
 #' `teal` main module
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #' Module to create a `teal` app as a Shiny Module.
 #'
 #' @details

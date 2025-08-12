@@ -50,8 +50,6 @@ This parameter is no longer supported. Use \code{\link[=ui_teal]{ui_teal()}} and
 Named list containing server and UI functions.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
 End-users: This is the most important function for you to start a
 \code{teal} app that is composed of \code{teal} modules.
 }

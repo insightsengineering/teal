@@ -4,7 +4,6 @@ setOldClass("teal_modules")
 #' Create `teal_module` and `teal_modules` objects
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
 #' Create a nested tab structure to embed modules in a `teal` application.
 #'
 #' @details

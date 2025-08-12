@@ -14,9 +14,6 @@ validate_has_variable(data, varname, msg)
 \item{msg}{(\code{character(1)}) message to display if \code{data} does not include \code{varname}}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-}
-\details{
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
