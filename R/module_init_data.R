@@ -95,15 +95,9 @@ srv_init_data <- function(id, data) {
     c(
       list(code = trimws(c(teal.code::get_code(data), hashes), which = "right")),
       list(join_keys = teal.data::join_keys(data)),
-      sapply(
-        names(data),
-        teal.code::get_var,
-        object = data,
-        simplify = FALSE
-      )
+      as.list(data, all.names = TRUE)
     )
   )
-
   tdata@verified <- data@verified
   tdata
 }
