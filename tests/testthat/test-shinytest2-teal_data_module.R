@@ -1,17 +1,17 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
-example_teal_data_module <- function(with_submit = FALSE, once = TRUE) {
+example_teal_data_module <- function(needs_submit = FALSE, once = TRUE) {
   teal_data_module(
     ui = function(id) {
       tagList(
         numericInput(NS(id, "iris_rows"), "iris rows", min = 0, max = 150, step = 1, value = 10),
-        if (with_submit) actionButton(NS(id, "submit"), "Submit")
+        if (needs_submit) actionButton(NS(id, "submit"), "Submit")
       )
     },
     server = function(id, ...) {
       moduleServer(id, function(input, output, session) {
-        if (with_submit) {
+        if (needs_submit) {
           eventReactive(input$submit, {
             teal_data(iris = head(iris, input$iris_rows), mtcars = mtcars)
           })
@@ -24,55 +24,91 @@ example_teal_data_module <- function(with_submit = FALSE, once = TRUE) {
   )
 }
 
-testthat::test_that("e2e: teal_data_module auto resolves when `once=TRUE` and data is passed", {
+testthat::test_that("e2e: teal_data_module `Load data` button is shown when once=FALSE", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = example_teal_data_module(with_submit = FALSE, once = TRUE),
+    data = example_teal_data_module(once = FALSE),
     modules = example_module(label = "Example Module")
   )
-
-  testthat::expect_null(app$get_html(".teal-data-module-popup"))
+  testthat::expect_true(app$is_visible("#teal-open_teal_data_module_ui"))
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module only resolves when `once=TRUE` and data is passed", {
+testthat::test_that("e2e: teal_data_module `Load data` button is not shown when once=TRUE", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = example_teal_data_module(with_submit = TRUE, once = TRUE),
+    data = example_teal_data_module(once = TRUE),
     modules = example_module(label = "Example Module")
   )
-  testthat::expect_type(app$get_html(".teal-data-module-popup"), "character")
+  testthat::expect_null(app$is_visible("#teal-open_teal_data_module_ui"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module shows modal on startup when data isn't ready", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    data = example_teal_data_module(needs_submit = TRUE),
+    modules = example_module(label = "Example Module")
+  )
+  testthat::expect_true(app$is_visible(".teal-data-module-popup"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module auto-closes modal when `once=TRUE` and data is ready (clicked submit)", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    data = example_teal_data_module(needs_submit = TRUE, once = TRUE),
+    modules = example_module(label = "Example Module")
+  )
   app$click("teal-data-teal_data_module-submit")
-  testthat::expect_null(app$get_html(".teal-data-module-popup"))
+  testthat::expect_null(app$is_visible(".teal-data-module-popup"))
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module modal is still open when `once=FALSE` and data is passed", {
+testthat::test_that("e2e: teal_data_module auto-closes modal when `once=TRUE` and data is ready", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = example_teal_data_module(with_submit = FALSE, once = FALSE),
+    data = example_teal_data_module(needs_submit = FALSE, once = TRUE),
     modules = example_module(label = "Example Module")
   )
+  testthat::expect_null(app$is_visible(".teal-data-module-popup"))
+  app$stop()
+})
 
-  testthat::expect_type(app$get_html(".teal-data-module-popup"), "character")
+testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` and data is ready (clicked submit)", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    data = example_teal_data_module(needs_submit = TRUE, once = FALSE),
+    modules = example_module(label = "Example Module")
+  )
   app$click(selector = "#teal-close_teal_data_module_modal button")
-  testthat::expect_null(app$get_html(".teal-data-module-popup"), "character")
+  testthat::expect_true(app$is_visible(".teal-data-module-popup"))
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module modal close is disabled `once=FALSE` and data is passed", {
+testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` and data is ready (no submit)", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = example_teal_data_module(with_submit = TRUE, once = FALSE),
+    data = example_teal_data_module(needs_submit = FALSE, once = FALSE),
+    modules = example_module(label = "Example Module")
+  )
+  testthat::expect_true(app$is_visible(".teal-data-module-popup"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module modal close button is enabled from disabled when data is ready", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    data = example_teal_data_module(needs_submit = TRUE, once = FALSE),
     modules = example_module(label = "Example Module")
   )
 
-  expected_button_selector <- "#teal-close_teal_data_module_modal button.disabled"
-  testthat::expect_type(app$get_html(expected_button_selector), "character")
+  testthat::expect_identical(
+    app$get_attr("#teal-close_teal_data_module_modal", "disabled"),
+    "disabled"
+  )
   app$click("teal-data-teal_data_module-submit")
-  app$click(selector = "#teal-close_teal_data_module_modal button")
-
-  testthat::expect_null(app$get_html(expected_button_selector))
+  testthat::expect_true(is.na(app$get_attr("#teal-close_teal_data_module_modal", "disabled")))
   app$stop()
 })
 
@@ -178,66 +214,6 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
     app$get_active_data_filters("dataset1")$A_New_Column,
     unique(sprintf("%s new", iris$Species))
   )
-
-  app$stop()
-})
-
-testthat::test_that("e2e: teal_data_module gets removed after successful data load, when once = TRUE", {
-  skip_if_too_deep(5)
-  tdm <- teal_data_module(
-    ui = function(id) shiny::actionButton(shiny::NS(id, "submit"), label = "Load data"),
-    server = function(id) {
-      shiny::moduleServer(id, function(input, output, session) {
-        shiny::eventReactive(input$submit, {
-          data <- within(teal_data(), {
-            dataset1 <- iris
-            dataset2 <- mtcars
-          })
-        })
-      })
-    },
-    once = TRUE
-  )
-
-  app <- TealAppDriver$new(
-    data = tdm,
-    modules = example_module(label = "Example Module")
-  )
-
-  submit <- "teal-data-teal_data_module-submit"
-  app$click(submit)
-
-  testthat::expect_null(app$get_html("#teal-open_teal_data_module_ui"))
-  testthat::expect_null(app$is_visible(sprintf("#%s", submit)))
-
-  app$stop()
-})
-
-testthat::test_that("e2e: teal_data_module is still visible after successful data load, when once = FALSE", {
-  skip_if_too_deep(5)
-  tdm <- teal_data_module(
-    ui = function(id) shiny::actionButton(shiny::NS(id, "submit"), label = "Load data"),
-    server = function(id) {
-      shiny::moduleServer(id, function(input, output, session) {
-        shiny::eventReactive(input$submit, {
-          within(teal_data(), {
-            dataset1 <- iris
-            dataset2 <- mtcars
-          })
-        })
-      })
-    },
-    once = FALSE
-  )
-
-  app <- TealAppDriver$new(
-    data = tdm,
-    modules = example_module(label = "Example Module")
-  )
-
-  app$click("teal-data-teal_data_module-submit")
-  app$click(selector = "#teal-close_teal_data_module_modal button")
-  testthat::expect_true(app$is_visible("#teal-open_teal_data_module_ui"))
 
   app$stop()
 })
