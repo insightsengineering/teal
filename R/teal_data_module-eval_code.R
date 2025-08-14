@@ -46,7 +46,8 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
         )
         td
       })
-    }
+    },
+    once = attr(object, "once")
   )
 })
 
