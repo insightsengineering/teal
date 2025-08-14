@@ -1,8 +1,8 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
+bookmark_manager_selector <- "button[id$='bookmark_manager-do_bookmark']"
 testthat::describe("bookmark_manager_button is", {
-  bookmark_manager_selector <- ".bookmark_manager_button"
   it("not rendered by default", {
     skip_if_too_deep(5)
     app <- TealAppDriver$new(
@@ -44,7 +44,7 @@ testthat::test_that("bookmark_manager_button shows modal with url containing sta
     modules = example_module(label = "Example Module"),
     options = list(shiny.bookmarkStore = "server")
   )
-  bookmark_button_id <- app$get_attr(".bookmark_manager_button", "id")
+  bookmark_button_id <- app$get_attr(bookmark_manager_selector, "id")
   app$click(bookmark_button_id)
 
   testthat::expect_match(
