@@ -174,3 +174,43 @@ testthat::test_that("eval_code.teal_data_module handles a `NULL` result", {
     )
   )
 })
+
+testthat::test_that("teal_data_module preserves once attribute after calling eval_code and within", {
+  testthat::expect_true(
+    attr(
+      eval_code(
+        teal_data_module(ui = function(id) NULL, server = function(id) NULL, once = TRUE),
+        code = "a <- 1"
+      ),
+      "once"
+    )
+  )
+  testthat::expect_false(
+    attr(
+      eval_code(
+        teal_data_module(ui = function(id) NULL, server = function(id) NULL, once = FALSE),
+        code = "a <- 1"
+      ),
+      "once"
+    )
+  )
+
+  testthat::expect_true(
+    attr(
+      within(
+        teal_data_module(ui = function(id) NULL, server = function(id) NULL, once = TRUE),
+        expr = a <- 1
+      ),
+      "once"
+    )
+  )
+  testthat::expect_false(
+    attr(
+      within(
+        teal_data_module(ui = function(id) NULL, server = function(id) NULL, once = FALSE),
+        expr = a <- 1
+      ),
+      "once"
+    )
+  )
+})
