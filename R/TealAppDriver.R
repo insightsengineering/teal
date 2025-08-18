@@ -695,7 +695,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         "^#",
         "",
         self$get_attr(
-          selector = ".teal-modules-tree li a.module-button",
+          selector = sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs),
           attribute = "href"
         )
       )
@@ -703,7 +703,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       private$ns$module <- shiny::NS(active_base_id, "module")
       private$ns$filter_panel <- shiny::NS(active_base_id, "filter_panel")
-      private$ns$data_summary <- shiny::NS(active_base_id, "module_data_summary")
+      private$ns$data_summary <- shiny::NS(active_base_id, "data_summary")
     },
     # @description
     # Get the active filter values from the active filter selection of dataset from the filter panel.
