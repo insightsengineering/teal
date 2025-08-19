@@ -18,7 +18,7 @@ assert_reactive(
 )
 }
 \arguments{
-\item{x}{[any]\cr
+\item{x}{[\code{any}]\cr
 Object to check.}
 
 \item{null.ok}{[\code{logical(1)}]\cr
