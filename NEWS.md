@@ -1,4 +1,4 @@
-# teal 0.16.0.9029
+# teal 1.0.0
 
 ### Breaking changes
 
@@ -10,6 +10,7 @@
 
 ### Enhancement
 
+* Improved the layout and appearance of the app using `bslib` components.
 * General repositioning of key navigation components across the app:
     - Modules: The module navigation is moved from a nested tab selection to a "Module" drop-down selection. The module selection can be done from the nested button of modules.
     - Reporter: The Report previewer is no longer displayed as yet another teal module, it is placed inside a "Report" drop-down right next to the "Module" drop-down. The Report previewer is a modal that displays the added report cards. The "Report" drop-down also contains other global report options like download/load/reset the Report.
