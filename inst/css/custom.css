@@ -54,6 +54,86 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   --bslib-mb-spacer: 0;
 }
 
+.teal-data-module-popup .modal-dialog {
+  --bs-modal-margin: 20px;
+}
+
+.teal-data-module-popup .modal-content {
+  overflow: auto;
+  max-height: 90vh;
+  height: 90vh;
+}
+
+@media (min-width: 576px) {
+  .teal-data-module-popup .modal-dialog {
+    --bs-modal-width: 500px;
+  }
+}
+
+@media (min-width: 992px) {
+  .teal-data-module-popup .modal-dialog {
+    --bs-modal-width: 90vw;
+  }
+}
+
+.teal.expand-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 40px;
+  transition: max-width 0.3s ease;
+}
+
+.teal.expand-button button {
+  color: var(--bs-primary);
+  background-color: transparent;
+  border: 2px solid transparent;
+  padding: 0.5rem;
+}
+
+.teal.expand-button button:disabled {
+  color: var(--bs-dark-text-emphasis);
+}
+
+.teal.expand-button:hover button:disabled {
+  border-bottom: 2px solid var(--bs-dark-bg-subtle);
+}
+
+.teal.expand-button .label {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.teal.expand-button:hover {
+  max-width: 200px;
+}
+
+.teal.expand-button:hover button {
+  border-bottom: 2px solid var(--bs-primary-border-subtle);
+}
+
+.teal.expand-button:hover .label {
+  opacity: 1;
+}
+
+.teal.primary-button {
+  border: solid 1px var(--bs-primary);
+  padding: 0.3em;
+  border-radius: 5px;
+}
+
+.teal.primary-button.disabled {
+  color: var(--bs-primary);
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.teal.primary-button:not(.disabled):hover {
+  background: var(--bs-primary-bg-subtle);
+}
+
 .teal.add-reporter-container {
   display: flex;
   justify-content: flex-end;

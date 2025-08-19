@@ -43,7 +43,8 @@ srv_validate_reactive_teal_data(
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
 
-\item{data}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
+The data which application will depend on.}
 }
 \value{
 \code{reactive} \code{teal_data}

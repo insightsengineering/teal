@@ -24,7 +24,8 @@ To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 
 \item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
 
-\item{data}{(\code{reactive} returning \code{teal_data})}
+\item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
+The data which application will depend on.}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
 

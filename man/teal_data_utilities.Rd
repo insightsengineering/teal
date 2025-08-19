@@ -4,14 +4,11 @@
 \alias{teal_data_utilities}
 \alias{.append_evaluated_code}
 \alias{.append_modified_data}
-\alias{.collapse_subsequent_chunks}
 \title{\code{teal_data} utils}
 \usage{
 .append_evaluated_code(data, code)
 
 .append_modified_data(data, objects)
-
-.collapse_subsequent_chunks(report)
 }
 \arguments{
 \item{data}{(\code{teal_data})}

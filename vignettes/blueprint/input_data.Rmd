@@ -53,12 +53,12 @@ When this button is clicked, a modal window appears, revealing the `R` code resp
 This functionality is achieved by inspecting the `teal_data` object and retrieving code from it.
 With the `Show R Code` button, users can easily copy and independently run the code to reproduce the analysis presented in the teal module.
 
-![Show R Code](../../man/figures/showrcode.jpg){width=50%}
+![Show R Code](images/showrcode.png){width=60%}
 
 The Reporter feature also leverages the `teal_data` object in its operation.
 Much like the `Show R Code` mechanism, the code displayed in a Reporter Card is extracted from the `teal_data` object.
 
-![Reporter](../../man/figures/reporter.jpg){width=50%}
+![Reporter](images/reporter.png){width=100%}
 
 To learn more about the `Reporter` feature, please visit the [`teal.reporter` documentation](https://insightsengineering.github.io/teal.reporter/latest-tag/index.html).
 

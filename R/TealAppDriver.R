@@ -189,22 +189,18 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Navigate the teal tabs in the `teal` app.
     #'
-    #' @param tabs (character) Labels of tabs to navigate to. The order of the tabs is important,
-    #' and it should start with the most parent level tab.
-    #' Note: In case the teal tab group has duplicate names, the first tab will be selected,
-    #' If you wish to select the second tab with the same name, use the suffix "_1".
-    #' If you wish to select the third tab with the same name, use the suffix "_2" and so on.
+    #' @param tab (character) Labels of tabs to navigate to.
+    #' Note: Make sure to provide unique labels for the tabs.
     #'
     #' @return The `TealAppDriver` object invisibly.
-    navigate_teal_tab = function(tabs) {
-      checkmate::check_character(tabs, min.len = 1)
-      for (tab in tabs) {
-        self$set_input(
-          "teal-teal_modules-active_tab",
-          get_unique_labels(tab),
-          wait_ = FALSE
+    navigate_teal_tab = function(tab) {
+      checkmate::check_string(tab)
+      self$run_js(
+        sprintf(
+          "$('.dropdown-menu a:contains(\"%s\")').click()",
+          tab
         )
-      }
+      )
       self$wait_for_idle()
       private$set_active_ns()
       invisible(self)
@@ -362,7 +358,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
       displayed_datasets_index <- self$is_visible(
-        sprintf("#%s-filters-filter_active_vars_contents > span", self$active_filters_ns())
+        sprintf("#%s-filters-filter_active_vars_contents > div > span", self$active_filters_ns())
       )
 
       js_code <- sprintf(
@@ -456,7 +452,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             replacement = "",
             self$get_text(
               sprintf(
-                "#%s-filters-%s .filter-card-varname",
+                "#%s-filters-%s-container .filter-card-varname",
                 self$active_filters_ns(),
                 x
               )
@@ -693,37 +689,21 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     # private methods ----
     set_active_ns = function() {
       all_inputs <- self$get_values()$input
-      active_tab_inputs <- all_inputs[grepl("-active_tab$", names(all_inputs))]
+      active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
-      tab_ns <- unlist(lapply(names(active_tab_inputs), function(name) {
-        gsub(
-          pattern = "-active_tab$",
-          replacement = sprintf("-%s", active_tab_inputs[[name]]),
-          name
+      active_wrapper_id <- sub(
+        "^#",
+        "",
+        self$get_attr(
+          selector = sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs),
+          attribute = "href"
         )
-      }))
-      active_ns <- tab_ns[1]
-      if (length(tab_ns) > 1) {
-        for (i in 2:length(tab_ns)) {
-          next_ns <- tab_ns[i]
-          if (grepl(pattern = active_ns, next_ns)) {
-            active_ns <- next_ns
-          }
-        }
-      }
-      private$ns$module <- sprintf("%s-%s", active_ns, "module")
+      )
+      active_base_id <- sub("-wrapper$", "", active_wrapper_id)
 
-      components <- c("filter_panel", "data_summary")
-      for (component in components) {
-        if (
-          !is.null(self$get_html(sprintf("#%s-%s-panel", active_ns, component))) ||
-            !is.null(self$get_html(sprintf("#%s-%s-table", active_ns, component)))
-        ) {
-          private$ns[[component]] <- sprintf("%s-%s", active_ns, component)
-        } else {
-          private$ns[[component]] <- sprintf("%s-module_%s", active_ns, component)
-        }
-      }
+      private$ns$module <- shiny::NS(active_base_id, "module")
+      private$ns$filter_panel <- shiny::NS(active_base_id, "filter_panel")
+      private$ns$data_summary <- shiny::NS(active_base_id, "data_summary")
     },
     # @description
     # Get the active filter values from the active filter selection of dataset from the filter panel.

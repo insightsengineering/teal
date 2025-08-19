@@ -2,18 +2,17 @@ testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: teal app initializes with no errors", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
     modules = example_module(label = "Example Module")
   )
   app$expect_no_shiny_error()
+  app$expect_screenshot(selector = "#teal-tabpanel_wrapper")
   app$stop()
 })
 
 testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),
@@ -69,7 +68,6 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
 })
 
 testthat::test_that("e2e: init creates UI containing specified title, favicon, header and footer", {
-  testthat::skip("chromium")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     data = simple_teal_data(),

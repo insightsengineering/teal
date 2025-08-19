@@ -24,7 +24,7 @@ srv_filter_data(id, datasets, active_datanames, data, is_active)
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton
-which implies in filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
+which implies the filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
 
 \item{active_datanames}{(\code{reactive} returning \code{character}) this module's data names}
 
