@@ -108,8 +108,8 @@ srv_init_data <- function(id, data) {
       ),
       sapply(
         names(data_teal_report),
-        teal.code::get_var,
-        object = data_teal_report,
+        base::get,
+        envir = data_teal_report,
         simplify = FALSE
       )
     )

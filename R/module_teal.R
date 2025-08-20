@@ -284,15 +284,15 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       data_load_status = data_load_status
     )
 
-    # TODO: averissimo (check if necessary)
-    insert_reporter_previewer_tab(
-      session = session,
-      modules = modules,
-      modules_output = modules_output,
-      reporter = reporter,
-      app_id = attr(filter, "app_id")
-    )
-    # END of TODO
+    # # TODO: averissimo (check if necessary)
+    # insert_reporter_previewer_tab(
+    #   session = session,
+    #   modules = modules,
+    #   modules_output = modules_output,
+    #   reporter = reporter,
+    #   app_id = attr(filter, "app_id")
+    # )
+    # # END of TODO
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
