@@ -110,13 +110,7 @@ ui_teal <- function(id, modules) {
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),
-    htmltools::htmlDependency(
-      name = "extend_shiny_js",
-      version = utils::packageVersion("teal"),
-      package = "teal",
-      src = "js",
-      script = "extendShinyJs.js"
-    ),
+    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal.reporter")),
     shiny_busy_message_panel,
     tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
