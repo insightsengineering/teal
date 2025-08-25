@@ -1,5 +1,5 @@
-pandoc: 3.6.3
-pkgdown: 2.1.1
+pandoc: 3.7.0.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   blueprint/actors: blueprint/actors.html
@@ -22,7 +22,7 @@ articles:
   teal-options: teal-options.html
   transform-input-data: transform-input-data.html
   transform-module-output: transform-module-output.html
-last_built: 2025-02-24T03:40Z
+last_built: 2025-08-20T10:00Z
 urls:
   reference: https://insightsengineering.github.io/teal/reference
   article: https://insightsengineering.github.io/teal/articles
