@@ -644,21 +644,6 @@ append_module <- function(modules, module) {
   modules
 }
 
-# TODO: averissimo (check if necessary)
-# #' @rdname module_teal
-# #' @keywords internal
-# #' @noRd
-# append_reporter_module <- function(modules) {
-#   if (length(extract_module(modules, "teal_module_previewer")) == 0) {
-#     modules <- append_module(
-#       modules,
-#       reporter_previewer_module(server_args = list(previewer_buttons = c("download", "reset")))
-#     )
-#   }
-#   modules
-# }
-# END of TODO
-
 #' Extract/Remove module(s) of specific class
 #'
 #' Given a `teal_module` or a `teal_modules`, return the elements of the structure according to `class`.

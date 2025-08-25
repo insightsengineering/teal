@@ -124,11 +124,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
-  # TODO: averissimo (check if necessary)
-  # if (!is.null(reporter)) {
-  #   modules <- append_reporter_module(modules)
-  # }
-  # END of TODO
 
   modules <- drop_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_previewer")
@@ -278,15 +273,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       data_load_status = data_load_status
     )
 
-    # # TODO: averissimo (check if necessary)
-    # insert_reporter_previewer_tab(
-    #   session = session,
-    #   modules = modules,
-    #   modules_output = modules_output,
-    #   reporter = reporter,
-    #   app_id = attr(filter, "app_id")
-    # )
-    # # END of TODO
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
     snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
     srv_bookmark_panel("bookmark_manager", modules)
