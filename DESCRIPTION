@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.16.0.9029
-Date: 2025-08-18
+Version: 1.0.0.9000
+Date: 2025-08-20
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -38,8 +38,8 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
-    teal.data (>= 0.7.0.9002),
-    teal.slice (>= 0.6.0.9001)
+    teal.data (>= 0.8.0),
+    teal.slice (>= 0.7.0)
 Imports:
     bsicons,
     bslib (>= 0.8.0),
@@ -53,10 +53,10 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.reporter (>= 0.4.0.9005),
     teal.code (>= 0.7.0),
     teal.logger (>= 0.4.0),
-    teal.widgets (>= 0.4.3.9001),
+    teal.reporter (>= 0.5.0),
+    teal.widgets (>= 0.5.0),
     tools,
     utils
 Suggests:
