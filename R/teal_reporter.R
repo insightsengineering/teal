@@ -131,7 +131,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
       tcard <- if (inherits(teal_data_handled, "teal_report")) {
         teal.reporter::teal_card(teal_data_handled)
       } else if (inherits(teal_data_handled, "teal_data")) {
-        teal.reporter::teal_card(teal.reporter::as.teal_report(teal_data_handled))
+        teal.reporter::teal_card(as(teal_data_handled, "teal_report"))
       } else if (inherits(teal_data_handled, "teal_card")) {
         teal_data_handled
       }
