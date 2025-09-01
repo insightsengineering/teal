@@ -143,7 +143,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
       output$reporter_add_container <- renderUI({
         tags$div(
           class = "teal add-reporter-container",
-          teal.reporter::add_card_button_ui(session$ns("reporter_add"))
+          teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
         )
       })
       teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
