@@ -239,13 +239,16 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         ui = tags$div(validate_ui)
       )
     }
-
     if (!is.null(reporter)) {
       shinyjs::show("reporter_menu_container")
     } else {
       removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
     }
-    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+    if (!is.null(reporter)) {
+      reporter$set_id(attr(filter, "app_id"))
+    } else {
+      reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+    }
     teal.reporter::preview_report_button_srv("preview_report", reporter)
     teal.reporter::report_load_srv("load_report", reporter)
     teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
