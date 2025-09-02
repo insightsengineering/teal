@@ -139,7 +139,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
       if (length(tcard)) .collapse_subsequent_chunks(tcard)
     })
 
-    .call_once_when(!is.null(doc_out()), {
+    .call_once_when(!is.null(doc_out()) && !is.null(reporter), {
       output$reporter_add_container <- renderUI({
         tags$div(
           class = "teal add-reporter-container",

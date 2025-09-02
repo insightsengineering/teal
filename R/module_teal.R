@@ -246,13 +246,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
     }
     if (!is.null(reporter)) {
       reporter$set_id(attr(filter, "app_id"))
-    } else {
-      reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
+      teal.reporter::preview_report_button_srv("preview_report", reporter)
+      teal.reporter::report_load_srv("load_report", reporter)
+      teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
+      teal.reporter::reset_report_button_srv("reset_reports", reporter)
     }
-    teal.reporter::preview_report_button_srv("preview_report", reporter)
-    teal.reporter::report_load_srv("load_report", reporter)
-    teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
-    teal.reporter::reset_report_button_srv("reset_reports", reporter)
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_signatured(), {
