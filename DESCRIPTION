@@ -78,12 +78,7 @@ VignetteBuilder:
     knitr,
     rmarkdown
 Remotes:
-    insightsengineering/teal.reporter@teal_reportable,
-    insightsengineering/teal.logger@main,
-    insightsengineering/teal.data@main,
-    insightsengineering/teal.code@main,
-    insightsengineering/teal.slice@main,
-    insightsengineering/teal.widgets@main
+    insightsengineering/teal.reporter@teal_reportable
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, r-lib/mirai, r-lib/cli,
