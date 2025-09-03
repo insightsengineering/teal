@@ -19,14 +19,14 @@ meta data.
 card <- TealReportCard$new()$append_src(
   "plot(iris)"
 )
-card$get_content()[[1]]$get_content()
+card$get_content()[[1]]
 
 ## ------------------------------------------------
 ## Method `TealReportCard$append_encodings`
 ## ------------------------------------------------
 
 card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
-card$get_content()[[1]]$get_content()
+card$get_content()[[1]]
 
 }
 \section{Super class}{
@@ -90,7 +90,7 @@ Object of class \code{TealReportCard}, invisibly.
 \preformatted{card <- TealReportCard$new()$append_src(
   "plot(iris)"
 )
-card$get_content()[[1]]$get_content()
+card$get_content()[[1]]
 }
 \if{html}{\out{</div>}}
 
@@ -142,7 +142,7 @@ Appends the encodings list to the \code{content} and \code{metadata} of this \co
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
-card$get_content()[[1]]$get_content()
+card$get_content()[[1]]
 
 }
 \if{html}{\out{</div>}}

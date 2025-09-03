@@ -20,7 +20,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
     #' card <- TealReportCard$new()$append_src(
     #'   "plot(iris)"
     #' )
-    #' card$get_content()[[1]]$get_content()
+    #' card$get_content()[[1]]
     append_src = function(src, ...) {
       super$append_rcode(text = src, ...)
     },
@@ -44,7 +44,7 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
     #' @return `self`, invisibly.
     #' @examples
     #' card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
-    #' card$get_content()[[1]]$get_content()
+    #' card$get_content()[[1]]
     #'
     append_encodings = function(encodings) {
       checkmate::assert_list(encodings)

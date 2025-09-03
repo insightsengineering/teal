@@ -25,7 +25,7 @@ testthat::test_that("report_card_template function returns TealReportCard object
   ))
   testthat::expect_s3_class(card, c("TealReportCard"))
   testthat::expect_equal(card$get_name(), "Card label")
-  testthat::expect_length(card$get_content(), 4)
+  testthat::expect_length(card$get_content(), 2)
 
   card <- shiny::isolate(report_card_template(
     title = "Card title",
