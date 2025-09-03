@@ -80,4 +80,3 @@ testthat::test_that("TealReportCard$append_fs returns title and content", {
   card$append_fs(teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b")))
   testthat::expect_identical(card$get_content()[[1]]$get_content(), "Filter State")
 })
-
