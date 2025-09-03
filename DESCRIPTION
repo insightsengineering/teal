@@ -77,6 +77,8 @@ Suggests:
 VignetteBuilder:
     knitr,
     rmarkdown
+RdMacros:
+    lifecycle
 Remotes:
     insightsengineering/teal.reporter@teal_reportable
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
