@@ -79,34 +79,5 @@ testthat::test_that("TealReportCard$append_fs returns title and content", {
   card <- TealReportCard$new()
   card$append_fs(teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b")))
   testthat::expect_identical(card$get_content()[[1]]$get_content(), "Filter State")
-  testthat::expect_true(inherits(card$get_content()[[2]], "TealSlicesBlock"))
 })
 
-testthat::test_that("TealSlicesBlock$new accepts teal_slices only", {
-  testthat::expect_no_error(TealSlicesBlock$new(teal_slices()))
-  testthat::expect_error(TealSlicesBlock$new(list()), "Assertion on 'content'")
-})
-
-testthat::test_that("TealSlicesBlock$get_content returns yaml character", {
-  block <- TealSlicesBlock$new(
-    teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-  )
-  testthat::expect_identical(block$get_content(), "- Dataset name: a\n  Variable name: b\n")
-})
-
-testthat::test_that("TealSlicesBlock$to_list returns list containing teal_slices", {
-  tss <- teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-  block <- TealSlicesBlock$new(tss)
-  testthat::expect_identical(
-    block$to_list(),
-    list(text = "- Dataset name: a\n  Variable name: b\n", style = "verbatim")
-  )
-})
-
-testthat::test_that("TealSlicesBlock$from_list retains states from a list", {
-  tss <- teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-  block1 <- TealSlicesBlock$new(tss)
-  block2 <- TealSlicesBlock$new()
-  block2$from_list(block1$to_list())
-  testthat::expect_identical(block1$get_content(), block2$get_content())
-})
