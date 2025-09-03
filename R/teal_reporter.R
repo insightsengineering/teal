@@ -5,6 +5,7 @@
 #' the source code, the encodings panel content and the filter panel content as part of the
 #' meta data.
 #' @export
+#' @importFrom methods as
 #'
 TealReportCard <- R6::R6Class( # nolint: object_name.
   classname = "TealReportCard",
