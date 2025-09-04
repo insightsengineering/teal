@@ -40,7 +40,7 @@ for their respective message groups.
 If neither of the nested list elements is named, a header message is taken from \code{header}.
 }
 \examples{
-\dontshow{if (require("shinyvalidate")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("shinyvalidate")) withAutoprint(\{ # examplesIf}
 library(shiny)
 library(shinyvalidate)
 
