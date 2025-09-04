@@ -98,6 +98,11 @@ Default: `"auto"`.
 
 To read more about lockfile usage creation check `?teal::module_teal_lockfile`.
 
+### `teal.sidebar.position` (`character`)
+This sets the position of the sidebar in the teal app. Possible values are `"left"` and `"right"`.
+
+Default: `left`
+
 ### `teal.sidebar.width` (`numeric`)
 
 This sets the sidebar width in pixels in the teal app.

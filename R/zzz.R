@@ -5,6 +5,8 @@
     teal.show_js_log = FALSE,
     teal.lockfile.mode = "auto",
     shiny.sanitize.errors = FALSE,
+    teal.sidebar.position = "left",
+    teal.sidebar.width = 250,
     teal.reporter.nav_buttons = c("preview", "download", "load", "reset")
   )
 

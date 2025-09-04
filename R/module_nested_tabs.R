@@ -234,6 +234,7 @@ srv_teal_module <- function(id,
             sidebar = bslib::sidebar(
               id = ns("teal_module_sidebar"),
               class = "teal-sidebar",
+              position = getOption("teal.sidebar.position", "left"),
               width = getOption("teal.sidebar.width", 250),
               tags$div(
                 tags$div(
