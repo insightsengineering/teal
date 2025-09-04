@@ -128,9 +128,18 @@ For further details see [Filter Panel vignette](filter-panel.html).
 
 ### Reporting
 
-If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.
-This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them. See more details in [this vignette](adding-support-for-reporting.html).
+The `init` function includes a `reporter` parameter that controls the global reporting functionality of your `teal` application. This parameter determines whether and how users can generate reports from the analyses performed in your application.
 
+The `reporter` parameter in `init` accepts three types of values:
+
+* `parameter is omitted`: reporting is enabled by default globally.
+* `NULL`: reporting is disabled globally.
+* `teal.reporter::Report$new()`: predefined reporter object, possibly containing some initial cards.
+
+For more details on reporting functionality and how to implement it in your modules, see:
+- [adding support for reporting](adding-support-for-reporting.html),
+- [managing reproducible report documents in teal](managing-reproducible-report-documents-in-teal.html),
+- [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) package documentation.
 
 ### Reproducible code
 
