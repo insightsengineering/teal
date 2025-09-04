@@ -130,6 +130,8 @@ reference:
       - reporter_previewer_module
       - TealReportCard
       - report_card_template
+      - disable_report
+      - after
   - title: Landing popup
     contents:
       - landing_popup_module

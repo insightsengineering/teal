@@ -226,7 +226,7 @@ To explore the content, we can use the `$get_content` method.
 For further details, refer to the documentation of `TealReportCard` and `teal.reporter::ReportCard`.
 
 We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`.
-The function must return the `card` object, otherwise errors may occur in `teal`.
+The function must return the `teal_card` object, otherwise errors may occur in `teal`.
 
 ```{r module_4}
 custom_function <- function(card = teal.reporter::ReportCard$new()) {

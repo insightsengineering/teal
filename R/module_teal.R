@@ -53,8 +53,9 @@ ui_teal <- function(id, modules) {
   mod <- extract_module(modules, class = "teal_module_previewer")
   reporter_opts <- if (length(mod)) .get_reporter_options(mod[[1]]$server_args)
   modules <- drop_module(modules, "teal_module_landing")
-  modules <- drop_module(modules, "teal_module_previewer")
 
+  # show busy icon when `shiny` session is busy computing stuff
+  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
   shiny_busy_message_panel <- conditionalPanel(
     condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint: line_length.
     tags$div(
@@ -108,6 +109,7 @@ ui_teal <- function(id, modules) {
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),
+    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal.reporter")),
     shiny_busy_message_panel,
     tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
@@ -116,14 +118,13 @@ ui_teal <- function(id, modules) {
 
 #' @rdname module_teal
 #' @export
-srv_teal <- function(id, data, modules, filter = teal_slices()) {
+srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
   modules <- drop_module(modules, "teal_module_landing")
-  modules <- drop_module(modules, "teal_module_previewer")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
@@ -159,7 +160,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
     srv_check_module_datanames("datanames_warning", data_handled, modules)
 
     data_validated <- .trigger_on_success(data_handled)
-
     data_signatured <- reactive({
       req(inherits(data_validated(), "teal_data"))
       is_filter_ok <- check_filter_datanames(filter, names(data_validated()))
@@ -239,17 +239,16 @@ srv_teal <- function(id, data, modules, filter = teal_slices()) {
         ui = tags$div(validate_ui)
       )
     }
-
-    if (is_arg_used(modules, "reporter")) {
+    if (!is.null(reporter)) {
       shinyjs::show("reporter_menu_container")
+      reporter$set_id(attr(filter, "app_id"))
+      teal.reporter::preview_report_button_srv("preview_report", reporter)
+      teal.reporter::report_load_srv("load_report", reporter)
+      teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
+      teal.reporter::reset_report_button_srv("reset_reports", reporter)
     } else {
       removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
     }
-    reporter <- teal.reporter::Reporter$new()$set_id(attr(filter, "app_id"))
-    teal.reporter::preview_report_button_srv("preview_report", reporter)
-    teal.reporter::report_load_srv("load_report", reporter)
-    teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
-    teal.reporter::reset_report_button_srv("reset_reports", reporter)
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_signatured(), {

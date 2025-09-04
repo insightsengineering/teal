@@ -133,3 +133,9 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 .teal.primary-button:not(.disabled):hover {
   background: var(--bs-primary-bg-subtle);
 }
+
+.teal.add-reporter-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}

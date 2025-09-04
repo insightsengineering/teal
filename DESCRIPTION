@@ -55,7 +55,7 @@ Imports:
     stats,
     teal.code (>= 0.7.0),
     teal.logger (>= 0.4.0),
-    teal.reporter (>= 0.5.0),
+    teal.reporter (>= 0.5.0.9001),
     teal.widgets (>= 0.5.0),
     tools,
     utils
@@ -79,6 +79,8 @@ VignetteBuilder:
     rmarkdown
 RdMacros:
     lifecycle
+Remotes:
+    insightsengineering/teal.reporter@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, r-lib/mirai, r-lib/cli,
@@ -95,9 +97,10 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate:
     'TealAppDriver.R'
+    'after.R'
     'checkmate.R'
     'dummy_functions.R'
     'include_css_js.R'

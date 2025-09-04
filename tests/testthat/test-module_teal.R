@@ -1043,7 +1043,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("does not receive report_previewer when none of the modules contain reporter argument", {
+  testthat::it("does not receive report_previewer when reporter is NULL", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1052,7 +1052,8 @@ testthat::describe("srv_teal teal_modules", {
         modules = modules(
           module("module_1", server = function(id) {}),
           module("module_2", server = function(id) {})
-        )
+        ),
+        reporter = NULL
       ),
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "report_previewer")

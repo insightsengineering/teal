@@ -34,6 +34,7 @@
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app.
 #'   This parameter is no longer supported. Use [ui_teal()] and [srv_teal()] instead.
+#' @param reporter (`Reporter`) object used to store report contents. Set to `NULL` to globally disable reporting.
 #'
 #' @return Named list containing server and UI functions.
 #'
@@ -99,7 +100,8 @@ init <- function(data,
                  title = lifecycle::deprecated(),
                  header = lifecycle::deprecated(),
                  footer = lifecycle::deprecated(),
-                 id = lifecycle::deprecated()) {
+                 id = lifecycle::deprecated(),
+                 reporter = teal.reporter::Reporter$new()) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
@@ -183,7 +185,6 @@ init <- function(data,
   landing <- extract_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_landing")
 
-
   if (lifecycle::is_present(id)) {
     lifecycle::deprecate_soft(
       when = "0.16.0",
@@ -235,7 +236,13 @@ init <- function(data,
         )
       },
       server = function(input, output, session) {
-        srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
+        srv_teal(
+          id = "teal",
+          data = data,
+          modules = modules,
+          filter = deep_copy_filter(filter),
+          reporter = if (!is.null(reporter)) reporter$clone(deep = TRUE)
+        )
         srv_session_info("teal-footer-session_info")
       }
     ),
