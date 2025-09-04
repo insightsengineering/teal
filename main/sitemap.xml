@@ -30,8 +30,8 @@
 <url><loc>https://insightsengineering.github.io/teal/news/index.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/TealAppDriver.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/TealReportCard.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/TealSlicesBlock.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/add_landing_modal.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/after.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc></url>
@@ -41,6 +41,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/create_app_id.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/decorate_err_msg.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/deep_copy_filter.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/disable_report.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-add_signature_to_data.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-call_once_when.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/dot-get_hashes_code.html</loc></url>
