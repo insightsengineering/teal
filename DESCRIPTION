@@ -80,7 +80,7 @@ VignetteBuilder:
 RdMacros:
     lifecycle
 Remotes:
-    insightsengineering/teal.reporter@main
+    insightsengineering/teal.reporter@1534-show_r_code@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, r-lib/mirai, r-lib/cli,
@@ -122,6 +122,7 @@ Collate:
     'module_transform_data.R'
     'reporter_previewer_module.R'
     'show_rcode_modal.R'
+    'source_code.R'
     'tdata.R'
     'teal.R'
     'teal_data_module.R'

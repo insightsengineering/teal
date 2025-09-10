@@ -129,12 +129,18 @@ srv_add_reporter <- function(id, module_out, reporter) {
       if (length(tcard)) .collapse_subsequent_chunks(tcard)
     })
 
+    is_reporter_enabled <- shiny::reactive({
+      !isFALSE(attr(doc_out(), "teal.show_report"))
+    })
+
     .call_once_when(!is.null(doc_out()) && !is.null(reporter), {
       output$reporter_add_container <- renderUI({
-        tags$div(
-          class = "teal add-reporter-container",
-          teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
-        )
+        if (is_reporter_enabled()) {
+          tags$div(
+            class = "teal add-reporter-container",
+            teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
+          )
+        }
       })
       teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
     })
@@ -152,7 +158,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 #' Convenience function that disables the user's ability to add the module
 #' to the report previewer.
 #' @param x (`teal_module`) a `teal_module` object.
-#' @return `NULL` that indicates that it should disable the reporter functionality.
+#' @return modified data object that indicates that it should disable the reporter functionality.
 #' @export
 #' @examples
 #' app <- init(
@@ -167,7 +173,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 disable_report <- function(x) {
   checkmate::assert_class(x, "teal_module")
   after(x, server = function(data) {
-    teal.reporter::teal_card(data) <- teal.reporter::teal_card()
-    NULL
+    attr(teal.reporter::teal_card(data), "teal.show_report") <- TRUE
+    data
   })
 }

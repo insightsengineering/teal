@@ -7,7 +7,8 @@
     shiny.sanitize.errors = FALSE,
     teal.sidebar.position = "left",
     teal.sidebar.width = 250,
-    teal.reporter.nav_buttons = c("preview", "download", "load", "reset")
+    teal.reporter.nav_buttons = c("preview", "download", "load", "reset"),
+    teal.show_r_code = TRUE
   )
 
   op <- options()

@@ -134,8 +134,14 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   background: var(--bs-primary-bg-subtle);
 }
 
-.teal.add-reporter-container {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
+.outline-button.primary {
+  color: var(--bs-primary);
+  border: solid 1px var(--bs-primary);
+  padding: 0.3em;
+  border-radius: 5px;
+  background: transparent;
+}
+
+.outline-button.primary:hover:not(:disabled) {
+  background: var(--bs-primary-bg-subtle);
 }
