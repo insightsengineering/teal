@@ -38,7 +38,7 @@ srv_source_code <- function(id, module_out) {
     })
 
     is_button_showed_r <- shiny::reactive({
-      getOption("teal.show_r_code_ui", TRUE) &&
+      getOption("teal.show_r_code", TRUE) &&
         inherits(mod_out_r(), "qenv") &&
         !isFALSE(attr(mod_out_r()@code, "teal.show_r_code")) # Only hide when value is explicitly FALSE
     })
