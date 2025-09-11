@@ -188,7 +188,59 @@ srv_teal_module <- function(id,
 .ui_teal_module.teal_module <- function(id, modules, active_module_id) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
-  ui_teal <- tags$div(
+
+  module_ui <- do.call(what = modules$ui, args = args, quote = TRUE)
+
+  is_transform_relocated <- !identical(getOption("teal.transform.location"), ".teal-sidebar") &&
+    length(htmltools::tagQuery(module_ui)$find(getOption("teal.transform.location"))$selectedTags())
+
+  container_id <- ns("wrapper")
+  module_id <- modules$path
+
+  data_summary_ui <- tags$div(
+    class = "teal-active-data-summary-panel",
+    bslib::accordion(
+      id = ns("data_summary_accordion"),
+      bslib::accordion_panel(
+        "Active Data Summary",
+        tags$div(
+          class = "teal-active-data-summary",
+          ui_data_summary(ns("data_summary"))
+        )
+      )
+    )
+  )
+
+  transformators_ui <- if (length(modules$transformators) > 0 && !isTRUE(attr(modules$transformators, "custom_ui"))) {
+    ui_transform_teal_data(
+      ns("data_transform"),
+      transformators = modules$transformators,
+      container = if (is_transform_relocated) "div" else "accordion"
+    )
+  }
+
+  if (is_transform_relocated) {
+    module_ui <- htmltools::tagInsertChildren(
+      tag = module_ui,
+      transformators_ui,
+      .cssSelector = getOption("teal.transform.location"),
+      after = 0
+    )
+    transformators_wrapper_ui <- NULL
+  } else {
+    transformators_wrapper_ui <- tags$div(
+      tags$br(),
+      tags$div(
+        class = "teal-transform-panel",
+        bslib::accordion(
+          id = ns("data_transform_accordion"),
+          bslib::accordion_panel("Transform Data", transformators_ui)
+        )
+      )
+    )
+  }
+
+  module_wrapper_ui <- tags$div(
     shinyjs::hidden(
       tags$div(
         id = ns("transform_failure_info"),
@@ -205,11 +257,9 @@ srv_teal_module <- function(id,
         class = "teal_validated",
         ui_check_module_datanames(ns("validate_datanames"))
       ),
-      do.call(what = modules$ui, args = args, quote = TRUE)
+      module_ui
     )
   )
-  container_id <- ns("wrapper")
-  module_id <- modules$path
 
   link <- tags$li(
     tags$a(
@@ -238,45 +288,13 @@ srv_teal_module <- function(id,
               position = getOption("teal.sidebar.position", "left"),
               width = getOption("teal.sidebar.width", 250),
               tags$div(
-                tags$div(
-                  class = "teal-active-data-summary-panel",
-                  bslib::accordion(
-                    id = ns("data_summary_accordion"),
-                    bslib::accordion_panel(
-                      "Active Data Summary",
-                      tags$div(
-                        class = "teal-active-data-summary",
-                        ui_data_summary(ns("data_summary"))
-                      )
-                    )
-                  )
-                ),
+                data_summary_ui,
                 tags$br(),
-                tags$div(
-                  class = "teal-filter-panel",
-                  ui_filter_data(ns("filter_panel"))
-                ),
-                if (length(modules$transformators) > 0 && !isTRUE(attr(modules$transformators, "custom_ui"))) {
-                  tags$div(
-                    tags$br(),
-                    tags$div(
-                      class = "teal-transform-panel",
-                      bslib::accordion(
-                        id = ns("data_transform_accordion"),
-                        bslib::accordion_panel(
-                          "Transform Data",
-                          ui_transform_teal_data(
-                            ns("data_transform"),
-                            transformators = modules$transformators
-                          )
-                        )
-                      )
-                    )
-                  )
-                }
+                tags$div(class = "teal-filter-panel", ui_filter_data(ns("filter_panel"))),
+                transformators_wrapper_ui
               )
             ),
-            ui_teal
+            module_wrapper_ui
           ),
           div(
             id = ns("sidebar_toggle_buttons"),
@@ -291,7 +309,7 @@ srv_teal_module <- function(id,
               ns("data_filters_toggle"),
               icon("fas fa-filter")
             ),
-            if (length(modules$transformators) > 0) {
+            if (!is_transform_relocated && length(modules$transformators) > 0) {
               actionButton(
                 class = "data-transforms-toggle btn-outline-primary",
                 ns("data_transforms_toggle"),

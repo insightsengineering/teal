@@ -122,6 +122,7 @@ Collate:
     'module_transform_data.R'
     'reporter_previewer_module.R'
     'show_rcode_modal.R'
+    'standard_layout.R'
     'tdata.R'
     'teal.R'
     'teal_data_module.R'

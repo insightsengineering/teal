@@ -23,8 +23,8 @@ after <- function(x,
 
   additional_args <- list(...)
   new_x <- x # because overwriting x$ui/server will cause infinite recursion
-  new_x$ui <- .after_ui(x$ui, ui, additional_args)
-  new_x$server <- .after_server(x$server, server, additional_args)
+  new_x$ui <- .after_ui(x = x$ui, y = ui, additional_args = additional_args)
+  new_x$server <- .after_server(x = x$server, y = server, additional_args = additional_args)
   new_x
 }
 
@@ -80,8 +80,45 @@ after <- function(x,
         list(id = "wrapper", input = input, output = output, session = session)
       )
       reactive({
-        req(original_out_r())
-        wrapper_args$data <- original_out()
+        wrapper_args$data <- req(original_out_r())
+        do.call(`_y`, wrapper_args[names(formals(`_y`))], quote = TRUE)
+      })
+    })
+  }
+  formals(new_x) <- formals(x)
+  new_x
+}
+
+.before_server <- function(x, y, additional_args) {
+  # add `_`-prefix to make sure objects are not masked in the wrapper functions
+  `_x` <- x # nolint: object_name.
+  `_y` <- y # nolint: object_name.
+  new_x <- function(id, ...) {
+    original_args <- as.list(environment())
+    original_args$id <- "wrapped"
+    if ("..." %in% names(formals(`_x`))) {
+      original_args <- c(original_args, list(...))
+    }
+    moduleServer(id, function(input, output, session) {
+      original_out <- if (all(c("input", "output", "session") %in% names(formals(`_x`)))) {
+        original_args$module <- `_x`
+        do.call(shiny::callModule, args = original_args)
+      } else {
+        do.call(`_x`, original_args)
+      }
+      original_out_r <- reactive(
+        if (is.reactive(original_out)) {
+          original_out()
+        } else {
+          original_out
+        }
+      )
+      wrapper_args <- utils::modifyList(
+        additional_args,
+        list(id = "wrapper", input = input, output = output, session = session)
+      )
+      reactive({
+        wrapper_args$data <- req(original_out_r())
         do.call(`_y`, wrapper_args[names(formals(`_y`))], quote = TRUE)
       })
     })
