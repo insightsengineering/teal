@@ -156,7 +156,7 @@ list(
 )
 ```
 
-### `teal.show_r_code` (`logical`)
+### `teal.show_src` (`logical`)
 
 It allows customizing the visibility of the "Show R Code" button in the module title bar.
 

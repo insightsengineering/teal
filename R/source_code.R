@@ -38,9 +38,9 @@ srv_source_code <- function(id, module_out) {
     })
 
     is_button_showed_r <- shiny::reactive({
-      getOption("teal.show_r_code", TRUE) &&
+      getOption("teal.show_src", TRUE) &&
         inherits(mod_out_r(), "qenv") &&
-        !isFALSE(attr(mod_out_r()@code, "teal.show_r_code")) # Only hide when value is explicitly FALSE
+        !isFALSE(attr(mod_out_r()@code, "teal.show_src")) # Only hide when value is explicitly FALSE
     })
 
     .call_once_when(!is.null(doc_out()), {
@@ -69,17 +69,17 @@ srv_source_code <- function(id, module_out) {
 #' app <- init(
 #'   data = within(teal_data(), iris <- iris),
 #'   modules = modules(
-#'     example_module(label = "example teal module") |> disable_show_r_code()
+#'     example_module(label = "example teal module") |> disable_src()
 #'   )
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
 #' @export
-disable_show_r_code <- function(x) {
+disable_src <- function(x) {
   checkmate::assert_class(x, "teal_module")
   after(x, server = function(data) {
-    attr(data@code, "teal.show_r_code") <- FALSE
+    attr(data@code, "teal.show_src") <- FALSE
     data
   })
 }
