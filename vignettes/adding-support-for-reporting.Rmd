@@ -21,7 +21,7 @@ Thus the app user can interact with the report.
 
 The responsibilities of a module developer include:
 
-- Adding support for reporting to their module.
+- Choosing whether reporting of their module is needed.
 - Specifying the outputs that constitute a snapshot of their module.
 
 The entire life cycle of objects involved in creating the report and configuring the module to preview the report is handled by `teal`.
@@ -37,6 +37,7 @@ interactive <- function() TRUE
 ```
 
 Let us consider an example module, based on the example module from `teal`:
+
 ```{r module_1}
 library(teal)
 library(teal.reporter)
@@ -95,7 +96,7 @@ knitr::include_url(url, height = "800px")
 
 ### Modify the declaration of the server function
 
-The first step is to add an additional argument to the server function declaration - `reporter`.
+The key step is to return the code within a `teal_report` object.
 This informs `teal` that the module requires `reporter`, and it will be included when the module is called.
 See below:
 
@@ -103,13 +104,35 @@ See below:
 my_module_with_reporting <- function(label = "example teal module") {
   module(
     label = label,
-    server = function(id, data, reporter) {
+    server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         updateSelectInput(session, "dataname", choices = isolate(names(data())))
-        output$dataset <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
+        
+        # Prepare the report:
+        report <- reactive({
+          req(obj <- data())
+          teal.reporter::teal_card(obj) <-
+            c(
+              teal.reporter::teal_card("# Module with reporting"),
+              teal.reporter::teal_card(obj),
+              teal.reporter::teal_card("## Module's code")
+            )
+          obj
         })
+        
+        # Add to the report the code of the module
+        module <- reactive({
+          req(rtd <- report(), input$dataname)
+          within(rtd, {
+            table
+          }, table = as.name(input$dataname))
+        })
+        
+        output$dataset <- renderPrint({
+          req(m <- module())
+          m[[input$dataname]]
+        })
+        module # the teal_report is returned by the module
       })
     },
     ui = function(id) {
