@@ -77,7 +77,7 @@ srv_source_code <- function(id, module_out) {
 #' }
 #' @export
 disable_src <- function(x) {
-  checkmate::assert_class(x, "teal_module")
+  checkmate::assert_multi_class(x, c("teal_module", "teal_modules"))
   after(x, server = function(data) {
     attr(data@code, "teal.show_src") <- FALSE
     data

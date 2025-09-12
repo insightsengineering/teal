@@ -175,7 +175,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 #'   shinyApp(app$ui, app$server)
 #' }
 disable_report <- function(x) {
-  checkmate::assert_class(x, "teal_module")
+  checkmate::assert_multi_class(x, c("teal_module", "teal_modules"))
   after(x, server = function(data) {
     attr(teal.reporter::teal_card(data), "teal.show_report") <- FALSE
     data
