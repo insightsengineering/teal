@@ -120,14 +120,14 @@ my_module_with_card <- function(label = "example teal module") {
         })
 
         # Add to the report the code of the module
-        module <- reactive({
+        data_r <- reactive({
           req(rtd <- report(), input$dataname)
           within(rtd, table, table = as.name(input$dataname))
         })
 
         output$dataset <- renderPrint({
-          req(m <- module())
-          m[[input$dataname]]
+          req(dr <- data_r())
+          dr[[input$dataname]]
         })
       })
     },
@@ -195,23 +195,18 @@ my_module_with_reporting <- function(label = "example teal module") {
         })
 
         # Add to the report the code of the module
-        module <- reactive({
+        data_r <- reactive({
           req(rtd <- report(), input$dataname)
-          within(rtd,
-            {
-              table
-            },
-            table = as.name(input$dataname)
-          )
+          within(rtd, table, table = as.name(input$dataname))
         })
 
         output$dataset <- renderPrint({
-          req(m <- module())
-          m[[input$dataname]]
+          req(dr <- data_r())
+          dr[[input$dataname]]
         })
 
         # the reactive teal_report is returned by the module
-        module
+        data_r
       })
     },
     ui = function(id) {
