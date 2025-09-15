@@ -96,18 +96,17 @@ knitr::include_url(url, height = "800px")
 
 ### Modify the declaration of the server function
 
-The key step is to return the code within a `teal_report` object.
-This informs `teal` that the module requires `reporter`, and it will be included when the module is called.
+First we need to prepare the code inside the module to be added to the report. 
 See below:
 
 ```{r module_2}
-my_module_with_reporting <- function(label = "example teal module") {
+my_module_with_card <- function(label = "example teal module") {
   module(
     label = label,
     server = function(id, data) {
       moduleServer(id, function(input, output, session) {
         updateSelectInput(session, "dataname", choices = isolate(names(data())))
-        
+
         # Prepare the report:
         report <- reactive({
           req(obj <- data())
@@ -119,20 +118,17 @@ my_module_with_reporting <- function(label = "example teal module") {
             )
           obj
         })
-        
+
         # Add to the report the code of the module
         module <- reactive({
           req(rtd <- report(), input$dataname)
-          within(rtd, {
-            table
-          }, table = as.name(input$dataname))
+          within(rtd, table, table = as.name(input$dataname))
         })
-        
+
         output$dataset <- renderPrint({
           req(m <- module())
           m[[input$dataname]]
         })
-        module # the teal_report is returned by the module
       })
     },
     ui = function(id) {
@@ -151,7 +147,7 @@ With these modifications, the module is now ready to be launched with `teal`:
 ```{r app_2}
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_reporting()
+  modules = my_module_with_card()
 )
 
 if (interactive()) {
@@ -172,7 +168,90 @@ knitr::include_url(url, height = "800px")
 ```
 
 
-`teal` adds a button `+ Add to Report` when it detects that the module can generate a card.
+The output hasn't changed (yet).
+We need one last step so that the module can be reported.
+
+### Return the reporter object
+
+
+```{r module_3}
+my_module_with_reporting <- function(label = "example teal module") {
+  module(
+    label = label,
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
+
+        # Prepare the report:
+        report <- reactive({
+          req(obj <- data())
+          teal.reporter::teal_card(obj) <-
+            c(
+              teal.reporter::teal_card("# Module with reporting"),
+              teal.reporter::teal_card(obj),
+              teal.reporter::teal_card("## Module's code")
+            )
+          obj
+        })
+
+        # Add to the report the code of the module
+        module <- reactive({
+          req(rtd <- report(), input$dataname)
+          within(rtd,
+            {
+              table
+            },
+            table = as.name(input$dataname)
+          )
+        })
+
+        output$dataset <- renderPrint({
+          req(m <- module())
+          m[[input$dataname]]
+        })
+
+        # the teal_report is returned by the module
+        module
+      })
+    },
+    ui = function(id) {
+      ns <- NS(id)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
+      )
+    }
+  )
+}
+```
+
+With these modifications, the module is now ready to be launched with `teal`:
+
+```{r app_3}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_2"),
+  knitr::knit_code$get("app_2")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
+The key step is to return a `teal_report` object containing everything.
+This informs `teal` that the module provides a `reporter`, and teal will add a button `+ Add to Report` to add the modules' code to the report.
 The user can now add a card to the report with the current state of the module.
 The report can be seen after clicking `Preview report` under the `Report` button.
 
@@ -180,6 +259,8 @@ The report can be seen after clicking `Preview report` under the `Report` button
 
 The user can modify the text of a card or add new text with the button `+ Add text block` present at the bottom of the card.
 Text can also be added inside the module by appending a `teal_card()` to the card of the report.
+
+As the module writer, you can also add any other content to the report you'd like: titles, text.
 
 ### Add non-text content to the card
 
