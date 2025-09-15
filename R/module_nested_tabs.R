@@ -190,7 +190,6 @@ srv_teal_module <- function(id,
   args <- c(list(id = ns("module")), modules$ui_args)
 
   module_ui <- do.call(what = modules$ui, args = args, quote = TRUE)
-
   is_transform_relocated <- !identical(getOption("teal.transform.location"), ".teal-sidebar") &&
     length(htmltools::tagQuery(module_ui)$find(getOption("teal.transform.location"))$selectedTags())
 
@@ -332,7 +331,7 @@ srv_teal_module <- function(id,
           )
         )
       } else {
-        ui_teal
+        module_ui
       }
     )
   )
