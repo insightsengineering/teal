@@ -210,7 +210,7 @@ my_module_with_reporting <- function(label = "example teal module") {
           m[[input$dataname]]
         })
 
-        # the teal_report is returned by the module
+        # the reactive teal_report is returned by the module
         module
       })
     },
