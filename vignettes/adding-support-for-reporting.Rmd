@@ -325,7 +325,6 @@ One can change the template so that it has some content by default.
 We can also add a loaded report. 
 
 ```{r reporter_6}
-# 1. Reporter with a pre-defined template that gets applied to every future report card
 reporter <- teal.reporter::Reporter$new()
 template_fun <- function(document) {
   header <- teal.reporter::teal_card("Here comes header text.")
@@ -334,13 +333,12 @@ template_fun <- function(document) {
 }
 reporter$set_template(template_fun)
 
-# 2. Reporter with a pre-defined card
 card1 <- teal.reporter::teal_card("## Header 2 text", "Regular text")
 metadata(card1, "title") <- "Welcome card"
 reporter$append_cards(card1)
 ```
 
-Once the reporter is added we can use in the teal application.
+Once the reporter is created we can use in the teal application.
 We can also extend a report for a specific module using `after()`:
 
 
@@ -348,7 +346,6 @@ We can also extend a report for a specific module using `after()`:
 app <- init(
   data = within(teal_data(), iris <- iris),
   modules = modules(
-    # 3. Module with an edited report (added by app developer)
     example_module(),
     example_module(label = "extend reporter") |>
       after(server = function(data) {
