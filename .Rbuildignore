@@ -46,4 +46,3 @@ coverage.*
 ^.revdeprefs\.yaml$
 ^revdep$
 ^\.covrignore$
-^inst/cheatsheet$
