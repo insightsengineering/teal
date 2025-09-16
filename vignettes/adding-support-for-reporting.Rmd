@@ -328,10 +328,9 @@ We can also add a loaded report.
 # 1. Reporter with a pre-defined template that gets applied to every future report card
 reporter <- teal.reporter::Reporter$new()
 template_fun <- function(document) {
-  header <- teal.reporter::teal_card("Here comes header text.") 
+  header <- teal.reporter::teal_card("Here comes header text.")
   footer <- teal.reporter::teal_card("Here comes footer text. Report generated with teal ![logo](https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg 'teal logo'){height=70}")
   c(header, document, footer)
-
 }
 reporter$set_template(template_fun)
 
@@ -351,9 +350,9 @@ app <- init(
   modules = modules(
     # 3. Module with an edited report (added by app developer)
     example_module(),
-    example_module(label = "extend reporter") |>  
+    example_module(label = "extend reporter") |>
       after(server = function(data) {
-        teal.reporter::teal_card(data) <- 
+        teal.reporter::teal_card(data) <-
           c(teal.reporter::teal_card(data), teal.reporter::teal_card("## New title", "text"))
         data
       })
