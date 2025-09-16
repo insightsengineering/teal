@@ -110,11 +110,11 @@ my_module_with_card <- function(label = "example teal module") {
         # Prepare the report:
         report <- reactive({
           req(obj <- data())
-          teal.reporter::teal_card(obj) <-
+          teal_card(obj) <-
             c(
-              teal.reporter::teal_card("# Module with reporting"),
-              teal.reporter::teal_card(obj),
-              teal.reporter::teal_card("## Module's code")
+              teal_card("# Module with reporting"),
+              teal_card(obj),
+              teal_card("## Module's code")
             )
           obj
         })
@@ -185,11 +185,11 @@ my_module_with_reporting <- function(label = "example teal module") {
         # Prepare the report:
         report <- reactive({
           req(obj <- data())
-          teal.reporter::teal_card(obj) <-
+          teal_card(obj) <-
             c(
-              teal.reporter::teal_card("# Module with reporting"),
-              teal.reporter::teal_card(obj),
-              teal.reporter::teal_card("## Module's code")
+              teal_card("# Module with reporting"),
+              teal_card(obj),
+              teal_card("## Module's code")
             )
           obj
         })
@@ -326,7 +326,7 @@ One can set the template of the report, so that each card added to the report wi
 We can also add cards to the report before the application is started.  
 
 ```{r reporter_6}
-reporter <- teal.reporter::Reporter$new()
+reporter <- Reporter$new()
 template_fun <- function(document) {
   header <- teal_card("Here comes header text.")
   footer <- teal_card("Here comes footer text. Report generated with teal ![logo](https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg 'teal logo'){height=70}")
@@ -334,7 +334,7 @@ template_fun <- function(document) {
 }
 reporter$set_template(template_fun)
 
-card1 <- teal.reporter::teal_card("## Header 2 text", "Regular text")
+card1 <- teal_card("## Header 2 text", "Regular text")
 metadata(card1, "title") <- "Welcome card"
 reporter$append_cards(card1)
 ```
