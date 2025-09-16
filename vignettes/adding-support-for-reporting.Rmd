@@ -321,14 +321,14 @@ knitr::include_url(url, height = "800px")
 
 ## Customizing the reporter
 
-One can change the template so that it has some content by default.
-We can also add a loaded report. 
+One can set the template of the report, so that each card added to the report will contain template's content by default.
+We can also add cards to the report before the application is started.  
 
 ```{r reporter_6}
 reporter <- teal.reporter::Reporter$new()
 template_fun <- function(document) {
-  header <- teal.reporter::teal_card("Here comes header text.")
-  footer <- teal.reporter::teal_card("Here comes footer text. Report generated with teal ![logo](https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg 'teal logo'){height=70}")
+  header <- teal_card("Here comes header text.")
+  footer <- teal_card("Here comes footer text. Report generated with teal ![logo](https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg 'teal logo'){height=70}")
   c(header, document, footer)
 }
 reporter$set_template(template_fun)
@@ -349,8 +349,8 @@ app <- init(
     example_module(),
     example_module(label = "extend reporter") |>
       after(server = function(data) {
-        teal.reporter::teal_card(data) <-
-          c(teal.reporter::teal_card(data), teal.reporter::teal_card("## New title", "text"))
+        teal_card(data) <-
+          c(teal_card(data), teal_card("## New title", "text"))
         data
       })
   ),
