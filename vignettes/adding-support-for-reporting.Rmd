@@ -15,7 +15,7 @@ vignette: >
 The `teal` package offers an integrated reporting feature utilizing the `teal.reporter` package.
 For a comprehensive explanation of the reporting functionality itself, please refer to the documentation therein.
 
-This article is intended for module developers and aims to provide guidance on enhancing a custom `teal` module with an automatic reporting feature.
+This article is *intended for module developers* and aims to provide guidance on enhancing a custom `teal` module with an automatic reporting feature.
 This enhancement enables users to incorporate snapshots of the module outputs into a report which can then be reviewed in another module automatically provided by `teal`.
 Thus the app user can interact with the report.
 
@@ -237,8 +237,8 @@ if (interactive()) {
 code <- paste0(c(
   knitr::knit_code$get("as_interactive"),
   knitr::knit_code$get("setup"),
-  knitr::knit_code$get("module_2"),
-  knitr::knit_code$get("app_2")
+  knitr::knit_code$get("module_3"),
+  knitr::knit_code$get("app_3")
 ), collapse = "\n")
 
 url <- roxy.shinylive::create_shinylive_url(code)
@@ -261,3 +261,59 @@ As the module writer, you can also add any other content to the report you'd lik
 
 `teal.reporter` supports the addition of tables, charts, and more.
 For more information, explore the API of `teal.reporter::ReportCard` to learn about the supported content types.
+
+## Removing support for Show R code
+
+If your module supports a report but you want to disable the show R code functionality `disable_src()`
+
+```{r app_4}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting() |> disable_src()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_3"),
+  knitr::knit_code$get("app_4")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
+
+
+## Removing reporting
+
+If a module has the reporter functionality the teal app developer can disable it with `disable_report()`
+
+```{r app_5}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting() |> disable_report()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+```{r shinylive_iframe_5, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_3"),
+  knitr::knit_code$get("app_5")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
