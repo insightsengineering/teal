@@ -264,7 +264,7 @@ For more information, explore the API of `teal.reporter::ReportCard` to learn ab
 
 ## Removing support for Show R code
 
-If your module supports a report but you want to disable the show R code functionality `disable_src()`
+If your module supports a report but you want to disable the show R code functionality, use `disable_src()`
 
 ```{r app_4}
 app <- init(
@@ -293,7 +293,8 @@ knitr::include_url(url, height = "800px")
 
 ## Removing reporting
 
-If a module has the reporter functionality the teal app developer can disable it with `disable_report()`
+If a module has the reporter functionality the teal app developer can disable it with `disable_report()`.
+To remove reporting from the whole application, set `reporter = NULL` in ìnit()`.
 
 ```{r app_5}
 app <- init(
