@@ -245,8 +245,8 @@ url <- roxy.shinylive::create_shinylive_url(code)
 knitr::include_url(url, height = "800px")
 ```
 
-The key step is to return a `teal_report` object containing everything.
-This informs `teal` that the module provides a `reporter`, and teal will add a button `+ Add to Report` to add the modules' code to the report.
+The key step is to return a reactive `teal_report` object containing everything.
+This informs `teal` that the module provides a `reporter`, and teal will add a button `+ Add to Report` to add the modules' content to the report.
 The user can now add a card to the report with the current state of the module.
 The report can be seen after clicking `Preview report` under the `Report` button.
 
@@ -260,7 +260,7 @@ As the module writer, you can also add any other content to the report you'd lik
 ### Add non-text content to the card
 
 `teal.reporter` supports the addition of tables, charts, and more.
-For more information, explore the API of `teal.reporter::ReportCard` to learn about the supported content types.
+For more information, explore the API of `teal_report()` to learn about the supported content types.
 
 ## Removing support for Show R code
 
@@ -322,7 +322,8 @@ knitr::include_url(url, height = "800px")
 
 ## Customizing the reporter
 
-One can set the template of the report, so that each card added to the report will contain template's content by default.
+One can set a template of the report. 
+Then each card added to the report will contain template's content by default.
 We can also add cards to the report before the application is started.  
 
 ```{r reporter_6}
@@ -375,4 +376,3 @@ code <- paste0(c(
 url <- roxy.shinylive::create_shinylive_url(code)
 knitr::include_url(url, height = "800px")
 ```
-
