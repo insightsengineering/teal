@@ -134,7 +134,7 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   background: var(--bs-primary-bg-subtle);
 }
 
-.outline-button.primary {
+.teal.outline-button.primary {
   color: var(--bs-primary);
   border: solid 1px var(--bs-primary);
   padding: 0.3em;
@@ -142,6 +142,6 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   background: transparent;
 }
 
-.outline-button.primary:hover:not(:disabled) {
+.teal.outline-button.primary:hover:not(:disabled) {
   background: var(--bs-primary-bg-subtle);
 }

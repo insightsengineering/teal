@@ -14,7 +14,7 @@ ui_source_button <- function(id) {
     shiny::actionButton(
       shiny::NS(id, shiny::NS("source_code", "button")),
       "Show R code",
-      class = "primary outline-button teal-busy-disable"
+      class = "primary teal outline-button teal-busy-disable"
     )
   )
 }
