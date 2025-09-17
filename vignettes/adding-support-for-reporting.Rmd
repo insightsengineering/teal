@@ -261,9 +261,9 @@ As the module writer, you can also add any other content to the report you'd lik
 For more information, explore the API of `teal_report()` to learn about the supported content types.
 
 
-## Removing support for Show R code
+## Removing support for displaying reproducible code
 
-If your module supports a report but you want to disable the show R code functionality, use `disable_src()`
+If your module supports a report but you want to disable the button that allows to display the module's reproducible code ("Show R code"), use `disable_src()`:
 
 ```{r app_4}
 app <- init(
