@@ -27,3 +27,16 @@ A \code{teal_report} object with the result of the server function.
 Primarily used to modify the output object of module to change the containing
 report.
 }
+\examples{
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = after(example_module(), server = function(input, output, session, data) {
+    teal_card(data) <-
+      c(teal_card(data), teal_card("## New title", "text"))
+    data
+  })
+)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+}
