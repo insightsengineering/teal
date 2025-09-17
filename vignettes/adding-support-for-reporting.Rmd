@@ -289,6 +289,26 @@ knitr::include_url(url, height = "800px")
 ```
 
 
+You can use `disable_src()` on multiple modules at the same time and nested modules too.
+For example on :
+
+```{r}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = c(
+    modules(
+      example_module(label = "1"),
+      example_module(label = "2"),
+      example_module(label = "3")
+    ) |> disable_src(),
+    modules(
+      label = "Nested modules without sourc",
+      example_module(label = "🗒️ Module 1"),
+      example_module(label = "🗒️ Module 2")
+    ) |> disable_src())
+)
+```
+
 ## Removing reporting
 
 If a module has the reporter functionality the teal app developer can disable it with `disable_report()`.
