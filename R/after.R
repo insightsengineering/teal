@@ -8,6 +8,18 @@
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
 #' @return A `teal_report` object with the result of the server function.
 #' @export
+#' @examples
+#' app <- init(
+#'   data = teal_data(IRIS = iris, MTCARS = mtcars),
+#'   modules = after(example_module(), server = function(input, output, session, data) {
+#'     teal_card(data) <-
+#'       c(teal_card(data), teal_card("## New title", "text"))
+#'     data
+#'   })
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 after <- function(x,
                   ui = function(id, elem) elem,
                   server = function(input, output, session, data) data,
