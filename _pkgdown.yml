@@ -134,7 +134,7 @@ reference:
   - title: Modifying output of modules
     contents:
       - after
-      - disable_show_r_code
+      - disable_src
       - disable_report
   - title: Landing popup
     contents:
