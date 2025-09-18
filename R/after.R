@@ -1,25 +1,39 @@
 #' Executes modifications to the result of a module
 #'
+#'
+#' `r lifecycle::badge("experimental")`
+#'
 #' Primarily used to modify the output object of module to change the containing
 #' report.
-#' @param x (`teal_module`)
-#' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`
-#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`
+#' @param x (`teal_module`) A teal module.
+#' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`.
+#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`.
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
-#' @return A `teal_report` object with the result of the server function.
+#' @return A `teal_module` object with the modifications.
+#' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namesepace.
 #' @export
 #' @examples
+#' library("teal.reporter")
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
-#'   modules = after(example_module(), server = function(input, output, session, data) {
-#'     teal_card(data) <-
-#'       c(teal_card(data), teal_card("## New title", "text"))
-#'     data
-#'   })
+#'   modules = example_module() |>
+#'     after(
+#'       ui = function(id, elem) {
+#'         ns <- NS(id)
+#'         check_box <- checkboxInput(ns("src"), "Include R Code in the report", TRUE)
+#'         htmltools::tagAppendChild(elem, check_box, .cssSelector = ".standard-layout .sidebar .sidebar-content")
+#'       },
+#'       server = function(input, output, session, data) {
+#'         teal_card(data) <- c(teal_card(data), teal_card("Modification"))
+#'         if (!input$`wrapper-src`) {
+#'           teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
+#'         }
+#'         data
+#'       }
+#'     )
 #' )
-#' if (interactive()) {
-#'   shinyApp(app$ui, app$server)
-#' }
+#'
+#' runApp(app)
 after <- function(x,
                   ui = function(id, elem) elem,
                   server = function(input, output, session, data) data,
