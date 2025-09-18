@@ -75,12 +75,6 @@ example_module <- function(label = "example teal module",
           table_data_decorated()[["object"]]
         })
 
-        teal.widgets::verbatim_popup_srv(
-          id = "rcode",
-          verbatim_content = reactive(teal.code::get_code(req(table_data_decorated()))),
-          title = "Example Code"
-        )
-
         table_data_decorated
       })
     },

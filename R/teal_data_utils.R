@@ -42,7 +42,10 @@ NULL
 }
 
 #' @rdname teal_data_utilities
-.collapse_subsequent_chunks <- function(report) {
+.collapse_subsequent_chunks <- function(card) {
+  checkmate::assert_class(card, "teal_card")
+  init_template <- teal.reporter::teal_card()
+  mostattributes(init_template) <- attributes(card)
   Reduce(
     function(x, this) {
       l <- length(x)
@@ -64,7 +67,7 @@ NULL
         c(x, this)
       }
     },
-    init = teal.reporter::teal_card(),
-    x = report
+    init = init_template,
+    x = card
   )
 }
