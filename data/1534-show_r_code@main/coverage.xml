@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.53498985801217" branch-rate="0" lines-covered="2110" lines-valid="3944" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-09-17 13:29:05.473018">
+<coverage line-rate="0.53498985801217" branch-rate="0" lines-covered="2110" lines-valid="3944" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-09-18 11:57:46.375901">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -6112,7 +6112,7 @@
                 <line number="34" hits="70" branch="false"/>
                 <line number="35" hits="70" branch="false"/>
                 <line number="36" hits="70" branch="false"/>
-                <line number="37" hits="70" branch="false"/>
+                <line number="37" hits="81" branch="false"/>
                 <line number="38" hits="81" branch="false"/>
                 <line number="40" hits="81" branch="false"/>
                 <line number="41" hits="70" branch="false"/>
@@ -6173,7 +6173,7 @@
             <line number="34" hits="70" branch="false"/>
             <line number="35" hits="70" branch="false"/>
             <line number="36" hits="70" branch="false"/>
-            <line number="37" hits="70" branch="false"/>
+            <line number="37" hits="81" branch="false"/>
             <line number="38" hits="81" branch="false"/>
             <line number="40" hits="81" branch="false"/>
             <line number="41" hits="70" branch="false"/>
