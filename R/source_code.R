@@ -32,7 +32,7 @@ srv_source_code <- function(id, module_out) {
     doc_out <- reactive({
       req(mod_out_r())
       teal_data_handled <- tryCatch(mod_out_r(), error = function(e) e)
-      tcard <- if (inherits(teal_data_handled, "qenv")) {
+      if (inherits(teal_data_handled, "qenv")) {
         teal.code::get_code(teal_data_handled)
       }
     })
