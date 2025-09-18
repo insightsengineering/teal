@@ -23,16 +23,14 @@ ui_source_button <- function(id) {
 srv_source_code <- function(id, module_out) {
   moduleServer(id, function(input, output, session) {
     mod_out_r <- reactive({
-      req(module_out)
-      if (is.reactive(module_out)) {
-        module_out()
+      if (!is.null(module_out) && is.reactive(module_out)) {
+        tryCatch(module_out(), error = function(e) e)
       }
     })
 
-    doc_out <- reactive({
-      req(mod_out_r())
-      teal_data_handled <- tryCatch(mod_out_r(), error = function(e) e)
-      tcard <- if (inherits(teal_data_handled, "qenv")) {
+    code_out <- reactive({
+      teal_data_handled <- module_out()
+      if (inherits(teal_data_handled, "qenv")) {
         teal.code::get_code(teal_data_handled)
       }
     })
@@ -43,20 +41,16 @@ srv_source_code <- function(id, module_out) {
         !isFALSE(attr(mod_out_r()@code, "teal.show_src")) # Only hide when value is explicitly FALSE
     })
 
-    .call_once_when(!is.null(doc_out()), {
-      output$source_code_container <- renderUI({
-        if (is_button_showed_r()) {
-          ui_source_button(session$ns(NULL))
-        }
+    output$source_code_container <- renderUI({
+      if (is_button_showed_r()) {
+        shinyjs::toggleState("source_code_container", condition = !is.null(code_out()))
+        result <- ui_source_button(session$ns(NULL))
+      }
+    })
+    teal.widgets::verbatim_popup_srv(
+      id = "source_code", verbatim_content = code_out, title = "Show R Code for Response"
+    )
       })
-      teal.widgets::verbatim_popup_srv(
-        id = "source_code", verbatim_content = doc_out, title = "Show R Code for Response"
-      )
-    })
-    observeEvent(doc_out(), ignoreNULL = FALSE, {
-      shinyjs::toggleState("source_code_container", condition = !is.null(doc_out()))
-    })
-  })
 }
 
 #' Disable the "Show R Code" global button in the UI
