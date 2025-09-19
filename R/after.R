@@ -40,11 +40,11 @@ after <- function(x,
                   ...) {
   # todo: make a method for teal_app and remove teal_extend_server?
   checkmate::assert_multi_class(x, "teal_module")
-  if (!is.function(ui) && !all(names(formals(ui)) %in% c("id", "elem"))) {
-    stop("ui should be a function of id and elem")
+  if (!is.function(ui) || !all(c("id", "elem") %in% names(formals(ui)))) {
+    stop("ui should be a function of `id` and `elem`.")
   }
-  if (!is.function(server) && !all(names(formals(server)) %in% c("input", "output", "session", "data"))) {
-    stop("server should be a function of `input` and `output`, `session`, `data`")
+  if (!is.function(server) || !all(c("input", "output", "session", "data") %in% names(formals(server)))) {
+    stop("server should be a function of `input`, `output`, `session` and `data`")
   }
 
   additional_args <- list(...)

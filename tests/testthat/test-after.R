@@ -1,19 +1,20 @@
-test_that("after returns a module", {
-  modified_example <-  after(example_module(),
-                             ui = function(id, elem) {
-                               ns <- NS(id)
-                               check_box <- checkboxInput(ns("src"), "Include R Code in the report", TRUE)
-                               htmltools::tagAppendChild(elem, check_box, .cssSelector = ".standard-layout .sidebar .sidebar-content")
-                             },
-                             server = function(input, output, session, data) {
-                               teal_card(data) <- c(teal_card(data), teal.reporter::teal_card("Modification"))
-                               if (!input$`wrapper-src`) {
-                                 teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
-                               }
-                               data
-                             }
-  )
-
-  expect_s3_class(modified_example, "teal_module")
+test_that("after requires a module for ui", {
+  expect_error(after(example_module), "Must inherit from class 'teal_module'")
+  expect_no_error(after(example_module()))
 })
 
+test_that("after requires functions for ui", {
+  expect_error(after(example_module(), ui = "a"), "ui should be a function")
+  expect_error(after(example_module(), ui = function(id) {ns <- NS(id)}), "ui should be a function")
+  expect_no_error(after(example_module(), ui = function(id, elem) {ns <- NS(id)}))
+})
+
+test_that("after requires functions for server", {
+  expect_error(after(example_module(), server = "a"), "server should be a function")
+  expect_error(after(example_module(), server = function(data){data}), "server should be a function")
+  expect_no_error(after(example_module(), server = function(input, output, data, session){data}))
+})
+
+test_that("after returns a module", {
+  expect_s3_class(after(example_module()), "teal_module")
+})
