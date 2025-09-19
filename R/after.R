@@ -12,6 +12,7 @@
 #' @return A `teal_module` object with the modifications.
 #' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namesepace.
 #' @export
+#' @seealso To modify just the output see [`teal_transform_module`].
 #' @examples
 #' library("teal.reporter")
 #' app <- init(
@@ -60,6 +61,7 @@ after <- function(x,
   `_new_ui` <- new_ui # nolint: object_name.
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
+    # FIXME: When does this happen? Why we pick the arguments of our current function call?
     if ("..." %in% names(formals(`_old_ui`))) {
       original_args <- c(original_args, list(...))
     }
@@ -84,6 +86,7 @@ after <- function(x,
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
     original_args$id <- "wrapped"
+    # FIXME: When does this happen? Why we pick the arguments of our current function call?
     if ("..." %in% names(formals(`_old_server`))) {
       original_args <- c(original_args, list(...))
     }

@@ -54,3 +54,6 @@ app <- init(
 
 runApp(app)
 }
+\seealso{
+To modify just the output see \code{\link{teal_transform_module}}.
+}
