@@ -260,6 +260,57 @@ As the module writer, you can also add any other content to the report you'd lik
 `teal.reporter` supports the addition of tables, charts, and more.
 For more information, explore the API of `teal_report()` to learn about the supported content types.
 
+
+## Removing support for displaying reproducible code
+
+If your module supports a report but you want to disable the button that allows to display the module's reproducible code ("Show R code"), use `disable_src()`:
+
+```{r app_4}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting() |> disable_src()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_3"),
+  knitr::knit_code$get("app_4")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
+
+You can use `disable_src()` on multiple modules at the same time and nested modules too.
+For example on:
+
+```{r eval = FALSE}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = c(
+    modules(
+      label = "One nested module disabled",
+      example_module(label = "Module 1"),
+      example_module(label = "Module 2"),
+      example_module(label = "Module 3") |> disable_src()
+    ),
+    modules(
+      label = "Nested modules without source",
+      example_module(label = "Module 1"),
+      example_module(label = "Module 2")
+    ) |> disable_src()
+  )
+)
+```
+
 ## Removing reporting
 
 If a module has the reporter functionality the teal app developer can disable it with `disable_report()`.
