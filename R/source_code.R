@@ -2,7 +2,7 @@
 ui_source_code <- function(id) uiOutput(NS(id, "source_code_container"))
 
 #' @noRd
-ui_source_button <- function(id) {
+ui_source_button <- function(id, title = NULL) {
   shiny::tagList(
     htmltools::htmlDependency(
       name = "teal-reporter-busy-disable",
@@ -14,7 +14,8 @@ ui_source_button <- function(id) {
     shiny::actionButton(
       shiny::NS(id, shiny::NS("source_code", "button")),
       "Show R code",
-      class = "primary teal outline-button teal-busy-disable"
+      class = "primary teal outline-button teal-busy-disable",
+      title = title
     )
   )
 }
@@ -29,28 +30,55 @@ srv_source_code <- function(id, module_out) {
     })
 
     code_out <- reactive({
-      teal_data_handled <- module_out()
+      teal_data_handled <- mod_out_r()
       if (inherits(teal_data_handled, "qenv")) {
         teal.code::get_code(teal_data_handled)
       }
     })
 
-    is_button_showed_r <- shiny::reactive({
-      getOption("teal.show_src", TRUE) &&
-        inherits(mod_out_r(), "qenv") &&
-        !isFALSE(attr(mod_out_r()@code, "teal.show_src")) # Only hide when value is explicitly FALSE
+    # Global option that doesn't show button
+    is_button_showed_r <- shiny::reactive(getOption("teal.show_src", TRUE))
+
+    reason <- reactive({
+      if (is.null(mod_out_r())) {
+        "No source code is available from this module"
+      } else if (inherits(mod_out_r(), "error")) {
+        "Module returned an error, check the module for errors."
+      } else if (is.null(code_out())) {
+        "Module does not support source code functionality"
+      } else if (isFALSE(attr(mod_out_r(), "teal.enable_src"))) {
+        "Source code is disabled for this module"
+      }
     })
 
     output$source_code_container <- renderUI({
       if (is_button_showed_r()) {
-        shinyjs::toggleState("source_code_container", condition = !is.null(code_out()))
-        result <- ui_source_button(session$ns(NULL))
+        bslib::tooltip(
+          id = session$ns("source_code_show"),
+          trigger = ui_source_button(session$ns(NULL)),
+          "Yada"
+        )
       }
     })
+
     teal.widgets::verbatim_popup_srv(
       id = "source_code", verbatim_content = code_out, title = "Show R Code for Response"
     )
-      })
+
+    observeEvent(code_out(), ignoreNULL = FALSE, {
+      # bslib::update_tooltip(
+      #   id = "source_code_show",
+      #   reason() %||% ""
+      # )
+
+      shinyjs::toggleState(
+        "source_code_container",
+        condition = !is.null(code_out()) &&
+          inherits(mod_out_r(), "qenv") &&
+            !isFALSE(attr(mod_out_r(), "teal.enable_src")) # Only forcibly disable when value is explicitly FALSE
+      )
+    })
+  })
 }
 
 #' Disable the "Show R Code" global button in the UI
@@ -73,7 +101,7 @@ srv_source_code <- function(id, module_out) {
 disable_src <- function(x) {
   checkmate::assert_multi_class(x, c("teal_module", "teal_modules"))
   after(x, server = function(data) {
-    attr(data@code, "teal.show_src") <- FALSE
+    attr(data, "teal.enable_src") <- FALSE
     data
   })
 }

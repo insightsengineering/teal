@@ -107,9 +107,13 @@ ui_teal <- function(id, modules) {
   bslib::page_fluid(
     id = id,
     theme = get_teal_bs_theme(),
-    include_teal_css_js(),
     shinyjs::useShinyjs(),
-    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal.reporter")),
+    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal")),
+    # shinyjs::extendShinyjs(
+    #   script = system.file("js/extendShinyJs.js", package = "teal"),
+    #   functions = c("updateAttribute")
+    # ),
+    shinyjs::extendShinyjs(text = "", functions = c("updateAttribute")),
     shiny_busy_message_panel,
     tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")

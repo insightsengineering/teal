@@ -1,6 +1,7 @@
 // This file contains functions that should be executed at the start of each session,
 // not included in the original HTML
 
+console.log('extendShinyJs.js loading...');
 shinyjs.autoFocusModal = function(id) {
   document.getElementById('shiny-modal').addEventListener(
     'shown.bs.modal',
@@ -20,3 +21,16 @@ shinyjs.enterToSubmit = function(id, submit_id) {
     })
   );
 }
+
+shinyjs.updateAttribute = function(params) {
+
+  var defaultParams = {
+    id : null,
+    attr : null,
+    value : null
+  };
+  params = shinyjs.getParams(params, defaultParams);
+
+  document.getElementById(params.id).setAttribute(params.attr, params.value)
+}
+console.log('extendShinyJs.js loaded', shinyjs);

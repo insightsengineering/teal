@@ -128,23 +128,45 @@ srv_add_reporter <- function(id, module_out, reporter) {
     })
 
     is_reporter_enabled <- shiny::reactive({
-      !isFALSE(attr(doc_out(), "teal.show_report"))
+      !is.null(reporter)
     })
 
-    .call_once_when(!is.null(doc_out()) && !is.null(reporter), {
-      output$reporter_add_container <- renderUI({
-        if (is_reporter_enabled()) {
-          shinyjs::toggleState("reporter_add_container", condition = inherits(doc_out(), "teal_card"))
-          tags$div(
-            class = "teal add-reporter-container",
-            teal.reporter::add_card_button_ui(
-              session$ns("reporter_add"),
-              label = "Add to Report"
-            )
+    reason <- reactive({
+      if (is.null(mod_out_r())) {
+        "No report content available from this module"
+      } else if (inherits(mod_out_r(), "error")) {
+        "Module returned an error, check the module for errors."
+      } else if (is.null(doc_out())) {
+        "Module does not support reporter functionality"
+      } else if (!inherits(doc_out(), "teal_card")) {
+        "Report content not in a valid format, check the module for errors."
+      } else if (isFALSE(attr(mod_out_r(), "teal.show_report"))) {
+        "Reporter is disabled for this module"
+      }
+    })
+
+    output$reporter_add_container <- renderUI({
+      if (!is.null(reporter)) {
+        tags$div(
+          class = "teal add-reporter-container",
+          teal.reporter::add_card_button_ui(
+            session$ns("reporter_add"),
+            label = "Add to Report"
           )
-        }
-      })
-      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
+        )
+      }
+    })
+    teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
+
+    observeEvent(doc_out(), ignoreNULL = FALSE, {
+      shinyjs::js$updateAttribute(session$ns("reporter_add_container"), "title", reason() %||% "")
+
+      shinyjs::toggleState(
+        "reporter_add_container",
+        condition = !is.null(doc_out()) &&
+          inherits(doc_out(), "teal_card") &&
+          !isFALSE(attr(doc_out(), "teal.enable_report"))
+      )
     })
   })
 }
@@ -169,7 +191,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 disable_report <- function(x) {
   checkmate::assert_multi_class(x, c("teal_module", "teal_modules"))
   after(x, server = function(data) {
-    attr(teal.reporter::teal_card(data), "teal.show_report") <- FALSE
+    attr(data, "teal.enable_report") <- FALSE
     data
   })
 }
