@@ -22,12 +22,12 @@ after(
 }
 \value{
 A \code{teal_module} object with the modifications.
-New element ids are under \code{wrapper} namespace, old elements' ids are on the \code{wrapped} namesepace.
+New element ids are under \code{wrapper} namespace, old elements' ids are on the \code{wrapped} namespace.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Modify the module's ui or server functions.
-Primarly used to modify the output of the report.
+Primary used to modify the output of the report.
 }
 \details{
 This function could overwrite the input or output of existing modules, or

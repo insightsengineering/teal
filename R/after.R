@@ -3,7 +3,7 @@
 #'
 #' `r lifecycle::badge("experimental")`
 #' Modify the module's ui or server functions.
-#' Primarly used to modify the output of the report.
+#' Primary used to modify the output of the report.
 #'
 #' @details
 #' This function could overwrite the input or output of existing modules, or
@@ -14,7 +14,7 @@
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`.
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
 #' @return A `teal_module` object with the modifications.
-#' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namesepace.
+#' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namespace.
 #' @export
 #' @seealso To modify just the output see [`teal_transform_module`].
 #' @examples
