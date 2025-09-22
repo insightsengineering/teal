@@ -2,9 +2,13 @@
 #'
 #'
 #' `r lifecycle::badge("experimental")`
+#' Modify the module's ui or server functions.
+#' Primarly used to modify the output of the report.
 #'
-#' Primarily used to modify the output object of module to change the containing
-#' report.
+#' @details
+#' This function could overwrite the input or output of existing modules, or
+#' show different code on report than the one used on the module.
+#'
 #' @param x (`teal_module`) A teal module.
 #' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`.
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`.
@@ -22,7 +26,9 @@
 #'       ui = function(id, elem) {
 #'         ns <- NS(id)
 #'         check_box <- checkboxInput(ns("src"), "Include R Code in the report", TRUE)
-#'         htmltools::tagAppendChild(elem, check_box, .cssSelector = ".standard-layout .sidebar .sidebar-content")
+#'         htmltools::tagAppendChild(elem, check_box,
+#'           .cssSelector = ".standard-layout .sidebar .sidebar-content"
+#'         )
 #'       },
 #'       server = function(input, output, session, data) {
 #'         teal_card(data) <- c(teal_card(data), teal_card("Modification"))
@@ -33,8 +39,9 @@
 #'       }
 #'     )
 #' )
-#'
-#' runApp(app)
+#' if (interactive()) {
+#'   runApp(app)
+#' }
 after <- function(x,
                   ui = function(id, elem) elem,
                   server = function(input, output, session, data) data,
@@ -99,8 +106,10 @@ after <- function(x,
 
       wrapper_args <- utils::modifyList(
         additional_args,
-        list(id = "wrapper", input = input, output = output,
-             session = session)
+        list(
+          id = "wrapper", input = input, output = output,
+          session = session
+        )
       )
 
       reactive({
