@@ -41,10 +41,11 @@ after <- function(x,
                   ...) {
   # todo: make a method for teal_app and remove teal_extend_server?
   checkmate::assert_multi_class(x, "teal_module")
-  if (!is.function(ui) || !all(c("id", "elem") %in% names(formals(ui)))) {
+  # Check ui && server have required arguments but nothing else
+  if (!is.function(ui) || !all(names(formals(ui)) %in% c("id", "elem"))) {
     stop("ui should be a function of `id` and `elem`.")
   }
-  if (!is.function(server) || !all(c("input", "output", "session", "data") %in% names(formals(server)))) {
+  if (!is.function(server) || !all(names(formals(server)) %in% c("input", "output", "session", "data"))) {
     stop("server should be a function of `input`, `output`, `session` and `data`")
   }
 
@@ -61,7 +62,7 @@ after <- function(x,
   `_new_ui` <- new_ui # nolint: object_name.
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
-    # FIXME: When does this happen? Why we pick the arguments of our current function call?
+    browser()
     if ("..." %in% names(formals(`_old_ui`))) {
       original_args <- c(original_args, list(...))
     }
@@ -85,8 +86,8 @@ after <- function(x,
   `_new_server` <- new_server # nolint: object_name.
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
+    browser()
     original_args$id <- "wrapped"
-    # FIXME: When does this happen? Why we pick the arguments of our current function call?
     if ("..." %in% names(formals(`_old_server`))) {
       original_args <- c(original_args, list(...))
     }
