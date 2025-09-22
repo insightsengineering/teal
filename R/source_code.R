@@ -2,7 +2,7 @@
 ui_source_code <- function(id) uiOutput(NS(id, "source_code_container"))
 
 #' @noRd
-ui_source_button <- function(id, title = NULL) {
+verbatim_popup_ui <- function(id, title) {
   shiny::tagList(
     htmltools::htmlDependency(
       name = "teal-reporter-busy-disable",
@@ -12,12 +12,20 @@ ui_source_button <- function(id, title = NULL) {
       script = "busy-disable.js"
     ),
     shiny::actionButton(
-      shiny::NS(id, shiny::NS("source_code", "button")),
+      shiny::NS(id, "button"),
       "Show R code",
       class = "primary teal outline-button teal-busy-disable",
       title = title
     )
   )
+}
+
+#' @noRd
+verbatim_popup_srv <- teal.widgets::verbatim_popup_srv
+
+#' @noRd
+ui_source_button <- function(id, title = NULL) {
+  verbatim_popup_ui(shiny::NS(id, "source_code"), title)
 }
 
 #' @noRd
