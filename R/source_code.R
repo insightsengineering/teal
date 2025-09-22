@@ -82,7 +82,7 @@ srv_source_code <- function(id, module_out) {
         "source_code_wrapper",
         condition = !is.null(code_out()) &&
           inherits(mod_out_r(), "qenv") &&
-            !isFALSE(attr(mod_out_r(), "teal.enable_src")) # Only forcibly disable when value is explicitly FALSE
+          !isFALSE(attr(mod_out_r(), "teal.enable_src")) # Only forcibly disable when value is explicitly FALSE
       )
     })
   })
