@@ -107,8 +107,16 @@ ui_teal <- function(id, modules) {
   bslib::page_fluid(
     id = id,
     theme = get_teal_bs_theme(),
+    include_teal_css_js(),
     shinyjs::useShinyjs(),
-    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal")),
+    htmltools::htmlDependency(
+      name = "bootstrap-helpers",
+      version = utils::packageVersion("teal"),
+      package = "teal",
+      src = "js",
+      script = "bootstrap-helpers.js"
+    ),
+    # shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal")),
     # shinyjs::extendShinyjs(
     #   script = system.file("js/extendShinyJs.js", package = "teal"),
     #   functions = c("updateAttribute")

@@ -33,4 +33,7 @@ shinyjs.updateAttribute = function(params) {
 
   document.getElementById(params.id).setAttribute(params.attr, params.value)
 }
-console.log('extendShinyJs.js loaded', shinyjs);
+
+  Shiny.addCustomMessageHandler('remove-tooltip', function(id) {
+    console.log("remove-tooltip", id);
+  });

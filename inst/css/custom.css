@@ -145,3 +145,8 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 .teal.outline-button.primary:hover:not(:disabled) {
   background: var(--bs-primary-bg-subtle);
 }
+
+[data-bs-toggle="tooltip"].disabled {
+  cursor: not-allowed;
+  color: var(--bs-gray);
+}

@@ -39,24 +39,28 @@ srv_source_code <- function(id, module_out) {
     # Global option that doesn't show button
     is_button_showed_r <- shiny::reactive(getOption("teal.show_src", TRUE))
 
-    reason <- reactive({
+    reason_r <- reactive({
       if (is.null(mod_out_r())) {
-        "No source code is available from this module"
+        "No source code is available from this module."
       } else if (inherits(mod_out_r(), "error")) {
-        "Module returned an error, check the module for errors."
+        "The module returned an error, check it for errors."
       } else if (is.null(code_out())) {
-        "Module does not support source code functionality"
+        "The module does not support source code functionality"
       } else if (isFALSE(attr(mod_out_r(), "teal.enable_src"))) {
-        "Source code is disabled for this module"
+        "The show source code functionality is disabled for this module."
       }
     })
 
     output$source_code_container <- renderUI({
       if (is_button_showed_r()) {
         bslib::tooltip(
-          id = session$ns("source_code_show"),
-          trigger = ui_source_button(session$ns(NULL)),
-          "Yada"
+          id = session$ns("source_code_tooltip"),
+          trigger = shiny::tags$div(
+            id = session$ns("source_code_wrapper"),
+            class = "cursor-helper",
+            ui_source_button(session$ns(NULL))
+          ),
+          ""
         )
       }
     })
@@ -66,13 +70,16 @@ srv_source_code <- function(id, module_out) {
     )
 
     observeEvent(code_out(), ignoreNULL = FALSE, {
-      # bslib::update_tooltip(
-      #   id = "source_code_show",
-      #   reason() %||% ""
-      # )
+      reason <- trimws(reason_r() %||% "")
+      if (is.null(reason) || identical(reason, "")) {
+        session$sendCustomMessage("disable-tooltip", session$ns("source_code_wrapper"))
+      } else {
+        session$sendCustomMessage("enable-tooltip", session$ns("source_code_wrapper"))
+        bslib::update_tooltip(id = "source_code_tooltip", reason)
+      }
 
       shinyjs::toggleState(
-        "source_code_container",
+        "source_code_wrapper",
         condition = !is.null(code_out()) &&
           inherits(mod_out_r(), "qenv") &&
             !isFALSE(attr(mod_out_r(), "teal.enable_src")) # Only forcibly disable when value is explicitly FALSE
