@@ -62,7 +62,6 @@ after <- function(x,
   `_new_ui` <- new_ui # nolint: object_name.
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
-    browser()
     if ("..." %in% names(formals(`_old_ui`))) {
       original_args <- c(original_args, list(...))
     }
@@ -86,7 +85,6 @@ after <- function(x,
   `_new_server` <- new_server # nolint: object_name.
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
-    browser()
     original_args$id <- "wrapped"
     if ("..." %in% names(formals(`_old_server`))) {
       original_args <- c(original_args, list(...))
