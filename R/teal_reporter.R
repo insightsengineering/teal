@@ -109,7 +109,8 @@ srv_add_reporter <- function(id, module_out, reporter) {
   } # early exit
   moduleServer(id, function(input, output, session) {
     mod_out_r <- reactive({
-      if (req(is.reactive(module_out))) {
+      req(module_out)
+      if (is.reactive(module_out)) {
         module_out()
       }
     })
