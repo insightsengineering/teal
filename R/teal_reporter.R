@@ -140,7 +140,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
         "The module does not support reporter functionality."
       } else if (!inherits(doc_out(), "teal_card")) {
         "Report content not in a valid format, check the module for errors."
-      } else if (isFALSE(attr(mod_out_r(), "teal.show_report"))) {
+      } else if (isFALSE(attr(mod_out_r(), "teal.enable_report"))) {
         "The report functionality is disabled for this module."
       }
     })
@@ -173,7 +173,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
         "report_add_wrapper",
         condition = !is.null(doc_out()) &&
           inherits(doc_out(), "teal_card") &&
-          !isFALSE(attr(doc_out(), "teal.enable_report"))
+          !isFALSE(attr(mod_out_r(), "teal.enable_report"))
       )
     })
   })
