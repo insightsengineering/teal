@@ -150,7 +150,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
         bslib::tooltip(
           id = session$ns("reporter_tooltip"),
           trigger = shiny::tags$div(
-            id = session$ns("source_code_wrapper"),
+            id = session$ns("report_add_wrapper"),
             teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
           ),
           class = "teal add-reporter-container",
@@ -163,14 +163,14 @@ srv_add_reporter <- function(id, module_out, reporter) {
     observeEvent(doc_out(), ignoreNULL = FALSE, {
       reason <- trimws(reason_r() %||% "")
       if (is.null(reason) || identical(reason, "")) {
-        session$sendCustomMessage("disable-tooltip", session$ns("source_code_wrapper"))
+        session$sendCustomMessage("disable-tooltip", session$ns("report_add_wrapper"))
       } else {
-        session$sendCustomMessage("enable-tooltip", session$ns("source_code_wrapper"))
+        session$sendCustomMessage("enable-tooltip", session$ns("report_add_wrapper"))
         bslib::update_tooltip(id = "reporter_tooltip", reason)
       }
 
       shinyjs::toggleState(
-        "source_code_wrapper",
+        "report_add_wrapper",
         condition = !is.null(doc_out()) &&
           inherits(doc_out(), "teal_card") &&
           !isFALSE(attr(doc_out(), "teal.enable_report"))
