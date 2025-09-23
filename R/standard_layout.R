@@ -68,27 +68,54 @@ badge_dropdown <- function(id, label, content) {
   ns <- shiny::NS(id)
   htmltools::tagList(
     htmltools::tags$style("
-      .choices-selected-badge-dropdown:has(~ div .shiny-validation-message) {
+      .badge-dropdown:has(~ div .shiny-validation-message) {
         border-color: red !important;
       }
-      .choices-selected-badge-dropdown {
+      .badge-dropdown {
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
         border-radius: 0.375rem;
         line-height: 1.2;
         min-width: auto;
+        width: 130px;
+        overflow-x: auto;
+        white-space: nowrap;
+        position: relative;
+        padding-right: .5rem;
       }
-      .choices-selected-badge-dropdown:after {
-        margin-left: 0.25rem;
-        vertical-align: 0.1em;
+      .badge-dropdown-label {
+        display: block;
+        max-width: calc(100% - .5rem);
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        text-align: left;
+      }
+      .badge-dropdown-label::-webkit-scrollbar {
+        display: none;
+      }
+      .badge-dropdown-icon {
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        background: inherit;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      .badge-dropdown:hover .badge-dropdown-icon {
+        opacity: 1;
       }
     "),
     htmltools::tags$div(
       htmltools::tags$span(
         id = ns("summary_badge"),
-        class = "badge bg-primary rounded-pill choices-selected-badge-dropdown",
-        label,
-        bsicons::bs_icon("caret-down-fill"),
+        class = "badge bg-primary rounded-pill badge-dropdown",
+        tags$span(class = "badge-dropdown-label", label),
+        tags$span(class = "badge-dropdown-icon", bsicons::bs_icon("caret-down-fill")),
         onclick = sprintf(
           "
           var container = document.getElementById('%s');
@@ -138,23 +165,23 @@ badge_dropdown <- function(id, label, content) {
 
   htmltools::tagList(
     htmltools::tags$style("
-      .choices-selected-badge-dropdown:has(~ div .shiny-validation-message) {
+      .badge-dropdown:has(~ div .shiny-validation-message) {
         border-color: red !important;
       }
-      .choices-selected-badge-dropdown .btn {
+      .badge-dropdown .btn {
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
         border-radius: 0.375rem;
         line-height: 1.2;
         min-width: auto;
       }
-      .choices-selected-badge-dropdown .btn::after {
+      .badge-dropdown .btn::after {
         margin-left: 0.25rem;
         vertical-align: 0.1em;
       }
     "),
     tags$div(
-      class = "dropdown choices-selected-badge-dropdown",
+      class = "dropdown badge-dropdown",
       tags$a(
         id = btn_id,
         class = "btn btn-primary btn-sm dropdown-toggle",
