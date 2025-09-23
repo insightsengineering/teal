@@ -69,7 +69,6 @@ ui_teal <- function(id, modules) {
   )
 
   navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules)
-  module_items <- ui_teal_module(id = ns("teal_modules"), modules = modules)
   nav_elements <- list(
     withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
       shinyjs::hidden(
