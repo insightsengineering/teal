@@ -9,7 +9,8 @@
 #' This function could overwrite the input or output of existing modules, or
 #' show different code on report than the one used on the module.
 #'
-#' @param x (`teal_module`) A teal module.
+#' @param x (`teal_module` or `teal_modules`), which in case `teal_modules` will apply
+#' `after` to each module in the list.
 #' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`.
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`.
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
@@ -46,6 +47,24 @@ after <- function(x,
                   ui = function(id, elem) elem,
                   server = function(input, output, session, data) data,
                   ...) {
+  UseMethod("after", x)
+}
+
+#' @export
+after.teal_modules <- function(x,
+                               ui = function(id, elem) elem,
+                               server = function(input, output, session, data) data,
+                               ...) {
+  checkmate::assert_multi_class(x, "teal_modules")
+  x$children <- lapply(x$children, after, ui = ui, server = server, ...)
+  x
+}
+
+#' @export
+after.teal_module <- function(x,
+                              ui = function(id, elem) elem,
+                              server = function(input, output, session, data) data,
+                              ...) {
   # todo: make a method for teal_app and remove teal_extend_server?
   checkmate::assert_multi_class(x, "teal_module")
   # Check ui && server have required arguments but nothing else
