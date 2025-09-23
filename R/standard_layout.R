@@ -121,8 +121,10 @@ badge_dropdown <- function(id, label, content) {
           var container = document.getElementById('%s');
           var summary = document.getElementById('%s');
 
-          if(container.style.display === 'none' || container.style.display === '') {
-            container.style.display = 'block';
+          if(container.style.visibility === 'hidden' || container.style.visibility === '') {
+            container.style.visibility = 'visible';
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'auto';
             $(container).trigger('shown');
             Shiny.bindAll(container);
 
@@ -131,7 +133,9 @@ badge_dropdown <- function(id, label, content) {
             setTimeout(function() {
               function handleClickOutside(event) {
                 if (!container.contains(event.target) && !summary.contains(event.target)) {
-                  container.style.display = 'none';
+                  container.style.visibility = 'hidden';
+                  container.style.opacity = '0';
+                  container.style.pointerEvents = 'none';
                   $(container).trigger('hidden');
                   document.removeEventListener('click', handleClickOutside);
                 }
@@ -139,7 +143,9 @@ badge_dropdown <- function(id, label, content) {
               document.addEventListener('click', handleClickOutside);
             }, 10);
           } else {
-            container.style.display = 'none';
+            container.style.visibility = 'hidden';
+            container.style.opacity = '0';
+            container.style.pointerEvents = 'none';
             $(container).trigger('hidden');
           }
         ",
@@ -150,7 +156,7 @@ badge_dropdown <- function(id, label, content) {
       htmltools::tags$div(
         content,
         id = ns("inputs_container"),
-        style = "display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 10px; z-index: 1000; min-width: 200px;",
+        style = "visibility: hidden; opacity: 0; pointer-events: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 10px; z-index: 1000; min-width: 200px; transition: opacity 0.2s ease;",
       )
     )
   )
