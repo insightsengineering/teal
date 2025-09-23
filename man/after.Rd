@@ -12,8 +12,7 @@ after(
 )
 }
 \arguments{
-\item{x}{(\code{teal_module} or \code{teal_modules}), which in case \code{teal_modules} will apply
-\code{after} to each module in the list.}
+\item{x}{(\code{teal_module}).}
 
 \item{ui}{(\verb{function(id, elem, ...)}) function to receive output (\code{shiny.tag}) from \code{x$ui}}
 
