@@ -145,3 +145,76 @@ after.teal_module <- function(x,
   formals(new_x) <- formals(old_server)
   new_x
 }
+
+
+
+#' Disable the sidebar globally for all modules
+#'
+#' Convenience function that disables the sidebar functionality globally
+#' by hiding the sidebar and making the main content use full width.
+#' This should be applied at the modules() level.
+#' 
+#' @param x (`teal_modules`) a `teal_modules` object.
+#' @return A modified `teal_modules` object with disabled sidebar functionality.
+#' @export
+#' @examples
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = modules(
+#'     example_module(label = "example teal module")
+#'   ) |> disable_sidebar()
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+disable_sidebar <- function(x) {
+  checkmate::assert_class(x, "teal_modules")
+  
+  sidebar_css <- tags$style(HTML("
+    /* Hide the entire sidebar globally */
+    [id^='bslib-sidebar-'],
+    aside[id^='bslib-sidebar-'],
+    .sidebar {
+      display: none !important;
+      width: 0 !important;
+      min-width: 0 !important;
+    }
+    /* Adjust the sidebar layout to use full width globally */
+    .bslib-sidebar-layout {
+      display: block !important;
+      grid-template-columns: none !important;
+    }
+    .bslib-sidebar-layout > .main {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    /* Ensure the main content container uses full width globally */
+    .main,
+    .main > *,
+    .main .container-fluid,
+    .main .row,
+    .main .col {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    /* Hide the collapse toggle button since sidebar is gone globally */
+    .collapse-toggle {
+      display: none !important;
+    }
+  "))
+
+  modified_children <- lapply(x$children, function(module) {
+    after(module, 
+      ui = function(id, elem) {
+        htmltools::tagAppendChild(elem, sidebar_css)
+      }
+    )
+  })
+
+  x$children <- modified_children
+  x
+}
