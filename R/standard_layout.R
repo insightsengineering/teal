@@ -68,7 +68,10 @@ badge_dropdown <- function(id, label, content) {
   ns <- shiny::NS(id)
   htmltools::tagList(
     htmltools::tags$style("
-      .badge-dropdown:has(~ div .shiny-validation-message) {
+      .badge-dropdown-wrapper:has(.shiny-validation-message),
+      .badge-dropdown-wrapper:has(.shiny-output-error),
+      .badge-dropdown-wrapper:has(* .shiny-validation-message),
+      .badge-dropdown-wrapper:has(* .shiny-output-error) {
         border-color: red !important;
       }
       .badge-dropdown {
@@ -111,6 +114,7 @@ badge_dropdown <- function(id, label, content) {
       }
     "),
     htmltools::tags$div(
+      class = "badge-dropdown-wrapper",
       htmltools::tags$span(
         id = ns("summary_badge"),
         class = "badge bg-primary rounded-pill badge-dropdown",

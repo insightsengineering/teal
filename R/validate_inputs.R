@@ -193,3 +193,45 @@ any_names <- function(x) {
     }
   )
 }
+
+#' Validate input
+#'
+#' @param inputId (`character`) Character of input ID(s) to validate
+#' @param condition (`logical(1)`, `function(x)`) Logical value or function returning logical value.
+#'  Condition should determine expected state, `FALSE` throws.
+#' @param message (`character(1)`) Character string of validation message to display
+#' @param session Shiny session object
+#'
+#' @return `TRUE` or `shiny.silent.error` when condition is not met
+#'
+#' @keywords internal
+validate_input <- function(inputId,
+                           condition = function(x) TRUE,
+                           message = "",
+                           session = shiny::getDefaultReactiveDomain()) {
+  checkmate::assert_character(inputId, min.len = 1)
+  checkmate::assert(
+    checkmate::check_flag(condition),
+    checkmate::check_function(condition, nargs = 1)
+  )
+  checkmate::assert_string(message)
+
+  # Evaluate condition if it's a function
+  condition_result <- if (is.function(condition)) {
+    input_value <- session$input[[inputId]]
+    checkmate::assert_flag(condition(input_value))
+  } else {
+    condition
+  }
+
+  # Send custom message to JavaScript handler
+  lapply(inputId, function(id) {
+    session$sendCustomMessage("validateInput", list(
+      inputId = session$ns(id),
+      isValid = condition,
+      message = message
+    ))
+  })
+
+  validate(need(condition, message))
+}

@@ -108,7 +108,8 @@ ui_teal <- function(id, modules) {
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),
-    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal.reporter")),
+    shiny::singleton(shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal.reporter"))),
+    shiny::singleton(shiny::includeScript(system.file("js/input-validator.js", package = "teal"))),
     shiny_busy_message_panel,
     tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")

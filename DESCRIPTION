@@ -125,6 +125,7 @@ Collate:
     'standard_layout.R'
     'tdata.R'
     'teal.R'
+    'teal.transform_wrappers.R'
     'teal_data_module.R'
     'teal_data_module-eval_code.R'
     'teal_data_module-within.R'
