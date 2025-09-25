@@ -9,21 +9,21 @@
 #' This function could overwrite the input or output of existing modules, or
 #' show different code on report than the one used on the module.
 #'
-#' @param x (`teal_module` or `teal_modules`), which in case `teal_modules` will apply
-#' `after` to each module in the list.
+#' @param _data (`teal_module` or `teal_modules`), which in case of `teal_modules` will apply
+#' `transform` to each module in the list.
 #' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`.
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`.
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
 #' @return A `teal_module` object with the modifications.
 #' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namespace.
-#' @export
 #' @seealso To modify just the output see [`teal_transform_module`].
+#' @export
 #' @examples
 #' library("teal.reporter")
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
 #'   modules = example_module() |>
-#'     after(
+#'     transform(
 #'       ui = function(id, elem) {
 #'         ns <- NS(id)
 #'         check_box <- checkboxInput(ns("src"), "Include R Code in the report", TRUE)
@@ -43,30 +43,20 @@
 #' if (interactive()) {
 #'   runApp(app)
 #' }
-after <- function(x,
-                  ui = function(id, elem) elem,
-                  server = function(input, output, session, data) data,
-                  ...) {
-  UseMethod("after", x)
-}
-
-#' @export
-after.teal_modules <- function(x,
+transform.teal_modules <- function(`_data`,
                                ui = function(id, elem) elem,
                                server = function(input, output, session, data) data,
                                ...) {
-  checkmate::assert_multi_class(x, "teal_modules")
-  x$children <- lapply(x$children, after, ui = ui, server = server, ...)
-  x
+  `_data`$children <- lapply(`_data`$children, transform, ui = ui, server = server, ...)
+  `_data`
 }
 
 #' @export
-after.teal_module <- function(x,
+transform.teal_module <- function(`_data`,
                               ui = function(id, elem) elem,
                               server = function(input, output, session, data) data,
                               ...) {
   # todo: make a method for teal_app and remove teal_extend_server?
-  checkmate::assert_multi_class(x, "teal_module")
   # Check ui && server have required arguments but nothing else
   if (!is.function(ui) || !all(names(formals(ui)) %in% c("id", "elem"))) {
     stop("ui should be a function of `id` and `elem`.")
@@ -76,13 +66,13 @@ after.teal_module <- function(x,
   }
 
   additional_args <- list(...)
-  new_x <- x # because overwriting x$ui/server will cause infinite recursion
-  new_x$ui <- .after_ui(x$ui, ui, additional_args)
-  new_x$server <- .after_server(x$server, server, additional_args)
+  new_x <- `_data` # because overwriting x$ui/server will cause infinite recursion
+  new_x$ui <- transform_ui(`_data`$ui, ui, additional_args)
+  new_x$server <- transform_srv(`_data`$server, server, additional_args)
   new_x
 }
 
-.after_ui <- function(old_ui, new_ui, additional_args) {
+transform_ui <- function(old_ui, new_ui, additional_args) {
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
   `_old_ui` <- old_ui # nolint: object_name.
   `_new_ui` <- new_ui # nolint: object_name.
@@ -105,10 +95,10 @@ after.teal_module <- function(x,
   new_x
 }
 
-.after_server <- function(old_server, new_server, additional_args) {
+transform_srv <- function(old_srv, new_srv, additional_args) {
   # add `_`-prefix to make sure objects are not masked in the wrapper functions
-  `_old_server` <- old_server # nolint: object_name.
-  `_new_server` <- new_server # nolint: object_name.
+  `_old_server` <- old_srv # nolint: object_name.
+  `_new_server` <- new_srv # nolint: object_name.
   new_x <- function(id, ...) {
     original_args <- as.list(environment())
     original_args$id <- "wrapped"
@@ -142,6 +132,6 @@ after.teal_module <- function(x,
       })
     })
   }
-  formals(new_x) <- formals(old_server)
+  formals(new_x) <- formals(old_srv)
   new_x
 }
