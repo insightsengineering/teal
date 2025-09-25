@@ -82,10 +82,7 @@ setOldClass("teal_modules")
 #' @return
 #' `module()` returns an object of class `teal_module`.
 #'
-#' `modules()` returns a `teal_modules` object which contains following fields:
-#' - `label`: taken from the `label` argument.
-#' - `children`: a list containing objects passed in `...`. List elements are named after
-#' their `label` attribute converted to a valid `shiny` id.
+#' `modules()` returns an object of class `teal_modules`.
 #'
 #' @name teal_modules
 #' @aliases teal_module
