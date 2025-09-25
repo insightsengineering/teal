@@ -12,18 +12,54 @@ after(
 )
 }
 \arguments{
-\item{x}{(\code{teal_module})}
+\item{x}{(\code{teal_module} or \code{teal_modules}), which in case \code{teal_modules} will apply
+\code{after} to each module in the list.}
 
-\item{ui}{(\verb{function(id, elem, ...)}) function to receive output (\code{shiny.tag}) from \code{x$ui}}
+\item{ui}{(\verb{function(id, elem, ...)}) function to receive output (\code{shiny.tag}) from \code{x$ui}.}
 
-\item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \code{x$server}}
+\item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \code{x$server}.}
 
 \item{...}{additional argument passed to \code{ui} and \code{server} by matching their formals names.}
 }
 \value{
-A \code{teal_report} object with the result of the server function.
+A \code{teal_module} object with the modifications.
+New element ids are under \code{wrapper} namespace, old elements' ids are on the \code{wrapped} namespace.
 }
 \description{
-Primarily used to modify the output object of module to change the containing
-report.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Modify the module's ui or server functions.
+Primary used to modify the output of the report.
+}
+\details{
+This function could overwrite the input or output of existing modules, or
+show different code on report than the one used on the module.
+}
+\examples{
+library("teal.reporter")
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = example_module() |>
+    after(
+      ui = function(id, elem) {
+        ns <- NS(id)
+        check_box <- checkboxInput(ns("src"), "Include R Code in the report", TRUE)
+        htmltools::tagAppendChild(elem, check_box,
+          .cssSelector = ".standard-layout .sidebar .sidebar-content"
+        )
+      },
+      server = function(input, output, session, data) {
+        teal_card(data) <- c(teal_card(data), teal_card("Modification"))
+        if (!input$`wrapper-src`) {
+          teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
+        }
+        data
+      }
+    )
+)
+if (interactive()) {
+  runApp(app)
+}
+}
+\seealso{
+To modify just the output see \code{\link{teal_transform_module}}.
 }
