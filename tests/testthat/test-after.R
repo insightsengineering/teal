@@ -1,5 +1,5 @@
 test_that("after requires a module for ui", {
-  expect_error(after(example_module), "Must inherit from class 'teal_module'")
+  expect_error(after(example_module), "no applicable method for ")
   expect_no_error(after(example_module()))
 })
 
