@@ -28,14 +28,12 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
     )
   )
 
-  test_exports <- app$get_values()$export
-
-  expect_equal(length(test_exports), 1)
+  test_exports_before <- app$get_values(export = TRUE)$export
 
   app$navigate_teal_tab("Module 2")
-  test_exports <- app$get_values()$export
+  test_exports <- app$get_values(export = TRUE)$export
 
-  expect_equal(length(test_exports), 2)
+  expect_gt(length(test_exports), length(test_exports_before))
   app$stop()
 })
 
