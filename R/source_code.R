@@ -44,9 +44,6 @@ srv_source_code <- function(id, module_out) {
       }
     })
 
-    # Global option that doesn't show button
-    is_button_showed_r <- shiny::reactive(getOption("teal.show_src", TRUE))
-
     reason_r <- reactive({
       if (is.null(mod_out_r())) {
         "No source code is available from this module."
@@ -60,7 +57,7 @@ srv_source_code <- function(id, module_out) {
     })
 
     output$source_code_container <- renderUI({
-      if (is_button_showed_r()) {
+      if (getOption("teal.show_src", TRUE)) {
         bslib::tooltip(
           id = session$ns("source_code_tooltip"),
           trigger = shiny::tags$div(
