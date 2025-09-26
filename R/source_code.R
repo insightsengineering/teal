@@ -24,8 +24,21 @@ verbatim_popup_ui <- function(id, title) {
 verbatim_popup_srv <- teal.widgets::verbatim_popup_srv
 
 #' @noRd
-ui_source_button <- function(id, title = NULL) {
-  verbatim_popup_ui(shiny::NS(id, "source_code"), title)
+verbatim_popup_ui <- function(id) {
+  shiny::tagList(
+    htmltools::htmlDependency(
+      name = "teal-reporter-busy-disable",
+      version = utils::packageVersion("teal.reporter"),
+      package = "teal.reporter",
+      src = "js",
+      script = "busy-disable.js"
+    ),
+    shiny::actionButton(
+      shiny::NS(id, "button"),
+      "Show R code",
+      class = "primary teal outline-button teal-busy-disable",
+    )
+  )
 }
 
 #' @noRd
@@ -63,14 +76,14 @@ srv_source_code <- function(id, module_out) {
           trigger = shiny::tags$div(
             id = session$ns("source_code_wrapper"),
             class = "cursor-helper",
-            ui_source_button(session$ns(NULL))
+            verbatim_popup_ui(session$ns("source_code"))
           ),
           ""
         )
       }
     })
 
-    teal.widgets::verbatim_popup_srv(
+    verbatim_popup_srv(
       id = "source_code", verbatim_content = code_out, title = "Show R Code for Response"
     )
 
