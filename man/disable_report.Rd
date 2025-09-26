@@ -10,7 +10,7 @@ disable_report(x)
 \item{x}{(\code{teal_module}) a \code{teal_module} object.}
 }
 \value{
-\code{NULL} that indicates that it should disable the reporter functionality.
+modified data object that indicates that it should disable the reporter functionality.
 }
 \description{
 Convenience function that disables the user's ability to add the module

@@ -11,7 +11,7 @@
 
 .append_modified_data(data, objects)
 
-.collapse_subsequent_chunks(report)
+.collapse_subsequent_chunks(card)
 }
 \arguments{
 \item{data}{(\code{teal_data})}

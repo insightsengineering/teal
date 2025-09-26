@@ -225,9 +225,16 @@ srv_teal_module <- function(id,
   tab_pane <- div(
     id = container_id,
     class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
-    ui_add_reporter(ns("add_reporter_wrapper")),
     tagList(
-      .modules_breadcrumb(modules),
+      tags$div(
+        style = "display: flex; justify-content: space-between; align-items: center; width: 100%;",
+        .modules_breadcrumb(modules),
+        tags$div(
+          style = "display: flex; gap: 0.5em;",
+          ui_add_reporter(ns("add_reporter_wrapper")),
+          ui_source_code(ns("source_code_wrapper"))
+        )
+      ),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
@@ -496,6 +503,7 @@ srv_teal_module <- function(id,
         handlerExpr = {
           out <- .call_teal_module(modules, datasets, module_teal_data, reporter)
           srv_add_reporter("add_reporter_wrapper", out, reporter)
+          srv_source_code("source_code_wrapper", out)
           module_out(out)
         }
       )
