@@ -127,10 +127,6 @@ srv_add_reporter <- function(id, module_out, reporter) {
       if (length(tcard)) .collapse_subsequent_chunks(tcard)
     })
 
-    is_reporter_enabled <- shiny::reactive({
-      !is.null(reporter)
-    })
-
     reason_r <- reactive({
       if (is.null(mod_out_r())) {
         "No report content available from this module."
