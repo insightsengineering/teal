@@ -28,7 +28,7 @@
 #' # `server` as a language
 #'
 #' The `server` function in `teal_transform_module` must return a reactive [`teal.data::teal_data`] object.
-#' For simple transformations without complex reactivity, the `server` function might look like this:s
+#' For simple transformations without complex reactivity, the `server` function might look like this:
 #'
 #' ```
 #' function(id, data) {
