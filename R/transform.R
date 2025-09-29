@@ -48,21 +48,20 @@
 #'   runApp(app)
 #' }
 transform.teal_modules <- function(`_data`,
-                               ui = function(id, elem) elem,
-                               server = function(input, output, session, data) data,
-                               when = "after",
-                               ...) {
+                                   ui = function(id, elem) elem,
+                                   server = function(input, output, session, data) data,
+                                   when = "after",
+                                   ...) {
   `_data`$children <- lapply(`_data`$children, transform, ui = ui, server = server, ...)
   `_data`
 }
 
 #' @export
 transform.teal_module <- function(`_data`,
-                              ui = function(id, elem) elem,
-                              server = function(input, output, session, data) data,
-                              when = "after",
-                              ...) {
-
+                                  ui = function(id, elem) elem,
+                                  server = function(input, output, session, data) data,
+                                  when = "after",
+                                  ...) {
   when <- match.arg(when, c("before", "after"))
   # todo: make a method for teal_app and remove teal_extend_server?
   # Check ui && server have required arguments but nothing else
@@ -96,7 +95,7 @@ transform.teal_module <- function(`_data`,
     # formals(tm)["transformators"] <- teal_transform_module(ui, server, ...)
   } else {
     tm$ui <- transform_ui(tm$ui, ui, additional_args)
-    tm$server = transform_srv(tm$server, server, additional_args)
+    tm$server <- transform_srv(tm$server, server, additional_args)
   }
   tm
 }

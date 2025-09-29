@@ -58,10 +58,11 @@ testthat::test_that("e2e: transform modifies arbitrary modules structure", {
   nested_modules <- modules(
     label = "Nested modules",
     example_module(label = "Module 0"),
-    modules(label = "Nested",
-            example_module(label = "Module 1"),
-            example_module(label = "Module 2")
-            )
+    modules(
+      label = "Nested",
+      example_module(label = "Module 1"),
+      example_module(label = "Module 2")
+    )
   )
   app <- TealAppDriver$new(
     data = simple_teal_data(),
