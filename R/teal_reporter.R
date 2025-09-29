@@ -166,7 +166,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 #' }
 disable_report <- function(x) {
   checkmate::assert_class(x, "teal_module")
-  after(x, server = function(data) {
+  transform(x, server = function(data) {
     teal.reporter::teal_card(data) <- teal.reporter::teal_card()
     NULL
   })
