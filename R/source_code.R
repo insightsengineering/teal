@@ -1,44 +1,30 @@
 #' @noRd
-ui_source_code <- function(id) uiOutput(NS(id, "source_code_container"))
-
-#' @noRd
-verbatim_popup_ui <- function(id, title) {
-  shiny::tagList(
-    htmltools::htmlDependency(
-      name = "teal-reporter-busy-disable",
-      version = utils::packageVersion("teal.reporter"),
-      package = "teal.reporter",
-      src = "js",
-      script = "busy-disable.js"
-    ),
-    shiny::actionButton(
-      shiny::NS(id, "button"),
-      "Show R code",
-      class = "primary teal outline-button teal-busy-disable",
-      title = title
-    )
-  )
-}
-
-#' @noRd
 verbatim_popup_srv <- teal.widgets::verbatim_popup_srv
 
 #' @noRd
 verbatim_popup_ui <- function(id) {
-  shiny::tagList(
-    htmltools::htmlDependency(
-      name = "teal-reporter-busy-disable",
-      version = utils::packageVersion("teal.reporter"),
-      package = "teal.reporter",
-      src = "js",
-      script = "busy-disable.js"
-    ),
-    shiny::actionButton(
-      shiny::NS(id, "button"),
-      "Show R code",
-      class = "primary teal outline-button teal-busy-disable",
-    )
+  teal.widgets::action_button_with_busy(
+    shiny::NS(id, "button"), "Show R code", type = "primary", outline = TRUE
   )
+}
+
+#' @noRd
+ui_source_code <- function(id) {
+  ns <- shiny::NS(id)
+  if (getOption("teal.show_src", TRUE)) {
+    bslib::tooltip(
+      id = ns("source_code_tooltip"),
+      trigger = shinyjs::disabled(
+        shiny::tags$div(
+          id = ns("source_code_wrapper"),
+          class = "cursor-helper",
+          shiny::uiOutput(ns("source_code_body"))
+        )
+      ),
+      shiny::uiOutput(ns("source_code_reason"))
+    )
+  }
+  # shiny::uiOutput(shiny::NS(id, "source_code_container"))
 }
 
 #' @noRd
@@ -69,40 +55,36 @@ srv_source_code <- function(id, module_out) {
       }
     })
 
-    output$source_code_container <- renderUI({
+    output$source_code_body <- shiny::renderUI({
       if (getOption("teal.show_src", TRUE)) {
-        bslib::tooltip(
-          id = session$ns("source_code_tooltip"),
-          trigger = shiny::tags$div(
-            id = session$ns("source_code_wrapper"),
-            class = "cursor-helper",
-            verbatim_popup_ui(session$ns("source_code"))
-          ),
-          ""
-        )
+        reason <- trimws(reason_r() %||% "")
+        verbatim_popup_ui(session$ns("source_code"))
+      }
+    })
+    output$source_code_container <- shiny::renderUI({
+      if (getOption("teal.show_src", TRUE)) {
+        reason <- trimws(reason_r() %||% "")
+        new_ui <- verbatim_popup_ui(session$ns("source_code"))
+        if (!identical(reason, "")) {
+          new_ui <- bslib::tooltip(
+            id = session$ns("source_code_tooltip"),
+            trigger = shinyjs::disabled(
+              shiny::tags$div(
+                id = session$ns("source_code_wrapper"),
+                class = "cursor-helper",
+                new_ui
+              )
+            ),
+            reason
+          )
+        }
+        new_ui
       }
     })
 
     verbatim_popup_srv(
       id = "source_code", verbatim_content = code_out, title = "Show R Code for Response"
     )
-
-    observeEvent(code_out(), ignoreNULL = FALSE, {
-      reason <- trimws(reason_r() %||% "")
-      if (is.null(reason) || identical(reason, "")) {
-        session$sendCustomMessage("disable-tooltip", session$ns("source_code_wrapper"))
-      } else {
-        session$sendCustomMessage("enable-tooltip", session$ns("source_code_wrapper"))
-        bslib::update_tooltip(id = "source_code_tooltip", reason)
-      }
-
-      shinyjs::toggleState(
-        "source_code_wrapper",
-        condition = !is.null(code_out()) &&
-          checkmate::test_multi_class(mod_out_r(), c("qenv", "qenv.error")) &&
-          !isFALSE(attr(mod_out_r(), "teal.enable_src")) # Only forcibly disable when value is explicitly FALSE
-      )
-    })
   })
 }
 
