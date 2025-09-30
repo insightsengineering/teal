@@ -17,7 +17,7 @@
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `_data$server`.
 #' @param when A character vector with when should this modification be applied: `before` or `after`.
 #' Default `after`, as before is equivalent to having a transformer on the module.
-#' @param ... additional argument. Passed to `ui` and `server` by matching their formals names or to `teal_transform_module`.
+#' @param ... additional argument. Passed to `ui` and `server` by matching their parameters.
 #' @return A `teal_module` object with the modifications.
 #' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namespace.
 #' @seealso To modify just the output see [`teal_transform_module`].
@@ -47,17 +47,17 @@
 #' if (interactive()) {
 #'   runApp(app)
 #' }
-transform.teal_modules <- function(`_data`,
+transform.teal_modules <- function(`_data`, # nolint: object_name
                                    ui = function(id, elem) elem,
                                    server = function(input, output, session, data) data,
                                    when = "after",
                                    ...) {
-  `_data`$children <- lapply(`_data`$children, transform, ui = ui, server = server, ...)
-  `_data`
+  `_data`$children <- lapply(`_data`$children, transform, ui = ui, server = server, ...) # nolint: object_name
+  `_data` # nolint: object_name
 }
 
 #' @export
-transform.teal_module <- function(`_data`,
+transform.teal_module <- function(`_data`, # nolint: object_name
                                   ui = function(id, elem) elem,
                                   server = function(input, output, session, data) data,
                                   when = "after",
@@ -73,41 +73,24 @@ transform.teal_module <- function(`_data`,
   }
 
   additional_args <- list(...)
-  tm <- `_data` # because overwriting x$ui/server will cause infinite recursion
+  # overwriting `_data`$ui/server causes infinite recursion
+  tm <- `_data` # nolint: object_name
 
   if (identical(when, "before")) {
-    # NOTE: Doesn't work, the attribute is not used
-    # Apply each modification to the exiting transformators? Add to the end?
-    # attr(tm, "transformators") <- c(
-    #   attr(tm, "transformators"),
-    #   teal_transform_module(ui, server, ...)
-    # )
-    # NOTE: Requires an id with just id as parameters; from module_transform_data.R#48: data_mod$ui(id = ns("transform"))
-
-    tm$transformators <- if (is.list(tm$transformators) && !length(tm$transformators)) {
-      list(teal_transform_module(server = server, ui = ui, ...))
-    } else {
-      list(tm$transformators, teal_transform_module(server = server, ui = ui, ...))
-    }
-
-    # transform_ui(tm$transformators$ui, ui, additional_args)
-    # transform_srv(tm$transformators$server, server, additional_args)
-    # formals(tm)["transformators"] <- teal_transform_module(ui, server, ...)
-  } else {
-    tm$ui <- transform_ui(tm$ui, ui, additional_args)
-    tm$server <- transform_srv(tm$server, server, additional_args)
+    # NOTE: Attribute is not used for transformators, or it would be needed to have more support
+    # NOTE: teal_transform_module generates a module with id transform from module_transform_data.R#48
+    # See: https://github.com/insightsengineering/teal/issues/1603
+    stop("Modification before the module evaluation is currently not supported.")
   }
+
+  tm$ui <- transform_ui(tm$ui, ui, additional_args)
+  tm$server <- transform_srv(tm$server, server, additional_args)
   tm
 }
 
-# Doesn't work: it doesn't get the shiny Session: probably it can't be taken from the environment as expected.
-# transform.function <- function(old, new, additional_args) {
-#   if (all(names(formals(old)) %in% c("id", "elem"))) {
-#     transform_ui(old, new, additional_args)
-#   } else {
-#     transform_srv(old, new, additional_args)
-#   }
-# }
+# To support independent modification of ui and server we can't use .function dispatch
+# transform server doesn't get the shiny Session: probably it can't be taken from the environment as expected.
+# See: https://github.com/insightsengineering/teal/issues/1603
 
 transform_ui <- function(old_ui, new_ui, additional_args) {
   new_fn <- function(id, ...) {
