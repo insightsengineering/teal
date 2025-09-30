@@ -243,6 +243,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
     # See: https://github.com/rstudio/shiny/issues/3348
     observeEvent(
       once = TRUE,
+      ignoreInit = TRUE,
       reactiveValuesToList(session$input),
       {
         if (!is.null(reporter)) {
@@ -255,8 +256,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         } else {
           removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
         }
-      },
-      ignoreInit = TRUE
+      }
     )
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
