@@ -1,4 +1,4 @@
-#' Modificates a teal module
+#' Transform a teal module
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`

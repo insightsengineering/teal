@@ -3,7 +3,7 @@
 \name{transform}
 \alias{transform}
 \alias{transform.teal_modules}
-\title{Modificates a teal module}
+\title{Transform a teal module}
 \usage{
 \method{transform}{teal_modules}(
   `_data`,
