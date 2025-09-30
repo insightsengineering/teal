@@ -100,7 +100,20 @@ TealReportCard <- R6::R6Class( # nolint: object_name.
 }
 
 #' @noRd
-ui_add_reporter <- function(id) uiOutput(NS(id, "reporter_add_container"))
+ui_add_reporter <- function(id) {
+  ns <- shiny::NS(id)
+  bslib::tooltip(
+    id = ns("reporter_tooltip"),
+    trigger = shinyjs::disabled(
+      shiny::tags$div(
+        id = ns("report_add_wrapper"),
+        shiny::uiOutput(ns("report_add_body"))
+      )
+    ),
+    class = "teal add-reporter-container",
+    shiny::textOutput(ns("report_add_reason"))
+  )
+}
 
 #' @noRd
 srv_add_reporter <- function(id, module_out, reporter) {
@@ -138,27 +151,40 @@ srv_add_reporter <- function(id, module_out, reporter) {
         "Report content not in a valid format, check the module for errors."
       } else if (isFALSE(attr(mod_out_r(), "teal.enable_report"))) {
         "The report functionality is disabled for this module."
+      } else {
+        "Click here to add this module's output to the report."
       }
     })
 
-    output$reporter_add_container <- renderUI({
+    output$report_add_body <- shiny::renderUI({
       if (!is.null(reporter)) {
-        reason <- trimws(reason_r() %||% "")
-        ui <- teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
-        if (!identical(reason, "")) {
-          bslib::tooltip(
-            id = session$ns("reporter_tooltip"),
-            trigger = shinyjs::disabled(
-              shiny::tags$div(id = session$ns("report_add_wrapper"), ui)
-            ),
-            class = "teal add-reporter-container",
-            reason
-          )
-        } else {
-          ui
-        }
+        teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
       }
     })
+
+    output$report_add_reason <- shiny::renderText({
+      if (!is.null(reporter)) {
+        trimws(reason_r())
+      }
+    })
+    # output$reporter_add_container <- renderUI({
+    #   if (!is.null(reporter)) {
+    #     reason <- trimws(reason_r() %||% "")
+    #     ui <- teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
+    #     if (!identical(reason, "")) {
+    #       bslib::tooltip(
+    #         id = session$ns("reporter_tooltip"),
+    #         trigger = shinyjs::disabled(
+    #           shiny::tags$div(id = session$ns("report_add_wrapper"), ui)
+    #         ),
+    #         class = "teal add-reporter-container",
+    #         reason
+    #       )
+    #     } else {
+    #       ui
+    #     }
+    #   }
+    # })
     teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
   })
 }

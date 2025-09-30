@@ -21,19 +21,3 @@ shinyjs.enterToSubmit = function(id, submit_id) {
     })
   );
 }
-
-shinyjs.updateAttribute = function(params) {
-
-  var defaultParams = {
-    id : null,
-    attr : null,
-    value : null
-  };
-  params = shinyjs.getParams(params, defaultParams);
-
-  document.getElementById(params.id).setAttribute(params.attr, params.value)
-}
-
-  Shiny.addCustomMessageHandler('remove-tooltip', function(id) {
-    console.log("remove-tooltip", id);
-  });

@@ -21,10 +21,9 @@ ui_source_code <- function(id) {
           shiny::uiOutput(ns("source_code_body"))
         )
       ),
-      shiny::uiOutput(ns("source_code_reason"))
+      shiny::textOutput(ns("source_code_reason"), inline = TRUE)
     )
   }
-  # shiny::uiOutput(shiny::NS(id, "source_code_container"))
 }
 
 #' @noRd
@@ -52,33 +51,21 @@ srv_source_code <- function(id, module_out) {
         "The module returned an error, check it for errors."
       } else if (is.null(code_out())) {
         "The module does not support source code functionality"
+      } else {
+        "Click here to show R code that generated this module's output."
       }
     })
 
     output$source_code_body <- shiny::renderUI({
       if (getOption("teal.show_src", TRUE)) {
-        reason <- trimws(reason_r() %||% "")
         verbatim_popup_ui(session$ns("source_code"))
       }
     })
-    output$source_code_container <- shiny::renderUI({
+
+    output$source_code_reason <- shiny::renderText({
       if (getOption("teal.show_src", TRUE)) {
-        reason <- trimws(reason_r() %||% "")
-        new_ui <- verbatim_popup_ui(session$ns("source_code"))
-        if (!identical(reason, "")) {
-          new_ui <- bslib::tooltip(
-            id = session$ns("source_code_tooltip"),
-            trigger = shinyjs::disabled(
-              shiny::tags$div(
-                id = session$ns("source_code_wrapper"),
-                class = "cursor-helper",
-                new_ui
-              )
-            ),
-            reason
-          )
-        }
-        new_ui
+        reason <- trimws(reason_r())
+        reason
       }
     })
 
