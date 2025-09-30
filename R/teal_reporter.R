@@ -171,8 +171,6 @@ srv_add_reporter <- function(id, module_out, reporter) {
 
       teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
     }
-
-
   })
 }
 
