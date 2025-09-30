@@ -107,7 +107,7 @@ ui_add_reporter <- function(id) {
     trigger = shinyjs::disabled(
       shiny::tags$div(
         id = ns("report_add_wrapper"),
-        shiny::uiOutput(ns("report_add_body"))
+        teal.reporter::add_card_button_ui(ns("reporter_add"), label = "Add to Report")
       )
     ),
     class = "teal add-reporter-container",
@@ -157,12 +157,8 @@ srv_add_reporter <- function(id, module_out, reporter) {
     })
 
     if (!is.null(reporter)) {
-      output$report_add_body <- shiny::renderUI({
-        teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
-      })
-
       output$report_add_reason <- shiny::renderText({
-        trimws(reason_r()) %||% "Click here to add this module's output to the report."
+        trimws(reason_r() %||% "Click here to add this module's output to the report.")
       })
 
       observeEvent(reason_r(), ignoreNULL = FALSE, {

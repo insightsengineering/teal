@@ -19,7 +19,7 @@ ui_source_code <- function(id) {
         shiny::tags$div(
           id = ns("source_code_wrapper"),
           class = "cursor-helper",
-          shiny::uiOutput(ns("source_code_body"))
+          verbatim_popup_ui(ns("source_code"))
         )
       ),
       shiny::textOutput(ns("source_code_reason"), inline = TRUE)
@@ -56,12 +56,8 @@ srv_source_code <- function(id, module_out) {
     })
 
     if (getOption("teal.show_src", TRUE)) {
-      output$source_code_body <- shiny::renderUI({
-        verbatim_popup_ui(session$ns("source_code"))
-      })
-
       output$source_code_reason <- shiny::renderText({
-        trimws(reason_r()) %||% "Click here to show R code that generated this module's output."
+        trimws(reason_r() %||% "Click here to show R code that generated this module's output.")
       })
 
       observeEvent(reason_r(), ignoreNULL = FALSE, {
