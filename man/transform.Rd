@@ -24,7 +24,7 @@
 \item{when}{A character vector with when should this modification be applied: \code{before} or \code{after}.
 Default \code{after}, as before is equivalent to having a transformer on the module.}
 
-\item{...}{additional argument. Passed to \code{ui} and \code{server} by matching their formals names or to \code{teal_transform_module}.}
+\item{...}{additional argument. Passed to \code{ui} and \code{server} by matching their parameters.}
 }
 \value{
 A \code{teal_module} object with the modifications.
