@@ -22,7 +22,10 @@ ui_source_code <- function(id) {
           verbatim_popup_ui(ns("source_code"))
         )
       ),
-      shiny::textOutput(ns("source_code_reason"), inline = TRUE)
+      shiny::div(
+        "Click here to show R code that generated this module's output.",
+        shiny::uiOutput(ns("source_code_reason"))
+      )
     )
   }
 }
@@ -56,8 +59,16 @@ srv_source_code <- function(id, module_out) {
     })
 
     if (getOption("teal.show_src", TRUE)) {
-      output$source_code_reason <- shiny::renderText({
-        trimws(reason_r() %||% "Click here to show R code that generated this module's output.")
+      output$source_code_reason <- shiny::renderUI({
+        reason <- trimws(reason_r())
+        if (length(reason)) {
+          shiny::div(
+            class = "text-warning",
+            style = "padding-top: 0.5em;",
+            bsicons::bs_icon(name = "exclamation-triangle-fill"),
+            reason
+          )
+        }
       })
 
       observeEvent(reason_r(), ignoreNULL = FALSE, {

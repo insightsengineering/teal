@@ -111,7 +111,10 @@ ui_add_reporter <- function(id) {
       )
     ),
     class = "teal add-reporter-container",
-    shiny::textOutput(ns("report_add_reason"))
+    shiny::div(
+      "Click here to add this module's output to the report.",
+      shiny::uiOutput(ns("report_add_reason"))
+    )
   )
 }
 
@@ -157,8 +160,16 @@ srv_add_reporter <- function(id, module_out, reporter) {
     })
 
     if (!is.null(reporter)) {
-      output$report_add_reason <- shiny::renderText({
-        trimws(reason_r() %||% "Click here to add this module's output to the report.")
+      output$report_add_reason <- shiny::renderUI({
+        reason <- trimws(reason_r())
+        if (length(reason)) {
+          shiny::div(
+            class = "text-warning",
+            style = "padding-top: 0.5em;",
+            bsicons::bs_icon(name = "exclamation-triangle-fill"),
+            reason
+          )
+        }
       })
 
       observeEvent(reason_r(), ignoreNULL = FALSE, {
