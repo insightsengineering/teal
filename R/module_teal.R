@@ -238,16 +238,26 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         ui = tags$div(validate_ui)
       )
     }
-    if (!is.null(reporter)) {
-      shinyjs::show("reporter_menu_container")
-      reporter$set_id(attr(filter, "app_id"))
-      teal.reporter::preview_report_button_srv("preview_report", reporter)
-      teal.reporter::report_load_srv("load_report", reporter)
-      teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
-      teal.reporter::reset_report_button_srv("reset_reports", reporter)
-    } else {
-      removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
-    }
+
+    # Wait for UI to be rendered before showing/hiding reporter UI elements
+    # See: https://github.com/rstudio/shiny/issues/3348
+    observeEvent(
+      once = TRUE,
+      reactiveValuesToList(session$input),
+      {
+        if (!is.null(reporter)) {
+          shinyjs::show("reporter_menu_container")
+          reporter$set_id(attr(filter, "app_id"))
+          teal.reporter::preview_report_button_srv("preview_report", reporter)
+          teal.reporter::report_load_srv("load_report", reporter)
+          teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
+          teal.reporter::reset_report_button_srv("reset_reports", reporter)
+        } else {
+          removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
+        }
+      },
+      ignoreInit = TRUE
+    )
 
     datasets_rv <- if (!isTRUE(attr(filter, "module_specific"))) {
       eventReactive(data_signatured(), {
