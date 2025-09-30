@@ -52,27 +52,26 @@ srv_source_code <- function(id, module_out) {
         "The module returned an error, check it for errors."
       } else if (is.null(code_out())) {
         "The module does not support source code functionality"
-      } else {
-        "Click here to show R code that generated this module's output."
       }
     })
 
-    output$source_code_body <- shiny::renderUI({
-      if (getOption("teal.show_src", TRUE)) {
+    if (getOption("teal.show_src", TRUE)) {
+      output$source_code_body <- shiny::renderUI({
         verbatim_popup_ui(session$ns("source_code"))
-      }
-    })
+      })
 
-    output$source_code_reason <- shiny::renderText({
-      if (getOption("teal.show_src", TRUE)) {
-        reason <- trimws(reason_r())
-        reason
-      }
-    })
+      output$source_code_reason <- shiny::renderText({
+        trimws(reason_r()) %||% "Click here to show R code that generated this module's output."
+      })
 
-    verbatim_popup_srv(
-      id = "source_code", verbatim_content = code_out, title = "Show R Code for Response"
-    )
+      observeEvent(reason_r(), ignoreNULL = FALSE, {
+        shinyjs::toggleState("source_code_wrapper", condition = is.null(reason_r()))
+      })
+
+      verbatim_popup_srv(
+        id = "source_code", verbatim_content = code_out, title = "Show R Code"
+      )
+      }
   })
 }
 

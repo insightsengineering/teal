@@ -152,40 +152,27 @@ srv_add_reporter <- function(id, module_out, reporter) {
       } else if (isFALSE(attr(mod_out_r(), "teal.enable_report"))) {
         "The report functionality is disabled for this module."
       } else {
-        "Click here to add this module's output to the report."
+
       }
     })
 
-    output$report_add_body <- shiny::renderUI({
-      if (!is.null(reporter)) {
+    if (!is.null(reporter)) {
+      output$report_add_body <- shiny::renderUI({
         teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
-      }
-    })
+      })
 
-    output$report_add_reason <- shiny::renderText({
-      if (!is.null(reporter)) {
-        trimws(reason_r())
-      }
-    })
-    # output$reporter_add_container <- renderUI({
-    #   if (!is.null(reporter)) {
-    #     reason <- trimws(reason_r() %||% "")
-    #     ui <- teal.reporter::add_card_button_ui(session$ns("reporter_add"), label = "Add to Report")
-    #     if (!identical(reason, "")) {
-    #       bslib::tooltip(
-    #         id = session$ns("reporter_tooltip"),
-    #         trigger = shinyjs::disabled(
-    #           shiny::tags$div(id = session$ns("report_add_wrapper"), ui)
-    #         ),
-    #         class = "teal add-reporter-container",
-    #         reason
-    #       )
-    #     } else {
-    #       ui
-    #     }
-    #   }
-    # })
-    teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
+      output$report_add_reason <- shiny::renderText({
+        trimws(reason_r()) %||% "Click here to add this module's output to the report."
+      })
+
+      observeEvent(reason_r(), ignoreNULL = FALSE, {
+        shinyjs::toggleState("report_add_wrapper", condition = is.null(reason_r()))
+      })
+
+      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
+    }
+
+
   })
 }
 
