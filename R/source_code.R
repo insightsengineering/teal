@@ -4,7 +4,8 @@ verbatim_popup_srv <- teal.widgets::verbatim_popup_srv
 #' @noRd
 verbatim_popup_ui <- function(id) {
   teal.widgets::action_button_with_busy(
-    shiny::NS(id, "button"), "Show R code", type = "primary", outline = TRUE
+    shiny::NS(id, "button"), "Show R code",
+    type = "primary", outline = TRUE
   )
 }
 
