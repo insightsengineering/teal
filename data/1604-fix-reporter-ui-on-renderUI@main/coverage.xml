@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.531717380092831" branch-rate="0" lines-covered="2062" lines-valid="3878" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-09-30 07:06:51.047642">
+<coverage line-rate="0.531717380092831" branch-rate="0" lines-covered="2062" lines-valid="3878" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-09-30 10:31:23.883952">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -4757,16 +4757,16 @@
                 <line number="245" hits="87" branch="false"/>
                 <line number="246" hits="87" branch="false"/>
                 <line number="247" hits="87" branch="false"/>
-                <line number="248" hits="20" branch="false"/>
+                <line number="248" hits="87" branch="false"/>
                 <line number="249" hits="20" branch="false"/>
                 <line number="250" hits="20" branch="false"/>
                 <line number="251" hits="20" branch="false"/>
                 <line number="252" hits="20" branch="false"/>
                 <line number="253" hits="20" branch="false"/>
                 <line number="254" hits="20" branch="false"/>
-                <line number="255" hits="87" branch="false"/>
-                <line number="256" hits="0" branch="false"/>
-                <line number="257" hits="87" branch="false"/>
+                <line number="255" hits="20" branch="false"/>
+                <line number="256" hits="87" branch="false"/>
+                <line number="257" hits="0" branch="false"/>
                 <line number="258" hits="87" branch="false"/>
                 <line number="259" hits="87" branch="false"/>
                 <line number="260" hits="87" branch="false"/>
@@ -4967,16 +4967,16 @@
             <line number="245" hits="87" branch="false"/>
             <line number="246" hits="87" branch="false"/>
             <line number="247" hits="87" branch="false"/>
-            <line number="248" hits="20" branch="false"/>
+            <line number="248" hits="87" branch="false"/>
             <line number="249" hits="20" branch="false"/>
             <line number="250" hits="20" branch="false"/>
             <line number="251" hits="20" branch="false"/>
             <line number="252" hits="20" branch="false"/>
             <line number="253" hits="20" branch="false"/>
             <line number="254" hits="20" branch="false"/>
-            <line number="255" hits="87" branch="false"/>
-            <line number="256" hits="0" branch="false"/>
-            <line number="257" hits="87" branch="false"/>
+            <line number="255" hits="20" branch="false"/>
+            <line number="256" hits="87" branch="false"/>
+            <line number="257" hits="0" branch="false"/>
             <line number="258" hits="87" branch="false"/>
             <line number="259" hits="87" branch="false"/>
             <line number="260" hits="87" branch="false"/>
