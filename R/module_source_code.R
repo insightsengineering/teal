@@ -56,7 +56,6 @@ srv_source_code <- function(id, module_out) {
       } else if (is.null(code_out())) {
         "The module does not support source code functionality"
       }
-
     })
 
     if (getOption("teal.show_src", TRUE)) {
