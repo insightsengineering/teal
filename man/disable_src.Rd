@@ -16,6 +16,10 @@ button in the UI.
 \description{
 Convenience function that disables the user's ability to see the code of the module.
 }
+\details{
+This is equivalent to setting the attribute \code{teal.enable_src} to \code{FALSE} on the
+data object returned by the module.
+}
 \examples{
 app <- init(
   data = within(teal_data(), iris <- iris),

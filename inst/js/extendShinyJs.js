@@ -1,7 +1,6 @@
 // This file contains functions that should be executed at the start of each session,
 // not included in the original HTML
 
-console.log('extendShinyJs.js loading...');
 shinyjs.autoFocusModal = function(id) {
   document.getElementById('shiny-modal').addEventListener(
     'shown.bs.modal',

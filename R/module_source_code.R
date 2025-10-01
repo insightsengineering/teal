@@ -86,6 +86,9 @@ srv_source_code <- function(id, module_out) {
 #' Disable the "Show R Code" global button in the UI
 #'
 #' Convenience function that disables the user's ability to see the code of the module.
+#'
+#' This is equivalent to setting the attribute `teal.enable_src` to `FALSE` on the
+#' data object returned by the module.
 #' @param x (`teal_module`) a `teal_module` object.
 #' @return modified data object that indicates that it should not show the "Show R Code"
 #' button in the UI.
