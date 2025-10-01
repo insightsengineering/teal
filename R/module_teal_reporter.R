@@ -154,8 +154,6 @@ srv_add_reporter <- function(id, module_out, reporter) {
         "Report content not in a valid format, check the module for errors."
       } else if (isFALSE(attr(mod_out_r(), "teal.enable_report"))) {
         "The report functionality is disabled for this module."
-      } else {
-
       }
     })
 
@@ -163,10 +161,11 @@ srv_add_reporter <- function(id, module_out, reporter) {
       output$report_add_reason <- shiny::renderUI({
         reason <- trimws(reason_r())
         if (length(reason)) {
+          icon <- if (grepl("error", reason)) "exclamation-triangle-fill" else "info-circle-fill"
           shiny::div(
-            class = "text-warning",
+            class = if (grepl("error", reason)) "text-warning" else "text-info",
             style = "padding-top: 0.5em;",
-            bsicons::bs_icon(name = "exclamation-triangle-fill"),
+            bsicons::bs_icon(name = icon),
             reason
           )
         }

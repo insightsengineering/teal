@@ -56,16 +56,18 @@ srv_source_code <- function(id, module_out) {
       } else if (is.null(code_out())) {
         "The module does not support source code functionality"
       }
+
     })
 
     if (getOption("teal.show_src", TRUE)) {
       output$source_code_reason <- shiny::renderUI({
         reason <- trimws(reason_r())
         if (length(reason)) {
+          icon <- if (grepl("error", reason)) "exclamation-triangle-fill" else "info-circle-fill"
           shiny::div(
-            class = "text-warning",
+            class = if (grepl("error", reason)) "text-danger" else "text-info",
             style = "padding-top: 0.5em;",
-            bsicons::bs_icon(name = "exclamation-triangle-fill"),
+            bsicons::bs_icon(name = icon),
             reason
           )
         }
