@@ -105,9 +105,12 @@ ui_add_reporter <- function(id) {
   bslib::tooltip(
     id = ns("reporter_tooltip"),
     trigger = shinyjs::disabled(
-      shiny::tags$div(
-        id = ns("report_add_wrapper"),
-        teal.reporter::add_card_button_ui(ns("reporter_add"), label = "Add to Report")
+      shinyjs::hidden(
+        shiny::tags$div(
+          id = ns("report_add_wrapper"),
+          class = "report_add_wrapper",
+          teal.reporter::add_card_button_ui(ns("reporter_add"), label = "Add to Report")
+        )
       )
     ),
     class = "teal add-reporter-container",
