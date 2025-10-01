@@ -40,3 +40,7 @@ coalesce_r <- getFromNamespace("coalesce_r", "teal.slice")
 # This one is here because lang2calls should not be exported from teal.code
 lang2calls <- getFromNamespace("lang2calls", "teal.code")
 code2list <- getFromNamespace("code2list", "teal.data")
+
+# Use non-exported function(s) from teal.reporter
+# This one is here because .action_button_busy is an internal function that should not be exported
+.action_button_busy <- getFromNamespace(".action_button_busy", "teal.reporter")
