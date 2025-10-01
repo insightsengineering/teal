@@ -7,7 +7,7 @@
 #' @export
 #' @importFrom methods as
 #'
-TealReportCard <- R6::R6Class( # nolint: object_name.
+TealReportCard <- R6::R6Class( # nolint: object_name_lintr.
   classname = "TealReportCard",
   inherit = teal.reporter::ReportCard,
   public = list(
