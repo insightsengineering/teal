@@ -1,4 +1,4 @@
-# teal 1.0.0.9006
+# teal 1.0.0.9007
 
 ### New features
 
