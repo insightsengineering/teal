@@ -54,7 +54,7 @@ See the vignette \code{vignette("transform-module-output", package = "teal")} fo
 
 \section{\code{server} as a language}{
 The \code{server} function in \code{teal_transform_module} must return a reactive \code{\link[teal.data:teal_data]{teal.data::teal_data}} object.
-For simple transformations without complex reactivity, the \code{server} function might look like this:s
+For simple transformations without complex reactivity, the \code{server} function might look like this:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{function(id, data) \{
   moduleServer(id, function(input, output, session) \{

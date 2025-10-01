@@ -23,7 +23,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   button_selector <- "#teal-footer-session_info-sessionInfo-button"
   testthat::expect_equal(
     app$get_text(button_selector),
-    "Session Info"
+    "\n          Session Info\n        "
   )
 
   app$click(selector = button_selector)
@@ -42,7 +42,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
       ),
       2
     ),
-    "Copy to Clipboard"
+    "\n                Copy to Clipboard\n              ",
   )
   # There are two Dismiss buttons with similar id and the same label.
   testthat::expect_setequal(

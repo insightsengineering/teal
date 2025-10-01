@@ -13,7 +13,7 @@ testthat::describe("e2e: Module with 'Show R Code'", {
     # Check if button exists.
     testthat::expect_identical(
       app$get_text(app$active_module_element("rcode-button")),
-      "Show R code"
+      "\n                                      Show R code\n                                    "
     )
     app$stop()
   })
@@ -40,11 +40,11 @@ testthat::describe("e2e: Module with 'Show R Code'", {
     # Check for Copy buttons.
     testthat::expect_equal(
       app$get_text(app$active_module_element("rcode-copy_button1")),
-      "Copy to Clipboard"
+      "\n            Copy to Clipboard\n          "
     )
     testthat::expect_equal(
       app$get_text(app$active_module_element("rcode-copy_button2")),
-      "Copy to Clipboard"
+      "\n            Copy to Clipboard\n          "
     )
 
     app$stop()

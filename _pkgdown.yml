@@ -131,7 +131,7 @@ reference:
       - TealReportCard
       - report_card_template
       - disable_report
-      - after
+      - transform
   - title: Landing popup
     contents:
       - landing_popup_module
