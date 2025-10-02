@@ -14,12 +14,14 @@
 #' @param _data (`teal_module` or `teal_modules`), which in case of `teal_modules` will apply
 #' `transform` to each module in the list.
 #' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `_data$ui`.
-#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `_data$server`.
-#' @param when A character vector with when should this modification be applied: `before` or `after`.
-#' Default `after`, as before is equivalent to having a transformer on the module.
+#' @param server (`function(input, output, session, data, ...)`) function or a `function(id, data) moduleServer(...)`
+#'  to receive output data from \code{`_data`$server}.
+#' @param when A character vector with when should this modification be applied: `before`, `decorator` or `after`.
+#' - `before`: Before the module is executed. Allows to change/update data or the UI.
+#' - `decorator`: after the module is executed but applied to specific objects. Allows to modify specific objects.
+#' - `after` (default) : after the module and decorators are executed. Allows to change reporter.
 #' @param ... additional argument. Passed to `ui` and `server` by matching their parameters.
 #' @return A `teal_module` object with the modifications.
-#' New element ids are under `wrapper` namespace, old elements' ids are on the `wrapped` namespace.
 #' @seealso To modify just the output see [`teal_transform_module`].
 #' @export
 #' @examples
@@ -37,7 +39,7 @@
 #'       },
 #'       server = function(input, output, session, data) {
 #'         teal_card(data) <- c(teal_card(data), teal_card("Modification"))
-#'         if (!input$`wrapper-src`) {
+#'         if (!input$src) {
 #'           teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
 #'         }
 #'         data
@@ -62,29 +64,40 @@ transform.teal_module <- function(`_data`, # nolint: object_name
                                   server = function(input, output, session, data) data,
                                   when = "after",
                                   ...) {
-  when <- match.arg(when, c("before", "after"))
-  # todo: make a method for teal_app and remove teal_extend_server?
-  # Check ui && server have required arguments but nothing else
-  if (!is.function(ui) || !all(names(formals(ui)) %in% c("id", "elem"))) {
-    stop("ui should be a function of `id` and `elem`.")
+  when <- match.arg(when, c("before", "decorator", "after"))
+
+  names_ui <- names(formals(ui))
+  if (!is.function(ui) || !"id" %in% names_ui) {
+    stop("ui should be a function of `id` and optionally `elem`.")
   }
-  if (!is.function(server) || !all(names(formals(server)) %in% c("input", "output", "session", "data"))) {
+
+  names_srv <- names(formals(server))
+  args_callModule <- c("input", "output", "session", "data")
+  if (!is.function(server) || !(!all(identical(names_srv, c("id", "data"))) || !all(names_srv %in% args_callModule))) {
+    browser()
     stop("server should be a function of `input`, `output`, `session` and `data`")
   }
 
   additional_args <- list(...)
   # overwriting `_data`$ui/server causes infinite recursion
-  tm <- `_data` # nolint: object_name
+  tm <- `_data` # nolint: object_name_lintr
 
   if (identical(when, "before")) {
-    # NOTE: Attribute is not used for transformators, or it would be needed to have more support
-    # NOTE: teal_transform_module generates a module with id transform from module_transform_data.R#48
-    # See: https://github.com/insightsengineering/teal/issues/1603
-    stop("Modification before the module evaluation is currently not supported.")
+    ttm <- teal_transform_module(ui = ui, server = server)
+    # add more assertions
+    if ("elem" %in% names_ui) {
+      warning("This allows to modify the UI. But requires to return the modified UI")
+    }
+    tm$transformators <- c(tm$transformators, list(ttm))
+  } else if (identical(when, "decorator")) {
+    ttm <- teal_transform_module(ui = ui, server = server)
+    tm$server_args$decorators <- c(tm$server_args$decorators, list(ttm))
+    tm$ui_args$decorators <- c(tm$ui_args$decorators, list(ttm))
+  } else {
+    tm$ui <- transform_ui(tm$ui, ui, additional_args)
+    tm$server <- transform_srv(tm$server, server, additional_args)
   }
 
-  tm$ui <- transform_ui(tm$ui, ui, additional_args)
-  tm$server <- transform_srv(tm$server, server, additional_args)
   tm
 }
 
@@ -99,15 +112,15 @@ transform_ui <- function(old_ui, new_ui, additional_args) {
       original_args <- c(original_args, list(...))
     }
     ns <- NS(id)
-    original_args$id <- ns("wrapped")
-    original_out <- do.call(old_ui, original_args, quote = TRUE)
+      original_args$id <- "wrapped"
+      original_out <- do.call(old_ui, original_args, quote = TRUE)
 
-    wrapper_args <- c(
-      additional_args,
-      list(id = ns("wrapper"), elem = original_out)
-    )
-    do.call(new_ui, args = wrapper_args[names(formals(new_ui))])
-  }
+      wrapper_args <- c(
+        additional_args,
+        list(id = ns("wrapper"), elem = original_out)
+      )
+      do.call(new_ui, args = wrapper_args[names(formals(new_ui))])
+    }
   formals(new_fn) <- formals(old_ui)
   new_fn
 }
@@ -115,16 +128,20 @@ transform_ui <- function(old_ui, new_ui, additional_args) {
 transform_srv <- function(old_srv, new_srv, additional_args) {
   new_fn <- function(id, ...) {
     original_args <- as.list(environment())
-    original_args$id <- "wrapped"
+    original_args$id <- id
     if ("..." %in% names(formals(old_srv))) {
-      original_args <- c(original_args, list(...))
+      orig_args <- c(original_args, list(...))
+    } else {
+      orig_args <- original_args
     }
+
     moduleServer(id, function(input, output, session) {
+      # original module can be a function for callModule or a function for moduleServer
       original_out <- if (all(c("input", "output", "session") %in% names(formals(old_srv)))) {
-        original_args$module <- old_srv
-        do.call(shiny::callModule, args = original_args)
+        orig_args$module <- old_srv
+        do.call(callModule, args = orig_args, quote = TRUE)
       } else {
-        do.call(old_srv, original_args)
+        do.call(old_srv, orig_args, quote = TRUE)
       }
 
       wrapper_args <- utils::modifyList(
@@ -135,15 +152,24 @@ transform_srv <- function(old_srv, new_srv, additional_args) {
         )
       )
 
-      reactive({
-        output <- if (is.reactive(original_out)) {
-          original_out()
+      wrapper_args$data <- reactive({
+        if (is.reactive(original_out)) {
+          req(original_out())
         } else {
           original_out
         }
-        wrapper_args$data <- output
-        do.call(new_srv, wrapper_args[names(formals(new_srv))], quote = TRUE)
       })
+
+      # new module can be a function for callModule or a function for moduleServer
+      names_args_srv <- names(formals(new_srv))
+      wrapper_args$id <- "wrapped"
+      if (all(c("input", "output", "session") %in% names_args_srv)) {
+        wrapper_args$module <- new_srv
+        # browser()
+        do.call(shiny::callModule, args = wrapper_args[c(setdiff(names_args_srv, c("output")), "module", "id")], quote = TRUE)
+      } else {
+        do.call(new_srv, wrapper_args[names_args_srv], quote = TRUE)
+      }
     })
   }
   formals(new_fn) <- formals(old_srv)
