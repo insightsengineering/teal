@@ -106,7 +106,7 @@ ui_teal <- function(id, modules) {
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),
-    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal.reporter")),
+    shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal")),
     shiny_busy_message_panel,
     tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
@@ -252,6 +252,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
           teal.reporter::reset_report_button_srv("reset_reports", reporter)
         } else {
           removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
+          removeUI(selector = ".report_add_wrapper")
         }
       }
     )

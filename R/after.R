@@ -2,7 +2,7 @@
 #'
 #' Primarily used to modify the output object of module to change the containing
 #' report.
-#' @param x (`teal_module`)
+#' @param x (`teal_module`).
 #' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
@@ -12,7 +12,6 @@ after <- function(x,
                   ui = function(id, elem) elem,
                   server = function(input, output, session, data) data,
                   ...) {
-  # todo: make a method for teal_app and remove teal_extend_server?
   checkmate::assert_multi_class(x, "teal_module")
   if (!is.function(ui) || !all(names(formals(ui)) %in% c("id", "elem"))) {
     stop("ui should be a function of id and elem")
