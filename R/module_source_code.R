@@ -3,6 +3,7 @@ verbatim_popup_srv <- teal.widgets::verbatim_popup_srv
 
 #' @noRd
 verbatim_popup_ui <- function(id) {
+  # we replace teal.widgets::verbarbatim_popup_ui with own button. `inputId="button"` is necessary
   .action_button_busy(
     shiny::NS(id, "button"), "Show R code",
     type = "primary", outline = TRUE
