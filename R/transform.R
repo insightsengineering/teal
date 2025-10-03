@@ -128,8 +128,9 @@ transform_ui <- function(old_ui, new_ui, additional_args) {
 transform_srv <- function(old_srv, new_srv, additional_args) {
   new_fn <- function(id, ...) {
     original_args <- as.list(environment())
-    original_args$id <- id
-    if ("..." %in% names(formals(old_srv))) {
+    original_args$id <- "wrapped"
+    old_names_args <- names(formals(old_srv))
+    if ("..." %in% old_names_args) {
       orig_args <- c(original_args, list(...))
     } else {
       orig_args <- original_args
@@ -137,7 +138,7 @@ transform_srv <- function(old_srv, new_srv, additional_args) {
 
     moduleServer(id, function(input, output, session) {
       # original module can be a function for callModule or a function for moduleServer
-      original_out <- if (all(c("input", "output", "session") %in% names(formals(old_srv)))) {
+      original_out <- if (all(c("input", "output", "session") %in% old_names_args)) {
         orig_args$module <- old_srv
         do.call(callModule, args = orig_args, quote = TRUE)
       } else {
