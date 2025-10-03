@@ -95,7 +95,9 @@ srv_init_data <- function(id, data) {
     teal.reporter::teal_card(data_teal_report) <- c(
       teal.reporter::teal_card(),
       "## Code preparation",
-      teal.reporter::teal_card(data_teal_report)
+      # Use of an incomplete class of `teal.reporter::pseudo_code_chunk` to force
+      # the code to be displayed in the reporter, even if user does not want to include module code
+      structure(list(teal.reporter::teal_card(data_teal_report)), class = "pseudo_code_chunk")
     )
   }
   tdata <- do.call(
