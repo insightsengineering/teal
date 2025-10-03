@@ -92,12 +92,17 @@ srv_init_data <- function(id, data) {
   hashes <- .get_hashes_code(data)
   data_teal_report <- as(data, "teal_report")
   if (!inherits(data, "teal_report")) {
+    current_card <- lapply(
+      teal.reporter::teal_card(data_teal_report),
+      function(x) {
+        if (inherits(x, "code_chunk")) {
+          attr(x, "always_keep") <- TRUE
+          x
+        }
+      }
+    )
     teal.reporter::teal_card(data_teal_report) <- c(
-      teal.reporter::teal_card(),
-      "## Code preparation",
-      # Use of an incomplete class of `teal.reporter::pseudo_code_chunk` to force
-      # the code to be displayed in the reporter, even if user does not want to include module code
-      structure(list(teal.reporter::teal_card(data_teal_report)), class = "pseudo_code_chunk")
+      teal.reporter::teal_card("## Data preparation"), current_card
     )
   }
   tdata <- do.call(
