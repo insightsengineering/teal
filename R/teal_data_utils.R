@@ -24,7 +24,7 @@ NULL
     teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(data),
       "## Data filtering",
-      teal.reporter::code_chunk(code)
+      teal.reporter::code_chunk(code, always_keep = TRUE)
     )
     methods::validObject(data)
   }
@@ -55,11 +55,14 @@ NULL
           inherits(this, "code_chunk") &&
           identical(attr(x[[l]], "params"), attr(this, "params"))
       ) {
+        always_keep <- (attr(x[[l]], "always_keep", exact = TRUE) %||% FALSE) ||
+          (attr(this, "always_keep", exact = TRUE) %||% FALSE)
         x[[length(x)]] <- do.call(
           teal.reporter::code_chunk,
           args = c(
             list(code = paste(x[[l]], this, sep = "\n")),
-            attr(x[[l]], "params")
+            attr(x[[l]], "params"),
+            list(always_keep = always_keep)
           )
         )
         x

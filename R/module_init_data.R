@@ -92,10 +92,17 @@ srv_init_data <- function(id, data) {
   hashes <- .get_hashes_code(data)
   data_teal_report <- as(data, "teal_report")
   if (!inherits(data, "teal_report")) {
+    current_card <- lapply(
+      teal.reporter::teal_card(data_teal_report),
+      function(x) {
+        if (inherits(x, "code_chunk")) {
+          attr(x, "always_keep") <- TRUE
+          x
+        }
+      }
+    )
     teal.reporter::teal_card(data_teal_report) <- c(
-      teal.reporter::teal_card(),
-      "## Code preparation",
-      teal.reporter::teal_card(data_teal_report)
+      teal.reporter::teal_card("## Data preparation"), current_card
     )
   }
   tdata <- do.call(
