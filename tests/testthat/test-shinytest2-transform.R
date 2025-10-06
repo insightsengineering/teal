@@ -19,6 +19,28 @@ testthat::test_that("e2e: transform adds wrapped to ids of modules", {
   app_transform$stop()
 })
 
+testthat::test_that("e2e: transform server function accepts callModule arguments", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = example_module()
+  )
+  app_transform <- TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = transform(example_module(), server = function(id, data) {
+      data
+    })
+  )
+  before_ids <- app$get_values(input = TRUE, output = TRUE)
+  transform_ids <- app_transform$get_values(input = TRUE, output = TRUE)
+
+  expect_true(all(grep("wrapped", setdiff(names(transform_ids$output), names(before_ids$output)), fixed = TRUE)))
+  expect_true(all(grep("wrapped", setdiff(names(transform_ids$input), names(before_ids$input)), fixed = TRUE)))
+
+  app$stop()
+  app_transform$stop()
+})
+
 testthat::test_that("e2e: transform modifies nested modules", {
   skip_if_too_deep(5)
   nested_modules <- modules(

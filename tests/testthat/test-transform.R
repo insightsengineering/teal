@@ -15,7 +15,7 @@ test_that("transform requires functions for ui", {
 
 test_that("transform requires functions for server", {
   expect_error(transform(example_module(), server = "a"), "server should be a function")
-  expect_no_error(transform(example_module(), server = function(data) {
+  expect_no_error(transform(example_module(), server = function(id, data) {
     data
   }))
   expect_no_error(transform(example_module(), server = function(input, output, data, session) {
