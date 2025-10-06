@@ -1,3 +1,30 @@
+testthat::test_that("e2e: transform before decorators", {
+  skip_if_too_deep(5)
+  expect_no_error(TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = transform(example_module(), when = "before")
+  ))
+  app_transform$stop()
+})
+
+testthat::test_that("e2e: transform as decorators", {
+  skip_if_too_deep(5)
+  expect_no_error(TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = transform(example_module(), when = "decorator")
+  ))
+  app_transform$stop()
+})
+
+testthat::test_that("e2e: transform after decorators", {
+  skip_if_too_deep(5)
+  expect_no_error(TealAppDriver$new(
+    data = simple_teal_data(),
+    modules = transform(example_module(), when = "after")
+  ))
+  app_transform$stop()
+})
+
 testthat::test_that("e2e: transform adds wrapped to ids of modules", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
