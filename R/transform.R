@@ -54,8 +54,8 @@ transform.teal_modules <- function(`_data`, # nolint: object_name
                                    server = function(input, output, session, data) data,
                                    when = "after",
                                    ...) {
-  `_data`$children <- lapply(`_data`$children, transform, ui = ui, server = server, ...) # nolint: object_name
-  `_data` # nolint: object_name
+  `_data`$children <- lapply(`_data`$children, transform, ui = ui, server = server, ...) # nolint object_name_lintr
+  `_data` # nolint object_name_lintr
 }
 
 #' @export
@@ -92,6 +92,7 @@ transform.teal_module <- function(`_data`, # nolint: object_name
     ttm <- teal_transform_module(ui = ui, server = server)
     tm$server_args$decorators <- c(tm$server_args$decorators, list(ttm))
     tm$ui_args$decorators <- c(tm$ui_args$decorators, list(ttm))
+    browser()
   } else {
     tm$ui <- transform_ui(tm$ui, ui, additional_args)
     tm$server <- transform_srv(tm$server, server, additional_args)
@@ -104,45 +105,45 @@ transform.teal_module <- function(`_data`, # nolint: object_name
 # transform server doesn't get the shiny Session: probably it can't be taken from the environment as expected.
 # See: https://github.com/insightsengineering/teal/issues/1603
 
-transform_ui <- function(old_ui, new_ui, additional_args) {
-  new_fn <- function(id, ...) {
+transform_ui <- function(old, new, additional_args) {
+  new_ui <- function(id, ...) {
     original_args <- as.list(environment())
-    if ("..." %in% names(formals(old_ui))) {
+    if ("..." %in% names(formals(old))) {
       original_args <- c(original_args, list(...))
     }
+    # Adding namespace id
     ns <- NS(id)
     original_args$id <- ns("wrapped")
-    original_out <- do.call(old_ui, original_args, quote = TRUE)
+    original_out <- do.call(old, original_args, quote = TRUE)
 
-    wrapper_args <- c(
-      additional_args,
-      list(id = ns("wrapper"), elem = original_out)
-    )
-    do.call(new_ui, args = wrapper_args[names(formals(new_ui))])
+    wrapper_args <- c(additional_args, list(id = ns("wrapper"), elem = original_out))
+    do.call(new, args = wrapper_args[names(formals(new))], quote = TRUE)
   }
-  formals(new_fn) <- formals(old_ui)
-  new_fn
+  formals(new_ui) <- formals(old)
+  new_ui
 }
 
-transform_srv <- function(old_srv, new_srv, additional_args) {
-  new_fn <- function(id, ...) {
+transform_srv <- function(old, new, additional_args) {
+  new_srv <- function(id, ...) {
     original_args <- as.list(environment())
 
     moduleServer(id, function(input, output, session) {
 
-      original_args$id <- session$ns("wrapped")
-      old_names_args <- names(formals(old_srv))
-      if ("..." %in% old_names_args) {
+      names_args_old <- names(formals(old))
+      if ("..." %in% names_args_old) {
         orig_args <- c(original_args, list(...))
       } else {
         orig_args <- original_args
       }
-      # original module can be a function for callModule or a function for moduleServer
-      original_out <- if (all(c("input", "output", "session") %in% old_names_args)) {
-        orig_args$module <- old_srv
-        do.call(callModule, args = orig_args, quote = TRUE)
+      moduleServer_args <- c("input", "output", "session") # nolint object_name_lintr
+      orig_args$id <-  session$ns("wrapped")
+      # original module can be a function for callModule or for moduleServer
+      old_out <- if (all(moduleServer_args %in% names_args_old)) {
+        do.call(old, orig_args, quote = TRUE)
       } else {
-        do.call(old_srv, orig_args, quote = TRUE)
+        orig_args$module <- old
+        valid_args_old <- unique(c(setdiff(names_args_old, "output"), "module", "id"))
+        do.call(callModule, args = orig_args[valid_args_old], quote = TRUE)
       }
 
       wrapper_args <- utils::modifyList(
@@ -154,25 +155,25 @@ transform_srv <- function(old_srv, new_srv, additional_args) {
       )
 
       wrapper_args$data <- reactive({
-        if (is.reactive(original_out)) {
-          req(original_out())
+        if (is.reactive(old_out)) {
+          req(old_out())
         } else {
-          original_out
+          old_out
         }
       })
 
       # new module can be a function for callModule or a function for moduleServer
-      names_args_srv <- names(formals(new_srv))
-      if (all(c("input", "output", "session") %in% names_args_srv)) {
-        do.call(new_srv, wrapper_args[names_args_srv], quote = TRUE)
+      names_args_new <- names(formals(new))
+      if (all(moduleServer_args %in% names_args_new)) {
+        do.call(new, wrapper_args[names_args_new], quote = TRUE)
       } else {
-        # callModule adds a childScope argument that module don't know how to handle.
-        wrapper_args$module <- new_srv
-        valid_args <- c(setdiff(names_args_srv, "output"), "module", "id")
-        do.call(shiny::callModule, args = wrapper_args[valid_args], quote = TRUE)
+        # Adding the module to the list passed to callModule with valid arguments
+        wrapper_args$module <- new
+        valid_args_new <- unique(c(setdiff(names_args_new, "output"), "module", "id"))
+        do.call(shiny::callModule, args = wrapper_args[valid_args_new], quote = TRUE)
       }
     })
   }
-  formals(new_fn) <- formals(old_srv)
-  new_fn
+  formals(new_srv) <- formals(old)
+  new_srv
 }

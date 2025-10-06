@@ -19,16 +19,20 @@
 
 \item{ui}{(\verb{function(id, elem, ...)}) function to receive output (\code{shiny.tag}) from \verb{_data$ui}.}
 
-\item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \verb{_data$server}.}
+\item{server}{(\verb{function(input, output, session, data, ...)}) function or a \code{function(id, data) moduleServer(...)}
+to receive output data from \code{`_data`$server}.}
 
-\item{when}{A character vector with when should this modification be applied: \code{before} or \code{after}.
-Default \code{after}, as before is equivalent to having a transformer on the module.}
+\item{when}{A character vector with when should this modification be applied: \code{before}, \code{decorator} or \code{after}.
+\itemize{
+\item \code{before}: Before the module is executed. Allows to change/update data or the UI.
+\item \code{decorator}: after the module is executed but applied to specific objects. Allows to modify specific objects.
+\item \code{after} (default) : after the module and decorators are executed. Allows to change reporter.
+}}
 
 \item{...}{additional argument. Passed to \code{ui} and \code{server} by matching their parameters.}
 }
 \value{
 A \code{teal_module} object with the modifications.
-New element ids are under \code{wrapper} namespace, old elements' ids are on the \code{wrapped} namespace.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -55,7 +59,7 @@ app <- init(
       },
       server = function(input, output, session, data) {
         teal_card(data) <- c(teal_card(data), teal_card("Modification"))
-        if (!input$`wrapper-src`) {
+        if (!input$src) {
           teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
         }
         data
