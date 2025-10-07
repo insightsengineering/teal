@@ -3,22 +3,21 @@
 \name{module_teal_module}
 \alias{module_teal_module}
 \alias{ui_teal_module}
-\alias{ui_teal_module.default}
-\alias{ui_teal_module.teal_modules}
-\alias{ui_teal_module.teal_module}
 \alias{srv_teal_module}
-\alias{srv_teal_module.default}
-\alias{srv_teal_module.teal_modules}
-\alias{srv_teal_module.teal_module}
+\alias{.teal_navbar_append}
+\alias{.teal_navbar_insert_ui}
+\alias{.teal_navbar_menu}
+\alias{.ui_teal_module}
+\alias{.ui_teal_module.default}
+\alias{.ui_teal_module.teal_modules}
+\alias{.ui_teal_module.teal_module}
+\alias{.srv_teal_module}
+\alias{.srv_teal_module.default}
+\alias{.srv_teal_module.teal_modules}
+\alias{.srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-ui_teal_module(id, modules, depth = 0L)
-
-\method{ui_teal_module}{default}(id, modules, depth = 0L)
-
-\method{ui_teal_module}{teal_modules}(id, modules, depth = 0L)
-
-\method{ui_teal_module}{teal_module}(id, modules, depth = 0L)
+ui_teal_module(id, modules)
 
 srv_teal_module(
   id,
@@ -27,11 +26,28 @@ srv_teal_module(
   datasets = NULL,
   slices_global,
   reporter = teal.reporter::Reporter$new(),
-  data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  data_load_status = reactive("ok")
 )
 
-\method{srv_teal_module}{default}(
+.teal_navbar_append(navbar, child)
+
+.teal_navbar_insert_ui(
+  ui,
+  where = "afterBegin",
+  session = getDefaultReactiveDomain()
+)
+
+.teal_navbar_menu(..., id = NULL, label = NULL, class = NULL, icon = NULL)
+
+.ui_teal_module(id, modules, active_module_id)
+
+\method{.ui_teal_module}{default}(id, modules, active_module_id)
+
+\method{.ui_teal_module}{teal_modules}(id, modules, active_module_id)
+
+\method{.ui_teal_module}{teal_module}(id, modules, active_module_id)
+
+.srv_teal_module(
   id,
   data,
   modules,
@@ -39,10 +55,10 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
 )
 
-\method{srv_teal_module}{teal_modules}(
+\method{.srv_teal_module}{default}(
   id,
   data,
   modules,
@@ -50,10 +66,10 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
 )
 
-\method{srv_teal_module}{teal_module}(
+\method{.srv_teal_module}{teal_modules}(
   id,
   data,
   modules,
@@ -61,7 +77,18 @@ srv_teal_module(
   slices_global,
   reporter = teal.reporter::Reporter$new(),
   data_load_status = reactive("ok"),
-  is_active = reactive(TRUE)
+  active_module_id = reactive(TRUE)
+)
+
+\method{.srv_teal_module}{teal_module}(
+  id,
+  data,
+  modules,
+  datasets = NULL,
+  slices_global,
+  reporter = teal.reporter::Reporter$new(),
+  data_load_status = reactive("ok"),
+  active_module_id = reactive(TRUE)
 )
 }
 \arguments{
@@ -72,37 +99,69 @@ srv_teal_module(
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
-\item{depth}{(\code{integer(1)})
-number which helps to determine depth of the modules nesting.}
-
 \item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
 When \code{datasets} is passed from the parent module (\code{srv_teal}) then \code{dataset} is a singleton
-which implies in filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
+which implies the filter-panel to be "global". When \code{NULL} then filter-panel is "module-specific".}
 
 \item{slices_global}{(\code{reactiveVal} returning \code{modules_teal_slices})
 see \code{\link{module_filter_manager}}}
 
-\item{data_load_status}{(\code{reactive} returning \code{character})
+\item{reporter}{(\code{Reporter}, singleton)
+Stores reporter-cards appended in the server of \code{teal_module}.}
+
+\item{data_load_status}{(\code{reactive} returning \code{character(1)})
 Determines action dependent on a data loading status:
 \itemize{
 \item \code{"ok"} when \code{teal_data} is returned from the data loading.
-\item \code{"teal_data_module failed"} when \code{\link[=teal_data_module]{teal_data_module()}} didn't return  \code{teal_data}. Disables tabs buttons.
+\item \code{"teal_data_module failed"} when \code{\link[=teal_data_module]{teal_data_module()}} didn't return \code{teal_data}. Disables tab buttons.
 \item \code{"external failed"} when a \code{reactive} passed to \code{srv_teal(data)} didn't return \code{teal_data}. Hides the whole tab
 panel.
 }}
+
+\item{active_module_id}{(\code{reactive} returning \code{character(1)})
+\code{id} of the currently active module. This helps to determine which module can listen to reactive events.}
 }
 \value{
-output of currently active module.
+Output of currently active module.
 \itemize{
 \item \code{srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
-\item \code{srv_teal_module.teal_modules} returns output of module selected by \code{input$active_tab}.
+\item \code{srv_teal_module.teal_modules} returns output of modules in a list following the hierarchy of \code{modules}
 }
 }
 \description{
-On the UI side each \code{teal_modules} is translated to a \code{tabsetPanel} and each \code{teal_module} is a
-\code{tabPanel}. Both, UI and server are called recursively so that each tab is a separate module and
-reflect nested structure of \code{modules} argument.
+Modules create navigation bar with drop-down menu and tab content. Each \code{teal_module} is called recursively
+according to the structure of \code{modules} argument. This is a custom module which utilizes shiny/Bootstrap
+\code{.nav} class. \code{modules} are called with an \code{id} derived from \code{teal_module}'s label and labels of its
+ancestors (if any).
+}
+\details{
+\subsection{Functions}{
+\itemize{
+\item \code{ui/srv_teal_module} - wrapper module which links drop-down buttons with modules panels.
+Here \code{input$active_module_id} is instantiated.
+\item \code{.ui/srv_teal_module} - recursive S3 method which calls each module
+\item \code{.teal_navbar_append} - wrapper for \code{\link[htmltools:tagAppendChild]{htmltools::tagAppendChild()}} to add any element to navigation bar.
+\item \code{.teal_navbar_insert_ui} - wrapper for \code{\link[shiny:insertUI]{shiny::insertUI()}} to insert any element to navigation bar.
+\item \code{.teal_navbar_menu} - UI function to create a drop-down menu for navigation bar.
+}
+}
+
+\subsection{Utilizing \code{.nav} class}{
+
+No extra \code{javascript} or server functionality were introduced to have navigation buttons toggle between
+tab panels. This works thanks to \code{.nav} container which links \code{.nav-link} buttons \verb{href = #<module id>}
+attribute with \code{.tab-pane}'s \verb{id = <module id>} (see ``.ui_teal_module.teal_module`).
+}
+
+\subsection{Initialization and isolation of the \code{teal_module}(s)}{
+
+Modules are initialized only when they are active. This speeds up app initialization and on
+startup only the first module is activated and its outputs are calculated.
+Only the active module is listening to reactive events. This way, modules are isolated and only
+one can run at any given time. This makes the app more efficient by reducing unnecessary
+computations on server side.
+}
 }
 \keyword{internal}

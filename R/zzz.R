@@ -4,7 +4,11 @@
   teal_default_options <- list(
     teal.show_js_log = FALSE,
     teal.lockfile.mode = "auto",
-    shiny.sanitize.errors = FALSE
+    shiny.sanitize.errors = FALSE,
+    teal.sidebar.position = "left",
+    teal.sidebar.width = 250,
+    teal.reporter.nav_buttons = c("preview", "download", "load", "reset"),
+    teal.show_src = TRUE
   )
 
   op <- options()
@@ -31,10 +35,12 @@
 setdiff_teal_slices <- getFromNamespace("setdiff_teal_slices", "teal.slice")
 # This one is here because it is needed by c.teal_slices but we don't want it exported from teal.slice.
 coalesce_r <- getFromNamespace("coalesce_r", "teal.slice")
-# all *Block objects are private in teal.reporter
-RcodeBlock <- getFromNamespace("RcodeBlock", "teal.reporter") # nolint: object_name.
 
 # Use non-exported function(s) from teal.code
 # This one is here because lang2calls should not be exported from teal.code
 lang2calls <- getFromNamespace("lang2calls", "teal.code")
 code2list <- getFromNamespace("code2list", "teal.data")
+
+# Use non-exported function(s) from teal.reporter
+# This one is here because .action_button_busy is an internal function that should not be exported
+.action_button_busy <- getFromNamespace(".action_button_busy", "teal.reporter")

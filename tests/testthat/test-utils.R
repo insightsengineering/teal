@@ -25,7 +25,7 @@ testthat::test_that("report_card_template function returns TealReportCard object
   ))
   testthat::expect_s3_class(card, c("TealReportCard"))
   testthat::expect_equal(card$get_name(), "Card label")
-  testthat::expect_length(card$get_content(), 4)
+  testthat::expect_length(card$get_content(), 2)
 
   card <- shiny::isolate(report_card_template(
     title = "Card title",
@@ -76,7 +76,7 @@ test_that("validate_app_title_tag works on validating the title tag", {
 })
 
 test_that("build_app_title builts a valid tag", {
-  valid_title_local <- build_app_title("title", "logo.png")
+  lifecycle::expect_deprecated(valid_title_local <- build_app_title("title", "logo.png"))
   valid_title_remote <- build_app_title("title", "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/nest.png") # nolint
   testthat::expect_silent(validate_app_title_tag(valid_title_local))
   testthat::expect_silent(validate_app_title_tag(valid_title_remote))

@@ -1,8 +1,32 @@
 #' Calls all `modules`
 #'
-#' On the UI side each `teal_modules` is translated to a `tabsetPanel` and each `teal_module` is a
-#' `tabPanel`. Both, UI and server are called recursively so that each tab is a separate module and
-#' reflect nested structure of `modules` argument.
+#' Modules create navigation bar with drop-down menu and tab content. Each `teal_module` is called recursively
+#' according to the structure of `modules` argument. This is a custom module which utilizes shiny/Bootstrap
+#' `.nav` class. `modules` are called with an `id` derived from `teal_module`'s label and labels of its
+#' ancestors (if any).
+#'
+#' ### Functions
+#'
+#' - `ui/srv_teal_module` - wrapper module which links drop-down buttons with modules panels.
+#'   Here `input$active_module_id` is instantiated.
+#' - `.ui/srv_teal_module` - recursive S3 method which calls each module
+#' - `.teal_navbar_append` - wrapper for [htmltools::tagAppendChild()] to add any element to navigation bar.
+#' - `.teal_navbar_insert_ui` - wrapper for [shiny::insertUI()] to insert any element to navigation bar.
+#' - `.teal_navbar_menu` - UI function to create a drop-down menu for navigation bar.
+#'
+#' ### Utilizing `.nav` class
+#'
+#' No extra `javascript` or server functionality were introduced to have navigation buttons toggle between
+#' tab panels. This works thanks to `.nav` container which links `.nav-link` buttons `href = #<module id>`
+#' attribute with `.tab-pane`'s `id = <module id>` (see ``.ui_teal_module.teal_module`).
+#'
+#' ### Initialization and isolation of the `teal_module`(s)
+#'
+#' Modules are initialized only when they are active. This speeds up app initialization and on
+#' startup only the first module is activated and its outputs are calculated.
+#' Only the active module is listening to reactive events. This way, modules are isolated and only
+#' one can run at any given time. This makes the app more efficient by reducing unnecessary
+#' computations on server side.
 #'
 #' @name module_teal_module
 #'
@@ -13,87 +37,157 @@
 #' @param slices_global (`reactiveVal` returning `modules_teal_slices`)
 #'   see [`module_filter_manager`]
 #'
-#' @param depth (`integer(1)`)
-#'  number which helps to determine depth of the modules nesting.
-#'
 #' @param datasets (`reactive` returning `FilteredData` or `NULL`)
 #'  When `datasets` is passed from the parent module (`srv_teal`) then `dataset` is a singleton
-#'  which implies in filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
+#'  which implies the filter-panel to be "global". When `NULL` then filter-panel is "module-specific".
 #'
-#' @param data_load_status (`reactive` returning `character`)
+#' @param reporter (`Reporter`, singleton)
+#'  Stores reporter-cards appended in the server of `teal_module`.
+#'
+#' @param data_load_status (`reactive` returning `character(1)`)
 #'  Determines action dependent on a data loading status:
 #'  - `"ok"` when `teal_data` is returned from the data loading.
-#'  - `"teal_data_module failed"` when [teal_data_module()] didn't return  `teal_data`. Disables tabs buttons.
+#'  - `"teal_data_module failed"` when [teal_data_module()] didn't return `teal_data`. Disables tab buttons.
 #'  - `"external failed"` when a `reactive` passed to `srv_teal(data)` didn't return `teal_data`. Hides the whole tab
 #'    panel.
 #'
+#' @param active_module_id (`reactive` returning `character(1)`)
+#'   `id` of the currently active module. This helps to determine which module can listen to reactive events.
+#'
 #' @return
-#' output of currently active module.
+#' Output of currently active module.
 #' - `srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
-#' - `srv_teal_module.teal_modules` returns output of module selected by `input$active_tab`.
+#' - `srv_teal_module.teal_modules` returns output of modules in a list following the hierarchy of `modules`
 #'
 #' @keywords internal
 NULL
 
-#' @rdname module_teal_module
-ui_teal_module <- function(id, modules, depth = 0L) {
-  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
-  checkmate::assert_count(depth)
-  UseMethod("ui_teal_module", modules)
-}
 
 #' @rdname module_teal_module
-#' @export
-ui_teal_module.default <- function(id, modules, depth = 0L) {
-  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
-}
-
-#' @rdname module_teal_module
-#' @export
-ui_teal_module.teal_modules <- function(id, modules, depth = 0L) {
+ui_teal_module <- function(id, modules) {
   ns <- NS(id)
+  active_module_id <- restoreInput(
+    ns("active_module_id"),
+    unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
+  )
+
+  module_items <- .ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
+
   tags$div(
-    id = ns("wrapper"),
-    do.call(
-      switch(as.character(depth),
-        "0" = bslib::navset_pill,
-        "1" = bslib::navset_tab,
-        bslib::navset_underline
-      ),
-      c(
-        # by giving an id, we can reactively respond to tab changes
-        list(
-          id = ns("active_tab")
-        ),
-        lapply(
-          names(modules$children),
-          function(module_id) {
-            module_label <- modules$children[[module_id]]$label
-            if (is.null(module_label)) {
-              module_label <- icon("fas fa-database")
-            }
-            bslib::nav_panel(
-              title = module_label,
-              value = module_id, # when clicked this tab value changes input$<tabset panel id>
-              ui_teal_module(
-                id = ns(module_id),
-                modules = modules$children[[module_id]],
-                depth = depth + 1L
-              )
-            )
-          }
-        )
+    class = "teal-modules-wrapper",
+    htmltools::htmlDependency(
+      name = "module-navigation",
+      version = utils::packageVersion("teal"),
+      package = "teal",
+      src = "module-navigation",
+      stylesheet = "module-navigation.css"
+    ),
+    tags$ul(
+      id = ns("active_module_id"),
+      style = "align-items: center; gap: 1em; font-size: large;",
+      class = "teal-navbar nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
+      `data-tabsetid` = "test",
+      .teal_navbar_menu(
+        !!!module_items$link,
+        label = sprintf("Module (%d)", length(unlist(modules_slot(modules, "label")))),
+        class = "teal-modules-tree",
+        icon = "diagram-3-fill"
       )
+    ),
+    tags$div(class = "tab-content", module_items$tab_pane)
+  )
+}
+
+#' @rdname module_teal_module
+srv_teal_module <- function(id,
+                            data,
+                            modules,
+                            datasets = NULL,
+                            slices_global,
+                            reporter = teal.reporter::Reporter$new(),
+                            data_load_status = reactive("ok")) {
+  moduleServer(id, function(input, output, session) {
+    .srv_teal_module(
+      id = "nav",
+      data = data,
+      modules = modules,
+      datasets = datasets,
+      slices_global = slices_global,
+      reporter = reporter,
+      data_load_status = data_load_status,
+      active_module_id = reactive(input$active_module_id)
+    )
+  })
+}
+
+#' @rdname module_teal_module
+.teal_navbar_append <- function(navbar, child) {
+  tagAppendChild(tag = navbar, child = child, .cssSelector = ".teal-navbar")
+}
+
+#' @rdname module_teal_module
+.teal_navbar_insert_ui <- function(ui, where = "afterBegin", session = getDefaultReactiveDomain()) {
+  insertUI(
+    selector = ".teal-navbar",
+    where = where,
+    ui = ui,
+    session = session
+  )
+}
+
+#' @rdname module_teal_module
+.teal_navbar_menu <- function(..., id = NULL, label = NULL, class = NULL, icon = NULL) {
+  tags$div(
+    class = "dropdown nav-item-custom",
+    .dropdown_button(
+      id = id,
+      label = label,
+      icon = icon
+    ),
+    tags$div(
+      class = "dropdown-menu",
+      tags$ul(class = class, !!!rlang::list2(...))
     )
   )
 }
 
 #' @rdname module_teal_module
+.ui_teal_module <- function(id, modules, active_module_id) {
+  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
+  UseMethod(".ui_teal_module", modules)
+}
+
+#' @rdname module_teal_module
 #' @export
-ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
+.ui_teal_module.default <- function(id, modules, active_module_id) {
+  stop("Modules class not supported: ", paste(class(modules), collapse = " "))
+}
+
+#' @rdname module_teal_module
+#' @export
+.ui_teal_module.teal_modules <- function(id, modules, active_module_id) {
+  items <- mapply(
+    FUN = .ui_teal_module,
+    id = NS(id, .label_to_id(sapply(modules$children, `[[`, "label"))),
+    modules = modules$children,
+    active_module_id = active_module_id,
+    SIMPLIFY = FALSE
+  )
+
+  list(
+    link = tagList(
+      if (length(modules$label)) tags$li(tags$span(modules$label, class = "module-group-label")),
+      tags$li(tags$ul(lapply(items, `[[`, "link")))
+    ),
+    tab_pane = tagList(lapply(items, `[[`, "tab_pane"))
+  )
+}
+
+#' @rdname module_teal_module
+#' @export
+.ui_teal_module.teal_module <- function(id, modules, active_module_id) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
-
   ui_teal <- tags$div(
     shinyjs::hidden(
       tags$div(
@@ -114,13 +208,33 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       do.call(what = modules$ui, args = args, quote = TRUE)
     )
   )
+  container_id <- ns("wrapper")
+  module_id <- modules$path
 
-  div(
-    id = id,
-    class = "teal_module",
-    uiOutput(ns("data_reactive"), inline = TRUE),
+  link <- tags$li(
+    tags$a(
+      href = paste0("#", container_id), # links button with module content in `tab-content` with same id.
+      `data-bs-toggle` = "tab", # signals shiny to treat this element as bootstrap tab buttons for toggle.
+      `data-value` = module_id, # this data is set as the shiny input.
+      class = c("nav-link", "module-button", "btn-default", if (identical(module_id, active_module_id)) "active"),
+      # `nav-link` is required to mimic bslib tab panel.
+      modules$label
+    )
+  )
+
+  tab_pane <- div(
+    id = container_id,
+    class = c("tab-pane", "teal_module", if (identical(module_id, active_module_id)) "active"),
     tagList(
-      if (depth >= 2L) tags$div(),
+      tags$div(
+        style = "display: flex; justify-content: space-between; align-items: center; width: 100%;",
+        .modules_breadcrumb(modules),
+        tags$div(
+          style = "display: flex; gap: 0.5em;",
+          ui_add_reporter(ns("add_reporter_wrapper")),
+          ui_source_code(ns("source_code_wrapper"))
+        )
+      ),
       if (!is.null(modules$datanames)) {
         tagList(
           bslib::layout_sidebar(
@@ -128,6 +242,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
             sidebar = bslib::sidebar(
               id = ns("teal_module_sidebar"),
               class = "teal-sidebar",
+              position = getOption("teal.sidebar.position", "left"),
               width = getOption("teal.sidebar.width", 250),
               tags$div(
                 tags$div(
@@ -200,7 +315,7 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
                   });
                 ",
                 ns("sidebar_toggle_buttons"),
-                id
+                ns("wrapper")
               )
             )
           )
@@ -210,86 +325,70 @@ ui_teal_module.teal_module <- function(id, modules, depth = 0L) {
       }
     )
   )
+
+  list(link = link, tab_pane = tab_pane)
 }
 
 #' @rdname module_teal_module
-srv_teal_module <- function(id,
-                            data,
-                            modules,
-                            datasets = NULL,
-                            slices_global,
-                            reporter = teal.reporter::Reporter$new(),
-                            data_load_status = reactive("ok"),
-                            is_active = reactive(TRUE)) {
+.srv_teal_module <- function(id,
+                             data,
+                             modules,
+                             datasets = NULL,
+                             slices_global,
+                             reporter = teal.reporter::Reporter$new(),
+                             data_load_status = reactive("ok"),
+                             active_module_id = reactive(TRUE)) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))
   assert_reactive(datasets, null.ok = TRUE)
   checkmate::assert_class(slices_global, ".slicesGlobal")
-  checkmate::assert_class(reporter, "Reporter")
+  checkmate::assert_class(reporter, "Reporter", null.ok = TRUE)
   assert_reactive(data_load_status)
-  UseMethod("srv_teal_module", modules)
+  UseMethod(".srv_teal_module", modules)
 }
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_module.default <- function(id,
-                                    data,
-                                    modules,
-                                    datasets = NULL,
-                                    slices_global,
-                                    reporter = teal.reporter::Reporter$new(),
-                                    data_load_status = reactive("ok"),
-                                    is_active = reactive(TRUE)) {
+.srv_teal_module.default <- function(id,
+                                     data,
+                                     modules,
+                                     datasets = NULL,
+                                     slices_global,
+                                     reporter = teal.reporter::Reporter$new(),
+                                     data_load_status = reactive("ok"),
+                                     active_module_id = reactive(TRUE)) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_module.teal_modules <- function(id,
-                                         data,
-                                         modules,
-                                         datasets = NULL,
-                                         slices_global,
-                                         reporter = teal.reporter::Reporter$new(),
-                                         data_load_status = reactive("ok"),
-                                         is_active = reactive(TRUE)) {
+.srv_teal_module.teal_modules <- function(id,
+                                          data,
+                                          modules,
+                                          datasets = NULL,
+                                          slices_global,
+                                          reporter = teal.reporter::Reporter$new(),
+                                          data_load_status = reactive("ok"),
+                                          active_module_id = reactive(TRUE)) {
   moduleServer(id = id, module = function(input, output, session) {
     logger::log_debug("srv_teal_module.teal_modules initializing the module { deparse1(modules$label) }.")
-
-    observeEvent(data_load_status(), {
-      tabs_selector <- sprintf("#%s li a", session$ns("active_tab"))
-      if (identical(data_load_status(), "ok")) {
-        logger::log_debug("srv_teal_module@1 enabling modules tabs.")
-        shinyjs::show("wrapper")
-        shinyjs::enable(selector = tabs_selector)
-      } else if (identical(data_load_status(), "teal_data_module failed")) {
-        logger::log_debug("srv_teal_module@1 disabling modules tabs.")
-        shinyjs::disable(selector = tabs_selector)
-      } else if (identical(data_load_status(), "external failed")) {
-        logger::log_debug("srv_teal_module@1 hiding modules tabs.")
-        shinyjs::hide("wrapper")
-      }
-    })
-
-    modules_output <- sapply(
-      names(modules$children),
-      function(module_id) {
-        srv_teal_module(
-          id = module_id,
+    modules_output <- mapply(
+      function(id, modules) {
+        .srv_teal_module(
+          id = id,
+          modules = modules,
           data = data,
-          modules = modules$children[[module_id]],
           datasets = datasets,
           slices_global = slices_global,
           reporter = reporter,
-          is_active = reactive(
-            is_active() &&
-              input$active_tab == module_id &&
-              identical(data_load_status(), "ok")
-          )
+          data_load_status = data_load_status,
+          active_module_id = active_module_id
         )
       },
-      simplify = FALSE
+      id = .label_to_id(sapply(modules$children, `[[`, "label")),
+      modules = modules$children,
+      SIMPLIFY = FALSE
     )
 
     modules_output
@@ -298,18 +397,21 @@ srv_teal_module.teal_modules <- function(id,
 
 #' @rdname module_teal_module
 #' @export
-srv_teal_module.teal_module <- function(id,
-                                        data,
-                                        modules,
-                                        datasets = NULL,
-                                        slices_global,
-                                        reporter = teal.reporter::Reporter$new(),
-                                        data_load_status = reactive("ok"),
-                                        is_active = reactive(TRUE)) {
+.srv_teal_module.teal_module <- function(id,
+                                         data,
+                                         modules,
+                                         datasets = NULL,
+                                         slices_global,
+                                         reporter = teal.reporter::Reporter$new(),
+                                         data_load_status = reactive("ok"),
+                                         active_module_id = reactive(TRUE)) {
   logger::log_debug("srv_teal_module.teal_module initializing the module: { deparse1(modules$label) }.")
   moduleServer(id = id, module = function(input, output, session) {
     module_out <- reactiveVal()
-
+    module_id <- modules$path
+    is_active <- reactive({
+      identical(data_load_status(), "ok") && identical(module_id, active_module_id())
+    })
     active_datanames <- reactive({
       .resolve_module_datanames(data = data(), modules = modules)
     })
@@ -376,40 +478,36 @@ srv_teal_module.teal_module <- function(id,
       observeEvent(input$data_summary_toggle, {
         bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
         bslib::accordion_panel_open(id = "data_summary_accordion", values = TRUE)
-        bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+        bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordion", values = TRUE)
         bslib::accordion_panel_close(id = "data_transform_accordion", values = TRUE)
       })
 
       observeEvent(input$data_filters_toggle, {
         bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
         bslib::accordion_panel_close(id = "data_summary_accordion", values = TRUE)
-        bslib::accordion_panel_open(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+        bslib::accordion_panel_open(id = "filter_panel-filters-main_filter_accordion", values = TRUE)
         bslib::accordion_panel_close(id = "data_transform_accordion", values = TRUE)
       })
 
       observeEvent(input$data_transforms_toggle, {
         bslib::toggle_sidebar(id = "teal_module_sidebar", open = TRUE)
         bslib::accordion_panel_close(id = "data_summary_accordion", values = TRUE)
-        bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordian", values = TRUE)
+        bslib::accordion_panel_close(id = "filter_panel-filters-main_filter_accordion", values = TRUE)
         bslib::accordion_panel_open(id = "data_transform_accordion", values = TRUE)
       })
 
       # Call modules.
-      if (!inherits(modules, "teal_module_previewer")) {
-        obs_module <- .call_once_when(
-          !is.null(module_teal_data()),
-          ignoreNULL = TRUE,
-          handlerExpr = {
-            module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-          }
-        )
-      } else {
-        # Report previewer must be initiated on app start for report cards to be included in bookmarks.
-        # When previewer is delayed, cards are bookmarked only if previewer has been initiated (visited).
-        module_out(.call_teal_module(modules, datasets, module_teal_data, reporter))
-      }
+      obs_module <- .call_once_when(
+        !is.null(module_teal_data()),
+        ignoreNULL = TRUE,
+        handlerExpr = {
+          out <- .call_teal_module(modules, datasets, module_teal_data, reporter)
+          srv_add_reporter("add_reporter_wrapper", out, reporter)
+          srv_source_code("source_code_wrapper", out)
+          module_out(out)
+        }
+      )
     })
-
     module_out
   })
 }
@@ -420,7 +518,7 @@ srv_teal_module.teal_module <- function(id,
 
   # collect arguments to run teal_module
   args <- c(list(id = "module"), modules$server_args)
-  if (is_arg_used(modules$server, "reporter")) {
+  if (is_arg_used(modules$server, "reporter") && !is.null(reporter)) {
     args <- c(args, list(reporter = reporter))
   }
 
@@ -489,5 +587,12 @@ srv_teal_module.teal_module <- function(id,
     once = TRUE,
     handlerExpr = rlang::eval_tidy(handler_quo),
     ...
+  )
+}
+
+.modules_breadcrumb <- function(module) {
+  tags$div(
+    style = "color: var(--bs-secondary); font-size: large; opacity: 0.6; margin: 0 0.5em 0.5em 0.5em;",
+    paste("Home", module$path, sep = " / ")
   )
 }
