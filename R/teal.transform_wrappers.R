@@ -7,28 +7,46 @@ teal_transform_filter <- function(x, label = "Filter") {
     label = label,
     ui <- function(id) {
       ns <- NS(id)
-      teal.transform::module_input_ui(ns("transformer"), spec = x)
+      teal.transform::module_input_ui(ns("transformer"), spec = x, container = div)
     },
     server <- function(id, data) {
       moduleServer(id, function(input, output, session) {
         selector <- teal.transform::module_input_srv("transformer", spec = x, data = data)
         reactive({
           req(data(), selector())
-          teal.code::eval_code(data(), .make_filter_call(selector()))
+          # todo: make sure filter call is not executed when setequal(selected, all_possible_choices)
+          filter_call <- .make_filter_call(
+            datasets = selector()$datasets$selected,
+            variables = selector()$variables$selected,
+            values = selector()$values$selected
+          )
+          teal.code::eval_code(data(), filter_call)
         })
       })
     }
   )
 }
 
-.make_filter_call <- function(x) {
-  checkmate::assert_class(x, "picks")
+.make_filter_call <- function(datasets, variables, values) {
+  checkmate::assert_character(datasets)
+  checkmate::assert_character(variables)
+  checkmate::assert_character(values)
   substitute(
     dataname <- dplyr::filter(dataname, varname %in% values),
     list(
-      dataname = str2lang(x$datasets$selected),
-      varname = str2lang(x$variables$selected),
-      values = x$values$selected
+      dataname = as.name(datasets),
+      varname = if (length(variables) == 1) {
+        as.name(variables)
+      } else {
+        as.call(
+          c(
+            quote(paste),
+            lapply(variables, as.name),
+            list(sep = ", ")
+          )
+        )
+      },
+      values = values
     )
   )
 }
