@@ -49,13 +49,13 @@ srv_source_code <- function(id, module_out) {
 
     reason_r <- reactive({
       if (is.null(mod_out_r())) {
-        "No source code is available from this module."
+        "No source code is available for this module."
       } else if (isFALSE(attr(mod_out_r(), "teal.enable_src"))) {
-        "The show source code functionality is disabled for this module."
+        "The source code functionality is disabled for this module."
       } else if (inherits(mod_out_r(), "error")) {
         "The module returned an error, check it for errors."
       } else if (is.null(code_out())) {
-        "The module does not support source code functionality"
+        "The module does not support source code functionality."
       }
     })
 
@@ -73,12 +73,11 @@ srv_source_code <- function(id, module_out) {
         }
       })
 
-      observeEvent(reason_r(), ignoreNULL = FALSE, {
-        shinyjs::toggleState("source_code_wrapper", condition = is.null(reason_r()))
-      })
-
       verbatim_popup_srv(
-        id = "source_code", verbatim_content = code_out, title = "Show R Code"
+        id = "source_code", 
+        verbatim_content = code_out, 
+        title = "Show R Code",
+        disabled = reactive(!is.null(reason_r()))
       )
     }
   })
