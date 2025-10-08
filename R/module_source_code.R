@@ -74,8 +74,8 @@ srv_source_code <- function(id, module_out) {
       })
 
       verbatim_popup_srv(
-        id = "source_code", 
-        verbatim_content = code_out, 
+        id = "source_code",
+        verbatim_content = code_out,
         title = "Show R Code",
         disabled = reactive(!is.null(reason_r()))
       )
