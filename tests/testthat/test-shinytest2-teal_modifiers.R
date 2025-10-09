@@ -1,7 +1,7 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
-testthat::describe("e2e: modify_title", {
+testthat::describe("e2e: modify_title sets custom title in the page title (`head title`)", {
   testthat::it("displays custom title in the app", {
     skip_if_too_deep(5)
     
@@ -47,13 +47,13 @@ testthat::describe("e2e: modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     ) |>
-      modify_header(element = tags$h1("Custom App Header", id = "test-header"))
+      modify_header(element = tags$h1("Custom App Header"))
     
     app_driver <- TealAppDriver$new(app)
     
     # Check that the header content is visible
-    testthat::expect_true(app_driver$is_visible("#test-header"))
-    header_text <- app_driver$get_text("#test-header")
+    testthat::expect_true(app_driver$is_visible("#teal-header-content"))
+    header_text <- app_driver$get_text("#teal-header-content")
     testthat::expect_equal(header_text, "Custom App Header")
     
     app_driver$stop()
@@ -68,13 +68,13 @@ testthat::describe("e2e: modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     ) |>
-      modify_footer(element = tags$p("Custom Footer Text", id = "test-footer"))
+      modify_footer(element = tags$p("Custom Footer Text"))
     
     app_driver <- TealAppDriver$new(app)
     
     # Check that the footer content is visible
-    testthat::expect_true(app_driver$is_visible("#test-footer"))
-    footer_text <- app_driver$get_text("#test-footer")
+    testthat::expect_true(app_driver$is_visible("#teal-footer-content"))
+    footer_text <- app_driver$get_text("#teal-footer-content")
     testthat::expect_equal(footer_text, "Custom Footer Text")
     
     app_driver$stop()
@@ -150,8 +150,8 @@ testthat::describe("e2e: combined modifiers", {
       modules = modules(example_module())
     ) |>
       modify_title(title = "Complete Custom App") |>
-      modify_header(element = tags$div("Custom Header", id = "custom-header")) |>
-      modify_footer(element = tags$div("Custom Footer", id = "custom-footer")) |>
+      modify_header(element = tags$div("Custom Header")) |>
+      modify_footer(element = tags$div("Custom Footer")) |>
       add_landing_modal(title = "Welcome", content = "Welcome message")
     
     app_driver <- TealAppDriver$new(app)
@@ -168,12 +168,14 @@ testthat::describe("e2e: combined modifiers", {
     Sys.sleep(0.5)
     
     # Check header is visible
-    testthat::expect_true(app_driver$is_visible("#custom-header"))
-    testthat::expect_equal(app_driver$get_text("#custom-header"), "Custom Header")
+    testthat::expect_true(app_driver$is_visible("#teal-header-content"))
+    header_text <- app_driver$get_text("#teal-header-content")
+    testthat::expect_equal(header_text, "Custom Header")
     
     # Check footer is visible
-    testthat::expect_true(app_driver$is_visible("#custom-footer"))
-    testthat::expect_equal(app_driver$get_text("#custom-footer"), "Custom Footer")
+    testthat::expect_true(app_driver$is_visible("#teal-footer-content"))
+    footer_text <- app_driver$get_text("#teal-footer-content")
+    testthat::expect_equal(footer_text, "Custom Footer")
     
     app_driver$stop()
   })
