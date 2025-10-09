@@ -102,7 +102,7 @@ testthat::describe(".is_disabled_lockfile_scenario", {
         old_testthat <- Sys.getenv("TESTTHAT")
         Sys.unsetenv("TESTTHAT")
         on.exit(Sys.setenv(TESTTHAT = old_testthat), add = TRUE)
-        
+
         result <- .is_disabled_lockfile_scenario()
         # Result may still be TRUE due to CheckExEnv in search path during tests
         testthat::expect_type(result, "logical")
@@ -114,15 +114,15 @@ testthat::describe(".is_disabled_lockfile_scenario", {
 testthat::describe(".renv_snapshot", {
   testthat::it("returns a list with 'out' and 'res' components", {
     testthat::skip_if_not_installed("renv")
-    
+
     # Create a temporary directory for the test
     temp_dir <- withr::local_tempdir()
     lockfile_path <- file.path(temp_dir, "test.lock")
-    
+
     # Run in a controlled environment
     withr::with_dir(temp_dir, {
       result <- .renv_snapshot(lockfile_path)
-      
+
       testthat::expect_type(result, "list")
       testthat::expect_true("out" %in% names(result))
       testthat::expect_true("res" %in% names(result))
@@ -134,10 +134,10 @@ testthat::describe(".renv_snapshot", {
 testthat::describe(".teal_lockfile_process_invoke", {
   testthat::it("returns an ExtendedTask object", {
     testthat::skip_if_not_installed("mirai")
-    
+
     temp_dir <- withr::local_tempdir()
     lockfile_path <- file.path(temp_dir, "test.lock")
-    
+
     withr::with_dir(temp_dir, {
       result <- .teal_lockfile_process_invoke(lockfile_path)
       testthat::expect_s3_class(result, "ExtendedTask")
@@ -180,12 +180,12 @@ testthat::describe("srv_teal_lockfile", {
   testthat::it("enables download when lockfile already exists", {
     testthat::skip_if_not_installed("mirai")
     testthat::skip_if_not_installed("renv")
-    
+
     # Create a temporary lockfile
     temp_lockfile <- "teal_app.lock"
     file.create(temp_lockfile)
     on.exit(if (file.exists(temp_lockfile)) file.remove(temp_lockfile), add = TRUE)
-    
+
     withr::with_options(
       list(teal.lockfile.mode = "enabled"),
       {
@@ -199,7 +199,7 @@ testthat::describe("srv_teal_lockfile", {
         )
       }
     )
-    
+
     # Clean up
     if (file.exists(temp_lockfile)) file.remove(temp_lockfile)
   })
@@ -252,7 +252,7 @@ testthat::describe("srv_teal_lockfile", {
         )
       }
     )
-    
+
     # Test 'auto' - in test env, should be disabled
     withr::with_options(
       list(teal.lockfile.mode = "auto"),
