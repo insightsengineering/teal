@@ -1,3 +1,6 @@
+# Tests for public functions in R/teal_modifiers.R
+# Testing: modify_title, modify_header, modify_footer, add_landing_modal
+
 # modify_title ----
 
 testthat::test_that("modify_title returns a teal_app object", {
