@@ -410,3 +410,192 @@ testthat::test_that("all modifiers can be chained together", {
   
   testthat::expect_s3_class(modified_app, "teal_app")
 })
+
+# UI function execution tests ----
+
+testthat::test_that("modify_title modified UI function can be called", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- modify_title(app, title = "Test Title")
+  
+  # Call the UI function to ensure it executes properly
+  testthat::expect_no_error({
+    ui_result <- modified_app$ui(request = NULL)
+  })
+})
+
+testthat::test_that("modify_header modified UI function can be called", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- modify_header(app, element = tags$div("Header"))
+  
+  testthat::expect_no_error({
+    ui_result <- modified_app$ui(request = NULL)
+  })
+})
+
+testthat::test_that("modify_footer modified UI function can be called", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- modify_footer(app, element = tags$div("Footer"))
+  
+  testthat::expect_no_error({
+    ui_result <- modified_app$ui(request = NULL)
+  })
+})
+
+# Server execution tests ----
+
+testthat::test_that("add_landing_modal server function executes", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- add_landing_modal(
+    app,
+    title = "Test Title",
+    content = "Test Content",
+    footer = modalButton("Close")
+  )
+  
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = modified_app$server,
+      expr = {
+        session$flushReact()
+      }
+    )
+  )
+})
+
+testthat::test_that("add_landing_modal with tag content executes", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- add_landing_modal(
+    app,
+    title = "Test",
+    content = tags$p("Tag content"),
+    footer = tags$div(modalButton("OK"))
+  )
+  
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = modified_app$server,
+      expr = {
+        session$flushReact()
+      }
+    )
+  )
+})
+
+testthat::test_that("add_landing_modal with NULL title and content executes", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- add_landing_modal(
+    app,
+    title = NULL,
+    content = NULL
+  )
+  
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = modified_app$server,
+      expr = {
+        session$flushReact()
+      }
+    )
+  )
+})
+
+testthat::test_that("modify_title accepts html class title", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  testthat::expect_no_error(
+    modify_title(app, title = HTML("<b>HTML Title</b>"))
+  )
+})
+
+testthat::test_that("modify_header accepts html class element", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  testthat::expect_no_error(
+    modify_header(app, element = HTML("<div>HTML Header</div>"))
+  )
+})
+
+testthat::test_that("modify_footer accepts html class element", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  testthat::expect_no_error(
+    modify_footer(app, element = HTML("<div>HTML Footer</div>"))
+  )
+})
+
+testthat::test_that("add_landing_modal with html content executes", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- add_landing_modal(
+    app,
+    title = "Test",
+    content = HTML("<p>HTML content</p>")
+  )
+  
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = modified_app$server,
+      expr = {
+        session$flushReact()
+      }
+    )
+  )
+})
+
+testthat::test_that("add_landing_modal with tagList content executes", {
+  app <- init(
+    data = teal.data::teal_data(iris = iris),
+    modules = modules(example_module())
+  )
+  
+  modified_app <- add_landing_modal(
+    app,
+    title = "Test",
+    content = tagList(tags$p("First"), tags$p("Second"))
+  )
+  
+  testthat::expect_no_error(
+    shiny::testServer(
+      app = modified_app$server,
+      expr = {
+        session$flushReact()
+      }
+    )
+  )
+})
