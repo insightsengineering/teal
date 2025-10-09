@@ -45,7 +45,7 @@ testthat::test_that("ui_teal_data_module includes data_module UI", {
 testthat::test_that("srv_teal_data_module validates id parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_teal_data_module,
+      app = srv_teal_data_module,
       args = list(id = 123),
       expr = NULL
     ),
@@ -56,7 +56,7 @@ testthat::test_that("srv_teal_data_module validates id parameter", {
 testthat::test_that("srv_teal_data_module validates data_module parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_teal_data_module,
+      app = srv_teal_data_module,
       args = list(id = "test", data_module = "not_a_function"),
       expr = NULL
     ),
@@ -67,7 +67,7 @@ testthat::test_that("srv_teal_data_module validates data_module parameter", {
 testthat::test_that("srv_teal_data_module validates modules parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_teal_data_module,
+      app = srv_teal_data_module,
       args = list(id = "test", modules = "invalid"),
       expr = NULL
     ),
@@ -78,7 +78,7 @@ testthat::test_that("srv_teal_data_module validates modules parameter", {
 testthat::test_that("srv_teal_data_module validates is_transform_failed parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_teal_data_module,
+      app = srv_teal_data_module,
       args = list(id = "test", is_transform_failed = list()),
       expr = NULL
     ),
@@ -94,7 +94,7 @@ testthat::test_that("srv_teal_data_module initializes is_transform_failed to FAL
   }
   
   shiny::testServer(
-    srv_teal_data_module,
+    app = srv_teal_data_module,
     args = list(
       id = "test",
       data_module = data_module_server
@@ -113,7 +113,7 @@ testthat::test_that("srv_teal_data_module sets is_transform_failed to TRUE when 
   }
   
   shiny::testServer(
-    srv_teal_data_module,
+    app = srv_teal_data_module,
     args = list(
       id = "test",
       data_module = data_module_server
@@ -133,7 +133,7 @@ testthat::test_that("srv_teal_data_module sets is_transform_failed to FALSE when
   }
   
   shiny::testServer(
-    srv_teal_data_module,
+    app = srv_teal_data_module,
     args = list(
       id = "test",
       data_module = data_module_server
@@ -155,7 +155,7 @@ testthat::test_that("srv_teal_data_module detects previous failures correctly", 
   transform_failed <- shiny::reactiveValues(first = TRUE, second = FALSE)
   
   shiny::testServer(
-    srv_teal_data_module,
+    app = srv_teal_data_module,
     args = list(
       id = "second",
       data_module = data_module_server,
@@ -177,7 +177,7 @@ testthat::test_that("srv_teal_data_module calls srv_validate_reactive_teal_data"
   }
   
   shiny::testServer(
-    srv_teal_data_module,
+    app = srv_teal_data_module,
     args = list(
       id = "test",
       data_module = data_module_server,
@@ -211,7 +211,7 @@ testthat::test_that("ui_validate_reactive_teal_data creates proper structure", {
 testthat::test_that("srv_validate_reactive_teal_data validates id parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_validate_reactive_teal_data,
+      app = srv_validate_reactive_teal_data,
       args = list(id = 123, data = reactive(teal_data())),
       expr = NULL
     ),
@@ -222,7 +222,7 @@ testthat::test_that("srv_validate_reactive_teal_data validates id parameter", {
 testthat::test_that("srv_validate_reactive_teal_data validates modules parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_validate_reactive_teal_data,
+      app = srv_validate_reactive_teal_data,
       args = list(id = "test", data = reactive(teal_data()), modules = "invalid"),
       expr = NULL
     ),
@@ -233,7 +233,7 @@ testthat::test_that("srv_validate_reactive_teal_data validates modules parameter
 testthat::test_that("srv_validate_reactive_teal_data validates validate_shiny_silent_error parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_validate_reactive_teal_data,
+      app = srv_validate_reactive_teal_data,
       args = list(id = "test", data = reactive(teal_data()), validate_shiny_silent_error = "not_logical"),
       expr = NULL
     ),
@@ -243,7 +243,7 @@ testthat::test_that("srv_validate_reactive_teal_data validates validate_shiny_si
 
 testthat::test_that("srv_validate_reactive_teal_data returns reactive when data is valid teal_data", {
   shiny::testServer(
-    srv_validate_reactive_teal_data,
+    app = srv_validate_reactive_teal_data,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris))
@@ -258,7 +258,7 @@ testthat::test_that("srv_validate_reactive_teal_data returns reactive when data 
 
 testthat::test_that("srv_validate_reactive_teal_data hides validation messages when hide_validation_error is TRUE", {
   shiny::testServer(
-    srv_validate_reactive_teal_data,
+    app = srv_validate_reactive_teal_data,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris)),
@@ -273,7 +273,7 @@ testthat::test_that("srv_validate_reactive_teal_data hides validation messages w
 
 testthat::test_that("srv_validate_reactive_teal_data shows validation messages when hide_validation_error is FALSE", {
   shiny::testServer(
-    srv_validate_reactive_teal_data,
+    app = srv_validate_reactive_teal_data,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris)),
@@ -291,7 +291,7 @@ testthat::test_that("srv_validate_reactive_teal_data shows validation messages w
 testthat::test_that("srv_validate_error validates id parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_validate_error,
+      app = srv_validate_error,
       args = list(id = 123, data = reactive(teal_data()), validate_shiny_silent_error = FALSE),
       expr = NULL
     ),
@@ -302,7 +302,7 @@ testthat::test_that("srv_validate_error validates id parameter", {
 testthat::test_that("srv_validate_error validates validate_shiny_silent_error parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_validate_error,
+      app = srv_validate_error,
       args = list(id = "test", data = reactive(teal_data()), validate_shiny_silent_error = "not_logical"),
       expr = NULL
     ),
@@ -312,7 +312,7 @@ testthat::test_that("srv_validate_error validates validate_shiny_silent_error pa
 
 testthat::test_that("srv_validate_error returns NULL when data is valid teal_data", {
   shiny::testServer(
-    srv_validate_error,
+    app = srv_validate_error,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris)),
@@ -332,7 +332,7 @@ testthat::test_that("srv_validate_error displays message for qenv.error", {
   })
   
   shiny::testServer(
-    srv_validate_error,
+    app = srv_validate_error,
     args = list(
       id = "test",
       data = qenv_error_data,
@@ -349,7 +349,7 @@ testthat::test_that("srv_validate_error displays message for regular error", {
   error_data <- reactive(stop("regular error"))
   
   shiny::testServer(
-    srv_validate_error,
+    app = srv_validate_error,
     args = list(
       id = "test",
       data = error_data,
@@ -369,7 +369,7 @@ testthat::test_that("srv_validate_error returns NULL for shiny.silent.error when
   )
   
   shiny::testServer(
-    srv_validate_error,
+    app = srv_validate_error,
     args = list(
       id = "test",
       data = reactive(silent_error),
@@ -387,7 +387,7 @@ testthat::test_that("srv_validate_error returns NULL for shiny.silent.error when
 testthat::test_that("srv_check_class_teal_data validates id parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_check_class_teal_data,
+      app = srv_check_class_teal_data,
       args = list(id = 123, data = reactive(teal_data())),
       expr = NULL
     ),
@@ -397,7 +397,7 @@ testthat::test_that("srv_check_class_teal_data validates id parameter", {
 
 testthat::test_that("srv_check_class_teal_data returns NULL when data is teal_data", {
   shiny::testServer(
-    srv_check_class_teal_data,
+    app = srv_check_class_teal_data,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris))
@@ -411,7 +411,7 @@ testthat::test_that("srv_check_class_teal_data returns NULL when data is teal_da
 
 testthat::test_that("srv_check_class_teal_data returns NULL when data is error", {
   shiny::testServer(
-    srv_check_class_teal_data,
+    app = srv_check_class_teal_data,
     args = list(
       id = "test",
       data = reactive(simpleError("test error"))
@@ -425,7 +425,7 @@ testthat::test_that("srv_check_class_teal_data returns NULL when data is error",
 
 testthat::test_that("srv_check_class_teal_data validates when data is not teal_data or error", {
   shiny::testServer(
-    srv_check_class_teal_data,
+    app = srv_check_class_teal_data,
     args = list(
       id = "test",
       data = reactive("not_teal_data")
@@ -442,7 +442,7 @@ testthat::test_that("srv_check_class_teal_data validates when data is not teal_d
 testthat::test_that("srv_check_module_datanames validates id parameter", {
   testthat::expect_error(
     shiny::testServer(
-      srv_check_module_datanames,
+      app = srv_check_module_datanames,
       args = list(id = 123, data = reactive(teal_data()), modules = NULL),
       expr = NULL
     ),
@@ -452,7 +452,7 @@ testthat::test_that("srv_check_module_datanames validates id parameter", {
 
 testthat::test_that("srv_check_module_datanames returns NULL when data is not teal_data", {
   shiny::testServer(
-    srv_check_module_datanames,
+    app = srv_check_module_datanames,
     args = list(
       id = "test",
       data = reactive("not_teal_data"),
@@ -467,7 +467,7 @@ testthat::test_that("srv_check_module_datanames returns NULL when data is not te
 
 testthat::test_that("srv_check_module_datanames returns NULL when modules datanames match", {
   shiny::testServer(
-    srv_check_module_datanames,
+    app = srv_check_module_datanames,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris, mtcars = mtcars)),
@@ -484,7 +484,7 @@ testthat::test_that("srv_check_module_datanames shows warning when datanames don
   testthat::skip_if_not_installed("rvest")
   
   shiny::testServer(
-    srv_check_module_datanames,
+    app = srv_check_module_datanames,
     args = list(
       id = "test",
       data = reactive(teal_data(iris = iris)),
