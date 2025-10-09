@@ -3,88 +3,93 @@
 #' Primarily used to modify the output object of module to change the containing
 #' report.
 #' @param x (`teal_module`).
-#' @param ui (`function(id, elem, ...)`) function to receive output (`shiny.tag`) from `x$ui`
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
 #' @return A `teal_report` object with the result of the server function.
-#' @export
-after <- function(x,
+#' @keywords internal
+#' @examples
+#' library("teal.reporter")
+#' hide_code <- function(input, output, session, data) {
+#'         teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
+#'         data
+#' }
+#' app <- init(
+#'   data = teal_data(IRIS = iris, MTCARS = mtcars),
+#'   modules = example_module() |>
+#'     after(server = hide_code)
+#' )
+#'
+#' if (interactive()) {
+#'   runApp(app)
+#' }
+after_teal_modules <- function(x,
                   ui = function(id, elem) elem,
                   server = function(input, output, session, data) data,
                   ...) {
+
+    x$children <- lapply(x$children, after_teal_module, ui = ui, server = server, ...) # nolint object_name_lintr
+    x # nolint object_name_lintr
+}
+
+after_teal_module <- function(x, # nolint: object_name
+                              server = function(input, output, session, data) data,
+                              ...) {
   checkmate::assert_multi_class(x, "teal_module")
-  if (!is.function(ui) || !all(names(formals(ui)) %in% c("id", "elem"))) {
-    stop("ui should be a function of id and elem")
-  }
-  if (!is.function(server) || !all(names(formals(server)) %in% c("input", "output", "session", "data"))) {
-    stop("server should be a function of `input` and `output`, `session`, `data`")
+
+  names_srv <- names(formals(server))
+  args_callModule <- c("input", "output", "session", "data")
+  if (!is.function(server) || !(!all(identical(names_srv, c("id", "data"))) || !all(names_srv %in% args_callModule))) {
+    stop("server should be a function of `input`, `output`, `session` and `data`")
   }
 
   additional_args <- list(...)
-  new_x <- x # because overwriting x$ui/server will cause infinite recursion
-  new_x$ui <- .after_ui(x$ui, ui, additional_args)
-  new_x$server <- .after_server(x$server, server, additional_args)
-  new_x
+  x$server <- transform_srv(x$server, server, additional_args)
+  x
 }
 
-.after_ui <- function(x, y, additional_args) {
-  # add `_`-prefix to make sure objects are not masked in the wrapper functions
-  `_x` <- x # nolint: object_name.
-  `_y` <- y # nolint: object_name.
-  new_x <- function(id, ...) {
-    original_args <- as.list(environment())
-    if ("..." %in% names(formals(`_x`))) {
-      original_args <- c(original_args, list(...))
-    }
-    ns <- NS(id)
-    original_args$id <- ns("wrapped")
-    original_out <- do.call(`_x`, original_args, quote = TRUE)
-
-    wrapper_args <- c(
-      additional_args,
-      list(id = ns("wrapper"), elem = original_out)
-    )
-    do.call(`_y`, args = wrapper_args[names(formals(`_y`))])
-  }
-  formals(new_x) <- formals(x)
-  new_x
-}
-
-.after_server <- function(x, y, additional_args) {
-  # add `_`-prefix to make sure objects are not masked in the wrapper functions
-  `_x` <- x # nolint: object_name.
-  `_y` <- y # nolint: object_name.
-  new_x <- function(id, ...) {
+after_srv <- function(old, new, additional_args) {
+  new_srv <- function(id, ...) {
     original_args <- as.list(environment())
     original_args$id <- "wrapped"
-    if ("..." %in% names(formals(`_x`))) {
+    if ("..." %in% names(formals(old))) {
       original_args <- c(original_args, list(...))
     }
+
+    moduleServer_args <- c("input", "output", "session")
+
     moduleServer(id, function(input, output, session) {
-      original_out <- if (all(c("input", "output", "session") %in% names(formals(`_x`)))) {
-        original_args$module <- `_x`
+      old_out <- if (all(moduleServer_args %in% names(formals(old)))) {
+        original_args$module <- old
         do.call(shiny::callModule, args = original_args)
       } else {
-        do.call(`_x`, original_args)
+        do.call(old, original_args)
       }
-      original_out_r <- reactive(
-        if (is.reactive(original_out)) {
-          original_out()
-        } else {
-          original_out
-        }
-      )
+
       wrapper_args <- utils::modifyList(
         additional_args,
         list(id = "wrapper", input = input, output = output, session = session)
       )
-      reactive({
-        req(original_out_r())
-        wrapper_args$data <- original_out()
-        do.call(`_y`, wrapper_args[names(formals(`_y`))], quote = TRUE)
+
+      wrapper_args$data <- reactive({
+        if (is.reactive(old_out)) {
+          req(old_out())
+        } else {
+          old_out
+        }
       })
+
+      # new module can be a function for callModule or a function for moduleServer
+      names_args_new <- names(formals(new))
+      if (all(moduleServer_args %in% names_args_new)) {
+        do.call(new, wrapper_args[names_args_new], quote = TRUE)
+      } else {
+        # Adding the module to the list passed to callModule with valid arguments
+        wrapper_args$module <- new
+        valid_args_new <- unique(c(setdiff(names_args_new, "output"), "module", "id"))
+        do.call(shiny::callModule, args = wrapper_args[valid_args_new], quote = TRUE)
+      }
     })
   }
-  formals(new_x) <- formals(x)
-  new_x
+  formals(new_srv) <- formals(old)
+  new_srv
 }
