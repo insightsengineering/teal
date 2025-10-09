@@ -164,7 +164,8 @@
   border-bottom: 2px solid transparent;
 }
 
-.teal-modules-tree > li > ul > li:has(> a) ~ li::before {
+.teal-modules-tree > li > ul > li:has(> a) ~ li::before,
+.teal-modules-tree > li > ul > li:has(> span) ~ li::before {
   border-left: 2px solid var(--bs-border-color, #bbb);
 }
 

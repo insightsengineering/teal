@@ -134,8 +134,7 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   background: var(--bs-primary-bg-subtle);
 }
 
-.teal.add-reporter-container {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
+[data-bs-toggle="tooltip"].disabled {
+  cursor: not-allowed;
+  color: var(--bs-gray);
 }

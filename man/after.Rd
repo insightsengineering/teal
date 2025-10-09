@@ -12,7 +12,7 @@ after(
 )
 }
 \arguments{
-\item{x}{(\code{teal_module})}
+\item{x}{(\code{teal_module}).}
 
 \item{ui}{(\verb{function(id, elem, ...)}) function to receive output (\code{shiny.tag}) from \code{x$ui}}
 
