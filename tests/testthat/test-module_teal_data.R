@@ -92,7 +92,7 @@ testthat::test_that("srv_teal_data_module initializes is_transform_failed to FAL
       reactive(teal_data(iris = iris))
     })
   }
-  
+
   shiny::testServer(
     app = srv_teal_data_module,
     args = list(
@@ -111,7 +111,7 @@ testthat::test_that("srv_teal_data_module sets is_transform_failed to TRUE when 
       reactive("not_teal_data")
     })
   }
-  
+
   shiny::testServer(
     app = srv_teal_data_module,
     args = list(
@@ -131,7 +131,7 @@ testthat::test_that("srv_teal_data_module sets is_transform_failed to FALSE when
       reactive(teal_data(iris = iris))
     })
   }
-  
+
   shiny::testServer(
     app = srv_teal_data_module,
     args = list(
@@ -151,9 +151,9 @@ testthat::test_that("srv_teal_data_module detects previous failures correctly", 
       reactive(teal_data(iris = iris))
     })
   }
-  
+
   transform_failed <- shiny::reactiveValues(first = TRUE, second = FALSE)
-  
+
   shiny::testServer(
     app = srv_teal_data_module,
     args = list(
@@ -175,7 +175,7 @@ testthat::test_that("srv_teal_data_module calls srv_validate_reactive_teal_data"
       reactive(teal_data(iris = iris))
     })
   }
-  
+
   shiny::testServer(
     app = srv_teal_data_module,
     args = list(
@@ -330,7 +330,7 @@ testthat::test_that("srv_validate_error displays message for qenv.error", {
     result <- within(teal_data(), stop("test error"))
     result
   })
-  
+
   shiny::testServer(
     app = srv_validate_error,
     args = list(
@@ -347,7 +347,7 @@ testthat::test_that("srv_validate_error displays message for qenv.error", {
 
 testthat::test_that("srv_validate_error displays message for regular error", {
   error_data <- reactive(stop("regular error"))
-  
+
   shiny::testServer(
     app = srv_validate_error,
     args = list(
@@ -367,7 +367,7 @@ testthat::test_that("srv_validate_error returns NULL for shiny.silent.error when
     list(message = ""),
     class = c("shiny.silent.error", "error", "condition")
   )
-  
+
   shiny::testServer(
     app = srv_validate_error,
     args = list(
@@ -482,7 +482,7 @@ testthat::test_that("srv_check_module_datanames returns NULL when modules datana
 
 testthat::test_that("srv_check_module_datanames shows warning when datanames don't match", {
   testthat::skip_if_not_installed("rvest")
-  
+
   shiny::testServer(
     app = srv_check_module_datanames,
     args = list(
@@ -516,11 +516,11 @@ testthat::test_that(".trigger_on_success triggers on teal_data", {
     app = function(input, output, session) {
       data <- reactiveVal(NULL)
       result <- .trigger_on_success(data)
-      
+
       observe({
         data(teal_data(iris = iris))
       })
-      
+
       result
     },
     expr = {
@@ -549,17 +549,17 @@ testthat::test_that(".trigger_on_success updates when data changes", {
     app = function(input, output, session) {
       data <- reactiveVal(teal_data(iris = iris))
       result <- .trigger_on_success(data)
-      
+
       observe({
         data(teal_data(mtcars = mtcars))
       })
-      
+
       result
     },
     expr = {
       first_data <- session$returned()()
       testthat::expect_true("iris" %in% names(first_data))
-      
+
       session$flushReact()
       second_data <- session$returned()()
       testthat::expect_true("mtcars" %in% names(second_data))
@@ -573,19 +573,19 @@ testthat::test_that(".trigger_on_success does not update when data is identical"
       td <- teal_data(iris = iris)
       data <- reactiveVal(td)
       result <- .trigger_on_success(data)
-      
+
       counter <- reactiveVal(0)
-      
+
       observe({
         result()
         isolate(counter(counter() + 1))
       })
-      
+
       observe({
         # Set the same data again
         data(td)
       })
-      
+
       list(result = result, counter = counter)
     },
     expr = {
