@@ -200,16 +200,12 @@ add_landing_modal <- function(
 #' @keywords internal
 teal_extend_server <- function(x, custom_server, module_id = character(0)) {
   checkmate::assert_class(x, "teal_app")
-  checkmate::assert_function(custom_server)
+  checkmate::assert_function(custom_server, args = c("input", "output", "session"))
   old_server <- x$server
 
   x$server <- function(input, output, session) {
     old_server(input, output, session)
-    if (all(c("input", "output", "session") %in% names(formals(custom_server)))) {
-      callModule(custom_server, module_id)
-    } else if ("id" %in% names(formals(custom_server))) {
-      custom_server(module_id)
-    }
+    callModule(custom_server, module_id)
   }
   x
 }
