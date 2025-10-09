@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.532431755572251" branch-rate="0" lines-covered="2126" lines-valid="3993" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-10-03 16:39:04.908656">
+<coverage line-rate="0.532431755572251" branch-rate="0" lines-covered="2126" lines-valid="3993" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-10-09 09:41:23.457">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -3948,20 +3948,20 @@
                 <line number="76" hits="81" branch="false"/>
                 <line number="77" hits="81" branch="false"/>
                 <line number="78" hits="81" branch="false"/>
+                <line number="79" hits="81" branch="false"/>
                 <line number="80" hits="81" branch="false"/>
                 <line number="81" hits="81" branch="false"/>
                 <line number="82" hits="81" branch="false"/>
                 <line number="83" hits="81" branch="false"/>
-                <line number="84" hits="81" branch="false"/>
               </lines>
             </method>
             <method name="disable_src" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
+                <line number="107" hits="0" branch="false"/>
                 <line number="108" hits="0" branch="false"/>
                 <line number="109" hits="0" branch="false"/>
                 <line number="110" hits="0" branch="false"/>
                 <line number="111" hits="0" branch="false"/>
-                <line number="112" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -4025,16 +4025,16 @@
             <line number="76" hits="81" branch="false"/>
             <line number="77" hits="81" branch="false"/>
             <line number="78" hits="81" branch="false"/>
+            <line number="79" hits="81" branch="false"/>
             <line number="80" hits="81" branch="false"/>
             <line number="81" hits="81" branch="false"/>
             <line number="82" hits="81" branch="false"/>
             <line number="83" hits="81" branch="false"/>
-            <line number="84" hits="81" branch="false"/>
+            <line number="107" hits="0" branch="false"/>
             <line number="108" hits="0" branch="false"/>
             <line number="109" hits="0" branch="false"/>
             <line number="110" hits="0" branch="false"/>
             <line number="111" hits="0" branch="false"/>
-            <line number="112" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="module_teal_data.R" filename="R/module_teal_data.R" line-rate="0.48993288590604" branch-rate="0" complexity="0">
