@@ -221,3 +221,44 @@ testthat::test_that("init accepts Reporter object", {
     )
   )
 })
+
+# deprecated parameters tests ----
+testthat::test_that("init shows deprecation warning for title parameter", {
+  lifecycle::expect_deprecated(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module()),
+      title = "Deprecated Title"
+    )
+  )
+})
+
+testthat::test_that("init shows deprecation warning for header parameter", {
+  lifecycle::expect_deprecated(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module()),
+      header = tags$div("Deprecated Header")
+    )
+  )
+})
+
+testthat::test_that("init shows deprecation warning for footer parameter", {
+  lifecycle::expect_deprecated(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module()),
+      footer = tags$div("Deprecated Footer")
+    )
+  )
+})
+
+testthat::test_that("init shows deprecation warning for id parameter", {
+  lifecycle::expect_deprecated(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module()),
+      id = "test_id"
+    )
+  )
+})
