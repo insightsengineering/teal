@@ -145,3 +145,79 @@ testthat::test_that("init throws when dataname in filter incompatible w/ datanam
     "Filter 'iris Species' refers to dataname not available in 'data'"
   )
 })
+
+# filter module_specific tests ----
+testthat::test_that("init throws error when filter mapping has invalid module names", {
+  testthat::expect_error(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module(label = "mod1")),
+      filter = teal_slices(
+        teal_slice(dataname = "iris", varname = "Species"),
+        module_specific = TRUE,
+        mapping = list(nonexistent_module = "iris Species")
+      )
+    ),
+    "Some module names in the mapping arguments don't match module labels"
+  )
+})
+
+testthat::test_that("init throws error when modules have duplicate labels with module_specific filter", {
+  testthat::expect_error(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(
+        example_module(label = "duplicate_label"),
+        example_module(label = "duplicate_label")
+      ),
+      filter = teal_slices(
+        teal_slice(dataname = "iris", varname = "Species"),
+        module_specific = TRUE,
+        mapping = list(duplicate_label = "iris Species")
+      )
+    ),
+    "Module labels should be unique when teal_slices\\(mapping = TRUE\\)"
+  )
+})
+
+testthat::test_that("init accepts valid module_specific filter with proper mapping", {
+  testthat::expect_no_error(
+    init(
+      data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+      modules = modules(
+        example_module(label = "iris_module"),
+        example_module(label = "mtcars_module")
+      ),
+      filter = teal_slices(
+        teal_slice(dataname = "iris", varname = "Species"),
+        teal_slice(dataname = "mtcars", varname = "cyl"),
+        module_specific = TRUE,
+        mapping = list(
+          iris_module = "iris Species",
+          global_filters = "mtcars cyl"
+        )
+      )
+    )
+  )
+})
+
+# reporter tests ----
+testthat::test_that("init accepts NULL reporter to disable reporting", {
+  testthat::expect_no_error(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module()),
+      reporter = NULL
+    )
+  )
+})
+
+testthat::test_that("init accepts Reporter object", {
+  testthat::expect_no_error(
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = modules(example_module()),
+      reporter = teal.reporter::Reporter$new()
+    )
+  )
+})
