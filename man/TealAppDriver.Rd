@@ -94,13 +94,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$new(
-  data,
-  modules,
-  filter = teal_slices(),
-  title_args = list(),
-  header = tags$p(),
-  footer = tags$p(),
-  landing_popup_args = NULL,
+  app,
+  options = list(),
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...
@@ -110,9 +105,9 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data, modules, filter}}{arguments passed to \code{init}}
+\item{\code{app}}{(\code{teal_app})}
 
-\item{\code{title_args, header, footer, landing_popup_args}}{to pass into the modifier functions.}
+\item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
 
 \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.
