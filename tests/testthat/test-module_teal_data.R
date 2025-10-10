@@ -149,11 +149,13 @@ testthat::describe("srv_teal with teal_data_module (indirectly tests srv_teal_da
         id = "test",
         data = teal_data_module(
           ui = function(id) tags$div("Data Module UI"),
-          server = function(id) reactive(teal.data::teal_data(
-            iris = iris,
-            mtcars = mtcars,
-            join_keys = teal.data::join_keys(teal.data::join_key("iris", "iris", "Species"))
-          ))
+          server = function(id) {
+            reactive(teal.data::teal_data(
+              iris = iris,
+              mtcars = mtcars,
+              join_keys = teal.data::join_keys(teal.data::join_key("iris", "iris", "Species"))
+            ))
+          }
         ),
         modules = modules(create_test_module()),
         filter = teal_slices(),
