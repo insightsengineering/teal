@@ -1,17 +1,24 @@
 #' Executes modifications to the result of a module
 #'
-#' Primarily used to modify the output object of module to change the containing
-#' report.
-#' @param x (`teal_module`).
-#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `x$server`
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Exported to be able to use methods not to be used directly by module-developers or app-users.
+#' Primarily used to modify the output object of module.
+#' @seealso [disable_src()], [disable_report()]
+#' @param tm (`teal_module`).
+#' @param server (`function(input, output, session, data, ...)`) function to receive output data from `tm$server`.
+#'  Must return data
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
 #' @return A `teal_report` object with the result of the server function.
+#' @export
 #' @keywords internal
+#' @noRd
 #' @examples
 #' library("teal.reporter")
 #' hide_code <- function(input, output, session, data) {
-#'         teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
-#'         data
+#'   teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
+#'   data
 #' }
 #' app <- init(
 #'   data = teal_data(IRIS = iris, MTCARS = mtcars),
@@ -22,19 +29,37 @@
 #' if (interactive()) {
 #'   runApp(app)
 #' }
-after_teal_modules <- function(x,
-                  ui = function(id, elem) elem,
-                  server = function(input, output, session, data) data,
-                  ...) {
-
-    x$children <- lapply(x$children, after_teal_module, ui = ui, server = server, ...) # nolint object_name_lintr
-    x # nolint object_name_lintr
+after <- function(tm,
+                      server = function(input, output, session, data) data,
+                      ...) {
+  UseMethod("after")
 }
 
-after_teal_module <- function(x, # nolint: object_name
+
+#' @export
+after.default <- function(tm,
                               server = function(input, output, session, data) data,
                               ...) {
-  checkmate::assert_multi_class(x, "teal_module")
+  stop("`after` is only implemented for `teal_module` and `teal_modules` objects.")
+}
+
+#' @export
+after.teal_modules <- function(tm,
+                               server = function(input, output, session, data) data,
+                               ...) {
+  tm$children <- lapply(tm$children, after,
+    ui = function(id, elem) {
+      elem
+    }, server = server, ...
+  )
+  tm
+}
+
+#' @export
+after.teal_module <- function(tm,
+                              server = function(input, output, session, data) data,
+                              ...) {
+  checkmate::assert_multi_class(tm, "teal_module")
 
   names_srv <- names(formals(server))
   args_callModule <- c("input", "output", "session", "data")
@@ -43,10 +68,12 @@ after_teal_module <- function(x, # nolint: object_name
   }
 
   additional_args <- list(...)
-  x$ui <- after_ui(x$ui, function(id, elem){elem}, additional_args)
-  x$server <- after_srv(x$server, server, additional_args)
-  x
-  x
+  tm$ui <- after_ui(tm$ui, function(id, elem) {
+    elem
+  }, additional_args)
+  tm$server <- after_srv(tm$server, server, additional_args)
+  tm
+  tm
 }
 
 after_ui <- function(old, new, additional_args) {
