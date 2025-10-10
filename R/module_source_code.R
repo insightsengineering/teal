@@ -93,6 +93,7 @@ srv_source_code <- function(id, module_out) {
 #' @param x (`teal_module`) a `teal_module` object.
 #' @return modified data object that indicates that it should not show the "Show R Code"
 #' button in the UI.
+#' @seealso [disable_report()]
 #' @examples
 #' app <- init(
 #'   data = within(teal_data(), iris <- iris),

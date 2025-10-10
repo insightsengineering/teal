@@ -27,3 +27,6 @@ if (interactive()) {
   shinyApp(app$ui, app$server)
 }
 }
+\seealso{
+\code{\link[=disable_src]{disable_src()}}
+}

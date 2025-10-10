@@ -187,6 +187,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
 #' to the report previewer.
 #' @param x (`teal_module`) a `teal_module` object.
 #' @return modified data object that indicates that it should disable the reporter functionality.
+#' @seealso [disable_src()]
 #' @export
 #' @examples
 #' app <- init(
