@@ -3,14 +3,12 @@ testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: the module server logic is only triggered when the teal module becomes active", {
   skip_if_too_deep(5)
-  value_export_module <- function(label = "custom module") {
+  value_export_module <- function(label = "custom module", value) {
     module(
       label = label,
       server = function(id, data) {
         moduleServer(id, function(input, output, session) {
-          shiny::exportTestValues(
-            value = rnorm(1)
-          )
+          shiny::exportTestValues(value = value)
         })
       },
       ui = function(id) {
@@ -21,21 +19,23 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
   }
 
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      value_export_module(label = "Module 1"),
-      value_export_module(label = "Module 2")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        value_export_module(label = "Module 1", value = 98),
+        value_export_module(label = "Module 2", value = 99)
+      )
     )
   )
 
-  test_exports <- app$get_values()$export
+  expected_values <- list(
+    `teal-teal_modules-nav-module_1-value` = 98,
+    `teal-teal_modules-nav-module_2-value` = 99
+  )
 
-  expect_equal(length(test_exports), 1)
-
+  testthat::expect_identical(expected_values %in% app$get_values()$export, c(TRUE, FALSE))
   app$navigate_teal_tab("Module 2")
-  test_exports <- app$get_values()$export
-
-  expect_equal(length(test_exports), 2)
+  testthat::expect_identical(expected_values %in% app$get_values()$export, c(TRUE, TRUE))
   app$stop()
 })
 
@@ -43,9 +43,11 @@ testthat::test_that("e2e: the module server logic is only triggered when the tea
 testthat::test_that("e2e: filter panel only shows the data supplied using datanames", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "mtcars", datanames = "mtcars")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "mtcars", datanames = "mtcars")
+      )
     )
   )
 
@@ -59,9 +61,11 @@ testthat::test_that("e2e: filter panel only shows the data supplied using datana
 testthat::test_that("e2e: filter panel shows all the datasets when datanames is all", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "all", datanames = "all")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "all", datanames = "all")
+      )
     )
   )
 
@@ -73,17 +77,19 @@ testthat::test_that("e2e: filter panel shows all the datasets when datanames is 
 testthat::test_that("e2e: nested modules layout in navigation respect order and keeps group names", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "Example Module"),
-      modules(
-        label = "Nested Modules",
-        example_module(label = "Nested 1.1"),
-        example_module(label = "Nested 1.2"),
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "Example Module"),
         modules(
-          label = "Sub Nested Modules",
-          example_module(label = "Nested 2.1"),
-          example_module(label = "Nested 2.2")
+          label = "Nested Modules",
+          example_module(label = "Nested 1.1"),
+          example_module(label = "Nested 1.2"),
+          modules(
+            label = "Sub Nested Modules",
+            example_module(label = "Nested 2.1"),
+            example_module(label = "Nested 2.2")
+          )
         )
       )
     )
