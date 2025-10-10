@@ -48,6 +48,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
+      checkmate::assert_class(app, c("teal_app", "list"))
+      if (inherits(app, "list")) {
+        checkmate::assert_names(
+          names(app),
+          must.include = c("ui", "server"),
+          subset.of = c("ui", "server")
+        )
+        checkmate::assert_function(app$server, args = c("input", "output", "session"))
+        checkmate::assert_class(app$ui, "shiny.tag")
+      }
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # It must be set as parameter to the AppDriver
       suppressWarnings(
