@@ -172,5 +172,3 @@ testthat::describe("srv_validate_reactive_teal_data", {
     )
   })
 })
-
-
