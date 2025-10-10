@@ -7,9 +7,9 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- modify_title(app, title = "Test Title")
-    
+
     testthat::expect_s3_class(modified_app, "teal_app")
   })
 
@@ -18,7 +18,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_title(app, title = "Custom Title")
     )
@@ -29,7 +29,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_title(app, title = tags$span("Custom Title"))
     )
@@ -40,7 +40,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_title(app, title = tagList(tags$span("Title")))
     )
@@ -51,7 +51,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_title(app, title = HTML("<b>HTML Title</b>"))
     )
@@ -62,7 +62,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_title(app, title = "Test", favicon = NULL)
     )
@@ -73,7 +73,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_title(app, title = "Test", favicon = "path/to/favicon.png")
     )
@@ -91,7 +91,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_error(
       modify_title(app, title = 123),
       "Assertion on 'title' failed"
@@ -103,7 +103,7 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_error(
       modify_title(app, title = "Test", favicon = 123),
       "Assertion on 'favicon' failed"
@@ -115,9 +115,9 @@ testthat::describe("modify_title", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- modify_title(app, title = "Test Title")
-    
+
     testthat::expect_no_error({
       ui_result <- modified_app$ui(request = NULL)
     })
@@ -130,9 +130,9 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- modify_header(app, element = tags$p("Test Header"))
-    
+
     testthat::expect_s3_class(modified_app, "teal_app")
   })
 
@@ -141,7 +141,7 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_header(app, element = tags$div("Header"))
     )
@@ -152,7 +152,7 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_header(app, element = tagList(tags$h3("Header")))
     )
@@ -163,7 +163,7 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_header(app, element = "Simple Header")
     )
@@ -174,7 +174,7 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_header(app, element = HTML("<div>HTML Header</div>"))
     )
@@ -185,7 +185,7 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_header(app)
     )
@@ -203,7 +203,7 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_error(
       modify_header(app, element = 123),
       "Assertion on 'element' failed"
@@ -215,9 +215,9 @@ testthat::describe("modify_header", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- modify_header(app, element = tags$div("Header"))
-    
+
     testthat::expect_no_error({
       ui_result <- modified_app$ui(request = NULL)
     })
@@ -230,9 +230,9 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- modify_footer(app, element = tags$p("Test Footer"))
-    
+
     testthat::expect_s3_class(modified_app, "teal_app")
   })
 
@@ -241,7 +241,7 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_footer(app, element = tags$div("Footer"))
     )
@@ -252,7 +252,7 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_footer(app, element = tagList(tags$p("Footer")))
     )
@@ -263,7 +263,7 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_footer(app, element = "Simple Footer")
     )
@@ -274,7 +274,7 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_footer(app, element = HTML("<div>HTML Footer</div>"))
     )
@@ -285,7 +285,7 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       modify_footer(app)
     )
@@ -303,7 +303,7 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_error(
       modify_footer(app, element = 123),
       "Assertion on 'element' failed"
@@ -315,9 +315,9 @@ testthat::describe("modify_footer", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- modify_footer(app, element = tags$div("Footer"))
-    
+
     testthat::expect_no_error({
       ui_result <- modified_app$ui(request = NULL)
     })
@@ -330,13 +330,13 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- add_landing_modal(
       app,
       title = "Welcome",
       content = "Test content"
     )
-    
+
     testthat::expect_s3_class(modified_app, "teal_app")
   })
 
@@ -345,7 +345,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, title = "Welcome")
     )
@@ -356,7 +356,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, title = NULL)
     )
@@ -367,7 +367,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, content = "Modal content")
     )
@@ -378,7 +378,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, content = tags$p("Modal content"))
     )
@@ -389,7 +389,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, content = tagList(tags$p("Content")))
     )
@@ -400,7 +400,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, content = HTML("<p>HTML content</p>"))
     )
@@ -411,7 +411,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, content = NULL)
     )
@@ -422,7 +422,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(
         app,
@@ -436,7 +436,7 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       add_landing_modal(app, title = "Test")
     )
@@ -454,14 +454,14 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- add_landing_modal(
       app,
       title = "Test Title",
       content = "Test Content",
       footer = modalButton("Close")
     )
-    
+
     testthat::expect_no_error(
       shiny::testServer(
         app = modified_app$server,
@@ -477,14 +477,14 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- add_landing_modal(
       app,
       title = "Test",
       content = tags$p("Tag content"),
       footer = tags$div(modalButton("OK"))
     )
-    
+
     testthat::expect_no_error(
       shiny::testServer(
         app = modified_app$server,
@@ -500,13 +500,13 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- add_landing_modal(
       app,
       title = NULL,
       content = NULL
     )
-    
+
     testthat::expect_no_error(
       shiny::testServer(
         app = modified_app$server,
@@ -522,13 +522,13 @@ testthat::describe("add_landing_modal", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- add_landing_modal(
       app,
       title = "Test",
       content = tagList(tags$p("First"), tags$p("Second"))
     )
-    
+
     testthat::expect_no_error(
       shiny::testServer(
         app = modified_app$server,
@@ -546,7 +546,7 @@ testthat::describe("function chaining", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       app |>
         modify_title(title = "Chained Title") |>
@@ -560,7 +560,7 @@ testthat::describe("function chaining", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     testthat::expect_no_error(
       app |>
         modify_title(title = "Test") |>
@@ -573,13 +573,13 @@ testthat::describe("function chaining", {
       data = teal.data::teal_data(iris = iris),
       modules = modules(example_module())
     )
-    
+
     modified_app <- app |>
       modify_title(title = "Complete App") |>
       modify_header(element = tags$div("App Header")) |>
       modify_footer(element = tags$div("App Footer")) |>
       add_landing_modal(title = "Welcome", content = "Please read the instructions")
-    
+
     testthat::expect_s3_class(modified_app, "teal_app")
   })
 })
