@@ -6,9 +6,11 @@ testthat::describe("bookmark_manager_button is", {
   it("not rendered by default", {
     skip_if_too_deep(5)
     app <- TealAppDriver$new(
-      data = simple_teal_data(),
-      modules = example_module(label = "Example Module"),
-      options = list()
+      init(
+        data = simple_teal_data(),
+        modules = example_module(label = "Example Module"),
+        options = list()
+      )
     )
     testthat::expect_null(app$get_html(bookmark_manager_selector))
     app$stop()
@@ -17,9 +19,11 @@ testthat::describe("bookmark_manager_button is", {
   it("not rendered when enableBookmarking = 'url'", {
     skip_if_too_deep(5)
     app <- TealAppDriver$new(
-      data = simple_teal_data(),
-      modules = example_module(label = "Example Module"),
-      options = list(shiny.bookmarkStore = "url")
+      init(
+        data = simple_teal_data(),
+        modules = example_module(label = "Example Module"),
+        options = list(shiny.bookmarkStore = "url")
+      )
     )
     testthat::expect_null(app$get_html(bookmark_manager_selector))
     app$stop()
@@ -28,9 +32,11 @@ testthat::describe("bookmark_manager_button is", {
   it("rendered when enableBookmarking = 'server'", {
     skip_if_too_deep(5)
     app <- TealAppDriver$new(
-      data = simple_teal_data(),
-      modules = example_module(label = "Example Module"),
-      options = list(shiny.bookmarkStore = "server")
+      init(
+        data = simple_teal_data(),
+        modules = example_module(label = "Example Module"),
+        options = list(shiny.bookmarkStore = "server")
+      )
     )
     testthat::expect_type(app$get_html(bookmark_manager_selector), "character")
     app$stop()
@@ -40,9 +46,11 @@ testthat::describe("bookmark_manager_button is", {
 testthat::test_that("bookmark_manager_button shows modal with url containing state_id when clicked", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module"),
-    options = list(shiny.bookmarkStore = "server")
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Example Module"),
+      options = list(shiny.bookmarkStore = "server")
+    )
   )
   bookmark_button_id <- app$get_attr(bookmark_manager_selector, "id")
   app$click(bookmark_button_id)

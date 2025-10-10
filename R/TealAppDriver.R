@@ -1,5 +1,3 @@
-# FilteredData ------
-
 #' Drive a `teal` application
 #'
 #' Extension of the `shinytest2::AppDriver` class with methods for
@@ -27,8 +25,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param data,modules,filter arguments passed to `init`
-    #' @param title_args,header,footer,landing_popup_args to pass into the modifier functions.
+    #' @param app (`teal_app`)
+    #' @param options (`list`) passed to `shinyApp(options)`. See [shiny::shinyApp()].
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
     #' Defaults to 20s.
@@ -44,65 +42,21 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #'
     #' @return  Object of class `TealAppDriver`
-    initialize = function(data,
-                          modules,
-                          filter = teal_slices(),
-                          title_args = list(),
-                          header = tags$p(),
-                          footer = tags$p(),
-                          landing_popup_args = NULL,
+    initialize = function(app,
+                          options = list(),
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
-      private$data <- data
-      private$modules <- modules
-      private$filter <- filter
-
-      new_title <- modifyList(
-        list(
-          title = "Custom Teal App Title",
-          favicon = .teal_favicon
-        ),
-        title_args
-      )
-      app <- init(
-        data = data,
-        modules = modules,
-        filter = filter
-      ) |>
-        modify_title(title = new_title$title, favicon = new_title$favicon) |>
-        modify_header(header) |>
-        modify_footer(footer)
-
-      if (!is.null(landing_popup_args)) {
-        default_args <- list(
-          title = NULL,
-          content = NULL,
-          footer = modalButton("Accept")
-        )
-        landing_popup_args[names(default_args)] <- Map(
-          function(x, y) if (is.null(y)) x else y,
-          default_args,
-          landing_popup_args[names(default_args)]
-        )
-        app <- add_landing_modal(
-          app,
-          title = landing_popup_args$title,
-          content = landing_popup_args$content,
-          footer = landing_popup_args$footer
-        )
-      }
-
+      checkmate::assert_class(app, "teal_app")
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # It must be set as parameter to the AppDriver
       suppressWarnings(
         super$initialize(
-          app_dir = shinyApp(app$ui, app$server),
+          shiny::shinyApp(ui = app$ui, server = app$server, options = options),
           name = "teal",
           variant = shinytest2::platform_variant(),
           timeout = rlang::maybe_missing(timeout, 20 * 1000),
-          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000),
-          ...
+          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000)
         )
       )
 
@@ -701,6 +655,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
       active_base_id <- sub("-wrapper$", "", active_wrapper_id)
 
+      private$ns$module_container <- active_base_id
       private$ns$module <- shiny::NS(active_base_id, "module")
       private$ns$filter_panel <- shiny::NS(active_base_id, "filter_panel")
       private$ns$data_summary <- shiny::NS(active_base_id, "data_summary")

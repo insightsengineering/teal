@@ -17,33 +17,16 @@ NULL
 #' @rdname teal_modifiers
 #' @keywords internal
 #' @noRd
-#' @param x One of:
-#'   - A `teal_app` object created using the `init` function.
-#'   - A `teal_module`, `teal_data_module`, or `teal_transform_module` object.
-#'   - A Shiny module UI function with `id` parameter
+#' @param x `teal_app` object created using the `init` function.
 #' @param selector (`character(1)`) CSS selector to find elements to replace
 teal_replace_ui <- function(x, selector, element) {
-  if (inherits(x, c("teal_app", "teal_module", "teal_data_module", "teal_transform_module"))) {
-    x$ui <- teal_replace_ui(x$ui, selector, element)
-    x
-  } else if (checkmate::test_function(x, args = "request")) {
-    # shiny ui function from teal_app
-    function(request) {
-      ui_tq <- htmltools::tagQuery(x(request = request))
-      ui_tq$find(selector)$empty()$append(element)$allTags()
-    }
-  } else if (checkmate::test_function(x, args = "id")) {
-    # shiny module ui function
-    function(id, ...) {
-      ui_tq <- htmltools::tagQuery(x(id = id, ...))
-      if (grepl("^#[a-zA-Z0-9_-]+$", selector)) {
-        selector <- paste0("#", NS(id, gsub("^#", "", selector)))
-      }
-      ui_tq$find(selector)$empty()$append(element)$allTags()
-    }
-  } else {
-    stop("Invalid UI object")
+  checkmate::assert_class(x, "teal_app")
+  new_x <- x
+  new_x$ui <- function(request) {
+    ui_tq <- htmltools::tagQuery(x$ui(request = request))
+    ui_tq$find(selector)$empty()$append(element)$allTags()
   }
+  new_x
 }
 
 #' @rdname teal_modifiers
