@@ -27,8 +27,10 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
   )
 
   app <- TealAppDriver$new(
-    data = teal.data::teal_data(x = "Text Input"),
-    modules = example_module(label = "Example Module", decorators = list(interactive_decorator))
+    init(
+      data = teal.data::teal_data(x = "Text Input"),
+      modules = example_module(label = "Example Module", decorators = list(interactive_decorator))
+    )
   )
 
   app$navigate_teal_tab("Example Module")
@@ -85,8 +87,10 @@ testthat::test_that("e2e: module with decorator, where server fails,  shows shin
     }
   )
   app <- TealAppDriver$new(
-    data = teal.data::teal_data(iris = iris),
-    modules = example_module(label = "Example Module", decorators = list(failing_decorator))
+    init(
+      data = teal.data::teal_data(iris = iris),
+      modules = example_module(label = "Example Module", decorators = list(failing_decorator))
+    )
   )
 
   app$navigate_teal_tab("Example Module")

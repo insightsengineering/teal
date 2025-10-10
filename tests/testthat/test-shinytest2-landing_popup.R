@@ -4,12 +4,14 @@ testthat::skip_if_not_installed("rvest")
 testthat::test_that("e2e: teal app with landing_popup_module initializes with no errors", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(example_module()),
-    landing_popup_args = list(
-      title = "Welcome",
-      content = tags$b("A welcome message!", style = "color: red;")
-    )
+    init(
+      data = simple_teal_data(),
+      modules = modules(example_module())
+    ) |>
+      add_landing_modal(
+        title = "Welcome",
+        content = tags$b("A welcome message!", style = "color: red;")
+      )
   )
 
   testthat::expect_equal(
@@ -22,11 +24,13 @@ testthat::test_that("e2e: teal app with landing_popup_module initializes with no
 testthat::test_that("e2e: app with default landing_popup_module creates modal containing a button", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module()
-    ),
-    landing_popup_args = list()
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module()
+      )
+    ) |>
+      add_landing_modal()
   )
 
   testthat::expect_equal(
@@ -40,11 +44,13 @@ testthat::test_that("e2e: app with default landing_popup_module creates modal co
 testthat::test_that("e2e: when default landing_popup_module is closed, it shows the underlying teal app", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module()
-    ),
-    landing_popup_args = list()
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module()
+      )
+    ) |>
+      add_landing_modal()
   )
 
   # Button is clicked.
@@ -65,27 +71,29 @@ testthat::test_that(
     skip_if_too_deep(5)
 
     app <- TealAppDriver$new(
-      data = simple_teal_data(),
-      modules = modules(
-        example_module()
-      ),
-      landing_popup_args = list(
-        title = "Custom Landing Popup Module Title",
-        content = tags$b("A welcome message!", style = "color: red;"),
-        footer = tagList(
-          shiny::modalButton("Proceed"),
-          shiny::actionButton(
-            "read",
-            label = "Read more",
-            onclick = "window.open('http://google.com', '_blank')"
-          ),
-          shiny::actionButton(
-            "close",
-            label = "Reject",
-            onclick = "window.close()"
+      init(
+        data = simple_teal_data(),
+        modules = modules(
+          example_module()
+        )
+      ) |>
+        add_landing_modal(
+          title = "Custom Landing Popup Module Title",
+          content = tags$b("A welcome message!", style = "color: red;"),
+          footer = tagList(
+            shiny::modalButton("Proceed"),
+            shiny::actionButton(
+              "read",
+              label = "Read more",
+              onclick = "window.open('http://google.com', '_blank')"
+            ),
+            shiny::actionButton(
+              "close",
+              label = "Reject",
+              onclick = "window.close()"
+            )
           )
         )
-      )
     )
 
     testthat::expect_equal(
@@ -130,13 +138,15 @@ testthat::test_that(
 testthat::test_that("e2e: when customized button in landing_popup_module is clicked, it redirects to a certain page", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module()
-    ),
-    landing_popup_args = list(
-      footer = actionButton("read", "Read more", onclick = "window.open('http://google.com', '_blank')")
-    )
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module()
+      )
+    ) |>
+      add_landing_modal(
+        footer = actionButton("read", "Read more", onclick = "window.open('http://google.com', '_blank')")
+      )
   )
 
   testthat::expect_equal(

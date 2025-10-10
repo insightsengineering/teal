@@ -4,8 +4,10 @@ testthat::skip_if_not_installed("rvest")
 testthat::test_that("e2e: teal app initializes with no errors", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module")
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Example Module")
+    )
   )
   app$expect_no_shiny_error()
   app$expect_screenshot(selector = "#teal-tabpanel_wrapper")
@@ -15,8 +17,10 @@ testthat::test_that("e2e: teal app initializes with no errors", {
 testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module")
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Example Module")
+    )
   )
 
   # Check if button exists.
@@ -70,15 +74,16 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
 testthat::test_that("e2e: init creates UI containing specified title, favicon, header and footer", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module"),
-    title_args = list(
-      title = "Custom Teal App Title",
-      something_else = "asdfsdf",
-      favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
-    ),
-    header = "Custom Teal App Header",
-    footer = "Custom Teal App Footer"
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Example Module")
+    ) |>
+      modify_title(
+        title = "Custom Teal App Title",
+        favicon = "https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/PNG/teal.png"
+      ) |>
+      modify_header(element = "Custom Teal App Header") |>
+      modify_footer(element = "Custom Teal App Footer")
   )
 
   testthat::expect_equal(

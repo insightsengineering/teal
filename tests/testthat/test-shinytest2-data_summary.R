@@ -1,8 +1,10 @@
 testthat::test_that("e2e: data summary just list the unfilterable objects at the bottom when provided", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = teal.data::teal_data(x = 1, y = "z", foo = function() NULL),
-    modules = example_module()
+    init(
+      data = teal.data::teal_data(x = 1, y = "z", foo = function() NULL),
+      modules = example_module()
+    )
   )
 
   testthat::expect_match(
@@ -16,8 +18,10 @@ testthat::test_that("e2e: data summary just list the unfilterable objects at the
 testthat::test_that("e2e: data summary table is displayed with 2 columns data without keys", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(), # iris, mtcars
-    modules = example_module()
+    init(
+      data = simple_teal_data(), # iris, mtcars
+      modules = example_module()
+    )
   )
 
   testthat::expect_identical(
@@ -41,7 +45,7 @@ testthat::test_that("e2e: data summary table displays datasets by topological_so
     teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
   )
 
-  app <- TealAppDriver$new(data = data, modules = example_module())
+  app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table())[["Data Name"]],
@@ -60,7 +64,7 @@ testthat::test_that("e2e: data summary table is displayed with 3 columns for dat
     teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
   )
 
-  app <- TealAppDriver$new(data = data, modules = example_module())
+  app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table()),
@@ -96,7 +100,7 @@ testthat::test_that("e2e: data summary table does not list unsupported objects",
     teal.data::join_key("mtcars2", "mtcars1", keys = c("am"))
   )
 
-  app <- TealAppDriver$new(data = data, modules = example_module())
+  app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table()),
@@ -119,7 +123,7 @@ testthat::test_that("e2e: data summary table displays datasets by names() order 
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
 
-  app <- TealAppDriver$new(data = data, modules = example_module())
+  app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   testthat::expect_identical(
     as.data.frame(app$get_active_data_summary_table())[["Data Name"]],
@@ -133,7 +137,7 @@ testthat::test_that("e2e: data summary UI can be collpased and expanded (`bslib`
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
-  app <- TealAppDriver$new(data = data, modules = example_module())
+  app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   # Visible by default
   testthat::expect_true(app$is_visible(".teal-active-data-summary-panel .accordion-collapse"))
