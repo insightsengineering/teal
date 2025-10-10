@@ -579,11 +579,11 @@ testthat::describe(".trigger_on_success", {
       app = function(input, output, session) {
         data_reactive <- reactive(teal.data::teal_data(iris = iris))
         trigger_out <- .trigger_on_success(data_reactive)
-        
+
         # Trigger the reactive to activate observeEvent
         data_reactive()
         session$flushReact()
-        
+
         # Test the reactive value
         result <- trigger_out()
         testthat::expect_s4_class(result, "teal_data")
@@ -599,11 +599,11 @@ testthat::describe(".trigger_on_success", {
       app = function(input, output, session) {
         data_reactive <- reactive("not_teal_data")
         trigger_out <- .trigger_on_success(data_reactive)
-        
+
         # Trigger the reactive to activate observeEvent
         data_reactive()
         session$flushReact()
-        
+
         # Test the reactive value
         result <- trigger_out()
         testthat::expect_null(result)
@@ -619,11 +619,11 @@ testthat::describe(".trigger_on_success", {
       app = function(input, output, session) {
         data_reactive <- reactive(tryCatch(stop("test error"), error = function(e) e))
         trigger_out <- .trigger_on_success(data_reactive)
-        
+
         # Trigger the reactive to activate observeEvent
         data_reactive()
         session$flushReact()
-        
+
         # Test the reactive value
         result <- trigger_out()
         testthat::expect_null(result)
@@ -639,13 +639,13 @@ testthat::describe(".trigger_on_success", {
       app = function(input, output, session) {
         data_val <- reactiveVal(teal.data::teal_data(iris = iris))
         trigger_out <- .trigger_on_success(data_val)
-        
+
         # Initial trigger
         data_val()
         session$flushReact()
         result1 <- trigger_out()
         testthat::expect_s4_class(result1, "teal_data")
-        
+
         # Update data
         data_val(teal.data::teal_data(mtcars = mtcars))
         session$flushReact()
@@ -664,13 +664,13 @@ testthat::describe(".trigger_on_success", {
       app = function(input, output, session) {
         data_val <- reactiveVal(teal.data::teal_data(iris = iris))
         trigger_out <- .trigger_on_success(data_val)
-        
+
         # Initial trigger
         data_val()
         session$flushReact()
         initial_data <- trigger_out()
         testthat::expect_s4_class(initial_data, "teal_data")
-        
+
         # Set same data again
         data_val(initial_data)
         session$flushReact()
