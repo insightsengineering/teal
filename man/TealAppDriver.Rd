@@ -105,7 +105,8 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{app}}{(\code{teal_app})}
+\item{\code{app}}{(\code{teal_app} or \code{list}) Accept the object created by the \code{init()} function or
+a list of \code{ui} and \code{server} elements that contains teal as a shiny module.}
 
 \item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
 

@@ -25,7 +25,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param app (`teal_app`)
+    #' @param app (`teal_app` or `list`) Accept the object created by the `init()` function or
+    #' a list of `ui` and `server` elements that contains teal as a shiny module.
     #' @param options (`list`) passed to `shinyApp(options)`. See [shiny::shinyApp()].
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
