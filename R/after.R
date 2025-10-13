@@ -62,7 +62,7 @@ after.teal_module <- function(tm,
   checkmate::assert_multi_class(tm, "teal_module")
 
   names_srv <- names(formals(server))
-  args_callModule <- c("input", "output", "session", "data")
+  args_callModule <- c("input", "output", "session", "data") # nolint object_name_linter.
   if (!is.function(server) || !(!all(identical(names_srv, c("id", "data"))) || !all(names_srv %in% args_callModule))) {
     stop("server should be a function of `input`, `output`, `session` and `data`")
   }
