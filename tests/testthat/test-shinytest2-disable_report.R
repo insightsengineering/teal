@@ -1,8 +1,8 @@
 testthat::describe("srv_teal teal_modules disable_report", {
-  testthat::skip_if_not_installed("shinytest2")
-  skip_if_too_deep(5)
 
   testthat::it("Button is active on a module", {
+    testthat::skip_if_not_installed("shinytest2")
+    skip_if_too_deep(5)
     app <- TealAppDriver$new(
       data = simple_teal_data(),
       modules = example_module(label = "m1")
@@ -17,6 +17,8 @@ testthat::describe("srv_teal teal_modules disable_report", {
     app$stop()
   })
   testthat::it("Button is disable on a module", {
+    testthat::skip_if_not_installed("shinytest2")
+    skip_if_too_deep(5)
     app <- TealAppDriver$new(
       data = simple_teal_data(),
       modules = example_module(label = "m1") |> disable_report()
@@ -32,6 +34,8 @@ testthat::describe("srv_teal teal_modules disable_report", {
   })
 
   testthat::it("Button is active on nested module", {
+    testthat::skip_if_not_installed("shinytest2")
+    skip_if_too_deep(5)
     app <- TealAppDriver$new(
       data = simple_teal_data(),
       modules = modules(
@@ -49,6 +53,8 @@ testthat::describe("srv_teal teal_modules disable_report", {
   })
 
   testthat::it("Disables button on nested modules", {
+    testthat::skip_if_not_installed("shinytest2")
+    skip_if_too_deep(5)
     app <- TealAppDriver$new(
       data = simple_teal_data(),
       modules = modules(
