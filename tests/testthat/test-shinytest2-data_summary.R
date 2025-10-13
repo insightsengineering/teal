@@ -7,9 +7,6 @@ testthat::test_that("e2e: data summary just list the unfilterable objects at the
     )
   )
 
-
-
-
   testthat::expect_match(
     app$get_text(app$namespaces(TRUE)$data_summary("table")),
     "And 3 more unfilterable object"
