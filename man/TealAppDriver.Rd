@@ -224,10 +224,21 @@ The \code{TealAppDriver} object invisibly.
 \if{html}{\out{<a id="method-TealAppDriver-namespaces"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-namespaces}{}}}
 \subsection{Method \code{namespaces()}}{
+\code{NS} in different sections of \code{teal} app
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$namespaces(cssSelector = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{cssSelector}}{(\code{logical(1)}) whether \code{ns} function should prefix with \verb{#}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+list of \code{ns}.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_input"></a>}}
