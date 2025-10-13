@@ -136,7 +136,13 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     set_input = function(input_id, value, ...) {
       do.call(
         self$set_inputs,
-        c(setNames(list(value), input_id), list(...))
+        c(
+          setNames(
+            list(value),
+            input_id
+          ),
+          list(...)
+        )
       )
       invisible(self)
     },
@@ -159,6 +165,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$set_active_ns()
       invisible(self)
     },
+    namespaces = function(cssSelector = FALSE) {
+      ns_fun <- if (cssSelector) {
+        function(id) shiny::NS(sprintf("#%s", id))
+      } else {
+        shiny::NS
+      }
+
+      lapply(private$ns, ns_fun)
+    },
+
     #' @description
     #' Get the active shiny name space for different components of the teal app.
     #'
@@ -187,7 +203,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return (`string`) The active shiny name space of the component bound with the input `element`.
     active_module_element = function(element) {
       checkmate::assert_string(element)
-      sprintf("#%s-%s", self$active_module_ns(), element)
+      self$namespaces(TRUE)$module(element)
     },
     #' @description
     #' Get the text of the active shiny name space bound with a custom `element` name.
@@ -197,7 +213,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return (`string`) The text of the active shiny name space of the component bound with the input `element`.
     active_module_element_text = function(element) {
       checkmate::assert_string(element)
-      self$get_text(self$active_module_element(element))
+      self$get_text(
+        self$namespaces(TRUE)$module(element)
+      )
     },
     #' @description
     #' Get the active shiny name space for interacting with the filter panel.
@@ -227,7 +245,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return (`string`) The active shiny name space of the component bound with the input `element`.
     active_data_summary_element = function(element) {
       checkmate::assert_string(element)
-      sprintf("#%s-%s", self$active_data_summary_ns(), element)
+      self$namespaces(TRUE)$data_summary(element)
     },
     #' @description
     #' Get the input from the module in the `teal` app.
@@ -238,7 +256,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return The value of the shiny input.
     get_active_module_input = function(input_id) {
       checkmate::check_string(input_id)
-      self$get_value(input = sprintf("%s-%s", self$active_module_ns(), input_id))
+      self$get_value(input = self$namespaces()$module(input_id))
     },
     #' @description
     #' Get the output from the module in the `teal` app.
@@ -249,7 +267,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return The value of the shiny output.
     get_active_module_output = function(output_id) {
       checkmate::check_string(output_id)
-      self$get_value(output = sprintf("%s-%s", self$active_module_ns(), output_id))
+      self$get_value(output = self$namespaces()$module(output_id))
     },
     #' @description
     #' Get the output from the module's `teal.widgets::table_with_settings` or `DT::DTOutput` in the `teal` app.
@@ -264,7 +282,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_number(which, lower = 1)
       checkmate::check_string(table_id)
       table <- rvest::html_table(
-        self$get_html_rvest(self$active_module_element(table_id)),
+        self$get_html_rvest(self$namespaces(TRUE)$module(table_id)),
         fill = TRUE
       )
       if (length(table) == 0) {
@@ -283,7 +301,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     get_active_module_plot_output = function(plot_id) {
       checkmate::check_string(plot_id)
       self$get_attr(
-        self$active_module_element(sprintf("%s-plot_main > img", plot_id)),
+        self$namespaces()$module(sprintf("%s-plot_main > img", plot_id)),
         "src"
       )
     },
@@ -300,7 +318,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_string(input_id)
       checkmate::check_string(value)
       self$set_input(
-        sprintf("%s-%s", self$active_module_ns(), input_id),
+        self$namespaces()$module(input_id),
         value,
         ...
       )
@@ -312,7 +330,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' Get the active datasets that can be accessed via the filter panel of the current active teal module.
     get_active_filter_vars = function() {
       displayed_datasets_index <- self$is_visible(
-        sprintf("#%s-filters-filter_active_vars_contents > div > span", self$active_filters_ns())
+        self$namespaces(TRUE)$filter_panel("filters-filter_active_vars_contents > div > span")
       )
 
       js_code <- sprintf(
@@ -328,7 +346,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           });
           textContents;
         ",
-        self$active_filters_ns()
+        self$namespaces()$filter_panel(NULL)
       )
       available_datasets <- unlist(self$get_js(js_code))
 
@@ -339,12 +357,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return `data.frame`
     get_active_data_summary_table = function() {
       summary_table <- rvest::html_table(
-        self$get_html_rvest(self$active_data_summary_element("table")),
+        self$get_html_rvest(
+          self$namspaces(TRUE)$data_summary("table")
+        ),
         fill = TRUE
       )[[1]]
 
-      col_names <- unlist(summary_table[1, ], use.names = FALSE)
-      summary_table <- summary_table[-1, ]
+      col_names <- unlist(summary_table[1, , drop = FALSE], use.names = FALSE)
+      summary_table <- summary_table[-1, , drop = FALSE]
       colnames(summary_table) <- col_names
       if (nrow(summary_table) > 0) {
         summary_table
@@ -405,11 +425,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             pattern = "\\s",
             replacement = "",
             self$get_text(
-              sprintf(
-                "#%s-filters-%s-container .filter-card-varname",
-                self$active_filters_ns(),
-                x
-              )
+              self$namespaces(TRUE)$filter_panel(sprintf("filters-%s-container .filter-card-varname", x))
             )
           )
           structure(
@@ -468,23 +484,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_string(dataset_name, null.ok = TRUE)
       checkmate::check_string(var_name, null.ok = TRUE)
       if (is.null(dataset_name)) {
-        remove_selector <- sprintf(
-          "#%s-active-remove_all_filters",
-          self$active_filters_ns()
-        )
+        remove_selector <- self$namespaces(TRUE)$filter_panel("active-remove_all_filters")
       } else if (is.null(var_name)) {
-        remove_selector <- sprintf(
-          "#%s-active-%s-remove_filters",
-          self$active_filters_ns(),
-          dataset_name
+        remove_selector <- self$namespaces(TRUE)$filter_panel(
+          sprintf("active-%s-remove_filters", dataset_name)
         )
       } else {
-        remove_selector <- sprintf(
-          "#%s-active-%s-filter-%s_%s-remove",
-          self$active_filters_ns(),
-          dataset_name,
-          dataset_name,
-          var_name
+        remove_selector <- self$namespaces(TRUE)$filter_panel(
+          sprintf("active-%1$s-filter-%1$s_%s-remove", dataset_name, var_name)
         )
       }
       self$click(
@@ -509,13 +516,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       checkmate::check_string(var_name)
       checkmate::check_string(input)
 
-      input_id_prefix <- sprintf(
-        "%s-filters-%s-filter-%s_%s-inputs",
-        self$active_filters_ns(),
-        dataset_name,
-        dataset_name,
-        var_name
+      input_id_prefix <- self$namespaces(TRUE)$filter_panel(
+        sprintf("filters-%1$s-filter-%1$s_%s-inputs", dataset_name, var_name)
       )
+
 
       # Find the type of filter (based on filter panel)
       supported_suffix <- c("selection", "selection_manual")
@@ -533,13 +537,9 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       ]
 
       # Generate correct namespace
-      slices_input_id <- sprintf(
-        "%s-filters-%s-filter-%s_%s-inputs-%s",
-        self$active_filters_ns(),
-        dataset_name,
-        dataset_name,
-        var_name,
-        slices_suffix
+
+      slices_input_id <- self$namespaces(TRUE)$filter_panel(
+        sprintf("filters-%1$s-filter-%1$s_%s-inputs-%s", dataset_name, var_name)
       )
 
       if (identical(slices_suffix, "selection_manual")) {
@@ -670,12 +670,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     get_active_filter_selection = function(dataset_name, var_name) {
       checkmate::check_string(dataset_name)
       checkmate::check_string(var_name)
-      input_id_prefix <- sprintf(
-        "%s-filters-%s-filter-%s_%s-inputs",
-        self$active_filters_ns(),
-        dataset_name,
-        dataset_name,
-        var_name
+      input_id_prefix <- self$namespaces()$filter_panel(
+        "filters-%1$s-filter-%1$s_%s-inputs", dataset_name, var_name
       )
 
       # Find the type of filter (categorical or range)
