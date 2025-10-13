@@ -36,11 +36,11 @@ testthat::it("Report button is active on nested module", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     init(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "m1"),
-      example_module(label = "m2")
-    )
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "m1"),
+        example_module(label = "m2")
+      )
     )
   )
 
@@ -57,12 +57,12 @@ testthat::it("Report button is disabled on nested modules", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     init(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "m1"),
-      example_module(label = "m2")
-    ) |> disable_report()
-  )
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "m1"),
+        example_module(label = "m2")
+      ) |> disable_report()
+    )
   )
 
   expect_true(endsWith(app$get_attr(
