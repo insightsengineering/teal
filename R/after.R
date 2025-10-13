@@ -13,7 +13,6 @@
 #' @return A `teal_report` object with the result of the server function.
 #' @export
 #' @keywords internal
-#' @noRd
 #' @examples
 #' library("teal.reporter")
 #' hide_code <- function(input, output, session, data) {
