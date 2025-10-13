@@ -30,16 +30,16 @@
 #'   runApp(app)
 #' }
 after <- function(tm,
-                      server = function(input, output, session, data) data,
-                      ...) {
+                  server = function(input, output, session, data) data,
+                  ...) {
   UseMethod("after")
 }
 
 
 #' @export
 after.default <- function(tm,
-                              server = function(input, output, session, data) data,
-                              ...) {
+                          server = function(input, output, session, data) data,
+                          ...) {
   stop("`after` is only implemented for `teal_module` and `teal_modules` objects.")
 }
 

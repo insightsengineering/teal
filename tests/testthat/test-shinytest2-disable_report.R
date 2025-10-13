@@ -1,5 +1,4 @@
 testthat::describe("srv_teal teal_modules disable_report", {
-
   testthat::it("Button is active on a module", {
     testthat::skip_if_not_installed("shinytest2")
     skip_if_too_deep(5)
