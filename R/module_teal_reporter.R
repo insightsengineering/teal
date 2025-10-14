@@ -121,6 +121,8 @@ ui_add_reporter <- function(id) {
 
 #' @noRd
 srv_add_reporter <- function(id, module_out, reporter) {
+  checkmate::assert_string(id)
+  checkmate::assert_class(reporter, "Reporter", null.ok = TRUE)
   if (is.null(reporter)) {
     return(FALSE)
   } # early exit
