@@ -15,7 +15,7 @@ testthat::test_that("Report button is active on a module", {
   app$stop()
 })
 
-testthat::test_that("Report button is disable on a module", {
+testthat::test_that("Report button is disabled on a module changed by disable_report", {
   app <- TealAppDriver$new(init(
     data = simple_teal_data(),
     modules = example_module(label = "m1") |> disable_report()
