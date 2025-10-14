@@ -365,36 +365,3 @@ reporter$append_cards(card1)
 ```
 
 Once the reporter is created we can use in the teal application.
-We can also extend a report for a specific module using `after()`:
-
-```{r app_6}
-app <- init(
-  data = within(teal_data(), iris <- iris),
-  modules = modules(
-    example_module(),
-    example_module(label = "extend reporter") |>
-      after(server = function(data) {
-        teal_card(data) <-
-          c(teal_card(data), teal_card("## New title", "text"))
-        data
-      })
-  ),
-  reporter = reporter
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
-
-```{r shinylive_iframe_6, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
-code <- paste0(c(
-  knitr::knit_code$get("as_interactive"),
-  knitr::knit_code$get("setup"),
-  knitr::knit_code$get("reporter_6"),
-  knitr::knit_code$get("app_6")
-), collapse = "\n")
-
-url <- roxy.shinylive::create_shinylive_url(code)
-knitr::include_url(url, height = "800px")
-```
