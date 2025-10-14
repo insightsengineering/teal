@@ -19,7 +19,7 @@ NULL
 #' @rdname teal_data_utilities
 .append_evaluated_code <- function(data, code, filter_states) {
   checkmate::assert_class(data, "teal_data")
-  checkmate::assert_class(filter_states, "teal_slices")
+  checkmate::assert_class(filter_states, "teal_slices", null.ok = TRUE)
   if (length(code) && !identical(code, "")) {
     data@code <- c(data@code, code2list(code))
     teal.reporter::teal_card(data) <- c(
