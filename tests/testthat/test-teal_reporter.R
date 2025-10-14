@@ -1,5 +1,5 @@
 testthat::test_that("TealReportCard object can be initialized", {
-  testthat::expect_no_error(TealReportCard$new())
+  testthat::expect_warning(TealReportCard$new(), "was deprecated in teal.reporter")
 })
 
 testthat::test_that("TealReportCard inherits from ReportCard", {
