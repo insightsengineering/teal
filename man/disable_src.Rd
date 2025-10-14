@@ -21,6 +21,7 @@ This is equivalent to setting the attribute \code{teal.enable_src} to \code{FALS
 data object returned by the module.
 }
 \examples{
+# Disabling source on a single module
 app <- init(
   data = within(teal_data(), iris <- iris),
   modules = modules(
@@ -30,7 +31,34 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+# Multiple modules
+app <- init(
+  data = within(teal_data(), iris <- iris),
+  modules = modules(
+    example_module(label = "example 1"),
+    example_module(label = "example 2")
+  )|> disable_src()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 }
 \seealso{
 \code{\link[=disable_report]{disable_report()}}
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObSbRFYwIyS0qK6FO1DIwRAAmKkECaKhyikK0pOwC0tKhUKR+ALzSAO4JABZCnHDcAPppGdq40rSMtrE1dTY8uMnSIeFBNtLZHRFwNkkQKSlwAB6wqEGlfUHs1PZw1D3SfGDjk0HSXMuzcGs6AD4AfKm29tM2ntpt-BB3tErS7ELkouJS2jogbTaFEKwAILodjRAAkKlo1XBNhEUkYdwAvmBEQBdIA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObSbRFYwIyS0qK6FO1DIwRAAmKkECaKhyikK0pOwC0tKhUKR+ALzSAO4JABZCnHDcAPppGdq40rSMtrE1dTY8uMnSIeFBNtLZHRFwNkkQKSlwAB6wqEGlfUHs1PZw1D3SfGDjk0HSXMuzcGs6AD4AfKm29tM2ntpt-BB3tErS7ELkouJS2jogbTaFEKwAILodjRAAkKlo1XBNhEUkYdwAvmBEQBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+  \item{example-2}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQFkV1camoyYRACY24AZwFpUcxUNqk7ALS0s5QpFDSALzSAO4BABZCnHDcAPphEdq40rSMtO6+ufnuPLjB0k6uDoUxVW7uQRAhIXAAHrD2cGn1DuzUUPRw1NHSfGDtnQ7SAIzjZRWtHTBdPS5u-YPDo+OTK9MATPMVPAA+AHyhBYMOae6MBNoC-BACtErS7ELkouJS2joQBV3EkIKwAILodjeAAkKloOVh7hEUkYLwAvmB0QBdIA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQFkV1camoyYRACY24AZwFpUcxUNqk7ALS0s5QpFDSALzSAO4BABZCnHDcAPphEdq40rSMtO6+ufnuPLjB0k6uDoUxVW7uQRAhIXAAHrD2cGn1DuzUUPRw1NHSfGDtnQ7SAIzjZRWtHTBdPS5u-YPDo+OTK9MATPMVPAA+AHyhBYMOae6MBNoC-BACtErS7ELkouJS2joQBV3EkIKwAILodjeAAkKloOVh7hEUkYLwAvmB0QBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+

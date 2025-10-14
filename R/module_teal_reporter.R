@@ -189,12 +189,50 @@ srv_add_reporter <- function(id, module_out, reporter) {
 #' @return modified data object that indicates that it should disable the reporter functionality.
 #' @seealso [disable_src()]
 #' @export
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
+#' # Disabling report on a single module
 #' app <- init(
 #'   data = within(teal_data(), iris <- iris),
 #'   modules = modules(
 #'     example_module(label = "example teal module") |> disable_report()
 #'   )
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+#'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
+#' @examples
+#' # Disabling report on multiple modules
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = modules(
+#'     example_module(label = "example 1"),
+#'     example_module(label = "example 2")
+#'   ) |> disable_report()
+#' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
+#' @examples
+#' # Disabling reporting for the app
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = modules(
+#'     example_module(label = "example teal module")
+#'   ),
+#'   reporter = NULL
 #' )
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)

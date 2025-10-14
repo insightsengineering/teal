@@ -93,13 +93,35 @@ srv_source_code <- function(id, module_out) {
 #' @return modified data object that indicates that it should not show the "Show R Code"
 #' button in the UI.
 #' @seealso [disable_report()]
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
+#' # Disabling source on a single module
 #' app <- init(
 #'   data = within(teal_data(), iris <- iris),
 #'   modules = modules(
 #'     example_module(label = "example teal module") |> disable_src()
 #'   )
 #' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
+#' @examples
+#' # Multiple modules
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = modules(
+#'     example_module(label = "example 1"),
+#'     example_module(label = "example 2")
+#'   )|> disable_src()
+#' )
+#'
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }

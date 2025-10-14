@@ -17,6 +17,7 @@ Convenience function that disables the user's ability to add the module
 to the report previewer.
 }
 \examples{
+# Disabling report on a single module
 app <- init(
   data = within(teal_data(), iris <- iris),
   modules = modules(
@@ -26,7 +27,50 @@ app <- init(
 if (interactive()) {
   shinyApp(app$ui, app$server)
 }
+
+# Disabling report on multiple modules
+app <- init(
+  data = within(teal_data(), iris <- iris),
+  modules = modules(
+    example_module(label = "example 1"),
+    example_module(label = "example 2")
+  ) |> disable_report()
+)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+# Disabling reporting for the app
+app <- init(
+  data = within(teal_data(), iris <- iris),
+  modules = modules(
+    example_module(label = "example teal module")
+  ),
+  reporter = NULL
+)
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
 }
 \seealso{
 \code{\link[=disable_src]{disable_src()}}
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObTGcVEUalpJaVGk2Qk7UMjBEACYqIQJoqHKKQrSk7ALS0uFQpP4AvNIA7kkAFkKccNwA+hlZ2rjStIy28XUNNjy4qdJhkSE20rldUXA2KRBpaXAAHrCoIeUDIezU9nDUfdJ8YJPTIdJcq-NwGzoAPgB86bb2s24eXtod-BCPtErS7ELkouJS2jogHTZihBWABBdDsWIAEhUtFqUJsIikjEeAF8BGAUQBdIA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObTGcVEUalpJaVGk2Qk7UMjBEACYqIQJoqHKKQrSk7ALS0uFQpP4AvNIA7kkAFkKccNwA+hlZ2rjStIy28XUNNjy4qdJhkSE20rldUXA2KRBpaXAAHrCoIeUDIezU9nDUfdJ8YJPTIdJcq-NwGzoAPgB86bb2s24eXtod-BCPtErS7ELkouJS2jogHTZihBWABBdDsWIAEhUtFqUJsIikjEeAF8BGAUQBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+  \item{example-2}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObTGcVEUalpJaTBXU4qjUMjBEACYBcDYCaKhyikK0pOwC0tLhUKRQ0gC80gDuyQAWQpxw3AD6mdnauNK0jLYJDU02PLhpfhFRNnndkSE2qRDp6XAAHrDBcJVhg3Ds1PZw1P18YJPTIdIAjBsdXeNTMDNzPSFLK2v5G1unOwBMB106AD4AfBm29iGVbh4vNoBPxBEppOwhORROIpNodCAujZShBWABBdDsOIAEhUtHqOJsIikjFBAF8wGSALpAA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObTGcVEUalpJaTBXU4qjUMjBEACYBcDYCaKhyikK0pOwC0tLhUKRQ0gC80gDuyQAWQpxw3AD6mdnauNK0jLYJDU02PLhpfhFRNnndkSE2qRDp6XAAHrDBcJVhg3Ds1PZw1P18YJPTIdIAjBsdXeNTMDNzPSFLK2v5G1unOwBMB106AD4AfBm29iGVbh4vNoBPxBEppOwhORROIpNodCAujZShBWABBdDsOIAEhUtHqOJsIikjFBAF8wGSALpAA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+  \item{example-3}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObTGcVEUbjnyz9NIAFjJoqAIhcopCtKTsAtLSACZQpFDSALzSAO7RAUKccNwA+kkp2rjStIy2ERVVNjy4cdIwRAkq1HA26c2t7Z2xEPHxcAAesKgdhS1tHezU9nDU3Xxgo+Md-gVL030r-IPSDU1uHl4i3QByBgAy1wL7tErS7ELkouJS2jogTTa5EKwAILodghAAkKlo5XBNhEUkY+wAvmBEQBdIA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObTGcVEUbjnyz9NIAFjJoqAIhcopCtKTsAtLSACZQpFDSALzSAO7RAUKccNwA+kkp2rjStIy2ERVVNjy4cdIwRAkq1HA26c2t7Z2xEPHxcAAesKgdhS1tHezU9nDU3Xxgo+Md-gVL030r-IPSDU1uHl4i3QByBgAy1wL7tErS7ELkouJS2jogTTa5EKwAILodghAAkKlo5XBNhEUkY+wAvmBEQBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+
