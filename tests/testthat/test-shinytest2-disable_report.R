@@ -31,7 +31,7 @@ testthat::test_that("Report button is disable on a module", {
   app$stop()
 })
 
-testthat::it("Report button is active on nested module", {
+testthat::test_that("Report button is active on nested module", {
   testthat::skip_if_not_installed("shinytest2")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
@@ -52,7 +52,7 @@ testthat::it("Report button is active on nested module", {
   app$stop()
 })
 
-testthat::it("Report button is disabled on nested modules", {
+testthat::test_that("Report button is disabled on nested modules", {
   testthat::skip_if_not_installed("shinytest2")
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
