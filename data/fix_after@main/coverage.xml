@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.674123029994916" branch-rate="0" lines-covered="2652" lines-valid="3934" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-10-14 11:13:09.547415">
+<coverage line-rate="0.674123029994916" branch-rate="0" lines-covered="2652" lines-valid="3934" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2025-10-14 11:40:25.614703">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -3918,11 +3918,11 @@
             </method>
             <method name="disable_src" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="108" hits="0" branch="false"/>
-                <line number="109" hits="0" branch="false"/>
-                <line number="110" hits="0" branch="false"/>
-                <line number="111" hits="0" branch="false"/>
-                <line number="112" hits="0" branch="false"/>
+                <line number="130" hits="0" branch="false"/>
+                <line number="131" hits="0" branch="false"/>
+                <line number="132" hits="0" branch="false"/>
+                <line number="133" hits="0" branch="false"/>
+                <line number="134" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -3991,11 +3991,11 @@
             <line number="81" hits="81" branch="false"/>
             <line number="82" hits="81" branch="false"/>
             <line number="83" hits="81" branch="false"/>
-            <line number="108" hits="0" branch="false"/>
-            <line number="109" hits="0" branch="false"/>
-            <line number="110" hits="0" branch="false"/>
-            <line number="111" hits="0" branch="false"/>
-            <line number="112" hits="0" branch="false"/>
+            <line number="130" hits="0" branch="false"/>
+            <line number="131" hits="0" branch="false"/>
+            <line number="132" hits="0" branch="false"/>
+            <line number="133" hits="0" branch="false"/>
+            <line number="134" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="module_teal_data.R" filename="R/module_teal_data.R" line-rate="0.48993288590604" branch-rate="0" complexity="0">
@@ -4775,11 +4775,11 @@
             </method>
             <method name="disable_report" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="203" hits="0" branch="false"/>
-                <line number="204" hits="0" branch="false"/>
-                <line number="205" hits="0" branch="false"/>
-                <line number="206" hits="0" branch="false"/>
-                <line number="207" hits="0" branch="false"/>
+                <line number="241" hits="0" branch="false"/>
+                <line number="242" hits="0" branch="false"/>
+                <line number="243" hits="0" branch="false"/>
+                <line number="244" hits="0" branch="false"/>
+                <line number="245" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -4893,11 +4893,11 @@
             <line number="179" hits="81" branch="false"/>
             <line number="180" hits="81" branch="false"/>
             <line number="181" hits="81" branch="false"/>
-            <line number="203" hits="0" branch="false"/>
-            <line number="204" hits="0" branch="false"/>
-            <line number="205" hits="0" branch="false"/>
-            <line number="206" hits="0" branch="false"/>
-            <line number="207" hits="0" branch="false"/>
+            <line number="241" hits="0" branch="false"/>
+            <line number="242" hits="0" branch="false"/>
+            <line number="243" hits="0" branch="false"/>
+            <line number="244" hits="0" branch="false"/>
+            <line number="245" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="module_teal_with_splash.R" filename="R/module_teal_with_splash.R" line-rate="0" branch-rate="0" complexity="0">
