@@ -119,7 +119,7 @@ srv_source_code <- function(id, module_out) {
 #'   modules = modules(
 #'     example_module(label = "example 1"),
 #'     example_module(label = "example 2")
-#'   )|> disable_src()
+#'   ) |> disable_src()
 #' )
 #'
 #' if (interactive()) {
