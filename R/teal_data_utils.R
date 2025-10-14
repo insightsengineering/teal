@@ -24,7 +24,7 @@ NULL
     data@code <- c(data@code, code2list(code))
     teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(data),
-      "## Data filtering",
+      "### Filter settings",
       teal.reporter::code_chunk(
         .teal_slice_to_yaml(filter_states),
         lang = "teal-slices",
