@@ -168,11 +168,11 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' `NS` in different sections of `teal` app
     #'
-    #' @param cssSelector (`logical(1)`) whether `ns` function should prefix with `#`.
+    #' @param is_selector (`logical(1)`) whether `ns` function should prefix with `#`.
     #'
     #' @return list of `ns`.
-    namespaces = function(cssSelector = FALSE) {
-      ns_fun <- if (cssSelector) {
+    namespaces = function(is_selector = FALSE) {
+      ns_fun <- if (is_selector) {
         function(id) shiny::NS(sprintf("#%s", id))
       } else {
         shiny::NS
@@ -568,7 +568,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
       active_base_id <- sub("-wrapper$", "", active_wrapper_id)
 
-      private$ns$module_container <- active_base_id
+      private$ns$wrapper <- shiny::NS(active_base_id, "wrapper")
       private$ns$module <- shiny::NS(active_base_id, "module")
       private$ns$filter_panel <- shiny::NS(active_base_id, "filter_panel")
       private$ns$data_summary <- shiny::NS(active_base_id, "data_summary")

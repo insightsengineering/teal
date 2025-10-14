@@ -226,13 +226,13 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{namespaces()}}{
 \code{NS} in different sections of \code{teal} app
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$namespaces(cssSelector = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$namespaces(is_selector = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{cssSelector}}{(\code{logical(1)}) whether \code{ns} function should prefix with \verb{#}.}
+\item{\code{is_selector}}{(\code{logical(1)}) whether \code{ns} function should prefix with \verb{#}.}
 }
 \if{html}{\out{</div>}}
 }
