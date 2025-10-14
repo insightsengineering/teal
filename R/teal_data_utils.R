@@ -17,13 +17,19 @@
 NULL
 
 #' @rdname teal_data_utilities
-.append_evaluated_code <- function(data, code) {
+.append_evaluated_code <- function(data, code, filter_states) {
   checkmate::assert_class(data, "teal_data")
+  checkmate::assert_class(filter_states, "teal_slices")
   if (length(code) && !identical(code, "")) {
     data@code <- c(data@code, code2list(code))
     teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(data),
       "## Data filtering",
+      teal.reporter::code_chunk(
+        .teal_slice_to_yaml(filter_states),
+        lang = "teal-slices",
+        echo = TRUE # to not hide chunk when `global_knitr$echo` is set to `FALSE`
+      ),
       teal.reporter::code_chunk(code)
     )
     methods::validObject(data)
