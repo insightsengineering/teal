@@ -87,11 +87,10 @@ NULL
 #' @rdname module_snapshot_manager
 ui_snapshot_manager_panel <- function(id) {
   ns <- NS(id)
-  tags$button(
+  .expand_button(
     id = ns("show_snapshot_manager"),
-    class = "btn action-button wunder_bar_button",
-    title = "View snapshot manager",
-    suppressMessages(icon("fas fa-camera"))
+    label = "Snapshot Manager",
+    icon = "camera-fill"
   )
 }
 
@@ -120,15 +119,27 @@ srv_snapshot_manager_panel <- function(id, slices_global) {
 ui_snapshot_manager <- function(id) {
   ns <- NS(id)
   tags$div(
-    class = "manager_content",
     tags$div(
-      class = "manager_table_row",
+      class = "teal manager_table_row",
       tags$span(tags$b("Snapshot manager")),
-      actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera"), title = "add snapshot"),
-      actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload"), title = "upload snapshot"),
-      actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo"), title = "reset initial state"),
+      bslib::tooltip(
+        tags$span(actionLink(ns("snapshot_add"), label = NULL, icon = icon("fas fa-camera"))),
+        "Add snapshot",
+        placement = "top"
+      ),
+      bslib::tooltip(
+        tags$span(actionLink(ns("snapshot_load"), label = NULL, icon = icon("fas fa-upload"))),
+        "Upload snapshot",
+        placement = "top"
+      ),
+      bslib::tooltip(
+        tags$span(actionLink(ns("snapshot_reset"), label = NULL, icon = icon("fas fa-undo"))),
+        "Reset initial state",
+        placement = "top"
+      ),
       NULL
     ),
+    tags$br(),
     uiOutput(ns("snapshot_list"))
   )
 }
@@ -144,7 +155,7 @@ srv_snapshot_manager <- function(id, slices_global) {
     # Register bookmark exclusions (all buttons and text fields).
     setBookmarkExclude(c(
       "snapshot_add", "snapshot_load", "snapshot_reset",
-      "snapshot_name_accept", "snaphot_file_accept",
+      "snapshot_name_accept", "snapshot_file_accept",
       "snapshot_name", "snapshot_file"
     ))
     # Add snapshot history to bookmark.
@@ -165,21 +176,40 @@ srv_snapshot_manager <- function(id, slices_global) {
     })
 
     # Snapshot current application state ----
-    # Name snaphsot.
+    # Name snapshot.
     observeEvent(input$snapshot_add, {
       logger::log_debug("srv_snapshot_manager: snapshot_add button clicked")
       showModal(
         modalDialog(
+          easyClose = TRUE,
           textInput(ns("snapshot_name"), "Name the snapshot", width = "100%", placeholder = "Meaningful, unique name"),
-          footer = tagList(
-            actionButton(ns("snapshot_name_accept"), "Accept", icon = icon("far fa-thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))
+          tags$script(
+            shiny::HTML(
+              sprintf("shinyjs.autoFocusModal('%s');", ns("snapshot_name")),
+              sprintf("shinyjs.enterToSubmit('%s', '%s');", ns("snapshot_name"), ns("snapshot_name_accept"))
+            )
+          ),
+          footer = shiny::div(
+            shiny::tags$button(
+              type = "button",
+              class = "btn btn-outline-secondary",
+              `data-bs-dismiss` = "modal",
+              NULL,
+              "Dismiss"
+            ),
+            shiny::tags$button(
+              id = ns("snapshot_name_accept"),
+              type = "button",
+              class = "btn btn-primary action-button",
+              NULL,
+              "Accept"
+            )
           ),
           size = "s"
         )
       )
     })
-    # Store snaphsot.
+    # Store snapshot.
     observeEvent(input$snapshot_name_accept, {
       logger::log_debug("srv_snapshot_manager: snapshot_name_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
@@ -215,6 +245,7 @@ srv_snapshot_manager <- function(id, slices_global) {
       logger::log_debug("srv_snapshot_manager: snapshot_load button clicked")
       showModal(
         modalDialog(
+          easyClose = TRUE,
           fileInput(ns("snapshot_file"), "Choose snapshot file", accept = ".json", width = "100%"),
           textInput(
             ns("snapshot_name"),
@@ -222,15 +253,33 @@ srv_snapshot_manager <- function(id, slices_global) {
             width = "100%",
             placeholder = "Meaningful, unique name"
           ),
-          footer = tagList(
-            actionButton(ns("snaphot_file_accept"), "Accept", icon = icon("far fa-thumbs-up")),
-            modalButton(label = "Cancel", icon = icon("far fa-thumbs-down"))
+          footer = shiny::div(
+            shiny::tags$button(
+              type = "button",
+              class = "btn btn-outline-secondary",
+              `data-bs-dismiss` = "modal",
+              NULL,
+              "Dismiss"
+            ),
+            shinyjs::disabled(
+              shiny::tags$button(
+                id = ns("snapshot_file_accept"),
+                type = "button",
+                class = "btn btn-primary action-button",
+                NULL,
+                "Accept"
+              )
+            )
           )
         )
       )
     })
+
+    observeEvent(input$snapshot_file, {
+      shinyjs::enable("snapshot_file_accept")
+    })
     # Store new snapshot to list and restore filter states.
-    observeEvent(input$snaphot_file_accept, {
+    observeEvent(input$snapshot_file_accept, {
       logger::log_debug("srv_snapshot_manager: snapshot_file_accept button clicked")
       snapshot_name <- trimws(input$snapshot_name)
       if (identical(snapshot_name, "")) {
@@ -333,10 +382,18 @@ srv_snapshot_manager <- function(id, slices_global) {
         # Create a row for the snapshot table.
         if (!is.element(id_rowme, names(divs))) {
           divs[[id_rowme]] <- tags$div(
-            class = "manager_table_row",
+            class = "teal manager_table_row",
             tags$span(tags$h5(s)),
-            actionLink(inputId = ns(id_pickme), label = icon("far fa-circle-check"), title = "select"),
-            downloadLink(outputId = ns(id_saveme), label = icon("far fa-save"), title = "save to file")
+            bslib::tooltip(
+              actionLink(inputId = ns(id_pickme), label = icon("far fa-circle-check")),
+              "select",
+              placement = "top"
+            ),
+            bslib::tooltip(
+              downloadLink(outputId = ns(id_saveme), label = icon("far fa-save")),
+              "save to file",
+              placement = "top"
+            )
           )
         }
       })
@@ -347,7 +404,6 @@ srv_snapshot_manager <- function(id, slices_global) {
       rows <- rev(reactiveValuesToList(divs))
       if (length(rows) == 0L) {
         tags$div(
-          class = "manager_placeholder",
           "Snapshots will appear here."
         )
       } else {

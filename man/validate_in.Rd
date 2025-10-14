@@ -14,9 +14,6 @@ validate_in(x, choices, msg)
 \item{msg}{(\code{character(1)}) Error message to display if some elements of \code{x} are not elements of \code{choices}.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-}
-\details{
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{

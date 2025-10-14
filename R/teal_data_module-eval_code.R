@@ -18,14 +18,13 @@ setOldClass("teal_data_module")
 #' @include teal_data_module.R
 #' @name eval_code
 #' @rdname teal_data_module
-#' @aliases eval_code,teal_data_module,character-method
-#' @aliases eval_code,teal_data_module,language-method
-#' @aliases eval_code,teal_data_module,expression-method
+#' @aliases eval_code,teal_data_module
+#' @aliases \S4method{eval_code}{teal_data_module}
 #'
 #' @importFrom methods setMethod
 #' @importMethodsFrom teal.code eval_code
 #'
-setMethod("eval_code", signature = c("teal_data_module", "character"), function(object, code) {
+setMethod("eval_code", signature = c(object = "teal_data_module"), function(object, code) {
   teal_data_module(
     ui = function(id) {
       ns <- NS(id)
@@ -46,14 +45,7 @@ setMethod("eval_code", signature = c("teal_data_module", "character"), function(
         )
         td
       })
-    }
+    },
+    once = attr(object, "once")
   )
-})
-
-setMethod("eval_code", signature = c("teal_data_module", "language"), function(object, code) {
-  eval_code(object, code = paste(lang2calls(code), collapse = "\n"))
-})
-
-setMethod("eval_code", signature = c("teal_data_module", "expression"), function(object, code) {
-  eval_code(object, code = paste(lang2calls(code), collapse = "\n"))
 })

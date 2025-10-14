@@ -13,13 +13,13 @@ testthat::test_that("TealReportCard$new returns an object of type TealReportCard
 testthat::test_that("TealReportCard$get_content returns content with metadata", {
   card <- TealReportCard$new()$append_text("test")$append_src("test_src")$append_encodings(list(data = "test"))
   testthat::expect_equal(length(card$get_content()), 4)
-  testthat::expect_equal(length(card$get_metadata()), 2)
-  testthat::expect_identical(card$get_content()[[1]]$get_content(), "test")
+  testthat::expect_equal(length(card$get_metadata()), 1)
+  testthat::expect_identical(card$get_content()[[1]], "test")
   testthat::expect_identical(
-    card$get_content()[[2]]$get_content(),
+    as.character(card$get_content()[[2]]),
     "test_src"
   )
-  testthat::expect_identical(card$get_content()[[4]]$get_content(), "data: test\n")
+  testthat::expect_identical(card$get_content()[[4]], "\n```\ndata: test\n\n```\n")
 })
 
 testthat::test_that("TealReportCard$append_src accepts a character", {
@@ -35,7 +35,7 @@ testthat::test_that("TealReportCard$append_src returns self", {
 testthat::test_that("TealReportCard$append_src returns title and content", {
   card <- TealReportCard$new()
   card$append_src("test")
-  testthat::expect_identical(card$get_content()[[1]]$get_content(), "test")
+  testthat::expect_identical(as.character(card$get_content()[[1]]), "test")
 })
 
 testthat::test_that("TealReportCard$append_encodings accepts list of character", {
@@ -51,8 +51,8 @@ testthat::test_that("TealReportCard$append_encodings returns self", {
 testthat::test_that("TealReportCard$append_encodings returns title and content", {
   card <- TealReportCard$new()
   card$append_encodings(list(a = "test"))
-  testthat::expect_identical(card$get_content()[[1]]$get_content(), "Selected Options")
-  testthat::expect_identical(card$get_content()[[2]]$get_content(), "a: test\n")
+  testthat::expect_identical(card$get_content()[[1]], "### Selected Options")
+  testthat::expect_identical(card$get_content()[[2]], "\n```\na: test\n\n```\n")
 })
 
 testthat::test_that("TealReportCard$append_fs accepts only a teal_slices", {
@@ -78,35 +78,5 @@ testthat::test_that("TealReportCard$append_fs returns self", {
 testthat::test_that("TealReportCard$append_fs returns title and content", {
   card <- TealReportCard$new()
   card$append_fs(teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b")))
-  testthat::expect_identical(card$get_content()[[1]]$get_content(), "Filter State")
-  testthat::expect_true(inherits(card$get_content()[[2]], "TealSlicesBlock"))
-})
-
-testthat::test_that("TealSlicesBlock$new accepts teal_slices only", {
-  testthat::expect_no_error(TealSlicesBlock$new(teal_slices()))
-  testthat::expect_error(TealSlicesBlock$new(list()), "Assertion on 'content'")
-})
-
-testthat::test_that("TealSlicesBlock$get_content returns yaml character", {
-  block <- TealSlicesBlock$new(
-    teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-  )
-  testthat::expect_identical(block$get_content(), "- Dataset name: a\n  Variable name: b\n")
-})
-
-testthat::test_that("TealSlicesBlock$to_list returns list containing teal_slices", {
-  tss <- teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-  block <- TealSlicesBlock$new(tss)
-  testthat::expect_identical(
-    block$to_list(),
-    list(text = "- Dataset name: a\n  Variable name: b\n", style = "verbatim")
-  )
-})
-
-testthat::test_that("TealSlicesBlock$from_list retains states from a list", {
-  tss <- teal.slice::teal_slices(teal.slice::teal_slice(dataname = "a", varname = "b"))
-  block1 <- TealSlicesBlock$new(tss)
-  block2 <- TealSlicesBlock$new()
-  block2$from_list(block1$to_list())
-  testthat::expect_identical(block1$get_content(), block2$get_content())
+  testthat::expect_identical(as.character(card$get_content()[[1]]), "- Dataset name: a\n  Variable name: b\n")
 })

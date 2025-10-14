@@ -5,7 +5,7 @@
 
 #' Create the server and UI function for the `shiny` app
 #'
-#' @description `r lifecycle::badge("stable")`
+#' @description
 #'
 #' End-users: This is the most important function for you to start a
 #' `teal` app that is composed of `teal` modules.
@@ -34,6 +34,7 @@
 #'   a string specifying the `shiny` module id in cases it is used as a `shiny` module
 #'   rather than a standalone `shiny` app.
 #'   This parameter is no longer supported. Use [ui_teal()] and [srv_teal()] instead.
+#' @param reporter (`Reporter`) object used to store report contents. Set to `NULL` to globally disable reporting.
 #'
 #' @return Named list containing server and UI functions.
 #'
@@ -99,7 +100,8 @@ init <- function(data,
                  title = lifecycle::deprecated(),
                  header = lifecycle::deprecated(),
                  footer = lifecycle::deprecated(),
-                 id = lifecycle::deprecated()) {
+                 id = lifecycle::deprecated(),
+                 reporter = teal.reporter::Reporter$new()) {
   logger::log_debug("init initializing teal app with: data ('{ class(data) }').")
 
   # argument checking (independent)
@@ -134,7 +136,7 @@ init <- function(data,
   # argument checking (interdependent)
   ## `filter` - `modules`
   if (isTRUE(attr(filter, "module_specific"))) {
-    module_names <- unlist(c(module_labels(modules), "global_filters"))
+    module_names <- unlist(c(modules_slot(modules, "label"), "global_filters"))
     failed_mod_names <- setdiff(names(attr(filter, "mapping")), module_names)
     if (length(failed_mod_names)) {
       stop(
@@ -183,7 +185,6 @@ init <- function(data,
   landing <- extract_module(modules, "teal_module_landing")
   modules <- drop_module(modules, "teal_module_landing")
 
-
   if (lifecycle::is_present(id)) {
     lifecycle::deprecate_soft(
       when = "0.16.0",
@@ -204,6 +205,8 @@ init <- function(data,
     list(
       ui = function(request) {
         bslib::page_fluid(
+          theme = get_teal_bs_theme(),
+          style = "--bs-gutter-x: 0;",
           title = tags$div(
             id = "teal-app-title",
             tags$head(
@@ -217,6 +220,7 @@ init <- function(data,
           ),
           tags$header(
             id = "teal-header",
+            style = "margin: 1em 1em 0 1em;",
             tags$div(id = "teal-header-content")
           ),
           ui_teal(
@@ -225,13 +229,20 @@ init <- function(data,
           ),
           tags$footer(
             id = "teal-footer",
+            style = "margin: 0.5em 1em;",
             tags$div(id = "teal-footer-content"),
             ui_session_info("teal-footer-session_info")
           )
         )
       },
       server = function(input, output, session) {
-        srv_teal(id = "teal", data = data, modules = modules, filter = deep_copy_filter(filter))
+        srv_teal(
+          id = "teal",
+          data = data,
+          modules = modules,
+          filter = deep_copy_filter(filter),
+          reporter = if (!is.null(reporter)) reporter$clone(deep = TRUE)
+        )
         srv_session_info("teal-footer-session_info")
       }
     ),

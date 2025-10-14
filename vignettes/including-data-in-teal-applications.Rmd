@@ -43,7 +43,7 @@ library(teal)
 data <- teal_data(iris = iris, cars = mtcars)
 ```
 
-Note that `iris` and `cars` have been added to the `datanames` property of `data` (see [`datanames` property](#datanames)).
+Note that `iris` and `cars` have been added to the `datanames` property of `data` (see [`datanames` property](#teal_data-properties)).
 
 This is sufficient to run a `teal` app.
 
@@ -79,30 +79,35 @@ data_populated_2 <- within(data_empty, {
 })
 ```
 
-The key difference between `eval_code` and `within` is that the former accepts code as character vector or language objects (calls and expressions), while `within` accepts _only_ inline code.
-See `?qenv` for more details.
+The key difference between `eval_code` and `within` is that the former accepts code as character vector or language objects (`call`s and `expression`s), while `within` accepts *only* inline code.
+For a deeper understanding check the low level class `?qenv` for more details.
 
-Note that in the first example `data` was created by passing data objects, so the code that was used to create the data objects is unknown and therefore the process cannot be reproduced.
-Inspecting code the in the app created above reveals a note that the preprocessing code is absent.
+Note that in the first example `data` was created by passing data objects.
+If it can be found on the base environment it will be processed without errors:
 
 <img src="images/show_code_prepro_missing.png" style = "display: block; margin: auto; width: 75%"/>
 
-The necessary code can be supplied to the `code` argument of the `teal_data` function.
+However, if there isn't code to generate the object they cannot be reproduced.
+This creates an object with an error like in a interactive R session (and will cause the application to fail).
+Inspecting object reveals it:
 
 ```{r}
-data_with_code <- teal_data(
-  iris = iris, cars = mtcars,
-  code = "iris <- iris
-          cars <- mtcars"
-)
+m <- diag(5)
+data_populated_3 <- eval_code(data_empty, code = "D5 <- m")
+data_populated_3
 ```
 
-<img src="images/show_code_prepro_present.png" style = "display: block; margin: auto; width: 75%"/>
+The necessary code can be supplied to the `code` argument of the to the `eval_code` function .
 
-Keep in mind this code is not executed in the `teal_data`'s environment, so it may not reproduce the environment.
-Such an object is considered _unverified_ (see [`verified` property](#verified)).
+```{r}
+data_populated_4 <- eval_code(data_empty, code = "D5 <- diag(5)")
+data_populated_4
+```
 
-If reproducibility is required, we recommend creating an empty `teal_data` object and then evaluating code.
+As you can see above the output shows that is a verified object.
+On an application we don't see that message but the reproducible code will be shown, as we can see using the `data_populated_2` object:
+
+<img src="images/show_code_prepro_present.png" style="display: block; margin: auto; width: 75%"/>
 
 #### code from file
 
@@ -217,8 +222,6 @@ The `verified` property designates whether or not reproducibility has been confi
 Those created with data objects alone or with data objects and code are not verified by default, but can become verified by running the `verify` function.
 
 ```{r}
-data_with_code
-
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 

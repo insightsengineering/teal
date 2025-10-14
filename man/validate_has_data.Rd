@@ -24,9 +24,6 @@ validate_has_data(
 \item{msg}{(\code{character(1)}) Additional message to display alongside the default message.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-}
-\details{
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{
