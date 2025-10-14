@@ -30,7 +30,7 @@ testthat::test_that("Report button is disabled on a module changed by disable_re
   app$stop()
 })
 
-testthat::test_that("Report button is active on nested module", {
+testthat::test_that("Report button is active on a nested module", {
   app <- TealAppDriver$new(
     init(
       data = simple_teal_data(),
