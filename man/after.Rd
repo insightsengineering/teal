@@ -4,10 +4,10 @@
 \alias{after}
 \title{Executes modifications to the result of a module}
 \usage{
-after(tm, server = function(input, output, session, data) data, ...)
+after(module, server = function(input, output, session, data) data, ...)
 }
 \arguments{
-\item{tm}{(\code{teal_module}).}
+\item{module}{(\code{teal_module}).}
 
 \item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \code{tm$server}.
 Must return data}

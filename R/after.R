@@ -6,7 +6,7 @@
 #' Exported to be able to use methods not to be used directly by module-developers or app-users.
 #' Primarily used to modify the output object of module.
 #' @seealso [disable_src()], [disable_report()]
-#' @param tm (`teal_module`).
+#' @param module (`teal_module`).
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `tm$server`.
 #'  Must return data
 #' @param ... additional argument passed to `ui` and `server` by matching their formals names.
@@ -28,7 +28,7 @@
 #' if (interactive()) {
 #'   runApp(app)
 #' }
-after <- function(tm,
+after <- function(module,
                   server = function(input, output, session, data) data,
                   ...) {
   UseMethod("after")
@@ -36,29 +36,29 @@ after <- function(tm,
 
 
 #' @export
-after.default <- function(tm,
+after.default <- function(module,
                           server = function(input, output, session, data) data,
                           ...) {
   stop("`after` is only implemented for `teal_module` and `teal_modules` objects.")
 }
 
 #' @export
-after.teal_modules <- function(tm,
+after.teal_modules <- function(module,
                                server = function(input, output, session, data) data,
                                ...) {
-  tm$children <- lapply(tm$children, after,
+  module$children <- lapply(module$children, after,
     ui = function(id, elem) {
       elem
     }, server = server, ...
   )
-  tm
+  module
 }
 
 #' @export
-after.teal_module <- function(tm,
+after.teal_module <- function(module,
                               server = function(input, output, session, data) data,
                               ...) {
-  checkmate::assert_multi_class(tm, "teal_module")
+  checkmate::assert_multi_class(module, "teal_module")
 
   names_srv <- names(formals(server))
   args_callModule <- c("input", "output", "session", "data") # nolint object_name_linter.
@@ -67,12 +67,12 @@ after.teal_module <- function(tm,
   }
 
   additional_args <- list(...)
-  tm$ui <- after_ui(tm$ui, function(id, elem) {
+  module$ui <- after_ui(module$ui, function(id, elem) {
     elem
   }, additional_args)
-  tm$server <- after_srv(tm$server, server, additional_args)
-  tm
-  tm
+  module$server <- after_srv(module$server, server, additional_args)
+  module
+  module
 }
 
 after_ui <- function(old, new, additional_args) {
