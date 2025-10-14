@@ -27,7 +27,7 @@ NULL
       "### Filter settings",
       teal.reporter::code_chunk(
         .teal_slice_to_yaml(filter_states),
-        lang = "teal-slices",
+        lang = "filters",
         echo = TRUE # to not hide chunk when `global_knitr$echo` is set to `FALSE`
       ),
       teal.reporter::code_chunk(code)
