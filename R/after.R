@@ -9,8 +9,8 @@
 #' @param x (`teal_module` or `teal_modules`).
 #' @param server (`function(input, output, session, data, ...)`) function to receive output data from `tm$server`.
 #'  Must return data
-#' @param ... additional argument passed to `ui` and `server` by matching their formals names.
-#' @return A `teal_report` object with the result of the server function.
+#' @param ... Additional arguments passed to the server wrapper function by matching their formal names.
+#' @return A `teal_module` or `teal_modules` object with a wrapped server.
 #' @export
 #' @keywords internal
 #' @examples
