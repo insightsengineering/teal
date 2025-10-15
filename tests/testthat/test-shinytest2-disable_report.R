@@ -59,11 +59,12 @@ testthat::test_that("Report button is disabled on nested modules changed by disa
       ) |> disable_report()
     )
   )
-
-  expect_true(endsWith(app$get_attr(
+  class <- app$get_attr(
     selector = "#teal-teal_modules-nav-m1-add_reporter_wrapper-reporter_add-add_report_card_button",
     attribute = "class"
-  ), "shiny-bound-input disabled"))
+  )
+  classes <- strsplit(class, split = " ", fixed = TRUE)[[1]]
+  expect_true(all(c("shiny-bound-input", "disabled") %in% classes))
 
   app$stop()
 })

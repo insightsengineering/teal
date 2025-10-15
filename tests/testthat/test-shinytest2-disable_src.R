@@ -25,10 +25,12 @@ testthat::test_that("Show R Code is disabled on nested modules changed with disa
     ) |> disable_src()
   ))
 
-  expect_true(endsWith(app$get_attr(
+  class <- app$get_attr(
     selector = "#teal-teal_modules-nav-m1-source_code_wrapper-source_code-button",
     attribute = "class"
-  ), "shiny-bound-input disabled"))
+  )
+  classes <- strsplit(class, split = " ", fixed = TRUE)[[1]]
+  expect_true(all(c("shiny-bound-input", "disabled") %in% classes))
 
   app$stop()
 })
