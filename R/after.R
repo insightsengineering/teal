@@ -47,9 +47,7 @@ after.teal_modules <- function(x,
                                server = function(input, output, session, data) data,
                                ...) {
   x$children <- lapply(x$children, after,
-    ui = function(id, elem) {
-      elem
-    }, server = server, ...
+    server = server, ...
   )
   x
 }
