@@ -76,16 +76,13 @@ testthat::test_that("e2e: adding a report card in a module adds it in the report
   )
 
   # Add new card with label and comment
-  app$click(NS(
-    app$active_ns()$module_container,
-    "add_reporter_wrapper-reporter_add-add_report_card_button"
-  ))
+  app$click(app$namespaces()$module_container("add_reporter_wrapper-reporter_add-add_report_card_button"))
 
   app$set_input(
-    NS(app$active_ns()$module_container, "add_reporter_wrapper-reporter_add-label"),
+    app$namespaces()$module_container("add_reporter_wrapper-reporter_add-label"),
     "Card name"
   )
-  app$click(NS(app$active_ns()$module_container, "add_reporter_wrapper-reporter_add-add_card_ok"))
+  app$click(app$namespaces()$module_container("add_reporter_wrapper-reporter_add-add_card_ok"))
 
   # Check whether card was added
   app$run_js("document.querySelector('#teal-preview_report-preview_button').click();") # skipping menu hovering
