@@ -2735,3 +2735,147 @@ testthat::describe("teal.data code with a function defined", {
     )
   })
 })
+
+testthat::describe("teal-reporter", {
+  it("Clicking Add Card adds a card to the reporter", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_length(reporter$get_cards(), 0)
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_report_card_button` = 1)
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_card_ok` = 1)
+        testthat::expect_length(reporter$get_cards(), 1)
+      }
+    )
+  })
+
+  it("Card added to the report contains ## Data preparation element", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_report_card_button` = 1)
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_card_ok` = 1)
+        testthat::expect_contains(reporter$get_cards()[[1]], "## Data preparation")
+      }
+    )
+  })
+
+  it("Card added to the report contains concatenated code_chunks", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_report_card_button` = 1)
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_card_ok` = 1)
+        testthat::expect_identical(
+          reporter$get_cards()[[1]][[2]],
+          teal.reporter::code_chunk(
+            "iris <- iris\n.raw_data <- list2env(list(iris = iris))\nlockEnvironment(.raw_data) # @linksto .raw_data"
+          )
+        )
+      }
+    )
+  })
+
+  it("Card added to the report contains elements added in a module", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) reactive(within(data(), iris2 <- iris)))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_report_card_button` = 1)
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_card_ok` = 1)
+        testthat::expect_identical(
+          reporter$get_cards()[[1]][[2]],
+          teal.reporter::code_chunk(c(
+            "iris <- iris",
+            ".raw_data <- list2env(list(iris = iris))",
+            "lockEnvironment(.raw_data) # @linksto .raw_data",
+            "iris2 <- iris"
+          ))
+        )
+      }
+    )
+  })
+
+  it("Card added to the report contains Filter settings section, teal-slices-yaml and code if filters are set", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "setosa")
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_report_card_button` = 1)
+        session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_card_ok` = 1)
+        testthat::expect_contains(
+          reporter$get_cards()[[1]],
+          c(
+            "### Filter settings",
+            teal.reporter::code_chunk(
+              "- Dataset name: iris\n  Variable name: Species\n  Selected Values: setosa\n",
+              lang = "filters"
+            ),
+            teal.reporter::code_chunk("iris <- dplyr::filter(iris, Species == \"setosa\")")
+          )
+        )
+      }
+    )
+  })
+})

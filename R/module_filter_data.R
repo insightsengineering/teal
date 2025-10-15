@@ -62,7 +62,7 @@ srv_filter_data <- function(id, datasets, active_datanames, data, is_active) {
     )
   )
   filtered_code <- .get_filter_expr(datasets = datasets, datanames = datanames)
-  filtered_teal_data <- .append_evaluated_code(data, filtered_code)
+  filtered_teal_data <- .append_evaluated_code(data, code = filtered_code, filter_states = datasets$get_filter_state())
   filtered_datasets <- sapply(datanames, function(x) datasets$get_data(x, filtered = TRUE), simplify = FALSE)
   filtered_teal_data <- .append_modified_data(filtered_teal_data, filtered_datasets)
   filtered_teal_data
