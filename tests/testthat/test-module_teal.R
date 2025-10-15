@@ -2737,6 +2737,102 @@ testthat::describe("teal.data code with a function defined", {
 })
 
 testthat::describe("teal-reporter", {
+  it("Add to report button contains 'NULL' reason when module's server returns reactive-teal_report object", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_null(output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]])
+      }
+    )
+  })
+
+  it("Add to report button contains 'No report' reason when module's server doesn't return reactive-teal_report", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) NULL)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_match(
+          output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
+          "No report content available from this module"
+        )
+      }
+    )
+  })
+
+  it("Add to report button contains 'error' reason when module's server returns an error", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) reactive(stop("test")))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_match(
+          output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
+          "The module returned an error, check it for errors"
+        )
+      }
+    )
+  })
+
+  it("Add to report button contains 'not support reporter' reason when module's server returns empty teal_card", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) reactive(teal.reporter::teal_report()))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        browser()
+        testthat::expect_match(
+          output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
+          "The module does not support reporter functionality"
+        )
+      }
+    )
+  })
+
+  # todo: test other conditions in srv_add_reporter@reason_r
+
   it("Clicking Add Card adds a card to the reporter", {
     shiny::testServer(
       app = srv_teal,
