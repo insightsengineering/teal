@@ -16,7 +16,7 @@ testthat::test_that("Show R Code button is disabled on a module", {
   app$stop()
 })
 
-testthat::test_that("Show R Code is disablesd on nested modules changed with disable_src", {
+testthat::test_that("Show R Code is disabled on nested modules changed with disable_src", {
   app <- TealAppDriver$new(init(
     data = simple_teal_data(),
     modules = modules(
