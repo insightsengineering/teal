@@ -12,10 +12,10 @@ after(x, server = function(input, output, session, data) data, ...)
 \item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \code{tm$server}.
 Must return data}
 
-\item{...}{additional argument passed to \code{ui} and \code{server} by matching their formals names.}
+\item{...}{Additional arguments passed to the server wrapper function by matching their formal names.}
 }
 \value{
-A \code{teal_report} object with the result of the server function.
+A \code{teal_module} or \code{teal_modules} object with a wrapped server.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
