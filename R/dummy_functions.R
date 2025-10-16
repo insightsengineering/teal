@@ -9,7 +9,7 @@
 #' @inheritParams teal_modules
 #' @param decorators `r lifecycle::badge("experimental")` (`list` of `teal_transform_module`) optional,
 #' decorator for `object` included in the module.
-#' 
+#'
 #' @section Reporting:
 #'
 #' This module returns an object of class `teal_module`, that contains a `server` function.

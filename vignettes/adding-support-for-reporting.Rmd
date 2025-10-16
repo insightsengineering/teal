@@ -264,22 +264,21 @@ tm_simple_regression <- function(label = "Simple Regression") {
   module(
     label = label,
     server = function(input, output, session, data, reporter, ...) {
-      
       output$plot <- renderPlot({
         req(input$x_var, input$y_var)
         dataset <- data()[["iris"]]
         plot(dataset[[input$x_var]], dataset[[input$y_var]])
       })
-      
+
       report_data <- reactive({
         obj <- data()
-        teal_card(obj) <- 
+        teal_card(obj) <-
           c(teal_card(obj), "# Module's computation")
         eval_code(
-          obj, 
+          obj,
           sprintf(
-            "correlation <- cor(iris[['%s']], iris[['%s']]);correlation", 
-            input$x_var, 
+            "correlation <- cor(iris[['%s']], iris[['%s']]);correlation",
+            input$x_var,
             input$y_var
           ),
           keep_output = TRUE
@@ -287,19 +286,22 @@ tm_simple_regression <- function(label = "Simple Regression") {
       })
       report_data
     },
-    
     ui = function(id) {
       ns <- NS(id)
       fluidPage(
         h3("Simple Regression Plot"),
         fluidRow(
-          column(6,
-            selectInput(ns("x_var"), "X Variable:", 
-                       choices = names(iris)[1:4], selected = "Sepal.Length")
+          column(
+            6,
+            selectInput(ns("x_var"), "X Variable:",
+              choices = names(iris)[1:4], selected = "Sepal.Length"
+            )
           ),
-          column(6,
-            selectInput(ns("y_var"), "Y Variable:", 
-                       choices = names(iris)[1:4], selected = "Sepal.Width")
+          column(
+            6,
+            selectInput(ns("y_var"), "Y Variable:",
+              choices = names(iris)[1:4], selected = "Sepal.Width"
+            )
           )
         ),
         plotOutput(ns("plot"))
