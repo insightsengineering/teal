@@ -179,7 +179,7 @@ srv_add_reporter <- function(id, module_out, reporter, module_label = "") {
         shinyjs::toggleState("report_add_wrapper", condition = is.null(reason_r()))
       })
 
-      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out, default_label = module_label)
+      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out, default_label = module_label) # nolint line_length_linter.
     }
   })
 }
