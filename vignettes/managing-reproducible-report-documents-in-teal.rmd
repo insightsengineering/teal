@@ -83,7 +83,7 @@ app_custom <- init(
     example_module("Analysis 1"),
     example_module("Analysis 2")
   ),
-  reporter = custom_reporter                        # TODO: doesn't work yet, app do not start with a predefined card
+  reporter = custom_reporter
 )
 # Start app with
 # if (interactive()) shinyApp(app_custom$ui, app_custom$server)
