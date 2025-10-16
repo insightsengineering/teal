@@ -354,8 +354,8 @@ Additionally, cards can be added to the report before the application starts.
 reporter <- Reporter$new()
 template_fun <- function(document) {
   header <- teal_card("Here comes header text.")
-  footer <- 
-      teal_card("Here comes footer text. Report generated with teal ![logo](https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg 'teal logo'){height=70}")
+  footer <-
+    teal_card("Here comes footer text. Report generated with teal ![logo](https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg 'teal logo'){height=70}")
   c(header, document, footer)
 }
 reporter$set_template(template_fun)
