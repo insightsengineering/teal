@@ -100,11 +100,9 @@ library(teal.reporter)
 # Create a custom reporter with specific configuration
 custom_reporter_template <- Reporter$new()
 custom_reporter_template$set_template(
-  # Need to return named `teal_card`
   function(card) {
-    tcard <- c("Templated information", card)
-    attributes(tcard) <-  attributes(card)
-    tcard
+    disclaimer <- teal.reporter::teal_card("Here comes disclaimer text")
+    c(disclaimer, card)
   }
 )
 
