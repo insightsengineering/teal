@@ -28,8 +28,6 @@ used for storing the content of the report. You can also globally disable report
 
 * `init` and `srv_teal` have new `reporter` parameter, that allows to pre-define `teal.reporter::Reporter` object to be
 used for storing the content of the report. You can also globally disable reporting by setting `reporter = NULL` 
-(and `disable = TRUE` in `ui_teal` for cases when `ui_teal` is used as shiny module).
-* TODO: verify if we need to clone/deep_clone reporter in `srv_teal/init`.
 
 # teal 0.16.0
 
