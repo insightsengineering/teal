@@ -120,9 +120,10 @@ ui_add_reporter <- function(id) {
 }
 
 #' @noRd
-srv_add_reporter <- function(id, module_out, reporter) {
+srv_add_reporter <- function(id, module_out, reporter, module_label = "") {
   checkmate::assert_string(id)
   checkmate::assert_class(reporter, "Reporter", null.ok = TRUE)
+  checkmate::assert_string(module_label)
   if (is.null(reporter)) {
     return(FALSE)
   } # early exit
@@ -178,7 +179,7 @@ srv_add_reporter <- function(id, module_out, reporter) {
         shinyjs::toggleState("report_add_wrapper", condition = is.null(reason_r()))
       })
 
-      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out)
+      teal.reporter::add_card_button_srv("reporter_add", reporter = reporter, card_fun = doc_out, default_label = module_label)
     }
   })
 }
