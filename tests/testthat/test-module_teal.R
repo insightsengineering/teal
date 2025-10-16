@@ -2822,7 +2822,8 @@ testthat::describe("teal-reporter", {
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
-        browser()
+
+        testthat::expect_equivalent(teal.reporter::teal_card(modules_output$module_1()()), list())
         testthat::expect_match(
           output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
           "The module does not support reporter functionality"
@@ -2831,6 +2832,32 @@ testthat::describe("teal-reporter", {
     )
   })
 
+
+  it("Add to report button has no reason when module's server returns a teal_report", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1",
+                 server = function(id, data) reactive({teal_report(teal_card = teal_card("## Title"))}))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+
+        testthat::expect_s4_class(modules_output$module_1()(), "teal_report")
+        testthat::expect_null(
+          output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
+        )
+      }
+    )
+  })
   # todo: test other conditions in srv_add_reporter@reason_r
 
   it("Clicking Add Card adds a card to the reporter", {
@@ -2849,6 +2876,7 @@ testthat::describe("teal-reporter", {
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
+        browser()
         testthat::expect_length(reporter$get_cards(), 0)
         session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_report_card_button` = 1)
         session$setInputs(`teal_modules-nav-module_1-add_reporter_wrapper-reporter_add-add_card_ok` = 1)
