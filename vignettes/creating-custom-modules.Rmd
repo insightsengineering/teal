@@ -147,6 +147,7 @@ In this updated server function, we will perform the following:
 
 1. **Create `new_data`** as a modified version of `data()` using `within()`, dynamically injecting `input$dataset` and `input$variable`.
 2. **Render the Plot**: `renderPlot()` displays the plot by referencing the plot stored in the updated `teal_data` object, `new_data`.
+3. **Return the data**: To allow for reporting capabilities we need to return the data. See [adding support for reporting vignette](adding-support-for-reporting.html)
 
 Here's the code:
 
@@ -202,6 +203,7 @@ histogram_module_server <- function(id, data) {
     output$plot_code <- shiny::renderText({
       teal.code::get_code(result()) # Retrieve and display the code for the updated `teal_data` object
     })
+    result
   })
 }
 ```
