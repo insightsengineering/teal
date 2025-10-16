@@ -28,8 +28,7 @@ as.teal_slices(x)
 match names of data sets and vector elements match variable names in respective data sets;
 specify which variables are allowed to be filtered; see \code{Details}.}
 
-\item{count_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-\emph{This is a new feature. Do kindly share your opinions on
+\item{count_type}{\emph{This is a new feature. Do kindly share your opinions on
 \href{https://github.com/insightsengineering/teal.slice/}{\code{teal.slice}'s GitHub repository}.}
 
 (\code{character(1)}) string specifying how observations are tallied by these filter states.

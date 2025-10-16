@@ -90,11 +90,11 @@ srv_init_data <- function(id, data) {
 #' @keywords internal
 .add_signature_to_data <- function(data) {
   hashes <- .get_hashes_code(data)
-  data_teal_report <- teal.reporter::as.teal_report(data)
+  data_teal_report <- as(data, "teal_report")
   if (!inherits(data, "teal_report")) {
     teal.reporter::teal_card(data_teal_report) <- c(
       teal.reporter::teal_card(),
-      "## Code preparation",
+      "## Data preparation",
       teal.reporter::teal_card(data_teal_report)
     )
   }
@@ -108,8 +108,8 @@ srv_init_data <- function(id, data) {
       ),
       sapply(
         names(data_teal_report),
-        teal.code::get_var,
-        object = data_teal_report,
+        base::get,
+        envir = data_teal_report,
         simplify = FALSE
       )
     )

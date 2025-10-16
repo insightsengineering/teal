@@ -1,7 +1,5 @@
 #' An example `teal` module
 #'
-#' `r lifecycle::badge("experimental")`
-#'
 #' This module creates an object called `object` that can be modified with decorators.
 #' The `object` is determined by what's selected in `Choose a dataset` input in UI.
 #' The object can be anything that can be handled by `renderPrint()`.
@@ -87,12 +85,6 @@ example_module <- function(label = "example teal module",
           table_data_decorated()[["object"]]
         })
 
-        teal.widgets::verbatim_popup_srv(
-          id = "rcode",
-          verbatim_content = reactive(teal.code::get_code(req(table_data_decorated()))),
-          title = "Example Code"
-        )
-
         table_data_decorated
       })
     },
@@ -102,8 +94,7 @@ example_module <- function(label = "example teal module",
         output = verbatimTextOutput(ns("text")),
         encoding = tags$div(
           selectInput(ns("dataname"), "Choose a dataset", choices = NULL),
-          ui_transform_teal_data(ns("decorate"), transformators = decorators),
-          teal.widgets::verbatim_popup_ui(ns("rcode"), "Show R code")
+          ui_transform_teal_data(ns("decorate"), transformators = decorators)
         )
       )
     },

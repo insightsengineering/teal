@@ -28,12 +28,223 @@ The entire life cycle of objects involved in creating the report and configuring
 
 ## Add support for reporting
 
-To inform `teal` that the module requires reporting, return a `reactive` containing `teal_report` from the `server` function.
-Current outputs of the modules and reproducible code will be included in the module when "add to report" button is clicked.
+### Modify the declaration of the server function
 
-Every input `teal_data` object in `teal` gets converted to a `teal_report` object, which you can then enhance with additional content.
+The first step is to add an additional argument to the server function declaration - `reporter`.
+This informs `teal` that the module requires `reporter`, and it will be included when the module is called.
+See below:
 
-For detailed information about the `teal_report` class and its capabilities, see the [teal_report Class vignette](https://insightsengineering.github.io/teal.reporter/latest-tag/articles/teal-report-class.html).
+```{r module_2}
+my_module_with_reporting <- function(label = "example teal module") {
+  module(
+    label = label,
+    server = function(id, data, reporter) {
+      moduleServer(id, function(input, output, session) {
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
+      })
+    },
+    ui = function(id) {
+      ns <- NS(id)
+      sidebarLayout(
+        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
+        mainPanel(verbatimTextOutput(ns("dataset")))
+      )
+    }
+  )
+}
+```
+
+With these modifications, the module is now ready to be launched with `teal`:
+
+```{r app_2}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_2"),
+  knitr::knit_code$get("app_2")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
+
+`teal` adds another tab to the application, titled `Report previewer`.
+However, there is no visible change in how the module operates and appears and the user cannot add content to the report from this module.
+That requires inserting UI and server elements of the `teal.reporter` module into the module body.
+
+### Insert `teal.reporter` module
+
+The UI and the server logic necessary for adding cards from `my_module_with_reporting` to the report are provided by `teal.reporter::simple_reporter_ui` and `teal.reporter::simple_reporter_srv`.
+
+```{r module_3}
+my_module_with_reporting <- function(label = "example teal module") {
+  module(
+    label = label,
+    server = function(id, data, reporter) {
+      moduleServer(id, function(input, output, session) {
+        teal.reporter::simple_reporter_srv(
+          id = "reporter",
+          reporter = reporter,
+          card_fun = function(card) card
+        )
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
+      })
+    },
+    ui = function(id) {
+      ns <- NS(id)
+      sidebarLayout(
+        sidebarPanel(
+          teal.reporter::simple_reporter_ui(ns("reporter")),
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        ),
+        mainPanel(verbatimTextOutput(ns("dataset")))
+      )
+    }
+  )
+}
+```
+
+This updated module is now ready to be launched:
+
+```{r app_3}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+A new piece of `UI` has been added, and the buttons are clickable.
+The user can now add a card to the report and view it in the `Report previewer` module but the preview is still empty since we have not instructed our module what to put on the card.
+
+```{r shinylive_iframe_3, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_3"),
+  knitr::knit_code$get("app_3")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
+### Add content to the card
+
+To add content to a card, we will utilize the public API exposed by the `TealReportCard` class.
+The `teal.reporter::simple_reporter_srv` module accepts the `card_fun` argument that determines the appearance of the output from our custom module.
+`ReportCard` and its derivatives allow the sequential addition of content according to the order of method calls.
+To explore the content, we can use the `$get_content` method.
+For further details, refer to the documentation of `TealReportCard` and `teal.reporter::ReportCard`.
+
+We will add simple text to the card by modifying the `card_fun` argument passed to `teal.reporter::simple_reporter_srv`.
+The function must return the `teal_card` object, otherwise errors may occur in `teal`.
+
+```{r module_4}
+custom_function <- function(card = teal.reporter::ReportCard$new()) {
+  card$append_text("This is content from a custom teal module!")
+  card
+}
+
+my_module_with_reporting <- function(label = "example teal module") {
+  module(
+    label = label,
+    server = function(id, data, reporter) {
+      moduleServer(id, function(input, output, session) {
+        teal.reporter::simple_reporter_srv(
+          id = "reporter",
+          reporter = reporter,
+          card_fun = custom_function
+        )
+        updateSelectInput(session, "dataname", choices = isolate(names(data())))
+        output$dataset <- renderPrint({
+          req(input$dataname)
+          data()[[input$dataname]]
+        })
+      })
+    },
+    ui = function(id) {
+      ns <- NS(id)
+      sidebarLayout(
+        sidebarPanel(
+          teal.reporter::simple_reporter_ui(ns("reporter")),
+          selectInput(ns("dataname"), "Choose a dataset", choices = NULL)
+        ),
+        mainPanel(verbatimTextOutput(ns("dataset")))
+      )
+    }
+  )
+}
+```
+
+```{r app_4}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = my_module_with_reporting()
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
+Now, an application user can see the text added by `custom_function` in the `Report previewer` module.
+
+```{r shinylive_iframe_4, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
+code <- paste0(c(
+  knitr::knit_code$get("as_interactive"),
+  knitr::knit_code$get("setup"),
+  knitr::knit_code$get("module_4"),
+  knitr::knit_code$get("app_4")
+), collapse = "\n")
+
+url <- roxy.shinylive::create_shinylive_url(code)
+knitr::include_url(url, height = "800px")
+```
+
+### Add non-text content to the card
+
+`teal.reporter` supports the addition of tables, charts, and more.
+For more information, explore the API of `teal.reporter::ReportCard` to learn about the supported content types.
+
+### `TealReportCard`
+
+`teal` exports the `TealReportCard` class, which extends the `teal.reporter::ReportCard` class and provides several convenient methods to facilitate working with `teal` features like the filter panel or source code.
+For more details, refer to the documentation of `TealReportCard`.
+
+To support `TealReportCard`, the function that is passed to `teal.reporter::simple_reporter_srv` must define a default value for the card, as shown below:
+
+```{r}
+custom_function <- function(card = TealReportCard$new()) {
+  # ... some code ... #
+  card
+}
+```
+
+Without this definition, the API of `TealReportCard` will not be available within the function.
 
 ## Example
 

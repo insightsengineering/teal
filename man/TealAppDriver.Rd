@@ -94,13 +94,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$new(
-  data,
-  modules,
-  filter = teal_slices(),
-  title_args = list(),
-  header = tags$p(),
-  footer = tags$p(),
-  landing_popup_args = NULL,
+  app,
+  options = list(),
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...
@@ -110,9 +105,9 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data, modules, filter}}{arguments passed to \code{init}}
+\item{\code{app}}{(\code{teal_app})}
 
-\item{\code{title_args, header, footer, landing_popup_args}}{to pass into the modifier functions.}
+\item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
 
 \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.
@@ -216,17 +211,14 @@ The \code{TealAppDriver} object invisibly.
 \subsection{Method \code{navigate_teal_tab()}}{
 Navigate the teal tabs in the \code{teal} app.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$navigate_teal_tab(tabs)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$navigate_teal_tab(tab)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{tabs}}{(character) Labels of tabs to navigate to. The order of the tabs is important,
-and it should start with the most parent level tab.
-Note: In case the teal tab group has duplicate names, the first tab will be selected,
-If you wish to select the second tab with the same name, use the suffix "_1".
-If you wish to select the third tab with the same name, use the suffix "_2" and so on.}
+\item{\code{tab}}{(character) Labels of tabs to navigate to.
+Note: Make sure to provide unique labels for the tabs.}
 }
 \if{html}{\out{</div>}}
 }

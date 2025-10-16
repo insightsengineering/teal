@@ -1,24 +1,51 @@
 testthat::skip_if_not_installed("shinytest2")
 testthat::skip_if_not_installed("rvest")
 
-testthat::test_that("e2e: reporter tab is created when a module has reporter + report_fun", {
-  testthat::skip("chromium")
+testthat::test_that("e2e: reporter tab is visible when reporter is specified (default)", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Module with Reporter")
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Module with Reporter")
+    )
   )
 
-  teal_tabs <- rvest::html_elements(app$get_html_rvest(selector = "#teal-teal_modules-active_tab"), "a")
-  tab_names <- setNames(
-    rvest::html_attr(teal_tabs, "data-value"),
-    rvest::html_text(teal_tabs)
-  )
-  testthat::expect_identical(
-    tab_names,
-    c("Module with Reporter" = "module_with_reporter", "Report previewer" = "report_previewer")
+  testthat::expect_true(app$is_visible(selector = "#teal-reporter_menu_container"))
+  app$stop()
+})
+
+testthat::test_that("e2e: reporter tab is visible when the teal ui creation is delayed", {
+  skip_if_too_deep(5)
+  app <- shinytest2::AppDriver$new(
+    shiny::shinyApp(
+      ui = bslib::page_fluid(
+        uiOutput("teal_as_shiny_module")
+      ),
+      server = function(input, output, session) {
+        mods <- modules(
+          example_module()
+        )
+        output$teal_as_shiny_module <- renderUI({
+          ui_teal("teal", mods)
+        })
+        srv_teal("teal", data = teal_data(iris = iris), modules = mods)
+      }
+    ),
+    height = 1000,
+    width = 1000
   )
 
+  # Runs the same check as `app$is_visible` to check if the selector is visible
+  testthat::expect_true(
+    unlist(
+      app$get_js(
+        sprintf(
+          "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({}))",
+          "#teal-reporter_menu_container"
+        )
+      )
+    )
+  )
   app$stop()
 })
 
@@ -26,96 +53,48 @@ testthat::test_that("e2e: reporter card can be customized", {
   skip("TODO")
 })
 
-testthat::test_that("e2e: reporter tab is not created when a module has no reporter", {
-  testthat::skip("chromium")
-  skip("TODO - change to reporter button is not visible if module has no report_card")
+testthat::test_that("e2e: reporter card can be customized", {
+  skip("TODO")
+})
+
+testthat::test_that("e2e: reporter tab is not created if app has no reporter", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module")
+    init(
+      data = simple_teal_data(),
+      modules = module(),
+      reporter = NULL
+    )
   )
-  teal_tabs <- rvest::html_elements(
-    app$get_html_rvest(selector = "#teal-teal_modules-active_tab"),
-    "a"
-  )
-  tab_names <- setNames(
-    rvest::html_attr(teal_tabs, "data-value"),
-    rvest::html_text(teal_tabs)
-  )
-
-  testthat::expect_identical(
-    tab_names,
-    c("Example Module" = "example_module")
-  )
-
+  testthat::expect_null(app$get_html("#teal-reporter_menu_container"))
   app$stop()
 })
 
-testthat::test_that("e2e: adding a report card with global button adds it in the report previewer tab", {
-  testthat::skip("chromium")
+testthat::test_that("e2e: adding a report card in a module adds it in the report previewer tab", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Module with Reporter")
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Module with Reporter")
+    )
   )
 
-  app$click(NS(app$active_module_ns(), "reporter_add-add_report_card_button"))
+  # Add new card with label and comment
+  app$click(NS(
+    app$active_ns()$module_container,
+    "add_reporter_wrapper-reporter_add-add_report_card_button"
+  ))
 
   app$set_input(
-    NS(app$active_module_ns(), "reporter_add-label"),
+    NS(app$active_ns()$module_container, "add_reporter_wrapper-reporter_add-label"),
     "Card name"
   )
+  app$click(NS(app$active_ns()$module_container, "add_reporter_wrapper-reporter_add-add_card_ok"))
 
-  app$click(NS(app$active_module_ns(), "reporter_add-add_card_ok"))
-
-  app$navigate_teal_tab("Report previewer")
-
-  accordian_selector <- sprintf("#%s-pcards .accordion-toggle", app$active_module_ns())
-  app$click(selector = accordian_selector)
-
-
-  testthat::expect_match(
-    app$get_text(selector = accordian_selector),
-    "Card name"
-  )
-
-  app$stop()
-})
-
-testthat::test_that("e2e: reporter_previewer_module has download, load and reset buttons", {
-  testthat::skip("chromium")
-  skip_if_too_deep(5)
-  app <- teal:::TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module with Reporter")
-  )
-
-  app$navigate_teal_tab("Report previewer")
-
-  testthat::expect_true(
-    app$is_visible(app$active_module_element("download_data_prev"))
-  )
-  testthat::expect_true(
-    app$is_visible(app$active_module_element("load_reporter_previewer"))
-  )
-  testthat::expect_true(
-    app$is_visible(app$active_module_element("resetButtonPreviewer-reset_reporter"))
-  )
-})
-
-testthat::test_that("e2e: reporter_previewer_module do not show data_summary nor filter_panel", {
-  testthat::skip("chromium")
-  skip_if_too_deep(5)
-  app <- teal:::TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Module with Reporter")
-  )
-
-  app$navigate_teal_tab("Report previewer")
-
-  testthat::expect_null(app$is_visible(app$active_data_summary_element("table")))
-
-  testthat::expect_null(app$get_active_filter_vars())
-
+  # Check whether card was added
+  app$run_js("document.querySelector('#teal-preview_report-preview_button').click();") # skipping menu hovering
+  app$wait_for_idle()
+  accordion_selector <- "#teal-preview_report-preview_content-reporter_cards"
+  testthat::expect_match(app$get_text(selector = paste(accordion_selector, ".accordion-title")), "Card name")
   app$stop()
 })

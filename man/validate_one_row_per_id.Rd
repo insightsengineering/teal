@@ -12,9 +12,6 @@ validate_one_row_per_id(x, key = c("USUBJID", "STUDYID"))
 \item{key}{(\code{character}) Vector of ID variables from \code{x} that identify unique records.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-}
-\details{
 This function is a wrapper for \code{shiny::validate}.
 }
 \examples{

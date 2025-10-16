@@ -132,6 +132,11 @@ reference:
       - TealReportCard
       - report_card_template
       - disable_report
+  - title: Modifying output of modules
+    contents:
+      - after
+      - disable_src
+      - disable_report
   - title: Landing popup
     contents:
       - landing_popup_module

@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.16.0.9009
-Date: 2025-06-24
+Version: 1.0.0.9013
+Date: 2025-10-14
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -15,14 +15,15 @@ Authors@R: c(
     person("Vedha", "Viyash", , "vedha.viyash@roche.com", role = "aut"),
     person("Marcin", "Kosinski", , "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
-    person("Chendi", "Liao", , "chendi.liao@roche.com", role = "rev"),
     person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
+    person("Nina", "Qi", , "qi.ting@gene.com", role = "rev"),
     person("Nikolas", "Burkoff", role = "aut"),
     person("Mahmoud", "Hallal", role = "aut"),
     person("Maciej", "Nasinski", role = "aut"),
     person("Konrad", "Pagacz", role = "aut"),
     person("Junlue", "Zhao", role = "aut"),
     person("Tadeusz", "Lewandowski", role = "aut"),
+    person("Chendi", "Liao", role = "rev"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Maximilian", "Mordig", role = "ctb")
   )
@@ -37,8 +38,8 @@ BugReports: https://github.com/insightsengineering/teal/issues
 Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
-    teal.data (>= 0.7.0.9002),
-    teal.slice (>= 0.6.0.9001)
+    teal.data (>= 0.8.0),
+    teal.slice (>= 0.7.0)
 Imports:
     bsicons,
     bslib (>= 0.8.0),
@@ -52,10 +53,10 @@ Imports:
     rlang (>= 1.0.0),
     shinyjs,
     stats,
-    teal.logger (>= 0.3.2.9001),
-    teal.code (>= 0.6.1.9002),
-    teal.reporter (>= 0.4.0.9004),
-    teal.widgets (>= 0.4.3.9001),
+    teal.code (>= 0.7.0),
+    teal.logger (>= 0.4.0),
+    teal.reporter (>= 0.5.0.9001),
+    teal.widgets (>= 0.5.0),
     tools,
     utils
 Suggests:
@@ -77,16 +78,11 @@ VignetteBuilder:
     knitr,
     rmarkdown
 Remotes:
-    insightsengineering/teal.code@main,
-    insightsengineering/teal.data@main,
-    insightsengineering/teal.logger@main,
-    insightsengineering/teal.reporter@teal_reportable,
-    insightsengineering/teal.slice@main,
-    insightsengineering/teal.widgets@main
+    insightsengineering/teal.reporter@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
-    r-lib/lifecycle, daroczig/logger, shikokuchuo/mirai, r-lib/cli,
-    shikokuchuo/nanonext, rstudio/renv, r-lib/rlang, daattali/shinyjs,
+    r-lib/lifecycle, daroczig/logger, r-lib/mirai, r-lib/cli,
+    r-lib/nanonext, rstudio/renv, r-lib/rlang, daattali/shinyjs,
     insightsengineering/teal.code, insightsengineering/teal.logger,
     insightsengineering/teal.reporter, insightsengineering/teal.widgets,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
@@ -99,7 +95,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate:
     'TealAppDriver.R'
     'after.R'
@@ -117,9 +113,11 @@ Collate:
     'module_nested_tabs.R'
     'module_session_info.R'
     'module_snapshot_manager.R'
+    'module_source_code.R'
     'module_teal.R'
     'module_teal_data.R'
     'module_teal_lockfile.R'
+    'module_teal_reporter.R'
     'module_teal_with_splash.R'
     'module_transform_data.R'
     'reporter_previewer_module.R'
@@ -131,7 +129,6 @@ Collate:
     'teal_data_module-within.R'
     'teal_data_utils.R'
     'teal_modifiers.R'
-    'teal_reporter.R'
     'teal_slices-store.R'
     'teal_slices.R'
     'teal_transform_module.R'

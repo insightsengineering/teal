@@ -17,13 +17,19 @@
 NULL
 
 #' @rdname teal_data_utilities
-.append_evaluated_code <- function(data, code) {
+.append_evaluated_code <- function(data, code, filter_states) {
   checkmate::assert_class(data, "teal_data")
+  checkmate::assert_class(filter_states, "teal_slices", null.ok = TRUE)
   if (length(code) && !identical(code, "")) {
     data@code <- c(data@code, code2list(code))
     teal.reporter::teal_card(data) <- c(
       teal.reporter::teal_card(data),
-      "## Data filtering",
+      "### Filter settings",
+      teal.reporter::code_chunk(
+        .teal_slice_to_yaml(filter_states),
+        lang = "filters",
+        echo = TRUE # to not hide chunk when `global_knitr$echo` is set to `FALSE`
+      ),
       teal.reporter::code_chunk(code)
     )
     methods::validObject(data)
@@ -42,7 +48,10 @@ NULL
 }
 
 #' @rdname teal_data_utilities
-.collapse_subsequent_chunks <- function(report) {
+.collapse_subsequent_chunks <- function(card) {
+  checkmate::assert_class(card, "teal_card")
+  init_template <- teal.reporter::teal_card()
+  mostattributes(init_template) <- attributes(card)
   Reduce(
     function(x, this) {
       l <- length(x)
@@ -64,7 +73,7 @@ NULL
         c(x, this)
       }
     },
-    init = teal.reporter::teal_card(),
-    x = report
+    init = init_template,
+    x = card
   )
 }
