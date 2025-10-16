@@ -53,10 +53,6 @@ testthat::test_that("e2e: reporter card can be customized", {
   skip("TODO")
 })
 
-testthat::test_that("e2e: reporter card can be customized", {
-  skip("TODO")
-})
-
 testthat::test_that("e2e: reporter tab is not created if app has no reporter", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
