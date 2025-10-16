@@ -16,7 +16,7 @@ The `teal` package offers an integrated reporting feature utilizing the `teal.re
 For a comprehensive explanation of the reporting functionality itself, please refer to the documentation therein.
 
 This article is intended for module developers and aims to provide guidance on enhancing a custom `teal` module with an automatic reporting feature.
-This enhancement enables users to incorporate snapshots of the module outputs into a report, which can be viewed in another module called `Reporter previewer` (automatically provided by `teal`).
+This enhancement enables users to incorporate snapshots of the module outputs into a report, which can be viewed in another modal called `Reporter previewer` (automatically provided by `teal`).
 Thus the app user can interact with the report.
 
 The responsibilities of a module developer include:
