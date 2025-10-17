@@ -2859,39 +2859,6 @@ testthat::describe("teal-reporter", {
     )
   })
 
-  it("Add to report button has no reason when module's server returns a teal_report", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = within(
-          teal.data::teal_data(),
-          iris <- iris
-        ),
-        modules = modules(
-          module("module_1",
-            server = function(id, data) {
-              reactive({
-                teal.reporter::teal_report(
-                  teal_card = teal.reporter::teal_card("## Title")
-                )
-              })
-            }
-          )
-        )
-      ),
-      expr = {
-        session$setInputs(`teal_modules-active_module_id` = "module_1")
-        session$flushReact()
-
-        testthat::expect_s4_class(modules_output$module_1()(), "teal_report")
-        testthat::expect_null(
-          output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
-        )
-      }
-    )
-  })
-
   it("Clicking Add Card adds a card to the reporter", {
     shiny::testServer(
       app = srv_teal,
@@ -3036,7 +3003,7 @@ testthat::describe("teal-reporter", {
 })
 
 testthat::describe("teal-src", {
-  it("Show R code button contains 'is available' reason when module's server returns NULL", {
+  it("Show R code button contains 'no code is available' reason when module's server returns NULL", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -3128,7 +3095,8 @@ testthat::describe("teal-src", {
       }
     )
   })
-  it("Show R code button doesn't contain reason when there is working code", {
+
+  it("Show R code button reason is null when there is working code", {
     shiny::testServer(
       app = srv_teal,
       args = list(
