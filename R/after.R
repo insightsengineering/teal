@@ -72,6 +72,26 @@ after.teal_module <- function(x,
   x
 }
 
+after_ui <- function(old, new, additional_args) {
+  new_ui <- function(id, ...) {
+    original_args <- as.list(environment())
+    if ("..." %in% names(formals(old))) {
+      original_args <- c(original_args, list(...))
+    }
+    ns <- NS(id)
+    original_args$id <- ns("wrapped")
+    original_out <- do.call(old, original_args, quote = TRUE)
+
+    wrapper_args <- c(
+      additional_args,
+      list(id = ns("wrapper"), elem = original_out)
+    )
+    do.call(new, args = wrapper_args[names(formals(new))])
+  }
+  formals(new_ui) <- formals(old)
+  new_ui
+}
+
 after_srv <- function(old, new, additional_args) {
   new_srv <- function(id, ...) {
     original_args <- as.list(environment())
