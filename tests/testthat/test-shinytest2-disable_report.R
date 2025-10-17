@@ -1,7 +1,7 @@
 testthat::skip_if_not_installed("shinytest2")
 skip_if_too_deep(5)
 
-testthat::test_that("Report button is active on a module", {
+testthat::test_that("Add to report button is not disabled by default.", {
   app <- TealAppDriver$new(init(
     data = simple_teal_data(),
     modules = example_module(label = "m1")
@@ -15,7 +15,7 @@ testthat::test_that("Report button is active on a module", {
   app$stop()
 })
 
-testthat::test_that("Report button is disabled on a module changed by disable_report", {
+testthat::test_that("Report button is disabled on a module changed by disable_report()", {
   app <- TealAppDriver$new(init(
     data = simple_teal_data(),
     modules = example_module(label = "m1") |> disable_report()
@@ -30,7 +30,7 @@ testthat::test_that("Report button is disabled on a module changed by disable_re
   app$stop()
 })
 
-testthat::test_that("Report button is active on a nested module", {
+testthat::test_that("Report button is active on a nested module by default", {
   app <- TealAppDriver$new(
     init(
       data = simple_teal_data(),
@@ -49,7 +49,7 @@ testthat::test_that("Report button is active on a nested module", {
   app$stop()
 })
 
-testthat::test_that("Report button is disabled on nested modules changed by disable_report", {
+testthat::test_that("Report button is disabled on nested modules changed by disable_report()", {
   app <- TealAppDriver$new(
     init(
       data = simple_teal_data(),
