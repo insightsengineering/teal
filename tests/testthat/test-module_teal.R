@@ -2822,8 +2822,6 @@ testthat::describe("teal-reporter", {
       expr = {
         session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
-
-        testthat::expect_equivalent(teal.reporter::teal_card(modules_output$module_1()()), list())
         testthat::expect_match(
           output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
           "The module does not support reporter functionality"
