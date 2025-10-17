@@ -54,7 +54,7 @@ srv_source_code <- function(id, module_out) {
         "The source code functionality is disabled for this module."
       } else if (inherits(mod_out_r(), "error")) {
         "The module returned an error, check it for errors."
-      } else if (is.null(code_out())) {
+      } else if (!nzchar(code_out())) {
         "The module does not support source code functionality."
       }
     })
