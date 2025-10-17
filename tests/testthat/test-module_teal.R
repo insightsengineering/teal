@@ -2776,7 +2776,8 @@ testthat::describe("teal-reporter", {
         session$flushReact()
         testthat::expect_match(
           output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
-          "No report content available from this module"
+          "No report content available from this module",
+          fixed = TRUE
         )
       }
     )
@@ -2800,7 +2801,8 @@ testthat::describe("teal-reporter", {
         session$flushReact()
         testthat::expect_match(
           output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
-          "The module returned an error, check it for errors"
+          "The module returned an error, check it for errors",
+          fixed = TRUE
         )
       }
     )
@@ -2824,12 +2826,38 @@ testthat::describe("teal-reporter", {
         session$flushReact()
         testthat::expect_match(
           output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
-          "The module does not support reporter functionality"
+          "The module does not support reporter functionality",
+          fixed = TRUE
         )
       }
     )
   })
 
+  it("Add to report button contains 'is disabled' reason when disabled report", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data) |> disable_report()
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+
+        testthat::expect_match(
+          output[["teal_modules-nav-module_1-add_reporter_wrapper-report_add_reason"]]$html,
+          "The report functionality is disabled for this module.",
+          fixed = TRUE
+        )
+      }
+    )
+  })
 
   it("Add to report button has no reason when module's server returns a teal_report", {
     shiny::testServer(
@@ -2856,7 +2884,6 @@ testthat::describe("teal-reporter", {
       }
     )
   })
-  # todo: test other conditions in srv_add_reporter@reason_r
 
   it("Clicking Add Card adds a card to the reporter", {
     shiny::testServer(
@@ -3000,4 +3027,121 @@ testthat::describe("teal-reporter", {
       }
     )
   })
+})
+
+testthat::describe("teal-src", {
+  it("Show R code button contains 'is available' reason when module's server returns NULL", {
+    shiny::testServer(
+
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) NULL)
+        )
+      ),
+      expr = {
+        browser()
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_match(output[["teal_modules-nav-module_1-source_code_wrapper-source_code_reason"]]$html,
+                     "No source code is available for this module.", fixed = TRUE)
+      }
+    )
+  })
+
+  it("Show R code button contains 'is disabled' reason when disabled source code", {
+    shiny::testServer(
+
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data) |> disable_src()
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_match(output[["teal_modules-nav-module_1-source_code_wrapper-source_code_reason"]]$html,
+                               "The source code functionality is disabled for this module.", fixed = TRUE)
+      }
+    )
+  })
+
+  it("Show R code button contains 'error' reason when module's server returns an error", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) reactive(teal.code::qenv(stop("test"))))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_match(output[["teal_modules-nav-module_1-source_code_wrapper-source_code_reason"]]$html,
+                               "The module returned an error, check it for errors.", fixed = TRUE)
+      }
+    )
+  })
+
+  it("Show R code button contains 'not support source code' reason when there is no code", {
+    shiny::testServer(
+
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(),
+        modules = modules(
+          module("module_1", server = function(id, data) reactive(NULL))
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        browser()
+        testthat::expect_match(output[["teal_modules-nav-module_1-source_code_wrapper-source_code_reason"]]$html,
+                               "The module does not support source code functionality.",
+                               fixed = TRUE)
+      }
+    )
+  })
+  it("Show R code button doesn't contain reason when there is code", {
+    shiny::testServer(
+
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data )
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        testthat::expect_null(output[["teal_modules-nav-module_1-source_code_wrapper-source_code_reason"]])
+      }
+    )
+  })
+
+  # it("Show R code button has no reason when module's server returns a source", {})
+  # it("Add to report button has no reason when module's server returns a teal_report", {})
 })
