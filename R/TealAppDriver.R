@@ -25,7 +25,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param app (`teal_app`)
+    #' @param app (`teal_app` or `list`) Accept the object created by the `init()` function or
+    #' a list of `ui` and `server` elements that contains teal as a shiny module.
     #' @param options (`list`) passed to `shinyApp(options)`. See [shiny::shinyApp()].
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
@@ -47,7 +48,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
-      checkmate::assert_class(app, "teal_app")
+      checkmate::assert_class(app, c("teal_app", "list"))
+      if (inherits(app, "list")) {
+        checkmate::assert_names(
+          names(app),
+          must.include = c("ui", "server"),
+          subset.of = c("ui", "server")
+        )
+        checkmate::assert_function(app$server, args = c("input", "output", "session"))
+        checkmate::assert_class(app$ui, "shiny.tag")
+      }
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # It must be set as parameter to the AppDriver
       suppressWarnings(
