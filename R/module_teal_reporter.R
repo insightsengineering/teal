@@ -183,7 +183,7 @@ srv_add_reporter <- function(id, module_out, reporter, module_label = "") {
         "reporter_add",
         reporter = reporter,
         card_fun = doc_out,
-        card_name = module_label
+        card_title = module_label
       )
     }
   })
