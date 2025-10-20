@@ -26,13 +26,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
 \item \href{#method-TealAppDriver-set_input}{\code{TealAppDriver$set_input()}}
 \item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
-\item \href{#method-TealAppDriver-active_ns}{\code{TealAppDriver$active_ns()}}
-\item \href{#method-TealAppDriver-active_module_ns}{\code{TealAppDriver$active_module_ns()}}
-\item \href{#method-TealAppDriver-active_module_element}{\code{TealAppDriver$active_module_element()}}
-\item \href{#method-TealAppDriver-active_module_element_text}{\code{TealAppDriver$active_module_element_text()}}
-\item \href{#method-TealAppDriver-active_filters_ns}{\code{TealAppDriver$active_filters_ns()}}
-\item \href{#method-TealAppDriver-active_data_summary_ns}{\code{TealAppDriver$active_data_summary_ns()}}
-\item \href{#method-TealAppDriver-active_data_summary_element}{\code{TealAppDriver$active_data_summary_element()}}
+\item \href{#method-TealAppDriver-namespaces}{\code{TealAppDriver$namespaces()}}
 \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
 \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
 \item \href{#method-TealAppDriver-get_active_module_table_output}{\code{TealAppDriver$get_active_module_table_output()}}
@@ -94,13 +88,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$new(
-  data,
-  modules,
-  filter = teal_slices(),
-  title_args = list(),
-  header = tags$p(),
-  footer = tags$p(),
-  landing_popup_args = NULL,
+  app,
+  options = list(),
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...
@@ -110,9 +99,9 @@ Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data, modules, filter}}{arguments passed to \code{init}}
+\item{\code{app}}{(\code{teal_app})}
 
-\item{\code{title_args, header, footer, landing_popup_args}}{to pass into the modifier functions.}
+\item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
 
 \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.
@@ -232,115 +221,23 @@ The \code{TealAppDriver} object invisibly.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_ns}{}}}
-\subsection{Method \code{active_ns()}}{
-Get the active shiny name space for different components of the teal app.
+\if{html}{\out{<a id="method-TealAppDriver-namespaces"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-namespaces}{}}}
+\subsection{Method \code{namespaces()}}{
+\code{NS} in different sections of \code{teal} app
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{list}) The list of active shiny name space of the teal components.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_module_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_ns}{}}}
-\subsection{Method \code{active_module_ns()}}{
-Get the active shiny name space for interacting with the module content.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the component.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_module_element"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_element}{}}}
-\subsection{Method \code{active_module_element()}}{
-Get the active shiny name space bound with a custom \code{element} name.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element(element)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$namespaces(is_selector = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{element}}{\code{character(1)} custom element name.}
+\item{\code{is_selector}}{(\code{logical(1)}) whether \code{ns} function should prefix with \verb{#}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{string}) The active shiny name space of the component bound with the input \code{element}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_module_element_text"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_module_element_text}{}}}
-\subsection{Method \code{active_module_element_text()}}{
-Get the text of the active shiny name space bound with a custom \code{element} name.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_module_element_text(element)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{element}}{\code{character(1)} the text of the custom element name.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{string}) The text of the active shiny name space of the component bound with the input \code{element}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_filters_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_filters_ns}{}}}
-\subsection{Method \code{active_filters_ns()}}{
-Get the active shiny name space for interacting with the filter panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_filters_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the component.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_data_summary_ns"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_data_summary_ns}{}}}
-\subsection{Method \code{active_data_summary_ns()}}{
-Get the active shiny name space for interacting with the data-summary panel.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_data_summary_ns()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the data-summary component.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-active_data_summary_element"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-active_data_summary_element}{}}}
-\subsection{Method \code{active_data_summary_element()}}{
-Get the active shiny name space bound with a custom \code{element} name.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$active_data_summary_element(element)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{element}}{\code{character(1)} custom element name.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{string}) The active shiny name space of the component bound with the input \code{element}.
+list of \code{ns}.
 }
 }
 \if{html}{\out{<hr>}}

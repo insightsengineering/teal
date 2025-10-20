@@ -4,16 +4,18 @@ testthat::skip_if_not_installed("rvest")
 testthat::test_that("e2e: teal_slices filters are initialized when global filters are created", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "Module_1"),
-      example_module(label = "Module_2")
-    ),
-    filter = teal_slices(
-      teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
-      teal_slice(id = "mtcars_cyl", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      teal_slice(id = "mtcars_drat", dataname = "mtcars", varname = "drat", selected = c(3, 4)),
-      teal_slice(id = "mtcars_gear", dataname = "mtcars", varname = "gear")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "Module_1"),
+        example_module(label = "Module_2")
+      ),
+      filter = teal_slices(
+        teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
+        teal_slice(id = "mtcars_cyl", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        teal_slice(id = "mtcars_drat", dataname = "mtcars", varname = "drat", selected = c(3, 4)),
+        teal_slice(id = "mtcars_gear", dataname = "mtcars", varname = "gear")
+      )
     )
   )
 
@@ -47,20 +49,22 @@ testthat::test_that("e2e: teal_slices filters are initialized when global filter
 testthat::test_that("e2e: teal_slices filters are initialized when module specific filters are created", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "Module_1"),
-      example_module(label = "Module_2")
-    ),
-    filter = teal_slices(
-      teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
-      teal_slice(id = "mtcars_cyl", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      teal_slice(id = "mtcars_drat", dataname = "mtcars", varname = "drat", selected = c(3, 4)),
-      teal_slice(id = "mtcars_gear", dataname = "mtcars", varname = "gear"),
-      module_specific = TRUE,
-      mapping = list(
-        "Module_1" = c("iris_species", "mtcars_cyl"),
-        "Module_2" = c("iris_species", "mtcars_drat", "mtcars_gear")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "Module_1"),
+        example_module(label = "Module_2")
+      ),
+      filter = teal_slices(
+        teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
+        teal_slice(id = "mtcars_cyl", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        teal_slice(id = "mtcars_drat", dataname = "mtcars", varname = "drat", selected = c(3, 4)),
+        teal_slice(id = "mtcars_gear", dataname = "mtcars", varname = "gear"),
+        module_specific = TRUE,
+        mapping = list(
+          "Module_1" = c("iris_species", "mtcars_cyl"),
+          "Module_2" = c("iris_species", "mtcars_drat", "mtcars_gear")
+        )
       )
     )
   )
