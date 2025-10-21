@@ -7,11 +7,11 @@ teal_transform_filter <- function(x, label = "Filter") {
     label = label,
     ui <- function(id) {
       ns <- NS(id)
-      teal.transform::module_input_ui(ns("transformer"), spec = x, container = div)
+      teal.transform::picks_ui(ns("transformer"), spec = x, container = div)
     },
     server <- function(id, data) {
       moduleServer(id, function(input, output, session) {
-        selector <- teal.transform::module_input_srv("transformer", spec = x, data = data)
+        selector <- teal.transform::picks_srv("transformer", spec = x, data = data)
         reactive({
           req(data(), selector())
           # todo: make sure filter call is not executed when setequal(selected, all_possible_choices)

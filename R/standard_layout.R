@@ -52,39 +52,3 @@ teal_nav_item <- function(label = NULL, ...) {
     tagList(list(...))
   )
 }
-
-#' Dropdown badge
-#'
-#' Dropdown button in a form of a badge with `bg-primary` as default style
-#' Clicking badge shows a dropdown containing any `HTML` element. Folded dropdown
-#' doesn't trigger display output which means that items rendered using `render*`
-#' will be recomputed only when dropdown is show.
-#'
-#' @param id (`character(1)`) shiny module's id
-#' @param label (`shiny.tag`) Label displayed on a badge.
-#' @param ... (`shiny.tag`) Content of a dropdown.
-#' @export
-badge_dropdown <- function(id, label, content) {
-  ns <- shiny::NS(id)
-  htmltools::tagList(
-    htmltools::singleton(htmltools::tags$head(
-      htmltools::includeCSS(system.file("css", "badge-dropdown.css", package = "teal")),
-      htmltools::includeScript(system.file("js", "badge-dropdown.js", package = "teal"))
-    )),
-    htmltools::tags$div(
-      class = "badge-dropdown-wrapper",
-      htmltools::tags$span(
-        id = ns("summary_badge"),
-        class = "badge bg-primary rounded-pill badge-dropdown",
-        tags$span(class = "badge-dropdown-label", label),
-        tags$span(class = "badge-dropdown-icon", bsicons::bs_icon("caret-down-fill")),
-        onclick = sprintf("toggleBadgeDropdown('%s', '%s')", ns("summary_badge"), ns("inputs_container"))
-      ),
-      htmltools::tags$div(
-        content,
-        id = ns("inputs_container"),
-        style = "visibility: hidden; opacity: 0; pointer-events: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 10px; z-index: 1000; min-width: 200px; transition: opacity 0.2s ease;",
-      )
-    )
-  )
-}
