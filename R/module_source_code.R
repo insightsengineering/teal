@@ -65,7 +65,7 @@ srv_source_code <- function(id, module_out) {
         if (length(reason)) {
           icon <- if (grepl("error", reason)) "exclamation-triangle-fill" else "info-circle-fill"
           shiny::div(
-            class = if (grepl("error", reason)) "text-danger" else "text-info",
+            class = if (grepl("error", reason)) "text-warning" else "text-info",
             style = "padding-top: 0.5em;",
             bsicons::bs_icon(name = icon),
             reason
