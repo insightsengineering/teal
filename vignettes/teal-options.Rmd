@@ -159,7 +159,7 @@ list(
 ###  `teal.reporter.max_request_size` (`numeric`)
 
 It allows controlling the maximum size allowed for a `shiny::fileInput`. Intented to allow for larger file sizes when a big report file is uploaded.
-Default: `10 * 1024^2` which stands for 10MB. To modify to another size in MB the simplest way is to change the first number,
+Default: `10 * 1024^2` which stands for 10MB.
 ### `teal.show_src` (`logical`)
 
 It allows customizing the visibility of the "Show R Code" button in the module title bar.
