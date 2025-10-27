@@ -166,7 +166,6 @@ It allows customizing the visibility of the "Show R Code" button in the module t
 
 Default: `TRUE`.
 
-
 # Deprecated options
 
 ### `teal_logging`
