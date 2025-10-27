@@ -52,7 +52,7 @@ To take advantage of the new features module developers may need to make the fol
 
 1. Return the modified `data` argument at the end of the server function
 2. Remove "Add to reporter" and "Show R code" buttons from module's UI
-3. Remove `repoter` and `filter_panel_api` arguments from the module's server function
+3. Remove `reporter` and `filter_panel_api` arguments from the module's server function
 4. Add required title and extra content to the reporter during code evaluation
 5. Ensure that the code evaluation generates outputs
 
