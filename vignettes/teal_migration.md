@@ -19,7 +19,7 @@ These changes simplify module development, improve reproducibility, and provide 
 > Purpose: Simplify the structure and management of report cards by directly storing R objects without a wrapper class.
 
 - This new class stores a list of R objects that make up the report card, such as plots, tables, and text.
-- Each object of the list is a R object, such as `character`, `ggplot`, `data.frame`, etc.
+- Each object of the list is an R object, such as `character`, `ggplot`, `data.frame`, etc.
 
 The previous `ReportCard` R6 class is now deprecated and will be removed in a future release.
 
