@@ -3,9 +3,9 @@
 `teal` `v1.1.0` introduces several new features that may require minor updates to existing modules.
 These changes simplify module development, improve reproducibility, and provide a unified reporting interface.
 
-### The key changes are:
+### Key changes
 
-#### 🆕 A new `teal_reporter` object is passed to the module server functions.
+#### 🆕 A new `teal_reporter` object is passed to the module server functions
 
 > Purpose: Enables modules to record outputs and custom content for reproducible reports.
 
@@ -14,7 +14,7 @@ These changes simplify module development, improve reproducibility, and provide 
 - Outputs from the code evaluation are captured in order and displayed in the reporter.
 - It allows modules to add manual content to the reporter, such as titles and descriptions.
 
-#### 🆕 `teal_card` object is now used to represent report cards in the reporter.
+#### 🆕 `teal_card` object is now used to represent report cards in the reporter
 
 > Purpose: Simplify the structure and management of report cards by directly storing R objects without a wrapper class.
 
@@ -23,14 +23,14 @@ These changes simplify module development, improve reproducibility, and provide 
 
 The previous `ReportCard` R6 class is now deprecated and will be removed in a future release.
 
-See the section ["Adding arbitrary markdown content to the reporter"](https://insightsengineering.github.io/teal.reporter/main/articles/teal-report-class.html#adding-content-to-the-teal_report) for more details on how to use the new `teal_card` class.
+See the section ["Adding arbitrary markdown content to the reporter"](https://insightsengineering.github.io/teal.reporter/latest-tag/articles/teal-report-class.html#adding-content-to-the-teal_report) for more details on how to use the new `teal_card` class.
 
 #### 🆕 `teal` always displays the Reporter buttons in the main UI
 
 > Purpose: Provide a clear and consistent API for defining reporting features.
 
 - The enabling of the reporter functionality is now determined by the `teal::init(reporter = NULL)` argument.
-    - and not by the presence of `reporter` argument in the module's server function.
+  - and not by the presence of `reporter` argument in the module's server function.
 - To disable it for specific modules while keeping the UI consistent, wrap them with `teal::disable_report()`.
 
 #### 🆕 Code reproducibility is now handled automatically by `teal`
@@ -39,7 +39,7 @@ See the section ["Adding arbitrary markdown content to the reporter"](https://in
 
 - The "Show R code" button is always displayed, but becomes active only when the module returns a `qenv`-based object (such as `teal_data` or `teal_reporter`).
 - To disable this globally use R option `options(teal.show_src = FALSE)`.
-    - Alternatively, use the wrapper function `teal::disable_src()` around a single module or group.
+  - Alternatively, use the wrapper function `teal::disable_src()` around a single module or group.
 
 ### Backward compatibility
 
@@ -226,5 +226,6 @@ To understand how to use the new `teal_reporter` and `teal_card` classes in more
 - [Adding Support for Reporting to Custom Modules](https://insightsengineering.github.io/teal/latest-main/articles/adding-support-for-reporting.html) vignette
 
 For detailed API documentation, see:
+
 - [`teal_reporter` reference](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_report.html)
 - [`teal_card` reference](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)
