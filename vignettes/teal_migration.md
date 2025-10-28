@@ -23,6 +23,8 @@ These changes simplify module development, improve reproducibility, and provide 
 
 The previous `ReportCard` R6 class is now deprecated and will be removed in a future release.
 
+See the section ["Adding arbitrary markdown content to the reporter"](https://insightsengineering.github.io/teal.reporter/main/articles/teal-report-class.html#adding-content-to-the-teal_report) for more details on how to use the new `teal_card` class.
+
 #### 🆕 `teal` always displays the Reporter buttons in the main UI
 
 > Purpose: Provide a clear and consistent API for defining reporting features.
