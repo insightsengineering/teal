@@ -217,6 +217,12 @@ We also add a title named `Plot` to the reporter using the `teal_card` function 
 The new features simplify how modules generate and manage reportable outputs.
 By updating existing modules as described above, developers gain automatic integration with reproducibility and reporting features.
 
+To understand how to use the new `teal_reporter` and `teal_card` classes in more detail, please refer to the following documentation:
+
+- [`teal_reporter` class](https://insightsengineering.github.io/teal.reporter/main/articles/teal-report-class.html) vignette
+- [Creating custom modules](https://insightsengineering.github.io/teal/latest-main/articles/creating-custom-modules.html) vignette
+- [Adding Support for Reporting to Custom Modules](https://insightsengineering.github.io/teal/latest-main/articles/adding-support-for-reporting.html) vignette
+
 For detailed API documentation, see:
 - [`teal_reporter` reference](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_report.html)
 - [`teal_card` reference](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)
