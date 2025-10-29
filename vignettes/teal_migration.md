@@ -37,7 +37,7 @@ See the section ["Adding arbitrary markdown content to the reporter"](https://in
 
 > Purpose: Promote code reproducibility in modules and simplify module development.
 
-- The "Show R code" button is always displayed, but becomes active only when the module returns a `qenv`-based object (such as `teal_data` or `teal_reporter`).
+- The `Show R code` button is always displayed, but becomes active only when the module returns a `qenv`-based object (such as `teal_data` or `teal_reporter`).
 - To disable this globally use R option `options(teal.show_src = FALSE)`.
   - Alternatively, use the wrapper function `teal::disable_src()` around a single module or group.
 
