@@ -58,7 +58,7 @@ To take advantage of the new features module developers may need to make the fol
 4. Add required title and extra content to the reporter during code evaluation with the help of `teal_card` function
 5. Ensure that the code evaluation generates outputs
 
-Here is an example of how we updated the `tm_a_regression` module in `teal.modules.general` package:
+Here is an example of how the `tm_a_regression` module was updated  in `teal.modules.general` package:
 
 ### 1. Return the modified `data` argument at the end of the server function
 
