@@ -14,9 +14,8 @@ NULL
 
 #' @export
 #' @rdname module_transform_data
-ui_transform_teal_data <- function(id, transformators, container = c("accordion", "div")) {
+ui_transform_teal_data <- function(id, transformators, class = "well") {
   checkmate::assert_string(id)
-  container <- match.arg(container)
   if (length(transformators) == 0L) {
     return(NULL)
   }
@@ -34,32 +33,29 @@ ui_transform_teal_data <- function(id, transformators, container = c("accordion"
       data_mod <- transformators[[name]]
       transform_wrapper_id <- ns(sprintf("wrapper_%s", name))
 
-      transformator_ui <- tags$div(
-        id = transform_wrapper_id,
-        if (is.null(data_mod$ui)) {
-          return(NULL)
-        } else {
-          data_mod$ui(id = ns("transform"))
-        },
-        div(
-          id = ns("validate_messages"),
-          class = "teal_validated",
-          uiOutput(ns("error_wrapper"))
-        )
-      )
+      display_fun <- if (is.null(data_mod$ui)) shinyjs::hidden else function(x) x
 
-      transformator_wrapper <- if (container == "accordion") {
+      display_fun(
         bslib::accordion(
           bslib::accordion_panel(
-            title = attr(data_mod, "label"),
+            attr(data_mod, "label"),
             icon = bsicons::bs_icon("palette-fill"),
-            transformator_ui
+            tags$div(
+              id = transform_wrapper_id,
+              if (is.null(data_mod$ui)) {
+                return(NULL)
+              } else {
+                data_mod$ui(id = ns("transform"))
+              },
+              div(
+                id = ns("validate_messages"),
+                class = "teal_validated",
+                uiOutput(ns("error_wrapper"))
+              )
+            )
           )
         )
-      } else {
-        teal::teal_nav_item(transformator_ui, label = tags$strong(attr(data_mod, "label")))
-      }
-      if (is.null(data_mod$ui)) shinyjs::hidden(transformator_wrapper) else transformator_wrapper
+      )
     }
   )
 }
@@ -87,7 +83,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
 
           data_out <- reactiveVal()
           .call_once_when(inherits(data_previous(), "teal_data"), {
-            logger::log_debug("srv_transform_teal_data@2 triggering a transform module call for { name }.")
+            logger::log_debug("srv_teal_transform_teal_data@2 triggering a transform module call for { name }.")
             data_unhandled <- transformators[[name]]$server("transform", data = data_previous)
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 

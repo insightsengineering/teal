@@ -6,7 +6,6 @@
     teal.lockfile.mode = "auto",
     shiny.sanitize.errors = FALSE,
     teal.sidebar.position = "left",
-    teal.transform.location = ".teal-sidebar", # alternatively .standard-layout.encoding-panel
     teal.sidebar.width = 250,
     teal.reporter.nav_buttons = c("preview", "download", "load", "reset"),
     teal.show_src = TRUE

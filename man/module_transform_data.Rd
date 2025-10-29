@@ -6,7 +6,7 @@
 \alias{srv_transform_teal_data}
 \title{Module to transform \code{reactive} \code{teal_data}}
 \usage{
-ui_transform_teal_data(id, transformators, container = c("accordion", "div"))
+ui_transform_teal_data(id, transformators, class = "well")
 
 srv_transform_teal_data(
   id,
@@ -22,6 +22,8 @@ srv_transform_teal_data(
 \item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
 To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 
+\item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
+
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
 The data which application will depend on.}
 
@@ -30,8 +32,6 @@ The data which application will depend on.}
 \item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
 Help to determine if any previous transformator failed, so that following transformators can be disabled
 and display a generic failure message.}
-
-\item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
 }
 \value{
 \code{reactive} \code{teal_data}
