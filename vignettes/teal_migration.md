@@ -99,6 +99,8 @@ For new modules this is the only required step to enable the new features.
    )
 ```
 
+The next section shows what to remove on the server side.
+
 ### 3. Remove the `reporter` and `filter_panel_api` arguments in the server
 
 Remove the arguments and their usage:
