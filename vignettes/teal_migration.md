@@ -48,7 +48,7 @@ The new `Add to Report` and `Show R code` buttons will appear in the UI but rema
 
 ### Migration steps for module developers
 
-Follow these steps to update your custom modules and take advantage of the new reporter and code reproducibility features (Only required for modules that need reporter or reproducibility integration).
+Follow these steps to update your custom modules and take advantage of the new reporter and code reproducibility features (only required for modules that need reporter or reproducibility integration).
 
 To take advantage of the new features module developers may need to make the following adjustments:
 
