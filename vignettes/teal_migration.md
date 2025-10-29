@@ -169,7 +169,7 @@ This takes the plot dimension size from the `plot_with_settings` widget (`teal.w
 
 ### 4. Add required title and extra content to the reporter during code evaluation
 
-Note that we are adding a title named `Module's output(s)` to the reporter using the `teal_card` function.
+Note that we are adding a header named `Module's output(s)` to the report card using the `teal_card` function.
 
 ```diff
 @@ srv_a_regression <- function(id,
