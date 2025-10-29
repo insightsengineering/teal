@@ -44,7 +44,7 @@ See the section ["Adding arbitrary markdown content to the reporter"](https://in
 ### Backward compatibility
 
 Existing modules will continue to function as before.
-The new Reporter and R code buttons will appear in the UI but remain disabled until the module is updated.
+The new `Add to Report` and `Show R code` buttons will appear in the UI but remain disabled until the module is updated.
 
 ### Migration steps for module developers
 
