@@ -52,10 +52,10 @@ Follow these steps to update your custom modules and take advantage of the new r
 
 To take advantage of the new features module developers may need to make the following adjustments:
 
-1. Return the modified `data` argument at the end of the server function  and make sure it's reactive
+1. Return the modified `data` argument at the end of the server function and make sure it's reactive
 2. Remove `Add to Report` and `Show R code` buttons from module's UI
 3. Remove `reporter` and `filter_panel_api` arguments from the module's server function
-4. Add required title and extra content to the reporter during code evaluation with the help of `teal_card` function
+4. Add required title and extra content to the reporter during code evaluation with the help of `teal.reporter::teal_card()` function
 5. Ensure that the code evaluation generates outputs
 
 Here is an example of how the `tm_a_regression` module was updated  in `teal.modules.general` package:
@@ -63,6 +63,7 @@ Here is an example of how the `tm_a_regression` module was updated  in `teal.mod
 ### 1. Return the modified `data` argument at the end of the server function
 
 For new modules this is the only required step to enable the new features.
+Ensure that the returned `data` argument is reactive.
 
 ```diff
 @@ srv_a_regression <- function(id,
@@ -167,11 +168,11 @@ The server logic that handles the reporter and R code buttons should also be rem
 ```
 
 Note that in the released `tm_a_regression` we are saving the plot size with a private utility function `set_chunk_dims()`.
-This takes the plot dimension size from the `plot_with_settings` widget (`teal.widgets::plot_with_settings_srv()`) and stores it in the metadata of the last `teal_card()` element.
+This takes the plot dimension size from the `plot_with_settings` widget (`teal.widgets::plot_with_settings_srv()`) and stores it in the metadata of the last `teal_card` element.
 
 ### 4. Add required title and extra content to the reporter during code evaluation
 
-Note that we are adding a header named `Module's output(s)` to the report card using the `teal_card` function.
+Note that we are adding a header named `Module's output(s)` to the report card using the `teal.reporter::teal_card()` function.
 
 ```diff
 @@ srv_a_regression <- function(id,
@@ -199,7 +200,7 @@ Note that we are adding a header named `Module's output(s)` to the report card u
 
 Here we modify the code evaluation to store the summary output in a variable `fit_summary` that is then returned.
 
-We also add a header named `Plot` to the report card using the `teal_card` function as the next code evaluation generates a plot (in the decorators logic).
+We also add a header named `Plot` to the report card using the `teal.repoter::teal_card()` function as the next code evaluation generates a plot (in the decorators logic).
 
 ```diff
 @@ srv_a_regression <- function(id,
