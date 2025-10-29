@@ -192,7 +192,7 @@ Note that we are adding a header named `Module's output(s)` to the report card u
      anl_merged_q <- reactive({
        req(anl_merged_input())
 ```
-
+`teal.reporter::teal_card(obj)` is reused as it already contains data filtering code and the code passed to `teal_data` object, before it was used in `teal::init(data = teal_data)`
 ### 5. Ensure that the code evaluation generates outputs
 
 Here we modify the code evaluation to store the summary output in a variable `fit_summary` that is then returned.
