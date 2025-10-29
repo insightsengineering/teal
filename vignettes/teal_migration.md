@@ -73,7 +73,7 @@ For new modules this is the only required step to enable the new features.
  }
 ```
 
-### 2. Remove "Add to reporter" and "Show R code" buttons from module's UI
+### 2. Remove "Add to Report" and "Show R code" buttons from module's UI
 
 ```diff
 @@ ui_a_regression <- function(id, ...) {
