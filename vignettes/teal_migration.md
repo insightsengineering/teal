@@ -197,7 +197,7 @@ Note that we are adding a title named `Module's output(s)` to the reporter using
 
 Here we modify the code evaluation to store the summary output in a variable `fit_summary` that is then returned.
 
-We also add a title named `Plot` to the reporter using the `teal_card` function as the next code evaluation generates a plot (in the decorators logic).
+We also add a header named `Plot` to the report card using the `teal_card` function as the next code evaluation generates a plot (in the decorators logic).
 
 ```diff
 @@ srv_a_regression <- function(id,
