@@ -68,7 +68,7 @@ For new modules this is the only required step to enable the new features.
 @@ srv_a_regression <- function(id,
        paste(utils::capture.output(summary(fitted()))[-1], collapse = "\n")
      })
-+    set_chunk_dims(pws, decorated_output_q)
++    decorated_output_q
    })
  }
 ```
