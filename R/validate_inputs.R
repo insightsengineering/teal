@@ -205,7 +205,7 @@ any_names <- function(x) {
 #' @return `TRUE` or `shiny.silent.error` when condition is not met
 #'
 #' @keywords internal
-validate_input <- function(inputId,
+validate_input <- function(inputId, # nolint
                            condition = function(x) TRUE,
                            message = "",
                            session = shiny::getDefaultReactiveDomain()) {
