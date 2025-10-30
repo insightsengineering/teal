@@ -60,8 +60,7 @@ To take advantage of the new features module developers may need to make the fol
 
 Here is an example of how the `tm_a_regression` module was updated  in `teal.modules.general` package:
 
-_Please note that the code snippets below are illustrative and may not represent the complete module code._
-_The full code for the updated modules uses internal utility functions to support decorators and keeping the shown image dimensions that are not shown here for brevity._
+_Note: The code examples below are simplified for illustration purposes and may not show the complete module implementation. The actual updated modules include additional internal utility functions for decorators and image dimension preservation that are omitted here for clarity._
 
 ### 1. Return the modified `data` argument at the end of the server function
 
