@@ -56,7 +56,7 @@ To take advantage of the new features module developers may need to make the fol
 2. Remove `Add to Report` and `Show R code` buttons from module's UI
 3. Remove `reporter` and `filter_panel_api` arguments from the module's server function
 4. Add required title and extra content to the reporter during code evaluation with the help of `teal.reporter::teal_card()` function
-5. Ensure that the code evaluation generates outputs
+5. Ensure that the code evaluation generates outputs (implicitly calling the object or using a print function)
 
 Here is an example of how the `tm_a_regression` module was updated  in `teal.modules.general` package:
 
