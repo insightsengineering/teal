@@ -13,9 +13,7 @@ testthat::test_that("e2e: Module with 'Show R Code' initializes with visible but
 
   # Check if button exists.
   testthat::expect_identical(
-    app$get_text(sprintf(
-      "#%s-%s", app$active_ns()$module_container, "source_code_wrapper-source_code-button"
-    )),
+    app$get_text(app$namespaces(TRUE)$module_container("source_code_wrapper-source_code-button")),
     "Show R code"
   )
   app$stop()
@@ -29,9 +27,7 @@ testthat::test_that("e2e: Module with 'Show R Code' has modal with two dismiss a
     )
   )
 
-  app$click(selector = sprintf(
-    "#%s-%s", app$active_ns()$module_container, "source_code_wrapper-source_code-button"
-  ))
+  app$click(selector = app$namespaces(TRUE)$module_container("source_code_wrapper-source_code-button"))
 
   # Check header and title content.
   testthat::expect_equal(
@@ -53,18 +49,12 @@ testthat::test_that("e2e: Module with 'Show R Code' has code", {
     )
   )
 
-  app$click(selector = sprintf(
-    "#%s-%s", app$active_ns()$module_container, "source_code_wrapper-source_code-button"
-  ))
+  app$click(selector = app$namespaces(TRUE)$module_container("source_code_wrapper-source_code-button"))
 
   # Check R code output.
   testthat::expect_identical(
     strsplit(
-      app$get_text(
-        sprintf(
-          "#%s-%s", app$active_ns()$module_container, "source_code_wrapper-source_code-verbatim_content"
-        )
-      ),
+      app$get_text(app$namespaces(TRUE)$module_container("source_code_wrapper-source_code-verbatim_content")),
       "\n"
     )[[1]],
     c(
