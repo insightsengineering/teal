@@ -47,3 +47,4 @@ coverage.*
 ^revdep$
 ^\.covrignore$
 ^inst/cheatsheet$
+^inst/userguide$
