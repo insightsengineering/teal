@@ -60,6 +60,9 @@ To take advantage of the new features module developers may need to make the fol
 
 Here is an example of how the `tm_a_regression` module was updated  in `teal.modules.general` package:
 
+_Please note that the code snippets below are illustrative and may not represent the complete module code._
+_The full code for the updated modules uses internal utility functions to support decorators and keeping the shown image dimensions that are not shown here for brevity._
+
 ### 1. Return the modified `data` argument at the end of the server function
 
 For new modules this is the only required step to enable the new features.
@@ -180,7 +183,7 @@ Note that we are adding a header named `Module's output(s)` to the report card u
      })
 
 -    qenv <- reactive(
--      teal.code::eval_code(data(), 'library("ggplot2");library("dplyr")') # nolint quotes
+-      teal.code::eval_code(data(), "library(ggplot2);library(dplyr)")
 -    )
 +    qenv <- reactive({
 +      obj <- data()
@@ -189,32 +192,44 @@ Note that we are adding a header named `Module's output(s)` to the report card u
 +          teal.reporter::teal_card(obj),
 +          teal.reporter::teal_card("## Module's output(s)")
 +        )
-+      teal.code::eval_code(obj, 'library("ggplot2");library("dplyr")') # nolint: quotes
++      teal.code::eval_code(obj, "library(ggplot2);library(dplyr)")
 +    })
 
      anl_merged_q <- reactive({
        req(anl_merged_input())
 ```
 `teal.reporter::teal_card(obj)` is reused as it already contains data filtering code and the code passed to `teal_data` object, before it was used in `teal::init(data = teal_data)`
+
 ### 5. Ensure that the code evaluation generates outputs
 
-Here we modify the code evaluation to store the summary output in a variable `fit_summary` that is then returned.
-
-We also add a header named `Plot` to the report card using the `teal.repoter::teal_card()` function as the next code evaluation generates a plot (in the decorators logic).
+The code evaluation that generates the model summary is added to the reporter automatically as it generates an output.
+Alternatively, you could also use `print()`, `plot()` or other functions to generate outputs that will be captured by the reporter.
 
 ```diff
 @@ srv_a_regression <- function(id,
              )
            }
          })) %>%
--        teal.code::eval_code(quote(summary(fit)))
-+        teal.code::eval_code(quote({
-+          fit_summary <- summary(fit)
-+          fit_summary
-+        }))
-+      teal.reporter::teal_card(anl_fit) <- c(teal.reporter::teal_card(anl_fit), "### Plot")
-+      anl_fit
+         teal.code::eval_code(quote(summary(fit)))
      })
+```
+
+We also add a header named `Plot` to the report card using the `teal.repoter::teal_card()` function before the plot output is generated.
+
+```diff
+@@ srv_a_regression <- function(id,
+    "Cook's distance" = output_plot_4(),
+        "Residuals vs Leverage" = output_plot_5(),
+        "Cook's dist vs Leverage" = output_plot_6()
+      )
+    })
+
+-   output_final_q <- reactive(within(output_q(), plot))
++   output_final_q <- reactive({
++     qenv <- output_q()
++     teal.reporter::teal_card(qenv) <- c(teal.reporter::teal_card(qenv), "### Plot")
++     within(qenv, plot)
++   })
 ```
 
 ### Summary
