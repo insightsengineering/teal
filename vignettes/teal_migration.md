@@ -11,7 +11,7 @@ These changes simplify module development, improve reproducibility, and provide 
 
 - The new class inherits from `teal_data`, keeping all existing functionality and adds a `teal_card` slot to store a report (`teal_card` object).
 - The conversion from `teal_data` to `teal_reporter` happens internally in `teal`, so app and module developers do not need to worry about it.
-- Outputs from the code evaluation are captured in order and displayed in the reporter.
+- Outputs from the code evaluation are captured in order of execution and displayed in the reporter.
 - It allows modules to add manual content to the report cards, such as titles and descriptions.
 
 #### 🆕 `teal_card` object is now used to represent report cards in the reporter
