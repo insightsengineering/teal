@@ -13,25 +13,23 @@
   color: #888;
 }
 
+.teal_validated {
+  margin-bottom: 0.5em;
+}
+
 .teal_validated .shiny-output-error,
 .teal_validated .teal-output-warning {
-  margin-top: 0.5em;
+  padding: 0.5em;
 }
 
-.teal_validated .teal-output-warning::before {
-  content: "\26A0\FE0F";
-}
-
-.teal_validated .shiny-output-error::before {
-  content: "\1F6A8";
-}
-
-.teal_primary_col .shiny-output-error::before {
-  content: "\1F6A8";
-}
-
+.teal_validated .teal-output-warning::before,
 .teal_primary_col .teal-output-warning::before {
   content: "\26A0\FE0F";
+}
+
+.teal_validated .shiny-output-error::before,
+.teal_primary_col .shiny-output-error::before {
+  content: "\1F6A8";
 }
 
 .teal_primary_col .teal_validated:has(.shiny-output-error),
