@@ -568,7 +568,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
       active_base_id <- sub("-wrapper$", "", active_wrapper_id)
 
-      private$ns$module_container <- active_base_id
+      private$ns$base_id <- active_base_id
       private$ns$wrapper <- shiny::NS(active_base_id, "wrapper")
       private$ns$module <- shiny::NS(active_base_id, "module")
       private$ns$filter_panel <- shiny::NS(active_base_id, "filter_panel")
