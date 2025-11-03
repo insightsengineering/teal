@@ -22,7 +22,7 @@ Condition should determine expected state, \code{FALSE} throws.}
 \item{session}{Shiny session object}
 }
 \value{
-\code{TRUE} or \code{shiny.silent.error} when condition is not met
+\code{NULL} or \code{shiny.silent.error} when condition is not met
 }
 \description{
 Validate input

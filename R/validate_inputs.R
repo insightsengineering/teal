@@ -202,7 +202,7 @@ any_names <- function(x) {
 #' @param message (`character(1)`) Character string of validation message to display
 #' @param session Shiny session object
 #'
-#' @return `TRUE` or `shiny.silent.error` when condition is not met
+#' @return `NULL` or `shiny.silent.error` when condition is not met
 #'
 #' @keywords internal
 validate_input <- function(inputId, # nolint
@@ -212,14 +212,14 @@ validate_input <- function(inputId, # nolint
   checkmate::assert_character(inputId, min.len = 1)
   checkmate::assert(
     checkmate::check_flag(condition),
-    checkmate::check_function(condition, nargs = 1)
+    checkmate::check_function(condition, nargs = length(inputId))
   )
   checkmate::assert_string(message)
 
   # Evaluate condition if it's a function
   condition_result <- if (is.function(condition)) {
-    input_value <- session$input[[inputId]]
-    checkmate::assert_flag(condition(input_value))
+    input_value <- lapply(inputId, function(id) session$input[[id]])
+    checkmate::assert_flag(do.call(condition, input_value))
   } else {
     condition
   }
@@ -228,10 +228,10 @@ validate_input <- function(inputId, # nolint
   lapply(inputId, function(id) {
     session$sendCustomMessage("validateInput", list(
       inputId = session$ns(id),
-      isValid = condition,
+      isValid = condition_result,
       message = message
     ))
   })
 
-  validate(need(condition, message))
+  validate(need(condition_result, message))
 }
