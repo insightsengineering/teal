@@ -54,7 +54,7 @@ srv_source_code <- function(id, module_out) {
         "The source code functionality is disabled for this module."
       } else if (inherits(mod_out_r(), "error")) {
         "The module returned an error, check it for errors."
-      } else if (is.null(code_out())) {
+      } else if (!nzchar(code_out())) {
         "The module does not support source code functionality."
       }
     })
@@ -65,7 +65,7 @@ srv_source_code <- function(id, module_out) {
         if (length(reason)) {
           icon <- if (grepl("error", reason)) "exclamation-triangle-fill" else "info-circle-fill"
           shiny::div(
-            class = if (grepl("error", reason)) "text-danger" else "text-info",
+            class = if (grepl("error", reason)) "text-warning" else "text-info",
             style = "padding-top: 0.5em;",
             bsicons::bs_icon(name = icon),
             reason
@@ -92,13 +92,36 @@ srv_source_code <- function(id, module_out) {
 #' @param x (`teal_module`) a `teal_module` object.
 #' @return modified data object that indicates that it should not show the "Show R Code"
 #' button in the UI.
+#' @seealso [disable_report()]
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
+#' # Disabling source on a single module
 #' app <- init(
 #'   data = within(teal_data(), iris <- iris),
 #'   modules = modules(
 #'     example_module(label = "example teal module") |> disable_src()
 #'   )
 #' )
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
+#' @examples
+#' # Multiple modules
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = modules(
+#'     example_module(label = "example 1"),
+#'     example_module(label = "example 2")
+#'   ) |> disable_src()
+#' )
+#'
 #' if (interactive()) {
 #'   shinyApp(app$ui, app$server)
 #' }
