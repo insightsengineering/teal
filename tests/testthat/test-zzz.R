@@ -48,7 +48,6 @@ testthat::describe(".onLoad: Initialised options on package load", {
       }
     )
   })
-
 })
 
 testthat::describe(".onAttach: packageStartupMessage", {
@@ -73,4 +72,3 @@ testthat::describe(".onAttach: packageStartupMessage", {
     )
   })
 })
-
