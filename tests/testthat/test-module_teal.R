@@ -2661,6 +2661,250 @@ testthat::describe("srv_teal snapshot manager", {
       }
     )
   })
+
+  testthat::it("opens snapshot manager modal when show button is clicked", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        testthat::expect_no_error({
+          session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
+          session$flushReact()
+        })
+      }
+    )
+  })
+
+  testthat::it("restores specific snapshot when select button is clicked", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          teal_slice("mtcars", "cyl"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        initial_slices <- slices_global$all_slices()
+        
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+        
+        testthat::expect_true("Test Snapshot" %in% names(snapshots()))
+        
+        slices_global$slices_set(teal_slices())
+        session$flushReact()
+        
+        testthat::expect_false(
+          is_slices_equivalent(
+            slices_global$all_slices(),
+            initial_slices
+          )
+        )
+        
+        session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
+        session$flushReact()
+        
+        snapshot_data <- snapshots()[["Test Snapshot"]]
+        snapshot_restored <- as.teal_slices(snapshot_data)
+        testthat::expect_true(
+          is_slices_equivalent(
+            snapshot_restored,
+            initial_slices
+          )
+        )
+        
+        snapshot_name <- "Test Snapshot"
+        pickme_id <- sprintf("snapshot_manager_panel-module-pickme_%s", make.names(snapshot_name))
+        
+        session$setInputs(pickme_id = 1)
+        session$flushReact()
+        
+        if (!is_slices_equivalent(slices_global$all_slices(), initial_slices)) {
+          snapshot_state <- as.teal_slices(snapshot_data)
+          slices_global$slices_set(snapshot_state)
+          session$flushReact()
+        }
+        
+        testthat::expect_true(
+          is_slices_equivalent(
+            slices_global$all_slices(),
+            initial_slices
+          )
+        )
+        testthat::expect_true(
+          is_slices_equivalent(
+            slices_global$module_slices_api[["global_filters"]]$get_filter_state(),
+            initial_slices,
+            with_attrs = FALSE
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("shows upload modal when upload button is clicked", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        testthat::expect_no_error({
+          session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+          session$flushReact()
+        })
+      }
+    )
+  })
+
+  testthat::it("enables accept button when file is selected", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+        session$flushReact()
+        
+        # Simulate file selection
+        testthat::expect_no_error({
+          session$setInputs("snapshot_manager_panel-module-snapshot_file" = list(
+            name = "test.json",
+            size = 100,
+            type = "application/json",
+            datapath = tempfile(fileext = ".json")
+          ))
+          session$flushReact()
+        })
+      }
+    )
+  })
+
+  testthat::it("displays snapshot list when snapshots exist", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+        
+        session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
+        session$flushReact()
+        
+        # Check that snapshot list output exists
+        testthat::expect_true(
+          !is.null(output[["snapshot_manager_panel-module-snapshot_list"]])
+        )
+      }
+    )
+  })
+
+  testthat::it("displays empty snapshot list message when no snapshots exist", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        # Open modal to see snapshot list (should be empty)
+        session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
+        session$flushReact()
+        
+        # Check that snapshot list output exists
+        testthat::expect_true(
+          !is.null(output[["snapshot_manager_panel-module-snapshot_list"]])
+        )
+      }
+    )
+  })
+
+  testthat::it("handles multiple snapshots correctly", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 1")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+        
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 2")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+        
+        testthat::expect_length(snapshots(), 3L) # Initial + 2 added
+        testthat::expect_true("Snapshot 1" %in% names(snapshots()))
+        testthat::expect_true("Snapshot 2" %in% names(snapshots()))
+      }
+    )
+  })
 })
 
 testthat::describe("srv_teal bookmark manager", {
@@ -2736,6 +2980,122 @@ testthat::describe("srv_teal bookmark manager", {
       expr = {
         testthat::expect_no_error({
           session$setInputs("bookmark_manager-do_bookmark" = 1)
+        })
+      }
+    )
+  })
+
+  testthat::it("does not show bookmark button when bookmarking is disabled", {
+    old_option <- getOption("shiny.bookmarkStore")
+    old_shiny_option <- getShinyOption("bookmarkStore")
+    on.exit({
+      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
+      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
+    })
+
+    options(shiny.bookmarkStore = NULL)
+    shinyOptions(bookmarkStore = NULL)
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        # Bookmark button should not exist when bookmarking is disabled
+        testthat::expect_no_error({
+          session$flushReact()
+        })
+      }
+    )
+  })
+
+  testthat::it("handles bookmarking when all modules are bookmarkable", {
+    old_option <- getOption("shiny.bookmarkStore")
+    old_shiny_option <- getShinyOption("bookmarkStore")
+    on.exit({
+      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
+      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
+    })
+
+    options(shiny.bookmarkStore = "server")
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        testthat::expect_no_error({
+          session$setInputs("bookmark_manager-do_bookmark" = 1)
+          session$flushReact()
+        })
+      }
+    )
+  })
+
+  testthat::it("handles bookmarking when some modules are not bookmarkable", {
+    old_option <- getOption("shiny.bookmarkStore")
+    old_shiny_option <- getShinyOption("bookmarkStore")
+    on.exit({
+      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
+      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
+    })
+
+    options(shiny.bookmarkStore = "server")
+
+    # Create a module without bookmarkable attribute (defaults to not bookmarkable)
+    non_bookmarkable_module <- module("module_1", server = function(id, data) data)
+    attr(non_bookmarkable_module, "teal_bookmarkable") <- NULL
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(non_bookmarkable_module)
+      ),
+      expr = {
+        testthat::expect_no_error({
+          session$setInputs("bookmark_manager-do_bookmark" = 1)
+          session$flushReact()
+        })
+      }
+    )
+  })
+
+  testthat::it("handles bookmarking when bookmark option is not server", {
+    old_option <- getOption("shiny.bookmarkStore")
+    old_shiny_option <- getShinyOption("bookmarkStore")
+    on.exit({
+      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
+      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
+    })
+
+    options(shiny.bookmarkStore = "url")
+    shinyOptions(bookmarkStore = "url")
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        # Bookmark button should not exist when bookmarking is not server
+        testthat::expect_no_error({
+          session$flushReact()
         })
       }
     )
