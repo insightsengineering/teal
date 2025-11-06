@@ -1,4 +1,3 @@
-testthat::skip()
 # comment: srv_teal is exported so the tests here are extensive and cover srv_data as well.
 #          testing of srv_data is not needed.
 module_summary_table <<- function(output, id) {
@@ -2574,7 +2573,7 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         testthat::expect_length(snapshots(), initial_count + 1L)
         testthat::expect_true("Test Snapshot" %in% names(snapshots()))
       }
@@ -2601,7 +2600,7 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         testthat::expect_length(snapshots(), initial_count)
       }
     )
@@ -2626,13 +2625,13 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         initial_count <- length(snapshots())
         session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         testthat::expect_length(snapshots(), initial_count)
       }
     )
@@ -2657,7 +2656,7 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "  Test Snapshot  ")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         testthat::expect_true("Test Snapshot" %in% names(snapshots()))
       }
     )
@@ -2672,9 +2671,9 @@ testthat::describe("srv_teal bookmark manager", {
       if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
       if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
     })
-    
+
     options(shiny.bookmarkStore = "server")
-    
+
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal,
@@ -2697,9 +2696,9 @@ testthat::describe("srv_teal bookmark manager", {
       if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
       if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
     })
-    
+
     options(shiny.bookmarkStore = NULL)
-    
+
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal,
@@ -2722,9 +2721,9 @@ testthat::describe("srv_teal bookmark manager", {
       if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
       if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
     })
-    
+
     options(shiny.bookmarkStore = "server")
-    
+
     shiny::testServer(
       app = srv_teal,
       args = list(
