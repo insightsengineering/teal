@@ -4,26 +4,42 @@
 \alias{after}
 \title{Executes modifications to the result of a module}
 \usage{
-after(
-  x,
-  ui = function(id, elem) elem,
-  server = function(input, output, session, data) data,
-  ...
-)
+after(x, server = function(input, output, session, data) data, ...)
 }
 \arguments{
-\item{x}{(\code{teal_module}).}
+\item{x}{(\code{teal_module} or \code{teal_modules}).}
 
-\item{ui}{(\verb{function(id, elem, ...)}) function to receive output (\code{shiny.tag}) from \code{x$ui}}
+\item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \code{tm$server}.
+Must return data}
 
-\item{server}{(\verb{function(input, output, session, data, ...)}) function to receive output data from \code{x$server}}
-
-\item{...}{additional argument passed to \code{ui} and \code{server} by matching their formals names.}
+\item{...}{Additional arguments passed to the server wrapper function by matching their formal names.}
 }
 \value{
-A \code{teal_report} object with the result of the server function.
+A \code{teal_module} or \code{teal_modules} object with a wrapped server.
 }
 \description{
-Primarily used to modify the output object of module to change the containing
-report.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Exported to be able to use methods not to be used directly by module-developers or app-users.
+Primarily used to modify the output object of module.
 }
+\examples{
+library("teal.reporter")
+hide_code <- function(input, output, session, data) {
+  teal_card(data) <- Filter(function(x) !inherits(x, "code_chunk"), teal_card(data))
+  data
+}
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = example_module() |>
+    after(server = hide_code)
+)
+
+if (interactive()) {
+  runApp(app)
+}
+}
+\seealso{
+\code{\link[=disable_src]{disable_src()}}, \code{\link[=disable_report]{disable_report()}}
+}
+\keyword{internal}
