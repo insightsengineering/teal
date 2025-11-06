@@ -2702,27 +2702,27 @@ testthat::describe("srv_teal snapshot manager", {
       ),
       expr = {
         initial_slices <- slices_global$all_slices()
-        
+
         session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         testthat::expect_true("Test Snapshot" %in% names(snapshots()))
-        
+
         slices_global$slices_set(teal_slices())
         session$flushReact()
-        
+
         testthat::expect_false(
           is_slices_equivalent(
             slices_global$all_slices(),
             initial_slices
           )
         )
-        
+
         session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
         session$flushReact()
-        
+
         snapshot_data <- snapshots()[["Test Snapshot"]]
         snapshot_restored <- as.teal_slices(snapshot_data)
         testthat::expect_true(
@@ -2731,19 +2731,19 @@ testthat::describe("srv_teal snapshot manager", {
             initial_slices
           )
         )
-        
+
         snapshot_name <- "Test Snapshot"
         pickme_id <- sprintf("snapshot_manager_panel-module-pickme_%s", make.names(snapshot_name))
-        
+
         session$setInputs(pickme_id = 1)
         session$flushReact()
-        
+
         if (!is_slices_equivalent(slices_global$all_slices(), initial_slices)) {
           snapshot_state <- as.teal_slices(snapshot_data)
           slices_global$slices_set(snapshot_state)
           session$flushReact()
         }
-        
+
         testthat::expect_true(
           is_slices_equivalent(
             slices_global$all_slices(),
@@ -2801,7 +2801,7 @@ testthat::describe("srv_teal snapshot manager", {
       expr = {
         session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
         session$flushReact()
-        
+
         # Simulate file selection
         testthat::expect_no_error({
           session$setInputs("snapshot_manager_panel-module-snapshot_file" = list(
@@ -2835,10 +2835,10 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
         session$flushReact()
-        
+
         # Check that snapshot list output exists
         testthat::expect_true(
           !is.null(output[["snapshot_manager_panel-module-snapshot_list"]])
@@ -2865,7 +2865,7 @@ testthat::describe("srv_teal snapshot manager", {
         # Open modal to see snapshot list (should be empty)
         session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
         session$flushReact()
-        
+
         # Check that snapshot list output exists
         testthat::expect_true(
           !is.null(output[["snapshot_manager_panel-module-snapshot_list"]])
@@ -2893,12 +2893,12 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 1")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
         session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 2")
         session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
         session$flushReact()
-        
+
         testthat::expect_length(snapshots(), 3L) # Initial + 2 added
         testthat::expect_true("Snapshot 1" %in% names(snapshots()))
         testthat::expect_true("Snapshot 2" %in% names(snapshots()))
