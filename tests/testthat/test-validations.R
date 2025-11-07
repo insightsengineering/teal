@@ -154,4 +154,3 @@ testthat::test_that("validate_n_levels works when both min and max are NULL", {
   x <- factor(c("a", "b"))
   testthat::expect_silent(validate_n_levels(x, var_name = "x"))
 })
-
