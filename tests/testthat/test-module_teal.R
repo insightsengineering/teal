@@ -2662,37 +2662,43 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  # TEST MODAL BASED ON WHETHER THIS LOG WAS SHOWN
-  # logger::log_debug("srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked.")
-  #
-  # testthat::it("opens snapshot manager modal when show button is clicked", {
-  #   mod_message <- "Modal was created"
-  #   testthat::expect_warning(
-  #     testthat::with_mocked_bindings(
-  #       showModal = function(...) warning(mod_message),
-  #       .package = "shiny",
-  #       code = shiny::testServer(
-  #         app = srv_teal,
-  #         args = list(
-  #           id = "test",
-  #           data = teal.data::teal_data(iris = iris),
-  #           modules = modules(
-  #             module("module_1", server = function(id, data) data)
-  #           ),
-  #           filter = teal_slices(
-  #             teal_slice("iris", "Species"),
-  #             module_specific = FALSE
-  #           )
-  #         ),
-  #         expr = {
-  #           session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
-  #           session$flushReact()
-  #         }
-  #       )
-  #     ),
-  #     mod_message
-  #   )
-  # })
+  testthat::it("opens snapshot manager modal when show button is clicked", {
+    log_calls <- character(0)
+    expected_log <- "srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked."
+    
+    testthat::with_mocked_bindings(
+      log_debug = function(...) {
+        log_calls <<- c(log_calls, paste(..., collapse = " "))
+      },
+      .package = "logger",
+      code = shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris),
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          ),
+          filter = teal_slices(
+            teal_slice("iris", "Species"),
+            module_specific = FALSE
+          )
+        ),
+        expr = {
+          session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
+          session$flushReact()
+        }
+      )
+    )
+    
+    testthat::expect_true(
+      expected_log %in% log_calls,
+      info = paste0(
+        "Expected log message '", expected_log, 
+        "' not found in log calls: ", paste(log_calls, collapse = ", ")
+      )
+    )
+  })
 
   testthat::it("snapshot history contains initial snapshot on init", {
     shiny::testServer(
@@ -2757,30 +2763,43 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  # TEST MODAL BASED ON WHETHER THIS LOG MESSAGE WAS SHOWN
-  # logger::log_debug("srv_snapshot_manager: snapshot_load button clicked")
-  # testthat::it("shows upload modal when upload button is clicked", {
-  #   shiny::testServer(
-  #     app = srv_teal,
-  #     args = list(
-  #       id = "test",
-  #       data = teal.data::teal_data(iris = iris),
-  #       modules = modules(
-  #         module("module_1", server = function(id, data) data)
-  #       ),
-  #       filter = teal_slices(
-  #         teal_slice("iris", "Species"),
-  #         module_specific = FALSE
-  #       )
-  #     ),
-  #     expr = {
-  #       testthat::expect_no_error({
-  #         session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
-  #         session$flushReact()
-  #       })
-  #     }
-  #   )
-  # })
+  testthat::it("shows upload modal when upload button is clicked", {
+    log_calls <- character(0)
+    expected_log <- "srv_snapshot_manager: snapshot_load button clicked"
+    
+    testthat::with_mocked_bindings(
+      log_debug = function(...) {
+        log_calls <<- c(log_calls, paste(..., collapse = " "))
+      },
+      .package = "logger",
+      code = shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris),
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          ),
+          filter = teal_slices(
+            teal_slice("iris", "Species"),
+            module_specific = FALSE
+          )
+        ),
+        expr = {
+          session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+          session$flushReact()
+        }
+      )
+    )
+    
+    testthat::expect_true(
+      expected_log %in% log_calls,
+      info = paste0(
+        "Expected log message '", expected_log, 
+        "' not found in log calls: ", paste(log_calls, collapse = ", ")
+      )
+    )
+  })
 
   # IDEA ON A TEST, CREATE A TEST SNAPSHOT, UPLOAD IT, CHECK HOW SLICES_GLOBAL LOOKS
   # testthat::it("enables accept button when file is selected", {
