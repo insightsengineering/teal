@@ -2665,7 +2665,7 @@ testthat::describe("srv_teal snapshot manager", {
   testthat::it("opens snapshot manager modal when show button is clicked", {
     log_calls <- character(0)
     expected_log <- "srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked."
-    
+
     testthat::with_mocked_bindings(
       log_debug = function(...) {
         log_calls <<- c(log_calls, paste(..., collapse = " "))
@@ -2690,11 +2690,11 @@ testthat::describe("srv_teal snapshot manager", {
         }
       )
     )
-    
+
     testthat::expect_true(
       expected_log %in% log_calls,
       info = paste0(
-        "Expected log message '", expected_log, 
+        "Expected log message '", expected_log,
         "' not found in log calls: ", paste(log_calls, collapse = ", ")
       )
     )
@@ -2766,7 +2766,7 @@ testthat::describe("srv_teal snapshot manager", {
   testthat::it("shows upload modal when upload button is clicked", {
     log_calls <- character(0)
     expected_log <- "srv_snapshot_manager: snapshot_load button clicked"
-    
+
     testthat::with_mocked_bindings(
       log_debug = function(...) {
         log_calls <<- c(log_calls, paste(..., collapse = " "))
@@ -2791,11 +2791,11 @@ testthat::describe("srv_teal snapshot manager", {
         }
       )
     )
-    
+
     testthat::expect_true(
       expected_log %in% log_calls,
       info = paste0(
-        "Expected log message '", expected_log, 
+        "Expected log message '", expected_log,
         "' not found in log calls: ", paste(log_calls, collapse = ", ")
       )
     )
