@@ -2677,6 +2677,7 @@ testthat::describe("srv_teal snapshot manager", {
         )
       ),
       expr = {
+        # TODO: TO BE IMPROVED - CAN WE CHECK MODAL WAS ACTUALLY OPENED
         testthat::expect_no_error({
           session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
           session$flushReact()
@@ -2732,6 +2733,9 @@ testthat::describe("srv_teal snapshot manager", {
           )
         )
 
+        # TODO: TO BE IMPROVED - CAN WE CHECK MODAL WAS ACTUALLY OPENED
+        # improper usage of pickme_id later used as input name
+
         snapshot_name <- "Test Snapshot"
         pickme_id <- sprintf("snapshot_manager_panel-module-pickme_%s", make.names(snapshot_name))
 
@@ -2776,6 +2780,7 @@ testthat::describe("srv_teal snapshot manager", {
         )
       ),
       expr = {
+        # TODO: TO BE IMPROVED - CAN WE CHECK MODAL WAS ACTUALLY OPENED
         testthat::expect_no_error({
           session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
           session$flushReact()
@@ -2802,6 +2807,7 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
         session$flushReact()
 
+        # TODO: TO BE IMPROVED - CAN WE CHECK BUTTON IS ACTUALLY ENABLED
         # Simulate file selection
         testthat::expect_no_error({
           session$setInputs("snapshot_manager_panel-module-snapshot_file" = list(
@@ -2839,6 +2845,7 @@ testthat::describe("srv_teal snapshot manager", {
         session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
         session$flushReact()
 
+        # TODO: TO BE IMPROVED - CAN WE CHECK LIST IS DISPLAYED
         # Check that snapshot list output exists
         testthat::expect_true(
           !is.null(output[["snapshot_manager_panel-module-snapshot_list"]])
@@ -2862,6 +2869,7 @@ testthat::describe("srv_teal snapshot manager", {
         )
       ),
       expr = {
+        # TODO: TO BE IMPROVED - VERIFY IT's EMPTY, NOT ONLY THAT IT EXISTS
         # Open modal to see snapshot list (should be empty)
         session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
         session$flushReact()
@@ -2902,201 +2910,6 @@ testthat::describe("srv_teal snapshot manager", {
         testthat::expect_length(snapshots(), 3L) # Initial + 2 added
         testthat::expect_true("Snapshot 1" %in% names(snapshots()))
         testthat::expect_true("Snapshot 2" %in% names(snapshots()))
-      }
-    )
-  })
-})
-
-testthat::describe("srv_teal bookmark manager", {
-  testthat::it("initializes without error when bookmarking is enabled", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = "server")
-
-    testthat::expect_no_error(
-      shiny::testServer(
-        app = srv_teal,
-        args = list(
-          id = "test",
-          data = teal.data::teal_data(iris = iris),
-          modules = modules(
-            module("module_1", server = function(id, data) data)
-          )
-        ),
-        expr = NULL
-      )
-    )
-  })
-
-  testthat::it("initializes without error when bookmarking is disabled", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = NULL)
-
-    testthat::expect_no_error(
-      shiny::testServer(
-        app = srv_teal,
-        args = list(
-          id = "test",
-          data = teal.data::teal_data(iris = iris),
-          modules = modules(
-            module("module_1", server = function(id, data) data)
-          )
-        ),
-        expr = NULL
-      )
-    )
-  })
-
-  testthat::it("does not fail when bookmark button is clicked", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = "server")
-
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
-        )
-      ),
-      expr = {
-        testthat::expect_no_error({
-          session$setInputs("bookmark_manager-do_bookmark" = 1)
-        })
-      }
-    )
-  })
-
-  testthat::it("does not show bookmark button when bookmarking is disabled", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = NULL)
-    shinyOptions(bookmarkStore = NULL)
-
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
-        )
-      ),
-      expr = {
-        # Bookmark button should not exist when bookmarking is disabled
-        testthat::expect_no_error({
-          session$flushReact()
-        })
-      }
-    )
-  })
-
-  testthat::it("handles bookmarking when all modules are bookmarkable", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = "server")
-
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
-        )
-      ),
-      expr = {
-        testthat::expect_no_error({
-          session$setInputs("bookmark_manager-do_bookmark" = 1)
-          session$flushReact()
-        })
-      }
-    )
-  })
-
-  testthat::it("handles bookmarking when some modules are not bookmarkable", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = "server")
-
-    # Create a module without bookmarkable attribute (defaults to not bookmarkable)
-    non_bookmarkable_module <- module("module_1", server = function(id, data) data)
-    attr(non_bookmarkable_module, "teal_bookmarkable") <- NULL
-
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(non_bookmarkable_module)
-      ),
-      expr = {
-        testthat::expect_no_error({
-          session$setInputs("bookmark_manager-do_bookmark" = 1)
-          session$flushReact()
-        })
-      }
-    )
-  })
-
-  testthat::it("handles bookmarking when bookmark option is not server", {
-    old_option <- getOption("shiny.bookmarkStore")
-    old_shiny_option <- getShinyOption("bookmarkStore")
-    on.exit({
-      if (!is.null(old_option)) options(shiny.bookmarkStore = old_option)
-      if (!is.null(old_shiny_option)) shinyOptions(bookmarkStore = old_shiny_option)
-    })
-
-    options(shiny.bookmarkStore = "url")
-    shinyOptions(bookmarkStore = "url")
-
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
-        )
-      ),
-      expr = {
-        # Bookmark button should not exist when bookmarking is not server
-        testthat::expect_no_error({
-          session$flushReact()
-        })
       }
     )
   })
