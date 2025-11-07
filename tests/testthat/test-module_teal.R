@@ -2725,7 +2725,7 @@ testthat::describe("srv_teal snapshot manager", {
       ),
       expr = {
         expected_test_slice <- teal_slices(
-          teal_slice(dataname = 'iris', varname = 'Species', selected = 'setosa')
+          teal_slice(dataname = "iris", varname = "Species", selected = "setosa")
         )
 
         slices_global$slices_set(
@@ -2739,7 +2739,7 @@ testthat::describe("srv_teal snapshot manager", {
 
         slices_global$slices_set(
           teal_slices(
-            teal_slice(dataname = 'iris', varname = 'Sepal.Length')
+            teal_slice(dataname = "iris", varname = "Sepal.Length")
           )
         )
         session$flushReact()
