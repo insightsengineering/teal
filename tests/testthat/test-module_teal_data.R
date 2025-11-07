@@ -1,4 +1,3 @@
-
 testthat::test_that("ui_teal_data_module returns tagList with wrapper and validation UI via init", {
   data_module <- teal_data_module(
     ui = function(id) tags$div("test"),
@@ -99,4 +98,3 @@ testthat::test_that("srv_validate_reactive_teal_data handles shiny.error via srv
     }
   )
 })
-
