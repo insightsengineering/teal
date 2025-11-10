@@ -2464,6 +2464,48 @@ testthat::describe("srv_teal summary table", {
 })
 
 testthat::describe("srv_teal snapshot manager", {
+  testthat::it("snapshot history contains initial snapshot on init", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      expr = {
+        testthat::expect_identical(
+          names(snapshots()),
+          "Initial application state"
+        )
+      }
+    )
+  })
+
+  testthat::it("snapshot list contains 'Snapshots will appear here on init'", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        testthat::expect_match(
+          output[["snapshot_manager_panel-module-snapshot_list"]]$html,
+          "Snapshots will appear here"
+        )
+      }
+    )
+  })
+
   testthat::it("clicking reset button restores initial filters state when !module_specific", {
     shiny::testServer(
       app = srv_teal,
@@ -2580,7 +2622,39 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("rejects empty snapshot name", {
+  testthat::it("appends multiple snapshots to the history ", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 1")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 2")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+
+        testthat::expect_length(snapshots(), 3L) # Initial + 2 added
+        testthat::expect_true("Snapshot 1" %in% names(snapshots()))
+        testthat::expect_true("Snapshot 2" %in% names(snapshots()))
+      }
+    )
+  })
+
+  testthat::it("doesn't add when snapshot name is empty", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2606,7 +2680,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("rejects duplicate snapshot name", {
+  testthat::it("doesn't add when duplicated snapshot name", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2663,57 +2737,32 @@ testthat::describe("srv_teal snapshot manager", {
   })
 
   testthat::it("opens snapshot manager modal when show button is clicked", {
-    log_calls <- character(0)
-    expected_log <- "srv_snapshot_manager_panel@1 show_snapshot_manager button has been clicked."
+    captured_modal_html <- NULL
+    # Create a mock session and override sendModal to capture modal content
+    mock_session <- shiny::MockShinySession$new()
+    mock_session$sendModal <- function(type, message) {
+      captured_modal_html <<- message$html
+      invisible()
+    }
 
-    testthat::with_mocked_bindings(
-      log_debug = function(...) {
-        log_calls <<- c(log_calls, paste(..., collapse = " "))
-      },
-      .package = "logger",
-      code = shiny::testServer(
-        app = srv_teal,
-        args = list(
-          id = "test",
-          data = teal.data::teal_data(iris = iris),
-          modules = modules(
-            module("module_1", server = function(id, data) data)
-          ),
-          filter = teal_slices(
-            teal_slice("iris", "Species"),
-            module_specific = FALSE
-          )
-        ),
-        expr = {
-          session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
-          session$flushReact()
-        }
-      )
-    )
-
-    testthat::expect_true(
-      expected_log %in% log_calls,
-      info = paste0(
-        "Expected log message '", expected_log,
-        "' not found in log calls: ", paste(log_calls, collapse = ", ")
-      )
-    )
-  })
-
-  testthat::it("snapshot history contains initial snapshot on init", {
     shiny::testServer(
       app = srv_teal,
+      session = mock_session,
       args = list(
         id = "test",
-        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        data = teal.data::teal_data(iris = iris),
         modules = modules(
           module("module_1", server = function(id, data) data)
         )
       ),
       expr = {
-        testthat::expect_identical(
-          names(snapshots()),
-          "Initial application state"
+        session$setInputs("snapshot_manager_panel-show_snapshot_manager" = 1)
+        session$flushReact()
+        testthat::expect_match(
+          rvest::read_html(captured_modal_html) |>
+            rvest::html_node(".snapshot_manager_modal") |>
+            rvest::html_text(),
+          "Snapshot manager"
         )
       }
     )
@@ -2766,7 +2815,6 @@ testthat::describe("srv_teal snapshot manager", {
   testthat::it("shows upload modal when upload button is clicked", {
     log_calls <- character(0)
     expected_log <- "srv_snapshot_manager: snapshot_load button clicked"
-
     testthat::with_mocked_bindings(
       log_debug = function(...) {
         log_calls <<- c(log_calls, paste(..., collapse = " "))
@@ -2788,132 +2836,239 @@ testthat::describe("srv_teal snapshot manager", {
         expr = {
           session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
           session$flushReact()
+          testthat::expect_true(
+            expected_log %in% log_calls,
+            info = paste0(
+              "Expected log message '", expected_log,
+              "' not found in log calls: ", paste(log_calls, collapse = ", ")
+            )
+          )
         }
       )
     )
+  })
 
-    testthat::expect_true(
-      expected_log %in% log_calls,
-      info = paste0(
-        "Expected log message '", expected_log,
-        "' not found in log calls: ", paste(log_calls, collapse = ", ")
+  testthat::it("enables accept button when file is selected", {
+    withr::with_tempfile("snapshot_file", {
+      writeLines(
+        format(teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "setosa"),
+          teal_slice(dataname = "mtcars", varname = "mpg")
+        )),
+        con = snapshot_file
       )
-    )
+
+      # Track calls to shinyjs::enable
+      enabled_ids <- character(0)
+      testthat::with_mocked_bindings(
+        enable = function(id) {
+          enabled_ids <<- c(enabled_ids, id)
+        },
+        .package = "shinyjs",
+        code = shiny::testServer(
+          app = srv_teal,
+          args = list(
+            id = "test",
+            data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+            modules = modules(
+              module("module_1", server = function(id, data) data)
+            )
+          ),
+          expr = {
+            session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+            session$flushReact()
+
+            # Simulate file selection
+            session$setInputs("snapshot_manager_panel-module-snapshot_file" = data.frame(
+              name = basename(snapshot_file),
+              size = file.info(snapshot_file)$size,
+              type = "application/json",
+              datapath = snapshot_file,
+              stringsAsFactors = FALSE
+            ))
+            session$flushReact()
+
+            # Verify that shinyjs::enable was called with the correct ID
+            testthat::expect_true(
+              "snapshot_file_accept" %in% enabled_ids,
+              info = sprintf("Expected 'snapshot_file_accept' in enable calls, got: %s", paste(enabled_ids, collapse = ", "))
+            )
+          }
+        )
+      )
+    })
   })
 
-  # IDEA ON A TEST, CREATE A TEST SNAPSHOT, UPLOAD IT, CHECK HOW SLICES_GLOBAL LOOKS
-  # testthat::it("enables accept button when file is selected", {
-  #   shiny::testServer(
-  #     app = srv_teal,
-  #     args = list(
-  #       id = "test",
-  #       data = teal.data::teal_data(iris = iris),
-  #       modules = modules(
-  #         module("module_1", server = function(id, data) data)
-  #       ),
-  #       filter = teal_slices(
-  #         teal_slice("iris", "Species"),
-  #         module_specific = FALSE
-  #       )
-  #     ),
-  #     expr = {
-  #       session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
-  #       session$flushReact()
-  #       # Simulate file selection
-  #       testthat::expect_no_error({
-  #         session$setInputs("snapshot_manager_panel-module-snapshot_file" = list(
-  #           name = "test.json",
-  #           size = 100,
-  #           type = "application/json",
-  #           datapath = tempfile(fileext = ".json")
-  #         ))
-  #         session$flushReact()
-  #       })
-  #     }
-  #   )
-  # })
 
-  testthat::it("extends snapshot list content when snapshots exist", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
-        ),
-        filter = teal_slices(
-          teal_slice("iris", "Species"),
-          module_specific = FALSE
-        )
-      ),
-      expr = {
-        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
-        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
-        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
-        session$flushReact()
+  testthat::it("appends uploaded snapshot to the snapshot list with the name from input", {
+    withr::with_tempfile("snapshot_file", fileext = "json", {
+      writeLines(
+        format(teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "setosa"),
+          teal_slice(dataname = "mtcars", varname = "mpg")
+        )),
+        con = snapshot_file
+      )
 
-        testthat::expect_match(
-          output[["snapshot_manager_panel-module-snapshot_list"]]$html,
-          "Test Snapshot"
-        )
-      }
-    )
+      enabled_ids <- character(0)
+      testthat::with_mocked_bindings(
+        enable = function(id) {
+          enabled_ids <<- c(enabled_ids, id)
+        },
+        .package = "shinyjs",
+        {
+          shiny::testServer(
+            app = srv_teal,
+            args = list(
+              id = "test",
+              data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+              modules = modules(
+                module("module_1", server = function(id, data) data)
+              )
+            ),
+            expr = {
+              session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+              session$flushReact()
+              session$setInputs("snapshot_manager_panel-module-snapshot_file" = data.frame(
+                name = basename(snapshot_file),
+                size = file.info(snapshot_file)$size,
+                type = "application/json",
+                datapath = snapshot_file,
+                stringsAsFactors = FALSE
+              ))
+              session$setInputs("snapshot_manager_panel-module-snapshot_name" = "uploaded snapshot")
+              session$setInputs("snapshot_manager_panel-module-snapshot_file_accept" = 1)
+              testthat::expect_match(
+                output[["snapshot_manager_panel-module-snapshot_list"]]$html,
+                "uploaded snapshot"
+              )
+            }
+          )
+        }
+      )
+    })
   })
 
-  testthat::it("sets empty snapshot list message when no snapshots exist", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
+  testthat::it("appends uploaded snapshot to the snapshot list with the name from file when input is ''", {
+    withr::with_tempfile("snapshot_file", fileext = ".json", {
+      writeLines(
+        format(teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "setosa"),
+          teal_slice(dataname = "mtcars", varname = "mpg")
+        )),
+        con = snapshot_file
+      )
+
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          )
         ),
-        filter = teal_slices(
-          teal_slice("iris", "Species"),
-          module_specific = FALSE
-        )
-      ),
-      expr = {
-        testthat::expect_match(
-          output[["snapshot_manager_panel-module-snapshot_list"]]$html,
-          "Snapshots will appear here"
-        )
-      }
-    )
+        expr = {
+          session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+          session$flushReact()
+          session$setInputs("snapshot_manager_panel-module-snapshot_file" = data.frame(
+            name = basename(snapshot_file),
+            size = file.info(snapshot_file)$size,
+            type = "application/json",
+            datapath = snapshot_file,
+            stringsAsFactors = FALSE
+          ))
+          session$setInputs("snapshot_manager_panel-module-snapshot_name" = "")
+          session$setInputs("snapshot_manager_panel-module-snapshot_file_accept" = 1)
+          testthat::expect_match(
+            output[["snapshot_manager_panel-module-snapshot_list"]]$html,
+            tools::file_path_sans_ext(input[["snapshot_manager_panel-module-snapshot_file"]]$name)
+          )
+        }
+      )
+    })
   })
 
-  testthat::it("handles multiple snapshots correctly", {
-    shiny::testServer(
-      app = srv_teal,
-      args = list(
-        id = "test",
-        data = teal.data::teal_data(iris = iris),
-        modules = modules(
-          module("module_1", server = function(id, data) data)
+
+  testthat::it("doesn't append uploaded snapshot to the snapshot list when name already exists", {
+    withr::with_tempfile("snapshot_file", fileext = ".json", {
+      writeLines(
+        format(teal_slices(
+          teal_slice(dataname = "iris", varname = "Species", selected = "setosa"),
+          teal_slice(dataname = "mtcars", varname = "mpg")
+        )),
+        con = snapshot_file
+      )
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          )
         ),
-        filter = teal_slices(
-          teal_slice("iris", "Species"),
-          module_specific = FALSE
-        )
-      ),
-      expr = {
-        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
-        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 1")
-        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
-        session$flushReact()
+        expr = {
+          # First, add a snapshot with the name "Test Snapshot"
+          session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+          session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
+          session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+          session$flushReact()
+          testthat::expect_length(snapshots(), 2)
 
-        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
-        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Snapshot 2")
-        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
-        session$flushReact()
+          # Now try to upload a snapshot with the same name
+          session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+          session$flushReact()
+          session$setInputs("snapshot_manager_panel-module-snapshot_file" = data.frame(
+            name = basename(snapshot_file),
+            size = file.info(snapshot_file)$size,
+            type = "application/json",
+            datapath = snapshot_file,
+            stringsAsFactors = FALSE
+          ))
+          session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
+          session$setInputs("snapshot_manager_panel-module-snapshot_file_accept" = 1)
+          session$flushReact()
+          testthat::expect_length(snapshots(), 2)
+        }
+      )
+    })
+  })
 
-        testthat::expect_length(snapshots(), 3L) # Initial + 2 added
-        testthat::expect_true("Snapshot 1" %in% names(snapshots()))
-        testthat::expect_true("Snapshot 2" %in% names(snapshots()))
-      }
-    )
+  testthat::it("doesn't append uploaded snapshot to the snapshot list when teal_slices have different app_id", {
+    withr::with_tempfile("snapshot_file", fileext = ".json", {
+      slices <- teal.slice::teal_slices(
+        teal.slice::teal_slice(dataname = "iris", varname = "Species", selected = "setosa"),
+        teal.slice::teal_slice(dataname = "mtcars", varname = "mpg")
+      )
+      attr(slices, "app_id") <- "wrong"
+      writeLines(format(slices), con = snapshot_file)
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          session$setInputs("snapshot_manager_panel-module-snapshot_load" = 1)
+          session$flushReact()
+          session$setInputs("snapshot_manager_panel-module-snapshot_file" = data.frame(
+            name = basename(snapshot_file),
+            size = file.info(snapshot_file)$size,
+            type = "application/json",
+            datapath = snapshot_file,
+            stringsAsFactors = FALSE
+          ))
+          session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
+          session$setInputs("snapshot_manager_panel-module-snapshot_file_accept" = 1)
+          session$flushReact()
+          testthat::expect_length(snapshots(), 1)
+        }
+      )
+    })
   })
 })
 
