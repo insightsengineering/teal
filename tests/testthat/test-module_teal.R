@@ -195,6 +195,23 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
+  testthat::it("modules with input, output, session are supoorted", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(input, output, session) 101L)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        testthat::expect_identical(modules_output$module_1(), 101L)
+      }
+    )
+  })
+
   testthat::it("are called once their tab is selected and data returns reactive `teal_data`", {
     shiny::testServer(
       app = srv_teal,
@@ -1063,6 +1080,53 @@ testthat::describe("srv_teal teal_modules", {
   })
 })
 
+testthat::describe("teal_data_module", {
+  testthat::it("opens modal with a specific id when open_teal_data_module_ui is clicked", {
+    # Create a teal_data_module with specific UI elements
+    test_tdm <- teal_data_module(
+      ui = function(id) {
+        ns <- shiny::NS(id)
+        shiny::tagList(
+          shiny::actionButton(ns("submit"), label = "Test Button Label"),
+          shiny::textInput(ns("text_input"), label = "Enter text")
+        )
+      },
+      server = function(id) {
+        shiny::moduleServer(id, function(input, output, session) {
+          shiny::eventReactive(input$submit, {
+            teal.data::teal_data()
+          })
+        })
+      }
+    )
+
+    captured_modal_html <- NULL
+    # Create a mock session and override sendModal to capture modal content
+    mock_session <- shiny::MockShinySession$new()
+    mock_session$sendModal <- function(type, message) {
+      captured_modal_html <<- message$html
+      invisible()
+    }
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = test_tdm,
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      session = mock_session,
+      expr = {
+        session$flushReact()
+        session$setInputs(open_teal_data_module_ui = 1)
+        testthat::expect_match(as.character(captured_modal_html), "test-teal_data_module_ui")
+      }
+    )
+  })
+})
+
 testthat::describe("srv_teal filters", {
   testthat::describe("slicesGlobal", {
     testthat::it("is set to initial filters when !module_specific", {
@@ -1599,7 +1663,7 @@ testthat::describe("srv_teal filters", {
   })
 })
 
-testthat::describe("srv_teal data reload", {
+testthat::describe("teal_data_module reload", {
   testthat::it("sets back the same active filters in each module", {
     testthat::skip("todo")
   })
@@ -2891,14 +2955,16 @@ testthat::describe("srv_teal snapshot manager", {
             # Verify that shinyjs::enable was called with the correct ID
             testthat::expect_true(
               "snapshot_file_accept" %in% enabled_ids,
-              info = sprintf("Expected 'snapshot_file_accept' in enable calls, got: %s", paste(enabled_ids, collapse = ", "))
+              info = sprintf(
+                "Expected 'snapshot_file_accept' in enable calls, got: %s",
+                toString(enabled_ids)
+              )
             )
           }
         )
       )
     })
   })
-
 
   testthat::it("appends uploaded snapshot to the snapshot list with the name from input", {
     withr::with_tempfile("snapshot_file", fileext = "json", {
@@ -2989,7 +3055,6 @@ testthat::describe("srv_teal snapshot manager", {
     })
   })
 
-
   testthat::it("doesn't append uploaded snapshot to the snapshot list when name already exists", {
     withr::with_tempfile("snapshot_file", fileext = ".json", {
       writeLines(
@@ -3069,6 +3134,113 @@ testthat::describe("srv_teal snapshot manager", {
         }
       )
     })
+  })
+
+  testthat::it("stores snapshot history in bookmark state as a list of teal_slices", {
+    slices <- teal_slices(
+      teal_slice(
+        dataname = "iris", varname = "Species", choices = levels(iris$Species), selected = levels(iris$Species)
+      ),
+      module_specific = FALSE
+    )
+
+    # Track bookmark callbacks and state
+    bookmark_callbacks <- list()
+    bookmark_state <- new.env()
+    bookmark_state$values <- list()
+
+    # Create a custom mock session with mocked bookmark functions
+    mock_session <- shiny::MockShinySession$new()
+    mock_session$onBookmark <- function(callback) {
+      bookmark_callbacks[[length(bookmark_callbacks) + 1]] <<- callback
+    }
+    mock_session$doBookmark <- function() {
+      for (callback in bookmark_callbacks) {
+        callback(bookmark_state)
+      }
+    }
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = slices
+      ),
+      session = mock_session,
+      expr = {
+        # Add a snapshot to create some history
+        session$setInputs("snapshot_manager_panel-module-snapshot_add" = 1)
+        session$flushReact()
+        session$setInputs("snapshot_manager_panel-module-snapshot_name" = "Test Snapshot")
+        session$setInputs("snapshot_manager_panel-module-snapshot_name_accept" = 1)
+        session$flushReact()
+        session$doBookmark()
+        testthat::expect_identical(
+          bookmark_state$values$snapshot_history,
+          list(
+            `Initial application state` = as.list(slices, recursive = TRUE),
+            `Test Snapshot` = as.list(slices, recursive = TRUE)
+          )
+        )
+      }
+    )
+  })
+
+  testthat::it("restores snapshot history from bookmarked values", {
+    # Create a saved snapshot history that would come from a bookmark
+    saved_snapshot_history <- list(
+      "Initial application state" = as.list(
+        teal_slices(
+          teal_slice("iris", "Species", selected = levels(iris$Species)),
+          teal_slice("mtcars", "cyl", selected = unique(mtcars$cyl))
+        ),
+        recursive = TRUE
+      ),
+      "Saved Snapshot 1" = as.list(
+        teal_slices(
+          teal_slice("iris", "Species", selected = "setosa")
+        ),
+        recursive = TRUE
+      ),
+      "Saved Snapshot 2" = as.list(
+        teal_slices(
+          teal_slice("mtcars", "cyl", selected = "4")
+        ),
+        recursive = TRUE
+      )
+    )
+
+    # Create a custom mock session with restoreContext
+    mock_session <- shiny::MockShinySession$new()
+    mock_session$restoreContext <- new.env(parent = emptyenv())
+    mock_session$restoreContext$active <- TRUE
+    mock_session$restoreContext$values <- list(
+      `test-snapshot_manager_panel-module-snapshot_history` = saved_snapshot_history
+    )
+
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          teal_slice("mtcars", "cyl"),
+          module_specific = FALSE
+        )
+      ),
+      session = mock_session,
+      expr = {
+        testthat::expect_identical(as.list(snapshots()), saved_snapshot_history)
+      }
+    )
   })
 })
 
@@ -3514,6 +3686,84 @@ testthat::describe("teal-reporter", {
             ),
             teal.reporter::code_chunk("iris <- dplyr::filter(iris, Species == \"setosa\")")
           )
+        )
+      }
+    )
+  })
+
+  it("reporter cards are added to the bookmarks when doBookmark", {
+    bookmark_callbacks <- list()
+    bookmark_state <- new.env()
+    bookmark_state$values <- list()
+
+    # Create a custom mock session with mocked bookmark functions
+    mock_session <- shiny::MockShinySession$new()
+    mock_session$onBookmark <- function(callback) {
+      bookmark_callbacks[[length(bookmark_callbacks) + 1]] <<- callback
+    }
+    mock_session$doBookmark <- function() {
+      for (callback in bookmark_callbacks) {
+        callback(bookmark_state)
+      }
+    }
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      session = mock_session,
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        reporter$append_cards(
+          list(
+            teal.reporter::teal_card("# test"),
+            teal.reporter::teal_card("# test2")
+          )
+        )
+        session$doBookmark()
+        testthat::expect_identical(bookmark_state$values$report_cards, reporter$get_cards())
+      }
+    )
+  })
+
+  it("reporter cards are restored from the bookmarks", {
+    saved_report_cards <- list(
+      teal.reporter::teal_card("# test"),
+      teal.reporter::teal_card("# test2")
+    )
+    mock_session <- shiny::MockShinySession$new()
+    mock_session$restoreContext <- new.env(parent = emptyenv())
+    mock_session$restoreContext$active <- TRUE
+    mock_session$restoreContext$values <- list(
+      `test-report_cards` = saved_report_cards
+    )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = within(
+          teal.data::teal_data(),
+          iris <- iris
+        ),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        )
+      ),
+      session = mock_session,
+      expr = {
+        session$flushReact()
+        session$setInputs(`test` = 1)
+        testthat::expect_identical(
+          unname(lapply(reporter$get_cards(), unname)),
+          lapply(saved_report_cards, unname)
         )
       }
     )

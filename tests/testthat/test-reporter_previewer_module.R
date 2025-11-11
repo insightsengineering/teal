@@ -31,7 +31,10 @@ testthat::describe("reporter_previewer_module", {
   testthat::it("throws error when server_args has invalid names", {
     testthat::expect_error(
       reporter_previewer_module(label = "test", server_args = list(invalid_arg = 1)),
-      "Assertion on 'all\\(names\\(server_args\\) %in% names\\(formals\\(teal\\.reporter::reporter_previewer_srv\\)\\)\\)' failed"
+      paste0(
+        "Assertion on 'all\\(names\\(server_args\\) %in% names\\(formals\\",
+        "(teal\\.reporter::reporter_previewer_srv\\)\\)\\)' failed"
+      )
     )
   })
 

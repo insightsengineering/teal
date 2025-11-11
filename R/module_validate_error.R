@@ -21,26 +21,24 @@
 #' (except error 1).
 #'
 #' @inheritParams module_teal
-#' @param data_module (`teal_data_module`)
 #' @param modules (`teal_modules` or `teal_module`) For `datanames` validation purpose
 #' @param validate_shiny_silent_error (`logical`) If `TRUE`, then `shiny.silent.error` is validated and
-#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transformator.
-#' Help to determine if any previous transformator failed, so that following transformators can be disabled
-#' and display a generic failure message.
 #'
 #' @return `reactive` `teal_data`
 #'
-#' @rdname module_teal_data
-#' @name module_teal_data
+#' @rdname module_validate_error
+#' @name module_validate_error
 #' @keywords internal
 NULL
 
+#' @rdname module_validate_error
 #' @keywords internal
 ui_validate_error <- function(id) {
   ns <- NS(id)
   uiOutput(ns("message"))
 }
 
+#' @rdname module_validate_error
 #' @keywords internal
 srv_validate_error <- function(id, data, validate_shiny_silent_error) {
   checkmate::assert_string(id)
@@ -79,13 +77,14 @@ srv_validate_error <- function(id, data, validate_shiny_silent_error) {
   })
 }
 
-
+#' @rdname module_validate_error
 #' @keywords internal
 ui_check_class_teal_data <- function(id) {
   ns <- NS(id)
   uiOutput(ns("message"))
 }
 
+#' @rdname module_validate_error
 #' @keywords internal
 srv_check_class_teal_data <- function(id, data) {
   checkmate::assert_string(id)
@@ -101,12 +100,14 @@ srv_check_class_teal_data <- function(id, data) {
   })
 }
 
+#' @rdname module_validate_error
 #' @keywords internal
 ui_check_module_datanames <- function(id) {
   ns <- NS(id)
   uiOutput(NS(id, "message"))
 }
 
+#' @rdname module_validate_error
 #' @keywords internal
 srv_check_module_datanames <- function(id, data, modules) {
   checkmate::assert_string(id)
