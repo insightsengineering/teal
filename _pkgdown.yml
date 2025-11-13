@@ -135,20 +135,10 @@ reference:
     contents:
       - disable_src
       - disable_report
-  - title: Landing popup
-    contents:
-      - landing_popup_module
   - title: Functions for module developers
     contents:
-      - as_tdata
-      - tdata
-      - get_code_tdata
-      - get_metadata
-      - tdata2env
       - eval_code
       - within.teal_data_module
-      - show_rcode_modal
-      - join_keys.tdata
   - title: Validation functions
     contents:
       - starts_with("validate_")
