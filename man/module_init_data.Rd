@@ -45,8 +45,6 @@ Since the server of \code{\link[=teal_data_module]{teal_data_module()}} must ret
 methods (1 and 2) produce the same reactive behavior within a \code{teal} application. The distinction
 lies in data control: the first method involves external control, while the second method
 involves control from a custom module within the app.
-
-For more details, see \code{\link{module_teal_data}}.
 }
 }
 \keyword{internal}
