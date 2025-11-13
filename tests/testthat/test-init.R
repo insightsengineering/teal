@@ -262,4 +262,3 @@ testthat::test_that("init shows deprecation warning for id parameter", {
     )
   )
 })
-
