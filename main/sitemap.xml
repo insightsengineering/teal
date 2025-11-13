@@ -33,7 +33,6 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/add_landing_modal.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/after.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/bookmarks_identical.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_filter_datanames.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_modules_datanames.html</loc></url>
@@ -58,7 +57,6 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/index.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/init.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/is_arg_used.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/landing_popup_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/make_teal_transform_server.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_bookmark_manager.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_data_summary.html</loc></url>
@@ -69,20 +67,17 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/module_session_info.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_snapshot_manager.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/module_teal_data.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_lockfile.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_module.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/module_teal_with_splash.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_transform_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_validate_error.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/modules_bookmarkable.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/modules_slot.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/pluralize.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/report_card_template.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/restoreValue.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/show_rcode_modal.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/slices_store.html</loc></url>
-<url><loc>https://insightsengineering.github.io/teal/reference/tdata.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_to_filtered_data.html</loc></url>
