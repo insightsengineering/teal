@@ -16,8 +16,8 @@ testthat::test_that("e2e: reporter tab is visible when reporter is specified (de
 
 testthat::test_that("e2e: reporter tab is visible when the teal ui creation is delayed", {
   skip_if_too_deep(5)
-  app <- shinytest2::AppDriver$new(
-    shiny::shinyApp(
+  app <- TealAppDriver$new(
+    list(
       ui = bslib::page_fluid(
         uiOutput("teal_as_shiny_module")
       ),
@@ -30,22 +30,10 @@ testthat::test_that("e2e: reporter tab is visible when the teal ui creation is d
         })
         srv_teal("teal", data = teal_data(iris = iris), modules = mods)
       }
-    ),
-    height = 1000,
-    width = 1000
-  )
-
-  # Runs the same check as `app$is_visible` to check if the selector is visible
-  testthat::expect_true(
-    unlist(
-      app$get_js(
-        sprintf(
-          "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({}))",
-          "#teal-reporter_menu_container"
-        )
-      )
     )
   )
+
+  testthat::expect_true(app$is_visible(selector = "#teal-reporter_menu_container"))
   app$stop()
 })
 
