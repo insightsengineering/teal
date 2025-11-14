@@ -17,7 +17,7 @@
 #' the reporting functionality will be turned on automatically by the `teal` framework.
 #'
 #' For more information on reporting in `teal`, see the vignettes:
-#' - `vignette("managing-reproducible-report-documents-in-teal", package = "teal")`
+#' - `vignette("reportable-shiny-application", package = "teal.reporter")`
 #' - `vignette("adding-support-for-reporting-to-custom-modules", package = "teal")`
 #'
 #' @return A `teal` module which can be included in the `modules` argument to [init()].
