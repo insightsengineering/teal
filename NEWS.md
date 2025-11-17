@@ -1,4 +1,4 @@
-# teal 1.0.0.9022
+# teal 1.1.0
 
 ### Deprecations and removals
 
