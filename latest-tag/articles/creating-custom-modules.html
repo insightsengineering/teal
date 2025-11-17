@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -129,7 +130,7 @@
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/vignettes/creating-custom-modules.Rmd" class="external-link"><code>vignettes/creating-custom-modules.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/vignettes/creating-custom-modules.Rmd" class="external-link"><code>vignettes/creating-custom-modules.Rmd</code></a></small>
       <div class="d-none name"><code>creating-custom-modules.Rmd</code></div>
     </div>
 
@@ -327,6 +328,11 @@ injecting <code>input$dataset</code> and
 <strong>Render the Plot</strong>: <code><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot()</a></code> displays
 the plot by referencing the plot stored in the updated
 <code>teal_data</code> object, <code>new_data</code>.</li>
+<li>
+<strong>Return the data</strong>: To allow for reporting
+capabilities we need to return the data. See <a href="adding-support-for-reporting.html">adding support for reporting
+vignette</a>
+</li>
 </ol>
 <p>Here’s the code:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -374,13 +380,14 @@ the plot by referencing the plot stored in the updated
 <span></span>
 <span>    <span class="co"># Render the histogram from the updated teal_data object</span></span>
 <span>    <span class="va">output</span><span class="op">$</span><span class="va">histogram_plot</span> <span class="op">&lt;-</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>      <span class="fu">result</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"my_plot"</span><span class="op">]</span><span class="op">]</span> <span class="co"># Access and render the plot stored in `new_data`</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">result</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"my_plot"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># Access and render the plot stored in `new_data`</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># Reactive expression to get the generated code for the plot</span></span>
 <span>    <span class="va">output</span><span class="op">$</span><span class="va">plot_code</span> <span class="op">&lt;-</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="fu">result</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># Retrieve and display the code for the updated `teal_data` object</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="va">result</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Let’s review what we’ve done so far:</p>
@@ -472,7 +479,7 @@ used it in a teal app!</strong></p>
 <p>This setup provides a fully dynamic, user-controlled
 <code>teal</code> module that allows for interactive data exploration
 and code visibility, enhancing both usability and transparency.</p>
-<iframe src="https://shinylive.io/r/app/#code=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" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+<iframe src="https://shinylive.io/r/app/#code=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-dA4gUkAnKg5bIV4GB5lBegBy2SMxgHTIVIAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
 </iframe>
 </div>
 <div class="section level2">

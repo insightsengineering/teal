@@ -6,20 +6,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Landing popup module — landing_popup_module • teal</title>
+<title>Disable the "Show R Code" global button in the UI — disable_src • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Landing popup module — landing_popup_module">
-<meta name="description" content=" Creates a landing welcome popup for teal applications.
-This module is used to display a popup dialog when the application starts.
-The dialog blocks access to the application and must be closed with a button before the application can be viewed.
-This function is deprecated, please use add_landing_modal() on the teal app object instead.">
-<meta property="og:description" content=" Creates a landing welcome popup for teal applications.
-This module is used to display a popup dialog when the application starts.
-The dialog blocks access to the application and must be closed with a button before the application can be viewed.
-This function is deprecated, please use add_landing_modal() on the teal app object instead.">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Disable the " show r code global button in the ui disable_src>
+<meta name="description" content="Convenience function that disables the user's ability to see the code of the module.">
+<meta property="og:description" content="Convenience function that disables the user's ability to see the code of the module.">
 <meta property="og:image" content="https://insightsengineering.github.io/teal/logo.svg">
 <link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
@@ -32,7 +26,7 @@ This function is deprecated, please use add_landing_modal() on the teal app obje
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,6 +93,7 @@ This function is deprecated, please use add_landing_modal() on the teal app obje
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -129,27 +124,19 @@ This function is deprecated, please use add_landing_modal() on the teal app obje
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.svg" class="logo" alt=""><h1>Landing popup module</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/landing_popup_module.R" class="external-link"><code>R/landing_popup_module.R</code></a></small>
-      <div class="d-none name"><code>landing_popup_module.Rd</code></div>
+      <img src="../logo.svg" class="logo" alt=""><h1>Disable the "Show R Code" global button in the UI</h1>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/module_source_code.R" class="external-link"><code>R/module_source_code.R</code></a></small>
+      <div class="d-none name"><code>disable_src.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Creates a landing welcome popup for <code>teal</code> applications.</p>
-<p>This module is used to display a popup dialog when the application starts.
-The dialog blocks access to the application and must be closed with a button before the application can be viewed.
-This function is deprecated, please use <code><a href="add_landing_modal.html">add_landing_modal()</a></code> on the teal app object instead.</p>
+    <p>Convenience function that disables the user's ability to see the code of the module.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a>
 </h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">landing_popup_module</span><span class="op">(</span></span>
-<span>  label <span class="op">=</span> <span class="st">"Landing Popup"</span>,</span>
-<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  content <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  buttons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/modalDialog.html" class="external-link">modalButton</a></span><span class="op">(</span><span class="st">"Accept"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">disable_src</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -158,34 +145,75 @@ This function is deprecated, please use <code><a href="add_landing_modal.html">a
 
 
 <dl>
-<dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a>
+<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a>
 </dt>
-<dd><p>(<code>character(1)</code>) Label of the module.</p></dd>
-
-
-<dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a>
-</dt>
-<dd><p>(<code>character(1)</code>) Text to be displayed as popup title.</p></dd>
-
-
-<dt id="arg-content">content<a class="anchor" aria-label="anchor" href="#arg-content"></a>
-</dt>
-<dd><p>(<code>character(1)</code>, <code>shiny.tag</code> or <code>shiny.tag.list</code>) with the content of the popup.
-Passed to <code>...</code> of <code><a href="https://rdrr.io/pkg/shiny/man/modalDialog.html" class="external-link">shiny::modalDialog</a></code>. See examples.</p></dd>
-
-
-<dt id="arg-buttons">buttons<a class="anchor" aria-label="anchor" href="#arg-buttons"></a>
-</dt>
-<dd><p>(<code>shiny.tag</code> or <code>shiny.tag.list</code>) Typically a <code>modalButton</code> or <code>actionButton</code>. See examples.</p></dd>
+<dd><p>(<code>teal_module</code>) a <code>teal_module</code> object.</p></dd>
 
 </dl>
 </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a>
 </h2>
-    <p>A <code>teal_module</code> (extended with <code>teal_landing_module</code> class) to be used in <code>teal</code> applications.</p>
+    <p>modified data object that indicates that it should not show the "Show R Code"
+button in the UI.</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
+</h2>
+    <p>This is equivalent to setting the attribute <code>teal.enable_src</code> to <code>FALSE</code> on the
+data object returned by the module.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a>
+</h2>
+    <div class="dont-index"><p><code><a href="disable_report.html">disable_report()</a></code></p></div>
+    </div>
+    <div class="section level2">
+    <h2 id="examples-in-shinylive">Examples in Shinylive<a class="anchor" aria-label="anchor" href="#examples-in-shinylive"></a>
+</h2>
 
+<dl>
+<dt>example-1</dt>
+<dd><p><a href="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObSbRFYwIyS0qK6FO1DIwRAAmKkECaKhyikK0pOwC0tKhUKR+ALzSAO4JABZCnHDcAPppGdq40rSMtrE1dTY8uMnSIeFBNtLZHRFwNkkQKSlwAB6wqEGlfUHs1PZw1D3SfGDjk0HSXMuzcGs6AD4AfKm29tM2ntpt-BB3tErS7ELkouJS2jogbTaFEKwAILodjRAAkKlo1XBNhEUkYdwAvmBEQBdIA" class="external-link">Open in Shinylive</a>
+    <iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQBFaAZyj06EAObSbRFYwIyS0qK6FO1DIwRAAmKkECaKhyikK0pOwC0tKhUKR+ALzSAO4JABZCnHDcAPppGdq40rSMtrE1dTY8uMnSIeFBNtLZHRFwNkkQKSlwAB6wqEGlfUHs1PZw1D3SfGDjk0HSXMuzcGs6AD4AfKm29tM2ntpt-BB3tErS7ELkouJS2jogbTaFEKwAILodjRAAkKlo1XBNhEUkYdwAvmBEQBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50%; margin-top: 30px; transform: translateX(-50%); z-index: 1"></iframe>
+    <a style="height: 800px; display: block;"></a></p></dd>
+
+  <dt>example-2</dt>
+<dd><p><a href="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQFkV1camoyYRACY24AZwFpUcxUNqk7ALS0s5QpFDSALzSAO4BABZCnHDcAPphEdq40rSMtO6+ufnuPLjB0k6uDoUxVW7uQRAhIXAAHrD2cGn1DuzUUPRw1NHSfGDtnQ7SAIzjZRWtHTBdPS5u-YPDo+OTK9MATPMVOgA+AHyhBYMOae6MBNoC-BACtErS7ELkouJS2joQBV3EkIKwAILodjeAAkKloOVh7hEUkYLwAvmB0QBdIA" class="external-link">Open in Shinylive</a>
+    <iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIEBiaQFkV1camoyYRACY24AZwFpUcxUNqk7ALS0s5QpFDSALzSAO4BABZCnHDcAPphEdq40rSMtO6+ufnuPLjB0k6uDoUxVW7uQRAhIXAAHrD2cGn1DuzUUPRw1NHSfGDtnQ7SAIzjZRWtHTBdPS5u-YPDo+OTK9MATPMVOgA+AHyhBYMOae6MBNoC-BACtErS7ELkouJS2joQBV3EkIKwAILodjeAAkKloOVh7hEUkYLwAvmB0QBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50%; margin-top: 30px; transform: translateX(-50%); z-index: 1"></iframe>
+    <a style="height: 800px; display: block;"></a></p></dd>
+
+
+</dl>
+</div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a>
+</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Disabling source on a single module</span></span></span>
+<span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="init.html">init</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  modules <span class="op">=</span> <span class="fu"><a href="teal_modules.html">modules</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">disable_src</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># Multiple modules</span></span></span>
+<span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="init.html">init</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="teal_data_module.html">within</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  modules <span class="op">=</span> <span class="fu"><a href="teal_modules.html">modules</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"example 1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"example 2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">disable_src</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

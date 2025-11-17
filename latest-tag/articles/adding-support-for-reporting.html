@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -129,7 +130,7 @@
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/vignettes/adding-support-for-reporting.Rmd" class="external-link"><code>vignettes/adding-support-for-reporting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/vignettes/adding-support-for-reporting.Rmd" class="external-link"><code>vignettes/adding-support-for-reporting.Rmd</code></a></small>
       <div class="d-none name"><code>adding-support-for-reporting.Rmd</code></div>
     </div>
 
@@ -142,15 +143,15 @@ CoreDev</h4>
 utilizing the <code>teal.reporter</code> package. For a comprehensive
 explanation of the reporting functionality itself, please refer to the
 documentation therein.</p>
-<p>This article is intended for module developers and aims to provide
-guidance on enhancing a custom <code>teal</code> module with an
+<p>This article is <em>intended for module developers</em> and aims to
+provide guidance on enhancing a custom <code>teal</code> module with an
 automatic reporting feature. This enhancement enables users to
 incorporate snapshots of the module outputs into a report which can then
 be reviewed in another module automatically provided by
 <code>teal</code>. Thus the app user can interact with the report.</p>
 <p>The responsibilities of a module developer include:</p>
 <ul>
-<li>Adding support for reporting to their module.</li>
+<li>Choosing whether reporting of their module is needed.</li>
 <li>Specifying the outputs that constitute a snapshot of their
 module.</li>
 </ul>
@@ -210,20 +211,37 @@ following:</p>
 <div class="section level3">
 <h3 id="modify-the-declaration-of-the-server-function">Modify the declaration of the server function<a class="anchor" aria-label="anchor" href="#modify-the-declaration-of-the-server-function"></a>
 </h3>
-<p>The first step is to add an additional argument to the server
-function declaration - <code>reporter</code>. This informs
-<code>teal</code> that the module requires <code>reporter</code>, and it
-will be included when the module is called. See below:</p>
+<p>First we need to prepare the code inside the module to be added to
+the report. See below:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">my_module_with_card</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
 <span>    label <span class="op">=</span> <span class="va">label</span>,</span>
-<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">reporter</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span><span class="va">session</span>, <span class="st">"dataname"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># Prepare the report:</span></span>
+<span>        <span class="va">report</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="st">"# Module with reporting"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="st">"## Module's code"</span><span class="op">)</span></span>
+<span>            <span class="op">)</span></span>
+<span>          <span class="va">obj</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># Add to the report the code of the module</span></span>
+<span>        <span class="va">data_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">teal_data</span> <span class="op">&lt;-</span> <span class="fu">report</span><span class="op">(</span><span class="op">)</span>, <span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="va">teal_data</span>, <span class="va">table</span>, table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
 <span>        <span class="va">output</span><span class="op">$</span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">teal_data</span> <span class="op">&lt;-</span> <span class="fu">data_r</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="va">teal_data</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
@@ -241,59 +259,66 @@ will be included when the module is called. See below:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>  modules <span class="op">=</span> <span class="fu">my_module_with_reporting</span><span class="op">(</span><span class="op">)</span></span>
+<span>  modules <span class="op">=</span> <span class="fu">my_module_with_card</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIMXQH0YRACaC1cB4A7tSkABYedg5OtADm3HxCIiwSalCacGocALwcymBwAB6wqAEchlnefgH50iCqHBxV-nDiDY0caRlZuV2ZuO2NAM4M7PQ5AsKiEtQ+uBw+UKRQ81GOznWDHc0BAMqjDOKz80nTEEcQqIKk80TXVzccI0NDYhCbEB1fHIKoi+T7ALMACSl2u4merxI83y-yg0Hg+XmBDCRGoBDgQwm1CGRDS5HECMx4jhUkk5K2XzupAeABI4SNSAkOHYID4GAAFei0Ujieqfb5fOwARwudLhRNcgq+pMkwGAtHFS3hsDgAF01ZSOgBfKXfXVbbUDAWNQTUCanFLnWYfQUQLG8DgAOV2Rx8eq+r3ZmgsABkoLpqW0Td8vXAffQOfDMhDMnAQWDefa2mAJarajCwABhVFEEYcKALZWMpEcFFojFY3JO+S+33k43SppQWhRiAxsY+lgwGRFUgAeXu4OTsOLcFItQpIcaHo42varnn0HQzNooWDjThEwqHlJwKwwN22O5Q3mAFkZFmAIJYI+5GCkAgWIaSRtNXwtKtNTw7QIhcKRPY6xxFIqiuKo1D8BwFzOEwLDsGSHD8sMYS0LoV7oOIaCoLSZrzNhtIjPQYyLmA2pqkAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIMXQH0YRACaC1cB4A7tSkABYeBBY+3HxCIiwSalCacGocALwcymBwAB6wqAEchunefgE50iCqHBzl-nDitXUcyanpWe1puC11AM4M7PSZAsKiEtQ+uBw+UKRQ1X2tDQEAykMM4lMz8RMQ2xCogqQzRCfHpxyD-f1iEEsQrc8cgqhz5BsBzACSRyfiG53EgzHIfKDQeA5GYEMJEagEOD9UbUfpEZLkcSQpHicFSSQE1TLZ4AYg4AAU7KgLJxwpwqY5SIhia0GU5Yhw7EwWOxxDUni9nnYAI7iIiaABWHLxhIFgrqpUi0TFkukvBZgoIzTl8ueiqi9B8zTAZIAsr5GhwQuFOfZGbQAOZVXo63UK6xqJWGlUSyQut0vfXKnIks0WgIAcmRxB8cCqGpergD4olCYAvq4E2SAII+GKkIglML0u3sukcGOcIj8IucVZx12tcEeEa8W3cthNfkBkVWIwecEctmkKQzWiXAAk4OxSbd1rCtD7nvBMwWmgCq5SxSyUH6GGxh0n09gcFluozRMbdXOpCP813cFIQ4osfolNoI+7bt7isHbeb9D4gm7r9uCwDAOOJxTve2IALqwems7PBeOppv6rSCNQox7IkBxTI8goQMibYAHJrNsPhIa0dyxpoFgADJQLoN7arqNFwHRb4QmkgJpHAvz-CORHGseUJgH62RgAAwnCRCDBwUCzPegykNCFZwgiSKjCR8j0fRBLoYKMBQLQ5LcWo4jDHRLAwDI+SkAA8hcALCWCymPlUZ6JssaYtK4vnQOgHK0KErFKQsoy-ve4g-FgPxrCi9CojMpoyFJ2ZYAlWQwKQBr9H6LT1si2WePWwShBEBpGq4mYQNQNaHM4Ha8gSHBfv0C4QLo2boOIaCoBOmEzP1E6DPQwz+WAaawUAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
 </iframe>
-<p><code>teal</code> adds another tab to the application, titled
-<code>Report previewer</code>. However, there is no visible change in
-how the module operates and appears and the user cannot add content to
-the report from this module. That requires inserting UI and server
-elements of the <code>teal.reporter</code> module into the module
-body.</p>
+<p>The output hasn’t changed (yet). The final step is to have the server
+return the reporter object, enabling the module to be reported.</p>
 </div>
 <div class="section level3">
-<h3 id="insert-teal-reporter-module">Insert <code>teal.reporter</code> module<a class="anchor" aria-label="anchor" href="#insert-teal-reporter-module"></a>
+<h3 id="return-the-reporter-object">Return the reporter object<a class="anchor" aria-label="anchor" href="#return-the-reporter-object"></a>
 </h3>
-<p>The UI and the server logic necessary for adding cards from
-<code>my_module_with_reporting</code> to the report are provided by
-<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">teal.reporter::simple_reporter_ui</a></code> and
-<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">teal.reporter::simple_reporter_srv</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
 <span>    label <span class="op">=</span> <span class="va">label</span>,</span>
-<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">reporter</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">simple_reporter_srv</a></span><span class="op">(</span></span>
-<span>          id <span class="op">=</span> <span class="st">"reporter"</span>,</span>
-<span>          reporter <span class="op">=</span> <span class="va">reporter</span>,</span>
-<span>          card_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span><span class="op">)</span> <span class="va">card</span></span>
-<span>        <span class="op">)</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span><span class="va">session</span>, <span class="st">"dataname"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="va">output</span><span class="op">$</span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span>        <span class="co"># Prepare the report:</span></span>
+<span>        <span class="va">report</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="op">&lt;-</span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="st">"# Module with reporting"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="st">"## Module's code"</span><span class="op">)</span></span>
+<span>            <span class="op">)</span></span>
+<span>          <span class="va">obj</span></span>
 <span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># Add to the report the code of the module</span></span>
+<span>        <span class="va">data_r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">rtd</span> <span class="op">&lt;-</span> <span class="fu">report</span><span class="op">(</span><span class="op">)</span>, <span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
+<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span><span class="va">rtd</span>, <span class="va">table</span>, table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="va">output</span><span class="op">$</span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">dr</span> <span class="op">&lt;-</span> <span class="fu">data_r</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="va">dr</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span></span>
+<span>        <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="co"># the reactive teal_report is returned by the module</span></span>
+<span>        <span class="va">data_r</span></span>
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="op">}</span>,</span>
 <span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarLayout</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarPanel</a></span><span class="op">(</span></span>
-<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarPanel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">mainPanel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataset"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>This updated module is now ready to be launched:</p>
+<p>With these modifications, the module is now ready to be launched with
+<code>teal</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
@@ -303,233 +328,121 @@ body.</p>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>A new piece of <code>UI</code> has been added, and the buttons are
-clickable. The user can now add a card to the report and view it in the
-<code>Report previewer</code> module but the preview is still empty
-since we have not instructed our module what to put on the card.</p>
-<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIMXQH0YRACaC1cB4A7tSkABYedg5OtADm3HxCIiwSalCacGocALwcymBwAB6wqAEchlnefgH50iCqHBxV-nDiDY0caRlZuV2ZuO2NAM4M7PQ5AsKiEtQ+uBw+UKRQ81GOznWDHc0BAMqjDOKz80nTEEcQqIKk80TXVzccI0NDYhCbEB1f5dZqtvbrBiIRCvGClQJrJwMDxDeisNqfb5fWYTfKQ5z5AaIpGNdEMCZ4+hYnEdAgWHweJITU4pc5k+g+aT0nxbL6uEmCVCLcj7ALMACSl2u4merxI83y3Kg0HgmI4BDCRGoBDgQwm1CGRDS5HEMtV4ilUkkxtZHTupAeABIpSNSAkOHYID4GAAFei0UjierYnF2ACOFytUr17JJCyWUCkwGAtCDEb1AF0E6bGgBfUNfdNbVPEjqCajUqa0o6MjjepEQNW8DgAOV2JYzHVezs0FgAMlBdOaESTm3BW-QXdLMj2wxV-tFnMDQeDIgCofQPPndUM2mBCbVJLne5k4AKhZ7K2vg7A4LUJWAAMKKogjDhQcPLW1yhVKlVq3I1+RttuNtnb74YCgWghwgEcxlbFgYBkIpSAAeXuYUj0lCNnzAY0-w4RtU3aVwcOgdB7VoUJRylCYKg8Q1+SwfldnVd0hnmABZGRLwAQSwOjchgUh6SGLd2h2VUJncLxfBaYJQgidE4ikVRXFUah+A4C5nCYFh2CNMt2iGMJaF0Nj0HENBUEtfN5hMy0RjhBg8LAVMEyAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIMXQH0YRACaC1cB4A7tSkABYedg5OtADm3HxCIiwSalCacGocALwcymBwAB6wqAEchlnefgH50iCqHBxV-nDiDY0caRlZuV2ZuO2NAM4M7PQ5AsKiEtQ+uBw+UKRQdYMdzQEAyqMM4rPzSdMQexCogqTzROdnFxwjQ0NiEKsQHW8cgqiL5NsBzACSp3O4nujxI83y3yg0Hg+XmBDCRGoBDgQwm1CGRDS5HEMNR4ihUkkxNUazeAGIOAAFKIWTjhThRRykRBkjpMpwJDh2Jgsdjieqvd5vOwAR3ERE0ACsuYSSULhY0Kh4CBYfBLpdJeGzhQQ2grFW9lar6Or8pSALK+FocELhbn2ZlxWoDA2GpXWNQqtUaqWSV3u97Gn3my3WgIAcjRxB8cFqOverkDkqlCYAvq4E5SAII+HzlIjlMKMx2chkcGOcIj8IucDZxt0dKGRLk80T8wWBsXiJz53gO6KkKTzWg3AAkULxSfddrCtB7pDm5XSAXmy00ZVyUCGGDxJ3Hk9gcHlhozpMbjSupAPS23cFIrYosfoNNoQ877u7PnG-eb9CJCaNN+wDAKO5wTreeIALpQemmYXhwlLlm2fL0p6kSlg+GIOqQgj0BAcD5poui1k04YNoaf5smeBppgGHSCNQEyHCkxyzC8woQGi-YAHKbHsPjTm8jyxpoFgADJQLoV76oaIlwGJL7QpkIKZHAAJAkOXFtGAh6wmA-p5GAADCiJECMHBQAst4jKQcIVoiyKohMPHyOJ4nEvRwowFAtBUspajiGMYksDAMhFKQADy1zAtpkI2fetQnomaxpu0rhpdA6BcrQoSydZywTMqhL-Fg-ybOi9AYvMFoyMZ2ZYBVuQwKQJpDP67T1mizWePWwShBEHIsBAsRSKo8HUDWJzOLybCtMSHAfkMc4QLo2boOIaCoGOjHzFtY4jPQYwZWAaZQUAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
 </iframe>
+<p>The key step is to return a reactive <code>teal_report</code> object
+containing everything. This informs <code>teal</code> that the module
+provides a <code>reporter</code>, and teal will add a button
+<code>+ Add to Report</code> to add the modules’ content to the report.
+The user can now add a card to the report with the current state of the
+module. The report can be seen after clicking
+<code>Preview report</code> under the <code>Report</code> button.</p>
 </div>
 <div class="section level3">
 <h3 id="add-content-to-the-card">Add content to the card<a class="anchor" aria-label="anchor" href="#add-content-to-the-card"></a>
 </h3>
-<p>To add content to a card, we will utilize the public API exposed by
-the <code>TealReportCard</code> class. The
-<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">teal.reporter::simple_reporter_srv</a></code> module accepts the
-<code>card_fun</code> argument that determines the appearance of the
-output from our custom module. <code>ReportCard</code> and its
-derivatives allow the sequential addition of content according to the
-order of method calls. To explore the content, we can use the
-<code>$get_content</code> method. For further details, refer to the
-documentation of <code>TealReportCard</code> and
-<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html">teal.reporter::ReportCard</a></code>.</p>
-<p>We will add simple text to the card by modifying the
-<code>card_fun</code> argument passed to
-<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">teal.reporter::simple_reporter_srv</a></code>. The function must
-return the <code>card</code> object, otherwise errors may occur in
-<code>teal</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">custom_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"This is content from a custom teal module!"</span><span class="op">)</span></span>
-<span>  <span class="va">card</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">my_module_with_reporting</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"example teal module"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
-<span>    label <span class="op">=</span> <span class="va">label</span>,</span>
-<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">reporter</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">simple_reporter_srv</a></span><span class="op">(</span></span>
-<span>          id <span class="op">=</span> <span class="st">"reporter"</span>,</span>
-<span>          reporter <span class="op">=</span> <span class="va">reporter</span>,</span>
-<span>          card_fun <span class="op">=</span> <span class="va">custom_function</span></span>
-<span>        <span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span><span class="va">session</span>, <span class="st">"dataname"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="va">output</span><span class="op">$</span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span></span>
-<span>        <span class="op">}</span><span class="op">)</span></span>
-<span>      <span class="op">}</span><span class="op">)</span></span>
-<span>    <span class="op">}</span>,</span>
-<span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarLayout</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarPanel</a></span><span class="op">(</span></span>
-<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span>        <span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">mainPanel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataset"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>  modules <span class="op">=</span> <span class="fu">my_module_with_reporting</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>Now, an application user can see the text added by
-<code>custom_function</code> in the <code>Report previewer</code>
-module.</p>
-<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomRggM6kiMAPpCRLCTcfP6iEgQWACYcALwchmq29o7OiIhYyU4AwlEAJBBwAO5S0iCqHBwR9JG5aKgUkT7kAB6k4spgMgAW1O4cvZUk5GQC9N4cUJUeXjDx1mocMESRgmpwAIQdrhVVkaoAvqqqMLo+SytrPoXUpF0+dg5OtADmwQLCYRDialCacAtxDpwZqwVBrOZGRbLVZwLYcMoQCrnGHtREVDg-P4AjG-f64cro9wMdj0WLvAJiL7USK4DiRKCkKC0h4pBilAnoqEXOAAZWJDHE1NpoUCVIgqEEpFpRElEqlHCJ7nclPZaM5FQSSUeqUQypgYLg90yzh87norFR6vV1LJHRZTgYHXxaqtHHtzjJ7oYztd6N2fmEZII028AYpJA56u2rsEqHp5D5a2YAElxZLxIrlSRaR141BoPAnZUukRqAQ4H04r0iD9yOICxXxHmSpJo1aZaQ5bk80TSG87BBIgwAAr0WhtBG+ip2ACOgrTpG7DPzsDgbddzckwGAtC7eYbAF0D5HOft1xUz5H9j70YJqGSRZTBZFVVaIH1eBwAHI85-nhXUnAmgWAAMlAugdparrKkOwH0MO+b-FBvqal69BpHqBpGtqDA+He9buO0YBoVskg3r6RJJqQqZygRRH7quWw5mAWQlkQRITHSy69kWBAlmWFZkl+8ggSB-4VGRJ7ojAUC0AhBRqOIJLASwMAyMCpAAPKyum770dxcCkKR-7rocaKuGZdRvLQNxQXmZIJD4zbJlgyY8mS1Bju4tIALIyFkACCWDuXEMCkFU7iSWiyJrJWiynDFhrXLc2EpC8UiqK4qjUPwHDzs4TAsOwJTwgS7g9BAugBeg4h1Lkd60nVRLmmyBxgPsB5AA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
-</iframe>
+<p>The user can modify the text of a card or add new text with the
+button <code>+ Add text block</code> present at the bottom of the card.
+Text can also be added inside the module by appending a
+<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card()</a></code> to the card of the report.</p>
+<p>As the module writer, you can also add any other content to the
+report you’d like: titles, text.</p>
 </div>
 <div class="section level3">
 <h3 id="add-non-text-content-to-the-card">Add non-text content to the card<a class="anchor" aria-label="anchor" href="#add-non-text-content-to-the-card"></a>
 </h3>
 <p><code>teal.reporter</code> supports the addition of tables, charts,
 and more. For more information, explore the API of
-<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html">teal.reporter::ReportCard</a></code> to learn about the supported
-content types.</p>
-</div>
-<div class="section level3">
-<h3 id="tealreportcard">
-<code>TealReportCard</code><a class="anchor" aria-label="anchor" href="#tealreportcard"></a>
-</h3>
-<p><code>teal</code> exports the <code>TealReportCard</code> class,
-which extends the <code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html">teal.reporter::ReportCard</a></code> class and
-provides several convenient methods to facilitate working with
-<code>teal</code> features like the filter panel or source code. For
-more details, refer to the documentation of
-<code>TealReportCard</code>.</p>
-<p>To support <code>TealReportCard</code>, the function that is passed
-to <code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">teal.reporter::simple_reporter_srv</a></code> must define a default
-value for the card, as shown below:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">custom_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="va"><a href="../reference/TealReportCard.html">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># ... some code ... #</span></span>
-<span>  <span class="va">card</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p>Without this definition, the API of <code>TealReportCard</code> will
-not be available within the function.</p>
+<code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_report.html">teal_report()</a></code> to learn about the supported content
+types.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="removing-support-for-displaying-reproducible-code">Removing support for displaying reproducible code<a class="anchor" aria-label="anchor" href="#removing-support-for-displaying-reproducible-code"></a>
 </h2>
-<p>In conclusion, we have demonstrated how to build a standard
-<code>teal</code> app with code reproducibility and reporter
-functionalities. Note that the server function requires the
-<code>filter_panel_api</code> argument so that the filter panel state
-can be added to the report.</p>
-<p>In the final example, we have incorporated <code>teal.code</code>
-snippets. <code>teal.code</code> is an <code>R</code> library that
-offers utilities for storing code and associating it with an execution
-environment. This allows <code>ReporterCard</code> to store the code
-necessary to generate the table along with the table itself. To learn
-more about <code>teal.code</code> see the vignette
-<em><code>qenv</code></em> in <code>teal.code</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_reporter_module</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span> <span class="op">=</span> <span class="st">"Example"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/teal_modules.html">module</a></span><span class="op">(</span></span>
-<span>    label <span class="op">=</span> <span class="va">label</span>,</span>
-<span>    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">reporter</span>, <span class="va">filter_panel_api</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">with_filter</span> <span class="op">&lt;-</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">filter_panel_api</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">filter_panel_api</span>, <span class="st">"FilterPanelApi"</span><span class="op">)</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSelectInput.html" class="external-link">updateSelectInput</a></span><span class="op">(</span><span class="va">session</span>, <span class="st">"dataname"</span>, choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/isolate.html" class="external-link">isolate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observe.html" class="external-link">observe</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu">dat</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/updateSliderInput.html" class="external-link">updateSliderInput</a></span><span class="op">(</span><span class="va">session</span>, <span class="st">"nrow"</span>, max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="fu">dat</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="fu">dat</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="op">}</span><span class="op">)</span></span>
-<span></span>
-<span>        <span class="va">table_q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">nrow</span><span class="op">)</span></span>
-<span>          <span class="fu"><a href="../reference/teal_data_module.html">within</a></span><span class="op">(</span></span>
-<span>            <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dataset</span>, <span class="va">nrows</span><span class="op">)</span>,</span>
-<span>            dataset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.name</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span>,</span>
-<span>            nrows <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">nrow</span></span>
-<span>          <span class="op">)</span></span>
-<span>        <span class="op">}</span><span class="op">)</span></span>
-<span></span>
-<span>        <span class="va">output</span><span class="op">$</span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="fu">table_q</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"result"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span>        <span class="co">### REPORTER</span></span>
-<span>        <span class="va">card_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">card</span> <span class="op">=</span> <span class="fu">teal.reporter</span><span class="fu">::</span><span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html">ReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>, <span class="va">comment</span><span class="op">)</span> <span class="op">{</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">set_name</span><span class="op">(</span><span class="st">"Table Module"</span><span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Selected dataset"</span>, <span class="va">input</span><span class="op">$</span><span class="va">dataname</span><span class="op">)</span>, <span class="st">"header2"</span><span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"Selected Filters"</span>, <span class="st">"header3"</span><span class="op">)</span></span>
-<span>          <span class="kw">if</span> <span class="op">(</span><span class="va">with_filter</span><span class="op">)</span> <span class="op">{</span></span>
-<span>            <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="va">filter_panel_api</span><span class="op">$</span><span class="fu">get_filter_state</span><span class="op">(</span><span class="op">)</span>, <span class="st">"verbatim"</span><span class="op">)</span></span>
-<span>          <span class="op">}</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"Encoding"</span>, <span class="st">"header3"</span><span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span></span>
-<span>            <span class="fu">yaml</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/yaml/man/as.yaml.html" class="external-link">as.yaml</a></span><span class="op">(</span></span>
-<span>              <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span>
-<span>                <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dataname"</span>, <span class="st">"nrow"</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">input</span><span class="op">[[</span><span class="va">x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dataname"</span>, <span class="st">"nrow"</span><span class="op">)</span></span>
-<span>              <span class="op">)</span></span>
-<span>            <span class="op">)</span>,</span>
-<span>            <span class="st">"verbatim"</span></span>
-<span>          <span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"Module Table"</span>, <span class="st">"header3"</span><span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_table</span><span class="op">(</span><span class="fu">table_q</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"result"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"Show R Code"</span>, <span class="st">"header3"</span><span class="op">)</span></span>
-<span>          <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="fu">teal.code</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html">get_code</a></span><span class="op">(</span><span class="fu">table_q</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"verbatim"</span><span class="op">)</span></span>
-<span>          <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">comment</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span> <span class="op">{</span></span>
-<span>            <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="st">"Comment"</span>, <span class="st">"header3"</span><span class="op">)</span></span>
-<span>            <span class="va">card</span><span class="op">$</span><span class="fu">append_text</span><span class="op">(</span><span class="va">comment</span><span class="op">)</span></span>
-<span>          <span class="op">}</span></span>
-<span>          <span class="va">card</span></span>
-<span>        <span class="op">}</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/add_card_button.html">add_card_button_srv</a></span><span class="op">(</span></span>
-<span>          <span class="st">"addReportCard"</span>,</span>
-<span>          reporter <span class="op">=</span> <span class="va">reporter</span>,</span>
-<span>          card_fun <span class="op">=</span> <span class="va">card_fun</span></span>
-<span>        <span class="op">)</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/download_report_button.html">download_report_button_srv</a></span><span class="op">(</span><span class="st">"downloadButton"</span>, reporter <span class="op">=</span> <span class="va">reporter</span><span class="op">)</span></span>
-<span>        <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/reset_report_button.html">reset_report_button_srv</a></span><span class="op">(</span><span class="st">"resetButton"</span>, <span class="va">reporter</span><span class="op">)</span></span>
-<span>        <span class="co">###</span></span>
-<span>      <span class="op">}</span><span class="op">)</span></span>
-<span>    <span class="op">}</span>,</span>
-<span>    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarLayout</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarPanel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">mainPanel</a></span><span class="op">(</span></span>
-<span>          <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/simple_reporter.html">simple_reporter_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"reporter"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataset"</span><span class="op">)</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarLayout</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">sidebarPanel</a></span><span class="op">(</span></span>
-<span>          <span class="va">tags</span><span class="op">$</span><span class="fu">div</span><span class="op">(</span></span>
-<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/add_card_button.html">add_card_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"addReportCard"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/download_report_button.html">download_report_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"downloadButton"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>            <span class="fu">teal.reporter</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/reset_report_button.html">reset_report_button_ui</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"resetButton"</span><span class="op">)</span><span class="op">)</span></span>
-<span>          <span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"dataname"</span><span class="op">)</span>, <span class="st">"Choose a dataset"</span>, choices <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"nrow"</span><span class="op">)</span>, <span class="st">"Number of rows"</span>, min <span class="op">=</span> <span class="fl">1</span>, max <span class="op">=</span> <span class="fl">1</span>, value <span class="op">=</span> <span class="fl">1</span>, step <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>        <span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sidebarLayout.html" class="external-link">mainPanel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>AIR <span class="op">=</span> <span class="va">airquality</span>, IRIS <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>,</span>
-<span>  modules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="fu">example_reporter_module</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"with Reporter"</span><span class="op">)</span>,</span>
-<span>    <span class="fu">my_module</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"without Reporter"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  filter <span class="op">=</span> <span class="fu"><a href="../reference/teal_slices.html">teal_slices</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html">teal_slice</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"AIR"</span>, varname <span class="op">=</span> <span class="st">"Temp"</span>, selected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">72</span>, <span class="fl">85</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/teal_modifiers.html">modify_header</a></span><span class="op">(</span><span class="va">tags</span><span class="op">$</span><span class="fu">h2</span><span class="op">(</span><span class="st">"Example teal app with reporter"</span><span class="op">)</span><span class="op">)</span></span>
+<p>If your module supports a report but you want to disable the button
+that allows to display the module’s reproducible code (“Show R code”),
+use <code><a href="../reference/disable_src.html">disable_src()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu">my_module_with_reporting</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/disable_src.html">disable_src</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIqmLoD6MIgBNBapy8AsKiEmpQmnBqHAC8HMpgcAAesKiBHIYxPv6BidIgqhwcOQFw4kXFHBFRMfE10biVxQDODOz0cSEiLBLUvrgcvlCkUAXNVQQAFnAEANYwI3CIiFAtbU6eBBHr4tQtRBHk4sOjUpKDiVmep1D5qhPFpYEAyu0MewPdYRB7EKiCUiDIiAgFAjhtdZiCDjCBVeEcQSoU5wN6BZgASX+gPEkJa0MuYFu0HgiUG0yI1AIcBaXX2hyW4hJNJOIyg50krgRVRBpDBABJbm1SNw+HYIL4GAAFei0UjiQpw7lVOwARz+AuJsDgXOVxVuUmAwFomrZzIAuubHlUAL66+F2iY2ppK4qCahdIQ9aGfWHciC04IAORevut+MlmgsABkoLpeRVXQiI3Ao-QpVAINFcdFZqQsWCmS0KkSzdr8oSAMJTIhENocKBDNnCskcClUmldIPyaPRzkuvWLWgZrNqcQdKMsGAyFKkADyoJxAZLQrgpHynOt9o4Nsqrl3WdSMHScE8dgcTgY3j8ZVF316vwadQSYEUR5P+Q4iqeN8CifhT5dE+A5VBsHSeqED6fIMtyDOejjOIM-DUGozieKgmbRJ4aDUH6CIAO7UKQUyeMhqEMHeACEMD7PiEAAObiGRaEYaO2GoLhHAAGRcRwtAzLKpDFsxV6sVhOGEgAYihzgjtEACCHH3EmP65Ki7z0NB94+iagLAou4J4tCeHckiKJonmBY4kZJCElqpJ4G2NYdrS8T0kc5TMsWBqcpuKlVKcd52EwLDsKyZySEaumkIKZbwJa27wkQmhgeU356hwaoaoCsWjMyiUIllpznNa8JmUsLwaJK9BWfKNkQISED0EQ+GtosyRdE1LXhecgysEYgicPE-BqLWmldfhPWchwAD0HAAKx+XqjpuP5xSjJogSeKqQXWKIYXpXqWXRblmbagV8LHdiMUTRdVSEcRtD-hl+pslIIEvXYLQBCKwQzFAvjhWsa6DBNLQXKVCKriK8RrBgzLZTF9k6h9GVg3S138hNkPFHdK2Q7yAobRkwTitVMiRH+xOnuqkXAIkX0-YkCUPGtHAAMScxwWCKFKc5YDIihYJDBAWL4pHCHeXo-OIov0L4XRZLY9gIQwKxYCrTiVmLWNwJNFxtkQMDwGQJnKnLvj8sKngI4kFObZwACyv5wMpL0W-yaCoBQ4vkMk8oYS0xyJBZzBwAr0OtidyMG4k-3VQATG7GUe17PueH78oh7mYcK9J5H0C0rZx9Y1UAMzJ3q1D8Bw4gPSRIkuF+OOTDracShns5MTJomYWo7HUPy9FrqRPf0J4QeMrHYATiM1AwJXyoHu7bfoOnmclooIh+LQ9HF2A8cMBXYB3cUqdrx3G8t8UuiwGoKxw7fMBjtfoGjEJKzCkG2rFq-AFe2ofQBAVxxVdo5RI2MT5IUgj6ZI0hopGmSAlckIC8rlnAZAZqrUT5-w4KfKoEM2bwkSLPKciQW74PPt7S+XdEjOzUrISmYDCSH3oMfShq9qG+yYQYJh21DT0zAIzVCzNzQcPlp7C+vtaFgBeDWfC3MOCVj8Mwl8rD2EtyoevLuStiCShWMPUgWwVG8Idvw-sL5SHz0XtyautdKLEGNhQGG8RyEn2bkQ1uEj27SP9iWZRTiyD73UTY82nDtF+McSbUg+Dl4pzFpDOJ3IlbwUvPQB+vhxYW08JoQEpASAT3oKwZ6epEgA18BrC8pBtbyzJC3VJzgugNIYKjbk2SvRdHacISGd0Uma2cCsXwLV1BEABmefpOS8kFJaEUlcwzRoAwAEJTLcI5ZpnR4jrN6dYNQysqlq0QF9EeDTJmkHyRAQpxSGY0jXMss5JBWxbMhpzdm1oVoOlRu6CC3o+i+DNsUAMd4QxhlWtyFMaZYzxhxJDcFFg5JjjaOifM10iyoLOg5ae1Zaz1kbJHRy7ZqSuQ4N2Xs-ZIZDggPCkpyo+n7PSYgfEx4trrM8O6VF1y6UblaQiKx05ZwLj5EuX+pZRgthPndAqrhwz9FTDGOMCYYUyrTFSluox6ItEFGwalepaWq3peUrYYtTnnNZdQdlKBMmVIQjU3wXLX66rSYM+ZozxYnNyfci5bLlyJCGfhEZSyVl2s8etHZey9UrCOUYt1KzTXmsjXc85G4KHcvhIiyyKLvUivRWAzFNY6ycFxc2NcrYCWdniCSvsKbQJVQYLVc1kDp5BkEDAKInQiA1ywUXRyNE4TxAAIyDHal0AdHB+pqEGsOwYQd7DDolVWilVLqYCsLJm6mG5JVOj3KoA8qgvZ3loERZ6txFY7JuG9eSGIsBdCgNQegqpBBGCIroQYl6MQvDpLKcGIFnhluqPsLOSYUhpGZf0q8P7xCAVcWAeu3NQP0ArBMDw141IQciNELoiR668lg5ynBSpCHFEbieowE8NCEqsCRloZHyjIww2AC9wtHL9XoMyOjM5jytjTbnTp4gADsCdBgAA5Fp+WkAAHwAHyVByNXLwrDeHqv5FMBOm93wZCyA2dAHAYPrKTatOxfxnAhTYOUaa6UWhTFoLoRSqBxBe35O6QY9nUouG3WAG05ogA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIMXQH0YRACaC1cB4A7tSkABYedg5OtADm3HxCIiwSalCacGocALwcymBwAB6wqAEchlnefgH50iCqHBxV-nDiDY0caRlZuV2ZuO2NAM4M7PQ5AsKiEtQ+uBw+UKRQdYMdzQEAyqMM4rPzSdMQexCogqTzROdnFxwjQ0NiEKsQHW8cgqiL5NsBzACSp3O4nujxI83y3yg0Hg+XmBDCRGoBDgQwm1CGRDS5HEMNR4ihUkkxNUazeAGIOAAFKIWTjhThRRykRBkjpMpwJDh2Jgsdjieqvd5vOwAR3ERE0ACsuYSSULhY0Kh4CBYfBLpdJeGzhQQ2grFW9lar6Or8pSALK+FocELhbn2ZlxWoDA2GpXWNQqtUaqWSV3u97Gn3my3WgIAcjRxB8cFqOverkDkqlCYAvq4E5SAII+HzlIjlMKMx2chkcGOcIj8IucDZxt0dKGRLk80T8wWBsXiJz53gO6KkKTzWg3AAkULxSfddrCtB7pDm5XSAXmy00ZVyUCGGDxJ3Hk9gcHlhozpMbjSupAPS23cFIrYosfoNNoQ877u7PnG-eb9CJCaNN+wDAKO5wTreeIALpQemmYXhwlLlm2fL0p6kSlg+GIOqQgj0BAcD5poui1k04YNoaf5smeBppgGHSCNQEyHCkxyzC8woQGi-YAHKbHsPjTm8jyxpoFgADJQLoV76oaIlwGJL7QpkIKZHAAJAkOXFtGAh6wmA-p5GAADCiJECMHBQAst4jKQcIVoiyKohMPHyOJ4nEvRwowFAtBUspajiGMYksDAMhFKQADy1zAtpkI2fetQnomaxpu0rhpdA6BcrQoSydZywTMqhL-Fg-ybOi9AYvMFoyMZ2ZYBVuQwKQJpDP67T1mizWePWwShBEHIsBAsRSBwAA+AB8CwYiugRDPQequPB1A1iczi8mwrTEhwH5DHOEC6Nm6DiGgqBjox8xnWOIz0GMGVgGmUFAA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
 </iframe>
+<p>You can use <code><a href="../reference/disable_src.html">disable_src()</a></code> on multiple modules at the
+same time and nested modules too. For example on:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
+<span>      label <span class="op">=</span> <span class="st">"One nested module disabled"</span>,</span>
+<span>      <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Module 1"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Module 2"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Module 3"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/disable_src.html">disable_src</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/teal_modules.html">modules</a></span><span class="op">(</span></span>
+<span>      label <span class="op">=</span> <span class="st">"Nested modules without source"</span>,</span>
+<span>      <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Module 1"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="../reference/example_module.html">example_module</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Module 2"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/disable_src.html">disable_src</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="removing-reporting">Removing reporting<a class="anchor" aria-label="anchor" href="#removing-reporting"></a>
+</h2>
+<p>If a module has the reporter functionality the teal app developer can
+disable it with <code><a href="../reference/disable_report.html">disable_report()</a></code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span>IRIS <span class="op">=</span> <span class="va">iris</span>, MTCARS <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>  modules <span class="op">=</span> <span class="fu">my_module_with_reporting</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/disable_report.html">disable_report</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<iframe src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMASzLgCcoDTqA3OAAgB4BaDgMwCuEZtRIAKAJQcAKlgCqAUQA6EADbUARo3oBPceShrJqjdqh6DcIxnpxUReuXomIMXQH0YRACaC1cB4A7tSkABYedg5OtADm3HxCIiwSalCacGocALwcymBwAB6wqAEchlnefgH50iCqHBxV-nDiDY0caRlZuV2ZuO2NAM4M7PQ5AsKiEtQ+uBw+UKRQdYMdzQEAyqMM4rPzSdMQexCogqTzROdnFxwjQ0NiEKsQHW8cgqiL5NsBzACSp3O4nujxI83y3yg0Hg+XmBDCRGoBDgQwm1CGRDS5HEMNR4ihUkkxNUazeAGIOAAFKIWTjhThRRykRBkjpMpwJDh2Jgsdjieqvd5vOwAR3ERE0ACsuYSSULhY0Kh4CBYfBLpdJeGzhQQ2grFW9lar6Or8pSALK+FocELhbn2ZlxWoDA2GpXWNQqtUaqWSV3u97Gn3my3WgIAcjRxB8cFqOverkDkqlCYAvq4E5SAII+HzlIjlMKMx2chkcGOcIj8IucDZxt0dKGRLk80T8wWBsXiJz53gO6KkKTzWg3AAkULxSfddrCtB7pDm5XSAXmy00ZVyUCGGDxJ3Hk9gcHlhozpMbjSupAPS23cFIrYosfoNNoQ877u7PnG-eb9CJCaNN+wDAKO5wTreeIALpQemmYXhwlLlm2fL0p6kSlg+GIOqQgj0BAcD5poui1k04YNoaf5smeBppgGHSCNQEyHCkxyzC8woQGi-YAHKbHsPjTm8jyxpoFgADJQLoV76oaIlwGJL7QpkIKZHAAJAkOXFtGAh6wmA-p5GAADCiJECMHBQAst4jKQcIVoiyKohMPHyOJ4nEvRwowFAtBUspajiGMYksDAMhFKQADy1zAtpkI2fetQnomaxpu0rhpdA6BcrQoSydZywTMqhL-Fg-ybOi9AYvMFoyMZ2ZYBVuQwKQJpDP67T1mizWePWwShBEHIsBAsRSBwAA+AB8CwYiugRDVIqjwdQNYnM4vJsK0xIcB+QxzhAujZug4hoKgY6MfMp1jiM9BjBlYBplBQA" width="150%" height="800px" data-external="1" style="position: relative; z-index:1">
+</iframe>
+<p>To remove reporting from the whole application, set
+<code>reporter = NULL</code> in <code><a href="../reference/init.html">init()</a></code>. This will
+completely disable all the reporter related buttons on the
+application:</p>
+<div class="float">
+<img src="images/custom_module_without_reporter.png" alt="Screenshot of an app without the reporter options"><div class="figcaption">Screenshot of an app without the reporter
+options</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="customizing-the-reporter">Customizing the reporter<a class="anchor" aria-label="anchor" href="#customizing-the-reporter"></a>
+</h2>
+<p>A template can be set for the report; when a template is used each
+card added to the report contains the template’s default content.
+Additionally, cards can be added to the report before the application
+starts.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reporter</span> <span class="op">&lt;-</span> <span class="va"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html">Reporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">template_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">document</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">header</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="st">"Here comes header text."</span><span class="op">)</span></span>
+<span>  <span class="va">logo_url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg"</span></span>
+<span>  <span class="va">footer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Here comes footer text. Report generated with teal ![logo](%s 'teal logo'){height=70}"</span>,</span>
+<span>    <span class="va">logo_url</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">header</span>, <span class="va">document</span>, <span class="va">footer</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">reporter</span><span class="op">$</span><span class="fu">set_template</span><span class="op">(</span><span class="va">template_fun</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">card1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html">teal_card</a></span><span class="op">(</span><span class="st">"## Header 2 text"</span>, <span class="st">"Regular text"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">card1</span>, <span class="st">"title"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Welcome card"</span></span>
+<span><span class="va">reporter</span><span class="op">$</span><span class="fu">append_cards</span><span class="op">(</span><span class="va">card1</span><span class="op">)</span></span></code></pre></div>
+<p>Once the reporter is created we can use in the teal application.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

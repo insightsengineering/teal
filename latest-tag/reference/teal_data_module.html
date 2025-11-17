@@ -28,7 +28,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +95,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -126,7 +127,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Data module for <code>teal</code> applications</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/teal_data_module.R" class="external-link"><code>R/teal_data_module.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/teal_data_module-eval_code.R" class="external-link"><code>R/teal_data_module-eval_code.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/teal_data_module-within.R" class="external-link"><code>R/teal_data_module-within.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/teal_data_module.R" class="external-link"><code>R/teal_data_module.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/teal_data_module-eval_code.R" class="external-link"><code>R/teal_data_module-eval_code.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/teal_data_module-within.R" class="external-link"><code>R/teal_data_module-within.R</code></a></small>
       <div class="d-none name"><code>teal_data_module.Rd</code></div>
     </div>
 
@@ -140,7 +141,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
 </h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">teal_data_module</span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span>, label <span class="op">=</span> <span class="st">"data module"</span>, once <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for class 'teal_data_module,character'</span></span>
+<span><span class="co"># S4 method for class 'teal_data_module'</span></span>
 <span><span class="fu">eval_code</span><span class="op">(</span><span class="va">object</span>, <span class="va">code</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'teal_data_module'</span></span>
@@ -269,7 +270,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x561983a227d0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560ddc527568&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -280,7 +281,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x561983a22530&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560ddc52b0f8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"label")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data module"</span>
@@ -295,7 +296,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5619834b5230&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560dda4eb3e8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -306,7 +307,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5619834b4f90&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560dda4eb148&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"label")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data module"</span>
@@ -323,7 +324,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5619820a1270&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560ddd9b6ea8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -334,7 +335,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5619820a0fd0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560ddd9b6c08&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"label")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data module"</span>

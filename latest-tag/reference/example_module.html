@@ -34,7 +34,7 @@ to read more about decorators.">
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,6 +101,7 @@ to read more about decorators.">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -132,7 +133,7 @@ to read more about decorators.">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>An example <code>teal</code> module</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/dummy_functions.R" class="external-link"><code>R/dummy_functions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/dummy_functions.R" class="external-link"><code>R/dummy_functions.R</code></a></small>
       <div class="d-none name"><code>example_module.Rd</code></div>
     </div>
 
@@ -199,6 +200,21 @@ decorator for <code>object</code> included in the module.</p></dd>
 </h2>
     <p>A <code>teal</code> module which can be included in the <code>modules</code> argument to <code><a href="init.html">init()</a></code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="reporting">Reporting<a class="anchor" aria-label="anchor" href="#reporting"></a>
+</h2>
+
+
+
+<p>This module returns an object of class <code>teal_module</code>, that contains a <code>server</code> function.
+Since the server function returns a <code>teal_report</code> object, this makes this module reportable, which means that
+the reporting functionality will be turned on automatically by the <code>teal</code> framework.</p>
+<p>For more information on reporting in <code>teal</code>, see the vignettes:</p>
+<ul>
+<li><p><code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/articles/reportable-shiny-application.html">vignette("reportable-shiny-application", package = "teal.reporter")</a></code></p></li>
+<li><p><code>vignette("adding-support-for-reporting-to-custom-modules", package = "teal")</code></p></li>
+</ul>
+</div>
     <div class="section level2">
     <h2 id="examples-in-shinylive">Examples in Shinylive<a class="anchor" aria-label="anchor" href="#examples-in-shinylive"></a>
 </h2>

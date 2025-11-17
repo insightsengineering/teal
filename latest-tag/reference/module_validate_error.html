@@ -6,16 +6,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Show R code modal — show_rcode_modal • teal</title>
+<title>Execute and validate teal_data_module — module_validate_error • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Show R code modal — show_rcode_modal">
-<meta name="description" content="
-Use the shiny::showModal() function to show the R code inside.">
-<meta property="og:description" content="
-Use the shiny::showModal() function to show the R code inside.">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Execute and validate teal_data_module — module_validate_error">
+<meta name="description" content="This is a low level module to handle teal_data_module execution and validation.
+teal_transform_module() inherits from teal_data_module() so it is handled by this module too.
+srv_teal() accepts various data objects and eventually they are all transformed to reactive
+teal.data::teal_data() which is a standard data class in whole teal framework.">
+<meta property="og:description" content="This is a low level module to handle teal_data_module execution and validation.
+teal_transform_module() inherits from teal_data_module() so it is handled by this module too.
+srv_teal() accepts various data objects and eventually they are all transformed to reactive
+teal.data::teal_data() which is a standard data class in whole teal framework.">
 <meta property="og:image" content="https://insightsengineering.github.io/teal/logo.svg">
 <link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
@@ -28,7 +32,7 @@ Use the shiny::showModal() function to show the R code inside.">
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +99,7 @@ Use the shiny::showModal() function to show the R code inside.">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -125,20 +130,33 @@ Use the shiny::showModal() function to show the R code inside.">
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.svg" class="logo" alt=""><h1>Show <code>R</code> code modal</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/show_rcode_modal.R" class="external-link"><code>R/show_rcode_modal.R</code></a></small>
-      <div class="d-none name"><code>show_rcode_modal.Rd</code></div>
+      <img src="../logo.svg" class="logo" alt=""><h1>Execute and validate <code>teal_data_module</code>
+</h1>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/module_validate_error.R" class="external-link"><code>R/module_validate_error.R</code></a></small>
+      <div class="d-none name"><code>module_validate_error.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p>
-<p>Use the <code><a href="https://rdrr.io/pkg/shiny/man/showModal.html" class="external-link">shiny::showModal()</a></code> function to show the <code>R</code> code inside.</p>
+    <p>This is a low level module to handle <code>teal_data_module</code> execution and validation.
+<code><a href="teal_transform_module.html">teal_transform_module()</a></code> inherits from <code><a href="teal_data_module.html">teal_data_module()</a></code> so it is handled by this module too.
+<code><a href="module_teal.html">srv_teal()</a></code> accepts various <code>data</code> objects and eventually they are all transformed to <code>reactive</code>
+<code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal.data::teal_data()</a></code> which is a standard data class in whole <code>teal</code> framework.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a>
 </h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">show_rcode_modal</span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">rcode</span>, session <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/domains.html" class="external-link">getDefaultReactiveDomain</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ui_validate_error</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">srv_validate_error</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">validate_shiny_silent_error</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ui_check_class_teal_data</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">srv_check_class_teal_data</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ui_check_module_datanames</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">srv_check_module_datanames</span><span class="op">(</span><span class="va">id</span>, <span class="va">data</span>, <span class="va">modules</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -147,29 +165,52 @@ Use the shiny::showModal() function to show the R code inside.">
 
 
 <dl>
-<dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a>
+<dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a>
 </dt>
-<dd><p>(<code>character(1)</code>)
-Title of the modal, displayed in the first comment of the <code>R</code> code.</p></dd>
+<dd><p>(<code>character(1)</code>) <code>shiny</code> module instance id.</p></dd>
 
 
-<dt id="arg-rcode">rcode<a class="anchor" aria-label="anchor" href="#arg-rcode"></a>
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a>
 </dt>
-<dd><p>(<code>character</code>)
-vector with <code>R</code> code to show inside the modal.</p></dd>
+<dd><p>(<code>teal_data</code>, <code>teal_data_module</code>, or <code>reactive</code> returning <code>teal_data</code>)
+The data which application will depend on.</p></dd>
 
 
-<dt id="arg-session">session<a class="anchor" aria-label="anchor" href="#arg-session"></a>
+<dt id="arg-validate-shiny-silent-error">validate_shiny_silent_error<a class="anchor" aria-label="anchor" href="#arg-validate-shiny-silent-error"></a>
 </dt>
-<dd><p>(<code>ShinySession</code>) optional
-<code>shiny</code> session object, defaults to <code><a href="https://rdrr.io/pkg/shiny/man/domains.html" class="external-link">shiny::getDefaultReactiveDomain()</a></code>.</p></dd>
+<dd><p>(<code>logical</code>) If <code>TRUE</code>, then <code>shiny.silent.error</code> is validated and</p></dd>
+
+
+<dt id="arg-modules">modules<a class="anchor" aria-label="anchor" href="#arg-modules"></a>
+</dt>
+<dd><p>(<code>teal_modules</code> or <code>teal_module</code>) For <code>datanames</code> validation purpose</p></dd>
 
 </dl>
 </div>
     <div class="section level2">
-    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a>
 </h2>
-    <p><code><a href="https://rdrr.io/pkg/shiny/man/showModal.html" class="external-link">shiny::showModal()</a></code></p>
+    <p><code>reactive</code> <code>teal_data</code></p>
+    </div>
+    <div class="section level2">
+    <h2 id="data-validation">data validation<a class="anchor" aria-label="anchor" href="#data-validation"></a>
+</h2>
+
+
+
+<p>Executed <code><a href="teal_data_module.html">teal_data_module()</a></code> is validated and output is validated for consistency.
+Output <code>data</code> is invalid if:</p>
+<ol>
+<li><p><code><a href="teal_data_module.html">teal_data_module()</a></code> is invalid if server doesn't return <code>reactive</code>. <strong>Immediately crashes an app!</strong></p></li>
+<li><p><code>reactive</code> throws a <code>shiny.error</code> - happens when module creating <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal.data::teal_data()</a></code> fails.</p></li>
+<li><p><code>reactive</code> returns <code>qenv.error</code> - happens when <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal.data::teal_data()</a></code> evaluates a failing code.</p></li>
+<li><p><code>reactive</code> object doesn't return <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal.data::teal_data()</a></code>.</p></li>
+<li><p><code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal.data::teal_data()</a></code> object lacks any <code>datanames</code> specified in the <code>modules</code> argument.</p></li>
+</ol>
+<p><code>teal</code> (observers in <code>srv_teal</code>) always waits to render an app until <code>reactive</code> <code>teal_data</code> is
+returned. If error 2-4 occurs, relevant error message is displayed to the app user. Once the issue is
+resolved, the app will continue to run. <code>teal</code> guarantees that errors in data don't crash the app
+(except error 1).</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -148,7 +149,7 @@
 <dl>
 <dt>
 
-          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
+          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Data module for <code>teal</code> applications</dd>
@@ -177,15 +178,6 @@
 
         </dt>
         <dd>Make teal_transform_module's server</dd>
-      </dl>
-<dl>
-<dt>
-
-          <code><a href="module_teal_with_splash.html">ui_teal_with_splash()</a></code> <code><a href="module_teal_with_splash.html">srv_teal_with_splash()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
-        </dt>
-        <dd>UI and server modules of <code>teal</code>
-</dd>
       </dl>
 <dl>
 <dt>
@@ -333,9 +325,18 @@
         </dt>
         <dd>Template function for <code>TealReportCard</code> creation and customization</dd>
       </dl>
+<dl>
+<dt>
+
+          <code><a href="disable_report.html">disable_report()</a></code>
+
+        </dt>
+        <dd>Disable the report for a <code>teal_module</code>
+</dd>
+      </dl>
 </div>
 <div class="section level2">
-      <h2 id="landing-popup">Landing popup<a class="anchor" aria-label="anchor" href="#landing-popup"></a>
+      <h2 id="modifying-output-of-modules">Modifying output of modules<a class="anchor" aria-label="anchor" href="#modifying-output-of-modules"></a>
 </h2>
 
 
@@ -350,10 +351,19 @@
       <dl>
 <dt>
 
-          <code><a href="landing_popup_module.html">landing_popup_module()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+          <code><a href="disable_src.html">disable_src()</a></code>
+
         </dt>
-        <dd>Landing popup module</dd>
+        <dd>Disable the "Show R Code" global button in the UI</dd>
+      </dl>
+<dl>
+<dt>
+
+          <code><a href="disable_report.html">disable_report()</a></code>
+
+        </dt>
+        <dd>Disable the report for a <code>teal_module</code>
+</dd>
       </dl>
 </div>
 <div class="section level2">
@@ -372,26 +382,10 @@
       <dl>
 <dt>
 
-          <code><a href="tdata.html">new_tdata()</a></code> <code><a href="tdata.html">tdata2env()</a></code> <code><a href="tdata.html">get_code_tdata()</a></code> <code><a href="tdata.html">join_keys(<i>&lt;tdata&gt;</i>)</a></code> <code><a href="tdata.html">get_metadata()</a></code> <code><a href="tdata.html">as_tdata()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
-        </dt>
-        <dd>Create a <code>tdata</code> object</dd>
-      </dl>
-<dl>
-<dt>
-
-          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
+          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Data module for <code>teal</code> applications</dd>
-      </dl>
-<dl>
-<dt>
-
-          <code><a href="show_rcode_modal.html">show_rcode_modal()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
-        </dt>
-        <dd>Show <code>R</code> code modal</dd>
       </dl>
 </div>
 <div class="section level2">

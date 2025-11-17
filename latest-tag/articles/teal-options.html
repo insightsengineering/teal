@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -129,7 +130,7 @@
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/vignettes/teal-options.Rmd" class="external-link"><code>vignettes/teal-options.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/vignettes/teal-options.Rmd" class="external-link"><code>vignettes/teal-options.Rmd</code></a></small>
       <div class="d-none name"><code>teal-options.Rmd</code></div>
     </div>
 
@@ -221,7 +222,7 @@ the usual numeric range selector.</p>
 object)<a class="anchor" aria-label="anchor" href="#teal-basic_table_args-basic_table_args-object"></a>
 </h4>
 <p>This specifies the list of arguments passed to every call to
-<code><a href="https://insightsengineering.github.io/rtables/latest-release/reference/basic_table.html" class="external-link">rtables::basic_table</a></code> made in a <code>teal</code>
+<code><a href="https://insightsengineering.github.io/rtables/latest-tag/reference/basic_table.html" class="external-link">rtables::basic_table</a></code> made in a <code>teal</code>
 application. This can be used to format <code>rtables</code> without
 making any changes to the application code. See the documentation of
 <code><a href="https://insightsengineering.github.io/teal.widgets/latest-tag/reference/basic_table_args.html">teal.widgets::basic_table_args</a></code> for more information.</p>
@@ -314,6 +315,14 @@ do not show <code>"download lockfile"</code> in the footer</li>
 <code><a href="../reference/module_teal_lockfile.html">?teal::module_teal_lockfile</a></code>.</p>
 </div>
 <div class="section level4">
+<h4 id="teal-sidebar-position-character">
+<code>teal.sidebar.position</code> (<code>character</code>)<a class="anchor" aria-label="anchor" href="#teal-sidebar-position-character"></a>
+</h4>
+<p>This sets the position of the sidebar in the teal app. Possible
+values are <code>"left"</code> and <code>"right"</code>.</p>
+<p>Default: <code>left</code></p>
+</div>
+<div class="section level4">
 <h4 id="teal-sidebar-width-numeric">
 <code>teal.sidebar.width</code> (<code>numeric</code>)<a class="anchor" aria-label="anchor" href="#teal-sidebar-width-numeric"></a>
 </h4>
@@ -376,6 +385,19 @@ rendering process.</p>
 <span>  tidy.opts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>width.cutoff <span class="op">=</span> <span class="fl">60</span><span class="op">)</span>,</span>
 <span>  tidy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"formatR"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="teal-reporter-max_request_size-numeric">
+<code>teal.reporter.max_request_size</code>
+(<code>numeric</code>)<a class="anchor" aria-label="anchor" href="#teal-reporter-max_request_size-numeric"></a>
+</h4>
+<p>Allows to control the maximum size of a
+<code><a href="https://rdrr.io/pkg/shiny/man/fileInput.html" class="external-link">shiny::fileInput</a></code>. Meant for large report file uploads.
+Default: <code>10 * 1024^2</code> which stands for 10MB. ###
+<code>teal.show_src</code> (<code>logical</code>)</p>
+<p>It allows customizing the visibility of the “Show R Code” button in
+the module title bar.</p>
+<p>Default: <code>TRUE</code>.</p>
 </div>
 </div>
 <div class="section level2">

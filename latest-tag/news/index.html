@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -122,9 +123,29 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="teal-110">teal 1.1.0<a class="anchor" aria-label="anchor" href="#teal-110"></a>
+</h2>
+<p class="text-muted">CRAN release: 2025-11-17</p>
+<div class="section level4">
+<h4 id="deprecations-and-removals-1-1-0">Deprecations and removals<a class="anchor" aria-label="anchor" href="#deprecations-and-removals-1-1-0"></a>
+</h4>
+<ul>
+<li>Removed <code>ui_teal_with_splash</code>, <code>srv_teal_with_splash</code>, <code>new_tdata</code>, <code>tdata2env</code>, <code>get_code_tdata</code>, <code>join_keys.tdata</code>, <code>get_metadata</code>, <code>as_tdata</code>, <code>landing_popup_module</code> and <code>show_rcode_modal</code> that were deprecated in 0.16.0.</li>
+</ul>
+</div>
+<div class="section level4">
+<h4 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a>
+</h4>
+<ul>
+<li>
+<code>init</code> and <code>srv_teal</code> have new <code>reporter</code> parameter, that allows to pre-define <code><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html">teal.reporter::Reporter</a></code> object to be used for storing the content of the report. You can also globally disable reporting by setting <code>reporter = NULL</code> (and <code>disable = TRUE</code> in <code>ui_teal</code> for cases when <code>ui_teal</code> is used as shiny module).</li>
+</ul>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="teal-100">teal 1.0.0<a class="anchor" aria-label="anchor" href="#teal-100"></a>
 </h2>
@@ -186,7 +207,7 @@
 <ul>
 <li>Setting <code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/datanames.html">datanames()</a></code> on <code>data</code> passed to teal application no longer has effect. In order to change <code>teal_module</code>’s <code>datanames</code> one should modify <code>module$datanames</code>.</li>
 <li>
-<code><a href="../reference/landing_popup_module.html">landing_popup_module()</a></code> is deprecated. Please use <code><a href="../reference/add_landing_modal.html">add_landing_modal()</a></code> function to add a landing popup for your teal application.</li>
+<code>landing_popup_module()</code> is deprecated. Please use <code><a href="../reference/add_landing_modal.html">add_landing_modal()</a></code> function to add a landing popup for your teal application.</li>
 <li>
 <code>teal</code> no longer re-export <code>%&gt;%</code>. Please load <code><a href="https://magrittr.tidyverse.org" class="external-link">library(magrittr)</a></code> instead or use <code>|&gt;</code> from <code>base</code>.</li>
 <li>
@@ -323,7 +344,7 @@
 <h4 id="breaking-changes-0-13-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-13-0"></a>
 </h4>
 <ul>
-<li>The use of <code>datasets</code> argument in <code>modules</code> has been deprecated and will be removed in a future release. Please use <code>data</code> argument instead. <code>data</code> is of type <code>tdata</code>; see “Creating custom modules” vignettes and function documentation of <code><a href="../reference/tdata.html">teal::new_tdata</a></code> for further details.</li>
+<li>The use of <code>datasets</code> argument in <code>modules</code> has been deprecated and will be removed in a future release. Please use <code>data</code> argument instead. <code>data</code> is of type <code>tdata</code>; see “Creating custom modules” vignettes and function documentation of <code>teal::new_tdata</code> for further details.</li>
 <li>Due to deprecation of <code>chunks</code> in <code>teal.code</code>, the <code>teal</code> framework now uses their replacement (<code>qenv</code>) instead. The documentation in <code>teal</code> has been updated to reflect this and custom modules written with <code>chunks</code> should be updated to use <code>qenv</code>.</li>
 <li>Due to deprecation of <code>chunks</code> in <code>teal.code</code>, <code>get_rcode</code>, <code>get_rcode_srv</code>, and <code>get_rcode_ui</code> have been removed.</li>
 </ul>

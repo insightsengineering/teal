@@ -34,7 +34,7 @@ meta data.">
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,6 +101,7 @@ meta data.">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v0.16.0">v0.16.0</a>
@@ -132,7 +133,7 @@ meta data.">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1><code>TealReportCard</code></h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0/R/teal_reporter.R" class="external-link"><code>R/teal_reporter.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/module_teal_reporter.R" class="external-link"><code>R/module_teal_reporter.R</code></a></small>
       <div class="d-none name"><code>TealReportCard.Rd</code></div>
     </div>
 
@@ -179,6 +180,7 @@ meta data.</p>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_name"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html#method-get_name"><code>teal.reporter::ReportCard$get_name()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="initialize"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html#method-initialize"><code>teal.reporter::ReportCard$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="reset"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html#method-reset"><code>teal.reporter::ReportCard$reset()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_content_names"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html#method-set_content_names"><code>teal.reporter::ReportCard$set_content_names()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_name"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html#method-set_name"><code>teal.reporter::ReportCard$set_name()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="to_list"><a href="https://insightsengineering.github.io/teal.reporter/latest-tag/reference/ReportCard.html#method-to_list"><code>teal.reporter::ReportCard$to_list()</code></a></span></li>
 </ul></details></p>
@@ -229,7 +231,7 @@ But <code>eval</code> parameter is always set to <code>FALSE</code>.</p></dd>
 <div class="sourceCode"><pre><code><span><span class="va">card</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TealReportCard.html">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">append_src</span><span class="op">(</span></span>
 <span>  <span class="st">"plot(iris)"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p></p>
 </div>
 </div>
@@ -317,7 +319,7 @@ If the filter state list is empty, nothing is appended to the <code>content</cod
 <p></p>
 <div class="r example copy">
 <div class="sourceCode"><pre><code><span><span class="va">card</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TealReportCard.html">TealReportCard</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">append_encodings</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>variable1 <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span></code></pre></div>
 <p></p>
 </div>
@@ -371,16 +373,28 @@ If the filter state list is empty, nothing is appended to the <code>content</cod
 <span class="r-in"><span><span class="va">card</span> <span class="op">&lt;-</span> <span class="va">TealReportCard</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">append_src</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"plot(iris)"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`ReportCard$new()` was deprecated in teal.reporter 0.6.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `teal_card()` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use teal_report class instead. See vignette('teal-report-class',</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   'teal.reporter') for more information.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">R6</span> package.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/r-lib/R6/issues&gt;</span>.</span>
+<span class="r-in"><span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "plot(iris)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"params")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"lang")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "R"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "code_chunk"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="co">## Method `TealReportCard$append_encodings`</span></span></span>
 <span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">card</span> <span class="op">&lt;-</span> <span class="va">TealReportCard</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">append_encodings</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>variable1 <span class="op">=</span> <span class="st">"X"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Selected Options"</span>
+<span class="r-in"><span><span class="va">card</span><span class="op">$</span><span class="fu">get_content</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "### Selected Options"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
