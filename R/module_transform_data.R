@@ -3,10 +3,12 @@
 #' Module calls [teal_transform_module()] in sequence so that `reactive teal_data` output
 #' from one module is handed over to the following module's input.
 #'
-#' @inheritParams module_teal_data
+#' @inheritParams module_validate_error
 #' @inheritParams teal_modules
 #' @param class (character(1)) CSS class to be added in the `div` wrapper tag.
-
+#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transformator.
+#' Help to determine if any previous transformator failed, so that following transformators can be disabled
+#' and display a generic failure message.
 #' @return `reactive` `teal_data`
 #'
 #' @name module_transform_data
