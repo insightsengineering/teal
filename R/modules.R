@@ -166,10 +166,10 @@ module <- function(label = "module",
       call. = FALSE
     )
   }
-  if (label == "Report previewer") {
+  if (label == "Report Previewer") {
     stop(
       sprintf("module(label = \"%s\", ...\n  ", label),
-      "Label 'Report previewer' is reserved in teal. Please change to something else.",
+      "Label 'Report Previewer' is reserved in teal. Please change to something else.",
       call. = FALSE
     )
   }

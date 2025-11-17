@@ -10,8 +10,8 @@ testthat::describe("reporter_previewer_module", {
 
   testthat::it("uses default label", {
     module <- reporter_previewer_module()
-    testthat::expect_equal(module$label, "Report previewer")
-    testthat::expect_equal(module$path, "Report previewer")
+    testthat::expect_equal(module$label, "Report Previewer")
+    testthat::expect_equal(module$path, "Report Previewer")
   })
 
   testthat::it("throws error when label is not a string", {
