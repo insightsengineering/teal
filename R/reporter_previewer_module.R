@@ -18,7 +18,7 @@
 #' `teal_module` (extended with `teal_module_previewer` class) containing the `teal.reporter` previewer functionality.
 #'
 #' @export
-reporter_previewer_module <- function(label = "Report previewer", server_args = list()) {
+reporter_previewer_module <- function(label = "Report Previewer", server_args = list()) {
   checkmate::assert_string(label)
   checkmate::assert_list(server_args, names = "named")
   checkmate::assert_true(all(names(server_args) %in% names(formals(teal.reporter::reporter_previewer_srv))))
@@ -51,7 +51,7 @@ reporter_previewer_module <- function(label = "Report previewer", server_args = 
     server_args = server_args, ui_args = list(), datanames = NULL
   )
   # Module is created with a placeholder label and path and both are changed later.
-  # This is to prevent another module being labeled "Report previewer".
+  # This is to prevent another module being labeled "Report Previewer".
   class(module) <- c(class(module), "teal_module_previewer")
   module$label <- label
   module$path <- label
