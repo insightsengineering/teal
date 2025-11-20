@@ -3,6 +3,9 @@ testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: teal app initializes with no errors", {
   skip_if_too_deep(5)
+  if (!startsWith(shinytest2::platform_variant(), "linux")) {
+    skip("Skipping test on non-linux platforms.")
+  }
   app <- TealAppDriver$new(
     init(
       data = simple_teal_data(),
