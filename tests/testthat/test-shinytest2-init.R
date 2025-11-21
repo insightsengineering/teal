@@ -3,6 +3,11 @@ testthat::skip_if_not_installed("rvest")
 
 testthat::test_that("e2e: teal app initializes with no errors", {
   skip_if_too_deep(5)
+  snaps <- list.dirs(testthat::test_path("_snaps"), recursive = FALSE, full.names = FALSE)
+  platform <- shinytest2::platform_variant()
+  if (!platform %in% snaps) {
+    testthat::skip(paste0("Skipping missing snapshot on ", platform))
+  }
   app <- TealAppDriver$new(
     init(
       data = simple_teal_data(),
