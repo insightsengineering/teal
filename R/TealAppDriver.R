@@ -189,7 +189,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return The value of the shiny input.
     get_active_module_input = function(input_id) {
       checkmate::check_string(input_id)
-      self$get_value(input = self$namespaces(TRUE)$module(input_id))
+      self$get_value(input = self$namespaces()$module(input_id))
     },
     #' @description
     #' Get the output from the module in the `teal` app.
@@ -200,7 +200,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return The value of the shiny output.
     get_active_module_output = function(output_id) {
       checkmate::check_string(output_id)
-      self$get_value(output = self$namespaces(TRUE)$module(output_id))
+      self$get_value(output = self$namespaces()$module(output_id))
     },
     #' @description
     #' Get the output from the module's `teal.widgets::table_with_settings` or `DT::DTOutput` in the `teal` app.
