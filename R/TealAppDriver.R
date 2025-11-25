@@ -87,8 +87,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
       # end od check
 
-      private$set_active_ns()
       self$wait_for_idle()
+      private$set_active_ns()
     },
     #' @description
     #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
@@ -555,17 +555,83 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     ),
     # private methods ----
     set_active_ns = function() {
+      # Wait for page to be stable before trying to extract namespace
+      private$wait_for_page_stability()
+      
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
-      active_wrapper_id <- sub(
-        "^#",
-        "",
-        self$get_attr(
-          selector = sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs),
-          attribute = "href"
+      # If no active_module_id input found, find the selected/active tab button directly
+      if (length(active_tab_inputs) == 0 || is.null(active_tab_inputs) || active_tab_inputs == "") {
+        active_wrapper_id <- sub(
+          "^#",
+          "",
+          self$get_attr(
+            selector = ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']",
+            attribute = "href"
+          )
         )
-      )
+        # Take first match if multiple found
+        if (length(active_wrapper_id) > 1) {
+          active_wrapper_id <- active_wrapper_id[1]
+        }
+        # If still not found, try any module button with a wrapper href
+        if (is.null(active_wrapper_id) || length(active_wrapper_id) == 0 || active_wrapper_id == "" || is.na(active_wrapper_id)) {
+          active_wrapper_id <- sub(
+            "^#",
+            "",
+            self$get_attr(
+              selector = ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])",
+              attribute = "href"
+            )
+          )
+          # Take first match if multiple found
+          if (length(active_wrapper_id) > 1) {
+            active_wrapper_id <- active_wrapper_id[1]
+          }
+        }
+      } else {
+        active_wrapper_id <- sub(
+          "^#",
+          "",
+          self$get_attr(
+            selector = sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs),
+            attribute = "href"
+          )
+        )
+        # Take first match if multiple found
+        if (length(active_wrapper_id) > 1) {
+          active_wrapper_id <- active_wrapper_id[1]
+        }
+      }
+      
+      # Ensure we have a valid wrapper ID
+      # get_attr returns character(0) when no elements found, or NA_character_ for missing attributes
+      if (is.null(active_wrapper_id) || 
+          length(active_wrapper_id) == 0 || 
+          (length(active_wrapper_id) == 1 && (active_wrapper_id == "" || is.na(active_wrapper_id)))) {
+        # Try one more time after a short wait - the page might still be loading
+        Sys.sleep(0.5)
+        active_wrapper_id <- sub(
+          "^#",
+          "",
+          self$get_attr(
+            selector = ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])",
+            attribute = "href"
+          )
+        )
+        if (length(active_wrapper_id) > 1) {
+          active_wrapper_id <- active_wrapper_id[1]
+        }
+      }
+      
+      # Final check - if still not found, throw error
+      if (is.null(active_wrapper_id) || 
+          length(active_wrapper_id) == 0 || 
+          (length(active_wrapper_id) == 1 && (active_wrapper_id == "" || is.na(active_wrapper_id)))) {
+        stop("Could not determine active module namespace. Make sure a module tab is selected and the page has finished loading.")
+      }
+      
       active_base_id <- sub("-wrapper$", "", active_wrapper_id)
 
       private$ns$base_id <- active_base_id
