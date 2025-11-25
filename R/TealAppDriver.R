@@ -557,7 +557,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     set_active_ns = function() {
       # Wait for page to be stable before trying to extract namespace
       private$wait_for_page_stability()
-      
+
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
@@ -604,12 +604,12 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           active_wrapper_id <- active_wrapper_id[1]
         }
       }
-      
+
       # Ensure we have a valid wrapper ID
       # get_attr returns character(0) when no elements found, or NA_character_ for missing attributes
-      if (is.null(active_wrapper_id) || 
-          length(active_wrapper_id) == 0 || 
-          (length(active_wrapper_id) == 1 && (active_wrapper_id == "" || is.na(active_wrapper_id)))) {
+      if (is.null(active_wrapper_id) ||
+        length(active_wrapper_id) == 0 ||
+        (length(active_wrapper_id) == 1 && (active_wrapper_id == "" || is.na(active_wrapper_id)))) {
         # Try one more time after a short wait - the page might still be loading
         Sys.sleep(0.5)
         active_wrapper_id <- sub(
@@ -624,14 +624,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           active_wrapper_id <- active_wrapper_id[1]
         }
       }
-      
+
       # Final check - if still not found, throw error
-      if (is.null(active_wrapper_id) || 
-          length(active_wrapper_id) == 0 || 
-          (length(active_wrapper_id) == 1 && (active_wrapper_id == "" || is.na(active_wrapper_id)))) {
+      if (is.null(active_wrapper_id) ||
+        length(active_wrapper_id) == 0 ||
+        (length(active_wrapper_id) == 1 && (active_wrapper_id == "" || is.na(active_wrapper_id)))) {
         stop("Could not determine active module namespace. Make sure a module tab is selected and the page has finished loading.")
       }
-      
+
       active_base_id <- sub("-wrapper$", "", active_wrapper_id)
 
       private$ns$base_id <- active_base_id
