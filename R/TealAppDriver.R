@@ -616,8 +616,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           collapse = ", "
         )
         stop(sprintf(
-          paste0("Could not determine active module namespace. ",
-          "Make sure a module tab is selected and the page has finished loading. Found wrapper IDs: %s"),
+          paste0(
+            "Could not determine active module namespace. ",
+            "Make sure a module tab is selected and the page has finished loading. Found wrapper IDs: %s"
+          ),
           if (length(found_ids) > 0) found_ids else "none"
         ))
       }
