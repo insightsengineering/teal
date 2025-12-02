@@ -568,9 +568,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     },
     # Helper function to check if wrapper ID is valid
     is_valid_wrapper_id = function(wrapper_id) {
-      !is.null(wrapper_id) &&
-        length(wrapper_id) > 0 &&
-        !(length(wrapper_id) == 1 && (wrapper_id == "" || is.na(wrapper_id)))
+      length(wrapper_id) == 1 && wrapper_id != "" && !is.na(wrapper_id)
     },
     set_active_ns = function() {
       # Although wait_for_idle() is called before set_active_ns(), it only ensures Shiny is not processing.
@@ -582,7 +580,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
       # If no active_module_id input found, find the selected/active tab button directly
-      if (length(active_tab_inputs) == 0 || is.null(active_tab_inputs) || active_tab_inputs == "") {
+      if (!length(active_tab_inputs) || active_tab_inputs == "") {
         active_wrapper_id <- private$extract_wrapper_id(
           ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
         )
