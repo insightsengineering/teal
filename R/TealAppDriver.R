@@ -572,7 +572,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         length(wrapper_id) > 0 &&
         !(length(wrapper_id) == 1 && (wrapper_id == "" || is.na(wrapper_id)))
     },
-    set_active_ns = function() {
+    set_active_ns = function(sleep_time = 0.5) {
       # Although wait_for_idle() is called before set_active_ns(), it only ensures Shiny is not processing.
       # wait_for_page_stability() is needed here to ensure the DOM/UI is fully rendered and stable
       # before trying to extract the namespace.
@@ -602,7 +602,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       # get_attr returns character(0) when no elements found, or NA_character_ for missing attributes
       if (!private$is_valid_wrapper_id(active_wrapper_id)) {
         # Try one more time after a short wait - the page might still be loading
-        Sys.sleep(0.5)
+        Sys.sleep(sleep_time)
         active_wrapper_id <- private$extract_wrapper_id(
           ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
         )
