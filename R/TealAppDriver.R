@@ -590,8 +590,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       if (length(valid_ids) > 1L) {
         valid_ids <- valid_ids[1L]
       } else if (length(valid_ids) < 1L) {
-        stop("Could not determine valid module namespace. ",
-             "Make sure a module tab is selected and the page has finished loading.")
+        stop(
+          "Could not determine valid module namespace. ",
+          "Make sure a module tab is selected and the page has finished loading."
+        )
       }
 
       active_base_id <- sub("-wrapper$", "", valid_ids)
