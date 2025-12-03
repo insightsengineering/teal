@@ -555,22 +555,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     # private methods ----
     # Helper function to extract wrapper ID from selector and take first match if multiple found
     extract_wrapper_id = function(selector) {
-      wrapper_id <- sub(
-        "^#",
-        "",
-        self$get_attr(selector = selector, attribute = "href")
-      )
-      # Take first match if multiple found
-      if (length(wrapper_id) > 1) {
-        wrapper_id <- wrapper_id[1]
-      }
-      wrapper_id
+      id <- self$get_attr(selector = selector, attribute = "href")
+      sub("^#", "", id[endsWith(id, "-wrapper")])
     },
     # Helper function to check if wrapper ID is valid
     is_valid_wrapper_id = function(wrapper_id) {
-      length(wrapper_id) == 1 && wrapper_id != "" && !is.na(wrapper_id)
+      length(wrapper_id) >= 1 & wrapper_id != "" & !is.na(wrapper_id)
     },
-    set_active_ns = function(sleep_time = 0.5) {
+    set_active_ns = function() {
       # Although wait_for_idle() is called before set_active_ns(), it only ensures Shiny is not processing.
       # wait_for_page_stability() is needed here to ensure the DOM/UI is fully rendered and stable
       # before trying to extract the namespace.
@@ -579,52 +571,30 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       all_inputs <- self$get_values()$input
       active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
 
-      # If no active_module_id input found, find the selected/active tab button directly
-      if (!length(active_tab_inputs) || active_tab_inputs == "") {
-        active_wrapper_id <- private$extract_wrapper_id(
-          ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
-        )
-        # If still not found, try any module button with a wrapper href
-        if (!private$is_valid_wrapper_id(active_wrapper_id)) {
-          active_wrapper_id <- private$extract_wrapper_id(
-            ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
-          )
-        }
-      } else {
-        active_wrapper_id <- private$extract_wrapper_id(
+      ids <- c(
+        private$extract_wrapper_id(
           sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs)
         )
+        # In principle once we get to this point we wouldn't need to search in other places
+        # FIXME: But it might be needed on the integration machine (somehow)
+        # private$extract_wrapper_id(
+        #   ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
+        # ),
+        # private$extract_wrapper_id(
+        #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
+        # )
+      )
+      validity_ids <- private$is_valid_wrapper_id(unique(ids))
+      valid_ids <- unique(ids[validity_ids])
+
+      if (length(valid_ids) > 1L) {
+        valid_ids <- valid_ids[1L]
+      } else if (length(valid_ids) < 1L) {
+        stop("Could not determine valid module namespace. ",
+             "Make sure a module tab is selected and the page has finished loading.")
       }
 
-      # Ensure we have a valid wrapper ID
-      # get_attr returns character(0) when no elements found, or NA_character_ for missing attributes
-      if (!private$is_valid_wrapper_id(active_wrapper_id)) {
-        # Try one more time after a short wait - the page might still be loading
-        Sys.sleep(sleep_time)
-        active_wrapper_id <- private$extract_wrapper_id(
-          ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
-        )
-      }
-
-      # Final check - if still not found, throw error with diagnostic information
-      if (!private$is_valid_wrapper_id(active_wrapper_id)) {
-        found_ids <- paste(
-          self$get_attr(
-            selector = ".teal-modules-tree li a.module-button[href*='-wrapper']",
-            attribute = "href"
-          ),
-          collapse = ", "
-        )
-        stop(sprintf(
-          paste0(
-            "Could not determine active module namespace. ",
-            "Make sure a module tab is selected and the page has finished loading. Found wrapper IDs: %s"
-          ),
-          if (length(found_ids) > 0) found_ids else "none"
-        ))
-      }
-
-      active_base_id <- sub("-wrapper$", "", active_wrapper_id)
+      active_base_id <- sub("-wrapper$", "", valid_ids)
 
       private$ns$base_id <- active_base_id
       private$ns$wrapper <- shiny::NS(active_base_id, "wrapper")
