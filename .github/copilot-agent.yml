@@ -1,0 +1,29 @@
+name: Copilot Agent Configuration
+
+# Configure the environment for GitHub Copilot coding agent
+# This ensures R is available when the agent works on this repository
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  copilot-agent:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install R
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y r-base r-base-dev
+      
+      - name: Verify R installation
+        run: |
+          R --version
+          R -e "sessionInfo()"
+      
+      # Additional steps for the Copilot agent would be invoked here
+      # The agent will have access to R in this environment
