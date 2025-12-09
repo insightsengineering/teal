@@ -1,6 +1,6 @@
 # R Session Info
 
-This document captures the R session information for the development environment.
+This document provides instructions for capturing R session information for this PR.
 
 ## How to generate
 
@@ -20,15 +20,28 @@ if (requireNamespace("sessioninfo", quietly = TRUE)) {
 }
 ```
 
-## Session Info Output
+## Capturing Session Info for this PR
 
-The session info will be populated here once R is available in the environment.
+Since R is not available in the GitHub Copilot agent environment, the session info should be captured by running the CI pipeline or manually in a local R environment.
 
-To capture this information and add it to the PR:
+### Option 1: Using CI Pipeline
+The CI pipeline automatically runs in a Docker container with R installed. Check the GitHub Actions logs for session info.
 
-1. Open R console in the project directory
-2. Run: `writeLines(capture.output(sessionInfo()), "R_SESSION_INFO.txt")`
-3. The output will be saved to `R_SESSION_INFO.txt`
+### Option 2: Manual Capture
+To capture this information manually and add it to the PR:
+
+1. Ensure you're in the project directory
+2. Open an R console
+3. Run: `writeLines(capture.output(sessionInfo()), "R_SESSION_INFO.txt")`
+4. The output will be saved to `R_SESSION_INFO.txt`
+5. Commit and push the file
+
+### Option 3: Using the Demo Script
+Run the demo script which prints session info:
+
+```bash
+Rscript demo_two_modules.R
+```
 
 ## Testing with example_module and example_module2
 
