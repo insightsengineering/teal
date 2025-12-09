@@ -1,14 +1,37 @@
 {
-  "name": "R Environment",
-  "build": {
-    "dockerfile": "Dockerfile"
+  "image": "ghcr.io/insightsengineering/rstudio:latest",
+  "name": "RStudio Dev Container",
+  
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+  
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "uname -a",
+  
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "Ikuyadeu.r",
+        "quarto-dev.quarto",
+        "RDebugger.r-debugger"
+      ],
+      "settings": {
+        // Try radian first if available, otherwise fall back to R
+        "r.rterm.linux": "/usr/local/bin/radian",
+        "r.rpath.linux": "/usr/bin/R",
+        "r.alwaysUseActiveTerminal": true,
+        "r.bracketedPaste": true,
+        "r.plot.useHttpgd": true
+      }
+    }
   },
-  "settings": {
-    "terminal.integrated.defaultProfile.linux": "bash"
-  },
-  "extensions": [
-    "Ikuyadeu.r",  // R language support in VS Code
-    "REditorSupport.r-lsp"  // R Language Server
-  ],
-  "postCreateCommand": "Rscript -e 'install.packages(c(\"languageserver\"), repos=\"https://cloud.r-project.org\")'"
+  
+  // Mount the workspace folder
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind"
 }
