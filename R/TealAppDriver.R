@@ -568,8 +568,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       # before trying to extract the namespace.
       private$wait_for_page_stability()
 
-      all_inputs <- self$get_values()$input
-      active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
+      active_module_input_id <- names(all_inputs)[grepl("-active_module_id$", names(all_inputs))][[1]]
+      active_tab_inputs <- self$wait_for_value(input = active_module_input_id)
 
       ids <- c(
         private$extract_wrapper_id(
@@ -577,12 +577,14 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
         # In principle once we get to this point we wouldn't need to search in other places
         # FIXME: But it might be needed on the integration machine (somehow)
+        # nolint start: commented_code.
         # private$extract_wrapper_id(
         #   ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
         # ),
         # private$extract_wrapper_id(
         #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
         # )
+        # nolint end: commented_code.
       )
       validity_ids <- private$is_valid_wrapper_id(unique(ids))
       valid_ids <- unique(ids[validity_ids])
