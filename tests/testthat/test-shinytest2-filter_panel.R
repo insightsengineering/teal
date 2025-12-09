@@ -4,16 +4,18 @@ testthat::skip_if_not_installed("rvest")
 testthat::test_that("e2e: module content is updated when data is filtered in filter panel", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "Module_1"),
-      example_module(label = "Module_2")
-    ),
-    filter = teal_slices(
-      teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
-      teal_slice(id = "mtcars_cyl", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      teal_slice(id = "mtcars_drat", dataname = "mtcars", varname = "drat", selected = c(3, 4)),
-      teal_slice(id = "mtcars_gear", dataname = "mtcars", varname = "gear")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "Module_1"),
+        example_module(label = "Module_2")
+      ),
+      filter = teal_slices(
+        teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
+        teal_slice(id = "mtcars_cyl", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        teal_slice(id = "mtcars_drat", dataname = "mtcars", varname = "drat", selected = c(3, 4)),
+        teal_slice(id = "mtcars_gear", dataname = "mtcars", varname = "gear")
+      )
     )
   )
 
@@ -31,19 +33,21 @@ testthat::test_that("e2e: module content is updated when data is filtered in fil
 testthat::test_that("e2e: filtering a module-specific filter is reflected in other shared module", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "Module_1"),
-      example_module(label = "Module_2")
-    ),
-    filter = teal_slices(
-      teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
-      teal_slice(id = "mtcars_cyl_1", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      teal_slice(id = "mtcars_cyl_2", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      module_specific = TRUE,
-      mapping = list(
-        "Module_1" = c("iris_species", "mtcars_cyl_1"),
-        "Module_2" = c("iris_species", "mtcars_cyl_2")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "Module_1"),
+        example_module(label = "Module_2")
+      ),
+      filter = teal_slices(
+        teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
+        teal_slice(id = "mtcars_cyl_1", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        teal_slice(id = "mtcars_cyl_2", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        module_specific = TRUE,
+        mapping = list(
+          "Module_1" = c("iris_species", "mtcars_cyl_1"),
+          "Module_2" = c("iris_species", "mtcars_cyl_2")
+        )
       )
     )
   )
@@ -65,19 +69,21 @@ testthat::test_that("e2e: filtering a module-specific filter is reflected in oth
 testthat::test_that("e2e: filtering a module-specific filter is not reflected in other unshared modules", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = modules(
-      example_module(label = "Module_1"),
-      example_module(label = "Module_2")
-    ),
-    filter = teal_slices(
-      teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
-      teal_slice(id = "mtcars_cyl_1", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      teal_slice(id = "mtcars_cyl_2", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
-      module_specific = TRUE,
-      mapping = list(
-        "Module_1" = c("iris_species", "mtcars_cyl_1"),
-        "Module_2" = c("iris_species", "mtcars_cyl_2")
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "Module_1"),
+        example_module(label = "Module_2")
+      ),
+      filter = teal_slices(
+        teal_slice(id = "iris_species", dataname = "iris", varname = "Species", multiple = TRUE),
+        teal_slice(id = "mtcars_cyl_1", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        teal_slice(id = "mtcars_cyl_2", dataname = "mtcars", varname = "cyl", selected = c(4, 6)),
+        module_specific = TRUE,
+        mapping = list(
+          "Module_1" = c("iris_species", "mtcars_cyl_1"),
+          "Module_2" = c("iris_species", "mtcars_cyl_2")
+        )
       )
     )
   )
@@ -97,7 +103,7 @@ testthat::test_that("e2e: filter panel UI can be collpased and expanded (`bslib`
   skip_if_too_deep(5)
 
   data <- teal.data::teal_data(mtcars1 = mtcars, mtcars2 = data.frame(am = c(0, 1), test = c("a", "b")))
-  app <- TealAppDriver$new(data = data, modules = example_module())
+  app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   # Visible by default
   filter_panel_id <- "#teal-teal_modules-nav-example_teal_module-filter_panel-filters-main_filter_accordion"

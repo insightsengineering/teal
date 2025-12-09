@@ -17,33 +17,16 @@ NULL
 #' @rdname teal_modifiers
 #' @keywords internal
 #' @noRd
-#' @param x One of:
-#'   - A `teal_app` object created using the `init` function.
-#'   - A `teal_module`, `teal_data_module`, or `teal_transform_module` object.
-#'   - A Shiny module UI function with `id` parameter
+#' @param x `teal_app` object created using the `init` function.
 #' @param selector (`character(1)`) CSS selector to find elements to replace
 teal_replace_ui <- function(x, selector, element) {
-  if (inherits(x, c("teal_app", "teal_module", "teal_data_module", "teal_transform_module"))) {
-    x$ui <- teal_replace_ui(x$ui, selector, element)
-    x
-  } else if (checkmate::test_function(x, args = "request")) {
-    # shiny ui function from teal_app
-    function(request) {
-      ui_tq <- htmltools::tagQuery(x(request = request))
-      ui_tq$find(selector)$empty()$append(element)$allTags()
-    }
-  } else if (checkmate::test_function(x, args = "id")) {
-    # shiny module ui function
-    function(id, ...) {
-      ui_tq <- htmltools::tagQuery(x(id = id, ...))
-      if (grepl("^#[a-zA-Z0-9_-]+$", selector)) {
-        selector <- paste0("#", NS(id, gsub("^#", "", selector)))
-      }
-      ui_tq$find(selector)$empty()$append(element)$allTags()
-    }
-  } else {
-    stop("Invalid UI object")
+  checkmate::assert_class(x, "teal_app")
+  new_x <- x
+  new_x$ui <- function(request) {
+    ui_tq <- htmltools::tagQuery(x$ui(request = request))
+    ui_tq$find(selector)$empty()$append(element)$allTags()
   }
+  new_x
 }
 
 #' @rdname teal_modifiers
@@ -64,9 +47,10 @@ teal_replace_ui <- function(x, selector, element) {
 #'   shinyApp(app$ui, app$server)
 #' }
 modify_title <- function(
-    x,
-    title = "teal app",
-    favicon = NULL) {
+  x,
+  title = "teal app",
+  favicon = NULL
+) {
   checkmate::assert_multi_class(x, "teal_app")
   checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
   checkmate::assert_string(favicon, null.ok = TRUE)
@@ -163,11 +147,12 @@ modify_footer <- function(x, element = tags$p()) {
 #'   shinyApp(app$ui, app$server)
 #' }
 add_landing_modal <- function(
-    x,
-    title = NULL,
-    content = NULL,
-    footer = modalButton("Accept"),
-    ...) {
+  x,
+  title = NULL,
+  content = NULL,
+  footer = modalButton("Accept"),
+  ...
+) {
   checkmate::assert_class(x, "teal_app")
   custom_server <- function(input, output, session) {
     checkmate::assert_string(title, null.ok = TRUE)
@@ -200,16 +185,12 @@ add_landing_modal <- function(
 #' @keywords internal
 teal_extend_server <- function(x, custom_server, module_id = character(0)) {
   checkmate::assert_class(x, "teal_app")
-  checkmate::assert_function(custom_server)
+  checkmate::assert_function(custom_server, args = c("input", "output", "session"))
   old_server <- x$server
 
   x$server <- function(input, output, session) {
     old_server(input, output, session)
-    if (all(c("input", "output", "session") %in% names(formals(custom_server)))) {
-      callModule(custom_server, module_id)
-    } else if ("id" %in% names(formals(custom_server))) {
-      custom_server(module_id)
-    }
+    callModule(custom_server, module_id)
   }
   x
 }

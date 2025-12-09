@@ -52,7 +52,6 @@ ui_teal <- function(id, modules) {
 
   mod <- extract_module(modules, class = "teal_module_previewer")
   reporter_opts <- if (length(mod)) .get_reporter_options(mod[[1]]$server_args)
-  modules <- drop_module(modules, "teal_module_landing")
 
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
@@ -121,8 +120,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
 
-  modules <- drop_module(modules, "teal_module_landing")
-
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
@@ -130,6 +127,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       shinyjs::showLog()
     }
 
+    session$onBookmark(function(state) {
+      logger::log_debug("srv_teal@onBookmark: storing report cards")
+      state$values$report_cards <- shiny::isolate(reporter$get_cards())
+    })
     # set timezone in shiny app
     # timezone is set in the early beginning so it will be available also
     # for `DDL` and all shiny modules
@@ -246,6 +247,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       {
         if (!is.null(reporter)) {
           reporter$set_id(attr(filter, "app_id"))
+          report_cards <- restoreValue(session$ns("report_cards"), NULL)
+          if (length(report_cards)) {
+            reporter$reset()
+            reporter$append_cards(report_cards)
+          }
           teal.reporter::preview_report_button_srv("preview_report", reporter)
           teal.reporter::report_load_srv("load_report", reporter)
           teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)

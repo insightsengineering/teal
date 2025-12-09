@@ -111,7 +111,8 @@ srv_snapshot_manager_panel <- function(id, slices_global) {
         )
       )
     })
-    srv_snapshot_manager("module", slices_global = slices_global)
+    snapshot_history <- srv_snapshot_manager("module", slices_global = slices_global)
+    snapshot_history
   })
 }
 

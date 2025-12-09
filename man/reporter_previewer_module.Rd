@@ -4,7 +4,7 @@
 \alias{reporter_previewer_module}
 \title{Create a \code{teal} module for previewing a report}
 \usage{
-reporter_previewer_module(label = "Report previewer", server_args = list())
+reporter_previewer_module(label = "Report Previewer", server_args = list())
 }
 \arguments{
 \item{label}{(\code{character(1)}) Label shown in the navigation item for the module or module group.

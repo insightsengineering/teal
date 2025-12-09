@@ -20,7 +20,6 @@
 #' lies in data control: the first method involves external control, while the second method
 #' involves control from a custom module within the app.
 #'
-#' For more details, see [`module_teal_data`].
 #'
 #' @inheritParams module_teal
 #'
@@ -94,7 +93,7 @@ srv_init_data <- function(id, data) {
   if (!inherits(data, "teal_report")) {
     teal.reporter::teal_card(data_teal_report) <- c(
       teal.reporter::teal_card(),
-      "## Code preparation",
+      "## Data preparation",
       teal.reporter::teal_card(data_teal_report)
     )
   }

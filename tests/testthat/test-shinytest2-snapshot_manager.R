@@ -1,8 +1,10 @@
 testthat::test_that("e2e: wunder_bar_srv clicking snapshot icon opens snapshot-manager modal", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
-    data = simple_teal_data(),
-    modules = example_module(label = "Example Module")
+    init(
+      data = simple_teal_data(),
+      modules = example_module(label = "Example Module")
+    )
   )
 
   testthat::expect_null(app$get_text(".snapshot_manager_modal"))

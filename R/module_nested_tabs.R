@@ -502,7 +502,7 @@ srv_teal_module <- function(id,
         ignoreNULL = TRUE,
         handlerExpr = {
           out <- .call_teal_module(modules, datasets, module_teal_data, reporter)
-          srv_add_reporter("add_reporter_wrapper", out, reporter)
+          srv_add_reporter("add_reporter_wrapper", module_out = out, reporter = reporter, module_label = modules$label)
           srv_source_code("source_code_wrapper", out)
           module_out(out)
         }
