@@ -323,22 +323,56 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       private$wait_for_page_stability()
 
-      testthat::skip_if_not(
-        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
-        "Element.prototype.checkVisibility is not supported in the current browser."
-      )
-
-      unlist(
-        self$get_js(
-          sprintf(
-            "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
-            selector,
-            # Extra parameters
-            sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
-            sprintf("opacityProperty: %s", tolower(opacity_property)),
-            sprintf("visibilityProperty: %s", tolower(visibility_property))
-          )
+      self$get_js(
+        private$test_visibility_js(
+          selector, "visible", content_visibility_auto, opacity_property, visibility_property
         )
+      )
+    },
+    expect_visible = function(selector,
+                              content_visibility_auto = FALSE,
+                              opacity_property = FALSE,
+                              visibility_property = FALSE,
+                              timeout) {
+      private$wait_for_page_stability()
+
+      tryCatch(
+        {
+          self$wait_for_js(
+            private$test_visibility_js(
+              selector, "visible", content_visibility_auto, opacity_property, visibility_property
+            ),
+            timeout
+          )
+          testthat::pass()
+        },
+        error = function(err) {
+          testthat::fail(sprintf("CSS selector '%s' does not produce any visible elements.", selector))
+        }
+      )
+    },
+
+
+    expect_hidden = function(selector,
+                             content_visibility_auto = FALSE,
+                             opacity_property = FALSE,
+                             visibility_property = FALSE,
+                             timeout) {
+      private$wait_for_page_stability()
+
+      tryCatch(
+        {
+          self$wait_for_js(
+            private$test_visibility_js(
+              selector, "hidden", content_visibility_auto, opacity_property, visibility_property
+            ),
+            timeout
+          )
+          testthat::pass()
+        },
+        error = function(err) {
+          testthat::fail(sprintf("CSS selector '%s' produces visible elements.", selector))
+        }
       )
     },
     #' @description
@@ -649,6 +683,31 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           break
         }
       }
+    },
+    test_visibility_js = function(selector,
+                                  action = c("visible", "hidden"),
+                                  content_visibility_auto,
+                                  opacity_property,
+                                  visibility_property) {
+
+      testthat::skip_if_not(
+        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
+        "Element.prototype.checkVisibility is not supported in the current browser."
+      )
+
+      action <- match.arg(action)
+      js_code <- sprintf(
+        "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s})).some(Boolean)",
+        selector,
+        # Extra parameters
+        sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
+        sprintf("opacityProperty: %s", tolower(opacity_property)),
+        sprintf("visibilityProperty: %s", tolower(visibility_property))
+      )
+      if (action == "hidden") {
+        js_code <- sprintf("!%s", js_code)
+      }
+      js_code
     }
   )
 )
