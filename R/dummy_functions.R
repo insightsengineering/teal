@@ -119,7 +119,7 @@ globalVariables("dataname")
 #'
 #' @inheritParams teal_modules
 #' @param decorators `r lifecycle::badge("experimental")` (`list` of `teal_transform_module`) optional,
-#' decorator for `object` included in the module.
+#' decorator for `object` and `object2` included in the module.
 #'
 #' @section Reporting:
 #'
