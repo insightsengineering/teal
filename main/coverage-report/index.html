@@ -95,7 +95,7 @@ table.table-condensed {
   font-size: 11px;
 }</style>
   <div class="col-md-8 col-md-offset-2">
-    <h2>teal coverage - 82.39%</h2>
+    <h2>teal coverage - 82.61%</h2>
     <div class="tabbable">
       <ul class="nav nav-tabs" data-tabsetid="covr">
         <li class="active">
@@ -107,8 +107,8 @@ table.table-condensed {
       </ul>
       <div class="tab-content" data-tabsetid="covr">
         <div class="tab-pane active" title="Files" data-value="Files" id="tab-covr-1">
-          <div class="datatables html-widget html-fill-item" id="htmlwidget-7b1e597548dc10427e2f" style="width:100%;height:500px;"></div>
-          <script type="application/json" data-for="htmlwidget-7b1e597548dc10427e2f">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["<a href=\"#\">R/TealAppDriver.R<\/a>","<a href=\"#\">R/module_bookmark_manager.R<\/a>","<a href=\"#\">R/module_teal_lockfile.R<\/a>","<a href=\"#\">R/after.R<\/a>","<a href=\"#\">R/reporter_previewer_module.R<\/a>","<a href=\"#\">R/modules.R<\/a>","<a href=\"#\">R/utils.R<\/a>","<a href=\"#\">R/module_nested_tabs.R<\/a>","<a href=\"#\">R/module_teal_reporter.R<\/a>","<a href=\"#\">R/module_transform_data.R<\/a>","<a href=\"#\">R/module_data_summary.R<\/a>","<a href=\"#\">R/dummy_functions.R<\/a>","<a href=\"#\">R/module_filter_manager.R<\/a>","<a href=\"#\">R/module_teal.R<\/a>","<a href=\"#\">R/module_snapshot_manager.R<\/a>","<a href=\"#\">R/init.R<\/a>","<a href=\"#\">R/module_init_data.R<\/a>","<a href=\"#\">R/module_source_code.R<\/a>","<a href=\"#\">R/module_validate_error.R<\/a>","<a href=\"#\">R/teal_slices.R<\/a>","<a href=\"#\">R/module_filter_data.R<\/a>","<a href=\"#\">R/teal_modifiers.R<\/a>","<a href=\"#\">R/validations.R<\/a>","<a href=\"#\">R/teal_data_utils.R<\/a>","<a href=\"#\">R/teal_transform_module.R<\/a>","<a href=\"#\">R/validate_inputs.R<\/a>","<a href=\"#\">R/teal_slices-store.R<\/a>","<a href=\"#\">R/checkmate.R<\/a>","<a href=\"#\">R/zzz.R<\/a>","<a href=\"#\">R/teal_data_module.R<\/a>","<a href=\"#\">R/module_session_info.R<\/a>","<a href=\"#\">R/teal_data_module-eval_code.R<\/a>","<a href=\"#\">R/include_css_js.R<\/a>","<a href=\"#\">R/teal_data_module-within.R<\/a>"],[624,211,202,123,86,757,550,598,254,160,250,110,363,292,417,289,150,135,139,181,111,196,394,79,234,195,68,49,46,83,60,51,38,42],[236,78,100,48,36,247,235,288,98,86,127,46,162,163,209,111,65,51,51,50,48,47,47,40,34,27,22,20,17,16,14,14,8,7],[0,33,52,29,24,196,201,258,89,81,120,44,155,156,201,111,65,51,51,50,48,47,47,40,34,27,22,20,17,16,14,14,8,7],[236,45,48,19,12,51,34,30,9,5,7,2,7,7,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],["0","62","1","1","4","89","60","59","37","21","65","29","122","53","27","20","110","46","113","156","125","12","6","137","12","51","11","166","2","39","5","7","3","4"],["0.00%","42.31%","52.00%","60.42%","66.67%","79.35%","85.53%","89.58%","90.82%","94.19%","94.49%","95.65%","95.68%","95.71%","96.17%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%"]],"container":"<table class=\"row-border\">\n  <thead>\n    <tr>\n      <th>File<\/th>\n      <th>Lines<\/th>\n      <th>Relevant<\/th>\n      <th>Covered<\/th>\n      <th>Missed<\/th>\n      <th>Hits / Line<\/th>\n      <th>Coverage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"dom":"t","paging":false,"columnDefs":[{"targets":6,"createdCell":"function(td, cellData, rowData, row, col) {\n  var percent = cellData.replace(\"%\", \"\");\n  if (percent > 90) {\n    var grad = \"linear-gradient(90deg, #edfde7 \" + cellData + \", white \" + cellData + \")\";\n  } else if (percent > 75) {\n    var grad = \"linear-gradient(90deg, #f9ffe5 \" + cellData + \", white \" + cellData + \")\";\n  } else {\n    var grad = \"linear-gradient(90deg, #fcece9 \" + cellData + \", white \" + cellData + \")\";\n  }\n  $(td).css(\"background\", grad);\n}\n"},{"className":"dt-right","targets":[1,2,3,4]},{"name":"File","targets":0},{"name":"Lines","targets":1},{"name":"Relevant","targets":2},{"name":"Covered","targets":3},{"name":"Missed","targets":4},{"name":"Hits / Line","targets":5},{"name":"Coverage","targets":6}],"order":[],"autoWidth":false,"orderClasses":false},"callback":"function(table) {\ntable.on('click.dt', 'a', function() {\n  files = $('div#files div');\n  files.not('div.hidden').addClass('hidden');\n  id = $(this).text();\n  files.filter('div[id=\\'' + id + '\\']').removeClass('hidden');\n  $('ul.nav a[data-value=Source]').text(id).tab('show');\n});\n}","selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":["options.columnDefs.0.createdCell","callback"],"jsHooks":[]}</script>
+          <div class="datatables html-widget html-fill-item" id="htmlwidget-b21d168e1487f10fc251" style="width:100%;height:500px;"></div>
+          <script type="application/json" data-for="htmlwidget-b21d168e1487f10fc251">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["<a href=\"#\">R/TealAppDriver.R<\/a>","<a href=\"#\">R/module_bookmark_manager.R<\/a>","<a href=\"#\">R/module_teal_lockfile.R<\/a>","<a href=\"#\">R/after.R<\/a>","<a href=\"#\">R/reporter_previewer_module.R<\/a>","<a href=\"#\">R/modules.R<\/a>","<a href=\"#\">R/utils.R<\/a>","<a href=\"#\">R/module_nested_tabs.R<\/a>","<a href=\"#\">R/module_teal_reporter.R<\/a>","<a href=\"#\">R/module_transform_data.R<\/a>","<a href=\"#\">R/module_data_summary.R<\/a>","<a href=\"#\">R/dummy_functions.R<\/a>","<a href=\"#\">R/module_filter_manager.R<\/a>","<a href=\"#\">R/module_teal.R<\/a>","<a href=\"#\">R/module_snapshot_manager.R<\/a>","<a href=\"#\">R/init.R<\/a>","<a href=\"#\">R/module_init_data.R<\/a>","<a href=\"#\">R/module_source_code.R<\/a>","<a href=\"#\">R/module_validate_error.R<\/a>","<a href=\"#\">R/teal_slices.R<\/a>","<a href=\"#\">R/module_filter_data.R<\/a>","<a href=\"#\">R/teal_modifiers.R<\/a>","<a href=\"#\">R/validations.R<\/a>","<a href=\"#\">R/teal_data_utils.R<\/a>","<a href=\"#\">R/teal_transform_module.R<\/a>","<a href=\"#\">R/validate_inputs.R<\/a>","<a href=\"#\">R/teal_slices-store.R<\/a>","<a href=\"#\">R/checkmate.R<\/a>","<a href=\"#\">R/zzz.R<\/a>","<a href=\"#\">R/teal_data_module.R<\/a>","<a href=\"#\">R/module_session_info.R<\/a>","<a href=\"#\">R/teal_data_module-eval_code.R<\/a>","<a href=\"#\">R/include_css_js.R<\/a>","<a href=\"#\">R/teal_data_module-within.R<\/a>"],[624,211,202,123,86,757,550,598,254,160,250,110,363,292,417,289,150,135,139,181,111,196,394,79,234,195,68,49,46,83,60,51,38,42],[236,78,100,48,36,247,235,288,98,86,127,46,162,163,209,111,65,51,51,50,48,47,47,40,34,27,22,20,17,16,14,14,8,7],[0,40,52,29,24,196,201,258,89,81,120,44,155,156,201,111,65,51,51,50,48,47,47,40,34,27,22,20,17,16,14,14,8,7],[236,38,48,19,12,51,34,30,9,5,7,2,7,7,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],["0","65","1","1","4","92","61","59","37","21","65","29","122","53","27","20","110","46","113","156","125","12","6","137","12","51","11","166","2","39","5","7","3","4"],["0.00%","51.28%","52.00%","60.42%","66.67%","79.35%","85.53%","89.58%","90.82%","94.19%","94.49%","95.65%","95.68%","95.71%","96.17%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%","100.00%"]],"container":"<table class=\"row-border\">\n  <thead>\n    <tr>\n      <th>File<\/th>\n      <th>Lines<\/th>\n      <th>Relevant<\/th>\n      <th>Covered<\/th>\n      <th>Missed<\/th>\n      <th>Hits / Line<\/th>\n      <th>Coverage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"searching":false,"dom":"t","paging":false,"columnDefs":[{"targets":6,"createdCell":"function(td, cellData, rowData, row, col) {\n  var percent = cellData.replace(\"%\", \"\");\n  if (percent > 90) {\n    var grad = \"linear-gradient(90deg, #edfde7 \" + cellData + \", white \" + cellData + \")\";\n  } else if (percent > 75) {\n    var grad = \"linear-gradient(90deg, #f9ffe5 \" + cellData + \", white \" + cellData + \")\";\n  } else {\n    var grad = \"linear-gradient(90deg, #fcece9 \" + cellData + \", white \" + cellData + \")\";\n  }\n  $(td).css(\"background\", grad);\n}\n"},{"className":"dt-right","targets":[1,2,3,4]},{"name":"File","targets":0},{"name":"Lines","targets":1},{"name":"Relevant","targets":2},{"name":"Covered","targets":3},{"name":"Missed","targets":4},{"name":"Hits / Line","targets":5},{"name":"Coverage","targets":6}],"order":[],"autoWidth":false,"orderClasses":false},"callback":"function(table) {\ntable.on('click.dt', 'a', function() {\n  files = $('div#files div');\n  files.not('div.hidden').addClass('hidden');\n  id = $(this).text();\n  files.filter('div[id=\\'' + id + '\\']').removeClass('hidden');\n  $('ul.nav a[data-value=Source]').text(id).tab('show');\n});\n}","selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":["options.columnDefs.0.createdCell","callback"],"jsHooks":[]}</script>
         </div>
         <div class="tab-pane" title="Source" data-value="Source" id="tab-covr-2">
           <div id="files">
@@ -7329,30 +7329,30 @@ table.table-condensed {
                       <pre class="language-r">  if (!all(is_unbookmarkable) &amp;&amp; identical(bookmark_option, "server")) {</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">54</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    .expand_button(</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">55</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      id = ns("do_bookmark"),</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">56</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      label = "Bookmark",</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">57</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">3<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      icon = "bookmark-fill"</pre>
                     </td>
@@ -7401,49 +7401,49 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">64</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_character(id)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">65</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_class(modules, "teal_modules")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">66</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  moduleServer(id, function(input, output, session) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">67</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    logger::log_debug("bookmark_manager_srv initializing")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">68</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    ns &lt;- session$ns</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">69</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    bookmark_option &lt;- get_bookmarking_option()</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">70</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    is_unbookmarkable &lt;- need_bookmarking(modules)</pre>
                     </td>
@@ -7471,7 +7471,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">74</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    setBookmarkExclude(c("do_bookmark"))</pre>
                     </td>
@@ -7485,14 +7485,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">76</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    app_session &lt;- .subset2(session, "parent")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">77</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    app_session$onBookmarked(function(url) {</pre>
                     </td>
@@ -7912,21 +7912,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">137</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    observeEvent(input$do_bookmark, {</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">138</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">1<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      logger::log_debug("bookmark_manager_srv@1 do_bookmark module clicked.")</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">139</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">1<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      session$doBookmark()</pre>
                     </td>
@@ -7947,7 +7947,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">142</td>
-                    <td class="coverage">132<em>x</em></td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    invisible(NULL)</pre>
                     </td>
@@ -7996,21 +7996,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">149</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  bookmark_option &lt;- getShinyOption("bookmarkStore")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">150</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (is.null(bookmark_option) &amp;&amp; identical(getOption("shiny.bookmarkStore"), "server")) {</pre>
                     </td>
                   </tr>
-                  <tr class="missed">
+                  <tr class="covered">
                     <td class="num">151</td>
-                    <td class="coverage">!</td>
+                    <td class="coverage">135<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    bookmark_option &lt;- getOption("shiny.bookmarkStore")</pre>
                     </td>
@@ -8024,7 +8024,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">153</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  bookmark_option</pre>
                     </td>
@@ -8059,21 +8059,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">158</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  unlist(rapply2(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">159</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    modules_bookmarkable(modules),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">160</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">142<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    Negate(isTRUE)</pre>
                     </td>
@@ -8395,14 +8395,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">206</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">315<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (inherits(x, "list")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">207</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">143<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    lapply(x, rapply2, f = f)</pre>
                     </td>
@@ -8416,7 +8416,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">209</td>
-                    <td class="coverage">161<em>x</em></td>
+                    <td class="coverage">172<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    f(x)</pre>
                     </td>
@@ -14657,56 +14657,56 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">516</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  tags$span(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">517</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    class = "teal expand-button",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">518</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    htmltools::htmlDependency(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">519</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      name = "teal-busy-disable",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">520</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      version = utils::packageVersion("teal"),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">521</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      package = "teal",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">522</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      src = "js",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">523</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      script = "busy-disable.js"</pre>
                     </td>
@@ -14720,56 +14720,56 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">525</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    shinyjs::useShinyjs(),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">526</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    tags$button(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">527</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      id = id,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">528</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      class = "action-button teal-busy-disable",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">529</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      role = "button",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">530</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      style = "text-decoration: none;",</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">531</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      tags$span(class = "icon", bsicons::bs_icon(icon, class = "text-primary")),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">532</td>
-                    <td class="coverage">20<em>x</em></td>
+                    <td class="coverage">23<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      tags$span(class = "label", label)</pre>
                     </td>
@@ -18692,14 +18692,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">161</td>
-                    <td class="coverage">300<em>x</em></td>
+                    <td class="coverage">311<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_string(label)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">162</td>
-                    <td class="coverage">297<em>x</em></td>
+                    <td class="coverage">308<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (label == "global_filters") {</pre>
                     </td>
@@ -18748,7 +18748,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">169</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">307<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (label == "Report Previewer") {</pre>
                     </td>
@@ -18811,35 +18811,35 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">178</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">307<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_function(server)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">179</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">307<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  server_formals &lt;- names(formals(server))</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">180</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">307<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (!(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">181</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">307<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    "id" %in% server_formals ||</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">182</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">307<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      all(c("input", "output", "session") %in% server_formals)</pre>
                     </td>
@@ -18944,7 +18944,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">197</td>
-                    <td class="coverage">294<em>x</em></td>
+                    <td class="coverage">305<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if ("datasets" %in% server_formals) {</pre>
                     </td>
@@ -19014,21 +19014,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">207</td>
-                    <td class="coverage">294<em>x</em></td>
+                    <td class="coverage">305<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_function(ui)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">208</td>
-                    <td class="coverage">294<em>x</em></td>
+                    <td class="coverage">305<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  ui_formals &lt;- names(formals(ui))</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">209</td>
-                    <td class="coverage">294<em>x</em></td>
+                    <td class="coverage">305<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (!"id" %in% ui_formals) {</pre>
                     </td>
@@ -19091,7 +19091,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">218</td>
-                    <td class="coverage">293<em>x</em></td>
+                    <td class="coverage">304<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (any(c("data", "datasets") %in% ui_formals)) {</pre>
                     </td>
@@ -19161,7 +19161,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">228</td>
-                    <td class="coverage">291<em>x</em></td>
+                    <td class="coverage">302<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (!missing(filters)) {</pre>
                     </td>
@@ -19224,7 +19224,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">237</td>
-                    <td class="coverage">291<em>x</em></td>
+                    <td class="coverage">302<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (!is.element("data", server_formals) &amp;&amp; !is.null(datanames)) {</pre>
                     </td>
@@ -19252,7 +19252,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">241</td>
-                    <td class="coverage">291<em>x</em></td>
+                    <td class="coverage">302<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_character(datanames, min.len = 1, null.ok = TRUE, any.missing = FALSE)</pre>
                     </td>
@@ -19273,21 +19273,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">244</td>
-                    <td class="coverage">290<em>x</em></td>
+                    <td class="coverage">301<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_list(server_args, null.ok = TRUE, names = "named")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">245</td>
-                    <td class="coverage">288<em>x</em></td>
+                    <td class="coverage">299<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  srv_extra_args &lt;- setdiff(names(server_args), server_formals)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">246</td>
-                    <td class="coverage">288<em>x</em></td>
+                    <td class="coverage">299<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (length(srv_extra_args) &gt; 0 &amp;&amp; !"..." %in% server_formals) {</pre>
                     </td>
@@ -19350,21 +19350,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">255</td>
-                    <td class="coverage">287<em>x</em></td>
+                    <td class="coverage">298<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_list(ui_args, null.ok = TRUE, names = "named")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">256</td>
-                    <td class="coverage">285<em>x</em></td>
+                    <td class="coverage">296<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  ui_extra_args &lt;- setdiff(names(ui_args), ui_formals)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">257</td>
-                    <td class="coverage">285<em>x</em></td>
+                    <td class="coverage">296<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (length(ui_extra_args) &gt; 0 &amp;&amp; !"..." %in% ui_formals) {</pre>
                     </td>
@@ -19427,7 +19427,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">266</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (inherits(transformators, "teal_transform_module")) {</pre>
                     </td>
@@ -19448,28 +19448,28 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">269</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_list(transformators, types = "teal_transform_module")</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">270</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  transform_datanames &lt;- unlist(lapply(transformators, attr, "datanames"))</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">271</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  combined_datanames &lt;- if (identical(datanames, "all")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">272</td>
-                    <td class="coverage">233<em>x</em></td>
+                    <td class="coverage">244<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    "all"</pre>
                     </td>
@@ -19504,70 +19504,70 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">277</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  structure(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">278</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">279</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      label = label,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">280</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      server = server,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">281</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      ui = ui,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">282</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      datanames = combined_datanames,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">283</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      server_args = server_args,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">284</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      ui_args = ui_args,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">285</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      transformators = transformators,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">286</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      path = label</pre>
                     </td>
@@ -19581,7 +19581,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">288</td>
-                    <td class="coverage">284<em>x</em></td>
+                    <td class="coverage">295<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    class = "teal_module"</pre>
                     </td>
@@ -19637,21 +19637,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">296</td>
-                    <td class="coverage">228<em>x</em></td>
+                    <td class="coverage">236<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_character(label, max.len = 1)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">297</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">234<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  submodules &lt;- list(...)</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">298</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">234<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (any(vapply(submodules, is.character, FUN.VALUE = logical(1)))) {</pre>
                     </td>
@@ -19700,7 +19700,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">305</td>
-                    <td class="coverage">224<em>x</em></td>
+                    <td class="coverage">232<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_list(submodules, min.len = 1, any.missing = FALSE, types = c("teal_module", "teal_modules"))</pre>
                     </td>
@@ -19714,35 +19714,35 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">307</td>
-                    <td class="coverage">221<em>x</em></td>
+                    <td class="coverage">229<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  .update_modules_paths(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">308</td>
-                    <td class="coverage">221<em>x</em></td>
+                    <td class="coverage">229<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    structure(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">309</td>
-                    <td class="coverage">221<em>x</em></td>
+                    <td class="coverage">229<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      list(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">310</td>
-                    <td class="coverage">221<em>x</em></td>
+                    <td class="coverage">229<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        label = label,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">311</td>
-                    <td class="coverage">221<em>x</em></td>
+                    <td class="coverage">229<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">        children = submodules</pre>
                     </td>
@@ -19756,7 +19756,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">313</td>
-                    <td class="coverage">221<em>x</em></td>
+                    <td class="coverage">229<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      class = "teal_modules"</pre>
                     </td>
@@ -22654,35 +22654,35 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">727</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">315<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  checkmate::assert_multi_class(modules, c("teal_modules", "teal_module"))</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">728</td>
-                    <td class="coverage">296<em>x</em></td>
+                    <td class="coverage">315<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (inherits(modules, "teal_modules")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">729</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">143<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    setNames(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">730</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">143<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      lapply(modules$children, modules_bookmarkable),</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">731</td>
-                    <td class="coverage">135<em>x</em></td>
+                    <td class="coverage">143<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      vapply(modules$children, `[[`, "label", FUN.VALUE = character(1))</pre>
                     </td>
@@ -22703,7 +22703,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">734</td>
-                    <td class="coverage">161<em>x</em></td>
+                    <td class="coverage">172<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    attr(modules, "teal_bookmarkable", exact = TRUE)</pre>
                     </td>
@@ -22752,42 +22752,42 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">741</td>
-                    <td class="coverage">495<em>x</em></td>
+                    <td class="coverage">517<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  if (inherits(modules, "teal_modules")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">742</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">235<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    modules$children &lt;- lapply(</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">743</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">235<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      modules$children,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">744</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">235<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      .update_modules_paths,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">745</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">235<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      parent_label = if (length(parent_label)) paste(parent_label, modules$label, sep = " / ") else modules$label,</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">746</td>
-                    <td class="coverage">226<em>x</em></td>
+                    <td class="coverage">235<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">      ids = ids</pre>
                     </td>
@@ -22801,21 +22801,21 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">748</td>
-                    <td class="coverage">269<em>x</em></td>
+                    <td class="coverage">282<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  } else if (inherits(modules, "teal_module")) {</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">749</td>
-                    <td class="coverage">269<em>x</em></td>
+                    <td class="coverage">282<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    new_label &lt;- if (length(parent_label)) paste(parent_label, modules$label, sep = " / ") else modules$label</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">750</td>
-                    <td class="coverage">269<em>x</em></td>
+                    <td class="coverage">282<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    if (new_label %in% ids$values) {</pre>
                     </td>
@@ -22836,14 +22836,14 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">753</td>
-                    <td class="coverage">269<em>x</em></td>
+                    <td class="coverage">282<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    modules$path &lt;- new_label</pre>
                     </td>
                   </tr>
                   <tr class="covered">
                     <td class="num">754</td>
-                    <td class="coverage">269<em>x</em></td>
+                    <td class="coverage">282<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">    ids$values &lt;- c(ids$values, new_label)</pre>
                     </td>
@@ -22857,7 +22857,7 @@ table.table-condensed {
                   </tr>
                   <tr class="covered">
                     <td class="num">756</td>
-                    <td class="coverage">495<em>x</em></td>
+                    <td class="coverage">517<em>x</em></td>
                     <td class="col-sm-12">
                       <pre class="language-r">  modules</pre>
                     </td>
