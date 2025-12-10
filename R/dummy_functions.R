@@ -111,7 +111,7 @@ globalVariables("dataname")
 
 #' An example `teal` module with two outputs
 #'
-#' This module is a duplicate of `example_module` but creates two objects called `object1` and `object2` 
+#' This module is a duplicate of `example_module` but creates two objects called `object1` and `object2`
 #' that can be modified with decorators.
 #' The objects are determined by what's selected in `Choose a dataset` input in UI.
 #' The objects can be anything that can be handled by `renderPrint()`.
@@ -191,6 +191,7 @@ example_module2 <- function(label = "example teal module 2",
           data = table_data,
           transformators = decorators
         )
+        # Evaluate both objects to trigger any side effects from decorators
         table_data_decorated <- reactive(within(req(table_data_decorated_no_print()), expr = {
           object1
           object2
