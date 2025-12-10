@@ -31,3 +31,4 @@ inst/doc
 tests/testthat/_snaps/**/*.new.md
 tests/testthat/_snaps/**/*.new.svg
 teal_app.lock
+*.tar.gz
