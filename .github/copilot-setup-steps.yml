@@ -1,0 +1,27 @@
+name: Copilot Agent Setup
+
+# Configure the environment for GitHub Copilot coding agent
+# This ensures R is available when the agent works on this repository
+# Uses the same Docker image as the devcontainer for consistency
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  copilot-agent:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/insightsengineering/rstudio:latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Verify R installation
+        run: |
+          R --version
+          R -e "sessionInfo()"
+      
+      # Additional steps for the Copilot agent would be invoked here
+      # The agent will have access to R in this environment
