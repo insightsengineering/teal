@@ -8,13 +8,7 @@
 \usage{
 ui_transform_teal_data(id, transformators, class = "well")
 
-srv_transform_teal_data(
-  id,
-  data,
-  transformators,
-  modules = NULL,
-  is_transform_failed = reactiveValues()
-)
+srv_transform_teal_data(id, data, transformators, modules = NULL)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
@@ -28,10 +22,6 @@ To learn more check \code{vignette("transform-input-data", package = "teal")}.}
 The data which application will depend on.}
 
 \item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
-
-\item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
-Help to determine if any previous transformator failed, so that following transformators can be disabled
-and display a generic failure message.}
 }
 \value{
 \code{reactive} \code{teal_data}
