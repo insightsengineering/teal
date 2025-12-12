@@ -40,9 +40,7 @@ testthat::test_that("e2e: module with decorator UI and output is modified intera
     c("decorate", "transform_1", "transform", "append_text")
   )
 
-  testthat::expect_true(
-    app$is_visible(app$namespaces(TRUE)$module(input_id))
-  )
+  app$expect_visible(app$namespaces(TRUE)$module(input_id))
 
   testthat::expect_identical(
     app$get_text(app$namespaces(TRUE)$module(sprintf("%s-label", input_id))),
@@ -97,7 +95,7 @@ testthat::test_that("e2e: module with decorator, where server fails,  shows shin
     c("decorate", "transform_1", "silent_error", "message")
   )
 
-  testthat::expect_true(app$is_visible(app$namespaces(TRUE)$module(input_id)))
+  app$expect_visible(app$namespaces(TRUE)$module(input_id))
 
   app$expect_validation_error()
 

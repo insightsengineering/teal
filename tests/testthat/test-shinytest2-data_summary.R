@@ -140,9 +140,9 @@ testthat::test_that("e2e: data summary UI can be collpased and expanded (`bslib`
   app <- TealAppDriver$new(init(data = data, modules = example_module()))
 
   # Visible by default
-  testthat::expect_true(app$is_visible(".teal-active-data-summary-panel .accordion-collapse"))
+  app$expect_visible(".teal-active-data-summary-panel .accordion-collapse")
   app$click(selector = ".teal-active-data-summary-panel .accordion-header button")
-  testthat::expect_false(app$is_visible(".teal-active-data-summary-panel .accordion-collapse"))
+  app$expect_hidden(".teal-active-data-summary-panel .accordion-collapse")
 
   app$stop()
 })

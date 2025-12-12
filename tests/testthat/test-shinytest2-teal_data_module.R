@@ -32,7 +32,7 @@ testthat::test_that("e2e: teal_data_module `Load data` button is shown when once
       modules = example_module(label = "Example Module")
     )
   )
-  testthat::expect_true(app$is_visible("#teal-open_teal_data_module_ui"))
+  app$expect_visible("#teal-open_teal_data_module_ui")
   app$stop()
 })
 
@@ -44,7 +44,7 @@ testthat::test_that("e2e: teal_data_module `Load data` button is not shown when 
       modules = example_module(label = "Example Module")
     )
   )
-  testthat::expect_null(app$is_visible("#teal-open_teal_data_module_ui"))
+  testthat::expect_null(app$get_html("#teal-open_teal_data_module_ui"))
   app$stop()
 })
 
@@ -56,7 +56,7 @@ testthat::test_that("e2e: teal_data_module shows modal on startup when data isn'
       modules = example_module(label = "Example Module")
     )
   )
-  testthat::expect_true(app$is_visible(".teal-data-module-popup"))
+  app$expect_visible(".teal-data-module-popup")
   app$stop()
 })
 
@@ -69,7 +69,7 @@ testthat::test_that("e2e: teal_data_module auto-closes modal when `once=TRUE` an
     )
   )
   app$click("teal-data-teal_data_module-submit")
-  testthat::expect_null(app$is_visible(".teal-data-module-popup"))
+  testthat::expect_null(app$get_html(".teal-data-module-popup"))
   app$stop()
 })
 
@@ -81,7 +81,7 @@ testthat::test_that("e2e: teal_data_module auto-closes modal when `once=TRUE` an
       modules = example_module(label = "Example Module")
     )
   )
-  testthat::expect_null(app$is_visible(".teal-data-module-popup"))
+  testthat::expect_null(app$get_html(".teal-data-module-popup"))
   app$stop()
 })
 
@@ -94,7 +94,7 @@ testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` 
     )
   )
   app$click(selector = "#teal-close_teal_data_module_modal button")
-  testthat::expect_true(app$is_visible(".teal-data-module-popup"))
+  app$expect_visible(".teal-data-module-popup")
   app$stop()
 })
 
@@ -106,7 +106,7 @@ testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` 
       modules = example_module(label = "Example Module")
     )
   )
-  testthat::expect_true(app$is_visible(".teal-data-module-popup"))
+  app$expect_visible(".teal-data-module-popup")
   app$stop()
 })
 
