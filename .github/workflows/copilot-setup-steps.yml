@@ -1,0 +1,10 @@
+---
+name: Copilot Agent Setup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  copilot-setup-steps:
+    name: Copilot Agent Setup
+    uses: insightsengineering/r.pkg.template/.github/workflows/copilot-setup-steps.yaml@main
