@@ -1,16 +1,16 @@
-Introduction
+# Introduction
 
-The teal framework uses shiny to create reproducible environment for analyst. It uses several packages: teal.widgets, teal.logger, teal.transform, teal.slice, teal.code, teal.data.
-The key package is teal
-Packages that create modules for users are teal.modules.general and teal.modules.clinical.
-Balance dependencies value and features.
+- The teal framework uses shiny to create reproducible environment for analyst. It uses several packages: teal.widgets, teal.logger, teal.transform, teal.slice, teal.code, teal.data.
+- The key package is teal
+- Packages that create modules for users are teal.modules.general and teal.modules.clinical.
+- Balance dependencies value and features.
 
-Modules
+# Modules
 
-Should create simple code using tidyverse style and be simple.
-Use tern and rtables related packages to create tables
-Use ggplot2 for plots. 
-teal.modules.clinical (sometimes abbreviated as tmc) and teal.modules.general (abbreviated as tmg) have too many dependencies: do not depend something that is not already in use.
+- Should create simple code using tidyverse style and be simple.
+- Use tern and rtables related packages to create tables
+- Use ggplot2 for plots. 
+- teal.modules.clinical (sometimes abbreviated as tmc) and teal.modules.general (abbreviated as tmg) have too many dependencies: do not depend something that is not already in use.
 
 Testing
 
