@@ -587,7 +587,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       filter_panel = character(0)
     ),
     # private methods ----
-    # Helper function to extract wrapper ID from selector and take first match if multiple found
+    # Helper function to extract wrapper ID from selector
     extract_wrapper_id = function(selector) {
       id <- self$get_attr(selector = selector, attribute = "href")
       sub("^#", "", id[endsWith(id, "-wrapper")])
@@ -601,27 +601,28 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       # wait_for_page_stability() is needed here to ensure the DOM/UI is fully rendered and stable
       # before trying to extract the namespace.
       private$wait_for_page_stability()
-
+      all_inputs <- self$get_values()$input
       active_module_input_id <- names(all_inputs)[grepl("-active_module_id$", names(all_inputs))][[1]]
       active_tab_inputs <- self$wait_for_value(input = active_module_input_id)
 
-      ids <- c(
-        private$extract_wrapper_id(
-          sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs)
+      ids <- unique(
+        c(
+          private$extract_wrapper_id(
+            sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs)
+          )
+          # In principle once we get to this point we wouldn't need to search in other places
+          # FIXME: But it might be needed on the integration machine (somehow)
+          # nolint start: commented_code.
+          # private$extract_wrapper_id(
+          #   ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
+          # ),
+          # private$extract_wrapper_id(
+          #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
+          # )
+          # nolint end: commented_code.
         )
-        # In principle once we get to this point we wouldn't need to search in other places
-        # FIXME: But it might be needed on the integration machine (somehow)
-        # nolint start: commented_code.
-        # private$extract_wrapper_id(
-        #   ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
-        # ),
-        # private$extract_wrapper_id(
-        #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
-        # )
-        # nolint end: commented_code.
       )
-      validity_ids <- private$is_valid_wrapper_id(unique(ids))
-      valid_ids <- unique(ids[validity_ids])
+      valid_ids <- ids[private$is_valid_wrapper_id(ids)]
 
       if (length(valid_ids) > 1L) {
         valid_ids <- valid_ids[1L]
