@@ -35,6 +35,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_summary_table}{\code{TealAppDriver$get_active_data_summary_table()}}
 \item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
+\item \href{#method-TealAppDriver-expect_visible}{\code{TealAppDriver$expect_visible()}}
+\item \href{#method-TealAppDriver-expect_hidden}{\code{TealAppDriver$expect_hidden()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
@@ -403,6 +405,36 @@ on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility
 \subsection{Returns}{
 Logical vector with all occurrences of the selector.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-expect_visible"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-expect_visible}{}}}
+\subsection{Method \code{expect_visible()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_visible(
+  selector,
+  content_visibility_auto = FALSE,
+  opacity_property = FALSE,
+  visibility_property = FALSE,
+  timeout
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-expect_hidden"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-expect_hidden}{}}}
+\subsection{Method \code{expect_hidden()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_hidden(
+  selector,
+  content_visibility_auto = FALSE,
+  opacity_property = FALSE,
+  visibility_property = FALSE,
+  timeout
+)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_data_filters"></a>}}
