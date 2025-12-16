@@ -37,7 +37,7 @@ testthat::test_that("e2e: Module with 'Show R Code' has modal with two dismiss a
 
   # There are two Dismiss buttons with similar id and the same label.
   buttons_text <- app$get_text("#shiny-modal button")
-  testthat::expect_setequal(buttons_text, c("Dismiss", "Copy to Clipboard", "Dismiss", "Copy to Clipboard"))
+  testthat::expect_setequal(buttons_text, trimws(c("Dismiss", "Copy to Clipboard", "Dismiss", "Copy to Clipboard")))
   app$stop()
 })
 
