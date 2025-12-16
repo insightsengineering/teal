@@ -553,7 +553,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       filter_panel = character(0)
     ),
     # private methods ----
-    # Helper function to extract wrapper ID from selector and take first match if multiple found
+    # Helper function to extract wrapper ID from selector
     extract_wrapper_id = function(selector) {
       id <- self$get_attr(selector = selector, attribute = "href")
       sub("^#", "", id[endsWith(id, "-wrapper")])
