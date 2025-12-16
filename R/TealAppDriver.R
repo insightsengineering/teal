@@ -580,7 +580,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           # FIXME: But it might be needed on the integration machine (somehow)
           # nolint start: commented_code.
           # private$extract_wrapper_id(
-          #   ".teal-modules-tree li a.module-button.active, .teal-modules-tree li a.module-button[aria-selected='true']"
+          #   paste(
+          #     ".teal-modules-tree li a.module-button.active, .teal-modules-tree",
+          #     "li a.module-button[aria-selected='true']"
+          #   )
           # ),
           # private$extract_wrapper_id(
           #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
