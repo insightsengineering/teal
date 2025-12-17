@@ -351,8 +351,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         }
       )
     },
-
-
     expect_hidden = function(selector,
                              content_visibility_auto = FALSE,
                              opacity_property = FALSE,
@@ -695,7 +693,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                                   content_visibility_auto,
                                   opacity_property,
                                   visibility_property) {
-
       testthat::skip_if_not(
         self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
         "Element.prototype.checkVisibility is not supported in the current browser."
