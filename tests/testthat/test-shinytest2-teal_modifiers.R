@@ -75,7 +75,7 @@ testthat::test_that("e2e: add_landing_modal displays landing modal on app startu
     )
   )
 
-  testthat::expect_true(app_driver$is_visible(".modal"))
+  app_driver$expect_visible(".modal")
   modal_title <- app_driver$get_text(".modal-title")
   testthat::expect_equal(modal_title, "Welcome to the App")
   modal_body <- app_driver$get_text(".modal-body")
@@ -94,11 +94,11 @@ testthat::test_that("e2e: add_landing_modal modal can be dismissed", {
     footer = modalButton("Accept")
   ))
 
-  testthat::expect_true(app_driver$is_visible(".modal"))
+  app_driver$expect_visible(".modal")
   # because $click(button:contains('Accept')) doesn't work
   app_driver$get_js("document.querySelector('#shiny-modal-wrapper button').click()")
   Sys.sleep(0.5) # Wait a moment for modal to close
-  testthat::expect_null(app_driver$is_visible(".modal"))
+  app_driver$expect_hidden(".modal")
 
   app_driver$stop()
 })
@@ -121,7 +121,7 @@ testthat::test_that("e2e: combined modifiers displays all customizations when ch
   testthat::expect_equal(page_title[1], "Complete Custom App")
 
   # Check modal is visible
-  testthat::expect_true(app_driver$is_visible(".modal"))
+  app_driver$expect_visible(".modal")
 
   # Dismiss modal
   # because $click(button:contains('Accept')) doesn't work
@@ -129,12 +129,12 @@ testthat::test_that("e2e: combined modifiers displays all customizations when ch
   Sys.sleep(0.5)
 
   # Check header is visible
-  testthat::expect_true(app_driver$is_visible("#teal-header-content"))
+  app_driver$expect_visible("#teal-header-content")
   header_text <- app_driver$get_text("#teal-header-content")
   testthat::expect_equal(trimws(header_text), "Custom Header")
 
   # Check footer is visible
-  testthat::expect_true(app_driver$is_visible("#teal-footer-content"))
+  app_driver$expect_visible("#teal-footer-content")
   footer_text <- app_driver$get_text("#teal-footer-content")
   testthat::expect_equal(trimws(footer_text), "Custom Footer")
 
