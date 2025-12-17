@@ -344,7 +344,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             ),
             timeout
           )
-          testthat::pass()
+          testthat::succeed()
         },
         error = function(err) {
           testthat::fail(sprintf("CSS selector '%s' does not produce any visible elements.", selector))
@@ -368,7 +368,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
             ),
             timeout
           )
-          testthat::pass()
+          testthat::succeed()
         },
         error = function(err) {
           testthat::fail(sprintf("CSS selector '%s' produces visible elements.", selector))
