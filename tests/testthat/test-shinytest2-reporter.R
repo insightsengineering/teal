@@ -10,7 +10,7 @@ testthat::test_that("e2e: reporter tab is visible when reporter is specified (de
     )
   )
 
-  testthat::expect_true(app$is_visible(selector = "#teal-reporter_menu_container"))
+  app$expect_visible(selector = "#teal-reporter_menu_container")
   app$stop()
 })
 
