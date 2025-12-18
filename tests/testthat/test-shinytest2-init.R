@@ -31,7 +31,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   # Check if button exists.
   button_selector <- "#teal-footer-session_info-sessionInfo-button"
   testthat::expect_equal(
-    app$get_text(button_selector),
+    trimws(app$get_text(button_selector)),
     "Session Info"
   )
 
@@ -46,9 +46,9 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   # There are two Copy buttons with similar id and the same label.
   testthat::expect_setequal(
     testthat::expect_length(
-      app$get_text(
+      trimws(app$get_text(
         "#shiny-modal [id^='teal-footer-session_info-sessionInfo-copy_button']"
-      ),
+      )),
       2
     ),
     "Copy to Clipboard"
@@ -56,7 +56,7 @@ testthat::test_that("e2e: teal app initializes with sessionInfo modal", {
   # There are two Dismiss buttons with similar id and the same label.
   testthat::expect_setequal(
     testthat::expect_length(
-      app$get_text("#shiny-modal button[data-dismiss]"),
+      trimws(app$get_text("#shiny-modal button[data-dismiss]")),
       2
     ),
     "Dismiss"
