@@ -1,0 +1,347 @@
+# Creating Custom Modules
+
+## Introduction
+
+The `teal` framework provides a large catalog of plug-in-ready analysis
+modules that can be incorporated into `teal` applications. However, it
+is also possible to create your own modules using the `module` function,
+which leverages `shiny` modules. Each custom teal module is built as a
+[`shiny` module](https://shiny.posit.co/r/articles/improve/modules/),
+combining `shiny`’s reactive capabilities with modularized UI and server
+logic to encapsulate functionality. This design enables a structured and
+reusable approach to creating interactive components that integrate
+seamlessly within the teal ecosystem.
+
+In this guide, we will use the simple histogram below as an example, and
+demonstrate how to convert this histogram function into a robust `teal`
+module step-by-step:
+
+``` r
+my_plot <- hist(
+  dataset[[vars]],
+  las = 1,
+  main = paste("Histogram of", vars),
+  xlab = vars,
+  col = "lightblue",
+  border = "black"
+)
+```
+
+This module will allow users to dynamically select datasets and
+variables to create histograms within a `teal` application. We will
+cover best practices, including:
+
+- Setting up dynamic inputs.
+- Structuring server logic.
+- Using the `teal_data` object to ensure reactivity and reproducibility.
+
+## Understanding the Inputs and Requirements
+
+When developing a custom `teal` module for visualizations, we will first
+identify the primary inputs that users will interact with:
+
+- **Dataset Input** (`dataset`): Allows users to select which dataset to
+  explore.
+- **Variable Input** (`vars`): Allows users to choose a specific numeric
+  variable from the chosen dataset, ensuring only appropriate columns
+  are available for plotting.
+
+These inputs are dynamically populated based on the available datasets
+and variables in the `teal_data` object, which we will cover later.
+
+## Setting Up the `teal` Module UI
+
+The UI function defines the controls and display area for the histogram.
+For this module, we will use:
+
+- **`selectInput` for Dataset**: Enables users to select a dataset from
+  the list of available datasets.
+- **`selectInput` for Variable**: Allows users to choose a numeric
+  variable from the chosen dataset, dynamically filtering out any
+  non-numeric variables from the choices.
+- **`plotOutput` for Histogram**: Displays the histogram once both
+  dataset and variable inputs are selected.
+- **`verbatimTextOutput` for Code**: Automatically displays code that
+  generated the plot based on the user input.
+
+Here’s the code for the `histogram_module_ui` function:
+
+``` r
+library(teal)
+
+# UI function for the custom histogram module
+histogram_module_ui <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::tagList(
+    shiny::selectInput(
+      ns("dataset"),
+      "Select Dataset",
+      choices = c("iris", "mtcars")
+    ),
+    shiny::selectInput(
+      ns("variable"),
+      "Select Variable",
+      choices = c(names(iris), names(mtcars))
+    ),
+    shiny::plotOutput(ns("histogram_plot")),
+    shiny::verbatimTextOutput(ns("plot_code")) # To display the reactive plot code
+  )
+}
+```
+
+## Setting Up the `teal` Module Server
+
+The server function is where the main logic of a `teal` module is
+handled. For our histogram module, the server function will handle user
+interactions and manage the reactive `teal_data` object, which allows
+the module to dynamically respond to user inputs.
+
+### Passing the `data` Argument to the Server Function
+
+To begin, it’s essential to include the `data` argument in the server
+function definition.
+
+This `data` argument holds the reactive `teal_data` object, which
+contains your datasets after applying any active filtering by the filter
+panel. By including `data`, we can ensure:
+
+- The server function receives a reactive version of `teal_data`,
+  allowing it to automatically respond to changes.
+- The server can access the filtered datasets directly.
+
+The correct function definition for the server function is:
+
+``` r
+histogram_module_server <- function(id, data) {
+  moduleServer(id, function(input, output, session) {
+    # Server logic goes here
+  })
+}
+```
+
+If you need a refresher on the `teal_data` object, please visit the
+[teal.data package
+documentation](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data.html).
+
+### Understanding `teal_data` as a Reactive Object in Server Logic
+
+When used in the server logic of a `teal` module, the `teal_data` object
+becomes a **reactive data container**. This means that to access its
+contents, you need to call it like a function, using parentheses:
+[`data()`](https://rdrr.io/r/utils/data.html).
+
+This syntax triggers reactivity, ensuring that the data within
+`teal_data` stays up-to-date with any filters or changes applied
+elsewhere in the application.
+
+> **Note**: The `teal_data` object behaves as a reactive data container
+> only when used within the server logic. If accessed outside of the
+> server, it will not be reactive.
+
+### Using `names()` to Access Dataset Names in `teal_data` object
+
+The `teal_data` object can contain multiple datasets. To retrieve the
+names of these datasets, use the
+[`names()`](https://rdrr.io/r/base/names.html) function:
+
+``` r
+names(data())
+```
+
+This will return a character vector of the dataset names contained in
+`teal_data`. You can then use these names to dynamically populate input
+controls, like a dataset selection drop-down.
+
+### Accessing Specific Datasets with Double Brackets (`[[ ]])`
+
+To access an individual dataset from `teal_data`, use double brackets
+(`[[ ]]`) along with the dataset name. This allows you to extract the
+specific dataset as a data frame:
+
+``` r
+data()[[input$dataset]]
+```
+
+Here, `input$dataset` represents the name of the dataset selected by the
+user. This syntax is highly flexible because it dynamically references
+whichever dataset the user has chosen. You can further subset or
+manipulate this extracted data frame as needed.
+
+### Setting Up Server Logic Using `teal_data` and Dynamic Variable Injection
+
+In this updated server function, we will perform the following:
+
+1.  **Create `new_data`** as a modified version of
+    [`data()`](https://rdrr.io/r/utils/data.html) using
+    [`within()`](https://insightsengineering.github.io/teal/reference/teal_data_module.md),
+    dynamically injecting `input$dataset` and `input$variable`.
+2.  **Render the Plot**:
+    [`renderPlot()`](https://rdrr.io/pkg/shiny/man/renderPlot.html)
+    displays the plot by referencing the plot stored in the updated
+    `teal_data` object, `new_data`.
+3.  **Return the data**: To allow for reporting capabilities we need to
+    return the data. See [adding support for reporting
+    vignette](https://insightsengineering.github.io/teal/articles/adding-support-for-reporting.md)
+
+Here’s the code:
+
+``` r
+# Server function for the custom histogram module with injected variables in within()
+histogram_module_server <- function(id, data) {
+  moduleServer(id, function(input, output, session) {
+    # Update dataset choices based on available datasets in teal_data
+    shiny::observe({
+      shiny::updateSelectInput(
+        session,
+        "dataset",
+        choices = names(data())
+      )
+    })
+
+    # Update variable choices based on selected dataset, only including numeric variables
+    observeEvent(input$dataset, {
+      req(input$dataset) # Ensure dataset is selected
+      numeric_vars <- names(data()[[input$dataset]])[sapply(data()[[input$dataset]], is.numeric)]
+      shiny::updateSelectInput(session, "variable", choices = numeric_vars)
+    })
+
+    # Create a reactive `teal_data` object with the histogram plot
+    result <- reactive({
+      req(input$dataset, input$variable) # Ensure both dataset and variable are selected
+
+      # Create a new teal_data object with the histogram plot
+      new_data <- within(
+        data(),
+        {
+          my_plot <- hist(
+            input_dataset[[input_vars]],
+            las = 1,
+            main = paste("Histogram of", input_vars),
+            xlab = input_vars,
+            col = "lightblue",
+            border = "black"
+          )
+        },
+        input_dataset = as.name(input$dataset), # Replace `input_dataset` with input$dataset
+        input_vars = input$variable # Replace `input_vars` with input$variable
+      )
+      new_data
+    })
+
+    # Render the histogram from the updated teal_data object
+    output$histogram_plot <- shiny::renderPlot({
+      plot(result()[["my_plot"]]) # Access and render the plot stored in `new_data`
+    })
+
+    # Reactive expression to get the generated code for the plot
+    output$plot_code <- shiny::renderText({
+      teal.code::get_code(result()) # Retrieve and display the code for the updated `teal_data` object
+    })
+    result
+  })
+}
+```
+
+Let’s review what we’ve done so far:
+
+1.  **Dynamic Variable Injection with
+    [`within()`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)**:
+    - `input_dataset = as.name(input$dataset)` passes the dataset name
+      dynamically as `input_dataset`.
+    - `input_vars = input$variable` passes the selected variable name
+      directly as `input_vars`.
+    - Inside
+      [`within()`](https://insightsengineering.github.io/teal/reference/teal_data_module.md),
+      `my_plot` uses these injected variables to dynamically generate
+      the histogram plot.
+2.  **Rendering the Plot**:
+    - `output$histogram_plot` uses
+      [`renderPlot()`](https://rdrr.io/pkg/shiny/man/renderPlot.html) to
+      display the plot stored in `new_data` by referencing
+      `result()[["my_plot"]]`.
+3.  **Plot Code Display**:
+    - The `output$plot_code` render function displays the dynamically
+      generated code using `teal.code::get_code(result())`, allowing
+      users to see the exact code used to generate the plot reactively.
+
+## Creating the Custom `teal` Module Function
+
+The
+[`teal::module()`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+function allows you to encapsulate your UI and server logic into a
+`teal` module, making it reusable and ready to integrate into any `teal`
+application.
+
+By setting `datanames = "all"`, you give the module access to all
+datasets specified in the `teal_data` object. Datasets which names start
+with `.` won’t be included (see [Hidden
+datasets](https://insightsengineering.github.io/teal/articles/including-data-in-teal-applications.html#hidden-datasets)
+section).
+
+``` r
+# Custom histogram module creation
+create_histogram_module <- function(label = "Histogram Module") {
+  teal::module(
+    label = label,
+    ui = histogram_module_ui,
+    server = histogram_module_server,
+    datanames = "all"
+  )
+}
+```
+
+## Integrating the Custom `teal` Module into a `teal` App
+
+With the custom `teal` module set up, it can now be integrated into a
+`teal` app. We’ll use
+[`init()`](https://insightsengineering.github.io/teal/reference/init.md)
+from `teal` to specify the datasets and modules used in the app, then
+run the app to test the newly created module.
+
+``` r
+# Define datasets in `teal_data`
+data_obj <- teal_data(
+  iris = iris,
+  mtcars = mtcars
+)
+
+# Initialize the teal app
+app <- init(
+  data = data_obj,
+  modules = modules(create_histogram_module())
+)
+
+# Run the app
+if (interactive()) {
+  shiny::shinyApp(ui = app$ui, server = app$server)
+}
+```
+
+**Congratulations! You just created a custom teal module and used it in
+a teal app!**
+
+This setup provides a fully dynamic, user-controlled `teal` module that
+allows for interactive data exploration and code visibility, enhancing
+both usability and transparency.
+
+## What’s next?
+
+Now that you’ve mastered the essentials of building and integrating
+modules in `teal`, you’re ready to explore more advanced features.
+`teal` offers a wide range of capabilities to enhance your module’s
+functionality and user experience.
+
+### Adding reporting to a module
+
+Enhance your custom `teal` module with reporting features! Dive into
+[this
+vignette](https://insightsengineering.github.io/teal/articles/adding-support-for-reporting.md)
+to see just how simple it is to add powerful reporting capabilities and
+elevate your module’s impact.
+
+### Using standard widgets in your custom module
+
+The
+[`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/)
+package provides various widgets which can be leveraged to quickly
+create standard elements in your custom `teal` module.

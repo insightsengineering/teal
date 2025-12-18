@@ -1,0 +1,75 @@
+# Product Map
+
+``` mermaid
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
+flowchart RL
+teal
+subgraph features
+  direction LR
+  teal.data
+  teal.slice
+  teal.code
+  teal.logger
+  teal.widgets
+end
+subgraph modules
+  direction RL
+  teal.modules.general
+  teal.modules.clinical
+  teal.osprey
+  teal.goshawk
+  teal.modules.hermes
+end
+teal--has-->features
+features--builds-->modules
+modules--creates-->teal
+subgraph modules
+  teal.modules.general
+  teal.modules.clinical
+  teal.osprey
+  teal.goshawk
+  teal.modules.hermes
+end
+subgraph calculations
+  direction RL
+  tern
+  osprey
+  goshawk
+  hermes
+end
+tern--supports-->teal.modules.clinical
+osprey--supports-->teal.osprey
+goshawk--supports-->teal.goshawk
+hermes--supports-->teal.modules.hermes
+style teal fill:lightblue
+style features fill:lightgreen
+style modules fill:pink
+```
+
+`teal` is a modular framework that relies on a suite of related
+packages, as illustrated in the above diagram, to provide a wide range
+of functionalities.
+
+`teal`’s primary function is to create web app for analyzing clinical
+trial data but it **has** a multitude of features distributed across
+various packages.
+
+Developers can selectively leverage these packages, such as
+`teal.widgets`, `teal.code`, and `teal.logger`, to **build** `teal`
+modules for a `teal` app. This approach gives the developers the tools
+that speed up their work and avoid re-implementing existing logic and UI
+elements.
+
+The `teal` modules utilize various packages such as `tern`, `osprey`,
+and `goshawk` to perform calculations and analyses. These packages
+provide **support** to the `teal` modules by performing all computations
+while the modules only have to focus on how to wrap the input options
+and the output.
+
+Once developed, new and existing modules can be integrated into `teal`
+to **create** a functional `teal` app.
+
+## Why so many packages?
+
+By breaking down `teal` features, modules, and calculations into
+dedicated packages, maintenance is made significantly more manageable.

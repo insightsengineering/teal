@@ -1,0 +1,117 @@
+# Actors
+
+There are two main actors in the `teal` development:
+
+- `teal` App Developer
+- `teal` Module Developer
+
+## `teal` app developer
+
+``` mermaid
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
+graph LR
+    A[teal App Developer]--utilizes--> B[teal modules]
+    B--to create--> C[teal app]
+    D[app user]--uses--> C
+style A fill:lightblue
+style C fill:gold
+style D fill:pink
+```
+
+The primary responsibility of a `teal` app developer is to leverage the
+available building blocks of the `teal` framework to create a functional
+`teal` app that analyses the data.
+
+To expedite the app creation process, developers can take advantage of
+pre-existing `teal` modules found in `R` packages like
+`teal.modules.general` and `teal.modules.clinical`.
+
+These modules are designed with a focus on standardization and
+versatility, making them suitable for a wide range of use cases.
+
+When developing a `teal` app, the developer will select the most
+appropriate `teal` modules and integrate them into the app’s interface
+to ensure seamless usability for end-users.
+
+To learn more about the existing modules, visit
+[`teal.gallery`](https://insightsengineering.github.io/teal.gallery/),
+which contains several demo applications and their source code.
+
+## `teal` module developer
+
+``` mermaid
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
+graph LR
+    A[Teal App Developer]--utilizes--> B[teal modules]
+    E[Teal Module Developer]--develops--> B
+    B--to create--> C[teal app]
+    D[app user]--uses--> C
+style A fill:lightblue
+style E fill:lightgreen
+style D fill:pink
+style C fill:gold
+```
+
+The main duty of a `teal` module developer is to construct a compatible
+`teal` module that can be utilized within the `teal` framework.
+
+Several factors influence the scope and requirements for building a
+`teal` module.
+
+When creating a reusable `teal` module, it’s advisable to focus on
+making it as general and adaptable as feasible to maximize the
+possibilities of being re-used in the future. However, developers have
+the freedom to create a `teal` module that is customized to suit the
+specific demands of a project.
+
+Ultimately, one or more `teal` modules are employed to construct a
+`teal` app.
+
+To learn more about creating custom modules follow the [Tutorial on
+Creating a Custom
+Module](https://insightsengineering.github.io/teal/articles/creating-custom-modules.md).
+
+## Workflow in a clinical trial study
+
+``` mermaid
+%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
+%%| fig-width: 7.5
+graph LR
+    subgraph Study B
+        A2[Study Teal App Developer]--utilizes--> B2[teal modules]
+        E2[Study Teal Module Developer]-.develops.-> B2
+        B2--to create--> C2[study teal app]
+        D2[study app user]--uses--> C2
+    end
+    E3[Teal Module Developer]--develops--> B
+    E3--develops-->B2
+    subgraph Study A
+        A[Study Teal App Developer]--utilizes--> B[teal modules]
+        E[Study Teal Module Developer]-.develops.-> B
+        B--to create--> C[study teal app]
+        D[study app user]--uses--> C
+    end
+style A fill:lightblue
+style A2 fill:lightblue
+style E fill:limegreen
+style E2 fill:limegreen
+style E3 fill:lightgreen
+style D fill:pink
+style D2 fill:pink
+style C fill:gold
+style C2 fill:gold
+```
+
+In a clinical trial study setting, a unique **study `teal` app
+developer** is assigned to each study team and is accountable for
+developing a tailored `teal` app for their respective study.
+
+The **study `teal` app developer** will initially leverage existing
+`teal` modules from `R` packages created by **`teal` module
+developers**.
+
+In cases where there is a need to create new modules tailored to the
+study, a **study `teal` module developer** will need to be involved.
+
+Upon completion, each study team will have their own designated `teal`
+app tailored to their specific study.

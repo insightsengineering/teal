@@ -1,0 +1,389 @@
+# `teal`: Interactive Exploratory Data Analysis with `Shiny` Web-Applications
+
+[![CRAN
+Version](https://www.r-pkg.org/badges/version/teal?color=green)](https://cran.r-project.org/package=teal)
+[![Total
+Downloads](http://cranlogs.r-pkg.org/badges/grand-total/teal?color=green)](https://cran.r-project.org/package=teal)
+[![Last Month
+Downloads](http://cranlogs.r-pkg.org/badges/last-month/teal?color=green)](https://cran.r-project.org/package=teal)
+[![Last Week
+Downloads](http://cranlogs.r-pkg.org/badges/last-week/teal?color=green)](https://cran.r-project.org/package=teal)
+
+[![Check
+🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/teal/main/unit-test-report/)
+[![Docs
+📚](https://github.com/insightsengineering/teal/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/teal/)
+[![Code Coverage
+📔](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/teal/main/coverage-report/)
+
+![GitHub
+forks](https://img.shields.io/github/forks/insightsengineering/teal?style=social)![GitHub
+repo
+stars](https://img.shields.io/github/stars/insightsengineering/teal?style=social)
+
+![GitHub commit
+activity](https://img.shields.io/github/commit-activity/m/insightsengineering/teal)![GitHub
+contributors](https://img.shields.io/github/contributors/insightsengineering/teal)![GitHub
+last
+commit](https://img.shields.io/github/last-commit/insightsengineering/teal)![GitHub
+pull
+requests](https://img.shields.io/github/issues-pr/insightsengineering/teal)![GitHub
+repo
+size](https://img.shields.io/github/repo-size/insightsengineering/teal)![GitHub
+language
+count](https://img.shields.io/github/languages/count/insightsengineering/teal)[![Project
+Status: Active – The project has reached a stable, usable state and is
+being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Current
+Version](https://img.shields.io/github/r-package/v/insightsengineering/teal/main?color=purple&label=package%20version)](https://github.com/insightsengineering/teal/tree/main)
+[![Open
+Issues](https://img.shields.io/github/issues-raw/insightsengineering/teal?color=red&label=open%20issues)](https://github.com/insightsengineering/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+
+`teal` is a `shiny`-based interactive exploration framework for
+analyzing data. `teal` applications require app developers to specify:
+
+- Data, which can be:
+  - CDISC data, commonly used for clinical trial reporting
+  - Independent datasets, for example from a `data.frame`
+  - Related datasets, for example a set of `data.frames` with key
+    columns to enable data joins
+  - `MultiAssayExperiment` objects which are `R` data structures for
+    representing and analyzing multi-omics experiments
+- `teal` modules:
+  - `teal modules` are `shiny` modules built within the `teal` framework
+    that specify analysis to be performed. For example, it can be a
+    module for exploring outliers in the data, or a module for
+    visualizing the data in line plots. Although these can be created
+    from scratch, many `teal` modules have been released and we
+    recommend starting with modules found in the following packages:
+    - [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/):
+      general modules for exploring relational/independent/CDISC data
+    - [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/latest-tag/):
+      modules specific to CDISC data and clinical trial reporting
+    - [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/):
+      modules for analyzing `MultiAssayExperiment` objects
+
+A lot of the functionality of the `teal` framework derives from the
+following packages:
+
+- [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/):
+  standardizes logging within `teal` framework.
+- [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/):
+  handles reproducibility of outputs.
+- [`teal.data`](https://insightsengineering.github.io/teal.data/latest-tag/):
+  creating and loading the data needed for `teal` applications.
+- [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/):
+  `shiny` components used within `teal`.
+- [`teal.slice`](https://insightsengineering.github.io/teal.slice/latest-tag/):
+  provides a filtering panel to allow filtering of data.
+- [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/):
+  allows `teal` applications to generate reports.
+- [`teal.transform`](https://insightsengineering.github.io/teal.transform/latest-tag/):
+  allows the creation of reproducible transform and merge module for
+  teal applications.
+
+Dive deeper into `teal` with our comprehensive video guide. Please click
+the image below to start learning:
+
+[![A Complete Guide to Getting Started with
+teal](https://img.youtube.com/vi/N8ZamECICSI/0.jpg)](https://www.youtube.com/watch?v=N8ZamECICSI)
+
+## Installation
+
+``` r
+install.packages("teal")
+```
+
+Alternatively, you might also use the development version.
+
+``` r
+# install.packages("pak")
+pak::pak("insightsengineering/teal")
+```
+
+## Usage
+
+``` r
+library(teal)
+
+app <- init(
+  data = teal_data(iris = iris),
+  modules = list(
+    module(
+      label = "iris histogram",
+      server = function(input, output, session, data) {
+        updateSelectInput(session = session,
+                          inputId =  "var",
+                          choices = names(data()[["iris"]])[1:4])
+
+        output$hist <- renderPlot({
+          req(input$var)
+          hist(x = data()[["iris"]][[input$var]])
+        })
+      },
+      ui = function(id) {
+        ns <- NS(id)
+        list(
+          selectInput(inputId = ns("var"),
+                      label =  "Column name",
+                      choices = NULL),
+          plotOutput(outputId = ns("hist"))
+        )
+      }
+    )
+  )
+)
+
+shinyApp(app$ui, app$server)
+```
+
+![App recording](reference/figures/readme_app.gif)
+
+App recording
+
+Please see
+[`teal.gallery`](https://insightsengineering.github.io/teal.gallery/)
+and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to
+see examples of `teal` apps.
+
+Please start with the [“Technical Blueprint”
+article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html),
+[“Getting Started”
+article](https://insightsengineering.github.io/teal/latest-tag/articles/getting-started-with-teal.html),
+and then other [package
+vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html)
+for more detailed guide.
+
+## Getting help
+
+If you encounter a bug or have a feature request, please file an issue.
+For questions, discussions, and updates, use the `teal` channel in the
+[`pharmaverse` slack workspace](https://pharmaverse.slack.com).
+
+## Acknowledgment
+
+This package is a result of a joint efforts by many developers and
+stakeholders. We would like to thank everyone who contributed so far!
+
+## Stargazers and Forkers
+
+### Stargazers over time
+
+[![Stargazers over
+time](https://starchart.cc/insightsengineering/teal.svg)](https://starchart.cc/insightsengineering/teal)
+
+### Stargazers
+
+[![Stargazers repo roster for
+@insightsengineering/teal](http://reporoster.com/stars/insightsengineering/teal)](https://github.com/insightsengineering/teal/stargazers)
+
+### Forkers
+
+[![Forkers repo roster for
+@insightsengineering/teal](http://reporoster.com/forks/insightsengineering/teal)](https://github.com/insightsengineering/teal/network/members)
+
+# Package index
+
+## Core `teal` functions
+
+Main functions needed to build a `teal` app
+
+- [`init()`](https://insightsengineering.github.io/teal/reference/init.md)
+  :
+
+  Create the server and UI function for the `shiny` app
+
+- [`teal_data_module()`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)
+  [`eval_code(`*`<teal_data_module>`*`)`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)
+  [`within(`*`<teal_data_module>`*`)`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)
+  **\[experimental\]** :
+
+  Data module for `teal` applications
+
+- [`teal_transform_module()`](https://insightsengineering.github.io/teal/reference/teal_transform_module.md)
+  **\[experimental\]** :
+
+  Data module for `teal` transformations and output customization
+
+- [`ui_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
+  [`srv_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
+  :
+
+  Module to transform `reactive` `teal_data`
+
+- [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/reference/make_teal_transform_server.md)
+  : Make teal_transform_module's server
+
+- [`ui_teal()`](https://insightsengineering.github.io/teal/reference/module_teal.md)
+  [`srv_teal()`](https://insightsengineering.github.io/teal/reference/module_teal.md)
+  :
+
+  `teal` main module
+
+- [`ui_session_info()`](https://insightsengineering.github.io/teal/reference/module_session_info.md)
+  [`srv_session_info()`](https://insightsengineering.github.io/teal/reference/module_session_info.md)
+  :
+
+  `teal` user session info module
+
+- [`module()`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+  [`modules()`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+  [`format(`*`<teal_module>`*`)`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+  [`format(`*`<teal_modules>`*`)`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+  [`print(`*`<teal_module>`*`)`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+  [`print(`*`<teal_modules>`*`)`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
+  :
+
+  Create `teal_module` and `teal_modules` objects
+
+- [`teal_slices()`](https://insightsengineering.github.io/teal/reference/teal_slices.md)
+  [`as.teal_slices()`](https://insightsengineering.github.io/teal/reference/teal_slices.md)
+  [`c(`*`<teal_slices>`*`)`](https://insightsengineering.github.io/teal/reference/teal_slices.md)
+  :
+
+  Filter settings for `teal` applications
+
+## Application modifiers for `teal`
+
+Functions to modify the `teal` app object
+
+- [`modify_title()`](https://insightsengineering.github.io/teal/reference/teal_modifiers.md)
+  [`modify_header()`](https://insightsengineering.github.io/teal/reference/teal_modifiers.md)
+  [`modify_footer()`](https://insightsengineering.github.io/teal/reference/teal_modifiers.md)
+  :
+
+  Replace UI Elements in `teal` UI objects
+
+- [`add_landing_modal()`](https://insightsengineering.github.io/teal/reference/add_landing_modal.md)
+  :
+
+  Add a Landing Popup to `teal` Application
+
+## Helper Functions
+
+Helper functions for `teal`
+
+- [`build_app_title()`](https://insightsengineering.github.io/teal/reference/build_app_title.md)
+  : Build app title with favicon
+
+## Example module
+
+A simple `teal` module
+
+- [`example_module()`](https://insightsengineering.github.io/teal/reference/example_module.md)
+  :
+
+  An example `teal` module
+
+## Creating reports
+
+- [`reporter_previewer_module()`](https://insightsengineering.github.io/teal/reference/reporter_previewer_module.md)
+  **\[deprecated\]** :
+
+  Create a `teal` module for previewing a report
+
+- [`TealReportCard`](https://insightsengineering.github.io/teal/reference/TealReportCard.md)
+  **\[experimental\]** :
+
+  `TealReportCard`
+
+- [`report_card_template()`](https://insightsengineering.github.io/teal/reference/report_card_template.md)
+  :
+
+  Template function for `TealReportCard` creation and customization
+
+- [`disable_report()`](https://insightsengineering.github.io/teal/reference/disable_report.md)
+  :
+
+  Disable the report for a `teal_module`
+
+## Modifying output of modules
+
+- [`disable_src()`](https://insightsengineering.github.io/teal/reference/disable_src.md)
+  : Disable the "Show R Code" global button in the UI
+
+- [`disable_report()`](https://insightsengineering.github.io/teal/reference/disable_report.md)
+  :
+
+  Disable the report for a `teal_module`
+
+## Functions for module developers
+
+- [`teal_data_module()`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)
+  [`eval_code(`*`<teal_data_module>`*`)`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)
+  [`within(`*`<teal_data_module>`*`)`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)
+  **\[experimental\]** :
+
+  Data module for `teal` applications
+
+## Validation functions
+
+- [`validate_has_data()`](https://insightsengineering.github.io/teal/reference/validate_has_data.md)
+  : Validate that dataset has a minimum number of observations
+- [`validate_has_elements()`](https://insightsengineering.github.io/teal/reference/validate_has_elements.md)
+  : Validates that vector has length greater than 0
+- [`validate_has_variable()`](https://insightsengineering.github.io/teal/reference/validate_has_variable.md)
+  : Validates that dataset contains specific variable
+- [`validate_in()`](https://insightsengineering.github.io/teal/reference/validate_in.md)
+  : Validates that vector includes all expected values
+- [`validate_inputs()`](https://insightsengineering.github.io/teal/reference/validate_inputs.md)
+  : Send input validation messages to output
+- [`validate_n_levels()`](https://insightsengineering.github.io/teal/reference/validate_n_levels.md)
+  : Validate that variables has expected number of levels
+- [`validate_no_intersection()`](https://insightsengineering.github.io/teal/reference/validate_no_intersection.md)
+  : Validates no intersection between two vectors
+- [`validate_one_row_per_id()`](https://insightsengineering.github.io/teal/reference/validate_one_row_per_id.md)
+  : Validate that dataset has unique rows for key variables
+
+# Articles
+
+### Get started
+
+- [Getting Started with
+  teal](https://insightsengineering.github.io/teal/articles/getting-started-with-teal.md):
+
+### Data in `teal` apps
+
+- [Including Data in teal
+  Applications](https://insightsengineering.github.io/teal/articles/including-data-in-teal-applications.md):
+- [Data as shiny
+  Module](https://insightsengineering.github.io/teal/articles/data-as-shiny-module.md):
+- [Filter
+  Panel](https://insightsengineering.github.io/teal/articles/filter-panel.md):
+- [Transform Input
+  Data](https://insightsengineering.github.io/teal/articles/transform-input-data.md):
+
+### Extending `teal`
+
+- [Creating Custom
+  Modules](https://insightsengineering.github.io/teal/articles/creating-custom-modules.md):
+- [Adding Support for Reporting to Custom
+  Modules](https://insightsengineering.github.io/teal/articles/adding-support-for-reporting.md):
+- [Transform Module
+  Output](https://insightsengineering.github.io/teal/articles/transform-module-output.md):
+
+### Using `teal`
+
+- [Teal as a Shiny
+  Module](https://insightsengineering.github.io/teal/articles/teal-as-a-shiny-module.md):
+- [Modifying a teal Application With R
+  Options](https://insightsengineering.github.io/teal/articles/teal-options.md):
+- [Bootstrap Themes in
+  teal](https://insightsengineering.github.io/teal/articles/bootstrap-themes-in-teal.md):
+
+### 📃 Technical blueprint
+
+The purpose of the blueprint is to aid new developer’s comprehension of
+the fundamental principles of the `teal` framework. We will explore
+crucial `teal` concepts such as data flow, actors, and filter panel,
+among others.
+
+- [About Technical
+  Blueprint](https://insightsengineering.github.io/teal/articles/blueprint/index.md):
+- [Introduction](https://insightsengineering.github.io/teal/articles/blueprint/intro.md):
+- [Actors](https://insightsengineering.github.io/teal/articles/blueprint/actors.md):
+- [Data
+  Flow](https://insightsengineering.github.io/teal/articles/blueprint/dataflow.md):
+- [Product
+  Map](https://insightsengineering.github.io/teal/articles/blueprint/product_map.md):
