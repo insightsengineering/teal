@@ -1,4 +1,6 @@
 testthat::describe("reporter_previewer_module", {
+  withr::local_options("lifecycle_verbosity" = "quiet")
+
   testthat::it("returns teal_module with previewer class", {
     module <- reporter_previewer_module(label = "test")
     testthat::expect_s3_class(module, "teal_module")
