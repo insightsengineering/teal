@@ -3,13 +3,17 @@
   "name": "RStudio Dev Container",
   
   // Features to add to the dev container. More info: https://containers.dev/features.
-  // "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "latest"
+    }
+  },
   
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "uname -a",
+  "postCreateCommand": "apt-get update && apt-get install -y python3-pip pipx && pipx ensurepath && pipx install pre-commit",
   
   // Configure tool-specific properties.
   "customizations": {
@@ -18,7 +22,9 @@
         "REditorSupport.r",
         "Ikuyadeu.r",
         "quarto-dev.quarto",
-        "RDebugger.r-debugger"
+        "RDebugger.r-debugger",
+        "hediet.vscode-drawio",
+        "Posit.air-vscode"
       ],
       "settings": {
         // Try radian first if available, otherwise fall back to R
