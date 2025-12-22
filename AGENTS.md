@@ -66,73 +66,14 @@ package_name/
 
 ## Code Style and Standards
 
-### General R Coding Standards
-Follow the [Tidyverse Style Guide](https://style.tidyverse.org/) with these teal-specific additions:
+### Code Quality
+- **Run pre-commit hooks**: Always run `pre-commit run --all-files` before committing. Fix any issues it reports - the error messages are informative and will guide you.
+- **Follow tidyverse style**: General R code style follows the tidyverse style guide.
+- **Documentation**: All exported functions must have roxygen2 documentation. Run `devtools::document()` to update documentation.
 
-```r
-# Good: Clear, descriptive function names
-create_teal_data <- function(data, code = NULL) {
-  # Function body
-}
-
-# Good: Consistent spacing and indentation
-ui_my_module <- function(id) {
-  ns <- NS(id)
-  tagList(
-    selectInput(
-      inputId = ns("variable"),
-      label = "Select Variable",
-      choices = NULL
-    ),
-    plotOutput(ns("plot"))
-  )
-}
-
-# Good: Use explicit returns for clarity
-srv_my_module <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    # Module logic
-    return(reactive_result)
-  })
-}
-```
-
-### Line Length and Formatting
+### Teal-Specific Conventions
 - **Maximum line length**: 120 characters (configured in `.lintr`)
-- **Indentation**: 2 spaces (no tabs)
-- **Assignment**: Use `<-` for assignment, not `=`
-- **Quotes**: Use double quotes `""` for strings, single quotes `''` only when needed
-
-### Documentation Standards
-Use roxygen2 with complete documentation:
-
-```r
-#' Create a Custom Teal Module
-#'
-#' @description
-#' This function creates a custom teal module for data analysis.
-#' 
-#' @param label (`character(1)`) 
-#'   The display label for the module.
-#' @param server (`function`) 
-#'   The server function for the module.
-#' @param ui (`function`) 
-#'   The UI function for the module.
-#' @param datanames (`character`)
-#'   Names of datasets this module requires.
-#'
-#' @return A `teal_module` object.
-#' 
-#' @export
-#' 
-#' @examples
-#' my_module <- module(
-#'   label = "My Analysis",
-#'   server = srv_my_analysis,
-#'   ui = ui_my_analysis,
-#'   datanames = c("ADSL", "ADAE")
-#' )
-```
+- **Naming**: Follow the naming conventions outlined in the Package Structure section
 
 ## Dependencies and Imports
 
@@ -345,7 +286,7 @@ testthat::test_that("my_module UI renders correctly", {
 ### Package Documentation
 - **README.md**: Clear overview, installation, basic usage examples
 - **Vignettes**: Comprehensive guides for complex functionality
-- **Function documentation**: Complete roxygen2 documentation for all exports
+- **Function documentation**: All exported functions must have roxygen2 documentation
 - **NEWS.md**: Detailed changelog following semantic versioning
 
 ### Website Generation
@@ -380,22 +321,12 @@ Use `r.pkg.template` workflows for consistency:
 - **pkgdown.yaml**: Website generation
 
 ### Pre-commit Hooks
-Configure `.pre-commit-config.yaml` for code quality:
-
-```yaml
-repos:
-  - repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9013
-    hooks:
-      - id: style-files
-      - id: roxygenize
-      - id: use-tidy-description
-      - id: spell-check
-      - id: lintr
-      - id: readme-rmd-rendered
-      - id: parsable-R
-      - id: no-browser-statement
+**Always run pre-commit before committing code**:
+```bash
+pre-commit run --all-files
 ```
+
+Fix any issues that pre-commit reports. The error messages are informative and will guide you on what needs to be fixed. Pre-commit automatically checks code style, documentation, linting, and other quality issues.
 
 ### Dependency Management with Staged Dependencies
 `staged_dependencies.yaml` is an old artifact. Ignore it.
