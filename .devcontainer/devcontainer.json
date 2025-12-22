@@ -13,7 +13,7 @@
   // "forwardPorts": [],
   
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "apt-get update && apt-get install -y python3-pip pipx && pipx ensurepath && pipx install pre-commit",
+  "postCreateCommand": "apt-get update && apt-get install -y python3-pip pipx && pipx ensurepath && pipx install pre-commit && pip install -U radian && (which radian > /dev/null 2>&1 && ln -sf $(which radian) /usr/local/bin/radian || true)",
   
   // Configure tool-specific properties.
   "customizations": {
