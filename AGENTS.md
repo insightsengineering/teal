@@ -71,8 +71,10 @@ package_name/
 - **Follow tidyverse style**: General R code style follows the tidyverse style guide.
 - **Documentation**: All exported functions must have roxygen2 documentation. Run `devtools::document()` to update documentation.
 
+### Formatting
+Formatting rules are configured in the `.lintr` file.
+
 ### Teal-Specific Conventions
-- **Maximum line length**: 120 characters (configured in `.lintr`)
 - **Naming**: Follow the naming conventions outlined in the Package Structure section
 
 ## Dependencies and Imports
