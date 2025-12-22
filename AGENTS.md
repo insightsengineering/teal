@@ -281,6 +281,7 @@ testthat::test_that("my_module UI renders correctly", {
 ### Test Organization and Naming
 - **One test file per R file**: `test-module_example.R` for `module_example.R`
 - **Descriptive test names**: Clearly describe what is being tested
+-**End to end test names**: `test-shinytest2-module_example.R` for `module_example.R`
 - **Logical grouping**: Group related tests using `describe()` when beneficial
 - **Test data**: Create minimal test datasets, avoid external dependencies
 
