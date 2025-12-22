@@ -204,6 +204,7 @@ ggplot2::ggplot(plot_data, ggplot2::aes(x = category, y = mean_value)) +
 - **Precise, focused tests**: Each test should verify one specific behavior
 - **High coverage**: Maintain at least 80% test coverage as measured by `covr`
 - **Integration over units**: Test realistic usage patterns
+- **Test Dependencies**.: Add `testthat::skip_if_not_installed(package_name)` only for dependencies in SUGGESTS or related to tests cases
 
 ### Test Structure
 Follow the established patterns from `test-module_teal.R`:
