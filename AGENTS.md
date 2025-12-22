@@ -240,7 +240,7 @@ testthat::test_that("function_name validates input types", {
 
 ### Shiny Module Testing
 - **Server functions**: Test with `shiny::testServer()`
-- **UI functions**: Test only through `TealAppDriver` for integration
+- **UI functions**: Test basic usage with regular testing (class checks, error generation, snapshots, regexp search). Test UI scenarios and interactions with `TealAppDriver` (based on `shinytest2::AppDriver`) for integration testing
 - **Reactive behavior**: Test reactive chains and side effects
 
 ```r
