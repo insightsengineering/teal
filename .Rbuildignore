@@ -48,3 +48,4 @@ coverage.*
 ^\.covrignore$
 ^inst/cheatsheet$
 AGENTS.md
+^.devcontainer$
