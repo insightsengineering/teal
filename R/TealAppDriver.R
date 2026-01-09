@@ -91,6 +91,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       private$set_active_ns()
     },
     #' @description
+    #' Extension of the parent [`shinytest2::AppDriver`] `stop` method that prints the logs
+    #' if the `ACTIONS_STEP_DEBUG` environment variable is set to `true` (case of value is ignored).
+    #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
+    stop = function(...) {
+      if (grepl("^true$", Sys.getenv("ACTIONS_STEP_DEBUG"), ignore.case = TRUE)) { #
+        message(format(self$get_logs()))
+      }
+      super$stop(...)
+    },
+    #' @description
     #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
     #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
     click = function(...) {
@@ -329,6 +339,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
     },
+    #' @description
+    #' Expect that `DOM` elements are visible on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' if more than one element is found, at least one must be visible for this expectation to
+    #' be successful.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`)
+    #' See more information on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #' @param timeout (`numeric(1)`) Time in milliseconds to wait for the expectation to be met.
+    #' Defaults to the `timeout` parameter set during initialization of the `TealAppDriver` object.
     expect_visible = function(selector,
                               content_visibility_auto = FALSE,
                               opacity_property = FALSE,
@@ -351,6 +370,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         }
       )
     },
+    #' @description
+    #' Expect that `DOM` elements are hidden on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' if more than one element is found, all of them must be invisible for this expectation to
+    #' be successful.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`)
+    #' See more information on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #' @param timeout (`numeric(1)`) Time in milliseconds to wait for the expectation to be met.
+    #' Defaults to the `timeout` parameter set during initialization of the `TealAppDriver` object.
     expect_hidden = function(selector,
                              content_visibility_auto = FALSE,
                              opacity_property = FALSE,
