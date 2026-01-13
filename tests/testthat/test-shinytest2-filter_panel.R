@@ -108,9 +108,9 @@ testthat::test_that("e2e: filter panel UI can be collpased and expanded (`bslib`
   # Visible by default
   filter_panel_id <- "#teal-teal_modules-nav-example_teal_module-filter_panel-filters-main_filter_accordion"
   filterpanel_accordion_selector <- paste(filter_panel_id, "> .accordion-item > .accordion-collapse")
-  testthat::expect_true(app$is_visible(filterpanel_accordion_selector))
+  app$expect_visible(filterpanel_accordion_selector)
   app$click(selector = paste(filter_panel_id, "> .accordion-item > .accordion-header button"))
-  testthat::expect_false(app$is_visible(filterpanel_accordion_selector))
+  app$expect_hidden(filterpanel_accordion_selector)
 
   app$stop()
 })

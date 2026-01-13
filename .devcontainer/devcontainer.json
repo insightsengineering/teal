@@ -1,0 +1,43 @@
+{
+  "image": "ghcr.io/insightsengineering/rstudio:latest",
+  "name": "RStudio Dev Container",
+  
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "latest"
+    }
+  },
+  
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "apt-get update && apt-get install -y python3-pip pipx && pipx ensurepath && pipx install pre-commit && pip install -U radian && (which radian > /dev/null 2>&1 && ln -sf $(which radian) /usr/local/bin/radian || true)",
+  
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "Ikuyadeu.r",
+        "quarto-dev.quarto",
+        "RDebugger.r-debugger",
+        "hediet.vscode-drawio",
+        "Posit.air-vscode"
+      ],
+      "settings": {
+        // Try radian first if available, otherwise fall back to R
+        "r.rterm.linux": "/usr/local/bin/radian",
+        "r.rpath.linux": "/usr/bin/R",
+        "r.alwaysUseActiveTerminal": true,
+        "r.bracketedPaste": true,
+        "r.plot.useHttpgd": true
+      }
+    }
+  },
+  
+  // Mount the workspace folder
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind"
+}

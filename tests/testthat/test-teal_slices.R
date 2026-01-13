@@ -112,13 +112,7 @@ testthat::test_that(
 )
 
 
-
-
-
-
-
 # from different file
-
 
 
 testthat::test_that("teal_slices mapping should be an empty list or a named list or missing", {

@@ -1,0 +1,40 @@
+name: Copilot Agent Setup
+
+# Configure the environment for GitHub Copilot coding agent
+# This ensures R is available when the agent works on this repository
+# Installs R using the standard GitHub Actions setup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    # Set the permissions to the lowest permissions possible needed for your steps.
+    # Copilot will be given its own token for its operations.
+    permissions:
+      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache-version: 1
+
+      - name: Verify R installation
+        run: |
+          R --version
+          R -e "sessionInfo()"
+      
+      # Additional steps for the Copilot agent would be invoked here
+      # The agent will have access to R in this environment

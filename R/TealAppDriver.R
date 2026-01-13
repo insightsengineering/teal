@@ -87,8 +87,8 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
       # end od check
 
-      private$set_active_ns()
       self$wait_for_idle()
+      private$set_active_ns()
     },
     #' @description
     #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
@@ -234,7 +234,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     get_active_module_plot_output = function(plot_id) {
       checkmate::check_string(plot_id)
       self$get_attr(
-        self$namespaces()$module(sprintf("%s-plot_main > img", plot_id)),
+        self$namespaces(TRUE)$module(sprintf("%s-plot_main > img", plot_id)),
         "src"
       )
     },
@@ -249,7 +249,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return The `TealAppDriver` object invisibly.
     set_active_module_input = function(input_id, value, ...) {
       checkmate::check_string(input_id)
-      checkmate::check_string(value)
       self$set_input(
         self$namespaces()$module(input_id),
         value,
@@ -324,22 +323,54 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       private$wait_for_page_stability()
 
-      testthat::skip_if_not(
-        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
-        "Element.prototype.checkVisibility is not supported in the current browser."
-      )
-
-      unlist(
-        self$get_js(
-          sprintf(
-            "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
-            selector,
-            # Extra parameters
-            sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
-            sprintf("opacityProperty: %s", tolower(opacity_property)),
-            sprintf("visibilityProperty: %s", tolower(visibility_property))
-          )
+      self$get_js(
+        private$test_visibility_js(
+          selector, "visible", content_visibility_auto, opacity_property, visibility_property
         )
+      )
+    },
+    expect_visible = function(selector,
+                              content_visibility_auto = FALSE,
+                              opacity_property = FALSE,
+                              visibility_property = FALSE,
+                              timeout) {
+      private$wait_for_page_stability()
+
+      tryCatch(
+        {
+          self$wait_for_js(
+            private$test_visibility_js(
+              selector, "visible", content_visibility_auto, opacity_property, visibility_property
+            ),
+            timeout
+          )
+          testthat::succeed()
+        },
+        error = function(err) {
+          testthat::fail(sprintf("CSS selector '%s' does not produce any visible elements.", selector))
+        }
+      )
+    },
+    expect_hidden = function(selector,
+                             content_visibility_auto = FALSE,
+                             opacity_property = FALSE,
+                             visibility_property = FALSE,
+                             timeout) {
+      private$wait_for_page_stability()
+
+      tryCatch(
+        {
+          self$wait_for_js(
+            private$test_visibility_js(
+              selector, "hidden", content_visibility_auto, opacity_property, visibility_property
+            ),
+            timeout
+          )
+          testthat::succeed()
+        },
+        error = function(err) {
+          testthat::fail(sprintf("CSS selector '%s' produces visible elements.", selector))
+        }
       )
     },
     #' @description
@@ -554,19 +585,56 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       filter_panel = character(0)
     ),
     # private methods ----
+    # Helper function to extract wrapper ID from selector
+    extract_wrapper_id = function(selector) {
+      id <- self$get_attr(selector = selector, attribute = "href")
+      sub("^#", "", id[endsWith(id, "-wrapper")])
+    },
+    # Helper function to check if wrapper ID is valid
+    is_valid_wrapper_id = function(wrapper_id) {
+      length(wrapper_id) >= 1 & wrapper_id != "" & !is.na(wrapper_id)
+    },
     set_active_ns = function() {
+      # Although wait_for_idle() is called before set_active_ns(), it only ensures Shiny is not processing.
+      # wait_for_page_stability() is needed here to ensure the DOM/UI is fully rendered and stable
+      # before trying to extract the namespace.
+      private$wait_for_page_stability()
       all_inputs <- self$get_values()$input
-      active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
+      active_module_input_id <- names(all_inputs)[grepl("-active_module_id$", names(all_inputs))][[1]]
+      active_tab_inputs <- self$wait_for_value(input = active_module_input_id)
 
-      active_wrapper_id <- sub(
-        "^#",
-        "",
-        self$get_attr(
-          selector = sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs),
-          attribute = "href"
+      ids <- unique(
+        c(
+          private$extract_wrapper_id(
+            sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs)
+          )
+          # In principle once we get to this point we wouldn't need to search in other places
+          # FIXME: But it might be needed on the integration machine (somehow)
+          # nolint start: commented_code.
+          # private$extract_wrapper_id(
+          #   paste(
+          #     ".teal-modules-tree li a.module-button.active, .teal-modules-tree",
+          #     "li a.module-button[aria-selected='true']"
+          #   )
+          # ),
+          # private$extract_wrapper_id(
+          #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
+          # )
+          # nolint end: commented_code.
         )
       )
-      active_base_id <- sub("-wrapper$", "", active_wrapper_id)
+      valid_ids <- ids[private$is_valid_wrapper_id(ids)]
+
+      if (length(valid_ids) > 1L) {
+        valid_ids <- valid_ids[1L]
+      } else if (length(valid_ids) < 1L) {
+        stop(
+          "Could not determine valid module namespace. ",
+          "Make sure a module tab is selected and the page has finished loading."
+        )
+      }
+
+      active_base_id <- sub("-wrapper$", "", valid_ids)
 
       private$ns$base_id <- active_base_id
       private$ns$wrapper <- shiny::NS(active_base_id, "wrapper")
@@ -619,6 +687,30 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           break
         }
       }
+    },
+    test_visibility_js = function(selector,
+                                  action = c("visible", "hidden"),
+                                  content_visibility_auto,
+                                  opacity_property,
+                                  visibility_property) {
+      testthat::skip_if_not(
+        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
+        "Element.prototype.checkVisibility is not supported in the current browser."
+      )
+
+      action <- match.arg(action)
+      js_code <- sprintf(
+        "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s})).some(Boolean)",
+        selector,
+        # Extra parameters
+        sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
+        sprintf("opacityProperty: %s", tolower(opacity_property)),
+        sprintf("visibilityProperty: %s", tolower(visibility_property))
+      )
+      if (action == "hidden") {
+        js_code <- sprintf("!%s", js_code)
+      }
+      js_code
     }
   )
 )

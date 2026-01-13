@@ -90,7 +90,7 @@ ui_teal_module <- function(id, modules) {
       .teal_navbar_menu(
         !!!module_items$link,
         label = sprintf("Module (%d)", length(unlist(modules_slot(modules, "label")))),
-        class = "teal-modules-tree",
+        class = "teal-modules-tree", # make sure `.teal-modules-tree a` to return modules' links (if ever refactored)
         icon = "diagram-3-fill"
       )
     ),
