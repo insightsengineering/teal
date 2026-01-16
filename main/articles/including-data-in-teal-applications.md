@@ -23,6 +23,7 @@ A `teal_data` object is created by calling the `teal_data` function and
 passing data objects as `name:value` pairs.
 
 ``` r
+
 library(teal)
 
 # create teal_data
@@ -35,6 +36,7 @@ of `data` (see [`datanames` property](#teal_data-properties)).
 This is sufficient to run a `teal` app.
 
 ``` r
+
 # build app
 app <- init(
   data = data,
@@ -55,6 +57,7 @@ using the `eval_code` function or, more conveniently, using the `within`
 function.
 
 ``` r
+
 # create empty object
 data_empty <- teal_data()
 
@@ -85,6 +88,7 @@ session (and will cause the application to fail). Inspecting object
 reveals it:
 
 ``` r
+
 m <- diag(5)
 data_populated_3 <- eval_code(data_empty, code = "D5 <- m")
 data_populated_3
@@ -97,10 +101,11 @@ The necessary code can be supplied to the `code` argument of the to the
 `eval_code` function .
 
 ``` r
+
 data_populated_4 <- eval_code(data_empty, code = "D5 <- diag(5)")
 data_populated_4
 #> ✅︎ code verified
-#> <environment: 0x5591544c0f80> 🔒 
+#> <environment: 0x560429f075c8> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - D5: [matrix]
@@ -118,6 +123,7 @@ The ability to pass code as a character vector to `eval_code` opens the
 door to using code stored in a file.
 
 ``` r
+
 # not run
 data_from_file <- teal_data()
 data_from_file <- eval_code(data, readLines("<path_to_file>"))
@@ -148,6 +154,7 @@ advantage of that fact to automatically set default joining keys (see
 `ADaM` datasets (`ADSL` and `ADTTE`) are passed to `cdisc_data`.
 
 ``` r
+
 # create cdisc_data
 data_cdisc <- cdisc_data(ADSL = teal.data::rADSL, ADTTE = teal.data::rADSL)
 
@@ -162,6 +169,7 @@ join_keys(data_cdisc)
 ```
 
 ``` r
+
 app <- init(
   data = data_cdisc,
   modules = example_module()
@@ -184,6 +192,7 @@ The `MultiAssayExperiment` class is described in detail
 like normal objects.
 
 ``` r
+
 library(MultiAssayExperiment)
 utils::data(miniACC)
 
@@ -220,6 +229,7 @@ object, using the `join_keys` argument, or using the `join_keys`
 function.
 
 ``` r
+
 ds1 <- data.frame(
   id = seq(1, 10),
   group = rep(c("A", "B"), each = 5)
@@ -255,10 +265,11 @@ objects and code are not verified by default, but can become verified by
 running the `verify` function.
 
 ``` r
+
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 #> ✖ code unverified
-#> <environment: 0x559150833bc0> 🔒 
+#> <environment: 0x5604264f2fe0> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
@@ -267,7 +278,7 @@ data_with_objects_and_code
 data_with_objects_and_code_ver <- verify(data_with_objects_and_code)
 data_with_objects_and_code_ver
 #> ✅︎ code verified
-#> <environment: 0x559150833bc0> 🔒 
+#> <environment: 0x5604264f2fe0> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
@@ -293,6 +304,7 @@ example:
 - Connection objects
 
 ``` r
+
 my_data <- teal_data()
 my_data <- within(my_data, {
   .data1 <- data.frame(id = 1:10, x = 11:20)

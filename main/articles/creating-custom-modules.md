@@ -17,6 +17,7 @@ demonstrate how to convert this histogram function into a robust `teal`
 module step-by-step:
 
 ``` r
+
 my_plot <- hist(
   dataset[[vars]],
   las = 1,
@@ -67,6 +68,7 @@ For this module, we will use:
 Here’s the code for the `histogram_module_ui` function:
 
 ``` r
+
 library(teal)
 
 # UI function for the custom histogram module
@@ -112,6 +114,7 @@ panel. By including `data`, we can ensure:
 The correct function definition for the server function is:
 
 ``` r
+
 histogram_module_server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     # Server logic goes here
@@ -145,6 +148,7 @@ names of these datasets, use the
 [`names()`](https://rdrr.io/r/base/names.html) function:
 
 ``` r
+
 names(data())
 ```
 
@@ -159,6 +163,7 @@ To access an individual dataset from `teal_data`, use double brackets
 specific dataset as a data frame:
 
 ``` r
+
 data()[[input$dataset]]
 ```
 
@@ -186,6 +191,7 @@ In this updated server function, we will perform the following:
 Here’s the code:
 
 ``` r
+
 # Server function for the custom histogram module with injected variables in within()
 histogram_module_server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
@@ -279,6 +285,7 @@ datasets](https://insightsengineering.github.io/teal/articles/including-data-in-
 section).
 
 ``` r
+
 # Custom histogram module creation
 create_histogram_module <- function(label = "Histogram Module") {
   teal::module(
@@ -299,6 +306,7 @@ from `teal` to specify the datasets and modules used in the app, then
 run the app to test the newly created module.
 
 ``` r
+
 # Define datasets in `teal_data`
 data_obj <- teal_data(
   iris = iris,

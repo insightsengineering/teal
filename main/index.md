@@ -92,12 +92,14 @@ teal](https://img.youtube.com/vi/N8ZamECICSI/0.jpg)](https://www.youtube.com/wat
 ## Installation
 
 ``` r
+
 install.packages("teal")
 ```
 
 Alternatively, you might also use the development version.
 
 ``` r
+
 # install.packages("pak")
 pak::pak("insightsengineering/teal")
 ```
@@ -105,6 +107,7 @@ pak::pak("insightsengineering/teal")
 ## Usage
 
 ``` r
+
 library(teal)
 
 app <- init(

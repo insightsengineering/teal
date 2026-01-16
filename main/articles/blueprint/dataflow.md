@@ -1,6 +1,7 @@
 # Data Flow
 
 ``` mermaid
+
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 sequenceDiagram;
     autonumber

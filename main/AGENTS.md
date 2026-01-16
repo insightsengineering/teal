@@ -129,6 +129,7 @@ Suggests:
 ### Import Best Practices
 
 ``` r
+
 # In NAMESPACE, prefer specific imports over full package imports
 #' @importFrom shiny moduleServer NS tagList
 #' @importFrom checkmate assert_character assert_function
@@ -145,6 +146,7 @@ checkmate::assert_string(label)
 Teal modules follow a specific pattern with UI and server components:
 
 ``` r
+
 # UI Function
 ui_example_module <- function(id) {
   ns <- NS(id)
@@ -208,6 +210,7 @@ srv_example_module <- function(id, data, reporter, filter_panel_api) {
   `teal.widgets::validate_inputs()`
 
 ``` r
+
 # Good: Clear data manipulation
 plot_data <- data %>%
   dplyr::filter(!is.na(variable)) %>%
@@ -249,6 +252,7 @@ ggplot2::ggplot(plot_data, ggplot2::aes(x = category, y = mean_value)) +
 Follow the established patterns from `test-module_teal.R`:
 
 ``` r
+
 # Test organization
 testthat::test_that("function_name works with valid inputs", {
   # Setup
@@ -290,6 +294,7 @@ testthat::test_that("function_name validates input types", {
 - **Reactive behavior**: Test reactive chains and side effects
 
 ``` r
+
 testthat::test_that("srv_my_module processes data correctly", {
   # Test server logic
   shiny::testServer(

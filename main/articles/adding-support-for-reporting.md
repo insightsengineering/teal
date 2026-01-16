@@ -28,6 +28,7 @@ Let us consider an example module, based on the example module from
 `teal`:
 
 ``` r
+
 library(teal)
 library(teal.reporter)
 
@@ -59,6 +60,7 @@ my_module <- function(label = "example teal module") {
 Using `teal`, you can launch this example module with the following:
 
 ``` r
+
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = my_module()
@@ -77,6 +79,7 @@ First we need to prepare the code inside the module to be added to the
 report. See below:
 
 ``` r
+
 my_module_with_card <- function(label = "example teal module") {
   module(
     label = label,
@@ -123,6 +126,7 @@ With these modifications, the module is now ready to be launched with
 `teal`:
 
 ``` r
+
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = my_module_with_card()
@@ -139,6 +143,7 @@ return the reporter object, enabling the module to be reported.
 ### Return the reporter object
 
 ``` r
+
 my_module_with_reporting <- function(label = "example teal module") {
   module(
     label = label,
@@ -188,6 +193,7 @@ With these modifications, the module is now ready to be launched with
 `teal`:
 
 ``` r
+
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = my_module_with_reporting()
@@ -230,6 +236,7 @@ allows to display the module’s reproducible code (“Show R code”), use
 [`disable_src()`](https://insightsengineering.github.io/teal/reference/disable_src.md):
 
 ``` r
+
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = my_module_with_reporting() |> disable_src()
@@ -246,6 +253,7 @@ on multiple modules at the same time and nested modules too. For example
 on:
 
 ``` r
+
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = c(
@@ -271,6 +279,7 @@ disable it with
 [`disable_report()`](https://insightsengineering.github.io/teal/reference/disable_report.md).
 
 ``` r
+
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = my_module_with_reporting() |> disable_report()
@@ -299,6 +308,7 @@ Additionally, cards can be added to the report before the application
 starts.
 
 ``` r
+
 reporter <- Reporter$new()
 template_fun <- function(document) {
   header <- teal_card("Here comes header text.")

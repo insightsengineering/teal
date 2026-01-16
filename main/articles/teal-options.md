@@ -18,6 +18,7 @@ At any time during an interactive session, you can change an option
 using:
 
 ``` r
+
 options(option_to_set = "value")
 ```
 
@@ -25,6 +26,7 @@ A way to change options for only the execution of a specific block of
 code is with the `withr` package like so:
 
 ``` r
+
 withr::with_options(list(digits = 3), print(pi))
 ```
 
@@ -36,6 +38,7 @@ value before the line was run.
 The function `getOption` allows to inspect the value of an option:
 
 ``` r
+
 getOption("option_to_set")
 ```
 
@@ -202,6 +205,7 @@ is downloaded. It should be a subset of “html_document”, “pdf_document”,
 Default:
 
 ``` r
+
 c(
   "html" = "html_document", "pdf" = "pdf_document",
   "powerpoint" = "powerpoint_presentation",
@@ -218,6 +222,7 @@ supported YAML args: “author”, “title”, “date”, “output”, “toc
 Default:
 
 ``` r
+
 list(
   author = "NEST",
   title = "Report",
@@ -235,6 +240,7 @@ It allows customizing the global `knitr` parameters which are passed to
 Default:
 
 ``` r
+
 list(
   echo = TRUE,
   tidy.opts = list(width.cutoff = 60),

@@ -35,6 +35,7 @@ from scratch every time the user starts the application.
 method.*
 
 ``` r
+
 library(teal)
 
 data_module <- teal_data_module(
@@ -77,6 +78,7 @@ The following example illustrates how `teal_data_module` can be utilized
 to subset data based on the user inputs:
 
 ``` r
+
 data <- within(teal_data(), {
   dataset1 <- iris
   dataset2 <- mtcars
@@ -142,6 +144,7 @@ modifies `data_module` so that new columns are added once the data is
 retrieved.
 
 ``` r
+
 data_module_2 <- within(
   data_module,
   {

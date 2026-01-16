@@ -1,6 +1,7 @@
 # Product Map
 
 ``` mermaid
+
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 flowchart RL
 teal

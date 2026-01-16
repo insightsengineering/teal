@@ -27,6 +27,7 @@ This simple `teal` application takes the `iris` and `mtcars` datasets
 and displays their contents:
 
 ``` r
+
 library(teal)
 
 app <- init(

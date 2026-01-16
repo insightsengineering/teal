@@ -19,6 +19,7 @@ either individually or globally, using the filter panel.
 ## Filter flow
 
 ``` mermaid
+
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 sequenceDiagram
     autonumber

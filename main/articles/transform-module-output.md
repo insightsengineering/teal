@@ -63,6 +63,7 @@ input. Knowing that the module contains an object of class `ggplot2`
 named `plot`, we will modify its title and x-axis title:
 
 ``` r
+
 static_decorator <- teal_transform_module(
   label = "Static decorator",
   server = function(id, data) {
@@ -92,6 +93,7 @@ function using its `...` argument. See
 for more examples.
 
 ``` r
+
 interactive_decorator <- teal_transform_module(
   label = "Interactive decorator",
   ui = function(id) {
@@ -130,6 +132,7 @@ names as arguments. Here, the `output_name` variable name is passed to a
 transformator, allowing it to work with multiple modules.
 
 ``` r
+
 dynamic_decorator <- function(output_name) {
   teal_transform_module(
     label = "Dynamic decorator",
@@ -180,6 +183,7 @@ Transformations are applied to a `teal` module as follows:
 Here is a minimal illustration:
 
 ``` r
+
 # styler: off
 pseudo_decorated_module <- function(
   label = "Pseudo Module with Decorator Support",
@@ -230,6 +234,7 @@ This module has one output, a plot created with `ggplot2`, and it
 displays the reproducible code used to obtain the plot.
 
 ``` r
+
 tm_decorated_plot <- function(label = "module", decorators = list()) {
   checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
 
@@ -318,6 +323,7 @@ Note that every call to the module constructor (`tm_decorated_plot`)
 takes a list containing *one* transformator.
 
 ``` r
+
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
@@ -343,6 +349,7 @@ The plot transformators adds a user-provided title to a `ggplot2`
 object.
 
 ``` r
+
 plot_decorator <- teal_transform_module(
   label = "Decorate plot",
   ui = function(id) {
@@ -372,6 +379,7 @@ plot_decorator <- teal_transform_module(
 The table transformators adds a column to a `data.frame`.
 
 ``` r
+
 table_decorator <- teal_transform_module(
   label = "Decorate table",
   ui = function(id) shiny::tags$p("No UI needed for table decorator and could be ommited."),
@@ -398,6 +406,7 @@ Note that the module constructor accepts one list of transformations and
 the transformations are then manually separated in the module functions.
 
 ``` r
+
 tm_decorated_plot_table <- function(label = "module with two outputs", decorators = list()) {
   checkmate::assert_list(decorators, "teal_transform_module", null.ok = TRUE)
 
@@ -496,6 +505,7 @@ Note that a named list of transformations is passed to the module
 constructor.
 
 ``` r
+
 app <- init(
   data = teal_data(iris = iris, mtcars = mtcars),
   modules = modules(
@@ -530,6 +540,7 @@ transformator module. Note that the combination of
 simple `xlab(x_axis_table)`.
 
 ``` r
+
 teal_transform_module(
   label = "Static decorator",
   ui = function(id) {
@@ -577,6 +588,7 @@ transformators in your module. Note that with this method all
 decorations will be applied to one output.
 
 ``` r
+
 # in the module UI function
 div(
   id = ns("deorator_container"),

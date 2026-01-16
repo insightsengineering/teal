@@ -37,6 +37,7 @@ Let us initialize a simple `teal` app by providing `iris` and `mtcars`
 as input datasets.
 
 ``` r
+
 library(teal)
 
 data <- within(teal_data(), {
@@ -76,6 +77,7 @@ the server, the event should include
 discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
 
 ``` r
+
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -138,6 +140,7 @@ in `mtcars`. Note that this module does not have interactive UI
 elements.
 
 ``` r
+
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars
@@ -206,6 +209,7 @@ dataset. In such cases, transformations will be executed in the same
 order in which the transformator modules are passed to the module.
 
 ``` r
+
 data <- within(teal_data(), {
   iris <- iris
   mtcars <- mtcars

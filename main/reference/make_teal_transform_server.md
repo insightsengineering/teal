@@ -40,6 +40,7 @@ make_teal_transform_server(expr)
 ## Examples
 
 ``` r
+
 trim_iris <- teal_transform_module(
   label = "Simplified interactive transformator for iris",
   datanames = "iris",

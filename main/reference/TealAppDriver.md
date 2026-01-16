@@ -22,6 +22,8 @@ interactions for `shinytest2` tests.
 
 - [`TealAppDriver$new()`](#method-TealAppDriver-new)
 
+- [`TealAppDriver$stop()`](#method-TealAppDriver-stop)
+
 - [`TealAppDriver$click()`](#method-TealAppDriver-click)
 
 - [`TealAppDriver$expect_no_shiny_error()`](#method-TealAppDriver-expect_no_shiny_error)
@@ -98,7 +100,6 @@ Inherited methods
 - [`shinytest2::AppDriver$run_js()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-run_js)
 - [`shinytest2::AppDriver$set_inputs()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-set_inputs)
 - [`shinytest2::AppDriver$set_window_size()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-set_window_size)
-- [`shinytest2::AppDriver$stop()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-stop)
 - [`shinytest2::AppDriver$upload_file()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-upload_file)
 - [`shinytest2::AppDriver$view()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-view)
 - [`shinytest2::AppDriver$wait_for_idle()`](https://rstudio.github.io/shinytest2/reference/AppDriver.html#method-wait_for_idle)
@@ -159,6 +160,27 @@ Initialize a `TealAppDriver` object for testing a `teal` application.
 #### Returns
 
 Object of class `TealAppDriver`
+
+------------------------------------------------------------------------
+
+### Method [`stop()`](https://rdrr.io/r/base/stop.html)
+
+Extension of the parent
+[`shinytest2::AppDriver`](https://rstudio.github.io/shinytest2/reference/AppDriver.html)
+`stop` method that prints the logs if the `ACTIONS_STEP_DEBUG`
+environment variable is set to `true` (case of value is ignored).
+
+#### Usage
+
+    TealAppDriver$stop(...)
+
+#### Arguments
+
+- `...`:
+
+  arguments passed to parent
+  [`shinytest2::AppDriver`](https://rstudio.github.io/shinytest2/reference/AppDriver.html)
+  `click()` method.
 
 ------------------------------------------------------------------------
 
@@ -476,6 +498,9 @@ Logical vector with all occurrences of the selector.
 
 ### Method `expect_visible()`
 
+Expect that `DOM` elements are visible on the page with a JavaScript
+call.
+
 #### Usage
 
     TealAppDriver$expect_visible(
@@ -486,9 +511,31 @@ Logical vector with all occurrences of the selector.
       timeout
     )
 
+#### Arguments
+
+- `selector`:
+
+  (`character(1)`) `CSS` selector to check visibility. if more than one
+  element is found, at least one must be visible for this expectation to
+  be successful.
+
+- `content_visibility_auto, opacity_property, visibility_property`:
+
+  (`logical(1)`) See more information on
+  <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+
+- `timeout`:
+
+  (`numeric(1)`) Time in milliseconds to wait for the expectation to be
+  met. Defaults to the `timeout` parameter set during initialization of
+  the `TealAppDriver` object.
+
 ------------------------------------------------------------------------
 
 ### Method `expect_hidden()`
+
+Expect that `DOM` elements are hidden on the page with a JavaScript
+call.
 
 #### Usage
 
@@ -499,6 +546,25 @@ Logical vector with all occurrences of the selector.
       visibility_property = FALSE,
       timeout
     )
+
+#### Arguments
+
+- `selector`:
+
+  (`character(1)`) `CSS` selector to check visibility. if more than one
+  element is found, all of them must be invisible for this expectation
+  to be successful.
+
+- `content_visibility_auto, opacity_property, visibility_property`:
+
+  (`logical(1)`) See more information on
+  <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+
+- `timeout`:
+
+  (`numeric(1)`) Time in milliseconds to wait for the expectation to be
+  met. Defaults to the `timeout` parameter set during initialization of
+  the `TealAppDriver` object.
 
 ------------------------------------------------------------------------
 

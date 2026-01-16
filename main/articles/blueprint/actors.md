@@ -8,6 +8,7 @@ There are two main actors in the `teal` development:
 ## `teal` app developer
 
 ``` mermaid
+
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 graph LR
     A[teal App Developer]--utilizes--> B[teal modules]
@@ -40,6 +41,7 @@ which contains several demo applications and their source code.
 ## `teal` module developer
 
 ``` mermaid
+
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 graph LR
     A[Teal App Developer]--utilizes--> B[teal modules]
@@ -74,6 +76,7 @@ Module](https://insightsengineering.github.io/teal/articles/creating-custom-modu
 ## Workflow in a clinical trial study
 
 ``` mermaid
+
 %% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
 %%| fig-width: 7.5
 graph LR

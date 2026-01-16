@@ -16,6 +16,7 @@ filters but allows the user to add filters on any column. To start a
 using the `teal_slice` function and wrapped together with `teal_slices`.
 
 ``` r
+
 library(teal)
 
 app <- init(
@@ -45,6 +46,7 @@ sets are to be sent to that module. The filter panel will display only
 those data sets and hide the rest when this module is active.
 
 ``` r
+
 library(teal)
 
 app <- init(
@@ -94,6 +96,7 @@ For a detailed explanation about the filter states, see [this
 vignette](https://insightsengineering.github.io/teal.slice/latest-tag/articles/filter-panel-for-developers.html).
 
 ``` r
+
 library(teal)
 
 app <- init(

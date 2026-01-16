@@ -133,6 +133,7 @@ Bootstrap 5. To start, we launch the app with
 [`shiny::shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html).
 
 ``` r
+
 options("teal.bs_theme" = bslib::bs_theme(version = "5"))
 
 library(teal)
@@ -168,6 +169,7 @@ selected for Minty](images/bs-theme-set.png)
 see
 
 ``` r
+
 ####  Update your bs_theme() R code with:  #####
 bs_theme_update(theme, bootswatch = "minty")
 ```
@@ -201,6 +203,7 @@ the `R` console when running our app in the themer can be plugged right
 in.
 
 ``` r
+
 options(
   "teal.bs_theme" = bslib::bs_theme(
     version = "5",

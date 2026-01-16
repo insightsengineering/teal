@@ -32,6 +32,7 @@ is called with a reactive `teal_data` object passed from the parent
 app’s server.
 
 ``` r
+
 library(teal)
 
 data <- teal_data() |> within({
