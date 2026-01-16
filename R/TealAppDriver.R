@@ -49,14 +49,26 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           ...) {
       checkmate::assert_class(app, "teal_app")
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
-      # It must be set as parameter to the AppDriver
+      # New default is set with environment variables if not already set by user
+      # envvars have the lowest priority in shinytest2 timeout resolution.
+      extra_envvar <- list()
+      if (Sys.getenv("SHINYTEST2_TIMEOUT") == "") {
+        extra_envvar$SHINYTEST2_TIMEOUT <- "20000"
+      }
+      if (Sys.getenv("SHINYTEST2_LOAD_TIMEOUT") == "") {
+        extra_envvar$SHINYTEST2_TIMEOUT <- "100000"
+      }
+
       suppressWarnings(
-        super$initialize(
-          shiny::shinyApp(ui = app$ui, server = app$server, options = options),
-          name = "teal",
-          variant = shinytest2::platform_variant(),
-          timeout = rlang::maybe_missing(timeout, 20 * 1000),
-          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000)
+        withr::with_envvar(
+          new = extra_envvar,
+          code = super$initialize(
+            shiny::shinyApp(ui = app$ui, server = app$server, options = options),
+            name = "teal",
+            variant = shinytest2::platform_variant(),
+            timeout = timeout,
+            load_timeout = load_timeout
+          )
         )
       )
 
@@ -89,6 +101,16 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       self$wait_for_idle()
       private$set_active_ns()
+    },
+    #' @description
+    #' Extension of the parent [`shinytest2::AppDriver`] `stop` method that prints the logs
+    #' if the `ACTIONS_STEP_DEBUG` environment variable is set to `true` (case of value is ignored).
+    #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
+    stop = function(...) {
+      if (grepl("^true$", Sys.getenv("ACTIONS_STEP_DEBUG"), ignore.case = TRUE)) { #
+        message(format(self$get_logs()))
+      }
+      super$stop(...)
     },
     #' @description
     #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
@@ -329,6 +351,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         )
       )
     },
+    #' @description
+    #' Expect that `DOM` elements are visible on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' if more than one element is found, at least one must be visible for this expectation to
+    #' be successful.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`)
+    #' See more information on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #' @param timeout (`numeric(1)`) Time in milliseconds to wait for the expectation to be met.
+    #' Defaults to the `timeout` parameter set during initialization of the `TealAppDriver` object.
     expect_visible = function(selector,
                               content_visibility_auto = FALSE,
                               opacity_property = FALSE,
@@ -351,6 +382,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         }
       )
     },
+    #' @description
+    #' Expect that `DOM` elements are hidden on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' if more than one element is found, all of them must be invisible for this expectation to
+    #' be successful.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`)
+    #' See more information on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #' @param timeout (`numeric(1)`) Time in milliseconds to wait for the expectation to be met.
+    #' Defaults to the `timeout` parameter set during initialization of the `TealAppDriver` object.
     expect_hidden = function(selector,
                              content_visibility_auto = FALSE,
                              opacity_property = FALSE,
