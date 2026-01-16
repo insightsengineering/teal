@@ -49,14 +49,26 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           ...) {
       checkmate::assert_class(app, "teal_app")
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
-      # It must be set as parameter to the AppDriver
+      # New default is set with environment variables if not already set by user
+      # envvars have the lowest priority in shinytest2 timeout resolution.
+      extra_envvar <- list()
+      if (Sys.getenv("SHINYTEST2_TIMEOUT") == "") {
+        extra_envvar$SHINYTEST2_TIMEOUT <- "20000"
+      }
+      if (Sys.getenv("SHINYTEST2_LOAD_TIMEOUT") == "") {
+        extra_envvar$SHINYTEST2_TIMEOUT <- "100000"
+      }
+
       suppressWarnings(
-        super$initialize(
-          shiny::shinyApp(ui = app$ui, server = app$server, options = options),
-          name = "teal",
-          variant = shinytest2::platform_variant(),
-          timeout = rlang::maybe_missing(timeout, 20 * 1000),
-          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000)
+        withr::with_envvar(
+          new = extra_envvar,
+          code = super$initialize(
+            shiny::shinyApp(ui = app$ui, server = app$server, options = options),
+            name = "teal",
+            variant = shinytest2::platform_variant(),
+            timeout = timeout,
+            load_timeout = load_timeout
+          )
         )
       )
 
