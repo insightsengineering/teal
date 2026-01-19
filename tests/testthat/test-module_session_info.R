@@ -3,6 +3,7 @@ testthat::describe("srv_session_info lockfile", {
     "creation process is invoked for teal.lockfile.mode = \"enabled\" ",
     "and snapshot is copied to teal_app.lock and removed after session ended"
   ), {
+    testthat::skip_on_cran()
     testthat::skip_if_not_installed("mirai")
     testthat::skip_if_not_installed("renv")
     withr::with_options(
