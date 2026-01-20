@@ -52,7 +52,6 @@ ui_teal <- function(id, modules) {
 
   mod <- extract_module(modules, class = "teal_module_previewer")
   reporter_opts <- if (length(mod)) .get_reporter_options(mod[[1]]$server_args)
-  modules <- drop_module(modules, "teal_module_landing")
 
   # show busy icon when `shiny` session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 # nolint: line_length.
@@ -121,8 +120,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
   checkmate::assert_multi_class(data, c("teal_data", "teal_data_module", "reactive"))
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(filter, "teal_slices")
-
-  modules <- drop_module(modules, "teal_module_landing")
 
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")

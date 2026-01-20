@@ -20,6 +20,7 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-TealAppDriver-new}{\code{TealAppDriver$new()}}
+\item \href{#method-TealAppDriver-stop}{\code{TealAppDriver$stop()}}
 \item \href{#method-TealAppDriver-click}{\code{TealAppDriver$click()}}
 \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
 \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
@@ -35,6 +36,8 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
 \item \href{#method-TealAppDriver-get_active_data_summary_table}{\code{TealAppDriver$get_active_data_summary_table()}}
 \item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
+\item \href{#method-TealAppDriver-expect_visible}{\code{TealAppDriver$expect_visible()}}
+\item \href{#method-TealAppDriver-expect_hidden}{\code{TealAppDriver$expect_hidden()}}
 \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
 \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
 \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
@@ -72,7 +75,6 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="run_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-run_js'><code>shinytest2::AppDriver$run_js()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="set_inputs"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-set_inputs'><code>shinytest2::AppDriver$set_inputs()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="set_window_size"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-set_window_size'><code>shinytest2::AppDriver$set_window_size()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="stop"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-stop'><code>shinytest2::AppDriver$stop()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="upload_file"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-upload_file'><code>shinytest2::AppDriver$upload_file()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="view"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-view'><code>shinytest2::AppDriver$view()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_idle"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_idle'><code>shinytest2::AppDriver$wait_for_idle()</code></a></span></li>
@@ -122,6 +124,24 @@ via options or environment variables}
 }
 \subsection{Returns}{
 Object of class \code{TealAppDriver}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-stop"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-stop}{}}}
+\subsection{Method \code{stop()}}{
+Extension of the parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{stop} method that prints the logs
+if the \code{ACTIONS_STEP_DEBUG} environment variable is set to \code{true} (case of value is ignored).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$stop(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -402,6 +422,68 @@ on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility
 }
 \subsection{Returns}{
 Logical vector with all occurrences of the selector.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-expect_visible"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-expect_visible}{}}}
+\subsection{Method \code{expect_visible()}}{
+Expect that \code{DOM} elements are visible on the page with a JavaScript call.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_visible(
+  selector,
+  content_visibility_auto = FALSE,
+  opacity_property = FALSE,
+  visibility_property = FALSE,
+  timeout
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
+if more than one element is found, at least one must be visible for this expectation to
+be successful.}
+
+\item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)})
+See more information on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
+
+\item{\code{timeout}}{(\code{numeric(1)}) Time in milliseconds to wait for the expectation to be met.
+Defaults to the \code{timeout} parameter set during initialization of the \code{TealAppDriver} object.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TealAppDriver-expect_hidden"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-expect_hidden}{}}}
+\subsection{Method \code{expect_hidden()}}{
+Expect that \code{DOM} elements are hidden on the page with a JavaScript call.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_hidden(
+  selector,
+  content_visibility_auto = FALSE,
+  opacity_property = FALSE,
+  visibility_property = FALSE,
+  timeout
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
+if more than one element is found, all of them must be invisible for this expectation to
+be successful.}
+
+\item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)})
+See more information on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
+
+\item{\code{timeout}}{(\code{numeric(1)}) Time in milliseconds to wait for the expectation to be met.
+Defaults to the \code{timeout} parameter set during initialization of the \code{TealAppDriver} object.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

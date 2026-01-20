@@ -1,8 +1,6 @@
-call_module_server_fun <- function(input, output, session, data) {
-}
+call_module_server_fun <- function(input, output, session, data) {}
 
-module_server_fun <- function(id, data) {
-}
+module_server_fun <- function(id, data) {}
 
 ui_fun1 <- function(id, ...) {
   tags$p(paste0("id: ", id))

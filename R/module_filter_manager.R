@@ -286,32 +286,6 @@ methods::setOldClass("reactivevalues")
         invisible(.self)
       })
     },
-    slices_deactivate_all = function(module_label) {
-      shiny::isolate({
-        new_slices <- .self$all_slices()
-        old_mapping <- attr(new_slices, "mapping")
-
-        new_mapping <- if (.self$is_module_specific()) {
-          new_module_mapping <- setNames(nm = module_label, list(character(0)))
-          modifyList(old_mapping, new_module_mapping)
-        } else if (missing(module_label)) {
-          lapply(
-            attr(.self$all_slices(), "mapping"),
-            function(x) character(0)
-          )
-        } else {
-          old_mapping[[module_label]] <- character(0)
-          old_mapping
-        }
-
-        if (!identical(new_mapping, old_mapping)) {
-          logger::log_debug(".slicesGlobal@slices_deactivate_all: deactivating all slices.")
-          attr(new_slices, "mapping") <- new_mapping
-          .self$all_slices(new_slices)
-        }
-        invisible(.self)
-      })
-    },
     slices_active = function(mapping_elem) {
       shiny::isolate({
         if (.self$is_module_specific()) {

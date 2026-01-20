@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 1.0.0.9021
-Date: 2025-11-03
+Version: 1.1.0.9016
+Date: 2026-01-16
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -55,7 +55,7 @@ Imports:
     stats,
     teal.code (>= 0.7.0),
     teal.logger (>= 0.4.0),
-    teal.reporter (>= 0.5.0.9001),
+    teal.reporter (>= 0.6.0),
     teal.widgets (>= 0.5.0),
     tools,
     utils
@@ -79,8 +79,6 @@ VignetteBuilder:
     rmarkdown
 RdMacros:
     lifecycle
-Remotes:
-    insightsengineering/teal.reporter@main
 Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, r-lib/mirai, r-lib/cli,
@@ -106,7 +104,6 @@ Collate:
     'include_css_js.R'
     'modules.R'
     'init.R'
-    'landing_popup_module.R'
     'module_bookmark_manager.R'
     'module_data_summary.R'
     'module_filter_data.R'
@@ -117,14 +114,11 @@ Collate:
     'module_snapshot_manager.R'
     'module_source_code.R'
     'module_teal.R'
-    'module_teal_data.R'
     'module_teal_lockfile.R'
     'module_teal_reporter.R'
-    'module_teal_with_splash.R'
     'module_transform_data.R'
+    'module_validate_error.R'
     'reporter_previewer_module.R'
-    'show_rcode_modal.R'
-    'tdata.R'
     'teal.R'
     'teal_data_module.R'
     'teal_data_module-eval_code.R'

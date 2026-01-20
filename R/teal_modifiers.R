@@ -47,9 +47,10 @@ teal_replace_ui <- function(x, selector, element) {
 #'   shinyApp(app$ui, app$server)
 #' }
 modify_title <- function(
-    x,
-    title = "teal app",
-    favicon = NULL) {
+  x,
+  title = "teal app",
+  favicon = NULL
+) {
   checkmate::assert_multi_class(x, "teal_app")
   checkmate::assert_multi_class(title, c("shiny.tag", "shiny.tag.list", "html", "character"))
   checkmate::assert_string(favicon, null.ok = TRUE)
@@ -146,11 +147,12 @@ modify_footer <- function(x, element = tags$p()) {
 #'   shinyApp(app$ui, app$server)
 #' }
 add_landing_modal <- function(
-    x,
-    title = NULL,
-    content = NULL,
-    footer = modalButton("Accept"),
-    ...) {
+  x,
+  title = NULL,
+  content = NULL,
+  footer = modalButton("Accept"),
+  ...
+) {
   checkmate::assert_class(x, "teal_app")
   custom_server <- function(input, output, session) {
     checkmate::assert_string(title, null.ok = TRUE)

@@ -181,9 +181,6 @@ init <- function(data,
   }
 
   # argument transformations
-  ## `modules` - landing module
-  landing <- extract_module(modules, "teal_module_landing")
-  modules <- drop_module(modules, "teal_module_landing")
 
   if (lifecycle::is_present(id)) {
     lifecycle::deprecate_soft(
@@ -284,22 +281,6 @@ init <- function(data,
     )
     checkmate::assert_multi_class(footer, c("shiny.tag", "shiny.tag.list", "html", "character"))
     res <- modify_footer(res, footer)
-  }
-
-  if (length(landing) == 1L) {
-    lifecycle::deprecate_soft(
-      when = "0.16.0",
-      what = "landing_popup_module()",
-      details = paste(
-        "`landing_popup_module()` is deprecated.",
-        "Use add_landing_modal() on the teal app object instead."
-      )
-    )
-    res <- teal_extend_server(res, function(input, output, session) {
-      do.call(landing[[1L]]$server, c(list(id = "landing_module_shiny_id")))
-    })
-  } else if (length(landing) > 1L) {
-    stop("Only one `landing_popup_module` can be used.")
   }
 
   logger::log_debug("init teal app has been initialized.")

@@ -47,3 +47,5 @@ coverage.*
 ^revdep$
 ^\.covrignore$
 ^inst/cheatsheet$
+AGENTS.md
+^.devcontainer$
