@@ -160,7 +160,7 @@ deep_copy_filter <- function(filter) {
 #' @export
 #' @keywords internal
 #'
-as.teal_slices <- .copy_from_namespace("as.teal_slices", "teal.slice")
+as.teal_slices <- .copy_from_namespace("as.teal_slices", "teal.slice") # nolint: object_name_linter.
 
 
 #' @rdname teal_slices

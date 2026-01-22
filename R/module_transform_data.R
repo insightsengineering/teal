@@ -25,7 +25,7 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
     transformators <- list(transformators)
   }
   checkmate::assert_list(transformators, "teal_transform_module")
-  names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
+  names(transformators) <- sprintf("transform_%d", seq_along(transformators))
 
   lapply(
     names(transformators),
@@ -75,7 +75,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
     transformators <- list(transformators)
   }
   checkmate::assert_list(transformators, "teal_transform_module", null.ok = TRUE)
-  names(transformators) <- sprintf("transform_%d", seq_len(length(transformators)))
+  names(transformators) <- sprintf("transform_%d", seq_along(transformators))
 
   moduleServer(id, function(input, output, session) {
     module_output <- Reduce(
