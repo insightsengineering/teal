@@ -12,7 +12,7 @@ check_reactive <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
       paste0(cl, collapse = "','")
     ))
   }
-  return(TRUE)
+  TRUE
 }
 #' @rdname check_reactive
 test_reactive <- function(x, null.ok = FALSE) { # nolint: object_name_linter.
