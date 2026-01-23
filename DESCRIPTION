@@ -97,7 +97,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
 RoxygenNote: 7.3.3
 Remotes:
-    insightsengineering/teal.slice@1683_ignore_duplicated_slice
+    insightsengineering/teal.slice@main
 Collate:
     'TealAppDriver.R'
     'after.R'
