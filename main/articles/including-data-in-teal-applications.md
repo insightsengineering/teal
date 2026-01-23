@@ -105,7 +105,7 @@ The necessary code can be supplied to the `code` argument of the to the
 data_populated_4 <- eval_code(data_empty, code = "D5 <- diag(5)")
 data_populated_4
 #> ✅︎ code verified
-#> <environment: 0x560429f075c8> 🔒 
+#> <environment: 0x556a74e620f8> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - D5: [matrix]
@@ -269,7 +269,7 @@ running the `verify` function.
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 #> ✖ code unverified
-#> <environment: 0x5604264f2fe0> 🔒 
+#> <environment: 0x556a71987578> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
@@ -278,7 +278,7 @@ data_with_objects_and_code
 data_with_objects_and_code_ver <- verify(data_with_objects_and_code)
 data_with_objects_and_code_ver
 #> ✅︎ code verified
-#> <environment: 0x5604264f2fe0> 🔒 
+#> <environment: 0x556a71987578> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
