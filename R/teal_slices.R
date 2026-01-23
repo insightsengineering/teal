@@ -144,27 +144,24 @@ deep_copy_filter <- function(filter) {
 }
 
 
-#' Function to copy functions from other namespaces
+#' Copy functions to `teal` namespace
 #'
-#' It differs from `getFromNamespace` as it returns a copy of the function
-#' so it is a part of `teal` namespace. Useful when we require function from other namespace
-#' where this function calls other functions from `teal` namespace (see `as.teal_slices`, `c.teal_slices`).
-#' @inheritParams utils::getFromNamespace
+#' Useful when we require function from other namespace where this function
+#' calls other functions from `teal` namespace (see `as.teal_slices`, `c.teal_slices`).
 #' @keywords internal
-.copy_from_namespace <- function(x, ns) {
-  original_fun <- utils::getFromNamespace(x, ns = ns)
-  eval(parse(text = deparse(original_fun)))
+.copy_to_teal <- function(fun) {
+  environment(fun) <- getNamespace("teal")
+  fun
 }
 
 #' @rdname teal_slices
 #' @export
 #' @keywords internal
 #'
-as.teal_slices <- .copy_from_namespace("as.teal_slices", "teal.slice") # nolint: object_name_linter.
-
+as.teal_slices <- .copy_to_teal(teal.slice::as.teal_slices) # nolint: object_name_linter.
 
 #' @rdname teal_slices
 #' @export
 #' @keywords internal
 #'
-c.teal_slices <- .copy_from_namespace("c.teal_slices", "teal.slice")
+c.teal_slices <- .copy_to_teal(utils::getS3method("c", "teal_slices", envir = getNamespace("teal.slice")))
