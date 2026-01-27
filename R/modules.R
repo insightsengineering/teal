@@ -403,7 +403,7 @@ format.teal_module <- function(
         return(NULL)
       }
     }
-    
+
     labels <- unlist(lapply(x$server_args$decorators, extract_decorator_labels))
     if (length(labels) > 0) {
       paste(labels, collapse = ", ")
