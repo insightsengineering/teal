@@ -388,16 +388,13 @@ format.teal_module <- function(
   }
 
   decorators <- if (length(x$server_args$decorators) > 0) {
-    # Helper to extract labels from decorator objects with depth limit
     extract_decorator_labels <- function(dec, depth = 0L) {
       if (depth > 10L) {
         return(NULL) # Prevent infinite recursion
       }
       if (inherits(dec, "teal_transform_module")) {
-        # Single decorator object
         return(attr(dec, "label"))
       } else if (is.list(dec)) {
-        # Nested list of decorators
         return(unlist(lapply(dec, extract_decorator_labels, depth = depth + 1L)))
       } else {
         return(NULL)
