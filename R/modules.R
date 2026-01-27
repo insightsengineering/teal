@@ -388,7 +388,25 @@ format.teal_module <- function(
   }
 
   decorators <- if (length(x$server_args$decorators) > 0) {
-    paste(sapply(x$server_args$decorators, function(t) attr(t, "label")), collapse = ", ")
+    # Helper to extract labels from decorator objects
+    extract_decorator_labels <- function(dec) {
+      if (inherits(dec, "teal_transform_module")) {
+        # Single decorator object
+        attr(dec, "label")
+      } else if (is.list(dec)) {
+        # Nested list of decorators
+        unlist(lapply(dec, extract_decorator_labels))
+      } else {
+        NULL
+      }
+    }
+    
+    labels <- unlist(lapply(x$server_args$decorators, extract_decorator_labels))
+    if (length(labels) > 0) {
+      paste(labels, collapse = ", ")
+    } else {
+      empty_text
+    }
   } else {
     empty_text
   }

@@ -397,3 +397,146 @@ testthat::test_that("module datanames stays 'all' regardless of transformators",
   out <- module(datanames = "all", transformators = list(transformator_w_datanames))
   testthat::expect_identical(out$datanames, "all")
 })
+
+# decorator printing tests --------------------------------------------------------------------------------------------
+
+testthat::test_that("format.teal_module prints single decorator label", {
+  decorator1 <- teal_transform_module(
+    label = "Test Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(decorators = list(decorator1))
+  )
+
+  formatted <- format(mod)
+  testthat::expect_match(formatted, "Test Decorator", fixed = TRUE)
+})
+
+testthat::test_that("format.teal_module prints multiple decorators in flat list", {
+  decorator1 <- teal_transform_module(
+    label = "Decorator One",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Decorator Two",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(decorators = list(decorator1, decorator2))
+  )
+
+  formatted <- format(mod)
+  testthat::expect_match(formatted, "Decorator One, Decorator Two", fixed = TRUE)
+})
+
+testthat::test_that("format.teal_module prints decorators from nested list structure", {
+  decorator1 <- teal_transform_module(
+    label = "First Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Second Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1, decorator2)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  testthat::expect_match(formatted, "First Decorator, Second Decorator", fixed = TRUE)
+  testthat::expect_no_match(formatted, "NULL")
+})
+
+testthat::test_that("format.teal_module prints decorators from complex nested structure", {
+  decorator1 <- teal_transform_module(
+    label = "Dec1",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Dec2",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator3 <- teal_transform_module(
+    label = "Dec3",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1, decorator2),
+        plot = list(decorator3)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  # Should contain all three decorator labels
+  testthat::expect_match(formatted, "Dec1")
+  testthat::expect_match(formatted, "Dec2")
+  testthat::expect_match(formatted, "Dec3")
+  testthat::expect_no_match(formatted, "NULL")
+})
+
+testthat::test_that("format.teal_module handles mixed decorator structure", {
+  decorator1 <- teal_transform_module(
+    label = "Nested Dec",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Single Dec",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  # Mix of nested list and single decorator
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1),
+        plot = decorator2
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  testthat::expect_match(formatted, "Nested Dec")
+  testthat::expect_match(formatted, "Single Dec")
+})
