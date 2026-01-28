@@ -397,3 +397,196 @@ testthat::test_that("module datanames stays 'all' regardless of transformators",
   out <- module(datanames = "all", transformators = list(transformator_w_datanames))
   testthat::expect_identical(out$datanames, "all")
 })
+
+# decorator printing tests --------------------------------------------------------------------------------------------
+
+testthat::test_that("format.teal_module prints single decorator label", {
+  decorator1 <- teal_transform_module(
+    label = "Test Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(decorators = list(decorator1))
+  )
+
+  formatted <- format(mod)
+  testthat::expect_match(formatted, "Test Decorator", fixed = TRUE)
+})
+
+testthat::test_that("format.teal_module prints multiple decorators in flat list", {
+  decorator1 <- teal_transform_module(
+    label = "Decorator One",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Decorator Two",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(decorators = list(decorator1, decorator2))
+  )
+
+  formatted <- format(mod)
+  testthat::expect_match(formatted, "Decorator One, Decorator Two", fixed = TRUE)
+})
+
+testthat::test_that("format.teal_module prints decorators from nested list structure", {
+  decorator1 <- teal_transform_module(
+    label = "First Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Second Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1, decorator2)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  # Check that decorators appear on the same line as "table:"
+  testthat::expect_match(formatted, "table:.*First Decorator, Second Decorator", fixed = FALSE)
+  testthat::expect_no_match(formatted, "NULL")
+})
+
+testthat::test_that("format.teal_module prints decorators from complex nested structure", {
+  decorator1 <- teal_transform_module(
+    label = "Dec1",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Dec2",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator3 <- teal_transform_module(
+    label = "Dec3",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1, decorator2),
+        plot = list(decorator3)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  # Check that decorators appear on the correct lines with their object names
+  testthat::expect_match(formatted, "table:.*Dec1, Dec2", fixed = FALSE)
+  testthat::expect_match(formatted, "plot:.*Dec3", fixed = FALSE)
+  testthat::expect_no_match(formatted, "NULL")
+})
+
+testthat::test_that("format.teal_module handles mixed decorator structure", {
+  decorator1 <- teal_transform_module(
+    label = "Nested Dec",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Single Dec",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  # Mix of nested list and single decorator
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1),
+        plot = decorator2
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  # Check that decorators appear on the correct lines with their object names
+  testthat::expect_match(formatted, "table:.*Nested Dec", fixed = FALSE)
+  testthat::expect_match(formatted, "plot:.*Single Dec", fixed = FALSE)
+})
+
+testthat::test_that("format.teal_module handles mixed global and object-specific decorators", {
+  decorator0 <- teal_transform_module(
+    label = "Global Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator1 <- teal_transform_module(
+    label = "Decorator One",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Decorator Two",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator3 <- teal_transform_module(
+    label = "Decorator Three",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  # Mix of global decorator and object-specific decorators
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        decorator0,
+        table = list(decorator1, decorator2),
+        plot = list(decorator3)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  # Check that global decorator appears first, then object-specific decorators
+  testthat::expect_match(formatted, "Global Decorator", fixed = TRUE)
+  testthat::expect_match(formatted, "table:.*Decorator One, Decorator Two", fixed = FALSE)
+  testthat::expect_match(formatted, "plot:.*Decorator Three", fixed = FALSE)
+  testthat::expect_no_match(formatted, "NULL")
+})
