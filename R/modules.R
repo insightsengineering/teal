@@ -317,6 +317,66 @@ modules <- function(..., label = character(0)) {
 
 # printing methods ----
 
+#' Extract decorator labels from a decorator structure
+#'
+#' Recursively extracts labels from decorators, handling both single decorators
+#' and nested list structures.
+#'
+#' @param dec Decorator object or list of decorators
+#' @return Character vector of decorator labels, or `character(0L)` if none found
+#' @keywords internal
+extract_decorator_labels <- function(dec) {
+  if (inherits(dec, "teal_transform_module")) {
+    label <- attr(dec, "label")
+    if (is.null(label)) {
+      character(0L)
+    } else {
+      label
+    }
+  } else if (is.list(dec)) {
+    unlist(lapply(dec, extract_decorator_labels), use.names = FALSE)
+  } else {
+    character(0L)
+  }
+}
+
+#' Format decorators in a tree structure
+#'
+#' Formats decorators showing global decorators and object-specific decorators
+#' in a tree structure. Returns a list with 'global' and 'objects' components.
+#'
+#' @param decorators List of decorators (can be mixed: global and named lists)
+#' @return List with 'global' (character vector) and 'objects' (named list) components
+#' @keywords internal
+format_decorators_tree <- function(decorators) {
+  if (length(decorators) == 0) {
+    return(list(global = character(0L), objects = list()))
+  }
+
+  # Separate global decorators (unnamed) from object-specific decorators (named)
+  global_decorators <- character(0L)
+  object_decorators <- list()
+
+  for (i in seq_along(decorators)) {
+    dec <- decorators[[i]]
+    name <- names(decorators)[i]
+
+    if (is.null(name) || name == "") {
+      # Global decorator - extract labels
+      labels <- extract_decorator_labels(dec)
+      global_decorators <- c(global_decorators, labels)
+    } else {
+      # Object-specific decorator - store with its name
+      labels <- extract_decorator_labels(dec)
+      if (length(labels) > 0) {
+        object_decorators[[name]] <- labels
+      }
+    }
+  }
+
+  list(global = global_decorators, objects = object_decorators)
+}
+
 #' @rdname teal_modules
 #' @param is_last (`logical(1)`) Whether this is the last item in its parent's children list.
 #'   Affects the tree branch character used (L- vs |-)
@@ -387,28 +447,10 @@ format.teal_module <- function(
     empty_text
   }
 
-  decorators <- if (length(x$server_args$decorators) > 0) {
-    extract_decorator_labels <- function(dec, depth = 0L) {
-      if (depth > 10L) {
-        return(NULL) # Prevent infinite recursion
-      }
-      if (inherits(dec, "teal_transform_module")) {
-        attr(dec, "label")
-      } else if (is.list(dec)) {
-        unlist(lapply(dec, extract_decorator_labels, depth = depth + 1L))
-      } else {
-        NULL
-      }
-    }
-
-    labels <- unlist(lapply(x$server_args$decorators, extract_decorator_labels))
-    if (length(labels) > 0) {
-      paste(labels, collapse = ", ")
-    } else {
-      empty_text
-    }
+  decorators_info <- if (length(x$server_args$decorators) > 0) {
+    format_decorators_tree(x$server_args$decorators)
   } else {
-    empty_text
+    list(global = character(0L), objects = list())
   }
 
   output <- pasten(current_prefix, cli::bg_white(cli::col_black(x$label)))
@@ -444,10 +486,56 @@ format.teal_module <- function(
     )
   }
   if ("decorators" %in% what) {
-    output <- paste0(
-      output,
-      content_prefix, "|- ", cli::col_magenta("Decorators       : "), decorators, "\n"
-    )
+    has_global <- length(decorators_info$global) > 0
+    has_objects <- length(decorators_info$objects) > 0
+
+    if (!has_global && !has_objects) {
+      # No decorators
+      output <- paste0(
+        output,
+        content_prefix, "|- ", cli::col_magenta("Decorators       : "), empty_text, "\n"
+      )
+    } else if (has_global && !has_objects) {
+      # Only global decorators - single line
+      global_labels <- paste(decorators_info$global, collapse = ", ")
+      output <- paste0(
+        output,
+        content_prefix, "|- ", cli::col_magenta("Decorators       : "), global_labels, "\n"
+      )
+    } else {
+      # Has object-specific decorators (with or without global)
+      output <- paste0(
+        output,
+        content_prefix, "|- ", cli::col_magenta("Decorators:"), "\n"
+      )
+
+      # Add global decorators if any (as first item)
+      if (has_global) {
+        global_labels <- paste(decorators_info$global, collapse = ", ")
+        is_last_global <- !has_objects
+        branch <- if (is_last_global) "L-" else "|-"
+        output <- paste0(
+          output,
+          content_prefix, "|  ", branch, " ", global_labels, "\n"
+        )
+      }
+
+      # Add object-specific decorators
+      if (has_objects) {
+        obj_names <- names(decorators_info$objects)
+        for (i in seq_along(obj_names)) {
+          obj_name <- obj_names[i]
+          obj_labels <- paste(decorators_info$objects[[obj_name]], collapse = ", ")
+          is_last_obj <- (i == length(obj_names))
+          branch <- if (is_last_obj) "L-" else "|-"
+          output <- paste0(
+            output,
+            content_prefix, "|  ", branch, " ",
+            cli::col_magenta(obj_name), ": ", obj_labels, "\n"
+          )
+        }
+      }
+    }
   }
   if ("transformators" %in% what) {
     output <- paste0(

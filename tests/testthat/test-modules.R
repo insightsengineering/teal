@@ -466,7 +466,8 @@ testthat::test_that("format.teal_module prints decorators from nested list struc
   )
 
   formatted <- format(mod)
-  testthat::expect_match(formatted, "First Decorator, Second Decorator", fixed = TRUE)
+  # Check that decorators appear on the same line as "table:"
+  testthat::expect_match(formatted, "table:.*First Decorator, Second Decorator", fixed = FALSE)
   testthat::expect_no_match(formatted, "NULL")
 })
 
@@ -503,10 +504,9 @@ testthat::test_that("format.teal_module prints decorators from complex nested st
   )
 
   formatted <- format(mod)
-  # Should contain all three decorator labels
-  testthat::expect_match(formatted, "Dec1")
-  testthat::expect_match(formatted, "Dec2")
-  testthat::expect_match(formatted, "Dec3")
+  # Check that decorators appear on the correct lines with their object names
+  testthat::expect_match(formatted, "table:.*Dec1, Dec2", fixed = FALSE)
+  testthat::expect_match(formatted, "plot:.*Dec3", fixed = FALSE)
   testthat::expect_no_match(formatted, "NULL")
 })
 
@@ -537,6 +537,56 @@ testthat::test_that("format.teal_module handles mixed decorator structure", {
   )
 
   formatted <- format(mod)
-  testthat::expect_match(formatted, "Nested Dec")
-  testthat::expect_match(formatted, "Single Dec")
+  # Check that decorators appear on the correct lines with their object names
+  testthat::expect_match(formatted, "table:.*Nested Dec", fixed = FALSE)
+  testthat::expect_match(formatted, "plot:.*Single Dec", fixed = FALSE)
+})
+
+testthat::test_that("format.teal_module handles mixed global and object-specific decorators", {
+  decorator0 <- teal_transform_module(
+    label = "Global Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator1 <- teal_transform_module(
+    label = "Decorator One",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Decorator Two",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator3 <- teal_transform_module(
+    label = "Decorator Three",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  # Mix of global decorator and object-specific decorators
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        decorator0,
+        table = list(decorator1, decorator2),
+        plot = list(decorator3)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  # Check that global decorator appears first, then object-specific decorators
+  testthat::expect_match(formatted, "Global Decorator", fixed = TRUE)
+  testthat::expect_match(formatted, "table:.*Decorator One, Decorator Two", fixed = FALSE)
+  testthat::expect_match(formatted, "plot:.*Decorator Three", fixed = FALSE)
+  testthat::expect_no_match(formatted, "NULL")
 })
