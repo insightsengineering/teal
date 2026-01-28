@@ -393,11 +393,11 @@ format.teal_module <- function(
         return(NULL) # Prevent infinite recursion
       }
       if (inherits(dec, "teal_transform_module")) {
-        return(attr(dec, "label"))
+        attr(dec, "label")
       } else if (is.list(dec)) {
-        return(unlist(lapply(dec, extract_decorator_labels, depth = depth + 1L)))
+        unlist(lapply(dec, extract_decorator_labels, depth = depth + 1L))
       } else {
-        return(NULL)
+        NULL
       }
     }
 
