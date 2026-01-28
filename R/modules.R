@@ -506,7 +506,7 @@ format.teal_module <- function(
       # Has object-specific decorators (with or without global)
       output <- paste0(
         output,
-        content_prefix, "|- ", cli::col_magenta("Decorators:"), "\n"
+        content_prefix, "|- ", cli::col_magenta("Decorators       : "), "\n"
       )
 
       # Add global decorators if any (as first item)
