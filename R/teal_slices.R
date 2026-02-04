@@ -123,43 +123,6 @@ teal_slices <- function(...,
   })
 }
 
-
-#' @rdname teal_slices
-#' @export
-#' @keywords internal
-#'
-as.teal_slices <- function(x) { # nolint: object_name.
-  checkmate::assert_list(x)
-  lapply(x, checkmate::assert_list, names = "named", .var.name = "list element")
-
-  attrs <- attributes(unclass(x))
-  ans <- lapply(x, function(x) if (is.teal_slice(x)) x else as.teal_slice(x))
-  do.call(teal_slices, c(ans, attrs))
-}
-
-
-#' @rdname teal_slices
-#' @export
-#' @keywords internal
-#'
-c.teal_slices <- function(...) {
-  x <- list(...)
-  checkmate::assert_true(all(vapply(x, is.teal_slices, logical(1L))), .var.name = "all arguments are teal_slices")
-
-  all_attributes <- lapply(x, attributes)
-  all_attributes <- coalesce_r(all_attributes)
-  all_attributes <- all_attributes[names(all_attributes) != "class"]
-
-  do.call(
-    teal_slices,
-    c(
-      unique(unlist(x, recursive = FALSE)),
-      all_attributes
-    )
-  )
-}
-
-
 #' Deep copy `teal_slices`
 #'
 #' it's important to create a new copy of `teal_slices` when
@@ -179,3 +142,26 @@ deep_copy_filter <- function(filter) {
     filter_copy
   })
 }
+
+
+#' Copy functions to `teal` namespace
+#'
+#' Useful when we require function from other namespace where this function
+#' calls other functions from `teal` namespace (see `as.teal_slices`, `c.teal_slices`).
+#' @keywords internal
+.copy_to_teal <- function(fun) {
+  environment(fun) <- getNamespace("teal")
+  fun
+}
+
+#' @rdname teal_slices
+#' @export
+#' @keywords internal
+#'
+as.teal_slices <- .copy_to_teal(teal.slice::as.teal_slices) # nolint: object_name_linter.
+
+#' @rdname teal_slices
+#' @export
+#' @keywords internal
+#'
+c.teal_slices <- .copy_to_teal(utils::getS3method("c", "teal_slices", envir = getNamespace("teal.slice")))

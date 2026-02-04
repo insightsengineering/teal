@@ -49,14 +49,26 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
                           ...) {
       checkmate::assert_class(app, "teal_app")
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
-      # It must be set as parameter to the AppDriver
+      # New default is set with environment variables if not already set by user
+      # envvars have the lowest priority in shinytest2 timeout resolution.
+      extra_envvar <- list()
+      if (Sys.getenv("SHINYTEST2_TIMEOUT") == "") {
+        extra_envvar$SHINYTEST2_TIMEOUT <- "20000"
+      }
+      if (Sys.getenv("SHINYTEST2_LOAD_TIMEOUT") == "") {
+        extra_envvar$SHINYTEST2_TIMEOUT <- "100000"
+      }
+
       suppressWarnings(
-        super$initialize(
-          shiny::shinyApp(ui = app$ui, server = app$server, options = options),
-          name = "teal",
-          variant = shinytest2::platform_variant(),
-          timeout = rlang::maybe_missing(timeout, 20 * 1000),
-          load_timeout = rlang::maybe_missing(load_timeout, 100 * 1000)
+        withr::with_envvar(
+          new = extra_envvar,
+          code = super$initialize(
+            shiny::shinyApp(ui = app$ui, server = app$server, options = options),
+            name = "teal",
+            variant = shinytest2::platform_variant(),
+            timeout = timeout,
+            load_timeout = load_timeout
+          )
         )
       )
 
@@ -87,8 +99,18 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       )
       # end od check
 
-      private$set_active_ns()
       self$wait_for_idle()
+      private$set_active_ns()
+    },
+    #' @description
+    #' Extension of the parent [`shinytest2::AppDriver`] `stop` method that prints the logs
+    #' if the `ACTIONS_STEP_DEBUG` environment variable is set to `true` (case of value is ignored).
+    #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
+    stop = function(...) {
+      if (grepl("^true$", Sys.getenv("ACTIONS_STEP_DEBUG"), ignore.case = TRUE)) { #
+        message(format(self$get_logs()))
+      }
+      super$stop(...)
     },
     #' @description
     #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
@@ -234,7 +256,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     get_active_module_plot_output = function(plot_id) {
       checkmate::check_string(plot_id)
       self$get_attr(
-        self$namespaces()$module(sprintf("%s-plot_main > img", plot_id)),
+        self$namespaces(TRUE)$module(sprintf("%s-plot_main > img", plot_id)),
         "src"
       )
     },
@@ -249,7 +271,6 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @return The `TealAppDriver` object invisibly.
     set_active_module_input = function(input_id, value, ...) {
       checkmate::check_string(input_id)
-      checkmate::check_string(value)
       self$set_input(
         self$namespaces()$module(input_id),
         value,
@@ -324,22 +345,72 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
 
       private$wait_for_page_stability()
 
-      testthat::skip_if_not(
-        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
-        "Element.prototype.checkVisibility is not supported in the current browser."
-      )
-
-      unlist(
-        self$get_js(
-          sprintf(
-            "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s}))",
-            selector,
-            # Extra parameters
-            sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
-            sprintf("opacityProperty: %s", tolower(opacity_property)),
-            sprintf("visibilityProperty: %s", tolower(visibility_property))
-          )
+      self$get_js(
+        private$test_visibility_js(
+          selector, "visible", content_visibility_auto, opacity_property, visibility_property
         )
+      )
+    },
+    #' @description
+    #' Expect that `DOM` elements are visible on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' if more than one element is found, at least one must be visible for this expectation to
+    #' be successful.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`)
+    #' See more information on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #' @param timeout (`numeric(1)`) Time in milliseconds to wait for the expectation to be met.
+    #' Defaults to the `timeout` parameter set during initialization of the `TealAppDriver` object.
+    expect_visible = function(selector,
+                              content_visibility_auto = FALSE,
+                              opacity_property = FALSE,
+                              visibility_property = FALSE,
+                              timeout) {
+      private$wait_for_page_stability()
+
+      tryCatch(
+        {
+          self$wait_for_js(
+            private$test_visibility_js(
+              selector, "visible", content_visibility_auto, opacity_property, visibility_property
+            ),
+            timeout
+          )
+          testthat::succeed()
+        },
+        error = function(err) {
+          testthat::fail(sprintf("CSS selector '%s' does not produce any visible elements.", selector))
+        }
+      )
+    },
+    #' @description
+    #' Expect that `DOM` elements are hidden on the page with a JavaScript call.
+    #' @param selector (`character(1)`) `CSS` selector to check visibility.
+    #' if more than one element is found, all of them must be invisible for this expectation to
+    #' be successful.
+    #' @param content_visibility_auto,opacity_property,visibility_property (`logical(1)`)
+    #' See more information on <https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility>.
+    #' @param timeout (`numeric(1)`) Time in milliseconds to wait for the expectation to be met.
+    #' Defaults to the `timeout` parameter set during initialization of the `TealAppDriver` object.
+    expect_hidden = function(selector,
+                             content_visibility_auto = FALSE,
+                             opacity_property = FALSE,
+                             visibility_property = FALSE,
+                             timeout) {
+      private$wait_for_page_stability()
+
+      tryCatch(
+        {
+          self$wait_for_js(
+            private$test_visibility_js(
+              selector, "hidden", content_visibility_auto, opacity_property, visibility_property
+            ),
+            timeout
+          )
+          testthat::succeed()
+        },
+        error = function(err) {
+          testthat::fail(sprintf("CSS selector '%s' produces visible elements.", selector))
+        }
       )
     },
     #' @description
@@ -554,19 +625,56 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       filter_panel = character(0)
     ),
     # private methods ----
+    # Helper function to extract wrapper ID from selector
+    extract_wrapper_id = function(selector) {
+      id <- self$get_attr(selector = selector, attribute = "href")
+      sub("^#", "", id[endsWith(id, "-wrapper")])
+    },
+    # Helper function to check if wrapper ID is valid
+    is_valid_wrapper_id = function(wrapper_id) {
+      length(wrapper_id) >= 1 & wrapper_id != "" & !is.na(wrapper_id)
+    },
     set_active_ns = function() {
+      # Although wait_for_idle() is called before set_active_ns(), it only ensures Shiny is not processing.
+      # wait_for_page_stability() is needed here to ensure the DOM/UI is fully rendered and stable
+      # before trying to extract the namespace.
+      private$wait_for_page_stability()
       all_inputs <- self$get_values()$input
-      active_tab_inputs <- all_inputs[grepl("-active_module_id$", names(all_inputs))]
+      active_module_input_id <- names(all_inputs)[grepl("-active_module_id$", names(all_inputs))][[1]]
+      active_tab_inputs <- self$wait_for_value(input = active_module_input_id)
 
-      active_wrapper_id <- sub(
-        "^#",
-        "",
-        self$get_attr(
-          selector = sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs),
-          attribute = "href"
+      ids <- unique(
+        c(
+          private$extract_wrapper_id(
+            sprintf(".teal-modules-tree li a.module-button[data-value='%s']", active_tab_inputs)
+          )
+          # In principle once we get to this point we wouldn't need to search in other places
+          # FIXME: But it might be needed on the integration machine (somehow)
+          # nolint start: commented_code.
+          # private$extract_wrapper_id(
+          #   paste(
+          #     ".teal-modules-tree li a.module-button.active, .teal-modules-tree",
+          #     "li a.module-button[aria-selected='true']"
+          #   )
+          # ),
+          # private$extract_wrapper_id(
+          #   ".teal-modules-tree li a.module-button[href*='-wrapper']:not([href='#'])"
+          # )
+          # nolint end: commented_code.
         )
       )
-      active_base_id <- sub("-wrapper$", "", active_wrapper_id)
+      valid_ids <- ids[private$is_valid_wrapper_id(ids)]
+
+      if (length(valid_ids) > 1L) {
+        valid_ids <- valid_ids[1L]
+      } else if (length(valid_ids) < 1L) {
+        stop(
+          "Could not determine valid module namespace. ",
+          "Make sure a module tab is selected and the page has finished loading."
+        )
+      }
+
+      active_base_id <- sub("-wrapper$", "", valid_ids)
 
       private$ns$base_id <- active_base_id
       private$ns$wrapper <- shiny::NS(active_base_id, "wrapper")
@@ -619,6 +727,30 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
           break
         }
       }
+    },
+    test_visibility_js = function(selector,
+                                  action = c("visible", "hidden"),
+                                  content_visibility_auto,
+                                  opacity_property,
+                                  visibility_property) {
+      testthat::skip_if_not(
+        self$get_js("typeof Element.prototype.checkVisibility === 'function'"),
+        "Element.prototype.checkVisibility is not supported in the current browser."
+      )
+
+      action <- match.arg(action)
+      js_code <- sprintf(
+        "Array.from(document.querySelectorAll('%s')).map(el => el.checkVisibility({%s, %s, %s})).some(Boolean)",
+        selector,
+        # Extra parameters
+        sprintf("contentVisibilityAuto: %s", tolower(content_visibility_auto)),
+        sprintf("opacityProperty: %s", tolower(opacity_property)),
+        sprintf("visibilityProperty: %s", tolower(visibility_property))
+      )
+      if (action == "hidden") {
+        js_code <- sprintf("!%s", js_code)
+      }
+      js_code
     }
   )
 )
