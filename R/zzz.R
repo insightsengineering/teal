@@ -8,7 +8,8 @@
     teal.sidebar.position = "left",
     teal.sidebar.width = 250,
     teal.reporter.nav_buttons = c("preview", "download", "load", "reset"),
-    teal.show_src = TRUE
+    teal.show_src = TRUE,
+    teal.telemetry = "none"
   )
 
   op <- options()

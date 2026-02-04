@@ -106,6 +106,7 @@ ui_teal <- function(id, modules) {
     include_teal_css_js(),
     shinyjs::useShinyjs(),
     shiny::includeScript(system.file("js/extendShinyJs.js", package = "teal")),
+    if (getOption("teal.telemetry") == "shiny.telemetry") shiny.telemetry::use_telemetry(),
     shiny_busy_message_panel,
     tags$div(id = ns("tabpanel_wrapper"), class = "teal-body", navbar),
     tags$hr(style = "margin: 1rem 0 0.5rem 0;")
@@ -125,6 +126,10 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
 
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
+    }
+    if (getOption("teal.telemetry") == "shiny.telemetry") {
+      telemetry <- shiny.telemetry::Telemetry$new()
+      telemetry$start_session()
     }
 
     session$onBookmark(function(state) {
