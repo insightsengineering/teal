@@ -474,15 +474,15 @@ format.teal_module <- function(
     ui_args_copy$decorators <- NULL
     server_args_copy <- x$server_args
     server_args_copy$decorators <- NULL
-    
+
     all_args <- c(ui_args_copy, server_args_copy)
-    
+
     has_args <- length(all_args) > 0
     has_decorators <- length(decorators_info$global) > 0 || length(decorators_info$objects) > 0
     has_transformators <- length(x$transformators) > 0
-    
+
     has_any_content <- has_args || has_decorators || has_transformators
-    
+
     if (!has_any_content) {
       # No arguments, decorators, or transformators
       output <- paste0(
@@ -494,14 +494,14 @@ format.teal_module <- function(
         output,
         content_prefix, "|- ", cli::col_green("Arguments        : "), "\n"
       )
-      
+
       args_content_prefix <- paste0(content_prefix, "|  ")
-      
+
       if (has_args) {
         arg_names <- names(all_args)
         num_args <- length(arg_names)
         is_last_args <- !has_decorators && !has_transformators
-        
+
         for (i in seq_along(arg_names)) {
           arg_name <- arg_names[i]
           arg_class <- cli::col_silver(class(all_args[[arg_name]])[1])
@@ -514,13 +514,13 @@ format.teal_module <- function(
           )
         }
       }
-      
+
       if (has_decorators) {
         has_global <- length(decorators_info$global) > 0
         has_objects <- length(decorators_info$objects) > 0
-        
+
         is_last_decorators <- !has_transformators
-        
+
         if (has_global && !has_objects) {
           # Only global decorators - single line
           global_labels <- paste(decorators_info$global, collapse = ", ")
@@ -569,7 +569,7 @@ format.teal_module <- function(
           }
         }
       }
-      
+
       if (has_transformators) {
         output <- paste0(
           output,
