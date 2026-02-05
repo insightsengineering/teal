@@ -353,7 +353,6 @@ format_decorators_tree <- function(decorators) {
     return(list(global = character(0L), objects = list()))
   }
 
-  # Separate global decorators (unnamed) from object-specific decorators (named)
   global_decorators <- character(0L)
   object_decorators <- list()
 
@@ -362,11 +361,9 @@ format_decorators_tree <- function(decorators) {
     name <- names(decorators)[i]
 
     if (is.null(name) || name == "") {
-      # Global decorator - extract labels
       labels <- extract_decorator_labels(dec)
       global_decorators <- c(global_decorators, labels)
     } else {
-      # Object-specific decorator - store with its name
       labels <- extract_decorator_labels(dec)
       if (length(labels) > 0) {
         object_decorators[[name]] <- labels
@@ -481,101 +478,98 @@ format.teal_module <- function(
     has_decorators <- length(decorators_info$global) > 0 || length(decorators_info$objects) > 0
     has_transformators <- length(x$transformators) > 0
     
-    has_any_content <- has_args || has_decorators || has_transformators
+    output <- paste0(
+      output,
+      content_prefix, "|- ", cli::col_green("Arguments        : "), "\n"
+    )
     
-    if (!has_any_content) {
-      # No arguments, decorators, or transformators
+    args_content_prefix <- paste0(content_prefix, "|  ")
+    
+    if (has_args) {
+      arg_names <- names(all_args)
+      num_args <- length(arg_names)
+      is_last_args <- !has_decorators && !has_transformators
+      
+      for (i in seq_along(arg_names)) {
+        arg_name <- arg_names[i]
+        arg_class <- cli::col_silver(class(all_args[[arg_name]])[1])
+        is_last_arg <- (i == num_args) && is_last_args
+        branch_char <- if (is_last_arg) "L-" else "|-"
+        output <- paste0(
+          output,
+          args_content_prefix, branch_char, " ",
+          sprintf("%s (%s)", arg_name, arg_class), "\n"
+        )
+      }
+    }
+    
+    has_global <- length(decorators_info$global) > 0
+    has_objects <- length(decorators_info$objects) > 0
+    is_last_decorators <- FALSE
+    
+    if (has_decorators) {
+      if (has_global && !has_objects) {
+        global_labels <- paste(decorators_info$global, collapse = ", ")
+        branch_char <- if (is_last_decorators) "L-" else "|-"
+        output <- paste0(
+          output,
+          args_content_prefix, branch_char, " ",
+          cli::col_magenta("Decorators       : "), global_labels, "\n"
+        )
+      } else {
+        branch_char <- if (is_last_decorators) "L-" else "|-"
+        output <- paste0(
+          output,
+          args_content_prefix, branch_char, " ",
+          cli::col_magenta("Decorators       : "), "\n"
+        )
+
+        decorators_content_prefix <- paste0(args_content_prefix, if (is_last_decorators) "   " else "|  ")
+
+        if (has_global) {
+          global_labels <- paste(decorators_info$global, collapse = ", ")
+          is_last_global <- !has_objects
+          branch_char <- if (is_last_global) "L-" else "|-"
+          output <- paste0(
+            output,
+            decorators_content_prefix, branch_char, " ", global_labels, "\n"
+          )
+        }
+
+        if (has_objects) {
+          obj_names <- names(decorators_info$objects)
+          for (i in seq_along(obj_names)) {
+            obj_name <- obj_names[i]
+            obj_labels <- paste(decorators_info$objects[[obj_name]], collapse = ", ")
+            is_last_obj <- (i == length(obj_names))
+            branch_char <- if (is_last_obj) "L-" else "|-"
+            output <- paste0(
+              output,
+              decorators_content_prefix, branch_char, " ",
+              cli::col_magenta(obj_name), ": ", obj_labels, "\n"
+            )
+          }
+        }
+      }
+    } else {
+      branch_char <- if (is_last_decorators) "L-" else "|-"
       output <- paste0(
         output,
-        content_prefix, "|- ", cli::col_green("Arguments        : "), empty_text, "\n"
+        args_content_prefix, branch_char, " ",
+        cli::col_magenta("Decorators       : "), empty_text, "\n"
+      )
+    }
+    
+    if (has_transformators) {
+      output <- paste0(
+        output,
+        args_content_prefix, "L- ", cli::col_magenta("Transformators   : "), transformators, "\n"
       )
     } else {
       output <- paste0(
         output,
-        content_prefix, "|- ", cli::col_green("Arguments        : "), "\n"
+        args_content_prefix, "L- ", cli::col_magenta("Transformators   : "), empty_text, "\n"
       )
-      
-      args_content_prefix <- paste0(content_prefix, "|  ")
-      
-      if (has_args) {
-        arg_names <- names(all_args)
-        num_args <- length(arg_names)
-        is_last_args <- !has_decorators && !has_transformators
-        
-        for (i in seq_along(arg_names)) {
-          arg_name <- arg_names[i]
-          arg_class <- cli::col_silver(class(all_args[[arg_name]])[1])
-          is_last_arg <- (i == num_args) && is_last_args
-          branch_char <- if (is_last_arg) "L-" else "|-"
-          output <- paste0(
-            output,
-            args_content_prefix, branch_char, " ",
-            sprintf("%s (%s)", arg_name, arg_class), "\n"
-          )
-        }
-      }
-      
-      if (has_decorators) {
-        has_global <- length(decorators_info$global) > 0
-        has_objects <- length(decorators_info$objects) > 0
-        
-        is_last_decorators <- !has_transformators
-        
-        if (has_global && !has_objects) {
-          # Only global decorators - single line
-          global_labels <- paste(decorators_info$global, collapse = ", ")
-          branch_char <- if (is_last_decorators) "L-" else "|-"
-          output <- paste0(
-            output,
-            args_content_prefix, branch_char, " ",
-            cli::col_magenta("Decorators       : "), global_labels, "\n"
-          )
-        } else {
-          # Has object-specific decorators (with or without global)
-          branch_char <- if (is_last_decorators) "L-" else "|-"
-          output <- paste0(
-            output,
-            args_content_prefix, branch_char, " ",
-            cli::col_magenta("Decorators       : "), "\n"
-          )
-
-          decorators_content_prefix <- paste0(args_content_prefix, if (is_last_decorators) "   " else "|  ")
-
-          # Add global decorators if any (as first item)
-          if (has_global) {
-            global_labels <- paste(decorators_info$global, collapse = ", ")
-            is_last_global <- !has_objects
-            branch_char <- if (is_last_global) "L-" else "|-"
-            output <- paste0(
-              output,
-              decorators_content_prefix, branch_char, " ", global_labels, "\n"
-            )
-          }
-
-          # Add object-specific decorators
-          if (has_objects) {
-            obj_names <- names(decorators_info$objects)
-            for (i in seq_along(obj_names)) {
-              obj_name <- obj_names[i]
-              obj_labels <- paste(decorators_info$objects[[obj_name]], collapse = ", ")
-              is_last_obj <- (i == length(obj_names))
-              branch_char <- if (is_last_obj) "L-" else "|-"
-              output <- paste0(
-                output,
-                decorators_content_prefix, branch_char, " ",
-                cli::col_magenta(obj_name), ": ", obj_labels, "\n"
-              )
-            }
-          }
-        }
-      }
-      
-      if (has_transformators) {
-        output <- paste0(
-          output,
-          args_content_prefix, "L- ", cli::col_magenta("Transformators   : "), transformators, "\n"
-        )
-      }
     }
   }
 
