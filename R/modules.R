@@ -334,7 +334,7 @@ extract_decorator_labels <- function(dec) {
       label
     }
   } else if (is.list(dec)) {
-    unlist(lapply(dec, extract_decorator_labels), use.names = FALSE)
+    paste(unlist(lapply(dec, extract_decorator_labels), use.names = FALSE), collapse = ", ")
   } else {
     character(0L)
   }
