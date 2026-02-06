@@ -411,7 +411,8 @@ testthat::test_that("format.teal_module prints single decorator label", {
   )
 
   formatted <- format(mod)
-  testthat::expect_match(formatted, "Test Decorator", fixed = TRUE)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  testthat::expect_match(formatted_stripped, "Test Decorator", fixed = TRUE)
 })
 
 testthat::test_that("format.teal_module prints multiple decorators in flat list", {
@@ -435,7 +436,8 @@ testthat::test_that("format.teal_module prints multiple decorators in flat list"
   )
 
   formatted <- format(mod)
-  testthat::expect_match(formatted, "Decorator One, Decorator Two", fixed = TRUE)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  testthat::expect_match(formatted_stripped, "Decorator One, Decorator Two", fixed = TRUE)
 })
 
 testthat::test_that("format.teal_module prints decorators from nested list structure", {
@@ -463,9 +465,10 @@ testthat::test_that("format.teal_module prints decorators from nested list struc
   )
 
   formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
   # Check that decorators appear on the same line as "table:"
-  testthat::expect_match(formatted, "table:.*First Decorator, Second Decorator", fixed = FALSE)
-  testthat::expect_no_match(formatted, "NULL")
+  testthat::expect_match(formatted_stripped, "table:.*First Decorator, Second Decorator", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "NULL")
 })
 
 testthat::test_that("format.teal_module prints decorators from complex nested structure", {
@@ -501,10 +504,11 @@ testthat::test_that("format.teal_module prints decorators from complex nested st
   )
 
   formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
   # Check that decorators appear on the correct lines with their object names
-  testthat::expect_match(formatted, "table:.*Dec1, Dec2", fixed = FALSE)
-  testthat::expect_match(formatted, "plot:.*Dec3", fixed = FALSE)
-  testthat::expect_no_match(formatted, "NULL")
+  testthat::expect_match(formatted_stripped, "table:.*Dec1, Dec2", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "plot:.*Dec3", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "NULL")
 })
 
 testthat::test_that("format.teal_module handles mixed decorator structure", {
@@ -534,9 +538,10 @@ testthat::test_that("format.teal_module handles mixed decorator structure", {
   )
 
   formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
   # Check that decorators appear on the correct lines with their object names
-  testthat::expect_match(formatted, "table:.*Nested Dec", fixed = FALSE)
-  testthat::expect_match(formatted, "plot:.*Single Dec", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "table:.*Nested Dec", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "plot:.*Single Dec", fixed = FALSE)
 })
 
 testthat::test_that("format.teal_module handles mixed global and object-specific decorators", {
@@ -581,9 +586,10 @@ testthat::test_that("format.teal_module handles mixed global and object-specific
   )
 
   formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
   # Check that global decorator appears first, then object-specific decorators
-  testthat::expect_match(formatted, "Global Decorator", fixed = TRUE)
-  testthat::expect_match(formatted, "table:.*Decorator One, Decorator Two", fixed = FALSE)
-  testthat::expect_match(formatted, "plot:.*Decorator Three", fixed = FALSE)
-  testthat::expect_no_match(formatted, "NULL")
+  testthat::expect_match(formatted_stripped, "Global Decorator", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "table:.*Decorator One, Decorator Two", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "plot:.*Decorator Three", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "NULL")
 })
