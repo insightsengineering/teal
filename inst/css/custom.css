@@ -24,16 +24,19 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
   background-color: var(--bs-white);
 }
 
-.teal-root .btn {
+.teal-root .btn,
+#shiny-modal .btn {
   --bs-btn-padding-x: 0.7em;
   --bs-btn-padding-y: 0.4em;
 }
 
-.teal-root {
+.teal-root,
+#shiny-modal {
   --bs-body-font-size: 0.875rem;
 }
 
-.teal-root .accordion-button {
+.teal-root .accordion-button,
+#shiny-modal .accordion-button {
   font-size: 0.875rem;
   font-weight: bold;
 }
