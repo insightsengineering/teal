@@ -102,6 +102,7 @@ ui_teal <- function(id, modules) {
 
   bslib::page_fluid(
     id = id,
+    class = "teal-root",
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),
