@@ -2,7 +2,7 @@
 
 ### Enhancements
 
-* Improved print method for `teal_module` object.
+* Improved print method for `teal_module` object (#1685).
 
 # teal 1.1.0
 
