@@ -29,7 +29,7 @@ modules(..., label = character(0))
   x,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "arguments"),
+  what = c("datasets", "properties", "arguments", "transformators"),
   ...
 )
 
