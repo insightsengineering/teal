@@ -1,5 +1,9 @@
 # teal 1.1.0.9017
 
+### Enhancements
+
+* Improved print method for `teal_module` object.
+
 # teal 1.1.0
 
 ### Deprecations and removals
