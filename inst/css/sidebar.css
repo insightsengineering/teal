@@ -29,7 +29,8 @@ a.disabled {
 .filter_manager_content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow-x: scroll;
 }
 
 .teal.manager_table_row {
