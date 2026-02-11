@@ -360,11 +360,10 @@ format_decorators_tree <- function(decorators) {
     dec <- decorators[[i]]
     name <- names(decorators)[i]
 
+    labels <- extract_decorator_labels(dec)
     if (is.null(name) || name == "") {
-      labels <- extract_decorator_labels(dec)
       global_decorators <- c(global_decorators, labels)
     } else {
-      labels <- extract_decorator_labels(dec)
       if (length(labels) > 0) {
         object_decorators[[name]] <- labels
       }
