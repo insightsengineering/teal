@@ -412,7 +412,7 @@ testthat::test_that("format.teal_module prints single decorator label", {
 
   formatted <- format(mod)
   formatted_stripped <- cli::ansi_strip(formatted)
-  testthat::expect_match(formatted_stripped, "Test Decorator", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "[|L]- Test Decorator\\n", fixed = FALSE)
 })
 
 testthat::test_that("format.teal_module prints multiple decorators in flat list", {
@@ -438,8 +438,8 @@ testthat::test_that("format.teal_module prints multiple decorators in flat list"
   formatted <- format(mod)
   formatted_stripped <- cli::ansi_strip(formatted)
   # With new formatting, global decorators are listed directly on separate lines
-  testthat::expect_match(formatted_stripped, "Decorator One", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "Decorator Two", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator One\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator Two\\n", fixed = FALSE)
   testthat::expect_no_match(formatted_stripped, "global:", fixed = TRUE)
 })
 
@@ -470,9 +470,9 @@ testthat::test_that("format.teal_module prints decorators from nested list struc
   formatted <- format(mod)
   formatted_stripped <- cli::ansi_strip(formatted)
   # Check that decorators appear on separate lines under "table:"
-  testthat::expect_match(formatted_stripped, "table.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "First Decorator", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "Second Decorator", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- First Decorator\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Second Decorator\\n", fixed = FALSE)
   testthat::expect_no_match(formatted_stripped, "NULL")
 })
 
@@ -511,11 +511,11 @@ testthat::test_that("format.teal_module prints decorators from complex nested st
   formatted <- format(mod)
   formatted_stripped <- cli::ansi_strip(formatted)
   # Check that decorators appear on separate lines under their object names
-  testthat::expect_match(formatted_stripped, "table.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "Dec1", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "Dec2", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "plot.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "Dec3", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Dec1\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Dec2\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- plot:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Dec3\\n", fixed = FALSE)
   testthat::expect_no_match(formatted_stripped, "NULL")
 })
 
@@ -548,10 +548,10 @@ testthat::test_that("format.teal_module handles mixed decorator structure", {
   formatted <- format(mod)
   formatted_stripped <- cli::ansi_strip(formatted)
   # Check that decorators appear on separate lines under their object names
-  testthat::expect_match(formatted_stripped, "table.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "Nested Dec", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "plot.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "Single Dec", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Nested Dec\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- plot:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Single Dec\\n", fixed = FALSE)
 })
 
 testthat::test_that("format.teal_module handles mixed global and object-specific decorators", {
@@ -598,11 +598,11 @@ testthat::test_that("format.teal_module handles mixed global and object-specific
   formatted <- format(mod)
   formatted_stripped <- cli::ansi_strip(formatted)
   # Check that global decorator appears first, then object-specific decorators on separate lines
-  testthat::expect_match(formatted_stripped, "Global Decorator", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "table.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "Decorator One", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "Decorator Two", fixed = TRUE)
-  testthat::expect_match(formatted_stripped, "plot.*:", fixed = FALSE)
-  testthat::expect_match(formatted_stripped, "Decorator Three", fixed = TRUE)
+  testthat::expect_match(formatted_stripped, "[|L]- Global Decorator\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator One\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator Two\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- plot:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator Three\\n", fixed = FALSE)
   testthat::expect_no_match(formatted_stripped, "NULL")
 })
