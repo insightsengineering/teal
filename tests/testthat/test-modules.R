@@ -331,25 +331,16 @@ testthat::test_that("format.teal_modules returns proper structure", {
       "  |  |- Properties:",
       "  |  |  |- Bookmarkable: FALSE",
       "  |  |  L- Reportable: FALSE",
-      "  |  |- Arguments:",
-      "  |  |  L- Decorators: ",
-      "  |  |- Transformators: ",
       "  |- c",
       "  |  |- Datasets: all",
       "  |  |- Properties:",
       "  |  |  |- Bookmarkable: FALSE",
       "  |  |  L- Reportable: FALSE",
-      "  |  |- Arguments:",
-      "  |  |  L- Decorators: ",
-      "  |  |- Transformators: ",
       "  L- c",
       "     |- Datasets: all",
-      "     |- Properties:",
-      "     |  |- Bookmarkable: FALSE",
-      "     |  L- Reportable: FALSE",
-      "     |- Arguments:",
-      "     |  L- Decorators: ",
-      "     L- Transformators: "
+      "     L- Properties:",
+      "        |- Bookmarkable: FALSE",
+      "        L- Reportable: FALSE"
     )
   )
 })

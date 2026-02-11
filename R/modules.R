@@ -373,6 +373,66 @@ format_decorators_tree <- function(decorators) {
   list(global = global_decorators, objects = object_decorators)
 }
 
+#' Render labels as tree leaf nodes
+#'
+#' Takes a character vector of labels and renders them as tree leaves
+#' with proper `|-` / `L-` connectors.
+#'
+#' @param labels (`character`) Labels to render as leaf nodes
+#' @param prefix (`character(1)`) Prefix for each line (indentation and pipe characters)
+#' @return (`character(1)`) Formatted string with tree connectors
+#' @keywords internal
+format_tree_leaves <- function(labels, prefix) {
+  output <- ""
+  for (i in seq_along(labels)) {
+    is_last <- (i == length(labels))
+    branch <- if (is_last) "L-" else "|-"
+    output <- paste0(output, prefix, branch, " ", labels[i], "\n")
+  }
+  output
+}
+
+#' Render decorator entries as tree nodes
+#'
+#' Renders global decorator labels and object-specific decorator groups
+#' as sibling entries under a common prefix. Reuses [format_tree_leaves()]
+#' for rendering children within object groups.
+#'
+#' @param decorators_info (`list`) with `global` (character vector) and `objects` (named list) components,
+#'   as returned by [format_decorators_tree()]
+#' @param prefix (`character(1)`) Prefix for each line
+#' @return (`character(1)`) Formatted string with tree connectors
+#' @keywords internal
+format_decorator_entries <- function(decorators_info, prefix) {
+  all_entries <- list()
+  for (lbl in decorators_info$global) {
+    all_entries <- c(all_entries, list(list(type = "leaf", label = lbl)))
+  }
+  for (obj_name in names(decorators_info$objects)) {
+    all_entries <- c(all_entries, list(list(
+      type = "group", label = obj_name, children = decorators_info$objects[[obj_name]]
+    )))
+  }
+
+  output <- ""
+  for (i in seq_along(all_entries)) {
+    entry <- all_entries[[i]]
+    is_last <- (i == length(all_entries))
+    branch <- if (is_last) "L-" else "|-"
+    if (entry$type == "leaf") {
+      output <- paste0(output, prefix, branch, " ", entry$label, "\n")
+    } else {
+      output <- paste0(
+        output, prefix, branch, " ",
+        cli::style_bold(cli::col_magenta(entry$label)), ":\n"
+      )
+      child_prefix <- paste0(prefix, if (is_last) "   " else "|  ")
+      output <- paste0(output, format_tree_leaves(entry$children, child_prefix))
+    }
+  }
+  output
+}
+
 #' @rdname teal_modules
 #' @param is_last (`logical(1)`) Whether this is the last item in its parent's children list.
 #'   Affects the tree branch character used (L- vs |-)
@@ -401,7 +461,6 @@ format.teal_module <- function(
   what = c("datasets", "properties", "arguments", "transformators"),
   ...
 ) {
-  empty_text <- ""
   branch <- if (is_last) "L-" else "|-"
   current_prefix <- paste0(parent_prefix, branch, " ")
   content_prefix <- paste0(parent_prefix, if (is_last) "   " else "|  ")
@@ -410,7 +469,7 @@ format.teal_module <- function(
   reportable <- "reporter" %in% names(formals(x$server))
 
   transformators_labels <- if (length(x$transformators) > 0) {
-    sapply(x$transformators, function(t) attr(t, "label"))
+    vapply(x$transformators, function(t) attr(t, "label"), character(1L))
   } else {
     character(0L)
   }
@@ -421,168 +480,92 @@ format.teal_module <- function(
     list(global = character(0L), objects = list())
   }
 
-  has_transformators <- length(x$transformators) > 0
+  has_transformators <- length(transformators_labels) > 0
+  has_decorators <- length(decorators_info$global) > 0 || length(decorators_info$objects) > 0
+
+  ui_args_copy <- x$ui_args
+  ui_args_copy$decorators <- NULL
+  server_args_copy <- x$server_args
+  server_args_copy$decorators <- NULL
+  all_args <- c(ui_args_copy, server_args_copy)
+  has_args <- length(all_args) > 0
+
+  show_arguments <- "arguments" %in% what && (has_args || has_decorators)
+  show_transformators <- "transformators" %in% what && has_transformators
+
+  visible_sections <- c(
+    if ("datasets" %in% what) "datasets",
+    if ("properties" %in% what) "properties",
+    if (show_arguments) "arguments",
+    if (show_transformators) "transformators"
+  )
+  last_visible <- if (length(visible_sections) > 0) tail(visible_sections, 1) else ""
 
   output <- pasten(current_prefix, cli::bg_white(cli::col_black(x$label)))
 
   # Datasets
   if ("datasets" %in% what) {
+    is_final <- ("datasets" == last_visible) && is_last
     output <- paste0(
       output,
-      content_prefix, "|- ", cli::col_yellow("Datasets"), ": ", paste(x$datanames, collapse = ", "), "\n"
+      content_prefix, if (is_final) "L- " else "|- ",
+      cli::col_yellow("Datasets"), ": ", paste(x$datanames, collapse = ", "), "\n"
     )
   }
 
   # Properties
   if ("properties" %in% what) {
-    properties_content_prefix <- paste0(content_prefix, "|  ")
+    is_final <- ("properties" == last_visible) && is_last
+    props_prefix <- paste0(content_prefix, if (is_final) "   " else "|  ")
     output <- paste0(
       output,
-      content_prefix, "|- ", cli::col_blue("Properties"), ":\n",
-      properties_content_prefix, "|- ", cli::col_cyan("Bookmarkable"), ": ", bookmarkable, "\n",
-      properties_content_prefix, "L- ", cli::col_cyan("Reportable"), ": ", reportable, "\n"
+      content_prefix, if (is_final) "L- " else "|- ", cli::col_blue("Properties"), ":\n",
+      props_prefix, "|- ", cli::col_cyan("Bookmarkable"), ": ", bookmarkable, "\n",
+      props_prefix, "L- ", cli::col_cyan("Reportable"), ": ", reportable, "\n"
     )
   }
 
   # Arguments
-  if ("arguments" %in% what) {
-    ui_args_copy <- x$ui_args
-    ui_args_copy$decorators <- NULL
-    server_args_copy <- x$server_args
-    server_args_copy$decorators <- NULL
-
-    all_args <- c(ui_args_copy, server_args_copy)
-
-    has_args <- length(all_args) > 0
-    has_global <- length(decorators_info$global) > 0
-    has_objects <- length(decorators_info$objects) > 0
-    has_decorators <- has_global || has_objects
-    has_transformators_after <- "transformators" %in% what
-
-    args_branch_char <- if (has_transformators_after) "|-" else (if (is_last) "L-" else "|-")
+  if (show_arguments) {
+    is_final <- ("arguments" == last_visible) && is_last
+    args_prefix <- paste0(content_prefix, if (is_final) "   " else "|  ")
     output <- paste0(
       output,
-      content_prefix, args_branch_char, " ", cli::col_green("Arguments"), ":\n"
+      content_prefix, if (is_final) "L- " else "|- ", cli::col_green("Arguments"), ":\n"
     )
-
-    args_content_prefix <- paste0(content_prefix, if (has_transformators_after) "|  " else (if (is_last) "   " else "|  "))
 
     if (has_args) {
       arg_names <- names(all_args)
-      num_args <- length(arg_names)
-      is_last_args <- !has_decorators
-
       for (i in seq_along(arg_names)) {
-        arg_name <- arg_names[i]
-        arg_class <- cli::col_silver(class(all_args[[arg_name]])[1])
-        is_last_arg <- (i == num_args) && is_last_args
-        branch_char <- if (is_last_arg) "L-" else "|-"
+        is_last_arg <- (i == length(arg_names)) && !has_decorators
+        arg_class <- cli::col_silver(class(all_args[[arg_names[i]]])[1])
         output <- paste0(
           output,
-          args_content_prefix, branch_char, " ",
-          arg_name, " (", arg_class, ")\n"
+          args_prefix, if (is_last_arg) "L- " else "|- ",
+          arg_names[i], " (", arg_class, ")\n"
         )
       }
     }
 
-    # Decorators (child of Arguments)
-    is_last_decorators <- TRUE
-
     if (has_decorators) {
-      branch_char <- if (is_last_decorators) "L-" else "|-"
+      dec_prefix <- paste0(args_prefix, "   ")
       output <- paste0(
         output,
-        args_content_prefix, branch_char, " ",
-        cli::col_magenta("Decorators"), ":\n"
-      )
-
-      decorators_content_prefix <- paste0(args_content_prefix, if (is_last_decorators) "   " else "|  ")
-
-      # Build a flat list of all decorator entries (global labels + object groups) as siblings
-      all_decorator_entries <- list()
-      if (has_global) {
-        for (lbl in decorators_info$global) {
-          all_decorator_entries <- c(all_decorator_entries, list(list(type = "global", label = lbl)))
-        }
-      }
-      if (has_objects) {
-        obj_names <- names(decorators_info$objects)
-        for (obj_name in obj_names) {
-          all_decorator_entries <- c(all_decorator_entries, list(list(
-            type = "object", name = obj_name, labels = decorators_info$objects[[obj_name]]
-          )))
-        }
-      }
-
-      num_entries <- length(all_decorator_entries)
-      for (entry_idx in seq_along(all_decorator_entries)) {
-        entry <- all_decorator_entries[[entry_idx]]
-        is_last_entry <- (entry_idx == num_entries)
-
-        if (entry$type == "global") {
-          branch_char <- if (is_last_entry) "L-" else "|-"
-          output <- paste0(
-            output,
-            decorators_content_prefix, branch_char, " ", entry$label, "\n"
-          )
-        } else {
-          # Object-specific decorators
-          obj_name <- entry$name
-          obj_labels <- entry$labels
-          branch_char <- if (is_last_entry) "L-" else "|-"
-          output <- paste0(
-            output,
-            decorators_content_prefix, branch_char, " ",
-            cli::style_bold(cli::col_magenta(obj_name)), ":\n"
-          )
-
-          obj_decorators_prefix <- paste0(decorators_content_prefix, if (is_last_entry) "   " else "|  ")
-          for (j in seq_along(obj_labels)) {
-            is_last_obj_label <- (j == length(obj_labels))
-            branch_char <- if (is_last_obj_label) "L-" else "|-"
-            output <- paste0(
-              output,
-              obj_decorators_prefix, branch_char, " ", obj_labels[j], "\n"
-            )
-          }
-        }
-      }
-    } else {
-      branch_char <- if (is_last_decorators) "L-" else "|-"
-      output <- paste0(
-        output,
-        args_content_prefix, branch_char, " ",
-        cli::col_magenta("Decorators"), ": ", empty_text, "\n"
+        args_prefix, "L- ", cli::col_magenta("Decorators"), ":\n",
+        format_decorator_entries(decorators_info, dec_prefix)
       )
     }
   }
 
-  # Transformators (top-level, sibling of Arguments)
-  if ("transformators" %in% what) {
-    branch_char <- if (is_last) "L-" else "|-"
-
-    if (has_transformators) {
-      output <- paste0(
-        output,
-        content_prefix, branch_char, " ", cli::col_magenta("Transformators"), ":\n"
-      )
-
-      transformators_content_prefix <- paste0(content_prefix, if (is_last) "   " else "|  ")
-
-      for (i in seq_along(transformators_labels)) {
-        is_last_transformator <- (i == length(transformators_labels))
-        branch_char_transformator <- if (is_last_transformator) "L-" else "|-"
-        output <- paste0(
-          output,
-          transformators_content_prefix, branch_char_transformator, " ", transformators_labels[i], "\n"
-        )
-      }
-    } else {
-      output <- paste0(
-        output,
-        content_prefix, branch_char, " ", cli::col_magenta("Transformators"), ": ", empty_text, "\n"
-      )
-    }
+  # Transformators
+  if (show_transformators) {
+    is_final <- ("transformators" == last_visible) && is_last
+    trans_prefix <- paste0(content_prefix, if (is_final) "   " else "|  ")
+    output <- paste0(
+      output,
+      content_prefix, if (is_final) "L- " else "|- ", cli::col_magenta("Transformators"), ":\n",
+      format_tree_leaves(transformators_labels, trans_prefix)
+    )
   }
 
   output
