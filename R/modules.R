@@ -499,7 +499,7 @@ format.teal_module <- function(
     if (show_arguments) "arguments",
     if (show_transformators) "transformators"
   )
-  last_visible <- if (length(visible_sections) > 0) tail(visible_sections, 1) else ""
+  last_visible <- if (length(visible_sections) > 0) utils::tail(visible_sections, 1) else ""
 
   output <- pasten(current_prefix, cli::bg_white(cli::col_black(x$label)))
 
