@@ -24,8 +24,7 @@ format(
   x,
   is_last = FALSE,
   parent_prefix = "",
-  what = c("datasets", "properties", "ui_args", "server_args", "decorators",
-    "transformators"),
+  what = c("datasets", "properties", "arguments", "transformators"),
   ...
 )
 
@@ -148,7 +147,7 @@ print(x, ...)
 - what:
 
   (`character`) Specifies which metadata to display. Possible values:
-  "datasets", "properties", "ui_args", "server_args", "transformators"
+  "datasets", "properties", "arguments", "transformators"
 
 - is_root:
 
@@ -287,16 +286,15 @@ mod <- module(
 )
 cat(format(mod))
 #> |- My Custom Module
-#> |  |- Datasets         : ADSL, ADTTE
+#> |  |- Datasets: ADSL, ADTTE
 #> |  |- Properties:
-#> |  |  |- Bookmarkable  : FALSE
-#> |  |  L- Reportable    : FALSE
-#> |  |- UI Arguments     : a (numeric)
-#> |  |                     b (character)
-#> |  |- Server Arguments : x (numeric)
-#> |  |                     y (list)
-#> |  |- Decorators       : 
-#> |  L- Transformators   : 
+#> |  |  |- Bookmarkable: FALSE
+#> |  |  L- Reportable: FALSE
+#> |  L- Arguments:
+#> |     |- a (numeric)
+#> |     |- b (character)
+#> |     |- x (numeric)
+#> |     L- y (list)
 custom_module <- function(
   label = "label", ui_args = NULL, server_args = NULL,
   datanames = "all", transformators = list(), bk = FALSE
@@ -413,133 +411,97 @@ complete_modules <- modules(
 cat(format(complete_modules))
 #> TEAL ROOT
 #>   |- Data Overview
-#>   |  |- Datasets         : ADSL, ADAE, ADVS, all
+#>   |  |- Datasets: ADSL, ADAE, ADVS, all
 #>   |  |- Properties:
-#>   |  |  |- Bookmarkable  : TRUE
-#>   |  |  L- Reportable    : FALSE
-#>   |  |- UI Arguments     : view_type (character)
-#>   |  |                     page_size (numeric)
-#>   |  |                     filters (character)
-#>   |  |- Server Arguments : cache (logical)
-#>   |  |                     debounce (numeric)
-#>   |  |- Decorators       : Static decorator
-#>   |  L- Transformators   : Dummy Transform
+#>   |  |  |- Bookmarkable: TRUE
+#>   |  |  L- Reportable: FALSE
+#>   |  |- Arguments:
+#>   |  |  |- view_type (character)
+#>   |  |  |- page_size (numeric)
+#>   |  |  |- filters (character)
+#>   |  |  |- cache (logical)
+#>   |  |  |- debounce (numeric)
+#>   |  |  L- Decorators:
+#>   |  |     L- Static decorator
+#>   |  L- Transformators:
+#>   |     L- Dummy Transform
 #>   |- Nested 1
 #>   |  |- Interactive Plots
-#>   |  |  |- Datasets         : ADSL, ADVS, all
+#>   |  |  |- Datasets: ADSL, ADVS, all
 #>   |  |  |- Properties:
-#>   |  |  |  |- Bookmarkable  : TRUE
-#>   |  |  |  L- Reportable    : FALSE
-#>   |  |  |- UI Arguments     : plot_type (character)
-#>   |  |  |                     height (numeric)
-#>   |  |  |                     width (numeric)
-#>   |  |  |                     color_scheme (character)
-#>   |  |  |- Server Arguments : render_type (character)
-#>   |  |  |                     cache_plots (logical)
-#>   |  |  |- Decorators       : 
-#>   |  |  L- Transformators   : Dummy Transform, Plot Settings
+#>   |  |  |  |- Bookmarkable: TRUE
+#>   |  |  |  L- Reportable: FALSE
+#>   |  |  |- Arguments:
+#>   |  |  |  |- plot_type (character)
+#>   |  |  |  |- height (numeric)
+#>   |  |  |  |- width (numeric)
+#>   |  |  |  |- color_scheme (character)
+#>   |  |  |  |- render_type (character)
+#>   |  |  |  L- cache_plots (logical)
+#>   |  |  L- Transformators:
+#>   |  |     |- Dummy Transform
+#>   |  |     L- Plot Settings
 #>   |  L- Nested 2
 #>   |     |- Summary Statistics
-#>   |     |  |- Datasets         : ADSL
+#>   |     |  |- Datasets: ADSL
 #>   |     |  |- Properties:
-#>   |     |  |  |- Bookmarkable  : FALSE
-#>   |     |  |  L- Reportable    : FALSE
-#>   |     |  |- UI Arguments     : stats (character)
-#>   |     |  |                     grouping (character)
-#>   |     |  |- Server Arguments : 
-#>   |     |  |- Decorators       : 
-#>   |     |  L- Transformators   : 
+#>   |     |  |  |- Bookmarkable: FALSE
+#>   |     |  |  L- Reportable: FALSE
+#>   |     |  L- Arguments:
+#>   |     |     |- stats (character)
+#>   |     |     L- grouping (character)
 #>   |     |- Labeled nested modules
 #>   |     |  L- Subgroup Analysis
-#>   |     |     |- Datasets         : ADSL, ADAE
+#>   |     |     |- Datasets: ADSL, ADAE
 #>   |     |     |- Properties:
-#>   |     |     |  |- Bookmarkable  : TRUE
-#>   |     |     |  L- Reportable    : FALSE
-#>   |     |     |- UI Arguments     : subgroups (character)
-#>   |     |     |                     analysis_type (character)
-#>   |     |     |- Server Arguments : 
-#>   |     |     |- Decorators       : 
-#>   |     |     L- Transformators   : 
+#>   |     |     |  |- Bookmarkable: TRUE
+#>   |     |     |  L- Reportable: FALSE
+#>   |     |     L- Arguments:
+#>   |     |        |- subgroups (character)
+#>   |     |        L- analysis_type (character)
 #>   |     L- 
 #>   |        L- Subgroup Analysis in non-labled modules
-#>   |           |- Datasets         : all
-#>   |           |- Properties:
-#>   |           |  |- Bookmarkable  : FALSE
-#>   |           |  L- Reportable    : FALSE
-#>   |           |- UI Arguments     : 
-#>   |           |- Server Arguments : 
-#>   |           |- Decorators       : 
-#>   |           L- Transformators   : 
+#>   |           |- Datasets: all
+#>   |           L- Properties:
+#>   |              |- Bookmarkable: FALSE
+#>   |              L- Reportable: FALSE
 #>   L- Non-nested module
-#>      |- Datasets         : all
-#>      |- Properties:
-#>      |  |- Bookmarkable  : FALSE
-#>      |  L- Reportable    : FALSE
-#>      |- UI Arguments     : 
-#>      |- Server Arguments : 
-#>      |- Decorators       : 
-#>      L- Transformators   : 
+#>      |- Datasets: all
+#>      L- Properties:
+#>         |- Bookmarkable: FALSE
+#>         L- Reportable: FALSE
 cat(format(complete_modules, what = c("ui_args", "server_args", "transformators")))
 #> TEAL ROOT
 #>   |- Data Overview
-#>   |  |- UI Arguments     : view_type (character)
-#>   |  |                     page_size (numeric)
-#>   |  |                     filters (character)
-#>   |  |- Server Arguments : cache (logical)
-#>   |  |                     debounce (numeric)
-#>   |  L- Transformators   : Dummy Transform
+#>   |  L- Transformators:
+#>   |     L- Dummy Transform
 #>   |- Nested 1
 #>   |  |- Interactive Plots
-#>   |  |  |- UI Arguments     : plot_type (character)
-#>   |  |  |                     height (numeric)
-#>   |  |  |                     width (numeric)
-#>   |  |  |                     color_scheme (character)
-#>   |  |  |- Server Arguments : render_type (character)
-#>   |  |  |                     cache_plots (logical)
-#>   |  |  L- Transformators   : Dummy Transform, Plot Settings
+#>   |  |  L- Transformators:
+#>   |  |     |- Dummy Transform
+#>   |  |     L- Plot Settings
 #>   |  L- Nested 2
 #>   |     |- Summary Statistics
-#>   |     |  |- UI Arguments     : stats (character)
-#>   |     |  |                     grouping (character)
-#>   |     |  |- Server Arguments : 
-#>   |     |  L- Transformators   : 
 #>   |     |- Labeled nested modules
 #>   |     |  L- Subgroup Analysis
-#>   |     |     |- UI Arguments     : subgroups (character)
-#>   |     |     |                     analysis_type (character)
-#>   |     |     |- Server Arguments : 
-#>   |     |     L- Transformators   : 
 #>   |     L- 
 #>   |        L- Subgroup Analysis in non-labled modules
-#>   |           |- UI Arguments     : 
-#>   |           |- Server Arguments : 
-#>   |           L- Transformators   : 
 #>   L- Non-nested module
-#>      |- UI Arguments     : 
-#>      |- Server Arguments : 
-#>      L- Transformators   : 
 cat(format(complete_modules, what = c("decorators", "transformators")))
 #> TEAL ROOT
 #>   |- Data Overview
-#>   |  |- Decorators       : Static decorator
-#>   |  L- Transformators   : Dummy Transform
+#>   |  L- Transformators:
+#>   |     L- Dummy Transform
 #>   |- Nested 1
 #>   |  |- Interactive Plots
-#>   |  |  |- Decorators       : 
-#>   |  |  L- Transformators   : Dummy Transform, Plot Settings
+#>   |  |  L- Transformators:
+#>   |  |     |- Dummy Transform
+#>   |  |     L- Plot Settings
 #>   |  L- Nested 2
 #>   |     |- Summary Statistics
-#>   |     |  |- Decorators       : 
-#>   |     |  L- Transformators   : 
 #>   |     |- Labeled nested modules
 #>   |     |  L- Subgroup Analysis
-#>   |     |     |- Decorators       : 
-#>   |     |     L- Transformators   : 
 #>   |     L- 
 #>   |        L- Subgroup Analysis in non-labled modules
-#>   |           |- Decorators       : 
-#>   |           L- Transformators   : 
 #>   L- Non-nested module
-#>      |- Decorators       : 
-#>      L- Transformators   : 
 ```
