@@ -30,7 +30,7 @@ a.disabled {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .teal.manager_table_row {
