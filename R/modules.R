@@ -454,7 +454,9 @@ format.teal_module <- function(
     all_args <- c(ui_args_copy, server_args_copy)
 
     has_args <- length(all_args) > 0
-    has_decorators <- length(decorators_info$global) > 0 || length(decorators_info$objects) > 0
+    has_global <- length(decorators_info$global) > 0
+    has_objects <- length(decorators_info$objects) > 0
+    has_decorators <- has_global || has_objects
     has_transformators_after <- "transformators" %in% what
 
     args_branch_char <- if (has_transformators_after) "|-" else (if (is_last) "L-" else "|-")
@@ -484,8 +486,6 @@ format.teal_module <- function(
     }
 
     # Decorators (child of Arguments)
-    has_global <- length(decorators_info$global) > 0
-    has_objects <- length(decorators_info$objects) > 0
     is_last_decorators <- TRUE
 
     if (has_decorators) {
