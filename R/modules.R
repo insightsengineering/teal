@@ -505,7 +505,7 @@ format.teal_module <- function(
 
   # Datasets
   if ("datasets" %in% what) {
-    is_final <- ("datasets" == last_visible) && is_last
+    is_final <- "datasets" == last_visible
     output <- paste0(
       output,
       content_prefix, if (is_final) "L- " else "|- ",
@@ -515,7 +515,7 @@ format.teal_module <- function(
 
   # Properties
   if ("properties" %in% what) {
-    is_final <- ("properties" == last_visible) && is_last
+    is_final <- "properties" == last_visible
     props_prefix <- paste0(content_prefix, if (is_final) "   " else "|  ")
     output <- paste0(
       output,
@@ -527,7 +527,7 @@ format.teal_module <- function(
 
   # Arguments
   if (show_arguments) {
-    is_final <- ("arguments" == last_visible) && is_last
+    is_final <- "arguments" == last_visible
     args_prefix <- paste0(content_prefix, if (is_final) "   " else "|  ")
     output <- paste0(
       output,
@@ -559,7 +559,7 @@ format.teal_module <- function(
 
   # Transformators
   if (show_transformators) {
-    is_final <- ("transformators" == last_visible) && is_last
+    is_final <- "transformators" == last_visible
     trans_prefix <- paste0(content_prefix, if (is_final) "   " else "|  ")
     output <- paste0(
       output,
