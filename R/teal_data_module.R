@@ -32,6 +32,10 @@
 #' `teal_data_module` returns a list of class `teal_data_module` containing two elements, `ui` and
 #' `server` provided via arguments.
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' tdm <- teal_data_module(
 #'   ui = function(id) {
@@ -54,6 +58,12 @@
 #'     })
 #'   }
 #' )
+#'
+#' app <- init(data = tdm, modules = example_module())
+#'
+#' if (interactive()) {
+#'  shinyApp(app$ui, app$server)
+#' }
 #'
 #' @name teal_data_module
 #' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]

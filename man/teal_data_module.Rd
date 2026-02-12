@@ -98,6 +98,12 @@ tdm <- teal_data_module(
   }
 )
 
+app <- init(data = tdm, modules = example_module())
+
+if (interactive()) {
+ shinyApp(app$ui, app$server)
+}
+
 eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
 within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
@@ -109,3 +115,13 @@ within(tdm, dataset1 <- subset(dataset1, Species \%in\% species), species = vali
 \seealso{
 \code{\link[teal.data:teal_data-class]{teal.data::teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIGkAJjDmKu1APrmopKHZhFzK6nHYDp0lbTSALzKahpatOY6IL5+0hAAztbSAHIAyuyR-BBx0lDhEABCKqSkWok+YAkq9DC0pHxgPLjS1FD0cNTB0o0AMkRQ5tKOzo3ZfgC+uLEJIlKM3arq4hFR0jE5cW4eXmlzIpnmLUsFmRCoJS1EJRekLbMJCZoQ0bG5cFJkWHD54lJntwAJNVavUWhtcrkRlBkgB3eoACyEPk2kLitgcTig2mmqLR6ze+L80NmpAAjMlaIxaAlCUSSXBSAAmZIwUgEFi0vFoiZ0uLZPnErF8ibjOKi2K8l6maDoSmCUjsaHdCwwFrbTxwJIhOAAD1gqC8rncmu0AsESmkZ3Ioj+3h4rxyCSREFYAEF0Ow0KhAQEWt7gftGNkpWAJgBdIA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIGkAJjDmKu1APrmopKHZhFzK6nHYDp0lbTSALzKahpatOY6IL5+0hAAztbSAHIAyuyR-BBx0lDhEABCKqSkWok+YAkq9DC0pHxgPLjS1FD0cNTB0o0AMkRQ5tKOzo3ZfgC+uLEJIlKM3arq4hFR0jE5cW4eXmlzIpnmLUsFmRCoJS1EJRekLbMJCZoQ0bG5cFJkWHD54lJntwAJNVavUWhtcrkRlBkgB3eoACyEPk2kLitgcTig2mmqLR6ze+L80NmpAAjMlaIxaAlCUSSXBSAAmZIwUgEFi0vFoiZ0uLZPnErF8ibjOKi2K8l6maDoSmCUjsaHdCwwFrbTxwJIhOAAD1gqC8rncmu0AsESmkZ3Ioj+3h4rxyCSREFYAEF0Ow0KhAQEWt7gftGNkpWAJgBdIA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+
