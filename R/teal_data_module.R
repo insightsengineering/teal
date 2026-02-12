@@ -70,7 +70,7 @@
 #' app <- init(data = tdm, modules = example_module())
 #'
 #' if (interactive()) {
-#'  shinyApp(app$ui, app$server)
+#'   shinyApp(app$ui, app$server)
 #' }
 #'
 #' @name teal_data_module
