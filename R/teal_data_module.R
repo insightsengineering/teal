@@ -40,7 +40,15 @@
 #' tdm <- teal_data_module(
 #'   ui = function(id) {
 #'     ns <- NS(id)
-#'     actionButton(ns("submit"), label = "Load data")
+#'     tags$div(
+#'       tags$p("This is an example of a data module."),
+#'       tags$p(
+#'         "Click the button to load the", tags$code("iris"), "and", tags$code("mtcars"),
+#'         "datasets into the app as", tags$code("dataset1"), "and", tags$code("dataset2"),
+#'         "respectively."
+#'       ),
+#'       actionButton(ns("submit"), label = "Load data")
+#'     )
 #'   },
 #'   server = function(id) {
 #'     moduleServer(id, function(input, output, session) {
