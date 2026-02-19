@@ -597,3 +597,44 @@ testthat::test_that("format.teal_module handles mixed global and object-specific
   testthat::expect_match(formatted_stripped, "[|L]- Decorator Three\\n", fixed = FALSE)
   testthat::expect_no_match(formatted_stripped, "NULL")
 })
+
+testthat::test_that("format.teal_module does not duplicate arguments shared between ui_args and server_args", {
+  mod <- module(
+    label = "test module",
+    server = function(id, data, ...) {},
+    ui = function(id, ...) {},
+    ui_args = list(by = list("a"), include = list("b"), page_size = 10),
+    server_args = list(by = list("a"), include = list("b"), cache = TRUE)
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+
+  by_matches <- gregexpr("\\|- by ", formatted_stripped)[[1]]
+  by_count <- sum(by_matches > 0)
+  testthat::expect_equal(by_count, 1L)
+
+  include_matches <- gregexpr("\\|- include ", formatted_stripped)[[1]]
+  include_count <- sum(include_matches > 0)
+  testthat::expect_equal(include_count, 1L)
+})
+
+testthat::test_that("format.teal_module omits NULL-valued arguments", {
+  mod <- module(
+    label = "test module",
+    server = function(id, data, ...) {},
+    ui = function(id, ...) {},
+    ui_args = list(pre_output = NULL, post_output = NULL, page_size = 10),
+    server_args = list(col_label = NULL, cache = TRUE)
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+
+  testthat::expect_no_match(formatted_stripped, "pre_output")
+  testthat::expect_no_match(formatted_stripped, "post_output")
+  testthat::expect_no_match(formatted_stripped, "col_label")
+  testthat::expect_no_match(formatted_stripped, "NULL")
+  testthat::expect_match(formatted_stripped, "page_size")
+  testthat::expect_match(formatted_stripped, "cache")
+})

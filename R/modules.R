@@ -484,10 +484,18 @@ format.teal_module <- function(
   has_decorators <- length(decorators_info$global) > 0 || length(decorators_info$objects) > 0
 
   ui_args_copy <- x$ui_args
-  ui_args_copy$decorators <- NULL
+  ui_args_copy[c("decorators", "transformators")] <- NULL
   server_args_copy <- x$server_args
-  server_args_copy$decorators <- NULL
+  server_args_copy[c("decorators", "transformators")] <- NULL
+
+  # Deduplicate: keep first occurrence when same name appears in both ui_args and server_args
   all_args <- c(ui_args_copy, server_args_copy)
+  if (length(all_args) > 0) {
+    arg_names <- names(all_args)
+    all_args <- all_args[!duplicated(arg_names)]
+    # Remove NULL-valued arguments
+    all_args <- Filter(Negate(is.null), all_args)
+  }
   has_args <- length(all_args) > 0
 
   show_arguments <- "arguments" %in% what && (has_args || has_decorators)
