@@ -107,6 +107,10 @@ srv_teal_module <- function(id,
                             reporter = teal.reporter::Reporter$new(),
                             data_load_status = reactive("ok")) {
   moduleServer(id, function(input, output, session) {
+    observeEvent(input$active_module_id, {
+      otel::log_info(sprintf("The app current module is %s", input$active_module_id))
+    })
+
     .srv_teal_module(
       id = "nav",
       data = data,
