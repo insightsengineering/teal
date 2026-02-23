@@ -49,66 +49,71 @@ decorate_err_msg <- function(x, pre = character(0), post = character(0)) {
 }
 
 
-#' Internal function to check if decorators is a valid object
+#' Internal function to check if decorators/transformators is a valid object
 #' @noRd
-check_transformators <- function(x, names = NULL, arg = "decorators") { # nolint: object_name.
+check <- function(arg = "decorators") {
+  arg <- force(arg)
+  function(x, names = NULL) { # nolint: object_name.
 
-  check_message <- checkmate::check_list(x, names = "named")
+    check_message <- checkmate::check_list(x)
 
-  if (!is.null(names) && isTRUE(check_message)) {
-    if (length(names(x)) != length(unique(names(x)))) {
-      check_message <- sprintf(
-        "The `%s` must contain unique names from these names: %s", arg,
-        paste(sQuote(names), collapse = ", ")
-      )
-    } else if (!all(unique(names(x)) %in% c("default", names))) {
-      check_message <- sprintf(
-        paste0(
-          "The `%s` must be a named list with:\n",
-          " * 'default' for decorating all objects and/or\n",
-          " * A name from these: %s"
-        ),
-        arg, paste(sQuote(names), collapse = ", ")
-      )
-    }
-  }
-
-  if (!isTRUE(check_message)) {
-    return(check_message)
-  }
-
-  valid_elements <- vapply(
-    x,
-    checkmate::test_class,
-    classes = "teal_transform_module",
-    FUN.VALUE = logical(1L)
-  )
-
-  # Nested list
-  if (any(!valid_elements)) {
-    valid_nested <- vapply(
-      x[!valid_elements], function(subdecorators) {
-        checks <- vapply(subdecorators,
-          checkmate::test_class,
-          classes = "teal_transform_module",
-          logical(1L)
+    if (!is.null(names) && isTRUE(check_message)) {
+      if (length(names(x)) != length(unique(names(x)))) {
+        check_message <- sprintf(
+          "The `%s` must contain unique names from these names: %s", arg,
+          paste(sQuote(names), collapse = ", ")
         )
-        all(checks)
-      },
+      } else if (!all(unique(names(x)) %in% c("default", names))) {
+        check_message <- sprintf(
+          paste0(
+            "The `%s` must be a named list with:\n",
+            " * 'default' for decorating all objects and/or\n",
+            " * A name from these: %s"
+          ),
+          arg, paste(sQuote(names), collapse = ", ")
+        )
+      }
+    }
+
+    if (!isTRUE(check_message)) {
+      return(check_message)
+    }
+
+    valid_elements <- vapply(
+      x,
+      checkmate::test_class,
+      classes = "teal_transform_module",
       FUN.VALUE = logical(1L)
     )
-    valid_elements[!valid_elements] <- valid_nested
-  }
 
-  if (all(valid_elements)) {
-    return(TRUE)
-  }
+    # Nested list
+    if (any(!valid_elements)) {
+      valid_nested <- vapply(
+        x[!valid_elements], function(subdecorators) {
+          checks <- vapply(subdecorators,
+                           checkmate::test_class,
+                           classes = "teal_transform_module",
+                           logical(1L)
+          )
+          all(checks)
+        },
+        FUN.VALUE = logical(1L)
+      )
+      valid_elements[!valid_elements] <- valid_nested
+    }
 
-  paste0(
-    "The named list can contain a list of 'teal_transform_module' objects created ",
-    "using `teal_transform_module()` or be a `teal_transform_module` object."
-  )
+    if (all(valid_elements)) {
+      return(TRUE)
+    }
+
+    paste0(
+      "The named list can contain a list of 'teal_transform_module' objects created ",
+      "using `teal_transform_module()` or be a `teal_transform_module` object."
+    )
+  }
 }
-#' Internal assertion on decorators
+
+#' Internal assertion with the appropriate name of the argument on the error message.
 #' @noRd
-assert_transformators <- checkmate::makeAssertionFunction(check_transformators)
+assert_transformators <- checkmate::makeAssertionFunction(check("transformators"))
+assert_decorators <- checkmate::makeAssertionFunction(check("decorators"))
