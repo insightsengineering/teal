@@ -362,7 +362,7 @@ testthat::test_that("module datanames is appended by its transformators dataname
     datanames = c("a", "b")
   )
 
-  out <- module(datanames = "c", transformators = list(transformator_w_datanames))
+  out <- module(datanames = "c", transformators = list(default = transformator_w_datanames))
   testthat::expect_identical(out$datanames, c("c", "a", "b"))
 })
 
@@ -382,7 +382,7 @@ testthat::test_that("module datanames stays 'all' regardless of transformators",
     datanames = c("a", "b")
   )
 
-  out <- module(datanames = "all", transformators = list(transformator_w_datanames))
+  out <- module(datanames = "all", transformators = list(default = transformator_w_datanames))
   testthat::expect_identical(out$datanames, "all")
 })
 

@@ -114,8 +114,8 @@
 #' app <- init(
 #'   data = teal_data(iris = iris),
 #'   modules = example_module(
-#'     transformators = data_transformators,
-#'     decorators = list(output_decorator)
+#'     transformators = list(default = data_transformators),
+#'     decorators = list(default = output_decorator)
 #'   )
 #' )
 #' if (interactive()) {

@@ -18,13 +18,7 @@ NULL
 #' @rdname module_transform_data
 ui_transform_teal_data <- function(id, transformators, class = "well") {
   checkmate::assert_string(id)
-  if (length(transformators) == 0L) {
-    return(NULL)
-  }
-  if (inherits(transformators, "teal_transform_module")) {
-    transformators <- list(transformators)
-  }
-  checkmate::assert_list(transformators, "teal_transform_module")
+  assert_transformators(transformators)
   names(transformators) <- sprintf("transform_%d", seq_along(transformators))
 
   lapply(
@@ -68,13 +62,7 @@ srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)
-  if (length(transformators) == 0L) {
-    return(data)
-  }
-  if (inherits(transformators, "teal_transform_module")) {
-    transformators <- list(transformators)
-  }
-  checkmate::assert_list(transformators, "teal_transform_module", null.ok = TRUE)
+  assert_transformators(transformators)
   names(transformators) <- sprintf("transform_%d", seq_along(transformators))
 
   moduleServer(id, function(input, output, session) {

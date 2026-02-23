@@ -92,14 +92,15 @@ testthat::test_that(
           example_module(
             datanames = "iris",
             transformators = list(
-              teal_transform_module(
-                ui = function(id) NULL,
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    NULL
-                  })
-                }
-              )
+              default =
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      NULL
+                    })
+                  }
+                )
             )
           )
         )

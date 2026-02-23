@@ -638,14 +638,14 @@ format.teal_module <- function(
 #'       view_type = "table",
 #'       page_size = 10,
 #'       filters = c("ARM", "SEX", "RACE"),
-#'       decorators = list(static_decorator)
+#'       decorators = list(default = static_decorator)
 #'     ),
 #'     server_args = list(
 #'       cache = TRUE,
 #'       debounce = 1000,
-#'       decorators = list(static_decorator)
+#'       decorators = list(default = static_decorator)
 #'     ),
-#'     transformators = list(dummy_transformator),
+#'     transformators = list(default = dummy_transformator),
 #'     bk = TRUE
 #'   ),
 #'   modules(
@@ -663,7 +663,7 @@ format.teal_module <- function(
 #'         render_type = "svg",
 #'         cache_plots = TRUE
 #'       ),
-#'       transformators = list(dummy_transformator, plot_transformator),
+#'       transformators = list(default = list(dummy_transformator, plot_transformator)),
 #'       bk = TRUE
 #'     ),
 #'     modules(

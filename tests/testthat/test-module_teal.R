@@ -776,14 +776,15 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                label = "Dummy",
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), swiss <- swiss))
-                  })
-                }
-              )
+              default =
+                teal_transform_module(
+                  label = "Dummy",
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive(within(data(), swiss <- swiss))
+                    })
+                  }
+                )
             ),
             datanames = "all"
           )
@@ -813,14 +814,15 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                label = "Dummy",
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), swiss <- swiss))
-                  })
-                }
-              )
+              default =
+                teal_transform_module(
+                  label = "Dummy",
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive(within(data(), swiss <- swiss))
+                    })
+                  }
+                )
             ),
             datanames = "all"
           )
@@ -872,16 +874,17 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                label = "Dummy",
-                ui = function(id) div("(does nothing)"),
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), swiss <- swiss))
-                  })
-                },
-                datanames = "swiss"
-              )
+              default =
+                teal_transform_module(
+                  label = "Dummy",
+                  ui = function(id) div("(does nothing)"),
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive(within(data(), swiss <- swiss))
+                    })
+                  },
+                  datanames = "swiss"
+                )
             ),
             datanames = c("iris", "mtcars")
           )
@@ -911,15 +914,16 @@ testthat::describe("srv_teal teal_modules", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                label = "Dummy",
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive(within(data(), swiss <- swiss))
-                  })
-                },
-                datanames = character(0)
-              )
+              default =
+                teal_transform_module(
+                  label = "Dummy",
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive(within(data(), swiss <- swiss))
+                    })
+                  },
+                  datanames = character(0)
+                )
             ),
             datanames = c("iris", "mtcars")
           )
@@ -1837,17 +1841,18 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             server = function(id, data) data,
             datanames = c("iris", "data_from_transform"),
             transformators = list(
-              teal_transform_module(
-                ui = function(id) NULL,
-                server = function(id, data) {
-                  moduleServer(id, function(input, output, session) {
-                    reactive({
-                      within(data(), data_from_transform <- list(iris = iris, mtcars = mtcars))
+              default =
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    moduleServer(id, function(input, output, session) {
+                      reactive({
+                        within(data(), data_from_transform <- list(iris = iris, mtcars = mtcars))
+                      })
                     })
-                  })
-                },
-                datanames = character(0)
-              )
+                  },
+                  datanames = character(0)
+                )
             )
           )
         )
@@ -1874,10 +1879,11 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             module(
               server = function(id, data) data,
               transformators = list(
-                teal_transform_module(
-                  ui = function(id) textInput("a", "an input"),
-                  server = function(id, data) eventReactive(input$a, data())
-                )
+                default =
+                  teal_transform_module(
+                    ui = function(id) textInput("a", "an input"),
+                    server = function(id, data) eventReactive(input$a, data())
+                  )
               )
             )
           )
@@ -1906,10 +1912,11 @@ testthat::describe("srv_teal teal_module(s) transformator", {
               module(
                 server = function(id, data) data,
                 transformators = list(
-                  teal_transform_module(
-                    ui = function(id) NULL,
-                    server = function(id, data) "whatever"
-                  )
+                  default =
+                    teal_transform_module(
+                      ui = function(id) NULL,
+                      server = function(id, data) "whatever"
+                    )
                 )
               )
             )
@@ -1939,12 +1946,13 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                ui = function(id) NULL,
-                server = function(id, data) {
-                  reactive(validate(need(FALSE, "my error")))
-                }
-              )
+              default =
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    reactive(validate(need(FALSE, "my error")))
+                  }
+                )
             )
           )
         )
@@ -1967,12 +1975,13 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                ui = function(id) NULL,
-                server = function(id, data) {
-                  reactive(validate(need(FALSE, "my error")))
-                }
-              )
+              default =
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    reactive(validate(need(FALSE, "my error")))
+                  }
+                )
             )
           )
         )
@@ -1995,12 +2004,13 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                ui = function(id) NULL,
-                server = function(id, data) {
-                  reactive(within(data(), stop("my error")))
-                }
-              )
+              default =
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    reactive(within(data(), stop("my error")))
+                  }
+                )
             )
           )
         )
@@ -2023,12 +2033,13 @@ testthat::describe("srv_teal teal_module(s) transformator", {
             label = "module_1",
             server = function(id, data) data,
             transformators = list(
-              teal_transform_module(
-                ui = function(id) NULL,
-                server = function(id, data) {
-                  reactive(data.frame())
-                }
-              )
+              default =
+                teal_transform_module(
+                  ui = function(id) NULL,
+                  server = function(id, data) {
+                    reactive(data.frame())
+                  }
+                )
             )
           )
         )
@@ -2496,17 +2507,18 @@ testthat::describe("srv_teal summary table", {
         id = "test",
         data = data,
         modules = modules(module("module_1", server = function(id, data) data, datanames = "all", transformators = list(
-          teal_transform_module(
-            server = function(id, data) {
-              reactive({
-                within(data(), {
-                  withr::with_package("MultiAssayExperiment", {
-                    data("miniACC", package = "MultiAssayExperiment", envir = environment())
+          default =
+            teal_transform_module(
+              server = function(id, data) {
+                reactive({
+                  within(data(), {
+                    withr::with_package("MultiAssayExperiment", {
+                      data("miniACC", package = "MultiAssayExperiment", envir = environment())
+                    })
                   })
                 })
-              })
-            }
-          )
+              }
+            )
         )))
       ),
       expr = {

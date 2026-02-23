@@ -1,12 +1,12 @@
 testthat::describe("make_teal_transform_server produces a valid teal_transform_module", {
   testthat::it("expression", {
     label <- "output_decorator"
-    output_decorator <- teal_transform_module(
+    output_decorator <- list(default = teal_transform_module(
       label = label,
       server = make_teal_transform_server(
         expression(data1 <- rev(data1))
       )
-    )
+    ))
 
     shiny::testServer(
       app = srv_transform_teal_data,
@@ -24,12 +24,12 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
 
   testthat::it("quote", {
     label <- "output_decorator"
-    output_decorator <- teal_transform_module(
+    output_decorator <- list(default = teal_transform_module(
       label = label,
       server = make_teal_transform_server(
         quote(data1 <- rev(data1))
       )
-    )
+    ))
 
     shiny::testServer(
       app = srv_transform_teal_data,
@@ -49,7 +49,7 @@ testthat::describe("make_teal_transform_server produces a valid teal_transform_m
 testthat::test_that(
   "ui_transform_teal_data and srv_transform_teal_data have the same namespace for transform module",
   {
-    ttm <- teal_transform_module(
+    ttm <- list(default = teal_transform_module(
       ui = function(id) tags$div(id = NS(id, "a_div"), "a div"),
       server = function(id, data) {
         moduleServer(id, function(input, output, session) {
@@ -57,7 +57,7 @@ testthat::test_that(
           reactive(within(data(), id <- full_id, full_id = full_id))
         })
       }
-    )
+    ))
 
     initial_id <- "a-path-to-an-inner-namespace"
     ui <- ui_transform_teal_data(initial_id, ttm)
