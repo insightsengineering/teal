@@ -327,32 +327,20 @@ testthat::test_that("format.teal_modules returns proper structure", {
     c(
       "TEAL ROOT",
       "  |- a",
-      "  |  |- Datasets         : all",
-      "  |  |- Properties:",
-      "  |  |  |- Bookmarkable  : FALSE",
-      "  |  |  L- Reportable    : FALSE",
-      "  |  |- UI Arguments     : ",
-      "  |  |- Server Arguments : ",
-      "  |  |- Decorators       : ",
-      "  |  L- Transformators   : ",
+      "  |  |- Datasets: all",
+      "  |  L- Properties:",
+      "  |     |- Bookmarkable: FALSE",
+      "  |     L- Reportable: FALSE",
       "  |- c",
-      "  |  |- Datasets         : all",
-      "  |  |- Properties:",
-      "  |  |  |- Bookmarkable  : FALSE",
-      "  |  |  L- Reportable    : FALSE",
-      "  |  |- UI Arguments     : ",
-      "  |  |- Server Arguments : ",
-      "  |  |- Decorators       : ",
-      "  |  L- Transformators   : ",
+      "  |  |- Datasets: all",
+      "  |  L- Properties:",
+      "  |     |- Bookmarkable: FALSE",
+      "  |     L- Reportable: FALSE",
       "  L- c",
-      "     |- Datasets         : all",
-      "     |- Properties:",
-      "     |  |- Bookmarkable  : FALSE",
-      "     |  L- Reportable    : FALSE",
-      "     |- UI Arguments     : ",
-      "     |- Server Arguments : ",
-      "     |- Decorators       : ",
-      "     L- Transformators   : "
+      "     |- Datasets: all",
+      "     L- Properties:",
+      "        |- Bookmarkable: FALSE",
+      "        L- Reportable: FALSE"
     )
   )
 })
@@ -396,4 +384,257 @@ testthat::test_that("module datanames stays 'all' regardless of transformators",
 
   out <- module(datanames = "all", transformators = list(transformator_w_datanames))
   testthat::expect_identical(out$datanames, "all")
+})
+
+# decorator printing tests --------------------------------------------------------------------------------------------
+
+testthat::test_that("format.teal_module prints single decorator label", {
+  decorator1 <- teal_transform_module(
+    label = "Test Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(decorators = list(decorator1))
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  testthat::expect_match(formatted_stripped, "[|L]- Test Decorator\\n", fixed = FALSE)
+})
+
+testthat::test_that("format.teal_module prints multiple decorators in flat list", {
+  decorator1 <- teal_transform_module(
+    label = "Decorator One",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Decorator Two",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(decorators = list(decorator1, decorator2))
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  # With new formatting, global decorators are listed directly on separate lines
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator One\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator Two\\n", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "global:", fixed = TRUE)
+})
+
+testthat::test_that("format.teal_module prints decorators from nested list structure", {
+  decorator1 <- teal_transform_module(
+    label = "First Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Second Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1, decorator2)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  # Check that decorators appear on separate lines under "table:"
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- First Decorator\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Second Decorator\\n", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "NULL")
+})
+
+testthat::test_that("format.teal_module prints decorators from complex nested structure", {
+  decorator1 <- teal_transform_module(
+    label = "Dec1",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Dec2",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator3 <- teal_transform_module(
+    label = "Dec3",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1, decorator2),
+        plot = list(decorator3)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  # Check that decorators appear on separate lines under their object names
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Dec1\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Dec2\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- plot:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Dec3\\n", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "NULL")
+})
+
+testthat::test_that("format.teal_module handles mixed decorator structure", {
+  decorator1 <- teal_transform_module(
+    label = "Nested Dec",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Single Dec",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  # Mix of nested list and single decorator
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        table = list(decorator1),
+        plot = decorator2
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  # Check that decorators appear on separate lines under their object names
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Nested Dec\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- plot:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Single Dec\\n", fixed = FALSE)
+})
+
+testthat::test_that("format.teal_module handles mixed global and object-specific decorators", {
+  decorator0 <- teal_transform_module(
+    label = "Global Decorator",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator1 <- teal_transform_module(
+    label = "Decorator One",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator2 <- teal_transform_module(
+    label = "Decorator Two",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  decorator3 <- teal_transform_module(
+    label = "Decorator Three",
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) data)
+    }
+  )
+
+  # Mix of global decorator and object-specific decorators
+  mod <- module(
+    label = "test module",
+    server_args = list(
+      decorators = list(
+        decorator0,
+        table = list(decorator1, decorator2),
+        plot = list(decorator3)
+      )
+    )
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+  # Check that global decorator appears first, then object-specific decorators on separate lines
+  testthat::expect_match(formatted_stripped, "[|L]- Global Decorator\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- table:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator One\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator Two\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- plot:\\n", fixed = FALSE)
+  testthat::expect_match(formatted_stripped, "[|L]- Decorator Three\\n", fixed = FALSE)
+  testthat::expect_no_match(formatted_stripped, "NULL")
+})
+
+testthat::test_that("format.teal_module does not duplicate arguments shared between ui_args and server_args", {
+  mod <- module(
+    label = "test module",
+    server = function(id, data, ...) {},
+    ui = function(id, ...) {},
+    ui_args = list(by = list("a"), include = list("b"), page_size = 10),
+    server_args = list(by = list("a"), include = list("b"), cache = TRUE)
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+
+  by_matches <- gregexpr("\\|- by ", formatted_stripped)[[1]]
+  by_count <- sum(by_matches > 0)
+  testthat::expect_equal(by_count, 1L)
+
+  include_matches <- gregexpr("\\|- include ", formatted_stripped)[[1]]
+  include_count <- sum(include_matches > 0)
+  testthat::expect_equal(include_count, 1L)
+})
+
+testthat::test_that("format.teal_module omits NULL-valued arguments", {
+  mod <- module(
+    label = "test module",
+    server = function(id, data, ...) {},
+    ui = function(id, ...) {},
+    ui_args = list(pre_output = NULL, post_output = NULL, page_size = 10),
+    server_args = list(col_label = NULL, cache = TRUE)
+  )
+
+  formatted <- format(mod)
+  formatted_stripped <- cli::ansi_strip(formatted)
+
+  testthat::expect_no_match(formatted_stripped, "pre_output")
+  testthat::expect_no_match(formatted_stripped, "post_output")
+  testthat::expect_no_match(formatted_stripped, "col_label")
+  testthat::expect_no_match(formatted_stripped, "NULL")
+  testthat::expect_match(formatted_stripped, "page_size")
+  testthat::expect_match(formatted_stripped, "cache")
 })

@@ -32,11 +32,23 @@
 #' `teal_data_module` returns a list of class `teal_data_module` containing two elements, `ui` and
 #' `server` provided via arguments.
 #'
+#' @examplesShinylive
+#' library(teal)
+#' interactive <- function() TRUE
+#' {{ next_example }}
 #' @examples
 #' tdm <- teal_data_module(
 #'   ui = function(id) {
 #'     ns <- NS(id)
-#'     actionButton(ns("submit"), label = "Load data")
+#'     tags$div(
+#'       tags$p("This is an example of a data module."),
+#'       tags$p(
+#'         "Click the button to load the", tags$code("iris"), "and", tags$code("mtcars"),
+#'         "datasets into the app as", tags$code("dataset1"), "and", tags$code("dataset2"),
+#'         "respectively."
+#'       ),
+#'       actionButton(ns("submit"), label = "Load data")
+#'     )
 #'   },
 #'   server = function(id) {
 #'     moduleServer(id, function(input, output, session) {
@@ -54,6 +66,12 @@
 #'     })
 #'   }
 #' )
+#'
+#' app <- init(data = tdm, modules = example_module())
+#'
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
 #'
 #' @name teal_data_module
 #' @seealso [`teal.data::teal_data-class`], [teal.code::qenv()]

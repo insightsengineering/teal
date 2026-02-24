@@ -79,7 +79,15 @@ the \code{...} argument: as \code{name:value} pairs are passed to \code{...}, \c
 tdm <- teal_data_module(
   ui = function(id) {
     ns <- NS(id)
-    actionButton(ns("submit"), label = "Load data")
+    tags$div(
+      tags$p("This is an example of a data module."),
+      tags$p(
+        "Click the button to load the", tags$code("iris"), "and", tags$code("mtcars"),
+        "datasets into the app as", tags$code("dataset1"), "and", tags$code("dataset2"),
+        "respectively."
+      ),
+      actionButton(ns("submit"), label = "Load data")
+    )
   },
   server = function(id) {
     moduleServer(id, function(input, output, session) {
@@ -98,6 +106,12 @@ tdm <- teal_data_module(
   }
 )
 
+app <- init(data = tdm, modules = example_module())
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+
 eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 
 within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
@@ -109,3 +123,13 @@ within(tdm, dataset1 <- subset(dataset1, Species \%in\% species), species = vali
 \seealso{
 \code{\link[teal.data:teal_data-class]{teal.data::teal_data}}, \code{\link[teal.code:qenv]{teal.code::qenv()}}
 }
+\section{Examples in Shinylive}{
+\describe{
+  \item{example-1}{
+    \href{https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIGkAJjDmKu1APrmopKHZhFzK6nHYDp0lbTSALzKahpatOY6IL5+0hAAztbSAHIAyuyR-BBx0s4A5gkAJOaSPjm5eVCFRag+YLoAFrRJLdJQOXAAHrCoXtJESu3Sjs7Sbh5eGHxgPLixuQXFdQuVMwDCdAQA1nmNMvQqpKQkeUTS1ERQ5ntwM7hVNcTm3jO0jC0zc9IzHeb3j2Kz1eYBgpAILASX3mFUqPzAoygCTgpFaZHOpH27XQ7SheEBRWB9URyNIAEZofC-gCloT3CCSSiAEzQ1a5GaMOAJVBwDRSaisaZgNnSOYiqDhCAAISOJwg7ES9QSKnoMFopEp1Cg9Dg1GC8IAMlcboivqtsn4AL4wvzIxhSRj61TqcQRKLSGKw8buTxwNIiB2ZcwPZ2SzIQVBHB5EI6R0gPZEJBKaCDREVwKRkLBwCXiKThuNFZWq9UPT1wvyI5IAd3VzXlIsWOfsiO0NorfnLHbijPJyXeny9Hd7TOSYIhjChQ8qlsbotM08rTigIstFria9is9TC7QqH7glI7CrIQsMAeE19SRC3V6XlcPq82myAloQ3D5FEee8PDTFQS9asAAgug7B7kUAQPOBdoOtk25gJaAC6QA}{Open in Shinylive}
+    \if{html}{\out{<iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIGkAJjDmKu1APrmopKHZhFzK6nHYDp0lbTSALzKahpatOY6IL5+0hAAztbSAHIAyuyR-BBx0s4A5gkAJOaSPjm5eVCFRag+YLoAFrRJLdJQOXAAHrCoXtJESu3Sjs7Sbh5eGHxgPLixuQXFdQuVMwDCdAQA1nmNMvQqpKQkeUTS1ERQ5ntwM7hVNcTm3jO0jC0zc9IzHeb3j2Kz1eYBgpAILASX3mFUqPzAoygCTgpFaZHOpH27XQ7SheEBRWB9URyNIAEZofC-gCloT3CCSSiAEzQ1a5GaMOAJVBwDRSaisaZgNnSOYiqDhCAAISOJwg7ES9QSKnoMFopEp1Cg9Dg1GC8IAMlcboivqtsn4AL4wvzIxhSRj61TqcQRKLSGKw8buTxwNIiB2ZcwPZ2SzIQVBHB5EI6R0gPZEJBKaCDREVwKRkLBwCXiKThuNFZWq9UPT1wvyI5IAd3VzXlIsWOfsiO0NorfnLHbijPJyXeny9Hd7TOSYIhjChQ8qlsbotM08rTigIstFria9is9TC7QqH7glI7CrIQsMAeE19SRC3V6XlcPq82myAloQ3D5FEee8PDTFQS9asAAgug7B7kUAQPOBdoOtk25gJaAC6QA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50\%; margin-top: 30px; transform: translateX(-50\%); z-index: 1"></iframe>}}
+    \if{html}{\out{<a style='height: 800px; display: block;'></a>}}
+  }
+}
+}
+
