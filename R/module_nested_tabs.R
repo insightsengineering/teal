@@ -107,17 +107,15 @@ srv_teal_module <- function(id,
                             reporter = teal.reporter::Reporter$new(),
                             data_load_status = reactive("ok")) {
   moduleServer(id, function(input, output, session) {
-    # Send document title from browser to server with namespaced input ID
     session$sendCustomMessage("teal-get-document-title", list(inputId = session$ns("app_title")))
 
     observeEvent(input$active_module_id, {
-      # Get app title from browser's document.title via JavaScript
       app_title <- if (!is.null(input$app_title) && nzchar(input$app_title)) {
         input$app_title
       } else {
         "teal app"
       }
-      
+
       logger::log_info(
         "Active module changed: app={app_title}, module={input$active_module_id}",
         app_title = app_title,
