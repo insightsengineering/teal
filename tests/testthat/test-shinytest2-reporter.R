@@ -36,6 +36,8 @@ testthat::test_that("e2e: reporter tab is visible when the teal ui creation is d
   )
 
   # Runs the same check as `app$is_visible` to check if the selector is visible
+  app$wait_js()
+  app$wait_for_page_stability()
   testthat::expect_true(
     unlist(
       app$get_js(
