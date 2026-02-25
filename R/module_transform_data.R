@@ -1,5 +1,6 @@
 #' Apply `teal_transform_module` decorators to reactive `teal_data`
 #'
+#' @description
 #' Shiny module pair (`srv_transform_teal_data` / `ui_transform_teal_data`) that runs a sequence
 #' of [teal_transform_module()] decorators against a reactive `teal_data` object.
 #' Decorators are applied one after another via `Reduce`, so each one receives the output of the
@@ -13,7 +14,47 @@
 #' @param transformators (`list` of `teal_transform_module`) decorator modules to apply sequentially
 #'   to `data`. Each transformator receives the output of the previous one as input.
 #' @return `reactive` `teal_data`
+#' @examples
+#' library(shiny)
+#' library(teal.data)
 #'
+#' # A decorator that sets a fixed title on a ggplot2 object named `plot`
+#' static_decorator <- teal_transform_module(
+#'   label = "Static decorator",
+#'   server = function(id, data) {
+#'     moduleServer(id, function(input, output, session) {
+#'       reactive({
+#'         req(data())
+#'         within(data(), {
+#'           plot <- plot + ggplot2::ggtitle("Decorated title")
+#'         })
+#'       })
+#'     })
+#'   }
+#' )
+#'
+#' if (interactive()) {
+#'   shinyApp(
+#'     ui = fluidPage(
+#'       ui_transform_teal_data("decorate", transformators = list(static_decorator)),
+#'       plotOutput("plot")
+#'     ),
+#'     server = function(input, output, session) {
+#'       data <- reactive(
+#'         teal_data(
+#'           plot = ggplot2::ggplot(iris, ggplot2::aes(Sepal.Length, Sepal.Width)) +
+#'             ggplot2::geom_point()
+#'         )
+#'       )
+#'       decorated <- srv_transform_teal_data(
+#'         "decorate",
+#'         data = data,
+#'         transformators = list(static_decorator)
+#'       )
+#'       output$plot <- renderPlot(decorated()[["plot"]])
+#'     }
+#'   )
+#' }
 #' @name module_transform_data
 NULL
 
@@ -26,17 +67,33 @@ NULL
 srv_transform_teal_data <- function(id,
                                     data,
                                     transformators,
-                                    modules = lifecycle::deprecated(),
-                                    is_transform_failed = lifecycle::deprecated(),
+                                    modules = NULL,
+                                    is_transform_failed = reactiveValues(),
                                     expr) {
   checkmate::assert_class(data, classes = "reactive")
+
+  if (!missing(modules)) {
+    lifecycle::deprecate_warn(
+      when = "1.2.0",
+      what = "srv_transform_teal_data(modules)",
+      details = "Argument is used only in the internal of teal and will be removed in the next release."
+    )
+  }
+
+  if (!missing(is_transform_failed)) {
+    lifecycle::deprecate_warn(
+      when = "1.2.0",
+      what = "srv_transform_teal_data(is_transform_failed)",
+      details = "Argument is used only in the internal of teal and will be removed in the next release."
+    )
+  }
 
   decorated_output <- .srv_transform_teal_data(
     id,
     data = data,
     transformators = transformators,
-    modules = if (missing(modules)) NULL,
-    is_transform_failed = if (missing(is_transform_failed)) reactiveValues()
+    modules = modules,
+    is_transform_failed = is_transform_failed
   )
 
   no_expr <- missing(expr)
@@ -60,23 +117,38 @@ srv_transform_teal_data <- function(id,
 
 
 #' @rdname module_transform_data
-#' @details
-#' `ui_transform_teal_data` is a thin wrapper around the internal `.ui_transform_teal_data`.
 #' @param class `r lifecycle::badge("deprecated")` No longer used.
 #' @param ... additional arguments passed to `.ui_transform_teal_data` (e.g. `class`).
 #' @return A `list` of `bslib::accordion` UI elements, one per transformator, or `NULL` if
 #'   `transformators` is empty.
 #' @export
-ui_transform_teal_data <- function(id, transformators, class = lifecycle::deprecated(), ...) {
+ui_transform_teal_data <- function(id, transformators, class = "well", ...) {
+  if (!missing(class)) {
+    lifecycle::deprecate_warn(
+      when = "1.2.0",
+      what = "ui_transform_teal_data(class)",
+      details = "Ability to choose class will be removed in the next release."
+    )
+  }
   .ui_transform_teal_data(
     id,
     transformators = transformators,
-    class = if (missing(class)) "well" else class,
+    class = class,
     ...
   )
 }
 
-#' @inheritParams module_transform_data
+#' Internal module handling list of [teal_transform_module()]
+#'
+#' This module calls [teal_transform_module()] sequentially by passing output from one step to the next.
+#' Modules have error/warning handling feature and highlight containers when something goes wrong.
+#' @name module_transform_teal_data_impl
+NULL
+
+#' @rdname module_transform_teal_data_impl
+#' @inheritParams srv_transform_teal_data
+#' @return `shiny.tag`
+#' @keywords internal
 .ui_transform_teal_data <- function(id, transformators, class = "well") {
   checkmate::assert_string(id)
   if (length(transformators) == 0L) {
@@ -123,7 +195,10 @@ ui_transform_teal_data <- function(id, transformators, class = lifecycle::deprec
   )
 }
 
-#' @inheritParams module_transform_data
+#' @rdname module_transform_teal_data_impl
+#' @inheritParams ui_transform_teal_data
+#' @return `reactive` `teal_data` object
+#' @keywords internal
 .srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)

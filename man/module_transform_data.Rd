@@ -10,17 +10,12 @@ srv_transform_teal_data(
   id,
   data,
   transformators,
-  modules = lifecycle::deprecated(),
-  is_transform_failed = lifecycle::deprecated(),
+  modules = NULL,
+  is_transform_failed = reactiveValues(),
   expr
 )
 
-ui_transform_teal_data(
-  id,
-  transformators,
-  class = lifecycle::deprecated(),
-  ...
-)
+ui_transform_teal_data(id, transformators, class = "well", ...)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
@@ -57,6 +52,45 @@ Failed transformators are tracked and any downstream transformator is automatica
 until the failure is resolved.
 An optional \code{expr} argument allows additional code to be evaluated on the final decorated output.
 }
-\details{
-\code{ui_transform_teal_data} is a thin wrapper around the internal \code{.ui_transform_teal_data}.
+\examples{
+library(shiny)
+library(teal.data)
+
+# A decorator that sets a fixed title on a ggplot2 object named `plot`
+static_decorator <- teal_transform_module(
+  label = "Static decorator",
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      reactive({
+        req(data())
+        within(data(), {
+          plot <- plot + ggplot2::ggtitle("Decorated title")
+        })
+      })
+    })
+  }
+)
+
+if (interactive()) {
+  shinyApp(
+    ui = fluidPage(
+      ui_transform_teal_data("decorate", transformators = list(static_decorator)),
+      plotOutput("plot")
+    ),
+    server = function(input, output, session) {
+      data <- reactive(
+        teal_data(
+          plot = ggplot2::ggplot(iris, ggplot2::aes(Sepal.Length, Sepal.Width)) +
+            ggplot2::geom_point()
+        )
+      )
+      decorated <- srv_transform_teal_data(
+        "decorate",
+        data = data,
+        transformators = list(static_decorator)
+      )
+      output$plot <- renderPlot(decorated()[["plot"]])
+    }
+  )
+}
 }

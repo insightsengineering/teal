@@ -13,7 +13,7 @@ assert_decorators(x, names = NULL, .var.name = checkmate::vname(x), add = NULL)
 \item{x}{(named \code{list}) of \code{teal_transform_module} objects, or nested lists thereof.}
 
 \item{names}{(\code{character}) optional vector of valid output names. When provided, all names
-in \code{x} must be either \code{"default"} or one of these names, and names must be unique.}
+in \code{x} must be one of these names, and names must be unique.}
 
 \item{.var.name}{[\code{character(1)}]\cr
 The custom name for \code{x} as passed to any \code{assert*} function.

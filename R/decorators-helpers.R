@@ -4,7 +4,7 @@
 #'
 #' @param x (named `list`) of `teal_transform_module` objects, or nested lists thereof.
 #' @param names (`character`) optional vector of valid output names. When provided, all names
-#'   in `x` must be either `"default"` or one of these names, and names must be unique.
+#'   in `x` must be one of these names, and names must be unique.
 #'
 #' @return `TRUE` if valid, otherwise a `character(1)` string describing the problem.
 #'
@@ -19,11 +19,11 @@ check_decorators <- function(x, names = NULL) { # nolint: object_name.
         "The `decorators` must contain unique names from these names: %s",
         paste(sQuote(names), collapse = ", ")
       )
-    } else if (!all(unique(names(x)) %in% c("default", names))) {
+    } else if (!all(unique(names(x)) %in% names)) {
       check_message <- sprintf(
         paste0(
           "The `decorators` must be a named list with:\n",
-          " * 'default' for decorating all objects and/or\n",
+          " * 'all' for decorating all objects and/or\n",
           " * A name from these: %s"
         ),
         paste(sQuote(names), collapse = ", ")
@@ -87,7 +87,7 @@ assert_decorators <- checkmate::makeAssertionFunction(check_decorators)
 select_decorators <- function(decorators, scope) {
   checkmate::assert_string(scope, null.ok = FALSE)
   if (scope %in% names(decorators)) {
-    result <- decorators[[scope]]
+    result <- decorators[scope]
     if (inherits(result, "teal_transform_module")) {
       result <- list(result)
     }
