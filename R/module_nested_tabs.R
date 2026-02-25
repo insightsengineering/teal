@@ -116,10 +116,12 @@ srv_teal_module <- function(id,
         "teal app"
       }
 
-      logger::log_info(
-        "Active module changed: app={app_title}, module={input$active_module_id}",
-        app_title = app_title,
-        namespace = "teal"
+      message(
+        sprintf(
+          "Active module changed: app=%s, module=%s",
+          sQuote(app_title),
+          sQuote(input$active_module_id)
+        )
       )
     })
 
