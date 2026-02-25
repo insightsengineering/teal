@@ -11,5 +11,5 @@ testthat::test_that("e2e: wunder_bar_srv clicking filter icon opens filter-manag
   )
   testthat::expect_null(app$get_text(".teal-filter-manager-modal"))
   app$click("teal-filter_manager_panel-show_filter_manager")
-  testthat::expect_match(app$get_text(".teal-filter-manager-modal"), "Filter manager")
+  testthat::expect_match(app$get_text(".teal-filter-manager-modal"), "Filter Manager")
 })
