@@ -119,7 +119,9 @@ reference:
   - title: Helper Functions
     desc: Helper functions for `teal`
     contents:
+      - assert_decorators
       - build_app_title
+      - check_decorators
   - title: Example module
     desc: A simple `teal` module
     contents:
