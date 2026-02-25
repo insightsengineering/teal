@@ -1,22 +1,81 @@
-#' Module to transform `reactive` `teal_data`
+#' Apply `teal_transform_module` decorators to reactive `teal_data`
 #'
-#' Module calls [teal_transform_module()] in sequence so that `reactive teal_data` output
-#' from one module is handed over to the following module's input.
+#' Shiny module pair (`srv_transform_teal_data` / `ui_transform_teal_data`) that runs a sequence
+#' of [teal_transform_module()] decorators against a reactive `teal_data` object.
+#' Decorators are applied one after another via `Reduce`, so each one receives the output of the
+#' previous as its `data` argument.
+#' Failed transformators are tracked and any downstream transformator is automatically disabled
+#' until the failure is resolved.
+#' An optional `expr` argument allows additional code to be evaluated on the final decorated output.
 #'
 #' @inheritParams module_validate_error
 #' @inheritParams teal_modules
-#' @param class (character(1)) CSS class to be added in the `div` wrapper tag.
-#' @param is_transform_failed (`reactiveValues`) contains `logical` flags named after each transformator.
-#' Help to determine if any previous transformator failed, so that following transformators can be disabled
-#' and display a generic failure message.
+#' @param transformators (`list` of `teal_transform_module`) decorator modules to apply sequentially
+#'   to `data`. Each transformator receives the output of the previous one as input.
+#' @param expr (`expression` or `reactive`) optional expression evaluated on top of the decorated
+#'   output. Useful for post-processing after all transformators have run.
+#' @param class (`character(1)`) CSS class added to the `div` wrapper of each transformator panel.
+#' @param is_transform_failed (`reactiveValues`) named logical flags, one per transformator,
+#'   indicating whether that transformator has failed. Used to disable downstream transformators
+#'   and show a generic failure message.
 #' @return `reactive` `teal_data`
 #'
 #' @name module_transform_data
 NULL
 
-#' @export
 #' @rdname module_transform_data
-ui_transform_teal_data <- function(id, transformators, class = "well") {
+#' @param modules `r lifecycle::badge("deprecated")` No longer used.
+#' @param is_transform_failed `r lifecycle::badge("deprecated")` No longer used.
+#' @export
+srv_transform_teal_data <- function(id,
+                                    data,
+                                    transformators,
+                                    modules = lifecycle::deprecated(),
+                                    is_transform_failed = lifecycle::deprecated(),
+                                    expr) {
+  checkmate::assert_class(data, classes = "reactive")
+
+  decorated_output <- .srv_transform_teal_data(
+    id,
+    data = data,
+    transformators = transformators,
+    modules = if (missing(modules)) NULL,
+    is_transform_failed = if (missing(is_transform_failed)) reactiveValues()
+  )
+
+  no_expr <- missing(expr)
+
+  reactive({
+    data_out <- try(data(), silent = TRUE)
+    if (inherits(data_out, "qenv.error")) {
+      data()
+    } else {
+      # ensure original errors are displayed and `eval_code` is never executed with NULL
+      req(data(), decorated_output())
+      if (no_expr) {
+        decorated_output()
+      } else {
+        expr_r <- if (is.reactive(expr)) expr else reactive(expr)
+        teal.code::eval_code(decorated_output(), expr_r())
+      }
+    }
+  })
+}
+
+
+#' @rdname module_transform_data
+#' @details
+#' `ui_transform_teal_data` is a thin wrapper around the internal `.ui_transform_teal_data`.
+#' @param ... additional arguments passed to `.ui_transform_teal_data` (e.g. `class`).
+#' @return A `list` of `bslib::accordion` UI elements, one per transformator, or `NULL` if
+#'   `transformators` is empty.
+#' @export
+ui_transform_teal_data <- function(id, transformators, ...) {
+  .ui_transform_teal_data(id, transformators = transformators, ...)
+}
+
+#' @inheritParams module_transform_data
+.ui_transform_teal_data <- function(id, transformators, class = "well") {
   checkmate::assert_string(id)
   if (length(transformators) == 0L) {
     return(NULL)
@@ -62,9 +121,8 @@ ui_transform_teal_data <- function(id, transformators, class = "well") {
   )
 }
 
-#' @export
-#' @rdname module_transform_data
-srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
+#' @inheritParams module_transform_data
+.srv_transform_teal_data <- function(id, data, transformators, modules = NULL, is_transform_failed = reactiveValues()) {
   checkmate::assert_string(id)
   assert_reactive(data)
   checkmate::assert_class(modules, "teal_module", null.ok = TRUE)

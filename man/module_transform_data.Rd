@@ -2,41 +2,53 @@
 % Please edit documentation in R/module_transform_data.R
 \name{module_transform_data}
 \alias{module_transform_data}
-\alias{ui_transform_teal_data}
 \alias{srv_transform_teal_data}
-\title{Module to transform \code{reactive} \code{teal_data}}
+\alias{ui_transform_teal_data}
+\title{Module to decorate \code{reactive} \code{teal_data}}
 \usage{
-ui_transform_teal_data(id, transformators, class = "well")
-
 srv_transform_teal_data(
   id,
   data,
   transformators,
-  modules = NULL,
-  is_transform_failed = reactiveValues()
+  modules = lifecycle::deprecated(),
+  is_transform_failed = lifecycle::deprecated(),
+  expr
 )
+
+ui_transform_teal_data(id, transformators, ...)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
-\item{transformators}{(\code{list} of \code{teal_transform_module}) that will be applied to transform module's data input.
-To learn more check \code{vignette("transform-input-data", package = "teal")}.}
-
-\item{class}{(character(1)) CSS class to be added in the \code{div} wrapper tag.}
-
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
 The data which application will depend on.}
 
-\item{modules}{(\code{teal_modules} or \code{teal_module}) For \code{datanames} validation purpose}
+\item{transformators}{(\code{list} of \code{teal_transform_module}) decorator modules to apply sequentially
+to \code{data}. Each transformator receives the output of the previous one as input.}
 
-\item{is_transform_failed}{(\code{reactiveValues}) contains \code{logical} flags named after each transformator.
-Help to determine if any previous transformator failed, so that following transformators can be disabled
-and display a generic failure message.}
+\item{modules}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} No longer used.}
+
+\item{is_transform_failed}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} No longer used.}
+
+\item{expr}{(\code{expression} or \code{reactive}) optional expression evaluated on top of the decorated
+output. Useful for post-processing after all transformators have run.}
+
+\item{...}{additional arguments passed to \code{.ui_transform_teal_data} (e.g. \code{class}).}
+
+\item{class}{(\code{character(1)}) CSS class added to the \code{div} wrapper of each transformator panel.}
 }
 \value{
 \code{reactive} \code{teal_data}
+
+A \code{list} of \code{bslib::accordion} UI elements, one per transformator, or \code{NULL} if
+\code{transformators} is empty.
 }
 \description{
-Module calls \code{\link[=teal_transform_module]{teal_transform_module()}} in sequence so that \verb{reactive teal_data} output
-from one module is handed over to the following module's input.
+Module to decorate \code{reactive} \code{teal_data}
+}
+\details{
+Module allows to modify elements in \code{teal_data} object. This module is commonly used in \code{teal_module}
+consuming \code{\link[=teal_transform_module]{teal_transform_module()}} in order to "decorate" its output.
+
+\code{ui_transform_teal_data} is a thin wrapper around the internal \code{.ui_transform_teal_data}.
 }
