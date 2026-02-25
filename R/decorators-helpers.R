@@ -8,7 +8,7 @@
 #'
 #' @return `TRUE` if valid, otherwise a `character(1)` string describing the problem.
 #'
-#' @keywords internal
+#' @export
 check_decorators <- function(x, names = NULL) { # nolint: object_name.
 
   check_message <- checkmate::check_list(x, names = "named")
@@ -67,8 +67,12 @@ check_decorators <- function(x, names = NULL) { # nolint: object_name.
     "using `teal_transform_module()` or be a `teal_transform_module` object."
   )
 }
-#' Internal assertion on decorators
+
 #' @rdname check_decorators
+#' @inheritParams checkmate::makeAssertionFunction
+#' @param add If an `AssertCollection` is provided, the error message is stored in it.
+#' If `NULL`, an exception is raised if res is not `TRUE`.
+#' @export
 assert_decorators <- checkmate::makeAssertionFunction(check_decorators)
 
 #' Subset decorators based on the scope

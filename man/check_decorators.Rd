@@ -14,6 +14,13 @@ assert_decorators(x, names = NULL, .var.name = checkmate::vname(x), add = NULL)
 
 \item{names}{(\code{character}) optional vector of valid output names. When provided, all names
 in \code{x} must be either \code{"default"} or one of these names, and names must be unique.}
+
+\item{.var.name}{[\code{character(1)}]\cr
+The custom name for \code{x} as passed to any \code{assert*} function.
+Defaults to a heuristic name lookup.}
+
+\item{add}{If an \code{AssertCollection} is provided, the error message is stored in it.
+If \code{NULL}, an exception is raised if res is not \code{TRUE}.}
 }
 \value{
 \code{TRUE} if valid, otherwise a \code{character(1)} string describing the problem.
@@ -21,4 +28,3 @@ in \code{x} must be either \code{"default"} or one of these names, and names mus
 \description{
 Check if a decorators list is valid and matches the expected output names.
 }
-\keyword{internal}

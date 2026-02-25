@@ -4,7 +4,7 @@
 \alias{module_transform_data}
 \alias{srv_transform_teal_data}
 \alias{ui_transform_teal_data}
-\title{Module to decorate \code{reactive} \code{teal_data}}
+\title{Apply \code{teal_transform_module} decorators to reactive \code{teal_data}}
 \usage{
 srv_transform_teal_data(
   id,
@@ -15,7 +15,12 @@ srv_transform_teal_data(
   expr
 )
 
-ui_transform_teal_data(id, transformators, ...)
+ui_transform_teal_data(
+  id,
+  transformators,
+  class = lifecycle::deprecated(),
+  ...
+)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
@@ -33,9 +38,9 @@ to \code{data}. Each transformator receives the output of the previous one as in
 \item{expr}{(\code{expression} or \code{reactive}) optional expression evaluated on top of the decorated
 output. Useful for post-processing after all transformators have run.}
 
-\item{...}{additional arguments passed to \code{.ui_transform_teal_data} (e.g. \code{class}).}
+\item{class}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} No longer used.}
 
-\item{class}{(\code{character(1)}) CSS class added to the \code{div} wrapper of each transformator panel.}
+\item{...}{additional arguments passed to \code{.ui_transform_teal_data} (e.g. \code{class}).}
 }
 \value{
 \code{reactive} \code{teal_data}
@@ -44,11 +49,14 @@ A \code{list} of \code{bslib::accordion} UI elements, one per transformator, or 
 \code{transformators} is empty.
 }
 \description{
-Module to decorate \code{reactive} \code{teal_data}
+Shiny module pair (\code{srv_transform_teal_data} / \code{ui_transform_teal_data}) that runs a sequence
+of \code{\link[=teal_transform_module]{teal_transform_module()}} decorators against a reactive \code{teal_data} object.
+Decorators are applied one after another via \code{Reduce}, so each one receives the output of the
+previous as its \code{data} argument.
+Failed transformators are tracked and any downstream transformator is automatically disabled
+until the failure is resolved.
+An optional \code{expr} argument allows additional code to be evaluated on the final decorated output.
 }
 \details{
-Module allows to modify elements in \code{teal_data} object. This module is commonly used in \code{teal_module}
-consuming \code{\link[=teal_transform_module]{teal_transform_module()}} in order to "decorate" its output.
-
 \code{ui_transform_teal_data} is a thin wrapper around the internal \code{.ui_transform_teal_data}.
 }

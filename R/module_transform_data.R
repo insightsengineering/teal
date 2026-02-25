@@ -12,18 +12,14 @@
 #' @inheritParams teal_modules
 #' @param transformators (`list` of `teal_transform_module`) decorator modules to apply sequentially
 #'   to `data`. Each transformator receives the output of the previous one as input.
-#' @param expr (`expression` or `reactive`) optional expression evaluated on top of the decorated
-#'   output. Useful for post-processing after all transformators have run.
-#' @param class (`character(1)`) CSS class added to the `div` wrapper of each transformator panel.
-#' @param is_transform_failed (`reactiveValues`) named logical flags, one per transformator,
-#'   indicating whether that transformator has failed. Used to disable downstream transformators
-#'   and show a generic failure message.
 #' @return `reactive` `teal_data`
 #'
 #' @name module_transform_data
 NULL
 
 #' @rdname module_transform_data
+#' @param expr (`expression` or `reactive`) optional expression evaluated on top of the decorated
+#'   output. Useful for post-processing after all transformators have run.
 #' @param modules `r lifecycle::badge("deprecated")` No longer used.
 #' @param is_transform_failed `r lifecycle::badge("deprecated")` No longer used.
 #' @export
@@ -66,12 +62,18 @@ srv_transform_teal_data <- function(id,
 #' @rdname module_transform_data
 #' @details
 #' `ui_transform_teal_data` is a thin wrapper around the internal `.ui_transform_teal_data`.
+#' @param class `r lifecycle::badge("deprecated")` No longer used.
 #' @param ... additional arguments passed to `.ui_transform_teal_data` (e.g. `class`).
 #' @return A `list` of `bslib::accordion` UI elements, one per transformator, or `NULL` if
 #'   `transformators` is empty.
 #' @export
-ui_transform_teal_data <- function(id, transformators, ...) {
-  .ui_transform_teal_data(id, transformators = transformators, ...)
+ui_transform_teal_data <- function(id, transformators, class = lifecycle::deprecated(), ...) {
+  .ui_transform_teal_data(
+    id,
+    transformators = transformators,
+    class = if (missing(class)) "well" else class,
+    ...
+  )
 }
 
 #' @inheritParams module_transform_data
