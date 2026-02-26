@@ -28,3 +28,10 @@ If \code{NULL}, an exception is raised if res is not \code{TRUE}.}
 \description{
 Check if a decorators list is valid and matches the expected output names.
 }
+\examples{
+decorator <- teal_transform_module(server = function(id, data) data)
+check_decorators(decorator)
+check_decorators(list(all = decorator))
+check_decorators(list(all = decorator, output = decorator))
+check_decorators(list(all = decorator, output = list(decorator, decorator)))
+}
