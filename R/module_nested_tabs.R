@@ -117,7 +117,8 @@ srv_teal_module <- function(id,
       }
 
       message(
-        sprintf("Active module changed: app=\"%s\", module=\"%s\"",
+        sprintf(
+          "Active module changed: app=\"%s\", module=\"%s\"",
           app_title,
           input$active_module_id
         )
