@@ -92,5 +92,5 @@ assert_decorators <- checkmate::makeAssertionFunction(check_decorators)
 #' @keywords internal
 select_decorators <- function(decorators, scope) {
   checkmate::assert_string(scope, null.ok = FALSE)
-  decorators[names(decorators) %in% scope]
+  decorators[names(decorators) %in% c("all", scope)]
 }
