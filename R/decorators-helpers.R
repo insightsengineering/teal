@@ -9,6 +9,12 @@
 #' @return `TRUE` if valid, otherwise a `character(1)` string describing the problem.
 #'
 #' @export
+#' @examples
+#' decorator <- teal_transform_module(server = function(id, data) data)
+#' check_decorators(decorator)
+#' check_decorators(list(all = decorator))
+#' check_decorators(list(all = decorator, output = decorator))
+#' check_decorators(list(all = decorator, output = list(decorator, decorator)))
 check_decorators <- function(x, names = NULL) { # nolint: object_name.
 
   check_message <- checkmate::check_list(x, names = "named")
