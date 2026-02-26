@@ -24,17 +24,17 @@ testthat::describe("check_decorators", {
   })
 
   testthat::describe("returns TRUE when names argument is provided and all names are valid", {
-    it("accepts 'default' as a name when names argument is provided", {
-      testthat::expect_true(check_decorators(list(default = ttm), names = "output1"))
+    it("accepts 'all' as a name when names argument is provided", {
+      testthat::expect_true(check_decorators(list(all = ttm), names = "output1"))
     })
 
     it("accepts a name that is present in the names argument", {
       testthat::expect_true(check_decorators(list(output1 = ttm), names = c("output1", "output2")))
     })
 
-    it("accepts a mix of 'default' and a name from the names argument", {
+    it("accepts a mix of 'all' and a name from the names argument", {
       testthat::expect_true(
-        check_decorators(list(default = ttm, output1 = ttm), names = c("output1", "output2"))
+        check_decorators(list(all = ttm, output1 = ttm), names = c("output1", "output2"))
       )
     })
 
@@ -78,9 +78,9 @@ testthat::describe("check_decorators", {
   })
 
   testthat::describe("returns a character string when names argument is provided and names in x are invalid", {
-    it("returns the expected message when a name in x is not 'default' or in names argument", {
+    it("returns the expected message when a name in x is not 'all' or in names argument", {
       result <- check_decorators(list(invalid_name = ttm), names = c("output1", "output2"))
-      testthat::expect_match(result, "'default'", fixed = TRUE)
+      testthat::expect_match(result, "'all'", fixed = TRUE)
       testthat::expect_match(result, "output1", fixed = TRUE)
       testthat::expect_match(result, "output2", fixed = TRUE)
     })
@@ -105,7 +105,7 @@ testthat::describe("assert_decorators", {
     })
 
     it("returns the input list invisibly when names argument is provided and all names are valid", {
-      x <- list(default = ttm, output1 = ttm)
+      x <- list(all = ttm, output1 = ttm)
       testthat::expect_identical(assert_decorators(x, names = c("output1", "output2")), x)
     })
   })
@@ -119,7 +119,7 @@ testthat::describe("assert_decorators", {
       testthat::expect_error(assert_decorators(list(a = "not_a_module")))
     })
 
-    it("throws when a name in x is not 'default' or in the names argument", {
+    it("throws when a name in x is not 'all' or in the names argument", {
       testthat::expect_error(assert_decorators(list(invalid_name = ttm), names = c("output1")))
     })
 

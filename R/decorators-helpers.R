@@ -19,7 +19,7 @@ check_decorators <- function(x, names = NULL) { # nolint: object_name.
         "The `decorators` must contain unique names from these names: %s",
         paste(sQuote(names), collapse = ", ")
       )
-    } else if (!all(unique(names(x)) %in% names)) {
+    } else if (!all(unique(names(x)) %in% c("all", names))) {
       check_message <- sprintf(
         paste0(
           "The `decorators` must be a named list with:\n",
