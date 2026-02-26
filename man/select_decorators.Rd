@@ -7,14 +7,13 @@
 select_decorators(decorators, scope)
 }
 \arguments{
-\item{decorators}{(named \code{list}) of list decorators to subset.}
+\item{decorators}{(named \code{list}) a named list of decorators to subset.}
 
 \item{scope}{(\code{character(1)}) a decorator name to include.}
 }
 \value{
-A \code{list} of \code{teal_transform_module} objects matching the given \code{scope}.
-A single \code{teal_transform_module} is wrapped in a list for consistency.
-Returns an empty list if \code{scope} is not found in \code{decorators}.
+A \code{list} of \code{teal_transform_module} objects matching the given \code{scope} and \code{all}.
+Returns an empty list if \code{scope} and \code{all} is not found in \code{decorators}.
 }
 \description{
 Subset decorators based on the scope

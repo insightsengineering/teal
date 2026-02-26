@@ -84,13 +84,17 @@ assert_decorators <- checkmate::makeAssertionFunction(check_decorators)
 #' Subset decorators based on the scope
 #'
 #' @param scope (`character(1)`) a decorator name to include.
-#' @param decorators (named `list`) of list decorators to subset.
+#' @param decorators (named `list`) a named list of decorators to subset.
 #'
-#' @return A `list` of `teal_transform_module` objects matching the given `scope`.
-#' A single `teal_transform_module` is wrapped in a list for consistency.
-#' Returns an empty list if `scope` is not found in `decorators`.
+#' @return A `list` of `teal_transform_module` objects matching the given `scope` and `all`.
+#' Returns an empty list if `scope` and `all` is not found in `decorators`.
 #' @keywords internal
 select_decorators <- function(decorators, scope) {
   checkmate::assert_string(scope, null.ok = FALSE)
-  decorators[names(decorators) %in% c("all", scope)]
+  check_decorators(decorators, scope)
+  decorators <- decorators[names(decorators) %in% c("all", scope)]
+  if (!length(decorators)) {
+    return(list())
+  }
+  decorators
 }
