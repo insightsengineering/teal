@@ -10,7 +10,7 @@ check_decorators(x, names = NULL)
 assert_decorators(x, names = NULL, .var.name = checkmate::vname(x), add = NULL)
 }
 \arguments{
-\item{x}{(named \code{list}) of \code{teal_transform_module} objects, or nested lists thereof.}
+\item{x}{(named \code{list}) of \code{\link[=teal_transform_module]{teal_transform_module()}} objects, or nested lists thereof.}
 
 \item{names}{(\code{character}) optional vector of valid output names. When provided, all names
 in \code{x} must be one of these names, and names must be unique.}
@@ -34,4 +34,7 @@ check_decorators(decorator)
 check_decorators(list(all = decorator))
 check_decorators(list(all = decorator, output = decorator))
 check_decorators(list(all = decorator, output = list(decorator, decorator)))
+}
+\seealso{
+\code{\link[=module_transform_data]{module_transform_data()}}
 }

@@ -14,6 +14,7 @@
 #' @param transformators (`list` of `teal_transform_module`) decorator modules to apply sequentially
 #'   to `data`. Each transformator receives the output of the previous one as input.
 #' @return `reactive` `teal_data`
+#' @seealso [assert_decorators()]
 #' @examples
 #' library(shiny)
 #' library(teal.data)

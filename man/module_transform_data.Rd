@@ -94,3 +94,6 @@ if (interactive()) {
   )
 }
 }
+\seealso{
+\code{\link[=assert_decorators]{assert_decorators()}}
+}

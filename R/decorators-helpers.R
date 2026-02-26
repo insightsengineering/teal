@@ -2,12 +2,12 @@
 #'
 #' Check if a decorators list is valid and matches the expected output names.
 #'
-#' @param x (named `list`) of `teal_transform_module` objects, or nested lists thereof.
+#' @param x (named `list`) of [teal_transform_module()] objects, or nested lists thereof.
 #' @param names (`character`) optional vector of valid output names. When provided, all names
 #'   in `x` must be one of these names, and names must be unique.
 #'
 #' @return `TRUE` if valid, otherwise a `character(1)` string describing the problem.
-#'
+#' @seealso [module_transform_data()]
 #' @export
 #' @examples
 #' decorator <- teal_transform_module(server = function(id, data) data)
