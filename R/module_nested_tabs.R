@@ -443,8 +443,7 @@ srv_teal_module <- function(id,
         "data_transform",
         data = filtered_teal_data,
         transformators = modules$transformators,
-        modules = modules,
-        is_transform_failed = is_transform_failed
+        modules = modules
       )
       any_transform_failed <- reactive({
         any(unlist(reactiveValuesToList(is_transform_failed)))
