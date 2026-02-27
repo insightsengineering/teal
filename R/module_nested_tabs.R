@@ -107,6 +107,28 @@ srv_teal_module <- function(id,
                             reporter = teal.reporter::Reporter$new(),
                             data_load_status = reactive("ok")) {
   moduleServer(id, function(input, output, session) {
+    # Send message to JS to get document title
+    session$sendCustomMessage("teal-get-document-title", list(inputId = session$ns("app_title")))
+
+    # Wait for both title and active_module_id to be available
+    observeEvent(list(input$active_module_id, input$app_title), {
+      req(input$app_title)
+
+      app_title <- if (!is.null(input$app_title) && nzchar(input$app_title)) {
+        input$app_title
+      } else {
+        "Teal Application"
+      }
+
+      message(
+        sprintf(
+          "Active module changed: app=\"%s\", module=\"%s\"",
+          app_title,
+          input$active_module_id
+        )
+      )
+    })
+
     if (isTRUE(getOption("teal.enable_deep_linking", FALSE))) {
       observeEvent(input$active_module_id, {
         current_query <- shiny::parseQueryString(session$clientData$url_search)
