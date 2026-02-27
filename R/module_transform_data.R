@@ -226,10 +226,9 @@ NULL
             data_handled <- reactive(tryCatch(data_unhandled(), error = function(e) e))
 
             observeEvent(data_handled(), {
-              if (inherits(data_handled(), "teal_data")) {
-                if (!identical(data_handled(), data_out())) {
-                  data_out(data_handled())
-                }
+              dh <- data_handled()
+              if (inherits(dh, "teal_data") && !identical(dh, data_out())) {
+                data_out(dh)
               }
             })
 
