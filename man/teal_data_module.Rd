@@ -10,7 +10,17 @@
 \alias{within.teal_data_module}
 \title{Data module for \code{teal} applications}
 \usage{
-teal_data_module(ui, server, label = "data module", once = TRUE)
+teal_data_module(
+  ui = function(id) NULL,
+  server = function(id) {
+     moduleServer(id, function(input, output, session) {
+      
+      reactive(teal.data::teal_data())
+     })
+ },
+  label = "data module",
+  once = TRUE
+)
 
 \S4method{eval_code}{teal_data_module}(object, code)
 
