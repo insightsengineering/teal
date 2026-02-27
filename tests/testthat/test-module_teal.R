@@ -3945,7 +3945,7 @@ testthat::describe("srv_teal URL navigation", {
     tab_calls <- list()
     local_url_search("?active_module=mod2")
     testthat::local_mocked_bindings(
-      updateTabsetPanel = function(session, inputId, selected = NULL) {
+      updateTabsetPanel = function(session, inputId, selected = NULL) { # nolint
         tab_calls[[length(tab_calls) + 1]] <<- list(inputId = inputId, selected = selected)
       },
       .package = "shiny"
@@ -3970,7 +3970,7 @@ testthat::describe("srv_teal URL navigation", {
     tab_calls <- list()
     local_url_search("?other=foo")
     testthat::local_mocked_bindings(
-      updateTabsetPanel = function(session, inputId, selected = NULL) {
+      updateTabsetPanel = function(session, inputId, selected = NULL) { # nolint
         tab_calls[[length(tab_calls) + 1]] <<- list(inputId = inputId, selected = selected)
       },
       .package = "shiny"
@@ -3993,7 +3993,9 @@ testthat::describe("srv_teal URL navigation", {
   testthat::it("calls updateQueryString with the active module path when tab changes", {
     qs_calls <- list()
     testthat::local_mocked_bindings(
-      updateQueryString = function(queryString, mode = "replace", session = shiny::getDefaultReactiveDomain()) {
+      updateQueryString = function(queryString, # nolint
+                                   mode = "replace",
+                                   session = shiny::getDefaultReactiveDomain()) {
         qs_calls[[length(qs_calls) + 1]] <<- queryString
       },
       .package = "shiny"
@@ -4021,7 +4023,9 @@ testthat::describe("srv_teal URL navigation", {
     qs_calls <- list()
     local_url_search("?active_module=mod1")
     testthat::local_mocked_bindings(
-      updateQueryString = function(queryString, mode = "replace", session = shiny::getDefaultReactiveDomain()) {
+      updateQueryString = function(queryString, # nolint
+                                   mode = "replace",
+                                   session = shiny::getDefaultReactiveDomain()) {
         qs_calls[[length(qs_calls) + 1]] <<- queryString
       },
       .package = "shiny"

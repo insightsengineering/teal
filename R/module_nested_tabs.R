@@ -143,8 +143,10 @@ srv_teal_module <- function(id,
       observeEvent(session$clientData$url_search,
         {
           query <- shiny::parseQueryString(session$clientData$url_search)
-          if (!is.null(query[["active_module"]]) &&
-            !identical(query[["active_module"]], isolate(input$active_module_id))) {
+          if (
+            !is.null(query[["active_module"]]) &&
+              !identical(query[["active_module"]], isolate(input$active_module_id))
+          ) {
             shiny::updateTabsetPanel(session, "active_module_id", selected = query[["active_module"]])
           }
         },
