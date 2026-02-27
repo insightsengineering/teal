@@ -107,6 +107,28 @@ srv_teal_module <- function(id,
                             reporter = teal.reporter::Reporter$new(),
                             data_load_status = reactive("ok")) {
   moduleServer(id, function(input, output, session) {
+    if (isTRUE(getOption("teal.enable_deep_linking", FALSE))) {
+      observeEvent(input$active_module_id, {
+        current_query <- shiny::parseQueryString(session$clientData$url_search)
+        if (!identical(current_query[["active_module"]], input$active_module_id)) {
+          shiny::updateQueryString(
+            paste0("?active_module=", input$active_module_id),
+            mode = "push",
+            session = session
+          )
+        }
+      })
+      observeEvent(session$clientData$url_search,
+        {
+          query <- shiny::parseQueryString(session$clientData$url_search)
+          if (!is.null(query[["active_module"]]) &&
+            !identical(query[["active_module"]], isolate(input$active_module_id))) {
+            shiny::updateTabsetPanel(session, "active_module_id", selected = query[["active_module"]])
+          }
+        },
+        ignoreNULL = FALSE
+      )
+    }
     .srv_teal_module(
       id = "nav",
       data = data,
