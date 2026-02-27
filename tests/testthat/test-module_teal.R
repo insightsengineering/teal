@@ -3915,3 +3915,136 @@ testthat::describe("teal-src", {
     )
   })
 })
+
+testthat::describe("srv_teal URL navigation", {
+  # local_url_search(): temporarily overrides session$clientData$url_search for the
+  # duration of the calling test, using withr::defer for cleanup.
+  #
+  # `$.mockclientdata` lives only in the shiny namespace (not the S3MethodsTable), so
+  # plain assign() does not affect S3 dispatch. registerS3method() must be used for
+  # both patching and restoration. withr::defer() ties the cleanup to the test frame,
+  # matching the style of local_mocked_bindings().
+  local_url_search <- function(url_val, .local_envir = parent.frame()) {
+    original <- utils::getS3method("$", "mockclientdata")
+    registerS3method("$", "mockclientdata", function(x, name) {
+      if (name == "url_search") {
+        return(url_val)
+      }
+      original(x, name)
+    }, envir = getNamespace("shiny"))
+    withr::defer(
+      registerS3method("$", "mockclientdata", original, envir = getNamespace("shiny")),
+      envir = .local_envir
+    )
+    invisible()
+  }
+
+  withr::local_options(list(teal.enable_deep_linking = TRUE), .local_envir = parent.frame())
+
+  testthat::it("calls updateTabsetPanel with the URL module when active_module differs from current tab", {
+    tab_calls <- list()
+    local_url_search("?active_module=mod2")
+    testthat::local_mocked_bindings(
+      updateTabsetPanel = function(session, inputId, selected = NULL) { # nolint
+        tab_calls[[length(tab_calls) + 1]] <<- list(inputId = inputId, selected = selected)
+      },
+      .package = "shiny"
+    )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris)),
+        modules = modules(
+          module("mod1", server = function(id, data) NULL),
+          module("mod2", server = function(id, data) NULL)
+        )
+      ),
+      expr = session$flushReact()
+    )
+    testthat::expect_length(tab_calls, 1L)
+    testthat::expect_equal(tab_calls[[1]]$selected, "mod2")
+  })
+
+  testthat::it("does not call updateTabsetPanel when URL has no active_module parameter", {
+    tab_calls <- list()
+    local_url_search("?other=foo")
+    testthat::local_mocked_bindings(
+      updateTabsetPanel = function(session, inputId, selected = NULL) { # nolint
+        tab_calls[[length(tab_calls) + 1]] <<- list(inputId = inputId, selected = selected)
+      },
+      .package = "shiny"
+    )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris)),
+        modules = modules(
+          module("mod1", server = function(id, data) NULL),
+          module("mod2", server = function(id, data) NULL)
+        )
+      ),
+      expr = session$flushReact()
+    )
+    testthat::expect_length(tab_calls, 0L)
+  })
+
+  testthat::it("calls updateQueryString with the active module path when tab changes", {
+    qs_calls <- list()
+    testthat::local_mocked_bindings(
+      updateQueryString = function(queryString, # nolint
+                                   mode = "replace",
+                                   session = shiny::getDefaultReactiveDomain()) {
+        qs_calls[[length(qs_calls) + 1]] <<- queryString
+      },
+      .package = "shiny"
+    )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris)),
+        modules = modules(
+          module("mod1", server = function(id, data) NULL),
+          module("mod2", server = function(id, data) NULL)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "mod2")
+        session$flushReact()
+      }
+    )
+    testthat::expect_length(qs_calls, 1L)
+    testthat::expect_equal(qs_calls[[1]], "?active_module=mod2")
+  })
+
+  testthat::it("does not call updateQueryString when URL already reflects the active tab (guard)", {
+    qs_calls <- list()
+    local_url_search("?active_module=mod1")
+    testthat::local_mocked_bindings(
+      updateQueryString = function(queryString, # nolint
+                                   mode = "replace",
+                                   session = shiny::getDefaultReactiveDomain()) {
+        qs_calls[[length(qs_calls) + 1]] <<- queryString
+      },
+      .package = "shiny"
+    )
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = reactive(teal_data(iris = iris)),
+        modules = modules(
+          module("mod1", server = function(id, data) NULL),
+          module("mod2", server = function(id, data) NULL)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "mod1")
+        session$flushReact()
+      }
+    )
+    testthat::expect_length(qs_calls, 0L)
+  })
+})
