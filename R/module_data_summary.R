@@ -50,7 +50,7 @@ srv_data_summary <- function(id, data) {
             stop("Error occurred during data processing. See details in the main panel.")
           }
         } else if (is.null(summary_table_out)) {
-          "no datasets to show"
+          shiny::tags$em("no datasets to show")
         } else {
           is_unsupported <- apply(summary_table(), 1, function(x) all(is.na(x[-1])))
           summary_table_out[is.na(summary_table_out)] <- ""
