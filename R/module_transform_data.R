@@ -81,7 +81,7 @@ srv_transform_teal_data <- function(id,
     )
   }
 
-  if (!identical(is_transform_failed, reactiveValues())) {
+  if (rlang::is_missing(is_transform_failed)) {
     lifecycle::deprecate_warn(
       when = "1.2.0",
       what = "srv_transform_teal_data(is_transform_failed)",
