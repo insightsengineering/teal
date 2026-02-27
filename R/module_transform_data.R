@@ -101,17 +101,23 @@ srv_transform_teal_data <- function(id,
 
   reactive({
     data_out <- try(data(), silent = TRUE)
+    # Report error on data to the user
     if (inherits(data_out, "qenv.error")) {
-      data()
+      validate("Data passed has errors.")
+    }
+
+    # ensure errors on transformators are displayed
+    do <- req(decorated_output())
+    if (inherits(do, "qenv.error")) {
+      validate(as.character(do))
+    }
+
+    # Append expr if needed
+    if (no_expr) {
+      do
     } else {
-      # ensure original errors are displayed and `eval_code` is never executed with NULL
-      req(data(), decorated_output())
-      if (no_expr) {
-        decorated_output()
-      } else {
-        expr_r <- if (is.reactive(expr)) expr else reactive(expr)
-        teal.code::eval_code(decorated_output(), expr_r())
-      }
+      expr_r <- if (is.reactive(expr)) expr else reactive(expr)
+      teal.code::eval_code(do, expr_r())
     }
   })
 }
