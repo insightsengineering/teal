@@ -294,7 +294,7 @@ srv_teal_module <- function(id,
                         id = ns("data_transform_accordion"),
                         bslib::accordion_panel(
                           "Transform Data",
-                          ui_transform_teal_data(
+                          .ui_transform_teal_data(
                             ns("data_transform"),
                             transformators = modules$transformators
                           )
@@ -461,7 +461,7 @@ srv_teal_module <- function(id,
         is_active = is_active
       )
       is_transform_failed <- reactiveValues()
-      transformed_teal_data <- srv_transform_teal_data(
+      transformed_teal_data <- .srv_transform_teal_data(
         "data_transform",
         data = filtered_teal_data,
         transformators = modules$transformators,
