@@ -73,7 +73,7 @@ srv_transform_teal_data <- function(id,
                                     expr) {
   checkmate::assert_class(data, classes = "reactive")
 
-  if (!is.null(modules)) {
+  if (!missing(modules)) {
     lifecycle::deprecate_warn(
       when = "1.2.0",
       what = "srv_transform_teal_data(modules)",
@@ -81,7 +81,7 @@ srv_transform_teal_data <- function(id,
     )
   }
 
-  if (rlang::is_missing(is_transform_failed)) {
+  if (!missing(is_transform_failed)) {
     lifecycle::deprecate_warn(
       when = "1.2.0",
       what = "srv_transform_teal_data(is_transform_failed)",
@@ -130,7 +130,7 @@ srv_transform_teal_data <- function(id,
 #'   `transformators` is empty.
 #' @export
 ui_transform_teal_data <- function(id, transformators, class = "well", ...) {
-  if (!identical(class, "well")) {
+  if (!missing(class)) {
     lifecycle::deprecate_warn(
       when = "1.2.0",
       what = "ui_transform_teal_data(class)",
