@@ -104,6 +104,15 @@ Another one is that the usage of `bslib::bs_theme(version = "3")` requires the i
 If you want to update the theme in a regular `shiny::fluidPage`-like app, you do not need the `teal.bs_theme` option.
 Simply provide the `bslib::bs_theme` directly: `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`.
 
+If, for some reason, you need to keep separately styled the parent app components and the teal components, use the option
+```
+options(
+  "teal.ui.class" = "my-teal-class"
+)
+```
+Which will add `my-teal-class` to the container of the teal modules to
+facilitate creation of css selectors only for the teal components.
+
 ### Interactive theming guide
 
 In this section we provide a step-by-step guide to customizing a `teal` application theme interactively with `bslib::run_with_themer()`.
