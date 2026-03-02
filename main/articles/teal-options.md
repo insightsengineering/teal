@@ -60,8 +60,7 @@ apps. Achieve better UX with the customized UI of an app. Please see the
 themes](https://insightsengineering.github.io/teal/articles/bootstrap-themes-in-teal.md)
 to read more about the functionality.
 
-Default:
-[`bslib::bs_theme()`](https://rstudio.github.io/bslib/reference/bs_theme.html)
+Default: `` bslib::bs_theme(`font-size-base` = "0.875rem") ``
 
 #### `teal.load_nest_code` (`character`)
 
@@ -279,3 +278,11 @@ Deprecated in favor of using the `teal.logger` package for logging.
 #### `teal_show_js_log`
 
 Deprecated in favor of `teal.show_js_log` (see above).
+
+#### `teal.ui.class` (`character(1)`)
+
+Adds additional class to the ui container of the teal app. This is
+useful to style teal apps embedded as modules in larger Shiny
+Applications.
+
+Default: `NULL`

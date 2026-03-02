@@ -103,7 +103,7 @@ low-level Bootstrap elements.
 
 It is important to note that the statements
 `options("teal.bs_theme" = NULL)` and
-`options("teal.bs_theme" = bslib::bs_theme(version = "3")` are not
+`options("teal.bs_theme" = bslib::bs_theme(version = "3"))` are not
 equivalent as the `bslib` approximation of the default `shiny` theme for
 Bootstrap version 3 can introduce some discrepancies. One important
 difference is that when using
@@ -119,6 +119,16 @@ If you want to update the theme in a regular
 app, you do not need the `teal.bs_theme` option. Simply provide the
 [`bslib::bs_theme`](https://rstudio.github.io/bslib/reference/bs_theme.html)
 directly: `shiny::fluidPage(theme = bslib::bs_theme(...), ...)`.
+
+If, for some reason, you need to keep separately styled the parent app
+components and the teal components, use the option
+
+    options(
+      "teal.ui.class" = "my-teal-class"
+    )
+
+Which will add `my-teal-class` to the container of the teal modules to
+facilitate creation of css selectors only for the teal components.
 
 ### Interactive theming guide
 
