@@ -8,13 +8,7 @@
 \usage{
 ui_transform_teal_data(id, transformators, class = "well")
 
-srv_transform_teal_data(
-  id,
-  data,
-  transformators,
-  modules = NULL,
-  is_transform_failed = reactiveValues()
-)
+srv_transform_teal_data(id, data, transformators, modules = NULL)
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
