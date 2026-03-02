@@ -1,11 +1,16 @@
 # Changelog
 
-## teal 1.1.0.9024
+## teal 1.1.0.9025
 
 #### Enhancements
 
 - Improved print method for `teal_module` object
   ([\#1685](https://github.com/insightsengineering/teal/issues/1685)).
+- Added opt-in URL-based module navigation, controlled by
+  `options(teal.enable_deep_linking = TRUE)` (default: `FALSE`). When
+  enabled, the active module is reflected in the URL as
+  `?active_module=<module path>`, and navigating to such a URL or using
+  the browser’s back/forward buttons switches to the corresponding tab.
 
 ## teal 1.1.0
 

@@ -260,6 +260,16 @@ module title bar.
 
 Default: `TRUE`.
 
+#### `teal.enable_deep_linking` (`logical`)
+
+This option enables URL-based module navigation in `teal` apps. When set
+to `TRUE`, the active module is reflected in the URL as a query
+parameter (`?active_module=<module path>`). Navigating to such a URL or
+using the browser’s back/forward buttons switches to the corresponding
+tab.
+
+Default: `FALSE`.
+
 ## Deprecated options
 
 #### `teal_logging`
