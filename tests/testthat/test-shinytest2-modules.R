@@ -111,3 +111,47 @@ testthat::test_that("e2e: nested modules layout in navigation respect order and 
   )
   app$stop()
 })
+
+testthat::test_that("e2e: active tab is reflected in URL query string after navigation", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "mod1"),
+        example_module(label = "mod2")
+      )
+    )
+  )
+  on.exit(app$stop())
+
+  app$navigate_teal_tab("mod2")
+
+  testthat::expect_match(app$get_url(), "active_module=mod2")
+})
+
+testthat::test_that("e2e: URL query string active_module switches to the specified tab", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    init(
+      data = simple_teal_data(),
+      modules = modules(
+        example_module(label = "mod1"),
+        example_module(label = "mod2")
+      )
+    )
+  )
+  on.exit(app$stop())
+
+  # Change URL without page reload and fire popstate so Shiny re-reads url_search.
+  app$run_js("
+    window.history.pushState({}, '', '?active_module=mod2');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  ")
+  app$wait_for_idle()
+
+  testthat::expect_equal(
+    app$get_value(input = "teal-teal_modules-active_module_id"),
+    "mod2"
+  )
+})
