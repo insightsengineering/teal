@@ -3951,7 +3951,6 @@ testthat::describe("teal-src", {
   })
 })
 
-<<<<<<< fix-bs-vars@main
 testthat::describe("ui_teal respects teal.ui.class option", {
   it("adds class in container when option is set", {
     withr::with_options(
@@ -3977,7 +3976,9 @@ testthat::describe("ui_teal respects teal.ui.class option", {
         testthat::expect_false(grepl("custom-teal-class", ui_html_no_option))
       }
     )
-=======
+  })
+})
+
 testthat::describe("srv_teal URL navigation", {
   # local_url_search(): temporarily overrides session$clientData$url_search for the
   # duration of the calling test, using withr::defer for cleanup.
@@ -4108,6 +4109,5 @@ testthat::describe("srv_teal URL navigation", {
       }
     )
     testthat::expect_length(qs_calls, 0L)
->>>>>>> main
   })
 })
