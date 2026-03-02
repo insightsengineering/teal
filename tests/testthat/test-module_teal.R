@@ -152,6 +152,23 @@ testthat::describe("srv_teal arguments", {
       "Must be a reactive"
     )
   })
+
+
+  testthat::it("app works with default teal_data_module", {
+    testthat::expect_no_error(
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal_data_module(),
+          modules = modules(example_module())
+        ),
+        expr = {
+          session$flushReact()
+        }
+      )
+    )
+  })
 })
 
 testthat::describe("srv_teal teal_modules", {
@@ -261,6 +278,24 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_module_id` = "module_2")
         testthat::expect_identical(modules_output$module_1(), 101L)
         testthat::expect_identical(modules_output$module_2(), 102L)
+      }
+    )
+  })
+
+  testthat::it("are called once their tab is selected with default (empty) teal_data_module", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal_data_module(),
+        modules = modules(
+          module("module_1", server = function(id, data) 101L),
+          module("module_2", server = function(id, data) 102L)
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        testthat::expect_identical(modules_output$module_1(), 101L)
       }
     )
   })
