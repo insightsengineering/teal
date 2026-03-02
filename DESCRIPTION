@@ -102,6 +102,7 @@ Collate:
     'TealAppDriver.R'
     'after.R'
     'checkmate.R'
+    'decorators-helpers.R'
     'dummy_functions.R'
     'include_css_js.R'
     'modules.R'
