@@ -68,10 +68,8 @@ This means you can use it to customize not only datasets but also
 tables, listings, and graphs. Some
 [`teal_modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)
 permit developers to inject custom `shiny` modules to enhance displayed
-outputs. To manage these `decorators` within your module, use
-[`ui_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
-and
-[`srv_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md).
+outputs. To manage these `decorators` within your module, see
+[`module_transform_data`](https://insightsengineering.github.io/teal/reference/module_transform_data.md).
 (For further guidance on managing decorators, refer to `ui_args` and
 `srv_args` in the vignette documentation.)
 

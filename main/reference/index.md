@@ -21,11 +21,11 @@ Main functions needed to build a `teal` app
 
   Data module for `teal` transformations and output customization
 
-- [`ui_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
-  [`srv_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
+- [`srv_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
+  [`ui_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
   :
 
-  Module to transform `reactive` `teal_data`
+  Apply `teal_transform_module` decorators to reactive `teal_data`
 
 - [`make_teal_transform_server()`](https://insightsengineering.github.io/teal/reference/make_teal_transform_server.md)
   : Make teal_transform_module's server
@@ -79,6 +79,9 @@ Functions to modify the `teal` app object
 
 Helper functions for `teal`
 
+- [`check_decorators()`](https://insightsengineering.github.io/teal/reference/check_decorators.md)
+  [`assert_decorators()`](https://insightsengineering.github.io/teal/reference/check_decorators.md)
+  : Check decorators list
 - [`build_app_title()`](https://insightsengineering.github.io/teal/reference/build_app_title.md)
   : Build app title with favicon
 

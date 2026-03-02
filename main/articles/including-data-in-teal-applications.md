@@ -74,7 +74,9 @@ data_populated_2 <- within(data_empty, {
 The key difference between `eval_code` and `within` is that the former
 accepts code as character vector or language objects (`call`s and
 `expression`s), while `within` accepts *only* inline code. For a deeper
-understanding check the low level class `?qenv` for more details.
+understanding check the low level class
+[`?qenv`](https://insightsengineering.github.io/teal.code/latest-tag/reference/qenv.html)
+for more details.
 
 Note that in the first example `data` was created by passing data
 objects. If it can be found on the base environment it will be processed
@@ -105,7 +107,7 @@ The necessary code can be supplied to the `code` argument of the to the
 data_populated_4 <- eval_code(data_empty, code = "D5 <- diag(5)")
 data_populated_4
 #> ✅︎ code verified
-#> <environment: 0x563984107870> 🔒 
+#> <environment: 0x55f5c3c74070> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - D5: [matrix]
@@ -269,7 +271,7 @@ running the `verify` function.
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 #> ✖ code unverified
-#> <environment: 0x563981b4b538> 🔒 
+#> <environment: 0x55f5c0f67f60> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
@@ -278,7 +280,7 @@ data_with_objects_and_code
 data_with_objects_and_code_ver <- verify(data_with_objects_and_code)
 data_with_objects_and_code_ver
 #> ✅︎ code verified
-#> <environment: 0x563981b4b538> 🔒 
+#> <environment: 0x55f5c0f67f60> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]

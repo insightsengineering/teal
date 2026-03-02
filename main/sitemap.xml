@@ -35,6 +35,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/after.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/append_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/build_app_title.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/check_decorators.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_filter_datanames.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_modules_datanames.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/check_reactive.html</loc></url>
@@ -76,6 +77,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_lockfile.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_teal_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_transform_data.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/module_transform_teal_data_impl.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/module_validate_error.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/modules_bookmarkable.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/modules_slot.html</loc></url>
@@ -83,6 +85,7 @@
 <url><loc>https://insightsengineering.github.io/teal/reference/report_card_template.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/reporter_previewer_module.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/restoreValue.html</loc></url>
+<url><loc>https://insightsengineering.github.io/teal/reference/select_decorators.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/slices_store.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal-package.html</loc></url>
 <url><loc>https://insightsengineering.github.io/teal/reference/teal_data_module.html</loc></url>
