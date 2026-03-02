@@ -110,8 +110,7 @@ options(
   "teal.ui.class" = "my-teal-class"
 )
 ```
-Which will add `my-teal-class` to the container of the teal modules to
-facilitate creation of css selectors only for the teal components.
+Which will add `my-teal-class` to the container of the teal modules to facilitate creation of css selectors only for the teal components.
 
 ### Interactive theming guide
 
