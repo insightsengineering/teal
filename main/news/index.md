@@ -1,6 +1,6 @@
 # Changelog
 
-## teal 1.1.0.9020
+## teal 1.1.0.9024
 
 #### Enhancements
 

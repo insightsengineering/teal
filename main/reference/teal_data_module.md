@@ -8,7 +8,17 @@ tracking.
 ## Usage
 
 ``` r
-teal_data_module(ui, server, label = "data module", once = TRUE)
+teal_data_module(
+  ui = function(id) NULL,
+  server = function(id) {
+     moduleServer(id, function(input, output, session) {
+      
+      reactive(teal.data::teal_data())
+     })
+ },
+  label = "data module",
+  once = TRUE
+)
 
 # S4 method for class 'teal_data_module'
 eval_code(object, code)
@@ -161,7 +171,7 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x55997d3bd318>
+#> <environment: 0x557e5191c638>
 #> 
 #> $server
 #> function(id) {
@@ -172,7 +182,7 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x55997d3bd5b8>
+#> <environment: 0x557e5191c948>
 #> 
 #> attr(,"label")
 #> [1] "data module"
@@ -187,7 +197,7 @@ within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x55998a6f77d8>
+#> <environment: 0x557e517913f0>
 #> 
 #> $server
 #> function(id) {
@@ -198,7 +208,7 @@ within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x55998a6f73e8>
+#> <environment: 0x557e51791690>
 #> 
 #> attr(,"label")
 #> [1] "data module"
@@ -215,7 +225,7 @@ within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x559987ff2af0>
+#> <environment: 0x557e5165cda0>
 #> 
 #> $server
 #> function(id) {
@@ -226,7 +236,7 @@ within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x559987ff85a0>
+#> <environment: 0x557e5165d040>
 #> 
 #> attr(,"label")
 #> [1] "data module"
