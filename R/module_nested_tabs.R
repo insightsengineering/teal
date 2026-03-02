@@ -85,7 +85,7 @@ ui_teal_module <- function(id, modules) {
     tags$ul(
       id = ns("active_module_id"),
       style = "align-items: center; gap: 1em; font-size: large;",
-      class = "teal-navbar nav shiny-tab-input", # to mimic nav and mimic tabsetPanel
+      class = "teal-navbar nav shiny-tab-input", # important! to mimic nav and mimic tabsetPanel
       `data-tabsetid` = "test",
       .teal_navbar_menu(
         !!!module_items$link,
@@ -129,6 +129,32 @@ srv_teal_module <- function(id,
       )
     })
 
+    if (isTRUE(getOption("teal.enable_deep_linking", FALSE))) {
+      observeEvent(input$active_module_id, {
+        current_query <- shiny::parseQueryString(session$clientData$url_search)
+        if (!identical(current_query[["active_module"]], input$active_module_id)) {
+          shiny::updateQueryString(
+            paste0("?active_module=", input$active_module_id),
+            mode = "push",
+            session = session
+          )
+        }
+      })
+      observeEvent(session$clientData$url_search,
+        {
+          query <- shiny::parseQueryString(session$clientData$url_search)
+          if (
+            !is.null(query[["active_module"]]) &&
+              !identical(query[["active_module"]], isolate(input$active_module_id))
+          ) {
+            # updateTabsetPanel works here because the navbar <ul> has class "shiny-tab-input"
+            # (see ui_teal_module), which makes Shiny treat it as a tabsetPanel input.
+            shiny::updateTabsetPanel(session, "active_module_id", selected = query[["active_module"]])
+          }
+        },
+        ignoreNULL = FALSE
+      )
+    }
     .srv_teal_module(
       id = "nav",
       data = data,
