@@ -177,7 +177,7 @@ Deprecated in favor of `teal.show_js_log` (see above).
 ### teal.ui.class
 
 Adds additional class to the ui container of the teal app. This is useful to style teal apps embedded as
-modules is larger Shiny Applications.
+modules in larger Shiny Applications.
 
 Default: `NULL`
 

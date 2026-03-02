@@ -30,7 +30,7 @@ body > div:has(~ #shiny-modal-wrapper .blur_background) {
 }
 
 .accordion-button {
-  font-size: var(-bs-body-font-size);
+  font-size: var(--bs-body-font-size);
   font-weight: bold;
 }
 

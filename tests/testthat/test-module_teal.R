@@ -3951,8 +3951,8 @@ testthat::describe("teal-src", {
   })
 })
 
-testthat::test_that("ui_teal respects teal.ui.class option", {
-  it(" adds class in container when option is set", {
+testthat::describe("ui_teal respects teal.ui.class option", {
+  testthat::it("adds class in container when option is set", {
     withr::with_options(
       list(teal.ui.class = "custom-teal-class"),
       {
@@ -3966,11 +3966,15 @@ testthat::test_that("ui_teal respects teal.ui.class option", {
     )
   })
 
-  it("does not add class if option is not set", {
-    testthat::expect_null(getOption("teal.ui.class"))
-    # Test without the option set - should not have the custom class
-    ui_result_no_option <- ui_teal("test_module2", modules = modules(example_module()))
-    ui_html_no_option <- as.character(ui_result_no_option)
-    testthat::expect_false(grepl("custom-teal-class", ui_html_no_option))
+  testthat::it("does not add class if option is not set", {
+    withr::with_options(
+      list(teal.ui.class = NULL),
+      {
+        # Test without the option set - should not have the custom class
+        ui_result_no_option <- ui_teal("test_module2", modules = modules(example_module()))
+        ui_html_no_option <- as.character(ui_result_no_option)
+        testthat::expect_false(grepl("custom-teal-class", ui_html_no_option))
+      }
+    )
   })
 })
