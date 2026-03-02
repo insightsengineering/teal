@@ -3952,7 +3952,7 @@ testthat::describe("teal-src", {
 })
 
 testthat::describe("ui_teal respects teal.ui.class option", {
-  testthat::it("adds class in container when option is set", {
+  it("adds class in container when option is set", {
     withr::with_options(
       list(teal.ui.class = "custom-teal-class"),
       {
@@ -3966,7 +3966,7 @@ testthat::describe("ui_teal respects teal.ui.class option", {
     )
   })
 
-  testthat::it("does not add class if option is not set", {
+  it("does not add class if option is not set", {
     withr::with_options(
       list(teal.ui.class = NULL),
       {
