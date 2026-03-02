@@ -174,7 +174,7 @@ Deprecated in favor of using the `teal.logger` package for logging.
 ### `teal_show_js_log`
 Deprecated in favor of `teal.show_js_log` (see above).
 
-### teal.ui.class
+### `teal.ui.class` (`character(1)`)
 
 Adds additional class to the ui container of the teal app. This is useful to style teal apps embedded as
 modules in larger Shiny Applications.
