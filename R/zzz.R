@@ -9,7 +9,7 @@
     teal.sidebar.width = 250,
     teal.reporter.nav_buttons = c("preview", "download", "load", "reset"),
     teal.show_src = TRUE,
-    teal.bs_theme = bslib::bs_theme(`font-size-base` = "0.875rem")
+    teal.bs_theme = .default_teal_bslib_theming
   )
 
   op <- options()
