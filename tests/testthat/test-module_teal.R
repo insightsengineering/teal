@@ -3951,6 +3951,34 @@ testthat::describe("teal-src", {
   })
 })
 
+testthat::describe("ui_teal respects teal.ui.class option", {
+  it("adds class in container when option is set", {
+    withr::with_options(
+      list(teal.ui.class = "custom-teal-class"),
+      {
+        ui_result <- ui_teal("test_module", modules = modules(example_module()))
+        testthat::expect_s3_class(ui_result, "shiny.tag.list")
+
+        ui_html <- as.character(ui_result)
+        testthat::expect_true(grepl('class="[^"]*custom-teal-class[^"]*"', ui_html))
+        testthat::expect_true(grepl("custom-teal-class", ui_html))
+      }
+    )
+  })
+
+  it("does not add class if option is not set", {
+    withr::with_options(
+      list(teal.ui.class = NULL),
+      {
+        # Test without the option set - should not have the custom class
+        ui_result_no_option <- ui_teal("test_module2", modules = modules(example_module()))
+        ui_html_no_option <- as.character(ui_result_no_option)
+        testthat::expect_false(grepl("custom-teal-class", ui_html_no_option))
+      }
+    )
+  })
+})
+
 testthat::describe("srv_teal URL navigation", {
   # local_url_search(): temporarily overrides session$clientData$url_search for the
   # duration of the calling test, using withr::defer for cleanup.
