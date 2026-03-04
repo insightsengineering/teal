@@ -106,5 +106,5 @@ select_decorators <- function(decorators, scope) {
     },
     x = decorators[intersect(c("all", scope), names(decorators))],
     init = list()
-  )```
+  )
 }
