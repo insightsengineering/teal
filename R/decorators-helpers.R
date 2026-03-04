@@ -96,5 +96,15 @@ select_decorators <- function(decorators, scope) {
   if (!length(decorators)) {
     return(list())
   }
-  unlist(decorators, recursive = FALSE)
+  Reduce(
+    function(acc, el) {
+      if (inherits(el, "teal_transform_module")) {
+        c(acc, list(el))
+      } else {
+        c(acc, el)
+      }
+    },
+    x = decorators[intersect(c("all", scope), names(decorators))],
+    init = list()
+  )```
 }
