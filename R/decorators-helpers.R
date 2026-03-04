@@ -96,5 +96,5 @@ select_decorators <- function(decorators, scope) {
   if (!length(decorators)) {
     return(list())
   }
-  decorators
+  unlist(decorators, recursive = FALSE)
 }
