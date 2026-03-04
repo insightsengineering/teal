@@ -321,9 +321,7 @@ testthat::describe("srv_teal teal_modules", {
         session$setInputs(`teal_modules-active_module_id` = "module_1")
         session$flushReact()
         testthat::expect_null(modules_output$module_1())
-
-
-        session$setInputs("data-teal_data_module-submit" = "1")
+        session$setInputs("teal_data_module-submit" = "1")
         session$flushReact()
         testthat::expect_identical(modules_output$module_1(), 101L)
       }
@@ -480,9 +478,9 @@ testthat::describe("srv_teal teal_modules", {
       ),
       expr = {
         testthat::expect_null(modules_output$module_1())
-        session$setInputs(`data-teal_data_module-dataset` = "iris", `teal_modules-active_module_id` = "module_1")
+        session$setInputs(`teal_data_module-dataset` = "iris", `teal_modules-active_module_id` = "module_1")
         testthat::expect_setequal(names(modules_output$module_1()()), "iris")
-        session$setInputs(`data-teal_data_module-dataset` = "mtcars", `teal_modules-active_module_id` = "module_2")
+        session$setInputs(`teal_data_module-dataset` = "mtcars", `teal_modules-active_module_id` = "module_2")
         testthat::expect_setequal(names(modules_output$module_2()()), "mtcars")
       }
     )
@@ -514,12 +512,12 @@ testthat::describe("srv_teal teal_modules", {
       expr = {
         testthat::expect_null(modules_output$module_1())
         session$setInputs(
-          `data-teal_data_module-dataset` = "iris",
+          `teal_data_module-dataset` = "iris",
           `teal_modules-active_module_id` = "module_1"
         )
         out <- modules_output$module_1()
         testthat::expect_type(out, "double")
-        session$setInputs(`data-teal_data_module-dataset` = "mtcars")
+        session$setInputs(`teal_data_module-dataset` = "mtcars")
         testthat::expect_identical(out, modules_output$module_1())
       }
     )

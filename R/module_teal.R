@@ -17,9 +17,9 @@
 #' This module supports multiple data inputs but eventually, they are all converted to `reactive`
 #' returning `teal_data` in this module. On this `reactive teal_data` object several actions are
 #' performed:
-#' - data loading in [`module_init_data`]
-#' - data filtering in [`module_filter_data`]
-#' - data transformation in [`module_transform_data`]
+#' - data loading
+#' - data filtering
+#' - data transformation
 #'
 #' ## Fallback on failure
 #'
@@ -146,7 +146,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       }
     )
 
-    data_handled <- srv_init_data("data", data = data)
+    data_ui <- if (inherits(data, "teal_data_module")) data$ui(id = session$ns(.teal_data_module_id))
 
     validate_ui <- tags$div(
       id = session$ns("validate_messages"),
@@ -155,10 +155,29 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       ui_validate_error(session$ns("silent_error")),
       ui_check_module_datanames(session$ns("datanames_warning"))
     )
-    srv_check_class_teal_data("class_teal_data", data_handled)
-    srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
-    srv_check_module_datanames("datanames_warning", data_handled, modules)
 
+    modal_ui <- div(
+      class = "teal teal-data-module-popup",
+      modalDialog(
+        id = session$ns("teal_data_module_ui"),
+        size = "xl",
+        tags$div(
+          data_ui,
+          validate_ui
+        ),
+        easyClose = FALSE,
+        footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+      )
+    )
+
+    data_reactive <- if (inherits(data, "teal_data_module")) {
+      data$server(.teal_data_module_id)
+    } else if (inherits(data, "teal_data")) {
+      reactiveVal(data)
+    } else if (test_reactive(data)) {
+      data
+    }
+    data_handled <- reactive(tryCatch(data_reactive(), error = function(e) e))
     data_validated <- .trigger_on_success(data_handled)
     data_signatured <- reactive({
       req(inherits(data_validated(), "teal_data"))
@@ -174,6 +193,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       .add_signature_to_data(data_validated())
     })
 
+
+    srv_check_class_teal_data("class_teal_data", data_handled)
+    srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
+    srv_check_module_datanames("datanames_warning", data_handled, modules)
+
     data_load_status <- reactive({
       if (inherits(data_handled(), "teal_data")) {
         shinyjs::enable(id = "close_teal_data_module_modal")
@@ -186,50 +210,55 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       }
     })
 
-    if (inherits(data, "teal_data_module")) {
-      setBookmarkExclude(c("teal_data_module_ui", "open_teal_data_module_ui"))
-      .teal_navbar_insert_ui(
-        ui = .expand_button(
-          id = session$ns("open_teal_data_module_ui"),
-          label = "Load Data",
-          icon = "database-fill"
-        )
-      )
-      observeEvent(
-        input$open_teal_data_module_ui,
-        ignoreInit = TRUE,
-        ignoreNULL = FALSE, # should be shown on startup
-        {
-          showModal(
-            div(
-              class = "teal teal-data-module-popup",
-              modalDialog(
-                id = session$ns("teal_data_module_ui"),
-                size = "xl",
-                tags$div(
-                  ui_init_data(session$ns("data")),
-                  validate_ui
-                ),
-                easyClose = FALSE,
-                footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
-              )
-            )
-          )
-          if (data_load_status() == "ok") {
-            shinyjs::enable(id = "close_teal_data_module_modal")
-          } else {
-            shinyjs::disable(id = "close_teal_data_module_modal")
-          }
-        }
-      )
+    has_ui <- !is.null(data_ui)
+    is_once <- isTRUE(attr(data, "once"))
 
-      if (isTRUE(attr(data, "once"))) {
-        # when once = TRUE we pull data once and then remove data button and a modal
-        shiny::removeUI(selector = sprintf(".teal.expand-button:has(#%s)", session$ns("open_teal_data_module_ui")))
+    if (has_ui) {
+      showModal(modal_ui)
+      # We want to exclude teal_data_module elements from bookmarking as they might have some secrets
+      observeEvent(data_handled(), {
+        if (inherits(data_handled(), "teal_data")) {
+          app_session <- .subset2(shiny::getDefaultReactiveDomain(), "parent")
+          setBookmarkExclude(
+            session$ns(
+              grep(
+                pattern = sprintf("%s-", .teal_data_module_id),
+                x = names(reactiveValuesToList(input)),
+                value = TRUE
+              )
+            ),
+            session = app_session
+          )
+        }
+      })
+
+      if (is_once) {
         observeEvent(data_signatured(), once = TRUE, {
           logger::log_debug("srv_teal@2 removing data tab.")
           shiny::removeModal()
         })
+      } else {
+        setBookmarkExclude(c("teal_data_module_ui", "open_teal_data_module_ui"))
+        .teal_navbar_insert_ui(
+          ui = .expand_button(
+            id = session$ns("open_teal_data_module_ui"),
+            label = "Load Data",
+            icon = "database-fill"
+          )
+        )
+        observeEvent(
+          input$open_teal_data_module_ui,
+          ignoreInit = TRUE,
+          ignoreNULL = TRUE,
+          {
+            showModal(modal_ui)
+            if (data_load_status() == "ok") {
+              shinyjs::enable(id = "close_teal_data_module_modal")
+            } else {
+              shinyjs::disable(id = "close_teal_data_module_modal")
+            }
+          }
+        )
       }
     } else {
       # when no teal_data_module then we want to display messages above tabsetPanel (because there is no data-tab)
@@ -292,3 +321,73 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
 
   invisible(NULL)
 }
+
+
+#' Adds signature protection to the `datanames` in the data
+#' @param data (`teal_data`)
+#' @return `teal_data` with additional code that has signature of the `datanames`
+#' @keywords internal
+.add_signature_to_data <- function(data) {
+  hashes <- .get_hashes_code(data)
+  data_teal_report <- as(data, "teal_report")
+  if (!inherits(data, "teal_report")) {
+    teal.reporter::teal_card(data_teal_report) <- c(
+      teal.reporter::teal_card(),
+      "## Data preparation",
+      teal.reporter::teal_card(data_teal_report)
+    )
+  }
+  tdata <- do.call(
+    teal.reporter::teal_report,
+    c(
+      list(
+        code = trimws(c(teal.code::get_code(data_teal_report), hashes), which = "right"),
+        join_keys = teal.data::join_keys(data_teal_report),
+        teal_card = teal.reporter::teal_card(data_teal_report)
+      ),
+      sapply(
+        names(data_teal_report),
+        base::get,
+        envir = data_teal_report,
+        simplify = FALSE
+      )
+    )
+  )
+  tdata@verified <- data_teal_report@verified
+  tdata
+}
+
+#' Get code that tests the integrity of the reproducible data
+#'
+#' @param data (`teal_data`) object holding the data
+#' @param datanames (`character`) names of `datasets`
+#'
+#' @return A character vector with the code lines.
+#' @keywords internal
+#'
+.get_hashes_code <- function(data, datanames = names(data)) {
+  vapply(
+    datanames,
+    function(dataname, datasets) {
+      x <- data[[dataname]]
+
+      code <- if (is.function(x) && !is.primitive(x)) {
+        x <- deparse1(x)
+        bquote(rlang::hash(deparse1(.(as.name(dataname)))))
+      } else {
+        bquote(rlang::hash(.(as.name(dataname))))
+      }
+      sprintf(
+        "stopifnot(%s == %s) # @linksto %s",
+        deparse1(code),
+        deparse1(rlang::hash(x)),
+        dataname
+      )
+    },
+    character(1L),
+    USE.NAMES = TRUE
+  )
+}
+
+
+.teal_data_module_id <- "teal_data_module"
