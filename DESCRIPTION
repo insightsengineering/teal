@@ -111,7 +111,6 @@ Collate:
     'module_data_summary.R'
     'module_filter_data.R'
     'module_filter_manager.R'
-    'module_init_data.R'
     'module_nested_tabs.R'
     'module_session_info.R'
     'module_snapshot_manager.R'
