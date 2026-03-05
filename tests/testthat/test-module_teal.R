@@ -1114,7 +1114,7 @@ testthat::describe("srv_teal teal_modules", {
 })
 
 testthat::describe("teal_data_module", {
-  testthat::it("opens modal with a specific id when open_teal_data_module_ui is clicked", {
+  testthat::it("shows modal with correct id on initialization", {
     # Create a teal_data_module with specific UI elements
     test_tdm <- teal_data_module(
       ui = function(id) {
