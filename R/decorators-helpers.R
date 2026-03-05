@@ -104,7 +104,7 @@ select_decorators <- function(decorators, scope) {
         c(acc, el)
       }
     },
-    x = decorators[intersect(c("all", scope), names(decorators))],
+    x = decorators[names(decorators) %in% c("all", scope)],
     init = list()
   )
 }
