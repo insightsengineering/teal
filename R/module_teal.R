@@ -100,8 +100,10 @@ ui_teal <- function(id, modules) {
   )
   navbar <- .teal_navbar_append(navbar, nav_elements)
 
+  teal_options_class <- getOption("teal.ui.class")
   bslib::page_fluid(
     id = id,
+    class = teal_options_class,
     theme = get_teal_bs_theme(),
     include_teal_css_js(),
     shinyjs::useShinyjs(),

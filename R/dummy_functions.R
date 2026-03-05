@@ -72,7 +72,6 @@ example_module <- function(label = "example teal module",
             dataname = as.name(input$dataname)
           )
         })
-
         table_data_decorated_no_print <- srv_transform_teal_data(
           "decorate",
           data = table_data,
