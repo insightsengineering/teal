@@ -193,7 +193,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       .add_signature_to_data(data_validated())
     })
 
-
     srv_check_class_teal_data("class_teal_data", data_handled)
     srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
     srv_check_module_datanames("datanames_warning", data_handled, modules)
