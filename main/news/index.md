@@ -1,6 +1,6 @@
 # Changelog
 
-## teal 1.1.0.9027
+## teal 1.1.0.9028
 
 #### Enhancements
 
@@ -10,7 +10,14 @@
   `options(teal.enable_deep_linking = TRUE)` (default: `FALSE`). When
   enabled, the active module is reflected in the URL as
   `?active_module=<module path>`, and navigating to such a URL or using
-  the browser’s back/forward buttons switches to the corresponding tab.
+  the browser’s back/forward buttons switches to the corresponding tab
+  ([\#1699](https://github.com/insightsengineering/teal/issues/1699)).
+- Exported new utility functions to support module decorators:
+  [`srv_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md),
+  [`ui_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
+  and
+  [`check_decorators()`](https://insightsengineering.github.io/teal/reference/check_decorators.md)
+  ([\#1697](https://github.com/insightsengineering/teal/issues/1697)).
 
 ## teal 1.1.0
 
