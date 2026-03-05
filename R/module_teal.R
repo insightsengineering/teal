@@ -148,6 +148,9 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
 
     data_ui <- if (inherits(data, "teal_data_module")) data$ui(id = session$ns(.teal_data_module_id))
 
+    has_ui <- !is.null(data_ui)
+    is_once <- isTRUE(attr(data, "once"))
+
     validate_ui <- tags$div(
       id = session$ns("validate_messages"),
       class = "teal_validated",
@@ -193,12 +196,21 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       .add_signature_to_data(data_validated())
     })
 
-
     srv_check_class_teal_data("class_teal_data", data_handled)
     srv_validate_error("silent_error", data_handled, validate_shiny_silent_error = FALSE)
     srv_check_module_datanames("datanames_warning", data_handled, modules)
 
+
+    if (!has_ui) {
+      showNotification(
+        "Loading data...",
+        id = "data_loading",
+        duration = NULL,
+        type = "message"
+      )
+    }
     data_load_status <- reactive({
+      removeNotification(id = "data_loading")
       if (inherits(data_handled(), "teal_data")) {
         shinyjs::enable(id = "close_teal_data_module_modal")
         "ok"
@@ -209,9 +221,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         "external failed"
       }
     })
-
-    has_ui <- !is.null(data_ui)
-    is_once <- isTRUE(attr(data, "once"))
 
     if (has_ui) {
       showModal(modal_ui)
