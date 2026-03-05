@@ -148,3 +148,60 @@ testthat::describe("assert_decorators", {
     })
   })
 })
+
+# Test internal function reused on other packages teal.modules.general, teal.modules.clinical, ...
+testthat::describe("select_decorators", {
+  it("returns only 'all' decorators when the scope is 'all'", {
+    decorators <- list(all = teal_transform_module(), plot = teal_transform_module())
+    dec_out <- select_decorators(decorators, "all")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 1L)
+    testthat::expect_equivalent(dec_out, decorators["all"])
+  })
+
+  it("combines 'all' and scope-specific decorators when a specific scope is requested", {
+    decorators <- list(all = teal_transform_module(), plot = teal_transform_module())
+    dec_out <- select_decorators(decorators, "plot")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 2L)
+    testthat::expect_equivalent(dec_out, decorators)
+  })
+
+  it("returns only 'all' decorators when an unknown scope is provided", {
+    decorators <- list(all = teal_transform_module(), plot = teal_transform_module())
+    dec_out <- select_decorators(decorators, "other")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 1L)
+  })
+
+  it("flattens a mixture of single modules and lists of modules", {
+    decorators <- list(all = teal_transform_module(), plot = teal_transform_module())
+    dec_out <- select_decorators(decorators, "plot")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 2L)
+    testthat::expect_equivalent(dec_out, decorators)
+  })
+
+  it("recursively flattens nested lists of decorators for the requested scope", {
+    decorators <- list(
+      all = list(teal_transform_module(), teal_transform_module()),
+      plot = list(teal_transform_module(), teal_transform_module())
+    )
+    dec_out <- select_decorators(decorators, "plot")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 4L)
+  })
+
+  it("recursively flattens when only the requested scope contains multiple modules", {
+    decorators <- list(all = teal_transform_module(), plot = list(teal_transform_module(), teal_transform_module()))
+    dec_out <- select_decorators(decorators, "plot")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 3L)
+  })
+
+  it("recursively flattens when only the 'all' scope contains multiple modules", {
+    decorators <- list(all = list(teal_transform_module(), teal_transform_module()), plot = teal_transform_module())
+    dec_out <- select_decorators(decorators, "plot")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 3L)
+  })
+
+  it("recursively flattens multiple 'all' decorators even if the specific scope is missing", {
+    decorators <- list(all = list(teal_transform_module(), teal_transform_module()), plot = teal_transform_module())
+    dec_out <- select_decorators(decorators, "other")
+    checkmate::expect_list(dec_out, types = "teal_transform_module", len = 2L)
+  })
+})
