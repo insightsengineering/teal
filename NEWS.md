@@ -1,9 +1,10 @@
-# teal 1.1.0.9027
+# teal 1.1.0.9028
 
 ### Enhancements
 
 * Improved print method for `teal_module` object (#1685).
-* Added opt-in URL-based module navigation, controlled by `options(teal.enable_deep_linking = TRUE)` (default: `FALSE`). When enabled, the active module is reflected in the URL as `?active_module=<module path>`, and navigating to such a URL or using the browser's back/forward buttons switches to the corresponding tab.
+* Added opt-in URL-based module navigation, controlled by `options(teal.enable_deep_linking = TRUE)` (default: `FALSE`). When enabled, the active module is reflected in the URL as `?active_module=<module path>`, and navigating to such a URL or using the browser's back/forward buttons switches to the corresponding tab (#1699).
+* Exported new utility functions to support module decorators: `srv_transform_teal_data()`, `ui_transform_teal_data()` and `check_decorators()` (#1697).
 
 # teal 1.1.0
 
