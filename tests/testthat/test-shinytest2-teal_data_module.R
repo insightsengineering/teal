@@ -68,7 +68,7 @@ testthat::test_that("e2e: teal_data_module auto-closes modal when `once=TRUE` an
       modules = example_module(label = "Example Module")
     )
   )
-  app$click("teal-data-teal_data_module-submit")
+  app$click("teal-teal_data_module-submit")
   testthat::expect_null(app$get_html(".teal-data-module-popup"))
   app$stop()
 })
@@ -123,7 +123,7 @@ testthat::test_that("e2e: teal_data_module modal close button is enabled from di
     app$get_attr("#teal-close_teal_data_module_modal", "disabled"),
     "disabled"
   )
-  app$click("teal-data-teal_data_module-submit")
+  app$click("teal-teal_data_module-submit")
   testthat::expect_true(is.na(app$get_attr("#teal-close_teal_data_module_modal", "disabled")))
   app$stop()
 })
@@ -149,7 +149,7 @@ testthat::test_that("e2e: datasets from teal_data_module show in filter panel", 
     )
   )
 
-  app$click("teal-data-teal_data_module-submit")
+  app$click("teal-teal_data_module-submit")
   app$navigate_teal_tab("Example Module")
   testthat::expect_setequal(app$get_active_filter_vars(), c("dataset1", "dataset2"))
 
@@ -184,7 +184,7 @@ testthat::test_that("e2e: teal_data_module shows validation errors", {
     )
   )
 
-  app$click("teal-data-teal_data_module-submit")
+  app$click("teal-teal_data_module-submit")
   app$expect_validation_error()
 
   app$stop()
@@ -225,8 +225,8 @@ testthat::test_that("e2e: teal_data_module inputs change teal_data object that i
     )
   )
 
-  app$set_input("teal-data-teal_data_module-new_column", "A_New_Column")
-  app$click("teal-data-teal_data_module-submit")
+  app$set_input("teal-teal_data_module-new_column", "A_New_Column")
+  app$click("teal-teal_data_module-submit")
   app$navigate_teal_tab("Example Module")
 
   # This may fail if teal_data_module does not perform the transformation
