@@ -579,7 +579,7 @@ Remember that they should receive a list of `teal_transform_module`.
 
 ```{r, eval=FALSE}
 # in the module UI function
-ui_transform_module("decorate", decorators)
+ui_transform_module(ns("decorate"), decorators)
 
 # in the module server function
 srv_transform_teal_data(
