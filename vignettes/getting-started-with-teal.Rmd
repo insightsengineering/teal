@@ -181,7 +181,7 @@ app <- init(
                 intro: "Add Filters: Incorporate additional variables to your filter criteria to dynamically update your results."
               },
               {
-                element: "#teal-filter_manager_panel-show_filter_manager > span.icon", 
+                element: "#teal-filter_manager_panel-show_filter_manager > span.icon",
                 intro: "Filter Manager: View a matrix of all active filters and see which modules they are currently affecting."
               },
               {
@@ -228,7 +228,8 @@ app <- init(
       });
     '))
     ),
-    h3("My first teal application"))) |>
+    h3("My first teal application")
+  )) |>
   modify_footer(tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/")))
 
 if (interactive()) {
