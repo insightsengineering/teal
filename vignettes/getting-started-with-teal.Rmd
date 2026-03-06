@@ -145,6 +145,7 @@ app <- init(
       tags$script(
         src = "https://unpkg.com/intro.js/intro.js"
       ),
+      # nolint start line_length_linter.
       tags$script(HTML('
       $(document).on("shiny:connected", function() {
         setTimeout(function() {
@@ -226,6 +227,7 @@ app <- init(
       });
     '))
     ),
+    # nolint end.
     h3("My first teal application")
   )) |>
   modify_footer(tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/")))
