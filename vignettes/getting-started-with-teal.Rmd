@@ -93,8 +93,6 @@ Every `teal` application is composed of the following elements, all of which can
 library(teal)
 library(shiny)
 
-
-
 app <- init(
   data = teal_data(IRIS = iris, MTCARS = mtcars),
   modules = modules(
@@ -161,7 +159,7 @@ app <- init(
                 intro: "Data Summary: An overview of the datasets currently loaded in the application."
               },
               {
-                element: "#teal-teal_modules-nav-module_1-filter_panel-filters-main_filter_accordion > div > div.accordion-header > button > div.accordion-title",
+                element: "#teal-teal_modules-nav-module_1-filter_panel-filters-main_filter_accordion > div > div.accordion-header",
                 intro: "Filter Data: Use this area to subset your data and refine the analysis data."
               },
               {
@@ -177,7 +175,7 @@ app <- init(
                 intro: "Snapshot Manager: Save your current inputs and settings to easily recreate a specific analysis later."
               },
               {
-                element: "#teal-teal_modules-nav-module_1-filter_panel-filters-IRIS-filter_util_icons > a",
+                element: "#teal-teal_modules-nav-module_1-filter_panel-filters-IRIS-dataset_filter_accordion > div > div.accordion-header > button",
                 intro: "Add Filters: Incorporate additional variables to your filter criteria to dynamically update your results."
               },
               {
