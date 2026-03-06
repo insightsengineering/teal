@@ -159,19 +159,30 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       ui_check_module_datanames(session$ns("datanames_warning"))
     )
 
-    modal_ui <- div(
-      class = "teal teal-data-module-popup",
-      modalDialog(
-        id = session$ns("teal_data_module_ui"),
-        size = "xl",
-        tags$div(
-          data_ui,
-          validate_ui
-        ),
-        easyClose = FALSE,
-        footer = tags$div(id = session$ns("close_teal_data_module_modal"), modalButton("Dismiss"))
+
+    modal_ui <- reactive({
+      # reactive as data_load_status determines if modal opens/reopens with disabled "dismiss" btn
+      div(
+        class = "teal teal-data-module-popup",
+        modalDialog(
+          id = session$ns("teal_data_module_ui"),
+          size = "xl",
+          tags$div(
+            data_ui,
+            validate_ui
+          ),
+          easyClose = FALSE,
+          footer = tags$div(
+            id = session$ns("close_teal_data_module_modal"),
+            if (identical(data_load_status(), "ok")) {
+              modalButton("Dismiss")
+            } else {
+              shinyjs::disabled(modalButton("Dismiss"))
+            }
+          )
+        )
       )
-    )
+    })
 
     data_reactive <- if (inherits(data, "teal_data_module")) {
       data$server(.teal_data_module_id)
@@ -209,9 +220,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         type = "message"
       )
     }
-    data_load_status <- reactive({
+
+    data_load_status <- reactiveVal(NULL)
+    observeEvent(data_handled(), {
       removeNotification(id = "data_loading")
-      if (inherits(data_handled(), "teal_data")) {
+      status <- if (inherits(data_handled(), "teal_data")) {
         shinyjs::enable(id = "close_teal_data_module_modal")
         "ok"
       } else if (inherits(data, "teal_data_module")) {
@@ -220,10 +233,11 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       } else {
         "external failed"
       }
+      data_load_status(status)
     })
 
     if (has_ui) {
-      showModal(modal_ui)
+      showModal(shiny::isolate(modal_ui()))
       # We want to exclude teal_data_module elements from bookmarking as they might have some secrets
       observeEvent(data_handled(), {
         if (inherits(data_handled(), "teal_data")) {
@@ -241,12 +255,12 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
         }
       })
 
-      if (is_once) {
-        observeEvent(data_signatured(), once = TRUE, {
-          logger::log_debug("srv_teal@2 removing data tab.")
-          shiny::removeModal()
-        })
-      } else {
+      observeEvent(data_signatured(), once = TRUE, {
+        logger::log_debug("srv_teal@2 removing data tab.")
+        shiny::removeModal()
+      })
+
+      if (!is_once) {
         setBookmarkExclude(c("teal_data_module_ui", "open_teal_data_module_ui"))
         .teal_navbar_insert_ui(
           ui = .expand_button(
@@ -260,8 +274,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
           ignoreInit = TRUE,
           ignoreNULL = TRUE,
           {
-            showModal(modal_ui)
-            if (data_load_status() == "ok") {
+            showModal(modal_ui())
+            if (identical(data_load_status(), "ok")) {
               shinyjs::enable(id = "close_teal_data_module_modal")
             } else {
               shinyjs::disable(id = "close_teal_data_module_modal")
