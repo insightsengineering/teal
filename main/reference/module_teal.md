@@ -72,14 +72,11 @@ This module supports multiple data inputs but eventually, they are all
 converted to `reactive` returning `teal_data` in this module. On this
 `reactive teal_data` object several actions are performed:
 
-- data loading in
-  [`module_init_data`](https://insightsengineering.github.io/teal/reference/module_init_data.md)
+- data loading
 
-- data filtering in
-  [`module_filter_data`](https://insightsengineering.github.io/teal/reference/module_filter_data.md)
+- data filtering
 
-- data transformation in
-  [`module_transform_data`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)
+- data transformation
 
 ### Fallback on failure
 

@@ -77,7 +77,7 @@ among modules.
 One possible scenario is depicted in the figure below:
 
 - `filter 1` is shared by all modules
-- `filter 2` is shared by `module 1` and `module 3`  
+- `filter 2` is shared by `module 1` and `module 3`\
 - `filter 3` is used only by `module 2`
 - `filter 4` is used only by `module 1`
 - `filter 5` and `filter 6` are not active in any of the modules

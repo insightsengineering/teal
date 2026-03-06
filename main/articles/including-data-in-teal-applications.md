@@ -107,7 +107,7 @@ The necessary code can be supplied to the `code` argument of the to the
 data_populated_4 <- eval_code(data_empty, code = "D5 <- diag(5)")
 data_populated_4
 #> ✅︎ code verified
-#> <environment: 0x5605203624c8> 🔒 
+#> <environment: 0x560e9f4982a8> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - D5: [matrix]
@@ -140,7 +140,7 @@ when it has to be pulled from a remote source. In those cases a
 vignette](https://insightsengineering.github.io/teal/articles/data-as-shiny-module.md)
 for a detailed description.
 
-  
+\
 
 ## Clinical data
 
@@ -216,7 +216,7 @@ reliable.
 
 The filter panel supports MAEs out of the box.
 
-  
+\
 
 ## `teal_data` properties
 
@@ -271,7 +271,7 @@ running the `verify` function.
 data_with_objects_and_code <- teal_data(iris = iris, cars = mtcars, code = expression(iris <- iris, cars <- mtcars))
 data_with_objects_and_code
 #> ✖ code unverified
-#> <environment: 0x56051c823788> 🔒 
+#> <environment: 0x560e9e1ca030> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
@@ -280,7 +280,7 @@ data_with_objects_and_code
 data_with_objects_and_code_ver <- verify(data_with_objects_and_code)
 data_with_objects_and_code_ver
 #> ✅︎ code verified
-#> <environment: 0x56051c823788> 🔒 
+#> <environment: 0x560e9e1ca030> 🔒 
 #> Parent: <environment: package:teal> 
 #> Bindings:
 #> - cars: [data.frame]
@@ -292,7 +292,7 @@ vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/te
 
 [(back to Reproducible Data)](#reproducible-data)
 
-  
+\
 
 ##### Hidden datasets
 

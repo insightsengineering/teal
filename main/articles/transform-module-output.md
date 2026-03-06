@@ -31,12 +31,12 @@ objects of a `teal` module that do not require user input.
 
 Transforming `teal` module output requires the following:
 
-1.  **Module Support**:  
+1.  **Module Support**:\
     `teal` will apply transformations to `teal_module` outputs, but the
     module in question must explicitly support this functionality. It is
     the responsibility of to the module developer to accept and consume
     the list of `teal_transform_module`.
-2.  **Matching Object Names**:  
+2.  **Matching Object Names**:\
     Transformations have to reference variables that already exist in
     the `teal_module` server function and therefore must use the
     appropriate variable names. Think of it as extending the plot/table
@@ -44,7 +44,7 @@ Transforming `teal` module output requires the following:
     encouraged to provide the relevant names in the module’s
     documentation, otherwise the person writing the output
     transformation must follow the source code.
-3.  **Maintaining Object Classes**:  
+3.  **Maintaining Object Classes**:\
     A transformation must not alter the class of the object that it
     modifies. This is because a different class may require a different
     rendering function and that is part of the module structure, which

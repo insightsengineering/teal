@@ -381,7 +381,7 @@ Do not change versions on your own.
 Use `r.pkg.template` workflows for consistency:
 
 - **check.yaml**: R CMD check, unit tests, coverage
-- **docs.yaml**: Documentation building and deployment  
+- **docs.yaml**: Documentation building and deployment\
 - **audit.yaml**: Security and dependency auditing
 - **pkgdown.yaml**: Website generation
 

@@ -1,13 +1,10 @@
 # Filter panel module in teal
 
 Creates filter panel module from `teal_data` object and returns
-`teal_data`. It is build in a way that filter panel changes and anything
-what happens before (e.g.
-[`module_init_data`](https://insightsengineering.github.io/teal/reference/module_init_data.md))
-is triggering further reactive events only if something has changed and
-if the module is visible. Thanks to this special implementation all
-modules' data are recalculated only for those modules which are
-currently displayed.
+`teal_data`. It is build in a way filter panel recalculates data only
+when filter-panel-state or loaded-data changes and when panel is
+visible. Thanks to this special implementation all modules' data are
+recalculated only for those modules which are currently displayed.
 
 ## Usage
 

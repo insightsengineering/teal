@@ -26,7 +26,7 @@ assert_decorators(x, names = NULL, .var.name = checkmate::vname(x), add = NULL)
 
 - .var.name:
 
-  \[`character(1)`\]  
+  \[`character(1)`\]\
   The custom name for `x` as passed to any `assert*` function. Defaults
   to a heuristic name lookup.
 
