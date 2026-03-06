@@ -89,10 +89,158 @@ Every `teal` application is composed of the following elements, all of which can
 
 ## Try the above app in `shinylive`
 
+```{r appintro, message=FALSE, warning=FALSE, include=FALSE}
+library(teal)
+library(shiny)
+
+app <- init(
+  data = teal_data(IRIS = iris, MTCARS = mtcars),
+  modules = modules(
+    example_module("Module 1"),
+    example_module("Module 2")
+  ),
+  filter = teal_slices(
+    teal_slice(dataname = "IRIS", varname = "Species", selected = "setosa")
+  )
+) |>
+  modify_title("My first teal application") |>
+  modify_header(tags$div(
+    tags$head(
+      tags$link(
+        rel = "stylesheet",
+        href = "https://unpkg.com/intro.js/introjs.css"
+      ),
+      tags$style(HTML("
+      .introjs-tooltip {
+        background-color: white !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+        padding: 15px !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3) !important;
+        min-width: 250px !important;
+        max-width: 400px !important;
+      }
+
+      .introjs-tooltip {
+        z-index: 10000000 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: absolute !important;
+      }
+      .introjs-overlay {
+        z-index: 9999999 !important;
+        opacity: 0.8 !important;
+      }
+      .introjs-helperLayer {
+        z-index: 9999998 !important;
+      }
+      .introjs-tooltipbuttons {
+        display: block !important;
+      }
+      .introjs-button {
+        display: inline-block !important;
+      }
+    ")),
+      tags$script(
+        src = "https://unpkg.com/intro.js/intro.js"
+      ),
+      # nolint start line_length_linter.
+      tags$script(HTML('
+      $(document).on("shiny:connected", function() {
+        setTimeout(function() {
+          console.log("Starting intro.js tour");
+          introJs.tour().setOptions({
+            steps: [
+              {
+                intro: "Welcome! This tour will guide you through the key features of this Teal application."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-data_summary_accordion",
+                intro: "Data Summary: An overview of the datasets currently loaded in the application."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-filter_panel-filters-main_filter_accordion > div > div.accordion-header",
+                intro: "Filter Data: Use this area to subset your data and refine the analysis data."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-teal_module_ui > div.container-fluid.teal-widgets.standard-layout-wrapper > div > div > aside.sidebar",
+                intro: "Analysis input: Input parameters for the analysis will be shown here."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-teal_module_ui > div.container-fluid.teal-widgets.standard-layout-wrapper > div > div > div.main",
+                intro: "Analysis output: Plots, tables, and statistics will be rendered here."
+              },
+              {
+                element: "#teal-snapshot_manager_panel-show_snapshot_manager > span.icon",
+                intro: "Snapshot Manager: Save your current inputs and settings to easily recreate a specific analysis later."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-filter_panel-filters-IRIS-dataset_filter_accordion > div > div.accordion-header > button",
+                intro: "Add Filters: Incorporate additional variables to your filter criteria to dynamically update your results."
+              },
+              {
+                element: "#teal-filter_manager_panel-show_filter_manager > span.icon",
+                intro: "Filter Manager: View a matrix of all active filters and see which modules they are currently affecting."
+              },
+              {
+                element: ".teal.dropdown-button",
+                intro: "Module Navigation: Click here to switch between different analysis types and modules."
+              },
+              {
+                element: "#teal-teal_modules-active_module_id > div.dropdown.nav-item-custom > div",
+                intro: "Breadcrumbs: This indicator tracks your location and shows which analysis is currently active."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-add_reporter_wrapper-report_add_wrapper",
+                intro: "Report Previewer: Add the current analysis to your report for later export."
+              },
+              {
+                element: "#teal-reporter_menu_container",
+                intro: "Reporting Pane: Access, edit, organize and export all the analyses added to your custom report."
+              },
+              {
+                element: "#teal-teal_modules-nav-module_1-source_code_wrapper-source_code-button",
+                intro: "Show Source Code: Review the underlying R code used to generate this specific output of the active analysis."
+              },
+              {
+                element: "#teal-footer-session_info-sessionInfo-button",
+                intro: "Session Info: View technical details regarding the R version and package environment."
+              },
+              {
+                element: "#teal-footer-session_info-identifier",
+                intro: "App Identifier: These helps support teams identify this specific application instance and environment.",
+              },
+              {
+                intro: "Thanks for checking the introduction. Let us know if something is unclear.",
+                dontShowAgain: true
+              }
+            ],
+            showProgress: true,
+            showBullets: false,
+            exitOnOverlayClick: false,
+            doneLabel: "Done",
+            nextLabel: "Next →",
+            prevLabel: "← Back"
+          }).start();
+        }, 2000);
+      });
+    '))
+    ),
+    # nolint end.
+    h3("My first teal application")
+  )) |>
+  modify_footer(tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/")))
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+```
+
 ```{r shinylive_iframe, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(
   "interactive <- function() TRUE",
-  knitr::knit_code$get("app")
+  knitr::knit_code$get("appintro")
 ), collapse = "\n")
 url <- roxy.shinylive::create_shinylive_url(code)
 knitr::include_url(url, height = "800px")
