@@ -583,35 +583,22 @@ teal_transform_module(
 
 ### Multiple Transformations
 
-Consider these constructs to accommodate an arbitrary number of
-transformators in your module. Note that with this method all
-decorations will be applied to one output.
+Multiple decorators can be passed to
+[`srv_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md)/[`ui_transform_teal_data()`](https://insightsengineering.github.io/teal/reference/module_transform_data.md).
+They will be executed in sequence, errors and warnings will show up on
+the appropriate decorator. Remember that they should receive a list of
+`teal_transform_module`.
 
 ``` r
 
 # in the module UI function
-div(
-  id = ns("deorator_container"),
-  lapply(names(decorators), function(decorator_name) {
-    div(
-      id = ns(paste0("decorate_", decorator_name)),
-      ui_transform_teal_data(
-        ns(paste0("decorate_", decorator_name)),
-        transformators = decorators[[decorator_name]]
-      )
-    )
-  })
-)
+ui_transform_module(ns("decorate"), decorators)
+
 # in the module server function
-output_data <- reactive(teal_data())
-decorations <- lapply(names(decorators), function(decorator_name) {
-  function(data) {
-    srv_transform_teal_data(
-      paste0("decorate_", decorator_name),
-      data = data,
-      transformators = decorators[[decorator_name]]
-    )
-  }
-})
-output_data_decorated <- Reduce(function(f, ...) f(...), decorations, init = output_data, right = TRUE)
+srv_transform_teal_data(
+  "decorate",
+  data = data,
+  transformators = decorators,
+  expr = quote(obj) # Often we want to display the output of the decorator at the end
+)
 ```

@@ -171,7 +171,7 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x559dceee7448>
+#> <environment: 0x55ba298505c8>
 #> 
 #> $server
 #> function(id) {
@@ -182,7 +182,7 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x559dceee76e8>
+#> <environment: 0x55ba2984ca38>
 #> 
 #> attr(,"label")
 #> [1] "data module"
@@ -197,7 +197,7 @@ within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x559dced92180>
+#> <environment: 0x55ba29641fe0>
 #> 
 #> $server
 #> function(id) {
@@ -208,7 +208,7 @@ within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x559dced92420>
+#> <environment: 0x55ba29642868>
 #> 
 #> attr(,"label")
 #> [1] "data module"
@@ -225,7 +225,7 @@ within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x559dcea96b28>
+#> <environment: 0x55ba29527888>
 #> 
 #> $server
 #> function(id) {
@@ -236,7 +236,7 @@ within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x559dcea96dc8>
+#> <environment: 0x55ba29527b60>
 #> 
 #> attr(,"label")
 #> [1] "data module"
