@@ -574,7 +574,8 @@ teal_transform_module(
 
 ### Multiple Transformations
 
-Multiple decorators can be passed to `srv_transform_teal_data()`/`ui_transform_teal_data()` and they will be handled properly.
+Multiple decorators can be passed to `srv_transform_teal_data()`/`ui_transform_teal_data()`.
+They will be executed in sequence, errors and warnings will show up on the appropriate decorator.
 Remember that they should receive a list of `teal_transform_module`. 
 
 ```{r, eval=FALSE}
