@@ -52,9 +52,9 @@ This module supports multiple data inputs but eventually, they are all converted
 returning \code{teal_data} in this module. On this \verb{reactive teal_data} object several actions are
 performed:
 \itemize{
-\item data loading in \code{\link{module_init_data}}
-\item data filtering in \code{\link{module_filter_data}}
-\item data transformation in \code{\link{module_transform_data}}
+\item data loading
+\item data filtering
+\item data transformation
 }
 }
 

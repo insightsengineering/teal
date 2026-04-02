@@ -88,9 +88,12 @@ srv_filter_manager_panel <- function(id, slices_global) {
 ui_filter_manager <- function(id) {
   ns <- NS(id)
   actionButton(ns("filter_manager"), NULL, icon = icon("fas fa-filter"))
-  tags$div(
-    class = "filter_manager_content",
-    tableOutput(ns("slices_table"))
+  tagList(
+    tags$span(tags$b("Filter Manager")),
+    tags$div(
+      class = "filter_manager_content",
+      tableOutput(ns("slices_table"))
+    )
   )
 }
 
@@ -157,7 +160,7 @@ srv_filter_manager <- function(id, slices_global) {
 
         # Display placeholder if no filters defined.
         if (nrow(mm) == 0L) {
-          mm <- data.frame(`Filter manager` = "No filters specified.", check.names = FALSE)
+          mm <- data.frame(" " = "No filters specified.", check.names = FALSE)
           rownames(mm) <- ""
         }
         mm

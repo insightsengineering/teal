@@ -111,10 +111,6 @@ testthat::test_that(
   }
 )
 
-
-# from different file
-
-
 testthat::test_that("teal_slices mapping should be an empty list or a named list or missing", {
   testthat::expect_no_error(
     teal_slices(
@@ -154,5 +150,54 @@ testthat::test_that("teal_slices mapping should be an empty list or a named list
       mapping = "mapping"
     ),
     "Assertion.+failed"
+  )
+})
+
+testthat::test_that("c.teal_slices combines mapping of teal_slices objects", {
+  tss1 <- teal_slices(
+    teal.slice::teal_slice(dataname = "data1", varname = "var1", id = "test1"),
+    module_specific = TRUE,
+    mapping = list(module1 = "test1")
+  )
+  tss2 <- teal_slices(
+    teal.slice::teal_slice(dataname = "data2", varname = "var2", id = "test2"),
+    module_specific = TRUE,
+    mapping = list(module2 = "test2")
+  )
+  testthat::expect_identical(
+    c(tss1, tss2),
+    teal_slices(
+      tss1[[1]], tss2[[1]],
+      module_specific = TRUE,
+      mapping = list(
+        module1 = "test1",
+        module2 = "test2"
+      )
+    )
+  )
+})
+
+testthat::test_that("c.teal_slices combines mapping of two equal slices objects but ignores adding duplicated one", {
+  tss1 <- teal_slices(
+    teal.slice::teal_slice(dataname = "data1", varname = "var1", id = "test1"),
+    module_specific = TRUE,
+    mapping = list(module1 = "test1")
+  )
+  tss2 <- teal_slices(
+    teal.slice::teal_slice(dataname = "data1", varname = "var1", id = "test1"),
+    module_specific = TRUE,
+    mapping = list(module2 = "test1")
+  )
+
+  testthat::expect_identical(
+    c(tss1, tss2),
+    teal_slices(
+      tss1[[1]],
+      module_specific = TRUE,
+      mapping = list(
+        module1 = "test1",
+        module2 = "test1"
+      )
+    )
   )
 })
