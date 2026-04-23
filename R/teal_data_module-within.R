@@ -6,7 +6,7 @@
 #' the `...` argument: as `name:value` pairs are passed to `...`, `name` in `expr` will be replaced with `value.`
 #'
 #' @param data (`teal_data_module`) object
-#' @param expr (`expression`) to evaluate. Must be inline code. See [within()]
+#' @param expr (`expression`) to evaluate. Must be inline code. See [within()][base::within()]
 #' @param ... See `Details`.
 #'
 #' @return
