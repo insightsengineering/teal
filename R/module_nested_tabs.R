@@ -55,9 +55,13 @@
 #'   `id` of the currently active module. This helps to determine which module can listen to reactive events.
 #'
 #' @return
-#' Output of currently active module.
-#' - `srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
-#' - `srv_teal_module.teal_modules` returns output of modules in a list following the hierarchy of `modules`
+#' `srv_teal_module` returns a `list` with:
+#' - `modules_output`: output of the module tree (see below).
+#' - `active_module_id`: `reactive` returning the `character(1)` path of the currently active module.
+#'
+#' `.srv_teal_module` dispatches on `modules` class:
+#' - `.srv_teal_module.teal_module` returns `reactiveVal` containing output of the called module.
+#' - `.srv_teal_module.teal_modules` returns output of modules in a list following the hierarchy of `modules`
 #'
 #' @keywords internal
 NULL
@@ -155,7 +159,7 @@ srv_teal_module <- function(id,
         ignoreNULL = FALSE
       )
     }
-    .srv_teal_module(
+    modules_output <- .srv_teal_module(
       id = "nav",
       data = data,
       modules = modules,
@@ -163,6 +167,11 @@ srv_teal_module <- function(id,
       slices_global = slices_global,
       reporter = reporter,
       data_load_status = data_load_status,
+      active_module_id = reactive(input$active_module_id)
+    )
+
+    list(
+      modules_output = modules_output,
       active_module_id = reactive(input$active_module_id)
     )
   })
