@@ -74,6 +74,9 @@
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
 #'                      containing all `teal_slice`s existing in the app, both active and inactive.
+#' @param active_module_id (`reactive` returning `character(1)`)
+#'   Path of the currently active module. Used to enable "Reset active module" functionality
+#'   when `module_specific` filtering is enabled.
 #'
 #' @return `list` containing the snapshot history, where each element is an unlisted `teal_slices` object.
 #'
@@ -95,7 +98,7 @@ ui_snapshot_manager_panel <- function(id) {
 }
 
 #' @rdname module_snapshot_manager
-srv_snapshot_manager_panel <- function(id, slices_global) {
+srv_snapshot_manager_panel <- function(id, slices_global, active_module_id = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_snapshot_manager_panel initializing")
     setBookmarkExclude(c("show_snapshot_manager"))
@@ -111,7 +114,11 @@ srv_snapshot_manager_panel <- function(id, slices_global) {
         )
       )
     })
-    snapshot_history <- srv_snapshot_manager("module", slices_global = slices_global)
+    snapshot_history <- srv_snapshot_manager(
+      "module",
+      slices_global = slices_global,
+      active_module_id = active_module_id
+    )
     snapshot_history
   })
 }
@@ -138,6 +145,7 @@ ui_snapshot_manager <- function(id) {
         "Reset initial state",
         placement = "top"
       ),
+      uiOutput(ns("snapshot_reset_module_ui"), inline = TRUE),
       NULL
     ),
     tags$br(),
@@ -146,7 +154,7 @@ ui_snapshot_manager <- function(id) {
 }
 
 #' @rdname module_snapshot_manager
-srv_snapshot_manager <- function(id, slices_global) {
+srv_snapshot_manager <- function(id, slices_global, active_module_id = reactive(NULL)) {
   checkmate::assert_character(id)
 
   moduleServer(id, function(input, output, session) {
@@ -155,7 +163,7 @@ srv_snapshot_manager <- function(id, slices_global) {
     # Set up bookmarking callbacks ----
     # Register bookmark exclusions (all buttons and text fields).
     setBookmarkExclude(c(
-      "snapshot_add", "snapshot_load", "snapshot_reset",
+      "snapshot_add", "snapshot_load", "snapshot_reset", "snapshot_reset_module",
       "snapshot_name_accept", "snapshot_file_accept",
       "snapshot_name", "snapshot_file"
     ))
@@ -337,6 +345,68 @@ srv_snapshot_manager <- function(id, slices_global) {
       slices_global$slices_set(snapshot_state)
       removeModal()
       ### End restore procedure. ###
+    })
+
+    # Restore initial state for active module only ----
+    output$snapshot_reset_module_ui <- renderUI({
+      if (slices_global$is_module_specific()) {
+        bslib::tooltip(
+          tags$span(actionLink(ns("snapshot_reset_module"), label = NULL, icon = icon("fas fa-rotate-left"))),
+          "Reset active module",
+          placement = "top"
+        )
+      }
+    })
+
+    observeEvent(input$snapshot_reset_module, {
+      active_path <- active_module_id()
+      req(active_path)
+      # Extract module label from path (last segment after " / ")
+      active_label <- sub(".*/ ", "", active_path)
+      logger::log_debug(
+        "srv_snapshot_manager: snapshot_reset_module clicked, resetting module: { active_label }"
+      )
+
+      # Get initial and current states
+      initial_snapshot <- snapshot_history()[["Initial application state"]]
+      initial_state <- as.teal_slices(initial_snapshot)
+      initial_mapping <- attr(initial_state, "mapping")
+      initial_module_ids <- initial_mapping[[active_label]] %||% character(0)
+
+      current_state <- slices_global$all_slices()
+      current_mapping <- attr(current_state, "mapping")
+
+      # Replace only the active module's mapping with initial
+      current_mapping[[active_label]] <- initial_module_ids
+
+      # Restore initial slice objects for this module
+      initial_module_slices <- Filter(
+        function(s) s$id %in% initial_module_ids,
+        initial_state
+      )
+      current_ids <- if (length(current_state)) {
+        vapply(current_state, `[[`, character(1L), "id")
+      } else {
+        character(0)
+      }
+      new_state <- current_state
+      for (init_slice in initial_module_slices) {
+        idx <- match(init_slice$id, current_ids)
+        if (!is.na(idx)) {
+          new_state[[idx]] <- init_slice
+        } else {
+          new_state[[length(new_state) + 1L]] <- init_slice
+          current_ids <- c(current_ids, init_slice$id)
+        }
+      }
+
+      attr(new_state, "mapping") <- current_mapping
+      # Ensure module_specific and app_id are preserved from the initial state,
+      # since these should never change during a session.
+      attr(new_state, "module_specific") <- attr(initial_state, "module_specific")
+      attr(new_state, "app_id") <- attr(initial_state, "app_id")
+      slices_global$slices_set(new_state)
+      removeModal()
     })
 
     # Build snapshot table ----

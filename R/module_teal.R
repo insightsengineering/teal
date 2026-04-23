@@ -327,7 +327,7 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
     module_labels <- unlist(modules_slot(modules, "label"), use.names = FALSE)
     slices_global <- methods::new(".slicesGlobal", filter, module_labels)
 
-    modules_output <- srv_teal_module(
+    teal_module_result <- srv_teal_module(
       "teal_modules",
       data = data_signatured,
       modules = modules,
@@ -336,9 +336,15 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
       reporter = reporter,
       data_load_status = data_load_status
     )
+    modules_output <- teal_module_result$modules_output
+    active_module_id <- teal_module_result$active_module_id
 
     mapping_table <- srv_filter_manager_panel("filter_manager_panel", slices_global = slices_global)
-    snapshots <- srv_snapshot_manager_panel("snapshot_manager_panel", slices_global = slices_global)
+    snapshots <- srv_snapshot_manager_panel(
+      "snapshot_manager_panel",
+      slices_global = slices_global,
+      active_module_id = active_module_id
+    )
     srv_bookmark_panel("bookmark_manager", modules)
   })
 

@@ -10,17 +10,25 @@
 \usage{
 ui_snapshot_manager_panel(id)
 
-srv_snapshot_manager_panel(id, slices_global)
+srv_snapshot_manager_panel(
+  id,
+  slices_global,
+  active_module_id = reactive(NULL)
+)
 
 ui_snapshot_manager(id)
 
-srv_snapshot_manager(id, slices_global)
+srv_snapshot_manager(id, slices_global, active_module_id = reactive(NULL))
 }
 \arguments{
 \item{id}{(\code{character(1)}) \code{shiny} module instance id.}
 
 \item{slices_global}{(\code{reactiveVal}) that contains a \code{teal_slices} object
 containing all \code{teal_slice}s existing in the app, both active and inactive.}
+
+\item{active_module_id}{(\code{reactive} returning \code{character(1)})
+Path of the currently active module. Used to enable "Reset active module" functionality
+when \code{module_specific} filtering is enabled.}
 }
 \value{
 \code{list} containing the snapshot history, where each element is an unlisted \code{teal_slices} object.

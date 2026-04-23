@@ -124,10 +124,16 @@ panel.
 \code{id} of the currently active module. This helps to determine which module can listen to reactive events.}
 }
 \value{
-Output of currently active module.
+\code{srv_teal_module} returns a \code{list} with:
 \itemize{
-\item \code{srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
-\item \code{srv_teal_module.teal_modules} returns output of modules in a list following the hierarchy of \code{modules}
+\item \code{modules_output}: output of the module tree (see below).
+\item \code{active_module_id}: \code{reactive} returning the \code{character(1)} path of the currently active module.
+}
+
+\code{.srv_teal_module} dispatches on \code{modules} class:
+\itemize{
+\item \code{.srv_teal_module.teal_module} returns \code{reactiveVal} containing output of the called module.
+\item \code{.srv_teal_module.teal_modules} returns output of modules in a list following the hierarchy of \code{modules}
 }
 }
 \description{

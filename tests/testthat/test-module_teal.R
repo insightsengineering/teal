@@ -2722,6 +2722,81 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
+  testthat::it("clicking reset active module resets only the active module's filters", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris, mtcars = mtcars),
+        modules = modules(
+          module("module_1", server = function(id, data) data),
+          module("module_2", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          teal_slice("mtcars", "cyl"),
+          mapping = list(module_1 = "iris Species", module_2 = "mtcars cyl"),
+          module_specific = TRUE
+        )
+      ),
+      expr = {
+        initial_slices <- slices_global$all_slices()
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$setInputs(`teal_modules-active_module_id` = "module_2")
+        session$flushReact()
+
+        # Modify module_1's mapping to also include the mtcars filter
+        slices_global$slices_active(list(module_1 = c("iris Species", "mtcars cyl")))
+        session$flushReact()
+
+        # Verify module_1 now has both filters
+        testthat::expect_equal(
+          attr(slices_global$all_slices(), "mapping")[["module_1"]],
+          c("iris Species", "mtcars cyl")
+        )
+
+        # Reset only module_1
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        session$setInputs("snapshot_manager_panel-module-snapshot_reset_module" = TRUE)
+        session$flushReact()
+
+        restored_mapping <- attr(slices_global$all_slices(), "mapping")
+
+        # module_1 should be restored to initial (only iris Species)
+        testthat::expect_equal(restored_mapping[["module_1"]], "iris Species")
+
+        # module_2 should remain unchanged
+        testthat::expect_equal(restored_mapping[["module_2"]], "mtcars cyl")
+      }
+    )
+  })
+
+  testthat::it("reset active module button is not rendered when module_specific is FALSE", {
+    shiny::testServer(
+      app = srv_teal,
+      args = list(
+        id = "test",
+        data = teal.data::teal_data(iris = iris),
+        modules = modules(
+          module("module_1", server = function(id, data) data)
+        ),
+        filter = teal_slices(
+          teal_slice("iris", "Species"),
+          module_specific = FALSE
+        )
+      ),
+      expr = {
+        session$setInputs(`teal_modules-active_module_id` = "module_1")
+        session$flushReact()
+        rendered_ui <- output[["snapshot_manager_panel-module-snapshot_reset_module_ui"]]
+        testthat::expect_true(
+          is.null(rendered_ui$html) || !grepl("snapshot_reset_module", rendered_ui$html)
+        )
+      }
+    )
+  })
+
   testthat::it("adds snapshot to history when name is provided", {
     shiny::testServer(
       app = srv_teal,
