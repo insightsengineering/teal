@@ -73,8 +73,8 @@ testthat::test_that("e2e: validate_input validates many inputs (and linked outpu
       ui = function(id) {
         ns <- NS(id)
         tagList(
-          numericInput(ns("input1"), "Enter y:", value = 4, min = 0, max = 100),
-          numericInput(ns("input2"), "Enter y:", value = 5, min = 0, max = 100),
+          numericInput(ns("input1"), "Enter x:", value = 4, min = 0, max = 100),
+          numericInput(ns("input2"), "Enter y:", value = 6, min = 0, max = 100),
           textOutput(ns("result"))
         )
       }
