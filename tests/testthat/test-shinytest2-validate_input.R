@@ -138,7 +138,7 @@ testthat::describe("e2e: validate_input validates", {
               silent = TRUE
             ),
             try(
-              teal:::validate_input("selectize", function(x) identical(x, "Y"), "selectize must be Y",),
+              teal:::validate_input("selectize", function(x) identical(x, "Y"), "selectize must be Y", ),
               silent = TRUE
             ),
             try(
