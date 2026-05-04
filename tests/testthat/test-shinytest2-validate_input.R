@@ -233,8 +233,12 @@ testthat::describe("e2e: validate_input validates", {
     message <- "date_range must be 2024-01-01 to 2024-01-31"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("date_range"), c("2024-01-01", "2024-01-31"))
+    errors <- app_driver$get_text(".shiny-output-error")
+    if (is.null(errors)) { # if there are no errors, set to empty character vector to avoid testthat::expect_match error
+      errors <- character(0L)
+    }
     testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+      testthat::expect_match(errors, message, fixed = TRUE, all = FALSE)
     )
   })
 
