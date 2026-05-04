@@ -97,7 +97,6 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, packages = c("roxy.shinylive"))
-RoxygenNote: 7.3.3
 Collate:
     'TealAppDriver.R'
     'after.R'
@@ -134,3 +133,4 @@ Collate:
     'validate_inputs.R'
     'validations.R'
     'zzz.R'
+Config/roxygen2/version: 8.0.0
