@@ -115,6 +115,7 @@ testthat::test_that("e2e: validate_input validates many inputs (and linked outpu
 })
 
 testthat::describe("e2e: validate_input validates", {
+  skip_if_too_deep(5)
   all_inputs_mod <- module(
     label = "all inputs",
     ui = function(id) {
@@ -234,7 +235,7 @@ testthat::describe("e2e: validate_input validates", {
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("date_range"), c("2024-01-01", "2024-01-31"))
     errors <- app_driver$get_text(".shiny-output-error")
-    if (is.null(errors)) { # if there are no errors, set to empty character vector to avoid testthat::expect_match error
+    if (is.null(errors)) { # Set to empty character vector to avoid testthat::expect_match error
       errors <- character(0L)
     }
     testthat::expect_failure(
