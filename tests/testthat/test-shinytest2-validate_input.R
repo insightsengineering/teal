@@ -145,7 +145,11 @@ testthat::describe("e2e: validate_input validates", {
               silent = TRUE
             ),
             try(
-              teal:::validate_input("checkbox_group", function(x) identical(x, c("Check 2")), "checkbox_group must be Check 2"),
+              teal:::validate_input(
+                "checkbox_group",
+                function(x) identical(x, c("Check 2")),
+                "checkbox_group must be Check 2"
+              ),
               silent = TRUE
             ),
             try(
