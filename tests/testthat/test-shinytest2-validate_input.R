@@ -114,11 +114,131 @@ testthat::test_that("e2e: validate_input validates many inputs (and linked outpu
   app$stop()
 })
 
-testthat::test_that("e2e: validate_input validates sliderInput")
-testthat::test_that("e2e: validate_input validates selectInput")
-testthat::test_that("e2e: validate_input validates selectizeInput")
-testthat::test_that("e2e: validate_input validates radioButtons")
-testthat::test_that("e2e: validate_input validates checkboxGroupInput")
-testthat::test_that("e2e: validate_input validates checkboxInput")
-testthat::test_that("e2e: validate_input validates dateInput")
-testthat::test_that("e2e: validate_input validates dateRangeInput")
+testthat::describe("e2e: validate_input validates", {
+  all_inputs_mod <- module(
+    label = "all inputs",
+    ui = function(id) {
+      ns <- NS(id)
+      tagList(
+        selectInput(ns("select"), "Select Input:", choices = c("A", "B", "C")),
+        selectizeInput(ns("selectize"), "Selectize Input:", choices = c("X", "Y", "Z")),
+        radioButtons(ns("radio"), "Radio Buttons:", choices = c("Option 1", "Option 2")),
+        checkboxGroupInput(ns("checkbox_group"), "Checkbox Group:", choices = c("Check 1", "Check 2")),
+        checkboxInput(ns("checkbox"), "Checkbox Input"),
+        dateInput(ns("date"), "Date Input:"),
+        dateRangeInput(ns("date_range"), "Date Range Input:")
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          validation <- list(
+            try(
+              teal:::validate_input("select", function(x) identical(x, "B"), "select must be B"),
+              silent = TRUE
+            ),
+            try(
+              teal:::validate_input("selectize", function(x) identical(x, "Y"), "selectize must be Y",),
+              silent = TRUE
+            ),
+            try(
+              teal:::validate_input("radio", function(x) identical(x, "Option 2"), "radio must be Option 2"),
+              silent = TRUE
+            ),
+            try(
+              teal:::validate_input("checkbox_group", function(x) identical(x, c("Check 2")), "checkbox_group must be Check 2"),
+              silent = TRUE
+            ),
+            try(
+              teal:::validate_input("checkbox", function(x) identical(x, TRUE), "checkbox must be TRUE"),
+              silent = TRUE
+            ),
+            try(
+              teal:::validate_input("date", function(x) identical(x, as.Date("2024-01-01")), "date must be 2024-01-01"),
+              silent = TRUE
+            ),
+            try(
+              teal:::validate_input(
+                "date_range",
+                function(x) identical(x, c(as.Date("2024-01-01"), as.Date("2024-01-31"))),
+                "date_range must be 2024-01-01 to 2024-01-31"
+              ),
+              silent = TRUE
+            )
+          )
+          data()
+        })
+      })
+    }
+  )
+
+  app_driver <- TealAppDriver$new(init(data = simple_teal_data(), modules = all_inputs_mod))
+  withr::defer(app_driver$stop())
+
+  it("selectInput", {
+    message <- "select must be B"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("select"), "B")
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("selectizeInput", {
+    message <- "selectize must be Y"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("selectize"), "Y")
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("radioButtons", {
+    message <- "radio must be Option 2"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("radio"), "Option 2")
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("checkboxGroupInput", {
+    message <- "checkbox_group must be Check 2"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("checkbox_group"), "Check 2")
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("checkboxInput", {
+    message <- "checkbox must be TRUE"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("checkbox"), TRUE)
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("dateInput", {
+    message <- "date must be 2024-01-01"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("date"), "2024-01-01")
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("dateRangeInput", {
+    message <- "date_range must be 2024-01-01 to 2024-01-31"
+    testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    app_driver$set_input(app_driver$namespaces()$module("date_range"), c("2024-01-01", "2024-01-31"))
+    testthat::expect_failure(
+      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
+    )
+  })
+
+  it("no input errors at the end", {
+    testthat::expect_null(app_driver$get_text(".shiny-output-error"))
+  })
+})
