@@ -14,6 +14,11 @@ $(document).on('shiny:connected', function () {
     }
 
     if (container.length > 0) {
+
+      container.off('shiny:inputchangede').on('shiny:inputchanged', function (event) {
+        container.find('.shiny-input_validation-error').remove();
+      });
+
       // Remove existing validation message
       container.find('.shiny-output-error').remove();
 
@@ -29,19 +34,4 @@ $(document).on('shiny:connected', function () {
       console.warn('Container not found for input: ' + inputId);
     }
   });
-});
-
-$(document).on('shiny:inputchanged', function (event) {
-  var inputId = event.name;
-
-  // Try both CSS selector patterns
-  var selector1 = '.shiny-input-container#' + inputId;
-  var selector2 = '.shiny-input-container:has(#' + inputId + ')';
-
-  var container = $(selector1);
-  if (container.length === 0) {
-    container = $(selector2);
-  }
-
-  container.find('.shiny-input_validation-error').remove();
 });
