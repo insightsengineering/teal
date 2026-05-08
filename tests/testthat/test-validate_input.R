@@ -186,3 +186,72 @@ testthat::test_that("validate_input with multiple inputIds doesn't throw shiny.s
     args = list(id = "test")
   )
 })
+
+testthat::describe("validate_input with add argument", {
+  it("1 validation", {
+    test_module <- function(id) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          validation_collection <- make_validation_collection()
+          validate_input(
+            inputId = "test_input",
+            condition = function(x) is.null(x),
+            message = "input must be null",
+            session = session,
+            add = validation_collection
+          )
+          validation_collection$validate()
+        })
+      })
+    }
+
+    shiny::testServer(
+      app = test_module,
+      args = list(id = "test"),
+      expr = {
+        # Set up input value
+        testthat::expect_no_error(session$returned())
+        session$setInputs(test_input = "invalid_value")
+        testthat::expect_error(session$returned(), "input must be null")
+      }
+    )
+  })
+
+  it("2 validations", {
+    test_module <- function(id) {
+      moduleServer(id, function(input, output, session) {
+        reactive({
+          validation_collection <- make_validation_collection()
+          validate_input(
+            inputId = "test_input1",
+            condition = function(x) is.null(x),
+            message = "input1 must be null",
+            session = session,
+            add = validation_collection
+          )
+          validate_input(
+            inputId = "test_input2",
+            condition = function(x) is.null(x),
+            message = "input2 must be null",
+            session = session,
+            add = validation_collection
+          )
+          validation_collection$validate()
+        })
+      })
+    }
+
+    shiny::testServer(
+      app = test_module,
+      args = list(id = "test"),
+      expr = {
+        # Set up input value
+        testthat::expect_no_error(session$returned())
+        session$setInputs(test_input1 = "invalid_value", test_input2 = "invalid_value")
+        testthat::expect_error(session$returned(), "input1 must be null\ninput2 must be null")
+        session$setInputs(test_input1 = NULL, test_input2 = "invalid_value")
+        testthat::expect_error(session$returned(), "^input2 must be null$")
+      }
+    )
+  })
+})

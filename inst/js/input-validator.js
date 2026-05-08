@@ -19,11 +19,29 @@ $(document).on('shiny:connected', function () {
 
       // Add validation message if rule failed
       if (!isValid && message && message.trim() !== '') {
-        var validationSpan = $('<span>').addClass('shiny-output-error').text(message);
+        var validationSpan = $('<span>')
+          .addClass('shiny-output-error')
+          .addClass('shiny-input_validation-error')
+          .text(message);
         container.append(validationSpan);
       }
     } else {
       console.warn('Container not found for input: ' + inputId);
     }
   });
+});
+
+$(document).on('shiny:inputchanged', function (event) {
+  var inputId = event.name;
+
+  // Try both CSS selector patterns
+  var selector1 = '.shiny-input-container#' + inputId;
+  var selector2 = '.shiny-input-container:has(#' + inputId + ')';
+
+  var container = $(selector1);
+  if (container.length === 0) {
+    container = $(selector2);
+  }
+
+  container.find('.shiny-input_validation-error').remove();
 });
