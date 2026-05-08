@@ -318,20 +318,10 @@ validate_input <- function(inputId, # nolint
     ))
   })
 
-  need_result <- need(condition_result, message)
   if (is.null(add)) {
-    if (!is.null(need_result)) {
-      stop(
-        structure(
-          list(message = need_result),
-          class = c("error", "condition", "shiny.silent.error", "validation-input", "validation"),
-          inputId = vapply(inputId, session$ns, character(1L))
-        )
-      )
-    }
-    validate(need_result)
+    validate(need(condition_result, message))
   } else {
-    add$push(need_result)
+    add$push(need(condition_result, message))
     invisible(NULL)
   }
 }
