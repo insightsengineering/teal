@@ -221,17 +221,17 @@ any_names <- function(x) {
 #' options(device.ask.default = FALSE)
 #'
 #' ui <- fluidPage(
-#'   checkboxGroupInput('in1', 'Check some letters', choices = head(LETTERS)),
-#'   selectizeInput('in2', 'Select a state', choices = c("", state.name)),
+#'   checkboxGroupInput("in1", "Check some letters", choices = head(LETTERS)),
+#'   selectizeInput("in2", "Select a state", choices = c("", state.name)),
 #'   use_validate_input_js(),
-#'   plotOutput('plot')
+#'   plotOutput("plot")
 #' )
 #'
 #' server <- function(input, output) {
 #'   output$plot <- renderPlot({
 #'     validate_input("in1", condition = function(x) length(x) > 0, "Check at least one letter!")
 #'     validate_input("in2", condition = function(x) x != "", "Please choose a state.")
-#'     plot(1:10, main = paste(c(input$in1, input$in2), collapse = ', '))
+#'     plot(1:10, main = paste(c(input$in1, input$in2), collapse = ", "))
 #'   })
 #' }
 #'
@@ -270,8 +270,10 @@ any_names <- function(x) {
 #'         )
 #'         colnames(tab) <- head(LETTERS)
 #'         barplot(
-#'           tab, beside = TRUE, legend.text = TRUE,main = "Selected letters per group",
-#'           col = c("steelblue", "tomato"))
+#'           tab,
+#'           beside = TRUE, legend.text = TRUE, main = "Selected letters per group",
+#'           col = c("steelblue", "tomato")
+#'         )
 #'       })
 #'     })
 #'   }
