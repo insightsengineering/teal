@@ -42,20 +42,25 @@ $(document).on('shiny:connected', function () {
 
   function applyValidation(container, isValid, message) {
     // Remove existing validation messages from siblings of the container
-    container.parent().children('.shiny-input-validation-error').remove()
+    container
+      .parent()
+      .children('.shiny-input-validation-error[data-ref="' + container.attr('id') + '"]')
+      .remove();
 
     // Add UI element for validation message if not valid
     if (!isValid && message && message.trim() !== '') {
-      var validationSpan = $('<span>')
+      const validationSpan = $('<span>')
+        .attr('data-ref', container.attr('id'))
         .addClass('shiny-output-error')
         .addClass('shiny-input-validation-error')
         .text(message);
       container.after(validationSpan);
+      console.log('Validation', validationSpan);
     }
 
     // Clear validation message on next input change to avoid having stale messages
     container.off('shiny:inputchanged').on('shiny:inputchanged', function () {
-      container.find('.shiny-input-validation-error').remove();
+      // container.parent().children('.shiny-input-validation-error[data-ref="' + container.attr('id') + '"]').remove()
     });
   }
 

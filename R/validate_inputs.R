@@ -291,15 +291,77 @@ any_names <- function(x) {
 validate_input <- function(inputId, # nolint
                            condition = function(x) TRUE,
                            message = "Check the input",
-                           add = NULL,
                            session = shiny::getDefaultReactiveDomain()) {
+  validate(need_input(inputId, condition, message, session))
+}
+
+#' @rdname validate_input
+#' @details
+#'   - `need_input()`: Validate a Shiny input and returns a message to be used in a [`shiny::validate()`] call.
+#' The message is sent to the client and appears both in the input widget.
+#' To observe the message in the output element, `need_input()` should be called inside a `shiny::validate()` call, e.g. via `validate(validate_input(...))`.
+#' @export
+#' @examples
+#' my_module <- module(
+#'   label = "My Module",
+#'   datanames = NULL,
+#'   ui = function(id) {
+#'     ns <- NS(id)
+#'     tagList(
+#'       checkboxGroupInput(ns("letters1"), "Select letters:", choices = head(LETTERS), inline = TRUE),
+#'       checkboxGroupInput(ns("letters2"), "Select letters:", choices = head(LETTERS), inline = TRUE),
+#'       tags$h3("Sample plot"),
+#'       plotOutput(ns("plot"))
+#'     )
+#'   },
+#'   server = function(id, data) {
+#'     moduleServer(id, function(input, output, session) {
+#'       output$plot <- renderPlot({
+#'         validate(
+#'           need_input(
+#'             "letters1",
+#'             condition = function(x) length(x) > 0,
+#'             message = "Select at least one letter."
+#'           )
+#'           need_input(
+#'             c("letters1", "letters2"),
+#'             condition = function(x, y) all(!x %in% y),
+#'             message = "Letters in the first group should not be in the second group."
+#'           )
+#'         )
+#'         tab <- rbind(
+#'           Group1 = as.integer(head(LETTERS) %in% input$letters1),
+#'           Group2 = as.integer(head(LETTERS) %in% input$letters2)
+#'         )
+#'         colnames(tab) <- head(LETTERS)
+#'         barplot(
+#'           tab,
+#'           beside = TRUE, legend.text = TRUE, main = "Selected letters per group",
+#'           col = c("steelblue", "tomato")
+#'         )
+#'       })
+#'     })
+#'   }
+#' )
+#'
+#' app <- init(
+#'   data = within(teal_data(), iris <- iris),
+#'   modules = my_module
+#' )
+#'
+#' if (interactive()) {
+#'   shinyApp(app$ui, app$server)
+#' }
+need_input <- function(inputId, # nolint
+                       condition = function(x) TRUE,
+                       message = "Check the input",
+                       session = shiny::getDefaultReactiveDomain()) {
   checkmate::assert_character(inputId, min.len = 1)
   checkmate::assert(
     checkmate::check_flag(condition),
     checkmate::check_function(condition, nargs = length(inputId))
   )
   checkmate::assert_string(message)
-  checkmate::assert_class(add, classes = "validation_collection", null.ok = TRUE)
 
   # Evaluate condition if it's a function
   condition_result <- if (is.function(condition)) {
@@ -318,12 +380,7 @@ validate_input <- function(inputId, # nolint
     ))
   })
 
-  if (is.null(add)) {
-    validate(need(condition_result, message))
-  } else {
-    add$push(need(condition_result, message))
-    invisible(NULL)
-  }
+  need(condition_result, message)
 }
 
 #' @rdname validate_input
@@ -336,24 +393,4 @@ use_validate_input_js <- function() {
   addResourcePath("js", system.file("js", package = "teal"))
   # system.file("js", "input-validator.js", package = "teal"))
   singleton(tags$script(src = "js/input-validator.js"))
-}
-
-#' @rdname validate_input
-#' @details
-#' - `make_validation_collection()`:
-#'
-#'     Create a validation collection to store multiple validation messages.
-#'
-#'     This can be used to collect messages from multiple `validate_input`
-#'     calls and validate them together with `<validation_collection>$validate()`.
-make_validation_collection <- function() {
-  msgs <- character(0L)
-  x <- list(
-    push = function(msg) msgs <<- c(msgs, msg),
-    getMessages = function() msgs,
-    isEmpty = function() length(msgs) == 0L,
-    validate = function() do.call(validate, as.list(msgs))
-  )
-  class(x) <- "validation_collection"
-  x
 }

@@ -2,21 +2,25 @@
 % Please edit documentation in R/validate_inputs.R
 \name{validate_input}
 \alias{validate_input}
+\alias{need_input}
 \alias{use_validate_input_js}
-\alias{make_validation_collection}
 \title{Validate input}
 \usage{
 validate_input(
   inputId,
   condition = function(x) TRUE,
   message = "Check the input",
-  add = NULL,
+  session = shiny::getDefaultReactiveDomain()
+)
+
+need_input(
+  inputId,
+  condition = function(x) TRUE,
+  message = "Check the input",
   session = shiny::getDefaultReactiveDomain()
 )
 
 use_validate_input_js()
-
-make_validation_collection()
 }
 \arguments{
 \item{inputId}{(\code{character}) Character of input ID(s) to validate}
@@ -26,10 +30,10 @@ Condition should determine expected state, \code{FALSE} throws.}
 
 \item{message}{(\code{character(1)}) Character string of validation message to display.}
 
+\item{session}{Shiny session object}
+
 \item{add}{(\code{validation_collection}) Optional validation collection to store the message in,
 see \code{make_validation_collection()} details.}
-
-\item{session}{Shiny session object}
 }
 \value{
 \code{NULL} or \code{shiny.silent.error} when condition is not met
@@ -49,18 +53,15 @@ that calls \code{validate_input}.
 }
 
 \itemize{
-\item \code{use_validate_input_js()}
-
-Include JavaScript for client-side input validation.
+\item \code{need_input()}: Validate a Shiny input and returns a message to be used in a \code{\link[shiny:validate]{shiny::validate()}} call.
+The message is sent to the client and appears both in the input widget.
+To observe the message in the output element, \code{need_input()} should be called inside a \code{shiny::validate()} call, e.g. via \code{validate(validate_input(...))}.
 }
 
 \itemize{
-\item \code{make_validation_collection()}
+\item \code{use_validate_input_js()}:
 
-Create a validation collection to store multiple validation messages.
-
-This can be used to collect messages from multiple \code{validate_input}
-calls and validate them together with \verb{<validation_collection>$validate()}.
+Include JavaScript for client-side input validation.
 }
 }
 \examples{
@@ -68,17 +69,17 @@ calls and validate them together with \verb{<validation_collection>$validate()}.
 options(device.ask.default = FALSE)
 
 ui <- fluidPage(
-  checkboxGroupInput('in1', 'Check some letters', choices = head(LETTERS)),
-  selectizeInput('in2', 'Select a state', choices = c("", state.name)),
+  checkboxGroupInput("in1", "Check some letters", choices = head(LETTERS)),
+  selectizeInput("in2", "Select a state", choices = c("", state.name)),
   use_validate_input_js(),
-  plotOutput('plot')
+  plotOutput("plot")
 )
 
 server <- function(input, output) {
   output$plot <- renderPlot({
     validate_input("in1", condition = function(x) length(x) > 0, "Check at least one letter!")
     validate_input("in2", condition = function(x) x != "", "Please choose a state.")
-    plot(1:10, main = paste(c(input$in1, input$in2), collapse = ', '))
+    plot(1:10, main = paste(c(input$in1, input$in2), collapse = ", "))
   })
 }
 
@@ -117,8 +118,60 @@ my_module <- module(
         )
         colnames(tab) <- head(LETTERS)
         barplot(
-          tab, beside = TRUE, legend.text = TRUE,main = "Selected letters per group",
-          col = c("steelblue", "tomato"))
+          tab,
+          beside = TRUE, legend.text = TRUE, main = "Selected letters per group",
+          col = c("steelblue", "tomato")
+        )
+      })
+    })
+  }
+)
+
+app <- init(
+  data = within(teal_data(), iris <- iris),
+  modules = my_module
+)
+
+if (interactive()) {
+  shinyApp(app$ui, app$server)
+}
+my_module <- module(
+  label = "My Module",
+  datanames = NULL,
+  ui = function(id) {
+    ns <- NS(id)
+    tagList(
+      checkboxGroupInput(ns("letters"), "Select letters:", choices = head(LETTERS), inline = TRUE),
+      checkboxGroupInput(ns("letters2"), "Select letters:", choices = head(LETTERS), inline = TRUE),
+      tags$h3("Sample plot"),
+      plotOutput(ns("plot"))
+    )
+  },
+  server = function(id, data) {
+    moduleServer(id, function(input, output, session) {
+      output$plot <- renderPlot({
+        validate(
+          need_input(
+            "letters",
+            condition = function(x) length(x) > 0,
+            message = "Select at least one letter."
+          )
+          need_input(
+            c("letters", "letters2"),
+            condition = function(x, y) all(!x \%in\% y),
+            message = "Letters in the first group should not be in the second group."
+          )
+        )
+        tab <- rbind(
+          Group1 = as.integer(head(LETTERS) \%in\% input$letters),
+          Group2 = as.integer(head(LETTERS) \%in\% input$letters2)
+        )
+        colnames(tab) <- head(LETTERS)
+        barplot(
+          tab,
+          beside = TRUE, legend.text = TRUE, main = "Selected letters per group",
+          col = c("steelblue", "tomato")
+        )
       })
     })
   }
