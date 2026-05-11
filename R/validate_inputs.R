@@ -356,6 +356,10 @@ need_input <- function(inputId, # nolint
                        condition = function(x) TRUE,
                        message = "Check the input",
                        session = shiny::getDefaultReactiveDomain()) {
+  # Fingerprint of arguments is used to ensure that the the validation messages in Javascript are not incorrectly
+  #  removed.
+  fingerprint <- rlang::hash(list(substitute(inputId), substitute(condition), substitute(message)))
+
   checkmate::assert_character(inputId, min.len = 1)
   checkmate::assert(
     checkmate::check_flag(condition),
@@ -376,7 +380,8 @@ need_input <- function(inputId, # nolint
     session$sendCustomMessage("validateInput", list(
       inputId = session$ns(id),
       isValid = condition_result,
-      message = message
+      message = message,
+      fingerprint = fingerprint
     ))
   })
 

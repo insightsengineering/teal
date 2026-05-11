@@ -40,17 +40,16 @@ $(document).on('shiny:connected', function () {
     }, timeoutMs);
   }
 
-  function applyValidation(container, isValid, message) {
+  function applyValidation(container, isValid, message, fingerprint) {
     // Remove existing validation messages from siblings of the container
-    container
-      .parent()
-      .children('.shiny-input-validation-error[data-ref="' + container.attr('id') + '"]')
-      .remove();
+    const data_ref = `${container.attr('id')}-${fingerprint}`;
+    const child_selector = `.shiny-input-validation-error[data-ref="${data_ref}"]`;
+    container.parent().children(child_selector).remove();
 
     // Add UI element for validation message if not valid
     if (!isValid && message && message.trim() !== '') {
       const validationSpan = $('<span>')
-        .attr('data-ref', container.attr('id'))
+        .attr('data-ref', data_ref)
         .addClass('shiny-output-error')
         .addClass('shiny-input-validation-error')
         .text(message);
@@ -60,13 +59,13 @@ $(document).on('shiny:connected', function () {
 
     // Clear validation message on next input change to avoid having stale messages
     container.off('shiny:inputchanged').on('shiny:inputchanged', function () {
-      // container.parent().children('.shiny-input-validation-error[data-ref="' + container.attr('id') + '"]').remove()
+      container.parent().children(child_selector).remove()
     });
   }
 
   Shiny.addCustomMessageHandler('validateInput', function (data) {
     withContainer(data.inputId, function (container) {
-      applyValidation(container, data.isValid, data.message);
+      applyValidation(container, data.isValid, data.message, data.fingerprint);
     });
   });
 });
