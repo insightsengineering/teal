@@ -58,7 +58,12 @@ $(document).on('shiny:connected', function () {
     }
 
     // Clear validation message on next input change to avoid having stale messages
-    container.off('shiny:inputchanged').on('shiny:inputchanged', function () {
+    container.off('shiny:inputchanged').on('shiny:inputchanged', function (event) {
+      // Only remove if actually changed input, not just a re-render
+      if (event.name !== container.find('input, select, textarea').attr('id')) {
+        return;
+      }
+      console.log('Input changed, clearing validation messages for', container.attr('id'), event);
       container.parent().children(child_selector).remove()
     });
   }
