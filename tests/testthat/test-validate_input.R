@@ -187,20 +187,19 @@ testthat::test_that("validate_input with multiple inputIds doesn't throw shiny.s
   )
 })
 
-testthat::describe("validate_input with add argument", {
+testthat::describe("validate with multiple need_input", {
   it("1 validation", {
     test_module <- function(id) {
       moduleServer(id, function(input, output, session) {
         reactive({
-          validation_collection <- make_validation_collection()
-          validate_input(
-            inputId = "test_input",
-            condition = function(x) is.null(x),
-            message = "input must be null",
-            session = session,
-            add = validation_collection
+          validate(
+            need_input(
+              inputId = "test_input",
+              condition = function(x) is.null(x),
+              message = "input must be null",
+              session = session
+            )
           )
-          validation_collection$validate()
         })
       })
     }
@@ -221,22 +220,20 @@ testthat::describe("validate_input with add argument", {
     test_module <- function(id) {
       moduleServer(id, function(input, output, session) {
         reactive({
-          validation_collection <- make_validation_collection()
-          validate_input(
-            inputId = "test_input1",
-            condition = function(x) is.null(x),
-            message = "input1 must be null",
-            session = session,
-            add = validation_collection
+          validate(
+            need_input(
+              inputId = "test_input1",
+              condition = function(x) is.null(x),
+              message = "input1 must be null",
+              session = session
+            ),
+            need_input(
+              inputId = "test_input2",
+              condition = function(x) is.null(x),
+              message = "input2 must be null",
+              session = session
+            )
           )
-          validate_input(
-            inputId = "test_input2",
-            condition = function(x) is.null(x),
-            message = "input2 must be null",
-            session = session,
-            add = validation_collection
-          )
-          validation_collection$validate()
         })
       })
     }
@@ -339,48 +336,56 @@ testthat::describe("validate_input shinytest2", {
   })
 })
 
-# testthat::test_that("validate_input shinytest2 - stale messages are not shown", {
-#   my_module <- module(
-#     label = "My Module",
-#     datanames = NULL,
-#     ui = function(id) {
-#       ns <- NS(id)
-#       tagList(
-#         textInput(ns("letters1"), "Select letters:", value = "A"),
-#         textInput(ns("letters2"), "Select letters:", value = ""),
-#         uiOutput(ns("validation_message"))
-#       )
-#     },
-#     server = function(id, data) {
-#       moduleServer(id, function(input, output, session) {
-#         output$validation_message <- renderUI({
-#           validate(
-#             need_input(
-#               "letters1",
-#               condition = nchar(input$letters1) > 0,
-#               message = "Select at least one letter for first input."
-#             )
-#           )
-#           validate(
-#             need_input(
-#               c("letters2"),
-#               condition = nchar(input$letters2) > 0,
-#               message = "Select at least one letter for second input."
-#             )
-#           )
-#           tags$div("All inputs are valid.")
-#         })
-#       })
-#     }
-#   )
+testthat::test_that("validate_input shinytest2 - stale messages are not shown", {
+  my_module <- module(
+    label = "My Module",
+    datanames = NULL,
+    ui = function(id) {
+      ns <- NS(id)
+      tagList(
+        textInput(ns("letters1"), "Select letters:", value = "A"),
+        textInput(ns("letters2"), "Select letters:", value = ""),
+        uiOutput(ns("validation_message"))
+      )
+    },
+    server = function(id, data) {
+      moduleServer(id, function(input, output, session) {
+        output$validation_message <- renderUI({
+          validate(
+            need_input(
+              "letters1",
+              condition = nchar(input$letters1) > 0,
+              message = "Select at least one letter for first input."
+            )
+          )
+          validate(
+            need_input(
+              c("letters2"),
+              condition = nchar(input$letters2) > 0,
+              message = "Select at least one letter for second input."
+            )
+          )
+          tags$div("All inputs are valid.")
+        })
+      })
+    }
+  )
 
-#   app_driver <- TealAppDriver$new(
-#     app = init(
-#       data = within(teal_data(), iris <- iris),
-#       modules = my_module
-#     )
-#   )
-#   withr::defer(app_driver$stop())
+  app_driver <- TealAppDriver$new(
+    app = init(
+      data = within(teal_data(), iris <- iris),
+      modules = my_module
+    )
+  )
+  withr::defer(app_driver$stop())
 
-
-# })
+  app_driver$set_active_module_input("letters1", character(0))
+  app_driver$set_active_module_input("letters2", "B")
+  testthat::expect_failure(
+    testthat::expect_match(
+      app_driver$get_text(".shiny-input-validation-error"),
+      "Select at least one letter for second input.",
+      all = FALSE
+    )
+  )
+})

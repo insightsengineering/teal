@@ -40,9 +40,9 @@ $(document).on('shiny:connected', function () {
     }, timeoutMs);
   }
 
-  function applyValidation(container, isValid, message, fingerprint) {
+  function applyValidation(container, inputId, isValid, message, fingerprint) {
     // Remove existing validation messages from siblings of the container
-    const data_ref = `${container.attr('id')}-${fingerprint}`;
+    const data_ref = `${inputId}-${fingerprint}`;
     const child_selector = `.shiny-input-validation-error[data-ref="${data_ref}"]`;
     container.parent().children(child_selector).remove();
 
@@ -54,23 +54,29 @@ $(document).on('shiny:connected', function () {
         .addClass('shiny-input-validation-error')
         .text(message);
       container.after(validationSpan);
-      console.log('Validation', validationSpan);
     }
 
     // Clear validation message on next input change to avoid having stale messages
-    container.off('shiny:inputchanged').on('shiny:inputchanged', function (event) {
-      // Only remove if actually changed input, not just a re-render
-      if (event.name !== container.find('input, select, textarea').attr('id')) {
+    const found = container.find(`#${inputId}`);
+    const inputEl = found.length ? found : container;
+    let previousValue = inputEl.val();
+    // Only remove if the value really changed, not just a re-render
+    inputEl.off('shiny:inputchanged').one('shiny:inputchanged', function (event) {
+      if (event.name !== inputEl.attr('id')) {
         return;
       }
-      console.log('Input changed, clearing validation messages for', container.attr('id'), event);
-      container.parent().children(child_selector).remove()
+      // Only clear if the value actually changed
+      if (event.value === previousValue) {
+        return;
+      }
+      previousValue = event.value;
+      container.parent().children(child_selector).remove() // Remove validation message
     });
   }
 
   Shiny.addCustomMessageHandler('validateInput', function (data) {
     withContainer(data.inputId, function (container) {
-      applyValidation(container, data.isValid, data.message, data.fingerprint);
+      applyValidation(container, data.inputId, data.isValid, data.message, data.fingerprint);
     });
   });
 });
