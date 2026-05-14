@@ -20,10 +20,12 @@ $(document).on('shiny:connected', function () {
     var observer = new MutationObserver(function () {
       var found = findContainer();
       if (found) {
+        console.log("found!", found);
         observer.disconnect();
         clearTimeout(timer);
         callback(found);
       }
+      console.log("not found yet");
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
@@ -60,7 +62,7 @@ $(document).on('shiny:connected', function () {
         return;
       }
       // Only clear if the value actually changed
-      if (event.value === previousValue) {
+      if (JSON.stringify(event.value) === JSON.stringify(previousValue)) {
         return;
       }
       previousValue = event.value;
