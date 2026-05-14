@@ -1,10 +1,4 @@
 $(document).on('shiny:connected', function () {
-
-  /**
-   * Find the .shiny-input-container for a given inputId,
-   * then call `callback(container)` once it exists in the DOM.
-   * Gives up after `timeoutMs` milliseconds.
-   */
   function withContainer(inputId, callback, timeoutMs) {
     timeoutMs = timeoutMs || 5000;
 
