@@ -10,7 +10,7 @@ testthat::test_that("e2e: validate_input displays validation message when input 
       server = function(id, data) {
         moduleServer(id, function(input, output, session) {
           output$plot <- renderPlot({
-            teal:::validate_input(
+            validate_input(
               inputId = "number",
               condition = function(x) !is.null(x) && as.numeric(x) > 5,
               message = "Please select a number greater than 5",
@@ -60,7 +60,7 @@ testthat::test_that("e2e: validate_input validates many inputs (and linked outpu
       server = function(id, data) {
         moduleServer(id, function(input, output, session) {
           output$result <- renderText({
-            teal:::validate_input(
+            validate_input(
               inputId = c("input1", "input2"),
               condition = function(x, y) identical(x, y),
               message = "x and y must be identical",
@@ -89,7 +89,6 @@ testthat::test_that("e2e: validate_input validates many inputs (and linked outpu
   )
   withr::defer(app_driver$stop())
 
-  # Initially input2 is invalid (value 5 < 10)
   error_text <- app_driver$get_text(".shiny-output-error-validation")
   testthat::expect_match(error_text, "x and y must be identical")
   testthat::expect_match(
@@ -133,7 +132,7 @@ testthat::describe("e2e: validate_input validates generic fields", {
         reactive({
           validate(
             need_input("select", function(x) identical(x, "B"), "select must be B"),
-            need_input("selectize", function(x) identical(x, "Y"), "selectize must be Y", ),
+            need_input("selectize", function(x) identical(x, "Y"), "selectize must be Y"),
             need_input("radio", function(x) identical(x, "Option 2"), "radio must be Option 2"),
             need_input(
               "checkbox_group",
@@ -161,67 +160,49 @@ testthat::describe("e2e: validate_input validates generic fields", {
     message <- "select must be B"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("select"), "B")
-    testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 
   it("selectizeInput", {
     message <- "selectize must be Y"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("selectize"), "Y")
-    testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 
   it("radioButtons", {
     message <- "radio must be Option 2"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("radio"), "Option 2")
-    testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 
   it("checkboxGroupInput", {
     message <- "checkbox_group must be Check 2"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("checkbox_group"), "Check 2")
-    testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 
   it("checkboxInput", {
     message <- "checkbox must be TRUE"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("checkbox"), TRUE)
-    testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 
   it("dateInput", {
     message <- "date must be 2024-01-01"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("date"), "2024-01-01")
-    testthat::expect_failure(
-      testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 
   it("dateRangeInput", {
     message <- "date_range must be 2024-01-01 to 2024-01-31"
     testthat::expect_match(app_driver$get_text(".shiny-output-error"), message, fixed = TRUE, all = FALSE)
     app_driver$set_input(app_driver$namespaces()$module("date_range"), c("2024-01-01", "2024-01-31"))
-    errors <- app_driver$get_text(".shiny-output-error")
-    if (is.null(errors)) { # Set to empty character vector to avoid testthat::expect_match error
-      errors <- character(0L)
-    }
-    testthat::expect_failure(
-      testthat::expect_match(errors, message, fixed = TRUE, all = FALSE)
-    )
+    testthat::expect_no_match(app_driver$get_text(".shiny-output-error") %||% character(0L), message, fixed = TRUE)
   })
 })
 
@@ -346,11 +327,8 @@ testthat::test_that("validate_input shinytest2 - stale messages are not shown", 
 
   app_driver$set_active_module_input("letters1", character(0))
   app_driver$set_active_module_input("letters2", "B")
-  testthat::expect_failure(
-    testthat::expect_match(
-      app_driver$get_text(".shiny-input-validation-error"),
-      "Select at least one letter for second input.",
-      all = FALSE
-    )
+  testthat::expect_no_match(
+    app_driver$get_text(".shiny-input-validation-error"),
+    "Select at least one letter for second input."
   )
 })
