@@ -20,6 +20,9 @@
   teal.logger::register_logger("teal")
   teal.logger::register_handlers("teal")
 
+  if (getRversion() < "4.4") {
+    assign("%||%", rlang::`%||%`, envir = getNamespace(pkgname))
+  }
   invisible()
 }
 
