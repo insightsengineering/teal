@@ -3,8 +3,10 @@ $(document).on('shiny:connected', function () {
     timeoutMs = timeoutMs || 5000;
 
     function findContainer() {
+      // First try direct match
       var container = $('.shiny-input-container#' + inputId);
       if (container.length === 0) {
+        // Then try to find container that has this input
         container = $('.shiny-input-container:has(#' + inputId + ')');
       }
       return container.length > 0 ? container : null;
@@ -20,15 +22,35 @@ $(document).on('shiny:connected', function () {
     var observer = new MutationObserver(function () {
       var found = findContainer();
       if (found) {
-        console.log("found!", found);
         observer.disconnect();
         clearTimeout(timer);
         callback(found);
       }
-      console.log("not found yet");
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    // More efficient approach: find a relevant parent container to observe instead of the entire body
+    function findTargetContainer() {
+      // Try to find a container with an ID that partially matches inputId
+      var idComponents = inputId.split('-');
+
+      // Look for potential parent containers by checking IDs that partially match
+      for (var i = idComponents.length; i >= 1; i--) {
+        var partialId = idComponents.slice(0, i).join('-');
+        var potentialContainer = $('#' + partialId);
+        if (potentialContainer.length > 0) {
+          // Return the closest shiny container or the element itself
+          var shinyContainer = potentialContainer.closest('.shiny-bound-input, .shiny-input-container, .form-group');
+          return shinyContainer.length > 0 ? shinyContainer[0] : potentialContainer[0];
+        }
+      }
+
+      // Last resort: observe the body (but this should rarely happen)
+      return document.body;
+    }
+
+    // Observe only the relevant container instead of the entire body
+    var targetContainer = findTargetContainer();
+    observer.observe(targetContainer, { childList: true, subtree: true });
 
     var timer = setTimeout(function () {
       observer.disconnect();

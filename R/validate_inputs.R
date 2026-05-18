@@ -210,8 +210,6 @@ any_names <- function(x) {
 #' @param condition (`logical(1)`, `function(x)`) Logical value or function returning logical value.
 #'  Condition should determine expected state, `FALSE` throws.
 #' @param message (`character(1)`) Character string of validation message to display.
-#' @param add (`validation_collection`) Optional validation collection to store the message in,
-#' see `make_validation_collection()` details.
 #' @param session Shiny session object
 #'
 #' @return `NULL` or `shiny.silent.error` when condition is not met
@@ -322,7 +320,7 @@ validate_input <- function(inputId, # nolint
 #'             "letters1",
 #'             condition = function(x) length(x) > 0,
 #'             message = "Select at least one letter."
-#'           )
+#'           ),
 #'           need_input(
 #'             c("letters1", "letters2"),
 #'             condition = function(x, y) all(!x %in% y),
@@ -356,9 +354,9 @@ need_input <- function(inputId, # nolint
                        condition = function(x) TRUE,
                        message = "Check the input",
                        session = shiny::getDefaultReactiveDomain()) {
-  # Fingerprint of arguments is used to ensure that the the validation messages in Javascript are not incorrectly
-  #  removed.
-  fingerprint <- rlang::hash(list(substitute(inputId), substitute(condition), substitute(message)))
+  # Simple fingerprint based on inputId and message to ensure validation messages
+  # in Javascript are not incorrectly removed.
+  fingerprint <- paste0(inputId, collapse = "|")
 
   checkmate::assert_character(inputId, min.len = 1)
   checkmate::assert(

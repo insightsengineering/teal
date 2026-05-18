@@ -155,7 +155,7 @@ my_module <- module(
             "letters",
             condition = function(x) length(x) > 0,
             message = "Select at least one letter."
-          )
+          ),
           need_input(
             c("letters", "letters2"),
             condition = function(x, y) all(!x \%in\% y),
