@@ -110,7 +110,7 @@ testthat::test_that("e2e: teal_data_module auto-closes modal when `once=FALSE` a
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module modal stays visible on startup when `once=FALSE` and submit button is present", {
+testthat::test_that("e2e: teal_data_module modal stays visible on startup when `once=FALSE` and `need_submit = TRUE`", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     init(

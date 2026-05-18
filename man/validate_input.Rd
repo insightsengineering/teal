@@ -52,7 +52,8 @@ that calls \code{validate_input}.
 \itemize{
 \item \code{need_input()}: Validate a Shiny input and returns a message to be used in a \code{\link[shiny:validate]{shiny::validate()}} call.
 The message is sent to the client and appears both in the input widget.
-To observe the message in the output element, \code{need_input()} should be called inside a \code{shiny::validate()} call, e.g. via \code{validate(validate_input(...))}.
+To observe the message in the output element, \code{need_input()} should be called inside a
+\code{shiny::validate()} call, e.g. via \code{validate(validate_input(...))}.
 }
 
 \itemize{

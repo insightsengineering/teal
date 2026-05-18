@@ -297,7 +297,8 @@ validate_input <- function(inputId, # nolint
 #' @details
 #'   - `need_input()`: Validate a Shiny input and returns a message to be used in a [`shiny::validate()`] call.
 #' The message is sent to the client and appears both in the input widget.
-#' To observe the message in the output element, `need_input()` should be called inside a `shiny::validate()` call, e.g. via `validate(validate_input(...))`.
+#' To observe the message in the output element, `need_input()` should be called inside a
+#' `shiny::validate()` call, e.g. via `validate(validate_input(...))`.
 #' @export
 #' @examples
 #' my_module <- module(
@@ -394,6 +395,5 @@ need_input <- function(inputId, # nolint
 #' @export
 use_validate_input_js <- function() {
   addResourcePath("js", system.file("js", package = "teal"))
-  # system.file("js", "input-validator.js", package = "teal"))
   singleton(tags$script(src = "js/input-validator.js"))
 }
