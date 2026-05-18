@@ -98,7 +98,7 @@ testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` 
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` and data is ready (no submit)", {
+testthat::test_that("e2e: teal_data_module auto-closes modal when `once=FALSE` and data is ready (no submit)", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
     init(
@@ -106,7 +106,20 @@ testthat::test_that("e2e: teal_data_module doesn't auto-close when `once=FALSE` 
       modules = example_module(label = "Example Module")
     )
   )
+  testthat::expect_null(app$get_html(".teal-data-module-popup"))
+  app$stop()
+})
+
+testthat::test_that("e2e: teal_data_module modal stays visible on startup when `once=FALSE` and submit button is present", {
+  skip_if_too_deep(5)
+  app <- TealAppDriver$new(
+    init(
+      data = example_teal_data_module(needs_submit = TRUE, once = FALSE),
+      modules = example_module(label = "Example Module")
+    )
+  )
   app$expect_visible(".teal-data-module-popup")
+  app$expect_visible("#teal-teal_data_module-submit")
   app$stop()
 })
 

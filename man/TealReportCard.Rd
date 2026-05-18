@@ -13,7 +13,7 @@ meta data.
 \examples{
 
 ## ------------------------------------------------
-## Method `TealReportCard$append_src()`
+## Method `TealReportCard$append_src`
 ## ------------------------------------------------
 
 card <- TealReportCard$new()$append_src(
@@ -22,7 +22,7 @@ card <- TealReportCard$new()$append_src(
 card$get_content()[[1]]
 
 ## ------------------------------------------------
-## Method `TealReportCard$append_encodings()`
+## Method `TealReportCard$append_encodings`
 ## ------------------------------------------------
 
 card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
@@ -34,137 +34,137 @@ card$get_content()[[1]]
 }
 \section{Methods}{
 \subsection{Public methods}{
-  \itemize{
-    \item \href{#method-TealReportCard-append_src}{\code{TealReportCard$append_src()}}
-    \item \href{#method-TealReportCard-append_fs}{\code{TealReportCard$append_fs()}}
-    \item \href{#method-TealReportCard-append_encodings}{\code{TealReportCard$append_encodings()}}
-    \item \href{#method-TealReportCard-clone}{\code{TealReportCard$clone()}}
-  }
+\itemize{
+\item \href{#method-TealReportCard-append_src}{\code{TealReportCard$append_src()}}
+\item \href{#method-TealReportCard-append_fs}{\code{TealReportCard$append_fs()}}
+\item \href{#method-TealReportCard-append_encodings}{\code{TealReportCard$append_encodings()}}
+\item \href{#method-TealReportCard-clone}{\code{TealReportCard$clone()}}
 }
-\if{html}{\out{<details><summary>Inherited methods</summary>
+}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
 <ul>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_content"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_content'><code>teal.reporter::ReportCard$append_content()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_html"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_html'><code>teal.reporter::ReportCard$append_html()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_metadata"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_metadata'><code>teal.reporter::ReportCard$append_metadata()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_plot"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_plot'><code>teal.reporter::ReportCard$append_plot()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_rcode"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_rcode'><code>teal.reporter::ReportCard$append_rcode()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_table"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_table'><code>teal.reporter::ReportCard$append_table()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_text"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_text'><code>teal.reporter::ReportCard$append_text()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="from_list"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-from_list'><code>teal.reporter::ReportCard$from_list()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_content"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_content'><code>teal.reporter::ReportCard$get_content()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_metadata"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_metadata'><code>teal.reporter::ReportCard$get_metadata()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_name"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_name'><code>teal.reporter::ReportCard$get_name()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="initialize"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-initialize'><code>teal.reporter::ReportCard$initialize()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="reset"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-reset'><code>teal.reporter::ReportCard$reset()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_content_names"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-set_content_names'><code>teal.reporter::ReportCard$set_content_names()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_name"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-set_name'><code>teal.reporter::ReportCard$set_name()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="to_list"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-to_list'><code>teal.reporter::ReportCard$to_list()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_content"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_content'><code>teal.reporter::ReportCard$append_content()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_html"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_html'><code>teal.reporter::ReportCard$append_html()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_metadata"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_metadata'><code>teal.reporter::ReportCard$append_metadata()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_plot"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_plot'><code>teal.reporter::ReportCard$append_plot()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_rcode"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_rcode'><code>teal.reporter::ReportCard$append_rcode()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_table"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_table'><code>teal.reporter::ReportCard$append_table()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="append_text"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-append_text'><code>teal.reporter::ReportCard$append_text()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="from_list"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-from_list'><code>teal.reporter::ReportCard$from_list()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_content"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_content'><code>teal.reporter::ReportCard$get_content()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_metadata"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_metadata'><code>teal.reporter::ReportCard$get_metadata()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="get_name"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-get_name'><code>teal.reporter::ReportCard$get_name()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="initialize"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-initialize'><code>teal.reporter::ReportCard$initialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="reset"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-reset'><code>teal.reporter::ReportCard$reset()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_content_names"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-set_content_names'><code>teal.reporter::ReportCard$set_content_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="set_name"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-set_name'><code>teal.reporter::ReportCard$set_name()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="teal.reporter" data-topic="ReportCard" data-id="to_list"><a href='../../teal.reporter/html/ReportCard.html#method-ReportCard-to_list'><code>teal.reporter::ReportCard$to_list()</code></a></span></li>
 </ul>
-</details>}}
+</details>
+}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealReportCard-append_src"></a>}}
 \if{latex}{\out{\hypertarget{method-TealReportCard-append_src}{}}}
-\subsection{\code{TealReportCard$append_src()}}{
-  Appends the source code to the \code{content} meta data of this \code{TealReportCard}.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealReportCard$append_src(src, ...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{src}}{(\code{character(1)}) code as text.}
-      \item{\code{...}}{any \code{rmarkdown} \code{R} chunk parameter and its value.
+\subsection{Method \code{append_src()}}{
+Appends the source code to the \code{content} meta data of this \code{TealReportCard}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealReportCard$append_src(src, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{src}}{(\code{character(1)}) code as text.}
+
+\item{\code{...}}{any \code{rmarkdown} \code{R} chunk parameter and its value.
 But \code{eval} parameter is always set to \code{FALSE}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    Object of class \code{TealReportCard}, invisibly.
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{card <- TealReportCard$new()$append_src(
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Object of class \code{TealReportCard}, invisibly.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{card <- TealReportCard$new()$append_src(
   "plot(iris)"
 )
 card$get_content()[[1]]
 }
-    \if{html}{\out{</div>}}
-  }
+\if{html}{\out{</div>}}
+
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealReportCard-append_fs"></a>}}
 \if{latex}{\out{\hypertarget{method-TealReportCard-append_fs}{}}}
-\subsection{\code{TealReportCard$append_fs()}}{
-  Appends the filter state list to the \code{content} and \code{metadata} of this \code{TealReportCard}.
+\subsection{Method \code{append_fs()}}{
+Appends the filter state list to the \code{content} and \code{metadata} of this \code{TealReportCard}.
 If the filter state list has an attribute named \code{formatted}, it appends it to the card otherwise it uses
 the default \code{yaml::as.yaml} to format the list.
 If the filter state list is empty, nothing is appended to the \code{content}.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealReportCard$append_fs(fs)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{fs}}{(\code{teal_slices}) object returned from \code{\link[=teal_slices]{teal_slices()}} function.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    \code{self}, invisibly.
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealReportCard$append_fs(fs)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fs}}{(\code{teal_slices}) object returned from \code{\link[=teal_slices]{teal_slices()}} function.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{self}, invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealReportCard-append_encodings"></a>}}
 \if{latex}{\out{\hypertarget{method-TealReportCard-append_encodings}{}}}
-\subsection{\code{TealReportCard$append_encodings()}}{
-  Appends the encodings list to the \code{content} and \code{metadata} of this \code{TealReportCard}.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealReportCard$append_encodings(encodings)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{encodings}}{(\code{list}) list of encodings selections of the \code{teal} app.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    \code{self}, invisibly.
-  }
-  \subsection{Examples}{
-    \if{html}{\out{<div class="r example copy">}}
-    \preformatted{card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
-card$get_content()[[1]]
-}
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{append_encodings()}}{
+Appends the encodings list to the \code{content} and \code{metadata} of this \code{TealReportCard}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealReportCard$append_encodings(encodings)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{encodings}}{(\code{list}) list of encodings selections of the \code{teal} app.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{self}, invisibly.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))
+card$get_content()[[1]]
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealReportCard-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-TealReportCard-clone}{}}}
-\subsection{\code{TealReportCard$clone()}}{
-  The objects of this class are cloneable with this method.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealReportCard$clone(deep = FALSE)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{deep}}{Whether to make a deep clone.}
-    }
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealReportCard$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }
