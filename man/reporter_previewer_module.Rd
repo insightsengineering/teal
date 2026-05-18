@@ -24,8 +24,8 @@ It is now deprecated in favor of the options:
 \itemize{
 \item \code{teal.reporter.nav_buttons = c("preview", "download", "load", "reset")} to control which
 buttons will be displayed in the drop-down.
-\item \code{teal.reporter.rmd_output}: passed to \code{\link[teal.reporter:download_report_button]{teal.reporter::download_report_button_srv()}}
-\item \code{teal.reporter.rmd_yaml_args}: passed to \code{\link[teal.reporter:download_report_button]{teal.reporter::download_report_button_srv()}}
-\item \code{teal.reporter.global_knitr}: passed to \code{\link[teal.reporter:download_report_button]{teal.reporter::download_report_button_srv()}}
+\item \code{teal.reporter.rmd_output}: passed to \code{\link[teal.reporter:download_report_button_srv]{teal.reporter::download_report_button_srv()}}
+\item \code{teal.reporter.rmd_yaml_args}: passed to \code{\link[teal.reporter:download_report_button_srv]{teal.reporter::download_report_button_srv()}}
+\item \code{teal.reporter.global_knitr}: passed to \code{\link[teal.reporter:download_report_button_srv]{teal.reporter::download_report_button_srv()}}
 }
 }
