@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.840387557368689" branch-rate="0" lines-covered="3296" lines-valid="3922" branches-covered="0" branches-valid="0" complexity="0" version="3.6.5" timestamp="2026-05-18 21:59:45.338464">
+<coverage line-rate="0.840387557368689" branch-rate="0" lines-covered="3296" lines-valid="3922" branches-covered="0" branches-valid="0" complexity="0" version="3.6.5" timestamp="2026-05-18 22:12:49.262607">
   <sources>
     <source>/__w/teal/teal/teal</source>
   </sources>
@@ -8730,20 +8730,19 @@
             </method>
             <method name="need_input" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="359" hits="32" branch="false"/>
-                <line number="361" hits="32" branch="false"/>
-                <line number="362" hits="29" branch="false"/>
+                <line number="360" hits="32" branch="false"/>
+                <line number="362" hits="32" branch="false"/>
                 <line number="363" hits="29" branch="false"/>
                 <line number="364" hits="29" branch="false"/>
                 <line number="365" hits="29" branch="false"/>
-                <line number="366" hits="25" branch="false"/>
-                <line number="369" hits="23" branch="false"/>
-                <line number="370" hits="15" branch="false"/>
+                <line number="366" hits="29" branch="false"/>
+                <line number="367" hits="25" branch="false"/>
+                <line number="370" hits="23" branch="false"/>
                 <line number="371" hits="15" branch="false"/>
-                <line number="372" hits="23" branch="false"/>
-                <line number="373" hits="8" branch="false"/>
-                <line number="374" hits="23" branch="false"/>
-                <line number="377" hits="23" branch="false"/>
+                <line number="372" hits="15" branch="false"/>
+                <line number="373" hits="23" branch="false"/>
+                <line number="374" hits="8" branch="false"/>
+                <line number="375" hits="23" branch="false"/>
                 <line number="378" hits="23" branch="false"/>
                 <line number="379" hits="23" branch="false"/>
                 <line number="380" hits="23" branch="false"/>
@@ -8751,12 +8750,13 @@
                 <line number="382" hits="23" branch="false"/>
                 <line number="383" hits="23" branch="false"/>
                 <line number="384" hits="23" branch="false"/>
-                <line number="386" hits="23" branch="false"/>
+                <line number="385" hits="23" branch="false"/>
+                <line number="387" hits="23" branch="false"/>
               </lines>
             </method>
             <method name="use_validate_input_js" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="396" hits="7" branch="false"/>
+                <line number="397" hits="7" branch="false"/>
                 <line number="398" hits="7" branch="false"/>
               </lines>
             </method>
@@ -8795,20 +8795,19 @@
             <line number="193" hits="103" branch="false"/>
             <line number="194" hits="103" branch="false"/>
             <line number="293" hits="15" branch="false"/>
-            <line number="359" hits="32" branch="false"/>
-            <line number="361" hits="32" branch="false"/>
-            <line number="362" hits="29" branch="false"/>
+            <line number="360" hits="32" branch="false"/>
+            <line number="362" hits="32" branch="false"/>
             <line number="363" hits="29" branch="false"/>
             <line number="364" hits="29" branch="false"/>
             <line number="365" hits="29" branch="false"/>
-            <line number="366" hits="25" branch="false"/>
-            <line number="369" hits="23" branch="false"/>
-            <line number="370" hits="15" branch="false"/>
+            <line number="366" hits="29" branch="false"/>
+            <line number="367" hits="25" branch="false"/>
+            <line number="370" hits="23" branch="false"/>
             <line number="371" hits="15" branch="false"/>
-            <line number="372" hits="23" branch="false"/>
-            <line number="373" hits="8" branch="false"/>
-            <line number="374" hits="23" branch="false"/>
-            <line number="377" hits="23" branch="false"/>
+            <line number="372" hits="15" branch="false"/>
+            <line number="373" hits="23" branch="false"/>
+            <line number="374" hits="8" branch="false"/>
+            <line number="375" hits="23" branch="false"/>
             <line number="378" hits="23" branch="false"/>
             <line number="379" hits="23" branch="false"/>
             <line number="380" hits="23" branch="false"/>
@@ -8816,8 +8815,9 @@
             <line number="382" hits="23" branch="false"/>
             <line number="383" hits="23" branch="false"/>
             <line number="384" hits="23" branch="false"/>
-            <line number="386" hits="23" branch="false"/>
-            <line number="396" hits="7" branch="false"/>
+            <line number="385" hits="23" branch="false"/>
+            <line number="387" hits="23" branch="false"/>
+            <line number="397" hits="7" branch="false"/>
             <line number="398" hits="7" branch="false"/>
           </lines>
         </class>
