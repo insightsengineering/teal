@@ -4,6 +4,11 @@
 \alias{TealAppDriver}
 \title{Drive a \code{teal} application}
 \description{
+Drive a \code{teal} application
+
+Drive a \code{teal} application
+}
+\details{
 Extension of the \code{shinytest2::AppDriver} class with methods for
 driving a teal application for performing interactions for \code{shinytest2} tests.
 }
@@ -13,677 +18,652 @@ driving a teal application for performing interactions for \code{shinytest2} tes
 }
 \section{Methods}{
 \subsection{Public methods}{
-  \itemize{
-    \item \href{#method-TealAppDriver-initialize}{\code{TealAppDriver$new()}}
-    \item \href{#method-TealAppDriver-stop}{\code{TealAppDriver$stop()}}
-    \item \href{#method-TealAppDriver-click}{\code{TealAppDriver$click()}}
-    \item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
-    \item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
-    \item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
-    \item \href{#method-TealAppDriver-set_input}{\code{TealAppDriver$set_input()}}
-    \item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
-    \item \href{#method-TealAppDriver-namespaces}{\code{TealAppDriver$namespaces()}}
-    \item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
-    \item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
-    \item \href{#method-TealAppDriver-get_active_module_table_output}{\code{TealAppDriver$get_active_module_table_output()}}
-    \item \href{#method-TealAppDriver-get_active_module_plot_output}{\code{TealAppDriver$get_active_module_plot_output()}}
-    \item \href{#method-TealAppDriver-set_active_module_input}{\code{TealAppDriver$set_active_module_input()}}
-    \item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
-    \item \href{#method-TealAppDriver-get_active_data_summary_table}{\code{TealAppDriver$get_active_data_summary_table()}}
-    \item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
-    \item \href{#method-TealAppDriver-expect_visible}{\code{TealAppDriver$expect_visible()}}
-    \item \href{#method-TealAppDriver-expect_hidden}{\code{TealAppDriver$expect_hidden()}}
-    \item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
-    \item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
-    \item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
-    \item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
-    \item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
-    \item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
-    \item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
-    \item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
-  }
+\itemize{
+\item \href{#method-TealAppDriver-new}{\code{TealAppDriver$new()}}
+\item \href{#method-TealAppDriver-stop}{\code{TealAppDriver$stop()}}
+\item \href{#method-TealAppDriver-click}{\code{TealAppDriver$click()}}
+\item \href{#method-TealAppDriver-expect_no_shiny_error}{\code{TealAppDriver$expect_no_shiny_error()}}
+\item \href{#method-TealAppDriver-expect_no_validation_error}{\code{TealAppDriver$expect_no_validation_error()}}
+\item \href{#method-TealAppDriver-expect_validation_error}{\code{TealAppDriver$expect_validation_error()}}
+\item \href{#method-TealAppDriver-set_input}{\code{TealAppDriver$set_input()}}
+\item \href{#method-TealAppDriver-navigate_teal_tab}{\code{TealAppDriver$navigate_teal_tab()}}
+\item \href{#method-TealAppDriver-namespaces}{\code{TealAppDriver$namespaces()}}
+\item \href{#method-TealAppDriver-get_active_module_input}{\code{TealAppDriver$get_active_module_input()}}
+\item \href{#method-TealAppDriver-get_active_module_output}{\code{TealAppDriver$get_active_module_output()}}
+\item \href{#method-TealAppDriver-get_active_module_table_output}{\code{TealAppDriver$get_active_module_table_output()}}
+\item \href{#method-TealAppDriver-get_active_module_plot_output}{\code{TealAppDriver$get_active_module_plot_output()}}
+\item \href{#method-TealAppDriver-set_active_module_input}{\code{TealAppDriver$set_active_module_input()}}
+\item \href{#method-TealAppDriver-get_active_filter_vars}{\code{TealAppDriver$get_active_filter_vars()}}
+\item \href{#method-TealAppDriver-get_active_data_summary_table}{\code{TealAppDriver$get_active_data_summary_table()}}
+\item \href{#method-TealAppDriver-is_visible}{\code{TealAppDriver$is_visible()}}
+\item \href{#method-TealAppDriver-expect_visible}{\code{TealAppDriver$expect_visible()}}
+\item \href{#method-TealAppDriver-expect_hidden}{\code{TealAppDriver$expect_hidden()}}
+\item \href{#method-TealAppDriver-get_active_data_filters}{\code{TealAppDriver$get_active_data_filters()}}
+\item \href{#method-TealAppDriver-add_filter_var}{\code{TealAppDriver$add_filter_var()}}
+\item \href{#method-TealAppDriver-remove_filter_var}{\code{TealAppDriver$remove_filter_var()}}
+\item \href{#method-TealAppDriver-set_active_filter_selection}{\code{TealAppDriver$set_active_filter_selection()}}
+\item \href{#method-TealAppDriver-get_attr}{\code{TealAppDriver$get_attr()}}
+\item \href{#method-TealAppDriver-get_html_rvest}{\code{TealAppDriver$get_html_rvest()}}
+\item \href{#method-TealAppDriver-open_url}{\code{TealAppDriver$open_url()}}
+\item \href{#method-TealAppDriver-wait_for_active_module_value}{\code{TealAppDriver$wait_for_active_module_value()}}
 }
-\if{html}{\out{<details><summary>Inherited methods</summary>
+}
+\if{html}{\out{
+<details><summary>Inherited methods</summary>
 <ul>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_download'><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_html'><code>shinytest2::AppDriver$expect_html()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_js'><code>shinytest2::AppDriver$expect_js()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_screenshot"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_screenshot'><code>shinytest2::AppDriver$expect_screenshot()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_text"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_text'><code>shinytest2::AppDriver$expect_text()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_unique_names"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_unique_names'><code>shinytest2::AppDriver$expect_unique_names()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_values"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_values'><code>shinytest2::AppDriver$expect_values()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_chromote_session"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_chromote_session'><code>shinytest2::AppDriver$get_chromote_session()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_dir"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_dir'><code>shinytest2::AppDriver$get_dir()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_download'><code>shinytest2::AppDriver$get_download()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_html'><code>shinytest2::AppDriver$get_html()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_js'><code>shinytest2::AppDriver$get_js()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_logs"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_logs'><code>shinytest2::AppDriver$get_logs()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_screenshot"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_screenshot'><code>shinytest2::AppDriver$get_screenshot()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_text"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_text'><code>shinytest2::AppDriver$get_text()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_url"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_url'><code>shinytest2::AppDriver$get_url()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_value"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_value'><code>shinytest2::AppDriver$get_value()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_values"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_values'><code>shinytest2::AppDriver$get_values()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_variant"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_variant'><code>shinytest2::AppDriver$get_variant()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_window_size"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_window_size'><code>shinytest2::AppDriver$get_window_size()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="log_message"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-log_message'><code>shinytest2::AppDriver$log_message()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="run_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-run_js'><code>shinytest2::AppDriver$run_js()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="set_inputs"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-set_inputs'><code>shinytest2::AppDriver$set_inputs()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="set_window_size"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-set_window_size'><code>shinytest2::AppDriver$set_window_size()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="upload_file"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-upload_file'><code>shinytest2::AppDriver$upload_file()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="view"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-view'><code>shinytest2::AppDriver$view()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_idle"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_idle'><code>shinytest2::AppDriver$wait_for_idle()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_js'><code>shinytest2::AppDriver$wait_for_js()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_value"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_value'><code>shinytest2::AppDriver$wait_for_value()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_download'><code>shinytest2::AppDriver$expect_download()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_html'><code>shinytest2::AppDriver$expect_html()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_js'><code>shinytest2::AppDriver$expect_js()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_screenshot"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_screenshot'><code>shinytest2::AppDriver$expect_screenshot()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_text"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_text'><code>shinytest2::AppDriver$expect_text()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_unique_names"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_unique_names'><code>shinytest2::AppDriver$expect_unique_names()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="expect_values"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-expect_values'><code>shinytest2::AppDriver$expect_values()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_chromote_session"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_chromote_session'><code>shinytest2::AppDriver$get_chromote_session()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_dir"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_dir'><code>shinytest2::AppDriver$get_dir()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_download"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_download'><code>shinytest2::AppDriver$get_download()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_html"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_html'><code>shinytest2::AppDriver$get_html()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_js'><code>shinytest2::AppDriver$get_js()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_logs"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_logs'><code>shinytest2::AppDriver$get_logs()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_screenshot"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_screenshot'><code>shinytest2::AppDriver$get_screenshot()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_text"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_text'><code>shinytest2::AppDriver$get_text()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_url"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_url'><code>shinytest2::AppDriver$get_url()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_value"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_value'><code>shinytest2::AppDriver$get_value()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_values"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_values'><code>shinytest2::AppDriver$get_values()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_variant"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_variant'><code>shinytest2::AppDriver$get_variant()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="get_window_size"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-get_window_size'><code>shinytest2::AppDriver$get_window_size()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="log_message"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-log_message'><code>shinytest2::AppDriver$log_message()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="run_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-run_js'><code>shinytest2::AppDriver$run_js()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="set_inputs"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-set_inputs'><code>shinytest2::AppDriver$set_inputs()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="set_window_size"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-set_window_size'><code>shinytest2::AppDriver$set_window_size()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="upload_file"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-upload_file'><code>shinytest2::AppDriver$upload_file()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="view"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-view'><code>shinytest2::AppDriver$view()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_idle"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_idle'><code>shinytest2::AppDriver$wait_for_idle()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_js"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_js'><code>shinytest2::AppDriver$wait_for_js()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="shinytest2" data-topic="AppDriver" data-id="wait_for_value"><a href='../../shinytest2/html/AppDriver.html#method-AppDriver-wait_for_value'><code>shinytest2::AppDriver$wait_for_value()</code></a></span></li>
 </ul>
-</details>}}
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TealAppDriver-initialize"></a>}}
-\if{latex}{\out{\hypertarget{method-TealAppDriver-initialize}{}}}
-\subsection{\code{TealAppDriver$new()}}{
-  Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$new(
+\if{html}{\out{<a id="method-TealAppDriver-new"></a>}}
+\if{latex}{\out{\hypertarget{method-TealAppDriver-new}{}}}
+\subsection{Method \code{new()}}{
+Initialize a \code{TealAppDriver} object for testing a \code{teal} application.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$new(
   app,
   options = list(),
+  teal_options = list(),
   timeout = rlang::missing_arg(),
   load_timeout = rlang::missing_arg(),
   ...
-)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{app}}{(\code{teal_app})}
-      \item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
-      \item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{app}}{(\code{teal_app})}
+
+\item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
+
+\item{\code{teal_options}}{(\code{list}) named list of R options to set inside the spawned
+Shiny process (e.g. \code{list(teal.enable_deep_linking = TRUE)}). Applied at session
+start so option-gated server logic sees them.}
+
+\item{\code{timeout}}{(\code{numeric}) Default number of milliseconds for any timeout or
 timeout_ parameter in the \code{TealAppDriver} class.
 Defaults to 20s.
 
 See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
 via options or environment variables.}
-      \item{\code{load_timeout}}{(\code{numeric}) How long to wait for the app to load, in ms.
+
+\item{\code{load_timeout}}{(\code{numeric}) How long to wait for the app to load, in ms.
 This includes the time to start R. Defaults to 100s.
 
 See \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new} method for more details on how to change it
 via options or environment variables}
-      \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    Object of class \code{TealAppDriver}
-  }
-}
 
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$new}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Object of class \code{TealAppDriver}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-stop"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-stop}{}}}
-\subsection{\code{TealAppDriver$stop()}}{
-  Extension of the parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{stop} method that prints the logs
+\subsection{Method \code{stop()}}{
+Extension of the parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{stop} method that prints the logs
 if the \code{ACTIONS_STEP_DEBUG} environment variable is set to \code{true} (case of value is ignored).
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$stop(...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
-    }
-    \if{html}{\out{</div>}}
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$stop(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
+}
+\if{html}{\out{</div>}}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-click"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-click}{}}}
-\subsection{\code{TealAppDriver$click()}}{
-  Append parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click} method with a call to \code{waif_for_idle()} method.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$click(...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
-    }
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{click()}}{
+Append parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click} method with a call to \code{waif_for_idle()} method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$click(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{arguments passed to parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click()} method.}
+}
+\if{html}{\out{</div>}}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-expect_no_shiny_error"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-expect_no_shiny_error}{}}}
-\subsection{\code{TealAppDriver$expect_no_shiny_error()}}{
-  Check if the app has shiny errors. This checks for global shiny errors.
+\subsection{Method \code{expect_no_shiny_error()}}{
+Check if the app has shiny errors. This checks for global shiny errors.
 Note that any shiny errors dependent on shiny server render will only be captured after the teal module tab
 is visited because shiny will not trigger server computations when the tab is invisible.
 So, navigate to the module tab you want to test before calling this function.
 Although, this catches errors hidden in the other module tabs if they are already rendered.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$expect_no_shiny_error()}
-    \if{html}{\out{</div>}}
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_no_shiny_error()}\if{html}{\out{</div>}}
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-expect_no_validation_error"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-expect_no_validation_error}{}}}
-\subsection{\code{TealAppDriver$expect_no_validation_error()}}{
-  Check if the app has no validation errors. This checks for global shiny validation errors.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$expect_no_validation_error()}
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{expect_no_validation_error()}}{
+Check if the app has no validation errors. This checks for global shiny validation errors.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_no_validation_error()}\if{html}{\out{</div>}}
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-expect_validation_error"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-expect_validation_error}{}}}
-\subsection{\code{TealAppDriver$expect_validation_error()}}{
-  Check if the app has validation errors. This checks for global shiny validation errors.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$expect_validation_error()}
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{expect_validation_error()}}{
+Check if the app has validation errors. This checks for global shiny validation errors.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_validation_error()}\if{html}{\out{</div>}}
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-set_input"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-set_input}{}}}
-\subsection{\code{TealAppDriver$set_input()}}{
-  Set the input in the \code{teal} app.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$set_input(input_id, value, ...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{input_id}}{(character) The shiny input id with it's complete name space.}
-      \item{\code{value}}{The value to set the input to.}
-      \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{TealAppDriver} object invisibly.
-  }
+\subsection{Method \code{set_input()}}{
+Set the input in the \code{teal} app.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_input(input_id, value, ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input_id}}{(character) The shiny input id with it's complete name space.}
+
+\item{\code{value}}{The value to set the input to.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-navigate_teal_tab"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-navigate_teal_tab}{}}}
-\subsection{\code{TealAppDriver$navigate_teal_tab()}}{
-  Navigate the teal tabs in the \code{teal} app.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$navigate_teal_tab(tab)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{tab}}{(character) Labels of tabs to navigate to.
-Note: Make sure to provide unique labels for the tabs.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{TealAppDriver} object invisibly.
-  }
+\subsection{Method \code{navigate_teal_tab()}}{
+Navigate the teal tabs in the \code{teal} app.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$navigate_teal_tab(tab)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tab}}{(character) Labels of tabs to navigate to.
+Note: Make sure to provide unique labels for the tabs.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-namespaces"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-namespaces}{}}}
-\subsection{\code{TealAppDriver$namespaces()}}{
-  \code{NS} in different sections of \code{teal} app
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$namespaces(is_selector = FALSE)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{is_selector}}{(\code{logical(1)}) whether \code{ns} function should prefix with \verb{#}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    list of \code{ns}.
-  }
+\subsection{Method \code{namespaces()}}{
+\code{NS} in different sections of \code{teal} app
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$namespaces(is_selector = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{is_selector}}{(\code{logical(1)}) whether \code{ns} function should prefix with \verb{#}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+list of \code{ns}.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_input"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_input}{}}}
-\subsection{\code{TealAppDriver$get_active_module_input()}}{
-  Get the input from the module in the \code{teal} app.
+\subsection{Method \code{get_active_module_input()}}{
+Get the input from the module in the \code{teal} app.
 This function will only access inputs from the name space of the current active teal module.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_module_input(input_id)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{input_id}}{(character) The shiny input id to get the value from.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The value of the shiny input.
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_input(input_id)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input_id}}{(character) The shiny input id to get the value from.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The value of the shiny input.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_output"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_output}{}}}
-\subsection{\code{TealAppDriver$get_active_module_output()}}{
-  Get the output from the module in the \code{teal} app.
+\subsection{Method \code{get_active_module_output()}}{
+Get the output from the module in the \code{teal} app.
 This function will only access outputs from the name space of the current active teal module.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_module_output(output_id)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{output_id}}{(character) The shiny output id to get the value from.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The value of the shiny output.
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_output(output_id)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{output_id}}{(character) The shiny output id to get the value from.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The value of the shiny output.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_table_output"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_table_output}{}}}
-\subsection{\code{TealAppDriver$get_active_module_table_output()}}{
-  Get the output from the module's \code{teal.widgets::table_with_settings} or \code{DT::DTOutput} in the \code{teal} app.
+\subsection{Method \code{get_active_module_table_output()}}{
+Get the output from the module's \code{teal.widgets::table_with_settings} or \code{DT::DTOutput} in the \code{teal} app.
 This function will only access outputs from the name space of the current active teal module.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_module_table_output(table_id, which = 1)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{table_id}}{(\code{character(1)}) The id of the table in the active teal module's name space.}
-      \item{\code{which}}{(integer) If there is more than one table, which should be extracted.
-By default it will look for  a table that is built using \code{teal.widgets::table_with_settings}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The data.frame with table contents.
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_table_output(table_id, which = 1)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{table_id}}{(\code{character(1)}) The id of the table in the active teal module's name space.}
+
+\item{\code{which}}{(integer) If there is more than one table, which should be extracted.
+By default it will look for  a table that is built using \code{teal.widgets::table_with_settings}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The data.frame with table contents.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_module_plot_output"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_module_plot_output}{}}}
-\subsection{\code{TealAppDriver$get_active_module_plot_output()}}{
-  Get the output from the module's \code{teal.widgets::plot_with_settings} in the \code{teal} app.
+\subsection{Method \code{get_active_module_plot_output()}}{
+Get the output from the module's \code{teal.widgets::plot_with_settings} in the \code{teal} app.
 This function will only access plots from the name space of the current active teal module.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_module_plot_output(plot_id)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{plot_id}}{(\code{character(1)}) The id of the plot in the active teal module's name space.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{src} attribute as \code{character(1)} vector.
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_module_plot_output(plot_id)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{plot_id}}{(\code{character(1)}) The id of the plot in the active teal module's name space.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{src} attribute as \code{character(1)} vector.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-set_active_module_input"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-set_active_module_input}{}}}
-\subsection{\code{TealAppDriver$set_active_module_input()}}{
-  Set the input in the module in the \code{teal} app.
+\subsection{Method \code{set_active_module_input()}}{
+Set the input in the module in the \code{teal} app.
 This function will only set inputs in the name space of the current active teal module.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$set_active_module_input(input_id, value, ...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{input_id}}{(character) The shiny input id to get the value from.}
-      \item{\code{value}}{The value to set the input to.}
-      \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{TealAppDriver} object invisibly.
-  }
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_module_input(input_id, value, ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input_id}}{(character) The shiny input id to get the value from.}
+
+\item{\code{value}}{The value to set the input to.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_filter_vars"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_filter_vars}{}}}
-\subsection{\code{TealAppDriver$get_active_filter_vars()}}{
-  Get the active datasets that can be accessed via the filter panel of the current active teal module.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_filter_vars()}
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{get_active_filter_vars()}}{
+Get the active datasets that can be accessed via the filter panel of the current active teal module.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_filter_vars()}\if{html}{\out{</div>}}
 }
 
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_data_summary_table"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_data_summary_table}{}}}
-\subsection{\code{TealAppDriver$get_active_data_summary_table()}}{
-  Get the active data summary table
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_data_summary_table()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    \code{data.frame}
-  }
+\subsection{Method \code{get_active_data_summary_table()}}{
+Get the active data summary table
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_data_summary_table()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+\code{data.frame}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-is_visible"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-is_visible}{}}}
-\subsection{\code{TealAppDriver$is_visible()}}{
-  Test if \code{DOM} elements are visible on the page with a JavaScript call.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$is_visible(
+\subsection{Method \code{is_visible()}}{
+Test if \code{DOM} elements are visible on the page with a JavaScript call.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$is_visible(
   selector,
   content_visibility_auto = FALSE,
   opacity_property = FALSE,
   visibility_property = FALSE
-)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
-A \code{CSS} id will return only one element if the UI is well formed.}
-      \item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)}) See more information
-on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    Logical vector with all occurrences of the selector.
-  }
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
+A \code{CSS} id will return only one element if the UI is well formed.}
+
+\item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)}) See more information
+on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Logical vector with all occurrences of the selector.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-expect_visible"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-expect_visible}{}}}
-\subsection{\code{TealAppDriver$expect_visible()}}{
-  Expect that \code{DOM} elements are visible on the page with a JavaScript call.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$expect_visible(
+\subsection{Method \code{expect_visible()}}{
+Expect that \code{DOM} elements are visible on the page with a JavaScript call.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_visible(
   selector,
   content_visibility_auto = FALSE,
   opacity_property = FALSE,
   visibility_property = FALSE,
   timeout
-)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
-if more than one element is found, at least one must be visible for this expectation to
-be successful.}
-      \item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)})
-See more information on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
-      \item{\code{timeout}}{(\code{numeric(1)}) Time in milliseconds to wait for the expectation to be met.
-Defaults to the \code{timeout} parameter set during initialization of the \code{TealAppDriver} object.}
-    }
-    \if{html}{\out{</div>}}
-  }
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
+if more than one element is found, at least one must be visible for this expectation to
+be successful.}
+
+\item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)})
+See more information on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
+
+\item{\code{timeout}}{(\code{numeric(1)}) Time in milliseconds to wait for the expectation to be met.
+Defaults to the \code{timeout} parameter set during initialization of the \code{TealAppDriver} object.}
+}
+\if{html}{\out{</div>}}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-expect_hidden"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-expect_hidden}{}}}
-\subsection{\code{TealAppDriver$expect_hidden()}}{
-  Expect that \code{DOM} elements are hidden on the page with a JavaScript call.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$expect_hidden(
+\subsection{Method \code{expect_hidden()}}{
+Expect that \code{DOM} elements are hidden on the page with a JavaScript call.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$expect_hidden(
   selector,
   content_visibility_auto = FALSE,
   opacity_property = FALSE,
   visibility_property = FALSE,
   timeout
-)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
-if more than one element is found, all of them must be invisible for this expectation to
-be successful.}
-      \item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)})
-See more information on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
-      \item{\code{timeout}}{(\code{numeric(1)}) Time in milliseconds to wait for the expectation to be met.
-Defaults to the \code{timeout} parameter set during initialization of the \code{TealAppDriver} object.}
-    }
-    \if{html}{\out{</div>}}
-  }
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) \code{CSS} selector to check visibility.
+if more than one element is found, all of them must be invisible for this expectation to
+be successful.}
+
+\item{\code{content_visibility_auto, opacity_property, visibility_property}}{(\code{logical(1)})
+See more information on \url{https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility}.}
+
+\item{\code{timeout}}{(\code{numeric(1)}) Time in milliseconds to wait for the expectation to be met.
+Defaults to the \code{timeout} parameter set during initialization of the \code{TealAppDriver} object.}
+}
+\if{html}{\out{</div>}}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_active_data_filters"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_active_data_filters}{}}}
-\subsection{\code{TealAppDriver$get_active_data_filters()}}{
-  Get the active filter variables from a dataset in the \code{teal} app.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_active_data_filters(dataset_name = NULL)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{dataset_name}}{(character) The name of the dataset to get the filter variables from.
-If \code{NULL}, the filter variables for all the datasets will be returned in a list.}
-    }
-    \if{html}{\out{</div>}}
-  }
+\subsection{Method \code{get_active_data_filters()}}{
+Get the active filter variables from a dataset in the \code{teal} app.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_active_data_filters(dataset_name = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_name}}{(character) The name of the dataset to get the filter variables from.
+If \code{NULL}, the filter variables for all the datasets will be returned in a list.}
+}
+\if{html}{\out{</div>}}
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-add_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-add_filter_var}{}}}
-\subsection{\code{TealAppDriver$add_filter_var()}}{
-  Add a new variable from the dataset to be filtered.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$add_filter_var(dataset_name, var_name, ...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
-      \item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
-      \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{TealAppDriver} object invisibly.
-  }
+\subsection{Method \code{add_filter_var()}}{
+Add a new variable from the dataset to be filtered.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$add_filter_var(dataset_name, var_name, ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_name}}{(character) The name of the dataset to add the filter variable to.}
+
+\item{\code{var_name}}{(character) The name of the variable to add to the filter panel.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-remove_filter_var"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-remove_filter_var}{}}}
-\subsection{\code{TealAppDriver$remove_filter_var()}}{
-  Remove an active filter variable of a dataset from the active filter variables panel.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$remove_filter_var(dataset_name = NULL, var_name = NULL)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{dataset_name}}{(character) The name of the dataset to remove the filter variable from.
-If \code{NULL}, all the filter variables will be removed.}
-      \item{\code{var_name}}{(character) The name of the variable to remove from the filter panel.
-If \code{NULL}, all the filter variables of the dataset will be removed.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{TealAppDriver} object invisibly.
-  }
+\subsection{Method \code{remove_filter_var()}}{
+Remove an active filter variable of a dataset from the active filter variables panel.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$remove_filter_var(dataset_name = NULL, var_name = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_name}}{(character) The name of the dataset to remove the filter variable from.
+If \code{NULL}, all the filter variables will be removed.}
+
+\item{\code{var_name}}{(character) The name of the variable to remove from the filter panel.
+If \code{NULL}, all the filter variables of the dataset will be removed.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-set_active_filter_selection"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-set_active_filter_selection}{}}}
-\subsection{\code{TealAppDriver$set_active_filter_selection()}}{
-  Set the active filter values for a variable of a dataset in the active filter variable panel.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input, ...)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{dataset_name}}{(character) The name of the dataset to set the filter value for.}
-      \item{\code{var_name}}{(character) The name of the variable to set the filter value for.}
-      \item{\code{input}}{The value to set the filter to.}
-      \item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{TealAppDriver} object invisibly.
-  }
+\subsection{Method \code{set_active_filter_selection()}}{
+Set the active filter values for a variable of a dataset in the active filter variable panel.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$set_active_filter_selection(dataset_name, var_name, input, ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_name}}{(character) The name of the dataset to set the filter value for.}
+
+\item{\code{var_name}}{(character) The name of the variable to set the filter value for.}
+
+\item{\code{input}}{The value to set the filter to.}
+
+\item{\code{...}}{Additional arguments to be passed to \code{shinytest2::AppDriver$set_inputs}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{TealAppDriver} object invisibly.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_attr"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_attr}{}}}
-\subsection{\code{TealAppDriver$get_attr()}}{
-  Extract \code{html} attribute (found by a \code{selector}).
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_attr(selector, attribute)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a specific node.}
-      \item{\code{attribute}}{(\code{character(1)}) name of an attribute to retrieve from a node specified by \code{selector}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    The \code{character} vector.
-  }
+\subsection{Method \code{get_attr()}}{
+Extract \code{html} attribute (found by a \code{selector}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_attr(selector, attribute)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{(\code{character(1)}) specifying the selector to be used to get the content of a specific node.}
+
+\item{\code{attribute}}{(\code{character(1)}) name of an attribute to retrieve from a node specified by \code{selector}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The \code{character} vector.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-get_html_rvest"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-get_html_rvest}{}}}
-\subsection{\code{TealAppDriver$get_html_rvest()}}{
-  Wrapper around \code{get_html} that passes the output directly to \code{rvest::read_html}.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$get_html_rvest(selector)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{selector}}{\code{(character(1))} passed to \code{get_html}.}
-    }
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    An XML document.
-Wrapper around \code{get_url()} method that opens the app in the browser.
-  }
+\subsection{Method \code{get_html_rvest()}}{
+Wrapper around \code{get_html} that passes the output directly to \code{rvest::read_html}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$get_html_rvest(selector)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{selector}}{\code{(character(1))} passed to \code{get_html}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An XML document.
+Wrapper around \code{get_url()} method that opens the app in the browser.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-open_url"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-open_url}{}}}
-\subsection{\code{TealAppDriver$open_url()}}{
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$open_url()}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Returns}{
-    Nothing. Opens the underlying teal app in the browser.
-  }
+\subsection{Method \code{open_url()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$open_url()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Nothing. Opens the underlying teal app in the browser.
+}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TealAppDriver-wait_for_active_module_value"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-wait_for_active_module_value}{}}}
-\subsection{\code{TealAppDriver$wait_for_active_module_value()}}{
-  Waits until a specified input, output, or export value.
+\subsection{Method \code{wait_for_active_module_value()}}{
+Waits until a specified input, output, or export value.
 This function serves as a wrapper around the \code{wait_for_value} method,
 providing a more flexible interface for waiting on different types of values within the active module namespace.
-  \subsection{Usage}{
-    \if{html}{\out{<div class="r">}}
-    \preformatted{TealAppDriver$wait_for_active_module_value(
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TealAppDriver$wait_for_active_module_value(
   input = rlang::missing_arg(),
   output = rlang::missing_arg(),
   export = rlang::missing_arg(),
   ...
-)}
-    \if{html}{\out{</div>}}
-  }
-  \subsection{Arguments}{
-    \if{html}{\out{<div class="arguments">}}
-    \describe{
-      \item{\code{input, output, export}}{A name of an input, output, or export value.
-Only one of these parameters may be used.}
-      \item{\code{...}}{Must be empty. Allows for parameter expansion.
-Parameter with additional value to passed in \code{wait_for_value}.}
-    }
-    \if{html}{\out{</div>}}
-  }
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input, output, export}}{A name of an input, output, or export value.
+Only one of these parameters may be used.}
+
+\item{\code{...}}{Must be empty. Allows for parameter expansion.
+Parameter with additional value to passed in \code{wait_for_value}.}
+}
+\if{html}{\out{</div>}}
+}
+}
 }

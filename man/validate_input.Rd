@@ -31,9 +31,6 @@ Condition should determine expected state, \code{FALSE} throws.}
 \item{message}{(\code{character(1)}) Character string of validation message to display.}
 
 \item{session}{Shiny session object}
-
-\item{add}{(\code{validation_collection}) Optional validation collection to store the message in,
-see \code{make_validation_collection()} details.}
 }
 \value{
 \code{NULL} or \code{shiny.silent.error} when condition is not met
@@ -141,7 +138,7 @@ my_module <- module(
   ui = function(id) {
     ns <- NS(id)
     tagList(
-      checkboxGroupInput(ns("letters"), "Select letters:", choices = head(LETTERS), inline = TRUE),
+      checkboxGroupInput(ns("letters1"), "Select letters:", choices = head(LETTERS), inline = TRUE),
       checkboxGroupInput(ns("letters2"), "Select letters:", choices = head(LETTERS), inline = TRUE),
       tags$h3("Sample plot"),
       plotOutput(ns("plot"))
@@ -152,18 +149,18 @@ my_module <- module(
       output$plot <- renderPlot({
         validate(
           need_input(
-            "letters",
+            "letters1",
             condition = function(x) length(x) > 0,
             message = "Select at least one letter."
           ),
           need_input(
-            c("letters", "letters2"),
+            c("letters1", "letters2"),
             condition = function(x, y) all(!x \%in\% y),
             message = "Letters in the first group should not be in the second group."
           )
         )
         tab <- rbind(
-          Group1 = as.integer(head(LETTERS) \%in\% input$letters),
+          Group1 = as.integer(head(LETTERS) \%in\% input$letters1),
           Group2 = as.integer(head(LETTERS) \%in\% input$letters2)
         )
         colnames(tab) <- head(LETTERS)

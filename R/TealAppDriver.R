@@ -38,16 +38,21 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #'
     #' See [`shinytest2::AppDriver`] `new` method for more details on how to change it
     #' via options or environment variables
+    #' @param teal_options (`list`) named list of R options to set inside the spawned
+    #' Shiny process (e.g. `list(teal.enable_deep_linking = TRUE)`). Applied at session
+    #' start so option-gated server logic sees them.
     #' @param ... Additional arguments to be passed to `shinytest2::AppDriver$new`
     #'
     #'
     #' @return  Object of class `TealAppDriver`
     initialize = function(app,
                           options = list(),
+                          teal_options = list(),
                           timeout = rlang::missing_arg(),
                           load_timeout = rlang::missing_arg(),
                           ...) {
       checkmate::assert_class(app, "teal_app")
+      checkmate::assert_list(teal_options, names = "named")
       # Default timeout is hardcoded to 4s in shinytest2:::resolve_timeout
       # New default is set with environment variables if not already set by user
       # envvars have the lowest priority in shinytest2 timeout resolution.
@@ -57,6 +62,15 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       }
       if (Sys.getenv("SHINYTEST2_LOAD_TIMEOUT") == "") {
         extra_envvar$SHINYTEST2_TIMEOUT <- "100000"
+      }
+
+      if (length(teal_options)) {
+        orig_server <- app$server
+        opts <- teal_options
+        app$server <- function(input, output, session) {
+          do.call(base::options, opts)
+          orig_server(input, output, session)
+        }
       }
 
       suppressWarnings(
