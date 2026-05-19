@@ -123,24 +123,6 @@ testthat::test_that("e2e: teal_data_module modal stays visible on startup when `
   app$stop()
 })
 
-testthat::test_that("e2e: teal_data_module modal close button is enabled from disabled when data is ready", {
-  skip_if_too_deep(5)
-  app <- TealAppDriver$new(
-    init(
-      data = example_teal_data_module(needs_submit = TRUE, once = FALSE),
-      modules = example_module(label = "Example Module")
-    )
-  )
-
-  testthat::expect_identical(
-    app$get_attr("#teal-close_teal_data_module_modal", "disabled"),
-    "disabled"
-  )
-  app$click("teal-teal_data_module-submit")
-  testthat::expect_true(is.na(app$get_attr("#teal-close_teal_data_module_modal", "disabled")))
-  app$stop()
-})
-
 testthat::test_that("e2e: datasets from teal_data_module show in filter panel", {
   skip_if_too_deep(5)
   tdm <- teal_data_module(

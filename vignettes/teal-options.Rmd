@@ -172,6 +172,12 @@ This option enables URL-based module navigation in `teal` apps. When set to `TRU
 
 Default: `FALSE`.
 
+### `teal.snapshot_manager.enable` (`logical`)
+
+This option controls whether the Snapshot Manager panel (the camera icon in the tabset bar) is rendered in a `teal` app. When set to `FALSE`, both `ui_snapshot_manager_panel()` and `srv_snapshot_manager_panel()` return `NULL`, so the panel is not displayed and no snapshot logic is attached.
+
+Default: `TRUE`.
+
 # Deprecated options
 
 ### `teal_logging`

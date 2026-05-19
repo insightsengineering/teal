@@ -3305,6 +3305,26 @@ testthat::describe("srv_teal snapshot manager", {
       }
     )
   })
+
+  testthat::it("is disabled by teal.snapshot_manager.enable = FALSE", {
+    withr::with_options(list(teal.snapshot_manager.enable = FALSE), {
+      testthat::expect_null(ui_snapshot_manager_panel("snapshot_manager_panel"))
+      shiny::testServer(
+        app = srv_teal,
+        args = list(
+          id = "test",
+          data = teal.data::teal_data(iris = iris),
+          modules = modules(
+            module("module_1", server = function(id, data) data)
+          )
+        ),
+        expr = {
+          testthat::expect_null(snapshots)
+          testthat::expect_null(output[["snapshot_manager_panel-module-snapshot_list"]])
+        }
+      )
+    })
+  })
 })
 
 testthat::describe("Datanames with special symbols", {
