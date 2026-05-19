@@ -1,8 +1,8 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 1.1.0.9031
-Date: 2026-03-11
+Version: 1.1.0.9032
+Date: 2026-05-19
 Authors@R: c(
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9533-457X")),
@@ -93,6 +93,7 @@ Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
     yaml=vubiostat/r-yaml, rstudio/htmltools, bioc::matrixStats,
     insightsengineering/roxy.shinylive
 Config/Needs/website: insightsengineering/nesttemplate
+Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Language: en-US
 LazyData: true
@@ -133,4 +134,3 @@ Collate:
     'validate_inputs.R'
     'validations.R'
     'zzz.R'
-Config/roxygen2/version: 8.0.0
