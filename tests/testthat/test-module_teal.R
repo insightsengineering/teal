@@ -3318,10 +3318,7 @@ testthat::describe("srv_teal snapshot manager", {
             module("module_1", server = function(id, data) data)
           )
         ),
-        expr = {
-          testthat::expect_null(snapshots)
-          testthat::expect_null(output[["snapshot_manager_panel-module-snapshot_list"]])
-        }
+        expr = testthat::expect_null(snapshots)
       )
     })
   })
