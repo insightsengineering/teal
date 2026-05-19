@@ -71,6 +71,13 @@
 #' (The snapshot will be retrieved by `module_teal` in order to set initial app state in a restored app.)
 #' Then that snapshot, and the previous snapshot history are dumped into the `values.rds` file in `<bookmark_dir>`.
 #'
+#' @section Disabling the snapshot manager:
+#' The snapshot manager can be turned off application-wide by setting the
+#' `teal.snapshot_manager.enable` option to `FALSE`. When disabled, both
+#' `ui_snapshot_manager_panel()` and `srv_snapshot_manager_panel()` return `NULL`,
+#' so the camera icon is not rendered and no snapshot logic is attached.
+#' The option defaults to `TRUE` and is set when the `teal` package is loaded.
+#'
 #' @param id (`character(1)`) `shiny` module instance id.
 #' @param slices_global (`reactiveVal`) that contains a `teal_slices` object
 #'                      containing all `teal_slice`s existing in the app, both active and inactive.
@@ -86,6 +93,9 @@ NULL
 
 #' @rdname module_snapshot_manager
 ui_snapshot_manager_panel <- function(id) {
+  if (!isTRUE(getOption("teal.snapshot_manager.enable", TRUE))) {
+    return(NULL)
+  }
   ns <- NS(id)
   .expand_button(
     id = ns("show_snapshot_manager"),
@@ -96,6 +106,9 @@ ui_snapshot_manager_panel <- function(id) {
 
 #' @rdname module_snapshot_manager
 srv_snapshot_manager_panel <- function(id, slices_global) {
+  if (!isTRUE(getOption("teal.snapshot_manager.enable", TRUE))) {
+    return(NULL)
+  }
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_snapshot_manager_panel initializing")
     setBookmarkExclude(c("show_snapshot_manager"))

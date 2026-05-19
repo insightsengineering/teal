@@ -121,13 +121,14 @@ testthat::test_that("e2e: active tab is reflected in URL query string after navi
         example_module(label = "mod1"),
         example_module(label = "mod2")
       )
-    )
+    ),
+    teal_options = list(teal.enable_deep_linking = TRUE)
   )
   on.exit(app$stop())
 
   app$navigate_teal_tab("mod2")
 
-  testthat::expect_match(app$get_url(), "active_module=mod2")
+  testthat::expect_match(app$get_js("window.location.href"), "active_module=mod2")
 })
 
 testthat::test_that("e2e: URL query string active_module switches to the specified tab", {
@@ -139,7 +140,8 @@ testthat::test_that("e2e: URL query string active_module switches to the specifi
         example_module(label = "mod1"),
         example_module(label = "mod2")
       )
-    )
+    ),
+    teal_options = list(teal.enable_deep_linking = TRUE)
   )
   on.exit(app$stop())
 

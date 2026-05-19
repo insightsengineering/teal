@@ -1,7 +1,7 @@
 // This file contains functions that should be executed at the start of each session,
 // not included in the original HTML
 
-shinyjs.autoFocusModal = function(id) {
+shinyjs.autoFocusModal = function (id) {
   document.getElementById('shiny-modal').addEventListener(
     'shown.bs.modal',
     () => document.getElementById(id).focus(),
@@ -9,7 +9,7 @@ shinyjs.autoFocusModal = function(id) {
   );
 }
 
-shinyjs.enterToSubmit = function(id, submit_id) {
+shinyjs.enterToSubmit = function (id, submit_id) {
   document.getElementById('shiny-modal').addEventListener(
     'shown.bs.modal',
     () => document.getElementById(id).addEventListener('keyup', (e) => {
@@ -22,10 +22,9 @@ shinyjs.enterToSubmit = function(id, submit_id) {
 }
 
 // Custom message handler to get document title and send it to the server
-Shiny.addCustomMessageHandler('teal-get-document-title', function(message) {
+Shiny.addCustomMessageHandler('teal-get-document-title', function (message) {
   const title = document.title;
   const inputId = message.inputId;
   console.log('Teal: Sending document title:', title, 'to input:', inputId);
-  Shiny.setInputValue(inputId, title, {priority: 'event'});
+  Shiny.setInputValue(inputId, title, { priority: 'event' });
 });
-

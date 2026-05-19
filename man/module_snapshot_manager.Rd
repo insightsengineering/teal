@@ -106,6 +106,15 @@ This is done on the app session, not the module session.
 Then that snapshot, and the previous snapshot history are dumped into the \code{values.rds} file in \verb{<bookmark_dir>}.
 }
 
+\section{Disabling the snapshot manager}{
+
+The snapshot manager can be turned off application-wide by setting the
+\code{teal.snapshot_manager.enable} option to \code{FALSE}. When disabled, both
+\code{ui_snapshot_manager_panel()} and \code{srv_snapshot_manager_panel()} return \code{NULL},
+so the camera icon is not rendered and no snapshot logic is attached.
+The option defaults to \code{TRUE} and is set when the \code{teal} package is loaded.
+}
+
 \author{
 Aleksander Chlebowski
 }

@@ -9,6 +9,7 @@
     teal.sidebar.width = 250,
     teal.reporter.nav_buttons = c("preview", "download", "load", "reset"),
     teal.show_src = TRUE,
+    teal.snapshot_manager.enable = TRUE,
     teal.bs_theme = .default_teal_bslib_theming
   )
 
@@ -20,6 +21,9 @@
   teal.logger::register_logger("teal")
   teal.logger::register_handlers("teal")
 
+  if (getRversion() < "4.4") {
+    assign("%||%", rlang::`%||%`, envir = getNamespace(pkgname))
+  }
   invisible()
 }
 

@@ -40,8 +40,8 @@
   padding: 0.5em 0 0.5em 0.5em;
 }
 
-.teal_primary_col > .teal_validated:has(.teal-output-warning),
-.teal_primary_col > .teal_validated:has(.shiny-output-error) {
+.teal_primary_col>.teal_validated:has(.teal-output-warning),
+.teal_primary_col>.teal_validated:has(.shiny-output-error) {
   width: 100%;
   background-color: rgba(223, 70, 97, 0.1);
   border: 1px solid red;
