@@ -269,6 +269,19 @@ tab.
 
 Default: `FALSE`.
 
+#### `teal.snapshot_manager.enable` (`logical`)
+
+This option controls whether the Snapshot Manager panel (the camera icon
+in the tabset bar) is rendered in a `teal` app. When set to `FALSE`,
+both
+[`ui_snapshot_manager_panel()`](https://insightsengineering.github.io/teal/reference/module_snapshot_manager.md)
+and
+[`srv_snapshot_manager_panel()`](https://insightsengineering.github.io/teal/reference/module_snapshot_manager.md)
+return `NULL`, so the panel is not displayed and no snapshot logic is
+attached.
+
+Default: `TRUE`.
+
 ## Deprecated options
 
 #### `teal_logging`

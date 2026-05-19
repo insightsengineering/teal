@@ -45,7 +45,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method `append_src()`
+### `TealReportCard$append_src()`
 
 Appends the source code to the `content` meta data of this
 `TealReportCard`.
@@ -78,7 +78,7 @@ Object of class `TealReportCard`, invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `append_fs()`
+### `TealReportCard$append_fs()`
 
 Appends the filter state list to the `content` and `metadata` of this
 `TealReportCard`. If the filter state list has an attribute named
@@ -105,7 +105,7 @@ to the `content`.
 
 ------------------------------------------------------------------------
 
-### Method `append_encodings()`
+### `TealReportCard$append_encodings()`
 
 Appends the encodings list to the `content` and `metadata` of this
 `TealReportCard`.
@@ -131,7 +131,7 @@ Appends the encodings list to the `content` and `metadata` of this
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `TealReportCard$clone()`
 
 The objects of this class are cloneable with this method.
 
@@ -150,7 +150,7 @@ The objects of this class are cloneable with this method.
 ``` r
 
 ## ------------------------------------------------
-## Method `TealReportCard$append_src`
+## Method `TealReportCard$append_src()`
 ## ------------------------------------------------
 
 card <- TealReportCard$new()$append_src(
@@ -172,7 +172,7 @@ card$get_content()[[1]]
 #> [1] "code_chunk"
 
 ## ------------------------------------------------
-## Method `TealReportCard$append_encodings`
+## Method `TealReportCard$append_encodings()`
 ## ------------------------------------------------
 
 card <- TealReportCard$new()$append_encodings(list(variable1 = "X"))

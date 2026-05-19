@@ -1,11 +1,5 @@
 # Drive a `teal` application
 
-Drive a `teal` application
-
-Drive a `teal` application
-
-## Details
-
 Extension of the
 [`shinytest2::AppDriver`](https://rstudio.github.io/shinytest2/reference/AppDriver.html)
 class with methods for driving a teal application for performing
@@ -20,7 +14,7 @@ interactions for `shinytest2` tests.
 
 ### Public methods
 
-- [`TealAppDriver$new()`](#method-TealAppDriver-new)
+- [`TealAppDriver$new()`](#method-TealAppDriver-initialize)
 
 - [`TealAppDriver$stop()`](#method-TealAppDriver-stop)
 
@@ -108,7 +102,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `TealAppDriver$new()`
 
 Initialize a `TealAppDriver` object for testing a `teal` application.
 
@@ -117,6 +111,7 @@ Initialize a `TealAppDriver` object for testing a `teal` application.
     TealAppDriver$new(
       app,
       options = list(),
+      teal_options = list(),
       timeout = rlang::missing_arg(),
       load_timeout = rlang::missing_arg(),
       ...
@@ -132,6 +127,12 @@ Initialize a `TealAppDriver` object for testing a `teal` application.
 
   (`list`) passed to `shinyApp(options)`. See
   [`shiny::shinyApp()`](https://rdrr.io/pkg/shiny/man/shinyApp.html).
+
+- `teal_options`:
+
+  (`list`) named list of R options to set inside the spawned Shiny
+  process (e.g. `list(teal.enable_deep_linking = TRUE)`). Applied at
+  session start so option-gated server logic sees them.
 
 - `timeout`:
 
@@ -163,7 +164,7 @@ Object of class `TealAppDriver`
 
 ------------------------------------------------------------------------
 
-### Method [`stop()`](https://rdrr.io/r/base/stop.html)
+### `TealAppDriver$stop()`
 
 Extension of the parent
 [`shinytest2::AppDriver`](https://rstudio.github.io/shinytest2/reference/AppDriver.html)
@@ -184,7 +185,7 @@ environment variable is set to `true` (case of value is ignored).
 
 ------------------------------------------------------------------------
 
-### Method `click()`
+### `TealAppDriver$click()`
 
 Append parent
 [`shinytest2::AppDriver`](https://rstudio.github.io/shinytest2/reference/AppDriver.html)
@@ -204,7 +205,7 @@ Append parent
 
 ------------------------------------------------------------------------
 
-### Method `expect_no_shiny_error()`
+### `TealAppDriver$expect_no_shiny_error()`
 
 Check if the app has shiny errors. This checks for global shiny errors.
 Note that any shiny errors dependent on shiny server render will only be
@@ -220,7 +221,7 @@ rendered.
 
 ------------------------------------------------------------------------
 
-### Method `expect_no_validation_error()`
+### `TealAppDriver$expect_no_validation_error()`
 
 Check if the app has no validation errors. This checks for global shiny
 validation errors.
@@ -231,7 +232,7 @@ validation errors.
 
 ------------------------------------------------------------------------
 
-### Method `expect_validation_error()`
+### `TealAppDriver$expect_validation_error()`
 
 Check if the app has validation errors. This checks for global shiny
 validation errors.
@@ -242,7 +243,7 @@ validation errors.
 
 ------------------------------------------------------------------------
 
-### Method `set_input()`
+### `TealAppDriver$set_input()`
 
 Set the input in the `teal` app.
 
@@ -271,7 +272,7 @@ The `TealAppDriver` object invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `navigate_teal_tab()`
+### `TealAppDriver$navigate_teal_tab()`
 
 Navigate the teal tabs in the `teal` app.
 
@@ -292,7 +293,7 @@ The `TealAppDriver` object invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `namespaces()`
+### `TealAppDriver$namespaces()`
 
 `NS` in different sections of `teal` app
 
@@ -312,7 +313,7 @@ list of `ns`.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_module_input()`
+### `TealAppDriver$get_active_module_input()`
 
 Get the input from the module in the `teal` app. This function will only
 access inputs from the name space of the current active teal module.
@@ -333,7 +334,7 @@ The value of the shiny input.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_module_output()`
+### `TealAppDriver$get_active_module_output()`
 
 Get the output from the module in the `teal` app. This function will
 only access outputs from the name space of the current active teal
@@ -355,7 +356,7 @@ The value of the shiny output.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_module_table_output()`
+### `TealAppDriver$get_active_module_table_output()`
 
 Get the output from the module's
 [`teal.widgets::table_with_settings`](https://insightsengineering.github.io/teal.widgets/latest-tag/reference/table_with_settings.html)
@@ -386,7 +387,7 @@ The data.frame with table contents.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_module_plot_output()`
+### `TealAppDriver$get_active_module_plot_output()`
 
 Get the output from the module's
 [`teal.widgets::plot_with_settings`](https://insightsengineering.github.io/teal.widgets/latest-tag/reference/plot_with_settings.html)
@@ -410,7 +411,7 @@ The `src` attribute as `character(1)` vector.
 
 ------------------------------------------------------------------------
 
-### Method `set_active_module_input()`
+### `TealAppDriver$set_active_module_input()`
 
 Set the input in the module in the `teal` app. This function will only
 set inputs in the name space of the current active teal module.
@@ -440,7 +441,7 @@ The `TealAppDriver` object invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_filter_vars()`
+### `TealAppDriver$get_active_filter_vars()`
 
 Get the active datasets that can be accessed via the filter panel of the
 current active teal module.
@@ -451,7 +452,7 @@ current active teal module.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_data_summary_table()`
+### `TealAppDriver$get_active_data_summary_table()`
 
 Get the active data summary table
 
@@ -465,7 +466,7 @@ Get the active data summary table
 
 ------------------------------------------------------------------------
 
-### Method `is_visible()`
+### `TealAppDriver$is_visible()`
 
 Test if `DOM` elements are visible on the page with a JavaScript call.
 
@@ -496,7 +497,7 @@ Logical vector with all occurrences of the selector.
 
 ------------------------------------------------------------------------
 
-### Method `expect_visible()`
+### `TealAppDriver$expect_visible()`
 
 Expect that `DOM` elements are visible on the page with a JavaScript
 call.
@@ -532,7 +533,7 @@ call.
 
 ------------------------------------------------------------------------
 
-### Method `expect_hidden()`
+### `TealAppDriver$expect_hidden()`
 
 Expect that `DOM` elements are hidden on the page with a JavaScript
 call.
@@ -568,7 +569,7 @@ call.
 
 ------------------------------------------------------------------------
 
-### Method `get_active_data_filters()`
+### `TealAppDriver$get_active_data_filters()`
 
 Get the active filter variables from a dataset in the `teal` app.
 
@@ -586,7 +587,7 @@ Get the active filter variables from a dataset in the `teal` app.
 
 ------------------------------------------------------------------------
 
-### Method `add_filter_var()`
+### `TealAppDriver$add_filter_var()`
 
 Add a new variable from the dataset to be filtered.
 
@@ -615,7 +616,7 @@ The `TealAppDriver` object invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `remove_filter_var()`
+### `TealAppDriver$remove_filter_var()`
 
 Remove an active filter variable of a dataset from the active filter
 variables panel.
@@ -642,7 +643,7 @@ The `TealAppDriver` object invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `set_active_filter_selection()`
+### `TealAppDriver$set_active_filter_selection()`
 
 Set the active filter values for a variable of a dataset in the active
 filter variable panel.
@@ -676,7 +677,7 @@ The `TealAppDriver` object invisibly.
 
 ------------------------------------------------------------------------
 
-### Method `get_attr()`
+### `TealAppDriver$get_attr()`
 
 Extract `html` attribute (found by a `selector`).
 
@@ -702,7 +703,7 @@ The `character` vector.
 
 ------------------------------------------------------------------------
 
-### Method `get_html_rvest()`
+### `TealAppDriver$get_html_rvest()`
 
 Wrapper around `get_html` that passes the output directly to
 [`rvest::read_html`](http://xml2.r-lib.org/reference/read_xml.md).
@@ -724,7 +725,7 @@ the browser.
 
 ------------------------------------------------------------------------
 
-### Method `open_url()`
+### `TealAppDriver$open_url()`
 
 #### Usage
 
@@ -736,7 +737,7 @@ Nothing. Opens the underlying teal app in the browser.
 
 ------------------------------------------------------------------------
 
-### Method `wait_for_active_module_value()`
+### `TealAppDriver$wait_for_active_module_value()`
 
 Waits until a specified input, output, or export value. This function
 serves as a wrapper around the `wait_for_value` method, providing a more

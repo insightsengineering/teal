@@ -28,6 +28,9 @@ Useful links:
 
 Authors:
 
+- Dawid Kaledkowski <dawid.kaledkowski@roche.com>
+  ([ORCID](https://orcid.org/0000-0001-9533-457X))
+
 - Pawel Rucki <pawel.rucki@roche.com>
 
 - Aleksander Chlebowski <aleksander.chlebowski@contractors.roche.com>

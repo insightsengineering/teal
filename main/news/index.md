@@ -1,6 +1,6 @@
 # Changelog
 
-## teal 1.1.0.9031
+## teal 1.1.0.9032
 
 #### Enhancements
 
@@ -18,6 +18,9 @@
   and
   [`check_decorators()`](https://insightsengineering.github.io/teal/reference/check_decorators.md)
   ([\#1697](https://github.com/insightsengineering/teal/issues/1697)).
+- Added `teal.snapshot_manager.enable` option (default: `TRUE`) to
+  control whether the Snapshot Manager panel is rendered. Setting it to
+  `FALSE` hides the panel and skips its server logic.
 
 ## teal 1.1.0
 

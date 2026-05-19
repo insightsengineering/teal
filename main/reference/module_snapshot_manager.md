@@ -125,6 +125,15 @@ will be retrieved by `module_teal` in order to set initial app state in
 a restored app.) Then that snapshot, and the previous snapshot history
 are dumped into the `values.rds` file in `<bookmark_dir>`.
 
+## Disabling the snapshot manager
+
+The snapshot manager can be turned off application-wide by setting the
+`teal.snapshot_manager.enable` option to `FALSE`. When disabled, both
+`ui_snapshot_manager_panel()` and `srv_snapshot_manager_panel()` return
+`NULL`, so the camera icon is not rendered and no snapshot logic is
+attached. The option defaults to `TRUE` and is set when the `teal`
+package is loaded.
+
 ## Author
 
 Aleksander Chlebowski

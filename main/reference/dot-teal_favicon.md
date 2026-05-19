@@ -7,7 +7,3 @@ The default favicon for the teal app.
 ``` r
 .teal_favicon
 ```
-
-## Format
-
-An object of class `character` of length 1.

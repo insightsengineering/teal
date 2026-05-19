@@ -333,6 +333,10 @@ A simple `teal` module
   : Validates that dataset contains specific variable
 - [`validate_in()`](https://insightsengineering.github.io/teal/reference/validate_in.md)
   : Validates that vector includes all expected values
+- [`validate_input()`](https://insightsengineering.github.io/teal/reference/validate_input.md)
+  [`need_input()`](https://insightsengineering.github.io/teal/reference/validate_input.md)
+  [`use_validate_input_js()`](https://insightsengineering.github.io/teal/reference/validate_input.md)
+  : Validate input
 - [`validate_inputs()`](https://insightsengineering.github.io/teal/reference/validate_inputs.md)
   : Send input validation messages to output
 - [`validate_n_levels()`](https://insightsengineering.github.io/teal/reference/validate_n_levels.md)
