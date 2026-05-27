@@ -1,3 +1,24 @@
+withr::local_options(
+  list(
+    shinytest2.timeout = max(
+      getOption("shinytest2.timeout", default = 0),
+      as.numeric(Sys.getenv("SHINYTEST2_TIMEOUT", unset = 0)),
+      30 * 1000
+    ),
+    shinytest2.load_timeout = max(
+      getOption("shinytest2.load_timeout", default = 0),
+      as.numeric(Sys.getenv("SHINYTEST2_LOAD_TIMEOUT", unset = 0)),
+      20 * 10000
+    ),
+    shinytest2.duration = max(
+      getOption("shinytest2.duration", default = 0),
+      as.numeric(Sys.getenv("SHINYTEST2_DURATION", unset = 0)),
+      0.5 * 1000
+    )
+  ),
+  .local_envir = testthat::test_env()
+)
+
 testthat::test_that("e2e: data summary just list the unfilterable objects at the bottom when provided", {
   skip_if_too_deep(5)
   app <- TealAppDriver$new(
