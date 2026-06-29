@@ -23,11 +23,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: 
+\strong{Maintainer}: Dony Unardi \email{unardid@gene.com}
 
 Authors:
 \itemize{
-  \item Dony Unardi \email{unardid@gene.com} [reviewer]
+  \item Dony Unardi \email{unardid@gene.com}
   \item Dawid Kaledkowski \email{dawid.kaledkowski@roche.com} (\href{https://orcid.org/0000-0001-9533-457X}{ORCID})
   \item Pawel Rucki \email{pawel.rucki@roche.com}
   \item Aleksander Chlebowski \email{aleksander.chlebowski@contractors.roche.com} (\href{https://orcid.org/0000-0001-5018-6294}{ORCID})
