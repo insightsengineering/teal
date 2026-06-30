@@ -1,6 +1,8 @@
 # Changelog
 
-## teal 1.1.0.9034
+## teal 1.2.0
+
+CRAN release: 2026-06-30
 
 #### Enhancements
 
@@ -21,6 +23,10 @@
 - Added `teal.snapshot_manager.enable` option (default: `TRUE`) to
   control whether the Snapshot Manager panel is rendered. Setting it to
   `FALSE` hides the panel and skips its server logic.
+
+#### Miscellaneous
+
+- Update maintainer.
 
 ## teal 1.1.0
 

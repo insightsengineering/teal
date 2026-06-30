@@ -23,10 +23,11 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Dawid Kaledkowski <dawid.kaledkowski@roche.com>
-([ORCID](https://orcid.org/0000-0001-9533-457X))
+**Maintainer**: Dony Unardi <unardid@gene.com>
 
 Authors:
+
+- Dony Unardi <unardid@gene.com>
 
 - Dawid Kaledkowski <dawid.kaledkowski@roche.com>
   ([ORCID](https://orcid.org/0000-0001-9533-457X))
@@ -60,8 +61,6 @@ Authors:
 - Tadeusz Lewandowski
 
 Other contributors:
-
-- Dony Unardi <unardid@gene.com> \[reviewer\]
 
 - Nina Qi <qi.ting@gene.com> \[reviewer\]
 
