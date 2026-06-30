@@ -1,10 +1,11 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 1.1.0.9034
+Version: 1.2.0
 Date: 2026-06-29
 Authors@R: c(
-    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = c("aut", "cre"),
+    person("Dony", "Unardi", , "unardid@gene.com", role = c("aut", "cre")),
+    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut",
            comment = c(ORCID = "0000-0001-9533-457X")),
     person("Pawel", "Rucki", , "pawel.rucki@roche.com", role = "aut"),
     person("Aleksander", "Chlebowski", , "aleksander.chlebowski@contractors.roche.com", role = "aut",
@@ -15,7 +16,6 @@ Authors@R: c(
     person("Vedha", "Viyash", , "vedha.viyash@roche.com", role = "aut"),
     person("Marcin", "Kosinski", , "marcin.kosinski.mk1@roche.com", role = "aut"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
-    person("Dony", "Unardi", , "unardid@gene.com", role = "rev"),
     person("Nina", "Qi", , "qi.ting@gene.com", role = "rev"),
     person("Nikolas", "Burkoff", role = "aut"),
     person("Mahmoud", "Hallal", role = "aut"),
