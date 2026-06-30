@@ -141,6 +141,10 @@ app <- init(
       .introjs-button {
         display: inline-block !important;
       }
+      aside.sidebar {
+      overflow-x: hidden !important;
+      }
+
     ")),
       tags$script(
         src = "https://unpkg.com/intro.js/intro.js"
