@@ -1,0 +1,37 @@
+# Introduction
+
+`teal` is an interactive data exploration framework based on `shiny`,
+designed primarily to analyze CDISC clinical trial data.
+
+A `shiny` Application created with `teal` offers users the ability to:
+
+- Import data from external sources;
+- Dynamically filter data for analysis;
+- Generate reproducible code for future analysis;
+- Create and download reports of analysis results *(for analysis modules
+  that support reporting)*.
+
+Moreover, the `teal` framework provides application developers with a
+wide range of customizable standard analysis modules to integrate into
+their applications, along with a logging framework that facilitates
+debugging. Additionally, advanced users of the framework can develop new
+analysis modules and easily integrate them into any `teal` application.
+
+The `teal` framework’s functionality draws heavily from the following
+packages:
+
+| R package | Description |
+|----|:---|
+| [`teal`](https://insightsengineering.github.io/teal) | `shiny`-based interactive exploration framework for analyzing data |
+| [`teal.widgets`](https://insightsengineering.github.io/teal.widgets) | `shiny` UI components used within `teal` |
+| [`teal.data`](https://insightsengineering.github.io/teal.data) | provides the data structure used in all `teal` applications |
+| [`teal.slice`](https://insightsengineering.github.io/teal.slice) | provides the filter panel to allow dynamic filtering of data |
+| [`teal.code`](https://insightsengineering.github.io/teal.code) | provides a mechanism for tracking code to reproduce an analysis |
+| [`teal.logger`](https://insightsengineering.github.io/teal.logger) | standardizes logging within `teal` framework |
+| [`teal.reporter`](https://insightsengineering.github.io/teal.reporter) | allows `teal` applications to generate reports |
+
+Although these packages are mentioned in the material, we strongly
+recommend visiting their vignettes to learn more about them.
+
+Learn on how to make your first `teal` application
+[here](https://insightsengineering.github.io/teal/articles/getting-started-with-teal.md)!

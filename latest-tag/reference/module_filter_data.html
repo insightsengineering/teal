@@ -8,20 +8,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Filter panel module in teal — module_filter_data • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Filter panel module in teal — module_filter_data">
 <meta name="description" content="Creates filter panel module from teal_data object and returns teal_data. It is build in a way
-that filter panel changes and anything what happens before (e.g. module_init_data) is triggering
-further reactive events only if something has changed and if the module is visible. Thanks to
-this special implementation all modules' data are recalculated only for those modules which are
-currently displayed.">
+filter panel recalculates data only when filter-panel-state or loaded-data changes and when
+panel is visible. Thanks to this special implementation all modules' data are recalculated only
+for those modules which are currently displayed.">
 <meta property="og:description" content="Creates filter panel module from teal_data object and returns teal_data. It is build in a way
-that filter panel changes and anything what happens before (e.g. module_init_data) is triggering
-further reactive events only if something has changed and if the module is visible. Thanks to
-this special implementation all modules' data are recalculated only for those modules which are
-currently displayed.">
+filter panel recalculates data only when filter-panel-state or loaded-data changes and when
+panel is visible. Thanks to this special implementation all modules' data are recalculated only
+for those modules which are currently displayed.">
 <meta property="og:image" content="https://insightsengineering.github.io/teal/logo.svg">
 <link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
@@ -34,7 +32,7 @@ currently displayed.">
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,6 +99,7 @@ currently displayed.">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0">v1.2.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0-rc1">v1.2.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
@@ -134,16 +133,15 @@ currently displayed.">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Filter panel module in teal</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/module_filter_data.R" class="external-link"><code>R/module_filter_data.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.2.0/R/module_filter_data.R" class="external-link"><code>R/module_filter_data.R</code></a></small>
       <div class="d-none name"><code>module_filter_data.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>Creates filter panel module from <code>teal_data</code> object and returns <code>teal_data</code>. It is build in a way
-that filter panel changes and anything what happens before (e.g. <code><a href="module_init_data.html">module_init_data</a></code>) is triggering
-further reactive events only if something has changed and if the module is visible. Thanks to
-this special implementation all modules' data are recalculated only for those modules which are
-currently displayed.</p>
+filter panel recalculates data only when filter-panel-state or loaded-data changes and when
+panel is visible. Thanks to this special implementation all modules' data are recalculated only
+for those modules which are currently displayed.</p>
     </div>
 
     <div class="section level2">

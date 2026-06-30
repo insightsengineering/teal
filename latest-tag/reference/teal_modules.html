@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Create teal_module and teal_modules objects — teal_modules • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create teal_module and teal_modules objects — teal_modules">
 <meta name="description" content="Create a nested tab structure to embed modules in a teal application.">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0">v1.2.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0-rc1">v1.2.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
@@ -126,7 +127,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Create <code>teal_module</code> and <code>teal_modules</code> objects</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.1.0/R/modules.R" class="external-link"><code>R/modules.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.2.0/R/modules.R" class="external-link"><code>R/modules.R</code></a></small>
       <div class="d-none name"><code>teal_modules.Rd</code></div>
     </div>
 
@@ -156,8 +157,7 @@
 <span>  <span class="va">x</span>,</span>
 <span>  is_last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  parent_prefix <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"datasets"</span>, <span class="st">"properties"</span>, <span class="st">"ui_args"</span>, <span class="st">"server_args"</span>, <span class="st">"decorators"</span>,</span>
-<span>    <span class="st">"transformators"</span><span class="op">)</span>,</span>
+<span>  what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"datasets"</span>, <span class="st">"properties"</span>, <span class="st">"arguments"</span>, <span class="st">"transformators"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -281,7 +281,7 @@ used to maintain the tree structure in nested levels</p></dd>
 <dt id="arg-what">what<a class="anchor" aria-label="anchor" href="#arg-what"></a>
 </dt>
 <dd><p>(<code>character</code>) Specifies which metadata to display.
-Possible values: "datasets", "properties", "ui_args", "server_args", "transformators"</p></dd>
+Possible values: "datasets", "properties", "arguments", "transformators"</p></dd>
 
 
 <dt id="arg-is-root">is_root<a class="anchor" aria-label="anchor" href="#arg-is-root"></a>
@@ -419,16 +419,15 @@ the module may receive extra datasets that could be unnecessary</p></li>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |- <span style="color: #000000; background-color: #BBBBBB;">My Custom Module</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #BBBB00;">Datasets         : </span>ADSL, ADTTE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #00BB00;">UI Arguments     : </span>a (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |                     b (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #00BB00;">Server Arguments : </span>x (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |                     y (<span style="color: #555555;">list</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |  L- <span style="color: #BB00BB;">Transformators   : </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #BBBB00;">Datasets</span>: ADSL, ADTTE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |  |- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |  |  |- <span style="color: #00BBBB;">Bookmarkable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |  |  L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |  L- <span style="color: #00BB00;">Arguments</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |     |- a (<span style="color: #555555;">numeric</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |     |- b (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |     |- x (<span style="color: #555555;">numeric</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |     L- y (<span style="color: #555555;">list</span>)</span>
 <span class="r-in"><span><span class="va">custom_module</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">label</span> <span class="op">=</span> <span class="st">"label"</span>, <span class="va">ui_args</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">server_args</span> <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>  <span class="va">datanames</span> <span class="op">=</span> <span class="st">"all"</span>, <span class="va">transformators</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">bk</span> <span class="op">=</span> <span class="cn">FALSE</span></span></span>
@@ -545,135 +544,99 @@ the module may receive extra datasets that could be unnecessary</p></li>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">complete_modules</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">TEAL ROOT</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |- <span style="color: #000000; background-color: #BBBBBB;">Data Overview</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #BBBB00;">Datasets         : </span>ADSL, ADAE, ADVS, all</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #00BB00;">UI Arguments     : </span>view_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |                     page_size (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |                     filters (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #00BB00;">Server Arguments : </span>cache (<span style="color: #555555;">logical</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |                     debounce (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #BB00BB;">Decorators       : </span>Static decorator</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="color: #BB00BB;">Transformators   : </span>Dummy Transform</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #BBBB00;">Datasets</span>: ADSL, ADAE, ADVS, all</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BBBB;">Bookmarkable</span>: TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #00BB00;">Arguments</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- view_type (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- page_size (<span style="color: #555555;">numeric</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- filters (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- cache (<span style="color: #555555;">logical</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- debounce (<span style="color: #555555;">numeric</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Decorators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     L- Static decorator</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="color: #BB00BB;">Transformators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     L- Dummy Transform</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |- <span style="font-weight: bold;">Nested 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #000000; background-color: #BBBBBB;">Interactive Plots</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #BBBB00;">Datasets         : </span>ADSL, ADVS, all</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BB00;">UI Arguments     : </span>plot_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     height (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     width (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     color_scheme (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BB00;">Server Arguments : </span>render_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     cache_plots (<span style="color: #555555;">logical</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Transformators   : </span>Dummy Transform, Plot Settings</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #BBBB00;">Datasets</span>: ADSL, ADVS, all</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- <span style="color: #00BBBB;">Bookmarkable</span>: TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BB00;">Arguments</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- plot_type (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- height (<span style="color: #555555;">numeric</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- width (<span style="color: #555555;">numeric</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- color_scheme (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  |- render_type (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |  L- cache_plots (<span style="color: #555555;">logical</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Transformators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     |- Dummy Transform</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     L- Plot Settings</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="font-weight: bold;">Nested 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |- <span style="color: #000000; background-color: #BBBBBB;">Summary Statistics</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #BBBB00;">Datasets         : </span>ADSL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #00BB00;">UI Arguments     : </span>stats (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |                     grouping (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #BB00BB;">Transformators   : </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #BBBB00;">Datasets</span>: ADSL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |  |- <span style="color: #00BBBB;">Bookmarkable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |  L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #00BB00;">Arguments</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- stats (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     L- grouping (<span style="color: #555555;">character</span>)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |- <span style="font-weight: bold;">Labeled nested modules</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #000000; background-color: #BBBBBB;">Subgroup Analysis</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #BBBB00;">Datasets         : </span>ADSL, ADAE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #00BB00;">UI Arguments     : </span>subgroups (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |                     analysis_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     L- <span style="color: #BB00BB;">Transformators   : </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #BBBB00;">Datasets</span>: ADSL, ADAE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |  |- <span style="color: #00BBBB;">Bookmarkable</span>: TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |  L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     L- <span style="color: #00BB00;">Arguments</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |        |- subgroups (<span style="color: #555555;">character</span>)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |        L- analysis_type (<span style="color: #555555;">character</span>)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     L- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |        L- <span style="color: #000000; background-color: #BBBBBB;">Subgroup Analysis in non-labled modules</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #BBBB00;">Datasets         : </span>all</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #00BB00;">UI Arguments     : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           L- <span style="color: #BB00BB;">Transformators   : </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #BBBB00;">Datasets</span>: all</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |           L- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |              |- <span style="color: #00BBBB;">Bookmarkable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |              L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   L- <span style="color: #000000; background-color: #BBBBBB;">Non-nested module</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #BBBB00;">Datasets         : </span>all</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #0000BB;">Properties:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |  |- <span style="color: #00BBBB;">Bookmarkable  : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |  L- <span style="color: #00BBBB;">Reportable    : </span>FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #00BB00;">UI Arguments     : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      L- <span style="color: #BB00BB;">Transformators   : </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #BBBB00;">Datasets</span>: all</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      L- <span style="color: #0000BB;">Properties</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         |- <span style="color: #00BBBB;">Bookmarkable</span>: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         L- <span style="color: #00BBBB;">Reportable</span>: FALSE</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">complete_modules</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ui_args"</span>, <span class="st">"server_args"</span>, <span class="st">"transformators"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">TEAL ROOT</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |- <span style="color: #000000; background-color: #BBBBBB;">Data Overview</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #00BB00;">UI Arguments     : </span>view_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |                     page_size (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |                     filters (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #00BB00;">Server Arguments : </span>cache (<span style="color: #555555;">logical</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |                     debounce (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="color: #BB00BB;">Transformators   : </span>Dummy Transform</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="color: #BB00BB;">Transformators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     L- Dummy Transform</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |- <span style="font-weight: bold;">Nested 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #000000; background-color: #BBBBBB;">Interactive Plots</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BB00;">UI Arguments     : </span>plot_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     height (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     width (<span style="color: #555555;">numeric</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     color_scheme (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #00BB00;">Server Arguments : </span>render_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |                     cache_plots (<span style="color: #555555;">logical</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Transformators   : </span>Dummy Transform, Plot Settings</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Transformators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     |- Dummy Transform</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     L- Plot Settings</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="font-weight: bold;">Nested 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |- <span style="color: #000000; background-color: #BBBBBB;">Summary Statistics</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #00BB00;">UI Arguments     : </span>stats (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |                     grouping (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |- <span style="font-weight: bold;">Labeled nested modules</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #000000; background-color: #BBBBBB;">Subgroup Analysis</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #00BB00;">UI Arguments     : </span>subgroups (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |                     analysis_type (<span style="color: #555555;">character</span>)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     L- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |        L- <span style="color: #000000; background-color: #BBBBBB;">Subgroup Analysis in non-labled modules</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #00BB00;">UI Arguments     : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   L- <span style="color: #000000; background-color: #BBBBBB;">Non-nested module</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #00BB00;">UI Arguments     : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #00BB00;">Server Arguments : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">complete_modules</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"decorators"</span>, <span class="st">"transformators"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">TEAL ROOT</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |- <span style="color: #000000; background-color: #BBBBBB;">Data Overview</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #BB00BB;">Decorators       : </span>Static decorator</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="color: #BB00BB;">Transformators   : </span>Dummy Transform</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="color: #BB00BB;">Transformators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |     L- Dummy Transform</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |- <span style="font-weight: bold;">Nested 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |  |- <span style="color: #000000; background-color: #BBBBBB;">Interactive Plots</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Transformators   : </span>Dummy Transform, Plot Settings</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |  L- <span style="color: #BB00BB;">Transformators</span>:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     |- Dummy Transform</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |  |     L- Plot Settings</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |  L- <span style="font-weight: bold;">Nested 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |- <span style="color: #000000; background-color: #BBBBBB;">Summary Statistics</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |- <span style="font-weight: bold;">Labeled nested modules</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     |  L- <span style="color: #000000; background-color: #BBBBBB;">Subgroup Analysis</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |     |     L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |     L- </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |        L- <span style="color: #000000; background-color: #BBBBBB;">Subgroup Analysis in non-labled modules</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |           L- <span style="color: #BB00BB;">Transformators   : </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   L- <span style="color: #000000; background-color: #BBBBBB;">Non-nested module</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      |- <span style="color: #BB00BB;">Decorators       : </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      L- <span style="color: #BB00BB;">Transformators   : </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
