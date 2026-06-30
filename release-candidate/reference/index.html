@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Package index • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Package index">
 <meta property="og:image" content="https://insightsengineering.github.io/teal/logo.svg">
@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0-rc1">v1.2.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
@@ -131,8 +132,8 @@
 
       <div class="section-desc"><p>Main functions needed to build a <code>teal</code> app</p></div>
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -145,77 +146,60 @@
 
         </dt>
         <dd>Create the server and UI function for the <code>shiny</code> app</dd>
-      </dl>
-<dl>
-<dt>
 
-          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
+        <dt>
+
+          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Data module for <code>teal</code> applications</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="teal_transform_module.html">teal_transform_module()</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Data module for <code>teal</code> transformations and output customization</dd>
-      </dl>
-<dl>
-<dt>
 
-          <code><a href="module_transform_data.html">ui_transform_teal_data()</a></code> <code><a href="module_transform_data.html">srv_transform_teal_data()</a></code>
+        <dt>
+
+          <code><a href="module_transform_data.html">srv_transform_teal_data()</a></code> <code><a href="module_transform_data.html">ui_transform_teal_data()</a></code>
 
         </dt>
-        <dd>Module to transform <code>reactive</code> <code>teal_data</code>
+        <dd>Apply <code>teal_transform_module</code> decorators to reactive <code>teal_data</code>
 </dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="make_teal_transform_server.html">make_teal_transform_server()</a></code>
 
         </dt>
         <dd>Make teal_transform_module's server</dd>
-      </dl>
-<dl>
-<dt>
 
-          <code><a href="module_teal_with_splash.html">ui_teal_with_splash()</a></code> <code><a href="module_teal_with_splash.html">srv_teal_with_splash()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
-        </dt>
-        <dd>UI and server modules of <code>teal</code>
-</dd>
-      </dl>
-<dl>
-<dt>
+        <dt>
 
           <code><a href="module_teal.html">ui_teal()</a></code> <code><a href="module_teal.html">srv_teal()</a></code>
 
         </dt>
         <dd>
 <code>teal</code> main module</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="module_session_info.html">ui_session_info()</a></code> <code><a href="module_session_info.html">srv_session_info()</a></code>
 
         </dt>
         <dd>
 <code>teal</code> user session info module</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="teal_modules.html">module()</a></code> <code><a href="teal_modules.html">modules()</a></code> <code><a href="teal_modules.html">format(<i>&lt;teal_module&gt;</i>)</a></code> <code><a href="teal_modules.html">format(<i>&lt;teal_modules&gt;</i>)</a></code> <code><a href="teal_modules.html">print(<i>&lt;teal_module&gt;</i>)</a></code> <code><a href="teal_modules.html">print(<i>&lt;teal_modules&gt;</i>)</a></code>
 
         </dt>
         <dd>Create <code>teal_module</code> and <code>teal_modules</code> objects</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="teal_slices.html">teal_slices()</a></code> <code><a href="teal_slices.html">as.teal_slices()</a></code> <code><a href="teal_slices.html">c(<i>&lt;teal_slices&gt;</i>)</a></code>
 
@@ -229,8 +213,8 @@
 
       <div class="section-desc"><p>Functions to modify the <code>teal</code> app object</p></div>
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -243,9 +227,8 @@
 
         </dt>
         <dd>Replace UI Elements in <code>teal</code> UI objects</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="add_landing_modal.html">add_landing_modal()</a></code>
 
@@ -259,8 +242,8 @@
 
       <div class="section-desc"><p>Helper functions for <code>teal</code></p></div>
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -268,6 +251,13 @@
 
       <dl>
 <dt>
+
+          <code><a href="check_decorators.html">check_decorators()</a></code> <code><a href="check_decorators.html">assert_decorators()</a></code>
+
+        </dt>
+        <dd>Check decorators list</dd>
+
+        <dt>
 
           <code><a href="build_app_title.html">build_app_title()</a></code>
 
@@ -281,8 +271,8 @@
 
       <div class="section-desc"><p>A simple <code>teal</code> module</p></div>
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -303,8 +293,8 @@
 
 
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -317,32 +307,38 @@
           <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
         </dt>
         <dd>Create a <code>teal</code> module for previewing a report</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="TealReportCard.html">TealReportCard</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd><code>TealReportCard</code></dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="report_card_template.html">report_card_template()</a></code>
 
         </dt>
         <dd>Template function for <code>TealReportCard</code> creation and customization</dd>
+
+        <dt>
+
+          <code><a href="disable_report.html">disable_report()</a></code>
+
+        </dt>
+        <dd>Disable the report for a <code>teal_module</code>
+</dd>
       </dl>
 </div>
 <div class="section level2">
-      <h2 id="landing-popup">Landing popup<a class="anchor" aria-label="anchor" href="#landing-popup"></a>
+      <h2 id="modifying-output-of-modules">Modifying output of modules<a class="anchor" aria-label="anchor" href="#modifying-output-of-modules"></a>
 </h2>
 
 
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -351,10 +347,18 @@
       <dl>
 <dt>
 
-          <code><a href="landing_popup_module.html">landing_popup_module()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
+          <code><a href="disable_src.html">disable_src()</a></code>
+
         </dt>
-        <dd>Landing popup module</dd>
+        <dd>Disable the "Show R Code" global button in the UI</dd>
+
+        <dt>
+
+          <code><a href="disable_report.html">disable_report()</a></code>
+
+        </dt>
+        <dd>Disable the report for a <code>teal_module</code>
+</dd>
       </dl>
 </div>
 <div class="section level2">
@@ -363,8 +367,8 @@
 
 
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -373,26 +377,10 @@
       <dl>
 <dt>
 
-          <code><a href="tdata.html">new_tdata()</a></code> <code><a href="tdata.html">tdata2env()</a></code> <code><a href="tdata.html">get_code_tdata()</a></code> <code><a href="tdata.html">join_keys(<i>&lt;tdata&gt;</i>)</a></code> <code><a href="tdata.html">get_metadata()</a></code> <code><a href="tdata.html">as_tdata()</a></code>
-          <span class="badge lifecycle lifecycle-superseded">superseded</span>
-        </dt>
-        <dd>Create a <code>tdata</code> object</dd>
-      </dl>
-<dl>
-<dt>
-
-          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>,<i>&lt;character&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
+          <code><a href="teal_data_module.html">teal_data_module()</a></code> <code><a href="teal_data_module.html">eval_code(<i>&lt;teal_data_module&gt;</i>)</a></code> <code><a href="teal_data_module.html">within(<i>&lt;teal_data_module&gt;</i>)</a></code>
           <span class="badge lifecycle lifecycle-experimental">experimental</span>
         </dt>
         <dd>Data module for <code>teal</code> applications</dd>
-      </dl>
-<dl>
-<dt>
-
-          <code><a href="show_rcode_modal.html">show_rcode_modal()</a></code>
-          <span class="badge lifecycle lifecycle-deprecated">deprecated</span>
-        </dt>
-        <dd>Show <code>R</code> code modal</dd>
       </dl>
 </div>
 <div class="section level2">
@@ -401,8 +389,8 @@
 
 
 
-
-    </div>
+      <dl></dl>
+</div>
 <div class="section level2">
 
 
@@ -415,57 +403,57 @@
 
         </dt>
         <dd>Validate that dataset has a minimum number of observations</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="validate_has_elements.html">validate_has_elements()</a></code>
 
         </dt>
         <dd>Validates that vector has length greater than 0</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="validate_has_variable.html">validate_has_variable()</a></code>
 
         </dt>
         <dd>Validates that dataset contains specific variable</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="validate_in.html">validate_in()</a></code>
 
         </dt>
         <dd>Validates that vector includes all expected values</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
+
+          <code><a href="validate_input.html">validate_input()</a></code> <code><a href="validate_input.html">need_input()</a></code> <code><a href="validate_input.html">use_validate_input_js()</a></code>
+
+        </dt>
+        <dd>Validate input</dd>
+
+        <dt>
 
           <code><a href="validate_inputs.html">validate_inputs()</a></code>
 
         </dt>
         <dd>Send input validation messages to output</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="validate_n_levels.html">validate_n_levels()</a></code>
 
         </dt>
         <dd>Validate that variables has expected number of levels</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="validate_no_intersection.html">validate_no_intersection()</a></code>
 
         </dt>
         <dd>Validates no intersection between two vectors</dd>
-      </dl>
-<dl>
-<dt>
+
+        <dt>
 
           <code><a href="validate_one_row_per_id.html">validate_one_row_per_id()</a></code>
 

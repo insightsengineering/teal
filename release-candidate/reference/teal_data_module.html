@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Data module for teal applications — teal_data_module • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Data module for teal applications — teal_data_module">
 <meta name="description" content="
@@ -28,7 +28,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +95,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0-rc1">v1.2.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
@@ -127,7 +128,7 @@ Create a teal_data_module object and evaluate code on it with history tracking."
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Data module for <code>teal</code> applications</h1>
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0-rc1/R/teal_data_module.R" class="external-link"><code>R/teal_data_module.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.0.0-rc1/R/teal_data_module-eval_code.R" class="external-link"><code>R/teal_data_module-eval_code.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.0.0-rc1/R/teal_data_module-within.R" class="external-link"><code>R/teal_data_module-within.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.2.0-rc1/R/teal_data_module.R" class="external-link"><code>R/teal_data_module.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.2.0-rc1/R/teal_data_module-eval_code.R" class="external-link"><code>R/teal_data_module-eval_code.R</code></a>, <a href="https://github.com/insightsengineering/teal/blob/v1.2.0-rc1/R/teal_data_module-within.R" class="external-link"><code>R/teal_data_module-within.R</code></a></small>
       <div class="d-none name"><code>teal_data_module.Rd</code></div>
     </div>
 
@@ -139,9 +140,19 @@ Create a teal_data_module object and evaluate code on it with history tracking."
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a>
 </h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">teal_data_module</span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span>, label <span class="op">=</span> <span class="st">"data module"</span>, once <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">teal_data_module</span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="cn">NULL</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span>
+<span>     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      </span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu">teal.data</span><span class="fu">::</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>     <span class="op">}</span><span class="op">)</span></span>
+<span> <span class="op">}</span>,</span>
+<span>  label <span class="op">=</span> <span class="st">"data module"</span>,</span>
+<span>  once <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for class 'teal_data_module,character'</span></span>
+<span><span class="co"># S4 method for class 'teal_data_module'</span></span>
 <span><span class="fu">eval_code</span><span class="op">(</span><span class="va">object</span>, <span class="va">code</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'teal_data_module'</span></span>
@@ -238,6 +249,19 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 </h2>
     <div class="dont-index"><p><code><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data-class.html">teal.data::teal_data</a></code>, <code><a href="https://insightsengineering.github.io/teal.code/latest-tag/reference/qenv.html">teal.code::qenv()</a></code></p></div>
     </div>
+    <div class="section level2">
+    <h2 id="examples-in-shinylive">Examples in Shinylive<a class="anchor" aria-label="anchor" href="#examples-in-shinylive"></a>
+</h2>
+
+<dl>
+<dt>example-1</dt>
+<dd><p><a href="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIGkAJjDmKu1APrmopKHZhFzK6nHYDp0lbTSALzKahpatOY6IL5+0hAAztbSAHIAyuyR-BBx0s4A5gkAJOaSPjm5eVCFRag+YLoAFrRJLdJQOXAAHrCoXtJESu3Sjs7Sbh5eGHxgPLixuQXFdQuVMwDCdAQA1nmNMvQqpKQkeUTS1ERQ5ntwM7hVNcTm3jO0jC0zc9IzHeb3j2Kz1eYBgpAILASX3mFUqPzAoygCTgpFaZHOpH27XQ7SheEBRWB9URyNIAEZofC-gCloT3CCSSiAEzQ1a5GaMOAJVBwDRSaisaZgNnSOYiqDhCAAISOJwg7ES9QSKnoMFopEp1Cg9Dg1GC8IAMlcboivqtsn4AL4wvzIxhSRj61TqcQRKLSGKw8buTxwNIiB2ZcwPZ2SzIQVBHB5EI6R0gPZEJBKaCDREVwKRkLBwCXiKThuNFZWq9UPT1wvyI5IAd3VzXlIsWOfsiO0NorfnLHbijPJyXeny9Hd7TOSYIhjChQ8qlsbotM08rTigIstFria9is9TC7QqH7glI7CrIQsMAeE19SRC3V6XlcPq82myAloQ3D5FEee8PDTFQS9asAAgug7B7kUAQPOBdoOtk25gJaAC6QA" class="external-link">Open in Shinylive</a>
+    <iframe class="iframe_shinylive" src="https://shinylive.io/r/app/#code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAGwEsAjAJykYE8AKcqagSgB0ItMnGYFStAG5wABAB4AtNIBmAVwhjaJdj2kAVLAFUAogIGkAJjDmKu1APrmopKHZhFzK6nHYDp0lbTSALzKahpatOY6IL5+0hAAztbSAHIAyuyR-BBx0s4A5gkAJOaSPjm5eVCFRag+YLoAFrRJLdJQOXAAHrCoXtJESu3Sjs7Sbh5eGHxgPLixuQXFdQuVMwDCdAQA1nmNMvQqpKQkeUTS1ERQ5ntwM7hVNcTm3jO0jC0zc9IzHeb3j2Kz1eYBgpAILASX3mFUqPzAoygCTgpFaZHOpH27XQ7SheEBRWB9URyNIAEZofC-gCloT3CCSSiAEzQ1a5GaMOAJVBwDRSaisaZgNnSOYiqDhCAAISOJwg7ES9QSKnoMFopEp1Cg9Dg1GC8IAMlcboivqtsn4AL4wvzIxhSRj61TqcQRKLSGKw8buTxwNIiB2ZcwPZ2SzIQVBHB5EI6R0gPZEJBKaCDREVwKRkLBwCXiKThuNFZWq9UPT1wvyI5IAd3VzXlIsWOfsiO0NorfnLHbijPJyXeny9Hd7TOSYIhjChQ8qlsbotM08rTigIstFria9is9TC7QqH7glI7CrIQsMAeE19SRC3V6XlcPq82myAloQ3D5FEee8PDTFQS9asAAgug7B7kUAQPOBdoOtk25gJaAC6QA" style="height: 800px; width: 100vw; max-width: 1400px; border: 1px solid rgba(0,0,0,0.175); border-radius: .375rem; position: absolute; left: 50%; margin-top: 30px; transform: translateX(-50%); z-index: 1"></iframe>
+    <a style="height: 800px; display: block;"></a></p></dd>
+
+
+</dl>
+</div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a>
@@ -245,7 +269,15 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tdm</span> <span class="op">&lt;-</span> <span class="fu">teal_data_module</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"submit"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Load data"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">tags</span><span class="op">$</span><span class="fu">div</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span><span class="st">"This is an example of a data module."</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"Click the button to load the"</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">code</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span>, <span class="st">"and"</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">code</span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"datasets into the app as"</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">code</span><span class="op">(</span><span class="st">"dataset1"</span><span class="op">)</span>, <span class="st">"and"</span>, <span class="va">tags</span><span class="op">$</span><span class="fu">code</span><span class="op">(</span><span class="st">"dataset2"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"respectively."</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"submit"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Load data"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">}</span>,</span></span>
 <span class="r-in"><span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -264,13 +296,19 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="init.html">init</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">tdm</span>, modules <span class="op">=</span> <span class="fu"><a href="example_module.html">example_module</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">$</span><span class="va">ui</span>, <span class="va">app</span><span class="op">$</span><span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">eval_code</span><span class="op">(</span><span class="va">tdm</span>, <span class="st">"dataset1 &lt;- subset(dataset1, Species == 'virginica')"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ui</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559e50e862b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c9c4de2960&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -281,7 +319,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559e50e86018&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c9c4de3840&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"label")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data module"</span>
@@ -296,7 +334,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559e50316978&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c9c4d4bbf0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -307,7 +345,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559e503166d8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c9c4d4be90&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"label")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data module"</span>
@@ -324,7 +362,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ns &lt;- NS(id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       object$ui(ns("mutate_inner"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559e4f7dc0d0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c9c4c955a0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $server</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(id) {</span>
@@ -335,7 +373,7 @@ the <code>...</code> argument: as <code>name:value</code> pairs are passed to <c
 <span class="r-out co"><span class="r-pr">#&gt;</span>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x559e4f7dbe30&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c9c4c95878&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"label")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "data module"</span>

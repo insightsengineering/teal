@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Modifying a teal Application With R Options • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Modifying a teal Application With R Options">
 <link rel="stylesheet" href="../consent.css">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0-rc1">v1.2.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
@@ -130,7 +131,7 @@
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0-rc1/vignettes/teal-options.Rmd" class="external-link"><code>vignettes/teal-options.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.2.0-rc1/vignettes/teal-options.Rmd" class="external-link"><code>vignettes/teal-options.Rmd</code></a></small>
       <div class="d-none name"><code>teal-options.Rmd</code></div>
     </div>
 
@@ -188,7 +189,8 @@ object)<a class="anchor" aria-label="anchor" href="#teal-bs_theme-bslibbs_theme-
 <code>teal</code> apps. Achieve better UX with the customized UI of an
 app. Please see the <a href="bootstrap-themes-in-teal.html">vignette on
 Bootstrap themes</a> to read more about the functionality.</p>
-<p>Default: <code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html" class="external-link">bslib::bs_theme()</a></code></p>
+<p>Default:
+<code>bslib::bs_theme(`font-size-base` = "0.875rem")</code></p>
 </div>
 <div class="section level4">
 <h4 id="teal-load_nest_code-character">
@@ -222,7 +224,7 @@ the usual numeric range selector.</p>
 object)<a class="anchor" aria-label="anchor" href="#teal-basic_table_args-basic_table_args-object"></a>
 </h4>
 <p>This specifies the list of arguments passed to every call to
-<code><a href="https://insightsengineering.github.io/rtables/latest-release/reference/basic_table.html" class="external-link">rtables::basic_table</a></code> made in a <code>teal</code>
+<code><a href="https://insightsengineering.github.io/rtables/latest-tag/reference/basic_table.html" class="external-link">rtables::basic_table</a></code> made in a <code>teal</code>
 application. This can be used to format <code>rtables</code> without
 making any changes to the application code. See the documentation of
 <code><a href="https://insightsengineering.github.io/teal.widgets/latest-tag/reference/basic_table_args.html">teal.widgets::basic_table_args</a></code> for more information.</p>
@@ -315,6 +317,14 @@ do not show <code>"download lockfile"</code> in the footer</li>
 <code><a href="../reference/module_teal_lockfile.html">?teal::module_teal_lockfile</a></code>.</p>
 </div>
 <div class="section level4">
+<h4 id="teal-sidebar-position-character">
+<code>teal.sidebar.position</code> (<code>character</code>)<a class="anchor" aria-label="anchor" href="#teal-sidebar-position-character"></a>
+</h4>
+<p>This sets the position of the sidebar in the teal app. Possible
+values are <code>"left"</code> and <code>"right"</code>.</p>
+<p>Default: <code>left</code></p>
+</div>
+<div class="section level4">
 <h4 id="teal-sidebar-width-numeric">
 <code>teal.sidebar.width</code> (<code>numeric</code>)<a class="anchor" aria-label="anchor" href="#teal-sidebar-width-numeric"></a>
 </h4>
@@ -378,6 +388,43 @@ rendering process.</p>
 <span>  tidy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"formatR"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level4">
+<h4 id="teal-reporter-max_request_size-numeric">
+<code>teal.reporter.max_request_size</code>
+(<code>numeric</code>)<a class="anchor" aria-label="anchor" href="#teal-reporter-max_request_size-numeric"></a>
+</h4>
+<p>Allows to control the maximum size of a
+<code><a href="https://rdrr.io/pkg/shiny/man/fileInput.html" class="external-link">shiny::fileInput</a></code>. Meant for large report file uploads.
+Default: <code>10 * 1024^2</code> which stands for 10MB. ###
+<code>teal.show_src</code> (<code>logical</code>)</p>
+<p>It allows customizing the visibility of the “Show R Code” button in
+the module title bar.</p>
+<p>Default: <code>TRUE</code>.</p>
+</div>
+<div class="section level4">
+<h4 id="teal-enable_deep_linking-logical">
+<code>teal.enable_deep_linking</code> (<code>logical</code>)<a class="anchor" aria-label="anchor" href="#teal-enable_deep_linking-logical"></a>
+</h4>
+<p>This option enables URL-based module navigation in <code>teal</code>
+apps. When set to <code>TRUE</code>, the active module is reflected in
+the URL as a query parameter
+(<code>?active_module=&lt;module path&gt;</code>). Navigating to such a
+URL or using the browser’s back/forward buttons switches to the
+corresponding tab.</p>
+<p>Default: <code>FALSE</code>.</p>
+</div>
+<div class="section level4">
+<h4 id="teal-snapshot_manager-enable-logical">
+<code>teal.snapshot_manager.enable</code>
+(<code>logical</code>)<a class="anchor" aria-label="anchor" href="#teal-snapshot_manager-enable-logical"></a>
+</h4>
+<p>This option controls whether the Snapshot Manager panel (the camera
+icon in the tabset bar) is rendered in a <code>teal</code> app. When set
+to <code>FALSE</code>, both <code><a href="../reference/module_snapshot_manager.html">ui_snapshot_manager_panel()</a></code> and
+<code><a href="../reference/module_snapshot_manager.html">srv_snapshot_manager_panel()</a></code> return <code>NULL</code>, so
+the panel is not displayed and no snapshot logic is attached.</p>
+<p>Default: <code>TRUE</code>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="deprecated-options">Deprecated options<a class="anchor" aria-label="anchor" href="#deprecated-options"></a>
@@ -394,6 +441,15 @@ logging.</p>
 <code>teal_show_js_log</code><a class="anchor" aria-label="anchor" href="#teal_show_js_log"></a>
 </h4>
 <p>Deprecated in favor of <code>teal.show_js_log</code> (see above).</p>
+</div>
+<div class="section level4">
+<h4 id="teal-ui-class-character1">
+<code>teal.ui.class</code> (<code>character(1)</code>)<a class="anchor" aria-label="anchor" href="#teal-ui-class-character1"></a>
+</h4>
+<p>Adds additional class to the ui container of the teal app. This is
+useful to style teal apps embedded as modules in larger Shiny
+Applications.</p>
+<p>Default: <code>NULL</code></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

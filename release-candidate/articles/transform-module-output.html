@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Transform Module Output • teal</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Transform Module Output">
 <link rel="stylesheet" href="../consent.css">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">teal</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.2.0-rc1">v1.2.0-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.1.0">v1.1.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0">v1.0.0</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/teal/v1.0.0-rc1">v1.0.0-rc1</a>
@@ -130,7 +131,7 @@
 CoreDev</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.0.0-rc1/vignettes/transform-module-output.Rmd" class="external-link"><code>vignettes/transform-module-output.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/teal/blob/v1.2.0-rc1/vignettes/transform-module-output.Rmd" class="external-link"><code>vignettes/transform-module-output.Rmd</code></a></small>
       <div class="d-none name"><code>transform-module-output.Rmd</code></div>
     </div>
 
@@ -713,35 +714,22 @@ combination of <code>my_title = input$x_axis_title</code> and
 <div class="section level3">
 <h3 id="multiple-transformations">Multiple Transformations<a class="anchor" aria-label="anchor" href="#multiple-transformations"></a>
 </h3>
-<p>Consider these constructs to accommodate an arbitrary number of
-transformators in your module. Note that with this method all
-decorations will be applied to one output.</p>
+<p>Multiple decorators can be passed to
+<code><a href="../reference/module_transform_data.html">srv_transform_teal_data()</a></code>/<code><a href="../reference/module_transform_data.html">ui_transform_teal_data()</a></code>.
+They will be executed in sequence, errors and warnings will show up on
+the appropriate decorator. Remember that they should receive a list of
+<code>teal_transform_module</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># in the module UI function</span></span>
-<span><span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>  id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="st">"deorator_container"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">decorators</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">decorator_name</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/builder.html" class="external-link">div</a></span><span class="op">(</span></span>
-<span>      id <span class="op">=</span> <span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"decorate_"</span>, <span class="va">decorator_name</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="../reference/module_transform_data.html">ui_transform_teal_data</a></span><span class="op">(</span></span>
-<span>        <span class="fu">ns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"decorate_"</span>, <span class="va">decorator_name</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>        transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">[[</span><span class="va">decorator_name</span><span class="op">]</span><span class="op">]</span></span>
-<span>      <span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu">ui_transform_module</span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"decorate"</span><span class="op">)</span>, <span class="va">decorators</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># in the module server function</span></span>
-<span><span class="va">output_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html">teal_data</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">decorations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">decorators</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">decorator_name</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"decorate_"</span>, <span class="va">decorator_name</span><span class="op">)</span>,</span>
-<span>      data <span class="op">=</span> <span class="va">data</span>,</span>
-<span>      transformators <span class="op">=</span> <span class="va">decorators</span><span class="op">[[</span><span class="va">decorator_name</span><span class="op">]</span><span class="op">]</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="va">output_data_decorated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">f</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">f</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, <span class="va">decorations</span>, init <span class="op">=</span> <span class="va">output_data</span>, right <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/module_transform_data.html">srv_transform_teal_data</a></span><span class="op">(</span></span>
+<span>  <span class="st">"decorate"</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  transformators <span class="op">=</span> <span class="va">decorators</span>,</span>
+<span>  expr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span> <span class="co"># Often we want to display the output of the decorator at the end</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
