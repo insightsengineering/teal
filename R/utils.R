@@ -26,17 +26,13 @@ get_client_timezone <- function(ns) {
 #' Set the default bslib theme for teal apps
 #' @noRd
 #' @keywords internal
-.default_teal_bslib_theming <- bslib::bs_theme(`font-size-base` = "0.875rem")
+.default_teal_bslib_theming <- function() bslib::bs_theme(`font-size-base` = "0.875rem")
 
 #' Resolve the expected bootstrap theme
 #' @noRd
 #' @keywords internal
 get_teal_bs_theme <- function() {
-  bs_theme <- getOption("teal.bs_theme")
-
-  if (is.null(bs_theme)) {
-    bs_theme <- .default_teal_bslib_theming
-  }
+  bs_theme <- getOption("teal.bs_theme", default = .default_teal_bslib_theming())
 
   if (!checkmate::test_class(bs_theme, "bs_theme")) {
     warning(
@@ -44,7 +40,7 @@ get_teal_bs_theme <- function() {
       checkmate::check_class(bs_theme, "bs_theme"),
       ". The default bslib Bootstrap theme will be used."
     )
-    bs_theme <- .default_teal_bslib_theming
+    bs_theme <- .default_teal_bslib_theming()
   }
 
   bs_theme
