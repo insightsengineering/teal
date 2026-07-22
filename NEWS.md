@@ -7,6 +7,10 @@
 * Exported new utility functions to support module decorators: `srv_transform_teal_data()`, `ui_transform_teal_data()` and `check_decorators()` (#1697).
 * Added `teal.snapshot_manager.enable` option (default: `TRUE`) to control whether the Snapshot Manager panel is rendered. Setting it to `FALSE` hides the panel and skips its server logic.
 
+### Bug fixes
+
+* Fixed reporter not resetting after the shiny session ends, which resulted in report cards being persistent across the same application (#XXX).
+
 ### Miscellaneous
 
 * Update maintainer.
