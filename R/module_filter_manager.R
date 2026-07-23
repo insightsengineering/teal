@@ -268,8 +268,8 @@ methods::setOldClass("reactivevalues")
           })
           attr(slices, "mapping") <- new_mapping
         }
-        .self$all_slices <<- shiny::reactiveVal(slices)
-        .self$module_slices_api <<- shiny::reactiveValues()
+        .self$all_slices <<- shiny::withReactiveDomain(NULL, shiny::reactiveVal(slices))
+        .self$module_slices_api <<- shiny::withReactiveDomain(NULL, shiny::reactiveValues())
         .self$slices_append(slices)
         .self$slices_active(attr(slices, "mapping"))
         invisible(.self)

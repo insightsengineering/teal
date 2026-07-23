@@ -39,7 +39,7 @@ Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
     teal.data (>= 0.8.0),
-    teal.slice (>= 0.7.0)
+    teal.slice (>= 0.8.1)
 Imports:
     bsicons,
     bslib (>= 0.8.0),
@@ -74,6 +74,9 @@ Suggests:
     testthat (>= 3.2.0),
     withr (>= 2.1.0),
     yaml (>= 1.1.0)
+Remotes:
+    insightsengineering/teal.slice@shiny_round_2,
+    insightsengineering/teal.reporter@682_fix_shiny
 VignetteBuilder:
     knitr,
     rmarkdown
