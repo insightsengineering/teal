@@ -9,7 +9,7 @@
 
 ### Bug fixes
 
-* Fixed reporter not resetting after the shiny session ends, which resulted in report cards being persistent across the same application (#XXX).
+* Fixed reporter not resetting after the shiny session ends, which resulted in report cards being persistent across the same application (#1723).
 
 ### Miscellaneous
 
