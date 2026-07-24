@@ -126,6 +126,12 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
   moduleServer(id, function(input, output, session) {
     logger::log_debug("srv_teal initializing.")
 
+    onSessionEnded(function() {
+      if (!is.null(reporter)) {
+        shiny::isolate(reporter$reset())
+      }
+    })
+
     if (getOption("teal.show_js_log", default = FALSE)) {
       shinyjs::showLog()
     }
