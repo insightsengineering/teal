@@ -1,8 +1,6 @@
 # Changelog
 
-## teal 1.2.0
-
-CRAN release: 2026-06-30
+## teal 1.2.0.9001
 
 #### Enhancements
 
@@ -23,6 +21,12 @@ CRAN release: 2026-06-30
 - Added `teal.snapshot_manager.enable` option (default: `TRUE`) to
   control whether the Snapshot Manager panel is rendered. Setting it to
   `FALSE` hides the panel and skips its server logic.
+
+#### Bug fixes
+
+- Fixed reporter not resetting after the shiny session ends, which
+  resulted in report cards being persistent across the same application
+  ([\#1723](https://github.com/insightsengineering/teal/issues/1723)).
 
 #### Miscellaneous
 
