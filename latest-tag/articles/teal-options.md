@@ -87,7 +87,7 @@ Default: 5.
 #### `teal.basic_table_args` (`basic_table_args` object)
 
 This specifies the list of arguments passed to every call to
-[`rtables::basic_table`](https://insightsengineering.github.io/rtables/latest-tag/reference/basic_table.html)
+[`rtables::basic_table`](https://rdrr.io/pkg/rtables/man/basic_table.html)
 made in a `teal` application. This can be used to format `rtables`
 without making any changes to the application code. See the
 documentation of
