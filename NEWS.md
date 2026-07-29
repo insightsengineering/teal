@@ -1,4 +1,11 @@
-# teal 1.2.0.9001
+# teal 1.2.1
+
+### Bug fixes
+
+* Fixed reporter not resetting after the shiny session ends, which resulted in report cards being persistent across the same application (#1723).
+* Fixed teal apps failing to render when installed as a prebuilt binary due to build-time `bslib` scss paths frozen in the default `bs_theme` object. The default theme is now built lazily at runtime (#1722).
+
+# teal 1.2.0
 
 ### Enhancements
 
@@ -6,10 +13,6 @@
 * Added opt-in URL-based module navigation, controlled by `options(teal.enable_deep_linking = TRUE)` (default: `FALSE`). When enabled, the active module is reflected in the URL as `?active_module=<module path>`, and navigating to such a URL or using the browser's back/forward buttons switches to the corresponding tab (#1699).
 * Exported new utility functions to support module decorators: `srv_transform_teal_data()`, `ui_transform_teal_data()` and `check_decorators()` (#1697).
 * Added `teal.snapshot_manager.enable` option (default: `TRUE`) to control whether the Snapshot Manager panel is rendered. Setting it to `FALSE` hides the panel and skips its server logic.
-
-### Bug fixes
-
-* Fixed reporter not resetting after the shiny session ends, which resulted in report cards being persistent across the same application (#1723).
 
 ### Miscellaneous
 
