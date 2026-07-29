@@ -1,0 +1,33 @@
+# Module Encapsulation
+
+## Introduction
+
+The `teal` framework leverages the [`shiny` module
+concept](https://rstudio.github.io/shiny/reference/moduleServer.html) to
+enable encapsulation of analytical actions in `teal` modules, while
+maintaining seamless communication between the modules and the
+application.
+
+## Benefits
+
+By implementing the modular app technique from the `shiny` module into
+the creation of the `teal` module, several benefits are realized:
+
+1.  Streamlined maintenance The development of the `teal` module becomes
+    more manageable, as it can function independently from the `teal`
+    framework. This separation allows developers to maintain the module
+    with ease. This approach has been successfully applied in `R`
+    packages dedicated to `teal` module development, such as
+    `teal.modules.general` and `teal.modules.clinical`.
+
+2.  Enhanced focus on output `teal` module developers can concentrate
+    solely on refining parameters or encoding, and output aspects (such
+    as data summarization and visualization) without the need to concern
+    themselves with the intricacies of the `teal` framework. When
+    developed correctly, the module seamlessly integrates with `teal`.
+
+3.  Facilitated collaboration `teal` module development becomes an
+    accessible entry point for developers interested in collaborating.
+    This approach encourages user collaboration for the improvement of
+    `teal` modules, as developers gain a deeper understanding of the
+    mechanics of the `teal` framework.

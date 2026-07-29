@@ -1,0 +1,11 @@
+Cookie files are used to analyze website traffic by Google Analytics service.
+
+Information about your browsing and use of the website is transmitted and will be analyzed anonymously to improve services. The data will be transmitted to the United States and are subject to the Google privacy policy (https://policies.google.com/privacy?hl=en-US).
+
+List of cookies:
+
+- "_ga": Used to distinguish users (expires after 2 years)
+- "_gid": Used to distinguish users (expires after 24 hours)
+- "_gat": Used to limit request rate (expires after 1 minute)
+
+Your consent is kept for 15 days. You can reset your consent by deleting the nest-documentation cookie from your browser data.
