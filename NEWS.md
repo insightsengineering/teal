@@ -3,7 +3,7 @@
 ### Bug fixes
 
 * Fixed reporter not resetting after the shiny session ends, which resulted in report cards being persistent across the same application (#1723).
-* Fixed teal apps failing to render when installed as a prebuilt binary due to build-time `bslib` scss paths frozen in the default `bs_theme` object. The default theme is now built lazily at runtime (#1722).
+* Fixed teal apps failing to render when installed as a pre-built binary due to build-time `bslib` scss paths frozen in the default `bs_theme` object. The default theme is now built lazily at runtime (#1722).
 
 # teal 1.2.0
 
