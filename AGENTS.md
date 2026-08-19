@@ -219,7 +219,14 @@ srv_example_module <- function(id, data, var_x, var_y) {
   })
 }
 
-tm_example_module <- function(label, var_x, var_y) {
+tm_example_module <- function(
+  label = "Example Module",
+  var_x = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 1L)),
+  var_y = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 2L))
+) {
+  checkmate::assert_string(label)
+  checkmate::assert_class(var_x, "picks")
+  checkmate::assert_class(var_y, "picks")
   args <- list(var_x = var_x, var_y = var_y)
   teal::module(
     label = label,
