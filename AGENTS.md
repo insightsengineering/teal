@@ -53,8 +53,7 @@ package_name/
 ├── README.md              # Package overview
 ├── _pkgdown.yml          # Documentation website config
 ├── .lintr                # Linting configuration
-├── .Rbuildignore         # Build exclusions
-└── staged_dependencies.yaml # Dependency management
+└── .Rbuildignore         # Build exclusions
 ```
 
 ### Naming Conventions
