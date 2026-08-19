@@ -7,13 +7,14 @@ The teal framework uses shiny to create reproducible environments for analysts. 
 ### Core Packages
 
 - **teal** - The main framework package providing the application structure
-- **teal.data** - Data management and validation
-- **teal.slice** - Data filtering capabilities
-- **teal.code** - Code generation and evaluation
+- **teal.code** - Bare code generation and evaluation ensuring reproducibility
+- **teal.data** - Data management and relationships between datasets
+- **teal.reporter** - Report generation functionality
+- **teal.slice** - Data filtering capabilities for application
 - **teal.widgets** - Reusable UI components
 - **teal.logger** - Standardized logging across the framework
-- **teal.reporter** - Report generation functionality
-- **teal.transform** - Data transformation utilities
+- **teal.picks** - Data selection and merging utilities using `teal.data` objects
+- **teal.transform** - Data transformation utilities (deprecated)
 
 ### Module Packages
 
@@ -28,6 +29,7 @@ The teal framework uses shiny to create reproducible environments for analysts. 
 - **tern** - Statistical analysis functions
 - **rtables** - Table creation and formatting
 - **formatters** - Output formatting utilities
+- **gtsummary** - Table creation and formatting
 
 **Key Principle**: Balance dependency value with features. Minimize dependencies to packages not already in use within the ecosystem.
 
@@ -129,64 +131,98 @@ Teal modules follow a specific pattern with UI and server components:
 
 ```r
 # UI Function
-ui_example_module <- function(id) {
-  ns <- NS(id)
-  
-  tagList(
+ui_example_module <- function(id, var_x, var_y) {
+  ns <- shiny::NS(id)
+
+  shiny::tagList(
     # Input controls
-    teal.widgets::panel_group(
-      teal.widgets::panel_item(
-        title = "Input Selection",
-        selectInput(
-          inputId = ns("variable"),
-          label = "Select Variable",
-          choices = NULL
+    teal.widgets::standard_layout(
+      # Output displays
+      output = teal.widgets::white_small_well(
+        shiny::tags$h4("Results"),
+        shiny::plotOutput(ns("plot")),
+        shiny::tags$h4("Summary data"),
+        gt::gt_output(ns("table"))
+      ),
+      # Encoding panel
+      encoding = shiny::tags$div(
+        shiny::tags$label("Encodings", class = "text-primary"),
+        shiny::tags$br(),
+        shiny::tags$div(
+          shiny::tags$strong("Select X-Axis Variable"),
+          teal.picks::picks_ui(ns("var_x"), var_x)
+        ),
+        shiny::tags$div(
+          shiny::tags$strong("Select Y-Axis Variable"),
+          teal.picks::picks_ui(ns("var_y"), var_y)
         )
       )
-    ),
-    
-    # Output displays
-    teal.widgets::white_small_well(
-      tags$h4("Results"),
-      plotOutput(ns("plot"))
     )
   )
 }
 
 # Server Function
-srv_example_module <- function(id, data, reporter, filter_panel_api) {
+srv_example_module <- function(id, data, var_x, var_y) {
   checkmate::assert_string(id)
   checkmate::assert_class(data, "reactive")
-  checkmate::assert_class(filter_panel_api, "FilterPanelAPI")
-  
-  moduleServer(id, function(input, output, session) {
+
+  shiny::moduleServer(id, function(input, output, session) {
+    selectors <- teal.picks::picks_srv("picks", picks = list(var_x = var_x, var_y = var_y), data = data)
+    merged <- teal.picks::merge_srv(
+      "merge_picks",
+      data = data,
+      selectors = selectors,
+      output_name = "anl",
+      join_fun = "dplyr::inner_join"
+    )
     # Data preparation
-    prepared_data <- reactive({
-      teal.code::eval_code(
-        data(),
-        code = "processed_data <- raw_data"
+    validated_q <- shiny::reactive({
+      shiny::validate(
+        shiny::need(length(selectors$var_x()$variables$selected) > 0, "X-Axis Variable must be selected"),
+        shiny::need(length(selectors$var_y()$variables$selected) > 0, "Y-Axis Variable must be selected")
       )
+      q <- merged$data()
+      teal.reporter::teal_card(q) <- c(teal.reporter::teal_card(q), "## Module's output")
+      q
     })
-    
-    # Output rendering
-    output$plot <- renderPlot({
-      # Use ggplot2 for visualizations
-      ggplot2::ggplot(prepared_data()[["processed_data"]]) +
-        ggplot2::geom_point(ggplot2::aes(x = x, y = y))
+
+    # Generate plot inside qenv
+    qenv <- reactive({
+      within(validated_q(), {
+        plot <- ggplot2::ggplot(anl) +
+          ggplot2::geom_point(ggplot2::aes(x = env_var_x, y = env_var_y))
+        plot
+
+        table <- gtsummary::tbl_summary(anl, by = env_var_x, missing = "no")
+        table
+      }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
     })
-    
-    # Return reactive for chaining if needed
-    return(prepared_data)
+    # Output rendering: use ggplot2 for visualizations
+    output$plot <- shiny::renderPlot(qenv()[["plot"]])
+    output$table <- gt::render_gt(expr = gtsummary::as_gt(qenv()[["table"]]))
+     # Return reactive
+    qenv
   })
+}
+
+tm_example_module <- function(label, var_x, var_y) {
+  args <- list(var_x = var_x, var_y = var_y)
+  teal::module(
+    label = label,
+    server = srv_example_module,
+    ui = ui_example_module,
+    ui_args = args[names(args) %in% names(formals(ui_example_module))],
+    server_args = args[names(args) %in% names(formals(srv_example_module))]
+  )
 }
 ```
 
 ### Code Style for Modules
 
-- **Use tidyverse style**: Write clear, readable code using dplyr, ggplot2 patterns
+- **Use tidyverse style**: Write clear, readable code using dplyr, ggplot2 patterns and maggritr pipes
 - **Prefer ggplot2**: For all visualizations over base R plotting
-- **Use tern/rtables**: For statistical tables and summaries
-- **Error handling**: Implement proper validation using `checkmate` and `teal.widgets::validate_inputs()`
+- **Use gt and gtsummary**: For statistical tables and summaries
+- **Error handling**: Implement proper validation using `checkmate` and `shiny::validate(teal::need_input(...))`
 
 ```r
 # Good: Clear data manipulation
@@ -229,10 +265,10 @@ Follow the established patterns from `test-module_teal.R`:
 testthat::test_that("function_name works with valid inputs", {
   # Setup
   test_data <- data.frame(x = 1:10, y = rnorm(10))
-  
-  # Execution  
-  result <- my_function(test_data)
-  
+
+  # Execution
+  result <- function_name(test_data)
+
   # Verification - one expectation per test preferably
   testthat::expect_s3_class(result, "data.frame")
 })
@@ -240,7 +276,7 @@ testthat::test_that("function_name works with valid inputs", {
 testthat::test_that("function_name handles edge cases", {
   # Test empty input
   testthat::expect_error(
-    my_function(data.frame()),
+    function_name(data.frame()),
     "Input data cannot be empty"
   )
 })
@@ -248,7 +284,7 @@ testthat::test_that("function_name handles edge cases", {
 testthat::test_that("function_name validates input types", {
   # Test invalid input type
   testthat::expect_error(
-    my_function("not a data frame"),
+    function_name("not a data frame"),
     class = "checkmate_error"
   )
 })
@@ -283,13 +319,13 @@ testthat::test_that("my_module UI renders correctly", {
     data = teal_data(mtcars = mtcars),
     modules = my_module()
   )
-  
+
   driver <- TealAppDriver$new(app)
-  driver$navigate_to("My Module")
-  
+  driver$navigate_teal_tab("My Module")
+
   # Test UI elements are present
-  testthat::expect_true(driver$is_visible("#plot"))
-  
+  driver$expect_visible("#plot")
+
   driver$stop()
 })
 ```
@@ -313,7 +349,7 @@ testthat::test_that("my_module UI renders correctly", {
 
 ### Website Generation
 
-Use `_pkgdown.yml` for documentation websites:
+Use `_pkgdown.yml` for documentation websites (`nesttemplate` is optional):
 
 ```yaml
 url: https://insightsengineering.github.io/package.name
@@ -342,7 +378,7 @@ Do not change versions on your own.
 Use `r.pkg.template` workflows for consistency:
 
 - **check.yaml**: R CMD check, unit tests, coverage
-- **docs.yaml**: Documentation building and deployment  
+- **docs.yaml**: Documentation building and deployment
 - **audit.yaml**: Security and dependency auditing
 - **pkgdown.yaml**: Website generation
 
