@@ -177,8 +177,23 @@ srv_example_module <- function(id, data, var_x, var_y) {
     # Data preparation
     validated_q <- shiny::reactive({
       shiny::validate(
-        shiny::need(length(selectors$var_x()$variables$selected) > 0, "X-Axis Variable must be selected"),
-        shiny::need(length(selectors$var_y()$variables$selected) > 0, "Y-Axis Variable must be selected")
+        teal::need_input(
+          inputId = "var_x-variables-selected",
+          condition = length(selectors$var_x()$variables$selected) > 0,
+          message = "X-Axis Variable must be selected"
+        ),
+        teal::need_input(
+          inputId = "var_y-variables-selected",
+          condition = length(selectors$var_y()$variables$selected) > 0,
+          message = "Y-Axis Variable must be selected"
+        )
+      )
+      shiny::validate(
+        teal::need_input(
+          inputId = c("var_x-variables-selected", "var_y-variables-selected"),
+          condition = !any(selectors$var_x()$variables$selected %in% selectors$var_y()$variables$selected),
+          message = "X-axis variable and Y-axis variable must be different"
+        )
       )
       q <- merged$data()
       teal.reporter::teal_card(q) <- c(teal.reporter::teal_card(q), "## Module's output")
