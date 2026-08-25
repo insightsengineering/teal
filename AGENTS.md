@@ -370,7 +370,7 @@ testthat::test_that("my_module UI renders correctly", {
 
 ### Website Generation
 
-Use `_pkgdown.yml` for documentation websites (`nesttemplate` is optional):
+Use `_pkgdown.yml` for documentation websites:
 
 ```yaml
 url: https://insightsengineering.github.io/package.name
