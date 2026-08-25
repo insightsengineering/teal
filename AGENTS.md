@@ -130,14 +130,17 @@ Teal modules follow a specific pattern with UI and server components:
 
 ```r
 # UI Function
-ui_example_module <- function(id, var_x, var_y) {
+ui_example_module <- function(id, var_x, var_y, decorators) {
   ns <- shiny::NS(id)
+  select_decorators <- getFromNamespace("select_decorators", "teal") # import from teal internal functions
 
   shiny::tagList(
     # Input controls
     teal.widgets::standard_layout(
       # Output displays
       output = teal.widgets::white_small_well(
+        teal::ui_transform_teal_data("decorator_table", select_decorators(decorators, "plot")),
+        teal::ui_transform_teal_data("decorator_table", select_decorators(decorators, "table")),
         shiny::tags$h4("Results"),
         shiny::plotOutput(ns("plot")),
         shiny::tags$h4("Summary data"),
@@ -161,10 +164,11 @@ ui_example_module <- function(id, var_x, var_y) {
 }
 
 # Server Function
-srv_example_module <- function(id, data, var_x, var_y) {
+srv_example_module <- function(id, data, var_x, var_y, decorators) {
   checkmate::assert_string(id)
   checkmate::assert_class(data, "reactive")
 
+  select_decorators <- getFromNamespace("select_decorators", "teal") # import from teal internal functions
   shiny::moduleServer(id, function(input, output, session) {
     selectors <- teal.picks::picks_srv("picks", picks = list(var_x = var_x, var_y = var_y), data = data)
     merged <- teal.picks::merge_srv(
@@ -208,6 +212,7 @@ srv_example_module <- function(id, data, var_x, var_y) {
         plot
       }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
     })
+    decorated_plot <- teal::srv_transform_teal_data("decorator_table", qenv_plot, select_decorators(decorators, "plot"))
 
     qenv_table <- reactive({
       within(validated_q(), {
@@ -215,13 +220,14 @@ srv_example_module <- function(id, data, var_x, var_y) {
         table
       }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
     })
+    decorated_table <- teal::srv_transform_teal_data("decorator_table", qenv_table, select_decorators(decorators, "table"))
 
     # Output rendering: use ggplot2 for visualizations
-    output$plot <- shiny::renderPlot(qenv_plot()[["plot"]])
-    output$table <- gt::render_gt(expr = gtsummary::as_gt(qenv_table()[["table"]]))
+    output$plot <- shiny::renderPlot(decorated_plot()[["plot"]])
+    output$table <- gt::render_gt(expr = gtsummary::as_gt(decorated_table()[["table"]]))
      # Return reactive
 
-    reactive(c(qenv_plot(), qenv_table()))
+    reactive(c(decorated_plot(), decorated_table()))
   })
 }
 
@@ -236,7 +242,7 @@ tm_example_module <- function(
   checkmate::assert_class(var_x, "picks")
   checkmate::assert_class(var_y, "picks")
   checkmate::assert_list(transformators, types = "teal_transform_module")
-  args <- list(var_x = var_x, var_y = var_y)
+  args <- list(var_x = var_x, var_y = var_y, decorators = decorators)
   teal::module(
     label = label,
     server = srv_example_module,
