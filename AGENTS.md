@@ -14,7 +14,7 @@ The teal framework uses shiny to create reproducible environments for analysts. 
 - **teal.widgets** - Reusable UI components
 - **teal.logger** - Standardized logging across the framework
 - **teal.picks** - Data selection and merging utilities using `teal.data` objects
-- **teal.transform** - Data transformation utilities (deprecated)
+- **teal.transform** - Data transformation utilities (deprecated in favor of teal.picks)
 
 ### Module Packages
 
