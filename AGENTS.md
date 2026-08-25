@@ -342,12 +342,11 @@ testthat::test_that("my_module UI renders correctly", {
   )
 
   driver <- TealAppDriver$new(app)
+  withr::defer(driver$stop())
   driver$navigate_teal_tab("My Module")
 
   # Test UI elements are present
   driver$expect_visible("#plot")
-
-  driver$stop()
 })
 ```
 
