@@ -9,6 +9,7 @@ The teal framework uses shiny to create reproducible environments for analysts. 
 - **teal** - The main framework package providing the application structure
 - **teal.code** - Bare code generation and evaluation ensuring reproducibility
 - **teal.data** - Data management and relationships between datasets
+(contains sample data for ADaM datasets and default keys to merge ADaM datasets)
 - **teal.reporter** - Report generation functionality
 - **teal.slice** - Data filtering capabilities for application
 - **teal.widgets** - Reusable UI components
