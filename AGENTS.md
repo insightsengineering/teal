@@ -124,6 +124,10 @@ checkmate::assert_string(label)
 
 ## Modules Development
 
+### Module features
+
+
+
 ### Module Architecture
 
 Teal modules follow a specific pattern with UI and server components:
@@ -209,18 +213,26 @@ srv_example_module <- function(id, data, var_x, var_y, decorators) {
       within(validated_q(), {
         plot <- ggplot2::ggplot(anl) +
           ggplot2::geom_point(ggplot2::aes(x = env_var_x, y = env_var_y))
-        plot
       }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
     })
-    decorated_plot <- teal::srv_transform_teal_data("decorator_table", qenv_plot, select_decorators(decorators, "plot"))
+    decorated_plot <- teal::srv_transform_teal_data(
+      "decorator_table",
+      qenv_plot,
+      select_decorators(decorators, "plot"),
+      expr = quote(plot)
+    )
 
     qenv_table <- reactive({
       within(validated_q(), {
         table <- gtsummary::tbl_summary(anl, by = env_var_x, missing = "no")
-        table
       }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
     })
-    decorated_table <- teal::srv_transform_teal_data("decorator_table", qenv_table, select_decorators(decorators, "table"))
+    decorated_table <- teal::srv_transform_teal_data(
+      "decorator_table",
+      qenv_table,
+      select_decorators(decorators, "table"),
+      expr = quote(table)
+    )
 
     # Output rendering: use ggplot2 for visualizations
     output$plot <- shiny::renderPlot(decorated_plot()[["plot"]])
