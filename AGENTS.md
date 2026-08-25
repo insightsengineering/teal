@@ -126,6 +126,14 @@ checkmate::assert_string(label)
 
 ### Module features
 
+Each module should produce one or more Table, Listing, or Graph (TLG):
+
+- **Reproducibility**: All code being executed to generate TLGs should be run using `teal_data` and
+`within()` / `teal.code::eval_code()`
+    - At the end of the module this object should be returned to enable Reporter and "Show R code" functionalities
+- **User Parameters**: Configurable inputs via `teal.picks::picks()` for flexible data selection
+- **Transformators**: Optional pre-processing functions that derive variables and validate data before analysis
+- **Decorators**: Optional post-processing functions that customize output presentation (titles, legends, annotations)
 
 
 ### Module Architecture
