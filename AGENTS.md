@@ -201,46 +201,57 @@ srv_example_module <- function(id, data, var_x, var_y) {
     })
 
     # Generate plot inside qenv
-    qenv <- reactive({
+    qenv_plot <- reactive({
       within(validated_q(), {
         plot <- ggplot2::ggplot(anl) +
           ggplot2::geom_point(ggplot2::aes(x = env_var_x, y = env_var_y))
         plot
+      }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
+    })
 
+    qenv_table <- reactive({
+      within(validated_q(), {
         table <- gtsummary::tbl_summary(anl, by = env_var_x, missing = "no")
         table
       }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
     })
+
     # Output rendering: use ggplot2 for visualizations
-    output$plot <- shiny::renderPlot(qenv()[["plot"]])
-    output$table <- gt::render_gt(expr = gtsummary::as_gt(qenv()[["table"]]))
+    output$plot <- shiny::renderPlot(qenv_plot()[["plot"]])
+    output$table <- gt::render_gt(expr = gtsummary::as_gt(qenv_table()[["table"]]))
      # Return reactive
-    qenv
+
+    reactive(c(qenv_plot(), qenv_table()))
   })
 }
 
 tm_example_module <- function(
   label = "Example Module",
   var_x = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 1L)),
-  var_y = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 2L))
+  var_y = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 2L)),
+  decorators = list(),
+  transformators = list()
 ) {
   checkmate::assert_string(label)
   checkmate::assert_class(var_x, "picks")
   checkmate::assert_class(var_y, "picks")
+  checkmate::assert_list(transformators, types = "teal_transform_module")
   args <- list(var_x = var_x, var_y = var_y)
   teal::module(
     label = label,
     server = srv_example_module,
     ui = ui_example_module,
     ui_args = args[names(args) %in% names(formals(ui_example_module))],
-    server_args = args[names(args) %in% names(formals(srv_example_module))]
+    server_args = args[names(args) %in% names(formals(srv_example_module))],
+    transformators = transformators
   )
 }
 ```
 
 ### Code Style for Modules
 
-- **Use tidyverse style**: Write clear, readable code using dplyr, ggplot2 patterns and maggritr pipes
+- **Use tidyverse style**: Write clear, readable code using dplyr, ggplot2 patterns
+- **Use maggritr pipes in reproducible execution**: For code executed for `teal_data`/`qenv` data objects with `eval_code()` and `within()`
 - **Prefer ggplot2**: For all visualizations over base R plotting
 - **Use gt and gtsummary**: For statistical tables and summaries
 - **Error handling**: Implement proper validation using `checkmate` and `shiny::validate(teal::need_input(...))`
