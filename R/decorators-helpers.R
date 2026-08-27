@@ -83,12 +83,28 @@ assert_decorators <- checkmate::makeAssertionFunction(check_decorators)
 
 #' Subset decorators based on the scope
 #'
+#' Subset a named list of decorators, keeping only those matching the requested
+#' `scope` together with any decorators registered under the `"all"` name. This is
+#' a helper for module developers to resolve the decorators applied to a specific
+#' output when a module produces several decoratable outputs.
+#'
 #' @param scope (`character(1)`) a decorator name to include.
 #' @param decorators (named `list`) a named list of decorators to subset.
 #'
 #' @return A `list` of `teal_transform_module` objects matching the given `scope` and `all`.
 #' Returns an empty list if `scope` and `all` is not found in `decorators`.
-#' @keywords internal
+#' @seealso [check_decorators()]
+#' @export
+#' @examples
+#' plot_decorator <- teal_transform_module(server = function(id, data) data)
+#' table_decorator <- teal_transform_module(server = function(id, data) data)
+#' decorators <- list(all = plot_decorator, table = table_decorator)
+#'
+#' # Decorators for the "table" output: both "all" and "table" scoped decorators.
+#' select_decorators(decorators, "table")
+#'
+#' # An unknown scope keeps only the "all" decorators.
+#' select_decorators(decorators, "plot")
 select_decorators <- function(decorators, scope) {
   checkmate::assert_string(scope, null.ok = FALSE)
   assert_decorators(decorators)

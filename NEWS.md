@@ -1,5 +1,9 @@
 # teal 1.2.1.9000
 
+### Enhancements
+
+* Exported `select_decorators()` to help module developers resolve the decorators applied to a specific output (#1733).
+
 # teal 1.2.1
 
 ### Bug fixes
