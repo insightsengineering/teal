@@ -19,7 +19,7 @@ Returns an empty list if \code{scope} and \code{all} is not found in \code{decor
 Subset a named list of decorators, keeping only those matching the requested
 \code{scope} together with any decorators registered under the \code{"all"} name. This is
 a helper for module developers to resolve the decorators applied to a specific
-output when a module produces several decoratable outputs.
+output when a module produces several decorable outputs.
 }
 \examples{
 plot_decorator <- teal_transform_module(server = function(id, data) data)
