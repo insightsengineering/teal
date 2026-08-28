@@ -69,7 +69,8 @@ within(data, expr, ...)
 
 - expr:
 
-  (`expression`) to evaluate. Must be inline code. See `within()`
+  (`expression`) to evaluate. Must be inline code. See
+  [`within()`](https://rdrr.io/r/base/with.html).
 
 - ...:
 
@@ -171,7 +172,7 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x5584a8879688>
+#> <environment: 0x55f209e66de0>
 #> 
 #> $server
 #> function(id) {
@@ -182,7 +183,7 @@ eval_code(tdm, "dataset1 <- subset(dataset1, Species == 'virginica')")
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x5584a8879928>
+#> <environment: 0x55f209e66b40>
 #> 
 #> attr(,"label")
 #> [1] "data module"
@@ -197,7 +198,7 @@ within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x5584a85787a8>
+#> <environment: 0x55f20a207ee8>
 #> 
 #> $server
 #> function(id) {
@@ -208,7 +209,7 @@ within(tdm, dataset1 <- subset(dataset1, Species == "virginica"))
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x5584a85790a0>
+#> <environment: 0x55f20a211a60>
 #> 
 #> attr(,"label")
 #> [1] "data module"
@@ -225,7 +226,7 @@ within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_
 #>       ns <- NS(id)
 #>       object$ui(ns("mutate_inner"))
 #>     }
-#> <environment: 0x5584a7b53858>
+#> <environment: 0x55f20a386c08>
 #> 
 #> $server
 #> function(id) {
@@ -236,7 +237,7 @@ within(tdm, dataset1 <- subset(dataset1, Species %in% species), species = valid_
 #>           post = "Please make sure that this module returns a 'reactive` object containing 'teal_data' class of object." # nolint: line_length_linter.
 #>         )
 #>       }
-#> <environment: 0x5584a7b53cf0>
+#> <environment: 0x55f20a386968>
 #> 
 #> attr(,"label")
 #> [1] "data module"

@@ -27,49 +27,11 @@ configuring the module to preview the report is handled by `teal`.
 Let us consider an example module, based on the example module from
 `teal`:
 
-``` r
-
-library(teal)
-library(teal.reporter)
-
-my_module <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data) {
-      checkmate::assert_class(isolate(data()), "teal_data")
-
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(names(data())))
-        output$dataset <- renderPrint({
-          req(input$dataname)
-          data()[[input$dataname]]
-        })
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`teal.reporter`](https://github.com/insightsengineering/teal.reporter)`)`` `` ``my_module`` ``<-`` ``function``(``label`` ``=`` ``"example teal module"``)`` ``{`` `` `[`module`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``label``,`` `` server ``=`` ``function``(``id``, ``data``)`` ``{`` `` ``checkmate``::`[`assert_class`](https://mllg.github.io/checkmate/reference/checkClass.html)`(`[`isolate`](https://rdrr.io/pkg/shiny/man/isolate.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``)``, ``"teal_data"``)`` `` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` `[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(``session``, ``"dataname"``, choices ``=`` `[`isolate`](https://rdrr.io/pkg/shiny/man/isolate.html)`(`[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``)``)``)`` `` ``output``$``dataset`` ``<-`` `[`renderPrint`](https://rdrr.io/pkg/shiny/man/renderPrint.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``input``$``dataname``)`` `` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``input``$``dataname``]``]`` `` ``}``)`` `` ``}``)`` `` ``}``,`` `` ui ``=`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` `[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`` `` `[`sidebarLayout`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`` `` `[`sidebarPanel`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``ns``(``"dataname"``)``, ``"Choose a dataset"``, choices ``=`` ``NULL``)``)``,`` `` `[`mainPanel`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`[`verbatimTextOutput`](https://rdrr.io/pkg/shiny/man/textOutput.html)`(``ns``(``"dataset"``)``)``)`` `` ``)`` `` ``}`` `` ``)`` ``}`
 
 Using `teal`, you can launch this example module with the following:
 
-``` r
-
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, MTCARS ``=`` ``mtcars``)``,`` `` modules ``=`` ``my_module``(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 ## Add support for reporting
 
@@ -78,131 +40,24 @@ if (interactive()) {
 First we need to prepare the code inside the module to be added to the
 report. See below:
 
-``` r
-
-my_module_with_card <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(names(data())))
-
-        # Prepare the report:
-        report <- reactive({
-          req(obj <- data())
-          teal_card(obj) <-
-            c(
-              teal_card("# Module with reporting"),
-              teal_card(obj),
-              teal_card("## Module's code")
-            )
-          obj
-        })
-
-        # Add to the report the code of the module
-        data_r <- reactive({
-          req(teal_data <- report(), input$dataname)
-          within(teal_data, table, table = as.name(input$dataname))
-        })
-
-        output$dataset <- renderPrint({
-          req(teal_data <- data_r())
-          teal_data[[input$dataname]]
-        })
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-```
+`my_module_with_card`` ``<-`` ``function``(``label`` ``=`` ``"example teal module"``)`` ``{`` `` `[`module`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``label``,`` `` server ``=`` ``function``(``id``, ``data``)`` ``{`` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` `[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(``session``, ``"dataname"``, choices ``=`` `[`isolate`](https://rdrr.io/pkg/shiny/man/isolate.html)`(`[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``)``)``)`` `` `` ``# Prepare the report:`` `` ``report`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``obj`` ``<-`` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``)`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``obj``)`` ``<-`` `` `[`c`](https://rdrr.io/r/base/c.html)`(`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``"# Module with reporting"``)``,`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``obj``)``,`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``"## Module's code"``)`` `` ``)`` `` ``obj`` `` ``}``)`` `` `` ``# Add to the report the code of the module`` `` ``data_r`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``teal_data`` ``<-`` ``report``(``)``, ``input``$``dataname``)`` `` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(``teal_data``, ``table``, table ``=`` `[`as.name`](https://rdrr.io/r/base/name.html)`(``input``$``dataname``)``)`` `` ``}``)`` `` `` ``output``$``dataset`` ``<-`` `[`renderPrint`](https://rdrr.io/pkg/shiny/man/renderPrint.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``teal_data`` ``<-`` ``data_r``(``)``)`` `` ``teal_data``[[``input``$``dataname``]``]`` `` ``}``)`` `` ``}``)`` `` ``}``,`` `` ui ``=`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` `[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`` `` `[`sidebarLayout`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`` `` `[`sidebarPanel`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``ns``(``"dataname"``)``, ``"Choose a dataset"``, choices ``=`` ``NULL``)``)``,`` `` `[`mainPanel`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`[`verbatimTextOutput`](https://rdrr.io/pkg/shiny/man/textOutput.html)`(``ns``(``"dataset"``)``)``)`` `` ``)`` `` ``}`` `` ``)`` ``}`
 
 With these modifications, the module is now ready to be launched with
 `teal`:
 
-``` r
-
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_card()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, MTCARS ``=`` ``mtcars``)``,`` `` modules ``=`` ``my_module_with_card``(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 The output hasn’t changed (yet). The final step is to have the server
 return the reporter object, enabling the module to be reported.
 
 ### Return the reporter object
 
-``` r
-
-my_module_with_reporting <- function(label = "example teal module") {
-  module(
-    label = label,
-    server = function(id, data) {
-      moduleServer(id, function(input, output, session) {
-        updateSelectInput(session, "dataname", choices = isolate(names(data())))
-
-        # Prepare the report:
-        report <- reactive({
-          req(obj <- data())
-          teal_card(obj) <-
-            c(
-              teal_card("# Module with reporting"),
-              teal_card(obj),
-              teal_card("## Module's code")
-            )
-          obj
-        })
-
-        # Add to the report the code of the module
-        data_r <- reactive({
-          req(rtd <- report(), input$dataname)
-          within(rtd, table, table = as.name(input$dataname))
-        })
-
-        output$dataset <- renderPrint({
-          req(dr <- data_r())
-          dr[[input$dataname]]
-        })
-
-        # the reactive teal_report is returned by the module
-        data_r
-      })
-    },
-    ui = function(id) {
-      ns <- NS(id)
-      sidebarLayout(
-        sidebarPanel(selectInput(ns("dataname"), "Choose a dataset", choices = NULL)),
-        mainPanel(verbatimTextOutput(ns("dataset")))
-      )
-    }
-  )
-}
-```
+`my_module_with_reporting`` ``<-`` ``function``(``label`` ``=`` ``"example teal module"``)`` ``{`` `` `[`module`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``label``,`` `` server ``=`` ``function``(``id``, ``data``)`` ``{`` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` `[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(``session``, ``"dataname"``, choices ``=`` `[`isolate`](https://rdrr.io/pkg/shiny/man/isolate.html)`(`[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``)``)``)`` `` `` ``# Prepare the report:`` `` ``report`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``obj`` ``<-`` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``)`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``obj``)`` ``<-`` `` `[`c`](https://rdrr.io/r/base/c.html)`(`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``"# Module with reporting"``)``,`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``obj``)``,`` `` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``"## Module's code"``)`` `` ``)`` `` ``obj`` `` ``}``)`` `` `` ``# Add to the report the code of the module`` `` ``data_r`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``rtd`` ``<-`` ``report``(``)``, ``input``$``dataname``)`` `` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(``rtd``, ``table``, table ``=`` `[`as.name`](https://rdrr.io/r/base/name.html)`(``input``$``dataname``)``)`` `` ``}``)`` `` `` ``output``$``dataset`` ``<-`` `[`renderPrint`](https://rdrr.io/pkg/shiny/man/renderPrint.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``dr`` ``<-`` ``data_r``(``)``)`` `` ``dr``[[``input``$``dataname``]``]`` `` ``}``)`` `` `` ``# the reactive teal_report is returned by the module`` `` ``data_r`` `` ``}``)`` `` ``}``,`` `` ui ``=`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` `[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`` `` `[`sidebarLayout`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`` `` `[`sidebarPanel`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``ns``(``"dataname"``)``, ``"Choose a dataset"``, choices ``=`` ``NULL``)``)``,`` `` `[`mainPanel`](https://rdrr.io/pkg/shiny/man/sidebarLayout.html)`(`[`verbatimTextOutput`](https://rdrr.io/pkg/shiny/man/textOutput.html)`(``ns``(``"dataset"``)``)``)`` `` ``)`` `` ``}`` `` ``)`` ``}`
 
 With these modifications, the module is now ready to be launched with
 `teal`:
 
-``` r
-
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_reporting()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, MTCARS ``=`` ``mtcars``)``,`` `` modules ``=`` ``my_module_with_reporting``(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 The key step is to return a reactive `teal_report` object containing
 everything. This informs `teal` that the module provides a `reporter`,
@@ -235,42 +90,14 @@ If your module supports a report but you want to disable the button that
 allows to display the module’s reproducible code (“Show R code”), use
 [`disable_src()`](https://insightsengineering.github.io/teal/reference/disable_src.md):
 
-``` r
-
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_reporting() |> disable_src()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, MTCARS ``=`` ``mtcars``)``,`` `` modules ``=`` ``my_module_with_reporting``(``)`` ``|>`` `[`disable_src`](https://insightsengineering.github.io/teal/reference/disable_src.md)`(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 You can use
 [`disable_src()`](https://insightsengineering.github.io/teal/reference/disable_src.md)
 on multiple modules at the same time and nested modules too. For example
 on:
 
-``` r
-
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = c(
-    modules(
-      label = "One nested module disabled",
-      example_module(label = "Module 1"),
-      example_module(label = "Module 2"),
-      example_module(label = "Module 3") |> disable_src()
-    ),
-    modules(
-      label = "Nested modules without source",
-      example_module(label = "Module 1"),
-      example_module(label = "Module 2")
-    ) |> disable_src()
-  )
-)
-```
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, MTCARS ``=`` ``mtcars``)``,`` `` modules ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`` `` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``"One nested module disabled"``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"Module 1"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"Module 2"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"Module 3"``)`` ``|>`` `[`disable_src`](https://insightsengineering.github.io/teal/reference/disable_src.md)`(``)`` `` ``)``,`` `` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``"Nested modules without source"``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"Module 1"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"Module 2"``)`` `` ``)`` ``|>`` `[`disable_src`](https://insightsengineering.github.io/teal/reference/disable_src.md)`(``)`` `` ``)`` ``)`
 
 ## Removing reporting
 
@@ -278,17 +105,7 @@ If a module has the reporter functionality the teal app developer can
 disable it with
 [`disable_report()`](https://insightsengineering.github.io/teal/reference/disable_report.md).
 
-``` r
-
-app <- init(
-  data = teal_data(IRIS = iris, MTCARS = mtcars),
-  modules = my_module_with_reporting() |> disable_report()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, MTCARS ``=`` ``mtcars``)``,`` `` modules ``=`` ``my_module_with_reporting``(``)`` ``|>`` `[`disable_report`](https://insightsengineering.github.io/teal/reference/disable_report.md)`(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 To remove reporting from the whole application, set `reporter = NULL` in
 [`init()`](https://insightsengineering.github.io/teal/reference/init.md).
@@ -307,23 +124,6 @@ added to the report contains the template’s default content.
 Additionally, cards can be added to the report before the application
 starts.
 
-``` r
-
-reporter <- Reporter$new()
-template_fun <- function(document) {
-  header <- teal_card("Here comes header text.")
-  logo_url <- "https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg"
-  footer <- teal_card(paste0(
-    "Here comes footer text. Report generated with teal ![logo](%s 'teal logo'){height=70}",
-    logo_url
-  ))
-  c(header, document, footer)
-}
-reporter$set_template(template_fun)
-
-card1 <- teal_card("## Header 2 text", "Regular text")
-metadata(card1, "title") <- "Welcome card"
-reporter$append_cards(card1)
-```
+`reporter`` ``<-`` `[`Reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/Reporter.html)`$``new``(``)`` ``template_fun`` ``<-`` ``function``(``document``)`` ``{`` `` ``header`` ``<-`` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``"Here comes header text."``)`` `` ``logo_url`` ``<-`` ``"https://raw.githubusercontent.com/insightsengineering/teal/refs/heads/main/man/figures/logo.svg"`` `` ``footer`` ``<-`` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(`[`paste0`](https://rdrr.io/r/base/paste.html)`(`` `` ``"Here comes footer text. Report generated with teal ![logo](%s 'teal logo'){height=70}"``,`` `` ``logo_url`` `` ``)``)`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``header``, ``document``, ``footer``)`` ``}`` ``reporter``$``set_template``(``template_fun``)`` `` ``card1`` ``<-`` `[`teal_card`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/teal_card.html)`(``"## Header 2 text"``, ``"Regular text"``)`` `[`metadata`](https://insightsengineering.github.io/teal.reporter/latest-tag/reference/metadata.html)`(``card1``, ``"title"``)`` ``<-`` ``"Welcome card"`` ``reporter``$``append_cards``(``card1``)`
 
 Once the reporter is created we can use in the teal application.

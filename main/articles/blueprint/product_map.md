@@ -1,51 +1,17 @@
 # Product Map
 
-``` mermaid
-
-%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
-flowchart RL
-teal
-subgraph features
-  direction LR
-  teal.data
-  teal.slice
-  teal.code
-  teal.logger
-  teal.widgets
-end
-subgraph modules
-  direction RL
-  teal.modules.general
-  teal.modules.clinical
-  teal.osprey
-  teal.goshawk
-  teal.modules.hermes
-end
-teal--has-->features
-features--builds-->modules
-modules--creates-->teal
-subgraph modules
-  teal.modules.general
-  teal.modules.clinical
-  teal.osprey
-  teal.goshawk
-  teal.modules.hermes
-end
-subgraph calculations
-  direction RL
-  tern
-  osprey
-  goshawk
-  hermes
-end
-tern--supports-->teal.modules.clinical
-osprey--supports-->teal.osprey
-goshawk--supports-->teal.goshawk
-hermes--supports-->teal.modules.hermes
-style teal fill:lightblue
-style features fill:lightgreen
-style modules fill:pink
-```
+%% This is a mermaid diagram, if you see this the plot failed to render.
+Sorry. flowchart RL teal subgraph features direction LR teal.data
+teal.slice teal.code teal.logger teal.widgets end subgraph modules
+direction RL teal.modules.general teal.modules.clinical teal.osprey
+teal.goshawk teal.modules.hermes end teal--has--\>features
+features--builds--\>modules modules--creates--\>teal subgraph modules
+teal.modules.general teal.modules.clinical teal.osprey teal.goshawk
+teal.modules.hermes end subgraph calculations direction RL tern osprey
+goshawk hermes end tern--supports--\>teal.modules.clinical
+osprey--supports--\>teal.osprey goshawk--supports--\>teal.goshawk
+hermes--supports--\>teal.modules.hermes style teal fill:lightblue style
+features fill:lightgreen style modules fill:pink
 
 `teal` is a modular framework that relies on a suite of related
 packages, as illustrated in the above diagram, to provide a wide range

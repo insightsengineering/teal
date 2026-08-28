@@ -15,25 +15,7 @@ filters but allows the user to add filters on any column. To start a
 `filter` argument. In the following example four filters are specified
 using the `teal_slice` function and wrapped together with `teal_slices`.
 
-``` r
-
-library(teal)
-
-app <- init(
-  data = teal_data(IRIS = iris, CARS = mtcars),
-  modules = example_module(),
-  filter = teal_slices(
-    teal_slice(dataname = "IRIS", varname = "Sepal.Length"),
-    teal_slice(dataname = "IRIS", varname = "Species", selected = "setosa"),
-    teal_slice(dataname = "CARS", varname = "mpg", selected = c(20, Inf)),
-    teal_slice(dataname = "CARS", expr = "qsec < 20", title = "1/4 mile under 20 sec", id = "qsec_20")
-  )
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, CARS ``=`` ``mtcars``)``,`` `` modules ``=`` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)``,`` `` filter ``=`` `[`teal_slices`](https://insightsengineering.github.io/teal/reference/teal_slices.md)`(`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"IRIS"``, varname ``=`` ``"Sepal.Length"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"IRIS"``, varname ``=`` ``"Species"``, selected ``=`` ``"setosa"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"CARS"``, varname ``=`` ``"mpg"``, selected ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``20``, ``Inf``)``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"CARS"``, expr ``=`` ``"qsec < 20"``, title ``=`` ``"1/4 mile under 20 sec"``, id ``=`` ``"qsec_20"``)`` `` ``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 ## Extending `teal.slice`
 
@@ -45,23 +27,7 @@ object contains the `datanames` attribute that determines which data
 sets are to be sent to that module. The filter panel will display only
 those data sets and hide the rest when this module is active.
 
-``` r
-
-library(teal)
-
-app <- init(
-  data = teal_data(IRIS = iris, CARS = mtcars),
-  modules = modules(
-    example_module(label = "all datasets"),
-    example_module(label = "IRIS only", datanames = "IRIS"),
-    example_module(label = "CARS only", datanames = "CARS"),
-    example_module(label = "no filter panel", datanames = NULL)
-  )
-)
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``, CARS ``=`` ``mtcars``)``,`` `` modules ``=`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"all datasets"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"IRIS only"``, datanames ``=`` ``"IRIS"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"CARS only"``, datanames ``=`` ``"CARS"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"no filter panel"``, datanames ``=`` ``NULL``)`` `` ``)`` ``)`` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 ### Global and module specific filter panel
 
@@ -95,39 +61,4 @@ For a detailed explanation about the filter states, see [this
 `teal.slice`
 vignette](https://insightsengineering.github.io/teal.slice/latest-tag/articles/filter-panel-for-developers.html).
 
-``` r
-
-library(teal)
-
-app <- init(
-  data = teal_data(mtcars = mtcars),
-  modules = modules(
-    example_module(label = "module 1"),
-    example_module(label = "module 2"),
-    example_module(label = "module 3"),
-    example_module(label = "module 4")
-  ),
-  filter = teal_slices(
-    # filters created with id
-    teal_slice(dataname = "mtcars", varname = "mpg", id = "filter 1"),
-    teal_slice(dataname = "mtcars", varname = "cyl", id = "filter 2"),
-    teal_slice(dataname = "mtcars", varname = "disp", id = "filter 3"),
-    teal_slice(dataname = "mtcars", varname = "hp", id = "filter 4"),
-    teal_slice(dataname = "mtcars", varname = "drat", id = "filter 5"),
-    teal_slice(dataname = "mtcars", varname = "wt", id = "filter 6"),
-    # module-specific filtering enabled
-    module_specific = TRUE,
-    # filters mapped to modules
-    mapping = list(
-      "module 1" = c("filter 2", "filter 4"),
-      "module 2" = "filter 3",
-      "module 3" = "filter 2",
-      global_filters = "filter 1"
-    )
-  )
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``mtcars ``=`` ``mtcars``)``,`` `` modules ``=`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"module 1"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"module 2"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"module 3"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``label ``=`` ``"module 4"``)`` `` ``)``,`` `` filter ``=`` `[`teal_slices`](https://insightsengineering.github.io/teal/reference/teal_slices.md)`(`` `` ``# filters created with id`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"mtcars"``, varname ``=`` ``"mpg"``, id ``=`` ``"filter 1"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"mtcars"``, varname ``=`` ``"cyl"``, id ``=`` ``"filter 2"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"mtcars"``, varname ``=`` ``"disp"``, id ``=`` ``"filter 3"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"mtcars"``, varname ``=`` ``"hp"``, id ``=`` ``"filter 4"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"mtcars"``, varname ``=`` ``"drat"``, id ``=`` ``"filter 5"``)``,`` `` `[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``dataname ``=`` ``"mtcars"``, varname ``=`` ``"wt"``, id ``=`` ``"filter 6"``)``,`` `` ``# module-specific filtering enabled`` `` module_specific ``=`` ``TRUE``,`` `` ``# filters mapped to modules`` `` mapping ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`` `` ``"module 1"`` ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"filter 2"``, ``"filter 4"``)``,`` `` ``"module 2"`` ``=`` ``"filter 3"``,`` `` ``"module 3"`` ``=`` ``"filter 2"``,`` `` global_filters ``=`` ``"filter 1"`` `` ``)`` `` ``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`

@@ -16,17 +16,7 @@ In this guide, we will use the simple histogram below as an example, and
 demonstrate how to convert this histogram function into a robust `teal`
 module step-by-step:
 
-``` r
-
-my_plot <- hist(
-  dataset[[vars]],
-  las = 1,
-  main = paste("Histogram of", vars),
-  xlab = vars,
-  col = "lightblue",
-  border = "black"
-)
-```
+`my_plot`` ``<-`` `[`hist`](https://rdrr.io/r/graphics/hist.html)`(`` `` ``dataset``[[``vars``]``]``,`` `` las ``=`` ``1``,`` `` main ``=`` `[`paste`](https://rdrr.io/r/base/paste.html)`(``"Histogram of"``, ``vars``)``,`` `` xlab ``=`` ``vars``,`` `` col ``=`` ``"lightblue"``,`` `` border ``=`` ``"black"`` ``)`
 
 This module will allow users to dynamically select datasets and
 variables to create histograms within a `teal` application. We will
@@ -67,29 +57,7 @@ For this module, we will use:
 
 Here’s the code for the `histogram_module_ui` function:
 
-``` r
-
-library(teal)
-
-# UI function for the custom histogram module
-histogram_module_ui <- function(id) {
-  ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::selectInput(
-      ns("dataset"),
-      "Select Dataset",
-      choices = c("iris", "mtcars")
-    ),
-    shiny::selectInput(
-      ns("variable"),
-      "Select Variable",
-      choices = c(names(iris), names(mtcars))
-    ),
-    shiny::plotOutput(ns("histogram_plot")),
-    shiny::verbatimTextOutput(ns("plot_code")) # To display the reactive plot code
-  )
-}
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``# UI function for the custom histogram module`` ``histogram_module_ui`` ``<-`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` ``shiny``::`[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`` `` ``shiny``::`[`tagList`](https://rstudio.github.io/htmltools/reference/tagList.html)`(`` `` ``shiny``::`[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(`` `` ``ns``(``"dataset"``)``,`` `` ``"Select Dataset"``,`` `` choices ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"iris"``, ``"mtcars"``)`` `` ``)``,`` `` ``shiny``::`[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(`` `` ``ns``(``"variable"``)``,`` `` ``"Select Variable"``,`` `` choices ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(`[`names`](https://rdrr.io/r/base/names.html)`(``iris``)``, `[`names`](https://rdrr.io/r/base/names.html)`(``mtcars``)``)`` `` ``)``,`` `` ``shiny``::`[`plotOutput`](https://rdrr.io/pkg/shiny/man/plotOutput.html)`(``ns``(``"histogram_plot"``)``)``,`` `` ``shiny``::`[`verbatimTextOutput`](https://rdrr.io/pkg/shiny/man/textOutput.html)`(``ns``(``"plot_code"``)``)`` ``# To display the reactive plot code`` `` ``)`` ``}`
 
 ## Setting Up the `teal` Module Server
 
@@ -113,14 +81,7 @@ panel. By including `data`, we can ensure:
 
 The correct function definition for the server function is:
 
-``` r
-
-histogram_module_server <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    # Server logic goes here
-  })
-}
-```
+`histogram_module_server`` ``<-`` ``function``(``id``, ``data``)`` ``{`` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` ``# Server logic goes here`` `` ``}``)`` ``}`
 
 If you need a refresher on the `teal_data` object, please visit the
 [teal.data package
@@ -147,10 +108,7 @@ The `teal_data` object can contain multiple datasets. To retrieve the
 names of these datasets, use the
 [`names()`](https://rdrr.io/r/base/names.html) function:
 
-``` r
-
-names(data())
-```
+[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``)`
 
 This will return a character vector of the dataset names contained in
 `teal_data`. You can then use these names to dynamically populate input
@@ -162,10 +120,7 @@ To access an individual dataset from `teal_data`, use double brackets
 (`[[ ]]`) along with the dataset name. This allows you to extract the
 specific dataset as a data frame:
 
-``` r
-
-data()[[input$dataset]]
-```
+[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``input``$``dataset``]``]`
 
 Here, `input$dataset` represents the name of the dataset selected by the
 user. This syntax is highly flexible because it dynamically references
@@ -190,63 +145,7 @@ In this updated server function, we will perform the following:
 
 Here’s the code:
 
-``` r
-
-# Server function for the custom histogram module with injected variables in within()
-histogram_module_server <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    # Update dataset choices based on available datasets in teal_data
-    shiny::observe({
-      shiny::updateSelectInput(
-        session,
-        "dataset",
-        choices = names(data())
-      )
-    })
-
-    # Update variable choices based on selected dataset, only including numeric variables
-    observeEvent(input$dataset, {
-      req(input$dataset) # Ensure dataset is selected
-      numeric_vars <- names(data()[[input$dataset]])[sapply(data()[[input$dataset]], is.numeric)]
-      shiny::updateSelectInput(session, "variable", choices = numeric_vars)
-    })
-
-    # Create a reactive `teal_data` object with the histogram plot
-    result <- reactive({
-      req(input$dataset, input$variable) # Ensure both dataset and variable are selected
-
-      # Create a new teal_data object with the histogram plot
-      new_data <- within(
-        data(),
-        {
-          my_plot <- hist(
-            input_dataset[[input_vars]],
-            las = 1,
-            main = paste("Histogram of", input_vars),
-            xlab = input_vars,
-            col = "lightblue",
-            border = "black"
-          )
-        },
-        input_dataset = as.name(input$dataset), # Replace `input_dataset` with input$dataset
-        input_vars = input$variable # Replace `input_vars` with input$variable
-      )
-      new_data
-    })
-
-    # Render the histogram from the updated teal_data object
-    output$histogram_plot <- shiny::renderPlot({
-      plot(result()[["my_plot"]]) # Access and render the plot stored in `new_data`
-    })
-
-    # Reactive expression to get the generated code for the plot
-    output$plot_code <- shiny::renderText({
-      teal.code::get_code(result()) # Retrieve and display the code for the updated `teal_data` object
-    })
-    result
-  })
-}
-```
+`# Server function for the custom histogram module with injected variables in within()`` ``histogram_module_server`` ``<-`` ``function``(``id``, ``data``)`` ``{`` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` ``# Update dataset choices based on available datasets in teal_data`` `` ``shiny``::`[`observe`](https://rdrr.io/pkg/shiny/man/observe.html)`(``{`` `` ``shiny``::`[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(`` `` ``session``,`` `` ``"dataset"``,`` `` choices ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``)`` `` ``)`` `` ``}``)`` `` `` ``# Update variable choices based on selected dataset, only including numeric variables`` `` `[`observeEvent`](https://rdrr.io/pkg/shiny/man/observeEvent.html)`(``input``$``dataset``, ``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``input``$``dataset``)`` ``# Ensure dataset is selected`` `` ``numeric_vars`` ``<-`` `[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``input``$``dataset``]``]``)``[`[`sapply`](https://rdrr.io/r/base/lapply.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``input``$``dataset``]``]``, ``is.numeric``)``]`` `` ``shiny``::`[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(``session``, ``"variable"``, choices ``=`` ``numeric_vars``)`` `` ``}``)`` `` `` ``` # Create a reactive `teal_data` object with the histogram plot ``` `` ``result`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``input``$``dataset``, ``input``$``variable``)`` ``# Ensure both dataset and variable are selected`` `` `` ``# Create a new teal_data object with the histogram plot`` `` ``new_data`` ``<-`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`` `` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``,`` `` ``{`` `` ``my_plot`` ``<-`` `[`hist`](https://rdrr.io/r/graphics/hist.html)`(`` `` ``input_dataset``[[``input_vars``]``]``,`` `` las ``=`` ``1``,`` `` main ``=`` `[`paste`](https://rdrr.io/r/base/paste.html)`(``"Histogram of"``, ``input_vars``)``,`` `` xlab ``=`` ``input_vars``,`` `` col ``=`` ``"lightblue"``,`` `` border ``=`` ``"black"`` `` ``)`` `` ``}``,`` `` input_dataset ``=`` `[`as.name`](https://rdrr.io/r/base/name.html)`(``input``$``dataset``)``, ``` # Replace `input_dataset` with input$dataset ``` `` input_vars ``=`` ``input``$``variable`` ``` # Replace `input_vars` with input$variable ``` `` ``)`` `` ``new_data`` `` ``}``)`` `` `` ``# Render the histogram from the updated teal_data object`` `` ``output``$``histogram_plot`` ``<-`` ``shiny``::`[`renderPlot`](https://rdrr.io/pkg/shiny/man/renderPlot.html)`(``{`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``result``(``)``[[``"my_plot"``]``]``)`` ``` # Access and render the plot stored in `new_data` ``` `` ``}``)`` `` `` ``# Reactive expression to get the generated code for the plot`` `` ``output``$``plot_code`` ``<-`` ``shiny``::`[`renderText`](https://rdrr.io/pkg/shiny/man/renderPrint.html)`(``{`` `` ``teal.code``::`[`get_code`](https://insightsengineering.github.io/teal.code/latest-tag/reference/get_code.html)`(``result``(``)``)`` ``` # Retrieve and display the code for the updated `teal_data` object ``` `` ``}``)`` `` ``result`` `` ``}``)`` ``}`
 
 Let’s review what we’ve done so far:
 
@@ -284,18 +183,7 @@ with `.` won’t be included (see [Hidden
 datasets](https://insightsengineering.github.io/teal/articles/including-data-in-teal-applications.html#hidden-datasets)
 section).
 
-``` r
-
-# Custom histogram module creation
-create_histogram_module <- function(label = "Histogram Module") {
-  teal::module(
-    label = label,
-    ui = histogram_module_ui,
-    server = histogram_module_server,
-    datanames = "all"
-  )
-}
-```
+`# Custom histogram module creation`` ``create_histogram_module`` ``<-`` ``function``(``label`` ``=`` ``"Histogram Module"``)`` ``{`` `` ``teal``::`[`module`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``label``,`` `` ui ``=`` ``histogram_module_ui``,`` `` server ``=`` ``histogram_module_server``,`` `` datanames ``=`` ``"all"`` `` ``)`` ``}`
 
 ## Integrating the Custom `teal` Module into a `teal` App
 
@@ -305,25 +193,7 @@ With the custom `teal` module set up, it can now be integrated into a
 from `teal` to specify the datasets and modules used in the app, then
 run the app to test the newly created module.
 
-``` r
-
-# Define datasets in `teal_data`
-data_obj <- teal_data(
-  iris = iris,
-  mtcars = mtcars
-)
-
-# Initialize the teal app
-app <- init(
-  data = data_obj,
-  modules = modules(create_histogram_module())
-)
-
-# Run the app
-if (interactive()) {
-  shiny::shinyApp(ui = app$ui, server = app$server)
-}
-```
+`` # Define datasets in `teal_data` ``` ``data_obj`` ``<-`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(`` `` iris ``=`` ``iris``,`` `` mtcars ``=`` ``mtcars`` ``)`` `` ``# Initialize the teal app`` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` ``data_obj``,`` `` modules ``=`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(``create_histogram_module``(``)``)`` ``)`` `` ``# Run the app`` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` ``shiny``::`[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``ui ``=`` ``app``$``ui``, server ``=`` ``app``$``server``)`` ``}`
 
 **Congratulations! You just created a custom teal module and used it in
 a teal app!**

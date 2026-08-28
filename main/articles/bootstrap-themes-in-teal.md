@@ -142,20 +142,7 @@ Bootstrap 5. To start, we launch the app with
 `bslib::run_with_themer(app$ui, app$server)` instead of
 [`shiny::shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html).
 
-``` r
-
-options("teal.bs_theme" = bslib::bs_theme(version = "5"))
-
-library(teal)
-
-app <- init(
-  data = teal_data(IRIS = iris), 
-  filter = teal_slices(teal_slice("IRIS", "Sepal.Length", selected = c(5, 7))),
-  modules = modules(example_module(), example_module()),
-)
-
-bslib::run_with_themer(shinyApp(app$ui, app$server))
-```
+[`options`](https://rdrr.io/r/base/options.html)`(``"teal.bs_theme"`` ``=`` ``bslib``::`[`bs_theme`](https://rstudio.github.io/bslib/reference/bs_theme.html)`(``version ``=`` ``"5"``)``)`` `` `[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``)``, `` `` filter ``=`` `[`teal_slices`](https://insightsengineering.github.io/teal/reference/teal_slices.md)`(`[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``"IRIS"``, ``"Sepal.Length"``, selected ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``5``, ``7``)``)``)``,`` `` modules ``=`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)``, `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)``)``,`` ``)`` `` ``bslib``::`[`run_with_themer`](https://rstudio.github.io/bslib/reference/run_with_themer.html)`(`[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)``)`
 
 This gives us a `Theme Customizer` similar to what is shown below.
 
@@ -178,11 +165,7 @@ selected for Minty](images/bs-theme-set.png)
 `customizer` theme. Additionally, if we look at our `R` console, we will
 see
 
-``` r
-
-####  Update your bs_theme() R code with:  #####
-bs_theme_update(theme, bootswatch = "minty")
-```
+`#### Update your bs_theme() R code with: #####`` ``bs_theme_update``(``theme``, bootswatch ``=`` ``"minty"``)`
 
 This is a helpful guide that provides code to update our theme. For
 `teal` applications we don’t actually use `bs_theme_update` and opt for
@@ -212,28 +195,7 @@ call to include our changes. Luckily, the arguments that were printed to
 the `R` console when running our app in the themer can be plugged right
 in.
 
-``` r
-
-options(
-  "teal.bs_theme" = bslib::bs_theme(
-    version = "5",
-    font_scale = 1.25,
-    bootswatch = "minty"
-  )
-)
-
-library(teal)
-
-app <- init(
-  data = teal_data(IRIS = iris),
-  filter = teal_slices(teal_slice("IRIS", "Sepal.Length", selected = c(5, 7))),
-  modules = modules(example_module(), example_module())
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+[`options`](https://rdrr.io/r/base/options.html)`(`` `` ``"teal.bs_theme"`` ``=`` ``bslib``::`[`bs_theme`](https://rstudio.github.io/bslib/reference/bs_theme.html)`(`` `` version ``=`` ``"5"``,`` `` font_scale ``=`` ``1.25``,`` `` bootswatch ``=`` ``"minty"`` `` ``)`` ``)`` `` `[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``IRIS ``=`` ``iris``)``,`` `` filter ``=`` `[`teal_slices`](https://insightsengineering.github.io/teal/reference/teal_slices.md)`(`[`teal_slice`](https://insightsengineering.github.io/teal.slice/latest-tag/reference/teal_slice.html)`(``"IRIS"``, ``"Sepal.Length"``, selected ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``5``, ``7``)``)``)``,`` `` modules ``=`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)``, `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 Now the application has our custom theme applied.
 

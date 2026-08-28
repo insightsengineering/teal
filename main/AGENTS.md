@@ -41,7 +41,7 @@ dependencies to packages not already in use within the ecosystem.
 
 Follow the standard R package structure with teal-specific conventions:
 
-``` text
+```
 package_name/
 ├── .github/workflows/     # CI/CD workflows (use r.pkg.template)
 ├── R/                     # R source code
@@ -128,16 +128,7 @@ Suggests:
 
 ### Import Best Practices
 
-``` r
-
-# In NAMESPACE, prefer specific imports over full package imports
-#' @importFrom shiny moduleServer NS tagList
-#' @importFrom checkmate assert_character assert_function
-#' @import teal.data  # Only for core teal packages
-
-# In code, use explicit namespacing for clarity when appropriate
-checkmate::assert_string(label)
-```
+`# In NAMESPACE, prefer specific imports over full package imports`` ``#' @importFrom shiny moduleServer NS tagList`` ``#' @importFrom checkmate assert_character assert_function`` ``#' @import teal.data # Only for core teal packages`` `` ``# In code, use explicit namespacing for clarity when appropriate`` ``checkmate``::`[`assert_string`](https://mllg.github.io/checkmate/reference/checkString.html)`(``label``)`
 
 ## Modules Development
 
@@ -145,60 +136,7 @@ checkmate::assert_string(label)
 
 Teal modules follow a specific pattern with UI and server components:
 
-``` r
-
-# UI Function
-ui_example_module <- function(id) {
-  ns <- NS(id)
-  
-  tagList(
-    # Input controls
-    teal.widgets::panel_group(
-      teal.widgets::panel_item(
-        title = "Input Selection",
-        selectInput(
-          inputId = ns("variable"),
-          label = "Select Variable",
-          choices = NULL
-        )
-      )
-    ),
-    
-    # Output displays
-    teal.widgets::white_small_well(
-      tags$h4("Results"),
-      plotOutput(ns("plot"))
-    )
-  )
-}
-
-# Server Function
-srv_example_module <- function(id, data, reporter, filter_panel_api) {
-  checkmate::assert_string(id)
-  checkmate::assert_class(data, "reactive")
-  checkmate::assert_class(filter_panel_api, "FilterPanelAPI")
-  
-  moduleServer(id, function(input, output, session) {
-    # Data preparation
-    prepared_data <- reactive({
-      teal.code::eval_code(
-        data(),
-        code = "processed_data <- raw_data"
-      )
-    })
-    
-    # Output rendering
-    output$plot <- renderPlot({
-      # Use ggplot2 for visualizations
-      ggplot2::ggplot(prepared_data()[["processed_data"]]) +
-        ggplot2::geom_point(ggplot2::aes(x = x, y = y))
-    })
-    
-    # Return reactive for chaining if needed
-    return(prepared_data)
-  })
-}
-```
+`# UI Function`` ``ui_example_module`` ``<-`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` ``NS``(``id``)`` `` `` `` ``tagList``(`` `` ``# Input controls`` `` ``teal.widgets``::`[`panel_group`](https://insightsengineering.github.io/teal.widgets/latest-tag/reference/panel_group.html)`(`` `` ``teal.widgets``::`[`panel_item`](https://insightsengineering.github.io/teal.widgets/latest-tag/reference/panel_item.html)`(`` `` title ``=`` ``"Input Selection"``,`` `` ``selectInput``(`` `` inputId ``=`` ``ns``(``"variable"``)``,`` `` label ``=`` ``"Select Variable"``,`` `` choices ``=`` ``NULL`` `` ``)`` `` ``)`` `` ``)``,`` `` `` `` ``# Output displays`` `` ``teal.widgets``::`[`white_small_well`](https://insightsengineering.github.io/teal.widgets/latest-tag/reference/white_small_well.html)`(`` `` ``tags``$``h4``(``"Results"``)``,`` `` ``plotOutput``(``ns``(``"plot"``)``)`` `` ``)`` `` ``)`` ``}`` `` ``# Server Function`` ``srv_example_module`` ``<-`` ``function``(``id``, ``data``, ``reporter``, ``filter_panel_api``)`` ``{`` `` ``checkmate``::`[`assert_string`](https://mllg.github.io/checkmate/reference/checkString.html)`(``id``)`` `` ``checkmate``::`[`assert_class`](https://mllg.github.io/checkmate/reference/checkClass.html)`(``data``, ``"reactive"``)`` `` ``checkmate``::`[`assert_class`](https://mllg.github.io/checkmate/reference/checkClass.html)`(``filter_panel_api``, ``"FilterPanelAPI"``)`` `` `` `` ``moduleServer``(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` ``# Data preparation`` `` ``prepared_data`` ``<-`` ``reactive``(``{`` `` ``teal.code``::`[`eval_code`](https://insightsengineering.github.io/teal.code/latest-tag/reference/eval_code.html)`(`` `` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``,`` `` code ``=`` ``"processed_data <- raw_data"`` `` ``)`` `` ``}``)`` `` `` `` ``# Output rendering`` `` ``output``$``plot`` ``<-`` ``renderPlot``(``{`` `` ``# Use ggplot2 for visualizations`` `` ``ggplot2``::`[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``prepared_data``(``)``[[``"processed_data"``]``]``)`` ``+`` `` ``ggplot2``::`[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``x``, y ``=`` ``y``)``)`` `` ``}``)`` `` `` `` ``# Return reactive for chaining if needed`` `` `[`return`](https://rdrr.io/r/base/function.html)`(``prepared_data``)`` `` ``}``)`` ``}`
 
 ### Code Style for Modules
 
@@ -209,28 +147,7 @@ srv_example_module <- function(id, data, reporter, filter_panel_api) {
 - **Error handling**: Implement proper validation using `checkmate` and
   `teal.widgets::validate_inputs()`
 
-``` r
-
-# Good: Clear data manipulation
-plot_data <- data %>%
-  dplyr::filter(!is.na(variable)) %>%
-  dplyr::group_by(category) %>%
-  dplyr::summarise(
-    mean_value = mean(value),
-    n = dplyr::n(),
-    .groups = "drop"
-  )
-
-# Good: Descriptive ggplot2 code
-ggplot2::ggplot(plot_data, ggplot2::aes(x = category, y = mean_value)) +
-  ggplot2::geom_col(fill = "steelblue") +
-  ggplot2::labs(
-    title = "Mean Values by Category",
-    x = "Category",
-    y = "Mean Value"
-  ) +
-  ggplot2::theme_minimal()
-```
+`# Good: Clear data manipulation`` ``plot_data`` ``<-`` ``data`` ``%>%`` `` ``dplyr``::`[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``!`[`is.na`](https://rdrr.io/r/base/NA.html)`(``variable``)``)`` ``%>%`` `` ``dplyr``::`[`group_by`](https://dplyr.tidyverse.org/reference/group_by.html)`(``category``)`` ``%>%`` `` ``dplyr``::`[`summarise`](https://dplyr.tidyverse.org/reference/summarise.html)`(`` `` mean_value ``=`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``value``)``,`` `` n ``=`` ``dplyr``::`[`n`](https://dplyr.tidyverse.org/reference/context.html)`(``)``,`` `` .groups ``=`` ``"drop"`` `` ``)`` `` ``# Good: Descriptive ggplot2 code`` ``ggplot2``::`[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``plot_data``, ``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``category``, y ``=`` ``mean_value``)``)`` ``+`` `` ``ggplot2``::`[`geom_col`](https://ggplot2.tidyverse.org/reference/geom_bar.html)`(``fill ``=`` ``"steelblue"``)`` ``+`` `` ``ggplot2``::`[`labs`](https://ggplot2.tidyverse.org/reference/labs.html)`(`` `` title ``=`` ``"Mean Values by Category"``,`` `` x ``=`` ``"Category"``,`` `` y ``=`` ``"Mean Value"`` `` ``)`` ``+`` `` ``ggplot2``::`[`theme_minimal`](https://ggplot2.tidyverse.org/reference/ggtheme.html)`(``)`
 
 ## Testing Framework
 
@@ -251,36 +168,7 @@ ggplot2::ggplot(plot_data, ggplot2::aes(x = category, y = mean_value)) +
 
 Follow the established patterns from `test-module_teal.R`:
 
-``` r
-
-# Test organization
-testthat::test_that("function_name works with valid inputs", {
-  # Setup
-  test_data <- data.frame(x = 1:10, y = rnorm(10))
-  
-  # Execution  
-  result <- my_function(test_data)
-  
-  # Verification - one expectation per test preferably
-  testthat::expect_s3_class(result, "data.frame")
-})
-
-testthat::test_that("function_name handles edge cases", {
-  # Test empty input
-  testthat::expect_error(
-    my_function(data.frame()),
-    "Input data cannot be empty"
-  )
-})
-
-testthat::test_that("function_name validates input types", {
-  # Test invalid input type
-  testthat::expect_error(
-    my_function("not a data frame"),
-    class = "checkmate_error"
-  )
-})
-```
+`# Test organization`` ``testthat``::`[`test_that`](https://testthat.r-lib.org/reference/test_that.html)`(``"function_name works with valid inputs"``, ``{`` `` ``# Setup`` `` ``test_data`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``x ``=`` ``1``:``10``, y ``=`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``10``)``)`` `` `` `` ``# Execution `` `` ``result`` ``<-`` ``my_function``(``test_data``)`` `` `` `` ``# Verification - one expectation per test preferably`` `` ``testthat``::`[`expect_s3_class`](https://testthat.r-lib.org/reference/inheritance-expectations.html)`(``result``, ``"data.frame"``)`` ``}``)`` `` ``testthat``::`[`test_that`](https://testthat.r-lib.org/reference/test_that.html)`(``"function_name handles edge cases"``, ``{`` `` ``# Test empty input`` `` ``testthat``::`[`expect_error`](https://testthat.r-lib.org/reference/expect_error.html)`(`` `` ``my_function``(`[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``)``)``,`` `` ``"Input data cannot be empty"`` `` ``)`` ``}``)`` `` ``testthat``::`[`test_that`](https://testthat.r-lib.org/reference/test_that.html)`(``"function_name validates input types"``, ``{`` `` ``# Test invalid input type`` `` ``testthat``::`[`expect_error`](https://testthat.r-lib.org/reference/expect_error.html)`(`` `` ``my_function``(``"not a data frame"``)``,`` `` class ``=`` ``"checkmate_error"`` `` ``)`` ``}``)`
 
 ### Shiny Module Testing
 
@@ -293,40 +181,7 @@ testthat::test_that("function_name validates input types", {
   for integration testing
 - **Reactive behavior**: Test reactive chains and side effects
 
-``` r
-
-testthat::test_that("srv_my_module processes data correctly", {
-  # Test server logic
-  shiny::testServer(
-    app = srv_my_module,
-    args = list(
-      data = reactive(test_data),
-      filter_panel_api = NULL
-    ),
-    expr = {
-      # Test reactive computations
-      result <- processed_data()
-      testthat::expect_s3_class(result, "teal_data")
-    }
-  )
-})
-
-testthat::test_that("my_module UI renders correctly", {
-  # Integration test with TealAppDriver
-  app <- init(
-    data = teal_data(mtcars = mtcars),
-    modules = my_module()
-  )
-  
-  driver <- TealAppDriver$new(app)
-  driver$navigate_to("My Module")
-  
-  # Test UI elements are present
-  testthat::expect_true(driver$is_visible("#plot"))
-  
-  driver$stop()
-})
-```
+`testthat``::`[`test_that`](https://testthat.r-lib.org/reference/test_that.html)`(``"srv_my_module processes data correctly"``, ``{`` `` ``# Test server logic`` `` ``shiny``::`[`testServer`](https://rdrr.io/pkg/shiny/man/testServer.html)`(`` `` app ``=`` ``srv_my_module``,`` `` args ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`` `` data ``=`` ``reactive``(``test_data``)``,`` `` filter_panel_api ``=`` ``NULL`` `` ``)``,`` `` expr ``=`` ``{`` `` ``# Test reactive computations`` `` ``result`` ``<-`` ``processed_data``(``)`` `` ``testthat``::`[`expect_s3_class`](https://testthat.r-lib.org/reference/inheritance-expectations.html)`(``result``, ``"teal_data"``)`` `` ``}`` `` ``)`` ``}``)`` `` ``testthat``::`[`test_that`](https://testthat.r-lib.org/reference/test_that.html)`(``"my_module UI renders correctly"``, ``{`` `` ``# Integration test with TealAppDriver`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` ``teal_data``(``mtcars ``=`` ``mtcars``)``,`` `` modules ``=`` ``my_module``(``)`` `` ``)`` `` `` `` ``driver`` ``<-`` `[`TealAppDriver`](https://insightsengineering.github.io/teal/reference/TealAppDriver.md)`$``new``(``app``)`` `` ``driver``$``navigate_to``(``"My Module"``)`` `` `` `` ``# Test UI elements are present`` `` ``testthat``::`[`expect_true`](https://testthat.r-lib.org/reference/logical-expectations.html)`(``driver``$``is_visible``(``"#plot"``)``)`` `` `` `` ``driver``$``stop``(``)`` ``}``)`
 
 ### Test Organization and Naming
 

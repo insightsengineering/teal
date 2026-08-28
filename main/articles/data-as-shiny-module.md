@@ -35,38 +35,7 @@ from scratch every time the user starts the application.
 [`?qenv`](https://insightsengineering.github.io/teal.code/latest-tag/reference/qenv.html)
 for a detailed explanation of how to use the `within` method.*
 
-``` r
-
-library(teal)
-
-data_module <- teal_data_module(
-  ui = function(id) tags$div(),
-  server = function(id) {
-    moduleServer(id, function(input, output, session) {
-      reactive({
-        data <- within(
-          teal_data(),
-          {
-            dataset1 <- iris
-            dataset2 <- mtcars
-          }
-        )
-        data
-      })
-    })
-  }
-)
-
-
-app <- init(
-  data = data_module,
-  modules = example_module()
-)
-
-if (interactive()) {
-  shinyApp(app$ui, app$server)
-}
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``data_module`` ``<-`` `[`teal_data_module`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`` `` ui ``=`` ``function``(``id``)`` ``tags``$``div``(``)``,`` `` server ``=`` ``function``(``id``)`` ``{`` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``{`` `` ``data`` ``<-`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`` `` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``)``,`` `` ``{`` `` ``dataset1`` ``<-`` ``iris`` `` ``dataset2`` ``<-`` ``mtcars`` `` ``}`` `` ``)`` `` ``data`` `` ``}``)`` `` ``}``)`` `` ``}`` ``)`` `` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` ``data_module``,`` `` modules ``=`` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`` ``}`
 
 ## Modification of data in-app
 
@@ -78,46 +47,7 @@ starts.
 The following example illustrates how `teal_data_module` can be utilized
 to subset data based on the user inputs:
 
-``` r
-
-data <- within(teal_data(), {
-  dataset1 <- iris
-  dataset2 <- mtcars
-})
-
-data_module <- teal_data_module(
-  ui = function(id) {
-    ns <- NS(id)
-    tags$div(
-      selectInput(ns("species"), "Select species to keep",
-        choices = unique(iris$Species), multiple = TRUE
-      ),
-      actionButton(ns("submit"), "Submit")
-    )
-  },
-  server = function(id) {
-    moduleServer(id, function(input, output, session) {
-      eventReactive(input$submit, {
-        data_modified <- within(
-          data,
-          dataset1 <- subset(dataset1, Species %in% selected),
-          selected = input$species
-        )
-        data_modified
-      })
-    })
-  }
-)
-
-app <- init(
-  data = data_module,
-  modules = example_module()
-)
-
-if (interactive()) {
-  shiny::shinyApp(ui = app$ui, server = app$server)
-}
-```
+`data`` ``<-`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``)``, ``{`` `` ``dataset1`` ``<-`` ``iris`` `` ``dataset2`` ``<-`` ``mtcars`` ``}``)`` `` ``data_module`` ``<-`` `[`teal_data_module`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`` `` ui ``=`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` `[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`` `` ``tags``$``div``(`` `` `[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``ns``(``"species"``)``, ``"Select species to keep"``,`` `` choices ``=`` `[`unique`](https://rdrr.io/r/base/unique.html)`(``iris``$``Species``)``, multiple ``=`` ``TRUE`` `` ``)``,`` `` `[`actionButton`](https://rdrr.io/pkg/shiny/man/actionButton.html)`(``ns``(``"submit"``)``, ``"Submit"``)`` `` ``)`` `` ``}``,`` `` server ``=`` ``function``(``id``)`` ``{`` `` `[`moduleServer`](https://rdrr.io/pkg/shiny/man/moduleServer.html)`(``id``, ``function``(``input``, ``output``, ``session``)`` ``{`` `` `[`eventReactive`](https://rdrr.io/pkg/shiny/man/observeEvent.html)`(``input``$``submit``, ``{`` `` ``data_modified`` ``<-`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`` `` ``data``,`` `` ``dataset1`` ``<-`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``dataset1``, ``Species`` `[`%in%`](https://rdrr.io/r/base/match.html)` ``selected``)``,`` `` selected ``=`` ``input``$``species`` `` ``)`` `` ``data_modified`` `` ``}``)`` `` ``}``)`` `` ``}`` ``)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` ``data_module``,`` `` modules ``=`` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` ``shiny``::`[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``ui ``=`` ``app``$``ui``, server ``=`` ``app``$``server``)`` ``}`
 
 Note that running preprocessing code in a module as opposed to the
 global environment will increase app loading times. It is recommended to
@@ -144,24 +74,4 @@ object and allows the app user to select a subset. The following example
 modifies `data_module` so that new columns are added once the data is
 retrieved.
 
-``` r
-
-data_module_2 <- within(
-  data_module,
-  {
-    # Create new column with Ratio of Sepal.Width and Petal.Width
-    dataset1$Ratio.Sepal.Petal.Width <- round(dataset1$Sepal.Width / dataset1$Petal.Width, digits = 2L)
-    # Create new column that converts Miles per Galon to Liter per 100 Km
-    dataset2$lp100km <- round(dataset2$mpg * 0.42514371, digits = 2L)
-  }
-)
-
-app <- init(
-  data = data_module_2,
-  modules = example_module()
-)
-
-if (interactive()) {
-  shiny::shinyApp(ui = app$ui, server = app$server)
-}
-```
+`data_module_2`` ``<-`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(`` `` ``data_module``,`` `` ``{`` `` ``# Create new column with Ratio of Sepal.Width and Petal.Width`` `` ``dataset1``$``Ratio.Sepal.Petal.Width`` ``<-`` `[`round`](https://rdrr.io/r/base/Round.html)`(``dataset1``$``Sepal.Width`` ``/`` ``dataset1``$``Petal.Width``, digits ``=`` ``2L``)`` `` ``# Create new column that converts Miles per Galon to Liter per 100 Km`` `` ``dataset2``$``lp100km`` ``<-`` `[`round`](https://rdrr.io/r/base/Round.html)`(``dataset2``$``mpg`` ``*`` ``0.42514371``, digits ``=`` ``2L``)`` `` ``}`` ``)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` ``data_module_2``,`` `` modules ``=`` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``)`` ``)`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` ``shiny``::`[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``ui ``=`` ``app``$``ui``, server ``=`` ``app``$``server``)`` ``}`

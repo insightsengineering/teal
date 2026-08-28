@@ -18,17 +18,11 @@ either individually or globally, using the filter panel.
 
 ## Filter flow
 
-``` mermaid
-
-%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
-sequenceDiagram
-    autonumber
-    data->teal.slice: processed by
-    teal.slice->>shiny inputs: creates
-    Note over teal.slice,shiny inputs: based on data type
-    shiny inputs->>reactive dataset: updates
-    reactive dataset->>teal modules: processed by
-```
+%% This is a mermaid diagram, if you see this the plot failed to render.
+Sorry. sequenceDiagram autonumber data-\>teal.slice: processed by
+teal.slice-\>\>shiny inputs: creates Note over teal.slice,shiny inputs:
+based on data type shiny inputs-\>\>reactive dataset: updates reactive
+dataset-\>\>teal modules: processed by
 
 The filter panel creates subsets of data. Subsetting is achieved by
 creating filter states, each of which holds a logical predicate (filter

@@ -1,6 +1,10 @@
 # Changelog
 
+## teal 1.2.1.9001
+
 ## teal 1.2.1
+
+CRAN release: 2026-07-29
 
 #### Bug fixes
 

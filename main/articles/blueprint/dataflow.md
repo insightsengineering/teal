@@ -1,18 +1,10 @@
 # Data Flow
 
-``` mermaid
-
-%% This is a mermaid diagram, if you see this the plot failed to render. Sorry.
-sequenceDiagram;
-    autonumber
-    participant data
-    participant filters
-    participant filtered data
-    participant teal module
-    data->filters: gets
-    filters->>filtered data: becomes
-    filtered data->>teal module: sent to
-```
+%% This is a mermaid diagram, if you see this the plot failed to render.
+Sorry. sequenceDiagram; autonumber participant data participant filters
+participant filtered data participant teal module data-\>filters: gets
+filters-\>\>filtered data: becomes filtered data-\>\>teal module: sent
+to
 
 The sequence diagram above illustrates the different stages that data
 goes through within the `teal` framework, supported by the `teal.slice`
