@@ -86,7 +86,7 @@ assert_decorators <- checkmate::makeAssertionFunction(check_decorators)
 #' Subset a named list of decorators, keeping only those matching the requested
 #' `scope` together with any decorators registered under the `"all"` name. This is
 #' a helper for module developers to resolve the decorators applied to a specific
-#' output when a module produces several decoratable outputs.
+#' output when a module produces several decorable outputs.
 #'
 #' @param scope (`character(1)`) a decorator name to include.
 #' @param decorators (named `list`) a named list of decorators to subset.
