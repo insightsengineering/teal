@@ -27,10 +27,10 @@ table_decorator <- teal_transform_module(server = function(id, data) data)
 decorators <- list(all = plot_decorator, table = table_decorator)
 
 # Decorators for the "table" output: both "all" and "table" scoped decorators.
-select_decorators(decorators, "table")
+str(select_decorators(decorators, "table"))
 
 # An unknown scope keeps only the "all" decorators.
-select_decorators(decorators, "plot")
+str(select_decorators(decorators, "plot"))
 }
 \seealso{
 \code{\link[=check_decorators]{check_decorators()}}
