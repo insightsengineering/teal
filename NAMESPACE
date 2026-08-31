@@ -58,10 +58,14 @@ export(validate_one_row_per_id)
 import(shiny)
 import(teal.data)
 import(teal.slice)
-importFrom(methods,as)
-importFrom(methods,new)
-importFrom(methods,setMethod)
-importFrom(shiny,reactiveVal)
-importFrom(shiny,reactiveValues)
+importFrom(methods,
+  as,
+  new,
+  setMethod
+)
+importFrom(shiny,
+  reactiveVal,
+  reactiveValues
+)
 importFrom(stats,setNames)
 importMethodsFrom(teal.code,eval_code)
