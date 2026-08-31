@@ -12,6 +12,7 @@ UX
 args
 bookmarkable
 css
+decorable
 favicon
 favicons
 funder
@@ -32,4 +33,3 @@ toc
 transformator
 transformators
 ui
-decorable
