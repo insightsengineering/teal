@@ -65,7 +65,7 @@ reveals it:
 The necessary code can be supplied to the `code` argument of the to the
 `eval_code` function .
 
-`data_populated_4`` ``<-`` `[`eval_code`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(``data_empty``, code ``=`` ``"D5 <- diag(5)"``)`` ``data_populated_4`` ``#> ✅︎ code verified`` ``#> ``<environment: 0x55fdeff060e8>`` 🔒 `` ``#> Parent: <environment: package:teal> `` ``#> ``Bindings:`` ``#> ``- D5: [matrix]`
+`data_populated_4`` ``<-`` `[`eval_code`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(``data_empty``, code ``=`` ``"D5 <- diag(5)"``)`` ``data_populated_4`` ``#> ✅︎ code verified`` ``#> ``<environment: 0x55a99c884f80>`` 🔒 `` ``#> Parent: <environment: package:teal> `` ``#> ``Bindings:`` ``#> ``- D5: [matrix]`
 
 As you can see above the output shows that is a verified object. On an
 application we don’t see that message but the reproducible code will be
@@ -165,7 +165,7 @@ verified by default. Those created with data objects alone or with data
 objects and code are not verified by default, but can become verified by
 running the `verify` function.
 
-`data_with_objects_and_code`` ``<-`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``iris ``=`` ``iris``, cars ``=`` ``mtcars``, code ``=`` `[`expression`](https://rdrr.io/r/base/expression.html)`(``iris`` ``<-`` ``iris``, ``cars`` ``<-`` ``mtcars``)``)`` ``data_with_objects_and_code`` ``#> ✖ code unverified`` ``#> ``<environment: 0x55fdee408db0>`` 🔒 `` ``#> Parent: <environment: package:teal> `` ``#> ``Bindings:`` ``#> ``- cars: [data.frame]`` ``#> - iris: [data.frame]`` `` ``data_with_objects_and_code_ver`` ``<-`` `[`verify`](https://insightsengineering.github.io/teal.data/latest-tag/reference/verify.html)`(``data_with_objects_and_code``)`` ``data_with_objects_and_code_ver`` ``#> ✅︎ code verified`` ``#> ``<environment: 0x55fdee408db0>`` 🔒 `` ``#> Parent: <environment: package:teal> `` ``#> ``Bindings:`` ``#> ``- cars: [data.frame]`` ``#> - iris: [data.frame]`
+`data_with_objects_and_code`` ``<-`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``iris ``=`` ``iris``, cars ``=`` ``mtcars``, code ``=`` `[`expression`](https://rdrr.io/r/base/expression.html)`(``iris`` ``<-`` ``iris``, ``cars`` ``<-`` ``mtcars``)``)`` ``data_with_objects_and_code`` ``#> ✖ code unverified`` ``#> ``<environment: 0x55a99ada56e8>`` 🔒 `` ``#> Parent: <environment: package:teal> `` ``#> ``Bindings:`` ``#> ``- cars: [data.frame]`` ``#> - iris: [data.frame]`` `` ``data_with_objects_and_code_ver`` ``<-`` `[`verify`](https://insightsengineering.github.io/teal.data/latest-tag/reference/verify.html)`(``data_with_objects_and_code``)`` ``data_with_objects_and_code_ver`` ``#> ✅︎ code verified`` ``#> ``<environment: 0x55a99ada56e8>`` 🔒 `` ``#> Parent: <environment: package:teal> `` ``#> ``Bindings:`` ``#> ``- cars: [data.frame]`` ``#> - iris: [data.frame]`
 
 For a detailed explanation of verification, see [this `teal.data`
 vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).

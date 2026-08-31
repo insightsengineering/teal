@@ -50,7 +50,7 @@ Source:
 Unardi D, Kaledkowski D, Rucki P, Chlebowski A, Verissimo A, Kirar K,
 Viyash V, Kosinski M, Waddell A, Burkoff N, Hallal M, Nasinski M, Pagacz
 K, Zhao J, Lewandowski T (2026). *teal: Exploratory Web Apps for
-Analyzing Clinical Trials Data*. R package version 1.2.1.9001,
+Analyzing Clinical Trials Data*. R package version 1.2.1.9002,
 <https://insightsengineering.github.io/teal/>.
 
 @Manual{, title = {teal: Exploratory Web Apps for Analyzing Clinical
@@ -59,5 +59,5 @@ Rucki and Aleksander Chlebowski and Andre Verissimo and Kartikeya Kirar
 and Vedha Viyash and Marcin Kosinski and Adrian Waddell and Nikolas
 Burkoff and Mahmoud Hallal and Maciej Nasinski and Konrad Pagacz and
 Junlue Zhao and Tadeusz Lewandowski}, year = {2026}, note = {R package
-version 1.2.1.9001}, url =
+version 1.2.1.9002}, url =
 {https://insightsengineering.github.io/teal/}, }

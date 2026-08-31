@@ -1,6 +1,14 @@
 # Changelog
 
-## teal 1.2.1.9001
+## teal 1.2.1.9002
+
+#### Enhancements
+
+- Exported
+  [`select_decorators()`](https://insightsengineering.github.io/teal/reference/select_decorators.md)
+  to help module developers resolve the decorators applied to a specific
+  output
+  ([\#1733](https://github.com/insightsengineering/teal/issues/1733)).
 
 ## teal 1.2.1
 

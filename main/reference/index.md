@@ -84,6 +84,8 @@ Helper functions for `teal`
   : Check decorators list
 - [`build_app_title()`](https://insightsengineering.github.io/teal/reference/build_app_title.md)
   : Build app title with favicon
+- [`select_decorators()`](https://insightsengineering.github.io/teal/reference/select_decorators.md)
+  : Subset decorators based on the scope
 
 ## Example module
 
