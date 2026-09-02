@@ -149,7 +149,7 @@ testthat::describe("assert_decorators", {
   })
 })
 
-# Test internal function reused on other packages teal.modules.general, teal.modules.clinical, ...
+# Exported helper reused on other packages teal.modules.general, teal.modules.clinical, ...
 testthat::describe("select_decorators", {
   it("returns only 'all' decorators when the scope is 'all'", {
     decorators <- list(all = teal_transform_module(), plot = teal_transform_module())
