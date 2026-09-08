@@ -11,6 +11,5 @@
 
 #' @import shiny teal.data teal.slice
 #' @importFrom stats setNames
-#' @rawNamespace if (getRversion() < "4.4.0") importFrom(rlang, "%||%")
 #' @export
 NULL
