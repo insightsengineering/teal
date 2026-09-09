@@ -119,4 +119,4 @@ body:
       description: Any decision tree(s) that would aid release management
       placeholder: Any decision tree(s) that would aid release management.
       value: |
-        Click [here](https://github.com/pharmaverse/.github/blob/main/.github/ISSUE_TEMPLATE/RELEASE_DECISION_TREE.md) to see the release decision tree.
+        Click [here](https://github.com/insightsengineering/.github/blob/main/.github/ISSUE_TEMPLATE/RELEASE_DECISION_TREE.md) to see the release decision tree.

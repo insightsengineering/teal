@@ -37,9 +37,9 @@
   - `MultiAssayExperiment` objects which are `R` data structures for representing and analyzing multi-omics experiments
 - `teal` modules:
   - `teal modules` are `shiny` modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
-    - [`teal.modules.general`](https://pharmaverse.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/CDISC data
-    - [`teal.modules.clinical`](https://pharmaverse.github.io/teal.modules.clinical/latest-tag/): modules specific to CDISC data and clinical trial reporting
-    - [`teal.modules.hermes`](https://pharmaverse.github.io/teal.modules.hermes/latest-tag/): modules for analyzing `MultiAssayExperiment` objects
+    - [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/CDISC data
+    - [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/latest-tag/): modules specific to CDISC data and clinical trial reporting
+    - [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/): modules for analyzing `MultiAssayExperiment` objects
 
 <!-- markdownlint-enable MD007 MD030 -->
 
@@ -113,7 +113,7 @@ shinyApp(app$ui, app$server)
 
 ![App recording](man/figures/readme_app.gif)
 
-Please see [`teal.gallery`](https://pharmaverse.github.io/teal.gallery/) and [TLG Catalog](https://pharmaverse.github.io/tlg-catalog/) to see examples of `teal` apps.
+Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to see examples of `teal` apps.
 
 Please start with the ["Technical Blueprint" article](https://pharmaverse.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://pharmaverse.github.io/teal/latest-tag/articles/getting-started-with-teal.html), and then other [package vignettes](https://pharmaverse.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
 
