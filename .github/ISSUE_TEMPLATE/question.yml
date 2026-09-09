@@ -13,7 +13,7 @@ body:
     id: code-of-conduct
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct.](https://insightsengineering.github.io/teal/latest-tag/CODE_OF_CONDUCT.html)
+      description: By submitting this issue, you agree to follow our [Code of Conduct.](https://pharmaverse.github.io/teal/latest-tag/CODE_OF_CONDUCT.html)
       options:
         - label: I agree to follow this project's Code of Conduct.
           required: true
@@ -21,7 +21,7 @@ body:
     id: contributor-guidelines
     attributes:
       label: Contribution Guidelines
-      description: By submitting this issue, you agree to follow our [Contribution Guidelines.](https://insightsengineering.github.io/teal/latest-tag/CONTRIBUTING.html)
+      description: By submitting this issue, you agree to follow our [Contribution Guidelines.](https://pharmaverse.github.io/teal/latest-tag/CONTRIBUTING.html)
       options:
         - label: I agree to follow this project's Contribution Guidelines.
           required: true
@@ -29,7 +29,7 @@ body:
     id: security-policy
     attributes:
       label: Security Policy
-      description: By submitting this issue, you agree to follow our [Security Policy.](https://github.com/insightsengineering/teal/security/policy)
+      description: By submitting this issue, you agree to follow our [Security Policy.](https://github.com/pharmaverse/teal/security/policy)
       options:
         - label: I agree to follow this project's Security Policy.
           required: true

@@ -14,7 +14,7 @@ Reproducibility is paramount in the pharmaceutical industry.
 Accurate and consistent results are essential to ensure high-quality research and the safety of patients.
 By prioritizing reproducibility, researchers can validate their methods, confirm their findings, and contribute to the advancement of the field.
 
-The `teal.code` package provides the [`qenv` class](https://insightsengineering.github.io/teal.code/latest-tag/articles/qenv.html) that facilitates code reproducibility.
+The `teal.code` package provides the [`qenv` class](https://pharmaverse.github.io/teal.code/latest-tag/articles/qenv.html) that facilitates code reproducibility.
 Code is passed to a `qenv` object, where is evaluated in a specific environment.
 `qenv` also stores the code so that it can be retrieved on request.
 
@@ -44,7 +44,7 @@ digraph G {
 }
 ```
 
-Learn more about the use of `teal_data` in the [`teal.data` package vignettes](https://insightsengineering.github.io/teal.data/latest-tag/articles).
+Learn more about the use of `teal_data` in the [`teal.data` package vignettes](https://pharmaverse.github.io/teal.data/latest-tag/articles).
 
 ## `Show R Code` and `Reporter`
 
@@ -60,6 +60,6 @@ Much like the `Show R Code` mechanism, the code displayed in a Reporter Card is 
 
 ![Reporter](images/reporter.png){width=100%}
 
-To learn more about the `Reporter` feature, please visit the [`teal.reporter` documentation](https://insightsengineering.github.io/teal.reporter/latest-tag/index.html).
+To learn more about the `Reporter` feature, please visit the [`teal.reporter` documentation](https://pharmaverse.github.io/teal.reporter/latest-tag/index.html).
 
 Overall, `qenv` from `teal.code` and its child class, `teal_data`, are powerful tools for ensuring code reproducibility and promoting high-quality research in the `R` programming language.

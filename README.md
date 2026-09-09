@@ -1,4 +1,4 @@
-# `teal`: Interactive Exploratory Data Analysis with `Shiny` Web-Applications <a href='https://insightsengineering.github.io/teal/'><img src="man/figures/logo.svg" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
+# `teal`: Interactive Exploratory Data Analysis with `Shiny` Web-Applications <a href='https://pharmaverse.github.io/teal/'><img src="man/figures/logo.svg" align="right" height="139" style="max-width: 100%; max-height: 139px;"/></a  >
 
 <!-- start badges -->
 
@@ -7,22 +7,22 @@
 [![Last Month Downloads](http://cranlogs.r-pkg.org/badges/last-month/teal?color=green)](https://cran.r-project.org/package=teal)
 [![Last Week Downloads](http://cranlogs.r-pkg.org/badges/last-week/teal?color=green)](https://cran.r-project.org/package=teal)
 
-[![Check 🛠](https://github.com/insightsengineering/teal/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/teal/main/unit-test-report/)
-[![Docs 📚](https://github.com/insightsengineering/teal/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/teal/)
-[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/teal/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/teal/main/coverage-report/)
+[![Check 🛠](https://github.com/pharmaverse/teal/actions/workflows/check.yaml/badge.svg)](https://pharmaverse.github.io/teal/main/unit-test-report/)
+[![Docs 📚](https://github.com/pharmaverse/teal/actions/workflows/docs.yaml/badge.svg)](https://pharmaverse.github.io/teal/)
+[![Code Coverage 📔](https://raw.githubusercontent.com/pharmaverse/teal/_xml_coverage_reports/data/main/badge.svg)](https://pharmaverse.github.io/teal/main/coverage-report/)
 
-![GitHub forks](https://img.shields.io/github/forks/insightsengineering/teal?style=social)
-![GitHub repo stars](https://img.shields.io/github/stars/insightsengineering/teal?style=social)
+![GitHub forks](https://img.shields.io/github/forks/pharmaverse/teal?style=social)
+![GitHub repo stars](https://img.shields.io/github/stars/pharmaverse/teal?style=social)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/insightsengineering/teal)
-![GitHub contributors](https://img.shields.io/github/contributors/insightsengineering/teal)
-![GitHub last commit](https://img.shields.io/github/last-commit/insightsengineering/teal)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/insightsengineering/teal)
-![GitHub repo size](https://img.shields.io/github/repo-size/insightsengineering/teal)
-![GitHub language count](https://img.shields.io/github/languages/count/insightsengineering/teal)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/pharmaverse/teal)
+![GitHub contributors](https://img.shields.io/github/contributors/pharmaverse/teal)
+![GitHub last commit](https://img.shields.io/github/last-commit/pharmaverse/teal)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/pharmaverse/teal)
+![GitHub repo size](https://img.shields.io/github/repo-size/pharmaverse/teal)
+![GitHub language count](https://img.shields.io/github/languages/count/pharmaverse/teal)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Current Version](https://img.shields.io/github/r-package/v/insightsengineering/teal/main?color=purple&label=package%20version)](https://github.com/insightsengineering/teal/tree/main)
-[![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/teal?color=red&label=open%20issues)](https://github.com/insightsengineering/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+[![Current Version](https://img.shields.io/github/r-package/v/pharmaverse/teal/main?color=purple&label=package%20version)](https://github.com/pharmaverse/teal/tree/main)
+[![Open Issues](https://img.shields.io/github/issues-raw/pharmaverse/teal?color=red&label=open%20issues)](https://github.com/pharmaverse/teal/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 
 <!-- end badges -->
 
@@ -37,9 +37,9 @@
   - `MultiAssayExperiment` objects which are `R` data structures for representing and analyzing multi-omics experiments
 - `teal` modules:
   - `teal modules` are `shiny` modules built within the `teal` framework that specify analysis to be performed. For example, it can be a module for exploring outliers in the data, or a module for visualizing the data in line plots. Although these can be created from scratch, many `teal` modules have been released and we recommend starting with modules found in the following packages:
-    - [`teal.modules.general`](https://insightsengineering.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/CDISC data
-    - [`teal.modules.clinical`](https://insightsengineering.github.io/teal.modules.clinical/latest-tag/): modules specific to CDISC data and clinical trial reporting
-    - [`teal.modules.hermes`](https://insightsengineering.github.io/teal.modules.hermes/latest-tag/): modules for analyzing `MultiAssayExperiment` objects
+    - [`teal.modules.general`](https://pharmaverse.github.io/teal.modules.general/latest-tag/): general modules for exploring relational/independent/CDISC data
+    - [`teal.modules.clinical`](https://pharmaverse.github.io/teal.modules.clinical/latest-tag/): modules specific to CDISC data and clinical trial reporting
+    - [`teal.modules.hermes`](https://pharmaverse.github.io/teal.modules.hermes/latest-tag/): modules for analyzing `MultiAssayExperiment` objects
 
 <!-- markdownlint-enable MD007 MD030 -->
 
@@ -47,13 +47,13 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 <!-- markdownlint-disable MD007 MD030 -->
 
-- [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
-- [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/): handles reproducibility of outputs.
-- [`teal.data`](https://insightsengineering.github.io/teal.data/latest-tag/): creating and loading the data needed for `teal` applications.
-- [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/): `shiny` components used within `teal`.
-- [`teal.slice`](https://insightsengineering.github.io/teal.slice/latest-tag/): provides a filtering panel to allow filtering of data.
-- [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/): allows `teal` applications to generate reports.
-- [`teal.transform`](https://insightsengineering.github.io/teal.transform/latest-tag/): allows the creation of reproducible transform and merge module for teal applications.
+- [`teal.logger`](https://pharmaverse.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
+- [`teal.code`](https://pharmaverse.github.io/teal.code/latest-tag/): handles reproducibility of outputs.
+- [`teal.data`](https://pharmaverse.github.io/teal.data/latest-tag/): creating and loading the data needed for `teal` applications.
+- [`teal.widgets`](https://pharmaverse.github.io/teal.widgets/latest-tag/): `shiny` components used within `teal`.
+- [`teal.slice`](https://pharmaverse.github.io/teal.slice/latest-tag/): provides a filtering panel to allow filtering of data.
+- [`teal.reporter`](https://pharmaverse.github.io/teal.reporter/latest-tag/): allows `teal` applications to generate reports.
+- [`teal.transform`](https://pharmaverse.github.io/teal.transform/latest-tag/): allows the creation of reproducible transform and merge module for teal applications.
 
 Dive deeper into `teal` with our comprehensive video guide.
 Please click the image below to start learning:
@@ -72,7 +72,7 @@ Alternatively, you might also use the development version.
 
 ```r
 # install.packages("pak")
-pak::pak("insightsengineering/teal")
+pak::pak("pharmaverse/teal")
 ```
 
 ## Usage
@@ -113,9 +113,9 @@ shinyApp(app$ui, app$server)
 
 ![App recording](man/figures/readme_app.gif)
 
-Please see [`teal.gallery`](https://insightsengineering.github.io/teal.gallery/) and [TLG Catalog](https://insightsengineering.github.io/tlg-catalog/) to see examples of `teal` apps.
+Please see [`teal.gallery`](https://pharmaverse.github.io/teal.gallery/) and [TLG Catalog](https://pharmaverse.github.io/tlg-catalog/) to see examples of `teal` apps.
 
-Please start with the ["Technical Blueprint" article](https://insightsengineering.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://insightsengineering.github.io/teal/latest-tag/articles/getting-started-with-teal.html), and then other [package vignettes](https://insightsengineering.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
+Please start with the ["Technical Blueprint" article](https://pharmaverse.github.io/teal/latest-tag/articles/blueprint/index.html), ["Getting Started" article](https://pharmaverse.github.io/teal/latest-tag/articles/getting-started-with-teal.html), and then other [package vignettes](https://pharmaverse.github.io/teal/latest-tag/articles/index.html) for more detailed guide.
 
 ## Getting help
 

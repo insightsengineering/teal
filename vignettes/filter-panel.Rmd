@@ -12,7 +12,7 @@ vignette: >
 
 The filter panel is an integral part of all `teal` applications and is included on the right side.
 Based on the selections made in the filter panel, filter expressions are executed before passing data to `teal` modules.
-The technical details of the filter panel are extensively described in [`teal.slice` documentation](https://insightsengineering.github.io/teal.slice/latest-tag/).
+The technical details of the filter panel are extensively described in [`teal.slice` documentation](https://pharmaverse.github.io/teal.slice/latest-tag/).
 
 By default, `init` initializes the filter panel without any active filters but allows the user to add filters on any column.
 To start a `teal` application with predefined filters, one must specify the `filter` argument.
@@ -83,7 +83,7 @@ To achieve the described setup, one must set the `module_specific` argument to `
 `mapping` takes a named list where element names correspond to module labels, and elements are vectors of `teal_slice` `id`s applied to that module at startup.
 `teal_slice`s listed the element called `"global_filters"` will be applied to all modules.
 
-For a detailed explanation about the filter states, see [this `teal.slice` vignette](https://insightsengineering.github.io/teal.slice/latest-tag/articles/filter-panel-for-developers.html).
+For a detailed explanation about the filter states, see [this `teal.slice` vignette](https://pharmaverse.github.io/teal.slice/latest-tag/articles/filter-panel-for-developers.html).
 
 ```{r app, message=FALSE, warning=FALSE}
 library(teal)

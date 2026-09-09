@@ -52,7 +52,7 @@ Modules can have different set of filters specified - see \code{mapping} argumen
 
 \item{mapping}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 \emph{This is a new feature. Do kindly share your opinions on
-\href{https://github.com/insightsengineering/teal/}{\code{teal}'s GitHub repository}.}
+\href{https://github.com/pharmaverse/teal/}{\code{teal}'s GitHub repository}.}
 
 (named \code{list}) specifies which filters will be active in which modules on app start.
 Elements should contain character vector of \code{teal_slice} \code{id}s (see \code{\link[teal.slice:teal_slice]{teal.slice::teal_slice}}).

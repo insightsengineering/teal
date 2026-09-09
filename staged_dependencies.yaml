@@ -1,35 +1,35 @@
 ---
 current_repo:
-  repo: insightsengineering/teal
+  repo: pharmaverse/teal
   host: https://github.com
 upstream_repos:
   insightsengineering/roxy.shinylive:
     repo: insightsengineering/roxy.shinylive
     host: https://github.com
-  insightsengineering/teal.widgets:
-    repo: insightsengineering/teal.widgets
+  pharmaverse/teal.widgets:
+    repo: pharmaverse/teal.widgets
     host: https://github.com
-  insightsengineering/teal.code:
-    repo: insightsengineering/teal.code
+  pharmaverse/teal.code:
+    repo: pharmaverse/teal.code
     host: https://github.com
-  insightsengineering/teal.data:
-    repo: insightsengineering/teal.data
+  pharmaverse/teal.data:
+    repo: pharmaverse/teal.data
     host: https://github.com
-  insightsengineering/teal.slice:
-    repo: insightsengineering/teal.slice
+  pharmaverse/teal.slice:
+    repo: pharmaverse/teal.slice
     host: https://github.com
-  insightsengineering/teal.logger:
-    repo: insightsengineering/teal.logger
+  pharmaverse/teal.logger:
+    repo: pharmaverse/teal.logger
     host: https://github.com
-  insightsengineering/teal.reporter:
-    repo: insightsengineering/teal.reporter
+  pharmaverse/teal.reporter:
+    repo: pharmaverse/teal.reporter
     host: https://github.com
 downstream_repos:
-  insightsengineering/teal.modules.general:
-    repo: insightsengineering/teal.modules.general
+  pharmaverse/teal.modules.general:
+    repo: pharmaverse/teal.modules.general
     host: https://github.com
-  insightsengineering/teal.modules.clinical:
-    repo: insightsengineering/teal.modules.clinical
+  pharmaverse/teal.modules.clinical:
+    repo: pharmaverse/teal.modules.clinical
     host: https://github.com
   insightsengineering/teal.osprey:
     repo: insightsengineering/teal.osprey
