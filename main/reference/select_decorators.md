@@ -46,7 +46,7 @@ str(select_decorators(decorators, "table"))
 #>   ..$ ui    : NULL
 #>   ..$ server:function (id, data)  
 #>   .. ..- attr(*, "srcref")= 'srcref' int [1:8] 135 16 155 7 16 7 135 155
-#>   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x55a94914f6e8> 
+#>   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x55a3c30ce088> 
 #>   ..- attr(*, "label")= chr "transform module"
 #>   ..- attr(*, "datanames")= chr "all"
 #>   ..- attr(*, "class")= chr [1:2] "teal_transform_module" "teal_data_module"
@@ -54,7 +54,7 @@ str(select_decorators(decorators, "table"))
 #>   ..$ ui    : NULL
 #>   ..$ server:function (id, data)  
 #>   .. ..- attr(*, "srcref")= 'srcref' int [1:8] 135 16 155 7 16 7 135 155
-#>   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x55a94914f6e8> 
+#>   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x55a3c30ce088> 
 #>   ..- attr(*, "label")= chr "transform module"
 #>   ..- attr(*, "datanames")= chr "all"
 #>   ..- attr(*, "class")= chr [1:2] "teal_transform_module" "teal_data_module"
@@ -66,7 +66,7 @@ str(select_decorators(decorators, "plot"))
 #>   ..$ ui    : NULL
 #>   ..$ server:function (id, data)  
 #>   .. ..- attr(*, "srcref")= 'srcref' int [1:8] 135 16 155 7 16 7 135 155
-#>   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x55a94914f6e8> 
+#>   .. .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x55a3c30ce088> 
 #>   ..- attr(*, "label")= chr "transform module"
 #>   ..- attr(*, "datanames")= chr "all"
 #>   ..- attr(*, "class")= chr [1:2] "teal_transform_module" "teal_data_module"
