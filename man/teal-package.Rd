@@ -10,15 +10,15 @@ The \code{teal} package provides a \code{shiny} based framework for creating an
 interactive data analysis environment.
 }
 \details{
-To learn mode about the package, visit the \href{https://insightsengineering.github.io/teal/latest-tag/}{project website}
+To learn mode about the package, visit the \href{https://pharmaverse.github.io/teal/latest-tag/}{project website}
 or read the \code{\link[=init]{init()}} manual page.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://insightsengineering.github.io/teal/}
-  \item \url{https://github.com/insightsengineering/teal/}
-  \item Report bugs at \url{https://github.com/insightsengineering/teal/issues}
+  \item \url{https://pharmaverse.github.io/teal/}
+  \item \url{https://github.com/pharmaverse/teal/}
+  \item Report bugs at \url{https://github.com/pharmaverse/teal/issues}
 }
 
 }

@@ -409,7 +409,7 @@ testthat::test_that("my_module UI renders correctly", {
 Use `_pkgdown.yml` for documentation websites:
 
 ```yaml
-url: https://insightsengineering.github.io/package.name
+url: https://pharmaverse.github.io/package.name
 
 template:
   package: nesttemplate

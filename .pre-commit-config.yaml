@@ -32,12 +32,12 @@ repos:
           - shinyjs
           - stats
           - insightsengineering/roxy.shinylive
-          - insightsengineering/teal.code
-          - insightsengineering/teal.data
-          - insightsengineering/teal.logger
-          - insightsengineering/teal.reporter
-          - insightsengineering/teal.slice
-          - insightsengineering/teal.widgets
+          - pharmaverse/teal.code
+          - pharmaverse/teal.data
+          - pharmaverse/teal.logger
+          - pharmaverse/teal.reporter
+          - pharmaverse/teal.slice
+          - pharmaverse/teal.widgets
           - utils
           - shinytest2 # Necessary for documentation
           - shinyvalidate # Necessary for documentation

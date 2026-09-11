@@ -75,7 +75,7 @@ The server function will take a reactive expression holding `data` as argument a
 
 _Note_: It is recommended to return `reactive()` with `teal_data()` in `server` code of a `teal_transform_module` as this is more robust for maintaining the reactivity of Shiny.
 If you are planning on using `eventReactive()` in the server, the event should include `data()` _(example `eventReactive(list(input$a, data()), {...})`)_.
-More in [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832).
+More in [this discussion](https://github.com/pharmaverse/teal/issues/1303#issuecomment-2286239832).
 
 ```{r teal_lib_call, eval=FALSE, echo=FALSE}
 library(teal)
@@ -121,7 +121,7 @@ if (interactive()) {
 _Note_: The `server` function of a `teal_transform_module` must return a reactive expression with a `teal_data` object.
 In order to maintain full reactivity, we recommended using `reactive()` over `eventReactive()`.
 If you do use `eventReactive()` or `bindEvent()`, the trigger event should include `data()` (_e.g._ `eventReactive(list(input$a, data()), {...})`).
-See [this discussion](https://github.com/insightsengineering/teal/issues/1303#issuecomment-2286239832) for a detailed explanation.
+See [this discussion](https://github.com/pharmaverse/teal/issues/1303#issuecomment-2286239832) for a detailed explanation.
 
 ```{r shinylive_iframe_2, echo = FALSE, out.width = '150%', out.extra = 'style = "position: relative; z-index:1"', eval = requireNamespace("roxy.shinylive", quietly = TRUE) && knitr::is_html_output() && identical(Sys.getenv("IN_PKGDOWN"), "true")}
 code <- paste0(c(

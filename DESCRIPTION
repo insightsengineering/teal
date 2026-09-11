@@ -32,9 +32,9 @@ Description: A 'shiny' based interactive exploration framework for
     filtering facility and different data viewers. 'teal' 'shiny'
     applications are built using standard 'shiny' modules.
 License: Apache License 2.0
-URL: https://insightsengineering.github.io/teal/,
-    https://github.com/insightsengineering/teal/
-BugReports: https://github.com/insightsengineering/teal/issues
+URL: https://pharmaverse.github.io/teal/,
+    https://github.com/pharmaverse/teal/
+BugReports: https://github.com/pharmaverse/teal/issues
 Depends:
     R (>= 4.1),
     shiny (>= 1.8.1),
@@ -79,12 +79,12 @@ VignetteBuilder:
     rmarkdown
 RdMacros:
     lifecycle
-Config/Needs/verdepcheck: rstudio/shiny, insightsengineering/teal.data,
-    insightsengineering/teal.slice, mllg/checkmate, jeroen/jsonlite,
+Config/Needs/verdepcheck: rstudio/shiny, pharmaverse/teal.data,
+    pharmaverse/teal.slice, mllg/checkmate, jeroen/jsonlite,
     r-lib/lifecycle, daroczig/logger, r-lib/mirai, r-lib/cli,
     r-lib/nanonext, rstudio/renv, r-lib/rlang, daattali/shinyjs,
-    insightsengineering/teal.code, insightsengineering/teal.logger,
-    insightsengineering/teal.reporter, insightsengineering/teal.widgets,
+    pharmaverse/teal.code, pharmaverse/teal.logger,
+    pharmaverse/teal.reporter, pharmaverse/teal.widgets,
     rstudio/bslib, yihui/knitr, bioc::MultiAssayExperiment, r-lib/R6,
     rstudio/rmarkdown, tidyverse/rvest, rstudio/shinytest2,
     rstudio/shinyvalidate, r-lib/testthat, r-lib/withr,

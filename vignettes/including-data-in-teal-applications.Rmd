@@ -210,7 +210,7 @@ data_relational2 <- teal_data(DS1 = ds1, DS2 = ds2)
 join_keys(data_relational2) <- keys
 ```
 
-For a detailed explanation of join keys, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/join-keys.html).
+For a detailed explanation of join keys, see [this `teal.data` vignette](https://pharmaverse.github.io/teal.data/latest-tag/articles/join-keys.html).
 
 [(back to `ADaM` Data)](#adam-data)
 
@@ -230,7 +230,7 @@ data_with_objects_and_code_ver
 ```
 
 
-For a detailed explanation of verification, see [this `teal.data` vignette](https://insightsengineering.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
+For a detailed explanation of verification, see [this `teal.data` vignette](https://pharmaverse.github.io/teal.data/latest-tag/articles/teal-data-reproducibility.html).
 
 [(back to Reproducible Data)](#reproducible-data)
 
@@ -264,4 +264,4 @@ if (interactive()) {
 
 ## Further reading
 
-For a complete guide to the `teal_data` class, please refer to the [`teal.data` package](https://insightsengineering.github.io/teal.data/latest-tag/).
+For a complete guide to the `teal_data` class, please refer to the [`teal.data` package](https://pharmaverse.github.io/teal.data/latest-tag/).

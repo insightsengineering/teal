@@ -48,7 +48,7 @@ app <- init(
 ) |>
   modify_title("My first teal application") |>
   modify_header(h3("My first teal application")) |>
-  modify_footer(tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/")))
+  modify_footer(tags$div(a("Powered by teal", href = "https://pharmaverse.github.io/teal/latest-tag/")))
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
@@ -230,7 +230,7 @@ app <- init(
     # nolint end.
     h3("My first teal application")
   )) |>
-  modify_footer(tags$div(a("Powered by teal", href = "https://insightsengineering.github.io/teal/latest-tag/")))
+  modify_footer(tags$div(a("Powered by teal", href = "https://pharmaverse.github.io/teal/latest-tag/")))
 
 if (interactive()) {
   shinyApp(app$ui, app$server)
@@ -260,7 +260,7 @@ See [this vignette](data-as-shiny-module.html) for details.
 In order to use CDISC clinical trial data in a `teal` application the `cdisc_data` function is used instead.
 Custom `SDTM` standards can be handled with `teal_data` and `join_keys`.
 
-For further details, we recommend exploring the [`teal.data`](https://insightsengineering.github.io/teal.data/) package documentation.
+For further details, we recommend exploring the [`teal.data`](https://pharmaverse.github.io/teal.data/) package documentation.
 
 ### Modules
 
@@ -276,7 +276,7 @@ For further details see [Filter Panel vignette](filter-panel.html).
 
 ### Reporting
 
-If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.
+If any of the `modules` in your `teal` application support reporting (see [`teal.reporter`](https://pharmaverse.github.io/teal.reporter/) for more details), users of your application can add the outputs of the modules to a report.
 This report can then be downloaded and a special _Report Previewer_ module will be added to your application as an additional tab, where users can view and configure their reports before downloading them. See more details in [this vignette](adding-support-for-reporting.html).
 
 
@@ -297,8 +297,8 @@ To learn more about the `teal` framework we recommend first exploring some of th
 
 For example see:
 
-* [general analysis modules](https://insightsengineering.github.io/teal.modules.general/)
-* [clinical trial reporting modules](https://insightsengineering.github.io/teal.modules.clinical/)
+* [general analysis modules](https://pharmaverse.github.io/teal.modules.general/)
+* [clinical trial reporting modules](https://pharmaverse.github.io/teal.modules.clinical/)
 * [modules for analyzing `MultiAssayExperiment` objects](https://insightsengineering.github.io/teal.modules.hermes/)
 
 For a demo of `teal` apps see:
@@ -310,5 +310,5 @@ For a demo of `teal` apps see:
 The `teal` framework relies on a set of supporting packages whose documentation provides more in-depth information.
 The packages which are of most interest when defining `teal`applications are:
 
-* [`teal.data`](https://insightsengineering.github.io/teal.data/): defining data for `teal` application.
-* [`teal.slice`](https://insightsengineering.github.io/teal.slice/): defining data filtering before passing into `teal` modules.
+* [`teal.data`](https://pharmaverse.github.io/teal.data/): defining data for `teal` application.
+* [`teal.slice`](https://pharmaverse.github.io/teal.slice/): defining data filtering before passing into `teal` modules.
