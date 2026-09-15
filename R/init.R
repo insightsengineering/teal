@@ -222,7 +222,8 @@ init <- function(data,
           ),
           ui_teal(
             id = "teal",
-            modules = modules
+            modules = modules,
+            reporter = reporter
           ),
           tags$footer(
             id = "teal-footer",

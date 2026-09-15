@@ -66,7 +66,7 @@ transform_list <<- list(
 )
 
 testthat::describe("srv_teal arguments", {
-  testthat::it("accepts data to be teal_data", {
+  it("accepts data to be teal_data", {
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal,
@@ -80,7 +80,7 @@ testthat::describe("srv_teal arguments", {
     )
   })
 
-  testthat::it("accepts data to be teal_data_module returning reactive teal_data", {
+  it("accepts data to be teal_data_module returning reactive teal_data", {
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal,
@@ -94,7 +94,7 @@ testthat::describe("srv_teal arguments", {
     )
   })
 
-  testthat::it("accepts data to a reactive or reactiveVal teal_data", {
+  it("accepts data to a reactive or reactiveVal teal_data", {
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal,
@@ -121,7 +121,7 @@ testthat::describe("srv_teal arguments", {
     )
   })
 
-  testthat::it("fails when data is not teal_data or teal_data_module", {
+  it("fails when data is not teal_data or teal_data_module", {
     testthat::expect_error(
       shiny::testServer(
         app = srv_teal,
@@ -136,7 +136,7 @@ testthat::describe("srv_teal arguments", {
     )
   })
 
-  testthat::it("app fails when teal_data_module doesn't return a reactive", {
+  it("app fails when teal_data_module doesn't return a reactive", {
     testthat::expect_error(
       shiny::testServer(
         app = srv_teal,
@@ -154,7 +154,7 @@ testthat::describe("srv_teal arguments", {
   })
 
 
-  testthat::it("app works with default teal_data_module", {
+  it("app works with default teal_data_module", {
     testthat::expect_no_error(
       shiny::testServer(
         app = srv_teal,
@@ -172,7 +172,7 @@ testthat::describe("srv_teal arguments", {
 })
 
 testthat::describe("srv_teal teal_modules", {
-  testthat::it("are not called by default", {
+  it("are not called by default", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -190,7 +190,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected and data is `teal_data`", {
+  it("are called once their tab is selected and data is `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -212,7 +212,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("modules with input, output, session are supoorted", {
+  it("modules with input, output, session are supoorted", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -229,7 +229,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected and data returns reactive `teal_data`", {
+  it("are called once their tab is selected and data returns reactive `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -252,7 +252,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected and teal_data_module returns reactive `teal_data`", {
+  it("are called once their tab is selected and teal_data_module returns reactive `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -282,7 +282,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called once their tab is selected with default (empty) teal_data_module", {
+  it("are called once their tab is selected with default (empty) teal_data_module", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -300,7 +300,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called only after teal_data_module is resolved", {
+  it("are called only after teal_data_module is resolved", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -328,7 +328,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are called with data argument being `teal_data`", {
+  it("are called with data argument being `teal_data`", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -345,7 +345,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called when the teal_data_module doesn't return teal_data", {
+  it("are not called when the teal_data_module doesn't return teal_data", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -371,7 +371,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called when teal_data_module returns validation error", {
+  it("are not called when teal_data_module returns validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -398,7 +398,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called when teal_data_module throws an error", {
+  it("are not called when teal_data_module throws an error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -425,7 +425,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called when teal_data_module returns qenv.error", {
+  it("are not called when teal_data_module returns qenv.error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -452,7 +452,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are receiving reactive data which triggers on change", {
+  it("are receiving reactive data which triggers on change", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -486,7 +486,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("are not called again when data changes", {
+  it("are not called again when data changes", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -523,7 +523,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives data with datasets == module$datanames", {
+  it("receives data with datasets == module$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -542,7 +542,7 @@ testthat::describe("srv_teal teal_modules", {
   })
 
   testthat::describe("reserved dataname is being used:", {
-    testthat::it("multiple datanames with `all` and `.raw_data`", {
+    it("multiple datanames with `all` and `.raw_data`", {
       testthat::skip_if_not_installed("rvest")
 
       # Shared common code for tests
@@ -579,7 +579,7 @@ testthat::describe("srv_teal teal_modules", {
       )
     })
 
-    testthat::it("single dataname with `all`", {
+    it("single dataname with `all`", {
       testthat::skip_if_not_installed("rvest")
 
       td <- within(teal.data::teal_data(), {
@@ -616,7 +616,7 @@ testthat::describe("srv_teal teal_modules", {
   })
 
   testthat::describe("warnings on missing datanames", {
-    testthat::it("warns when dataname is not available", {
+    it("warns when dataname is not available", {
       testthat::skip_if_not_installed("rvest")
       shiny::testServer(
         app = srv_teal,
@@ -643,7 +643,7 @@ testthat::describe("srv_teal teal_modules", {
       )
     })
 
-    testthat::it("warns when datanames are not available", {
+    it("warns when datanames are not available", {
       testthat::skip_if_not_installed("rvest")
       shiny::testServer(
         app = srv_teal,
@@ -671,7 +671,7 @@ testthat::describe("srv_teal teal_modules", {
       )
     })
 
-    testthat::it("warns about empty data when none of module$datanames is available (even if data is not empty)", {
+    it("warns about empty data when none of module$datanames is available (even if data is not empty)", {
       testthat::skip_if_not_installed("rvest")
       shiny::testServer(
         app = srv_teal,
@@ -698,7 +698,7 @@ testthat::describe("srv_teal teal_modules", {
       )
     })
 
-    testthat::it("warns about empty data when none of module$datanames is available", {
+    it("warns about empty data when none of module$datanames is available", {
       testthat::skip_if_not_installed("rvest")
       shiny::testServer(
         app = srv_teal,
@@ -726,7 +726,7 @@ testthat::describe("srv_teal teal_modules", {
     })
   })
 
-  testthat::it("is called and receives data even if datanames in `teal_data` are not sufficient", {
+  it("is called and receives data even if datanames in `teal_data` are not sufficient", {
     data <- teal_data(iris = iris)
     shiny::testServer(
       app = srv_teal,
@@ -744,7 +744,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all objects from teal_data when module$datanames = \"all\"", {
+  it("receives all objects from teal_data when module$datanames = \"all\"", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -767,7 +767,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives parent data when module$datanames limited to a child data but join keys are provided", {
+  it("receives parent data when module$datanames limited to a child data but join keys are provided", {
     parent <- data.frame(id = 1:3, test = letters[1:3])
     child <- data.frame(id = 1:9, parent_id = rep(1:3, each = 3), test2 = letters[1:9])
     data <- teal_data(parent = parent, child = child)
@@ -792,7 +792,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all transformator datasets if module$datanames == 'all'", {
+  it("receives all transformator datasets if module$datanames == 'all'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -829,7 +829,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all datasets if transform$datanames == 'all'", {
+  it("receives all datasets if transform$datanames == 'all'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -866,7 +866,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("receives all raw datasets based on module$datanames", {
+  it("receives all raw datasets based on module$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -894,7 +894,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("combines datanames from transform/module $datanames", {
+  it("combines datanames from transform/module $datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -927,7 +927,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("does not receive transformator datasets not specified in transform$datanames nor modue$datanames", {
+  it("does not receive transformator datasets not specified in transform$datanames nor modue$datanames", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -965,7 +965,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
+  it("srv_teal_module.teal_module does not pass data if not in the args explicitly", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -985,7 +985,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
+  it("srv_teal_module.teal_module passes (deprecated) datasets to the server module", {
     testthat::expect_warning(
       shiny::testServer(
         app = srv_teal,
@@ -1005,7 +1005,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module passes server_args to the ...", {
+  it("srv_teal_module.teal_module passes server_args to the ...", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1028,7 +1028,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module passes quoted arguments to the teal_module$server call", {
+  it("srv_teal_module.teal_module passes quoted arguments to the teal_module$server call", {
     tm_query <- function(query) {
       module(
         "module_1",
@@ -1059,7 +1059,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module passes filter_panel_api if specified", {
+  it("srv_teal_module.teal_module passes filter_panel_api if specified", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1076,7 +1076,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("srv_teal_module.teal_module passes Reporter if specified", {
+  it("srv_teal_module.teal_module passes Reporter if specified", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1093,7 +1093,7 @@ testthat::describe("srv_teal teal_modules", {
     )
   })
 
-  testthat::it("does not receive report_previewer when reporter is NULL", {
+  it("does not receive report_previewer when reporter is NULL", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1114,7 +1114,7 @@ testthat::describe("srv_teal teal_modules", {
 })
 
 testthat::describe("teal_data_module", {
-  testthat::it("shows modal with correct id on initialization", {
+  it("shows modal with correct id on initialization", {
     # Create a teal_data_module with specific UI elements
     test_tdm <- teal_data_module(
       ui = function(id) {
@@ -1162,7 +1162,7 @@ testthat::describe("teal_data_module", {
 
 testthat::describe("srv_teal filters", {
   testthat::describe("slicesGlobal", {
-    testthat::it("is set to initial filters when !module_specific", {
+    it("is set to initial filters when !module_specific", {
       init_filter <- teal_slices(
         teal_slice("iris", "Species"),
         teal_slice("mtcars", "cyl"),
@@ -1184,7 +1184,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("is set to initial filters with resolved attr(, 'mapping')$<modules label> when `module_specific`", {
+    it("is set to initial filters with resolved attr(, 'mapping')$<modules label> when `module_specific`", {
       init_filter <- teal_slices(
         teal_slice("iris", "Species"),
         teal_slice("mtcars", "cyl"),
@@ -1214,7 +1214,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("slices in slicesGlobal and in FilteredData refer to the same object", {
+    it("slices in slicesGlobal and in FilteredData refer to the same object", {
       init_filter <- teal_slices(
         teal_slice("iris", "Species"),
         teal_slice("mtcars", "cyl"),
@@ -1245,7 +1245,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("appends new slice and activates in $global_filters when added in a module if !module_specific", {
+    it("appends new slice and activates in $global_filters when added in a module if !module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1275,7 +1275,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("deactivates in $global_filters when removed from module if !module_specific", {
+    it("deactivates in $global_filters when removed from module if !module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1310,7 +1310,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("appends new slice and activates in $<module> when added in a module if module_specific", {
+    it("appends new slice and activates in $<module> when added in a module if module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1340,7 +1340,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("appends added 'duplicated' slice and makes new-slice$id unique", {
+    it("appends added 'duplicated' slice and makes new-slice$id unique", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1377,7 +1377,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("deactivates in $<module> when removed from module if module_specific", {
+    it("deactivates in $<module> when removed from module if module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1413,7 +1413,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("auto-resolves to mapping$<m> when setting slices with mapping$global_filters in module_specific ", {
+    it("auto-resolves to mapping$<m> when setting slices with mapping$global_filters in module_specific ", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1447,7 +1447,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("sets filters from mapping$<mod> to all modules' FilteredData when !module_specific", {
+    it("sets filters from mapping$<mod> to all modules' FilteredData when !module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1478,7 +1478,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("sets filters from mapping$<mod> to module's FilteredData when module_specific", {
+    it("sets filters from mapping$<mod> to module's FilteredData when module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1513,7 +1513,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("sets filters from mapping$global_filters to all modules' FilteredData when module_specific", {
+    it("sets filters from mapping$global_filters to all modules' FilteredData when module_specific", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -1548,7 +1548,7 @@ testthat::describe("srv_teal filters", {
         }
       )
     })
-    testthat::it("change in the slicesGlobal causes module's data filtering", {
+    it("change in the slicesGlobal causes module's data filtering", {
       existing_filters <- teal_slices(
         teal_slice(dataname = "iris", varname = "Species", selected = "versicolor"),
         teal_slice(dataname = "mtcars", varname = "cyl", selected = 6)
@@ -1597,7 +1597,7 @@ testthat::describe("srv_teal filters", {
 })
 
 testthat::describe("srv_filter_manager", {
-  testthat::it("mapping_table returns no rows if no filters set", {
+  it("mapping_table returns no rows if no filters set", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1619,7 +1619,7 @@ testthat::describe("srv_filter_manager", {
       }
     )
   })
-  testthat::it("mapping_table  returns global filters with active=true, inactive=false, unavailable=na", {
+  it("mapping_table  returns global filters with active=true, inactive=false, unavailable=na", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1654,7 +1654,7 @@ testthat::describe("srv_filter_manager", {
     )
   })
 
-  testthat::it("mapping_table  returns column per module with active=true, inactive=false, unavailable=na", {
+  it("mapping_table  returns column per module with active=true, inactive=false, unavailable=na", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1691,11 +1691,11 @@ testthat::describe("srv_filter_manager", {
     )
   })
 
-  testthat::it("mapping_table: what happens when module$label is duplicated (when nested modules)", {
+  it("mapping_table: what happens when module$label is duplicated (when nested modules)", {
     testthat::skip("todo")
   })
 
-  testthat::it("clicking show_filter_manager opens modal containing filter_manager uiOutput", {
+  it("clicking show_filter_manager opens modal containing filter_manager uiOutput", {
     captured_modal_html <- NULL
     # Create a mock session and override sendModal to capture modal content
     mock_session <- shiny::MockShinySession$new()
@@ -1727,16 +1727,16 @@ testthat::describe("srv_filter_manager", {
 })
 
 testthat::describe("teal_data_module reload", {
-  testthat::it("sets back the same active filters in each module", {
+  it("sets back the same active filters in each module", {
     testthat::skip("todo")
   })
-  testthat::it("doesn't fail when teal_data has no datasets", {
+  it("doesn't fail when teal_data has no datasets", {
     testthat::skip("todo")
   })
 })
 
 testthat::describe("srv_teal teal_module(s) transformator", {
-  testthat::it("evaluates custom qenv call and pass updated teal_data to the module", {
+  it("evaluates custom qenv call and pass updated teal_data to the module", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1758,7 +1758,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("evaluates custom qenv call after filter is applied", {
+  it("evaluates custom qenv call after filter is applied", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1806,7 +1806,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("is reactive to the filter changes", {
+  it("is reactive to the filter changes", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1851,7 +1851,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("receives all possible objects while those not specified in module$datanames are unfiltered", {
+  it("receives all possible objects while those not specified in module$datanames are unfiltered", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1896,7 +1896,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("throws a warning when transformator returns reactive.event", {
+  it("throws a warning when transformator returns reactive.event", {
     testthat::expect_warning(
       testServer(
         app = srv_teal,
@@ -1924,7 +1924,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("fails when transformator doesn't return reactive", {
+  it("fails when transformator doesn't return reactive", {
     testthat::expect_warning(
       # error decorator is mocked to avoid showing the trace error during the
       # test.
@@ -1961,7 +1961,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("pauses when transformator throws validation error", {
+  it("pauses when transformator throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -1989,7 +1989,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("pauses when transformator throws validation error", {
+  it("pauses when transformator throws validation error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2017,7 +2017,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("pauses when transformator throws qenv error", {
+  it("pauses when transformator throws qenv error", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2045,7 +2045,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("isn't called when `data` is not teal_data", {
+  it("isn't called when `data` is not teal_data", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2073,7 +2073,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("changes module output for a module with a static decorator", {
+  it("changes module output for a module with a static decorator", {
     output_decorator <- teal_transform_module(
       label = "output_decorator",
       server = make_teal_transform_server(expression(object <- rev(object)))
@@ -2098,7 +2098,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("changes module output for a module with a decorator that is a function of an object name", {
+  it("changes module output for a module with a decorator that is a function of an object name", {
     decorator_name <- function(output_name, label) {
       teal_transform_module(
         label = label,
@@ -2139,7 +2139,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
     )
   })
 
-  testthat::it("changes module output for a module with an interactive decorator", {
+  it("changes module output for a module with an interactive decorator", {
     decorator_name <- function(output_name, label) {
       teal_transform_module(
         label = label,
@@ -2184,7 +2184,7 @@ testthat::describe("srv_teal teal_module(s) transformator", {
 })
 
 testthat::describe("srv_teal summary table", {
-  testthat::it("displays Obs only column if all datasets have no join keys", {
+  it("displays Obs only column if all datasets have no join keys", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2209,7 +2209,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays Subjects with count based on foreign key column", {
+  it("displays Subjects with count based on foreign key column", {
     data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
@@ -2240,7 +2240,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays parent's Subjects with count based on primary key", {
+  it("displays parent's Subjects with count based on primary key", {
     data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
@@ -2272,7 +2272,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays parent's Subjects with count based on primary and foreign key", {
+  it("displays parent's Subjects with count based on primary and foreign key", {
     data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
@@ -2305,7 +2305,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects filters and displays subjects by their unique id count", {
+  it("reflects filters and displays subjects by their unique id count", {
     data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
@@ -2339,7 +2339,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects added filters and displays subjects by their unique id count", {
+  it("reflects added filters and displays subjects by their unique id count", {
     data <- teal.data::teal_data(
       a = data.frame(id = seq(3), name = letters[seq(3)]),
       b = data.frame(id = rep(seq(3), 2), id2 = seq(6), value = letters[seq(6)])
@@ -2374,7 +2374,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transformator adding new dataset if specified in module", {
+  it("reflects transformator adding new dataset if specified in module", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2412,8 +2412,8 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("reflects transformator filtering", {
-    testthat::it("displays parent's Subjects with count based on primary key", {
+  it("reflects transformator filtering", {
+    it("displays parent's Subjects with count based on primary key", {
       shiny::testServer(
         app = srv_teal,
         args = list(
@@ -2442,7 +2442,7 @@ testthat::describe("srv_teal summary table", {
     })
   })
 
-  testthat::it("displays only module$datanames", {
+  it("displays only module$datanames", {
     data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
     shiny::testServer(
       app = srv_teal,
@@ -2465,7 +2465,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays parent before child when join_keys are provided", {
+  it("displays parent before child when join_keys are provided", {
     data <- teal.data::teal_data(
       parent = mtcars,
       child = data.frame(am = c(0, 1), test = c("a", "b"))
@@ -2492,7 +2492,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays subset of module$datanames if not sufficient", {
+  it("displays subset of module$datanames if not sufficient", {
     data <- teal.data::teal_data(iris = iris, mtcars = mtcars)
     shiny::testServer(
       app = srv_teal,
@@ -2516,7 +2516,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("summary table displays MAE dataset added in transformators", {
+  it("summary table displays MAE dataset added in transformators", {
     testthat::skip_if_not_installed("MultiAssayExperiment")
     data <- within(teal.data::teal_data(), {
       iris <- iris
@@ -2561,7 +2561,7 @@ testthat::describe("srv_teal summary table", {
     )
   })
 
-  testthat::it("displays unsupported datasets", {
+  it("displays unsupported datasets", {
     data <- within(teal.data::teal_data(), {
       iris <- iris
       mtcars <- mtcars
@@ -2591,7 +2591,7 @@ testthat::describe("srv_teal summary table", {
 })
 
 testthat::describe("srv_teal snapshot manager", {
-  testthat::it("snapshot history contains initial snapshot on init", {
+  it("snapshot history contains initial snapshot on init", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2610,7 +2610,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("snapshot list contains 'Snapshots will appear here on init'", {
+  it("snapshot list contains 'Snapshots will appear here on init'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2633,7 +2633,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("clicking reset button restores initial filters state when !module_specific", {
+  it("clicking reset button restores initial filters state when !module_specific", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2673,7 +2673,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("clicking reset button restores initial filters with respect to mapping state when module_specific", {
+  it("clicking reset button restores initial filters with respect to mapping state when module_specific", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2722,7 +2722,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("adds snapshot to history when name is provided", {
+  it("adds snapshot to history when name is provided", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2749,7 +2749,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("appends multiple snapshots to the history ", {
+  it("appends multiple snapshots to the history ", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2781,7 +2781,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("doesn't add when snapshot name is empty", {
+  it("doesn't add when snapshot name is empty", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2807,7 +2807,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("doesn't add when duplicated snapshot name", {
+  it("doesn't add when duplicated snapshot name", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2838,7 +2838,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("trims whitespace from snapshot name", {
+  it("trims whitespace from snapshot name", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2863,7 +2863,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("opens snapshot manager modal when show button is clicked", {
+  it("opens snapshot manager modal when show button is clicked", {
     captured_modal_html <- NULL
     # Create a mock session and override sendModal to capture modal content
     mock_session <- shiny::MockShinySession$new()
@@ -2895,7 +2895,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("restores specific snapshot when select button is clicked", {
+  it("restores specific snapshot when select button is clicked", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -2939,7 +2939,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("shows upload modal when upload button is clicked", {
+  it("shows upload modal when upload button is clicked", {
     log_calls <- character(0)
     expected_log <- "srv_snapshot_manager: snapshot_load button clicked"
     testthat::with_mocked_bindings(
@@ -2975,7 +2975,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("enables accept button when file is selected", {
+  it("enables accept button when file is selected", {
     withr::with_tempfile("snapshot_file", {
       writeLines(
         format(teal_slices(
@@ -3029,7 +3029,7 @@ testthat::describe("srv_teal snapshot manager", {
     })
   })
 
-  testthat::it("appends uploaded snapshot to the snapshot list with the name from input", {
+  it("appends uploaded snapshot to the snapshot list with the name from input", {
     withr::with_tempfile("snapshot_file", fileext = "json", {
       writeLines(
         format(teal_slices(
@@ -3078,7 +3078,7 @@ testthat::describe("srv_teal snapshot manager", {
     })
   })
 
-  testthat::it("appends uploaded snapshot to the snapshot list with the name from file when input is ''", {
+  it("appends uploaded snapshot to the snapshot list with the name from file when input is ''", {
     withr::with_tempfile("snapshot_file", fileext = ".json", {
       writeLines(
         format(teal_slices(
@@ -3118,7 +3118,7 @@ testthat::describe("srv_teal snapshot manager", {
     })
   })
 
-  testthat::it("doesn't append uploaded snapshot to the snapshot list when name already exists", {
+  it("doesn't append uploaded snapshot to the snapshot list when name already exists", {
     withr::with_tempfile("snapshot_file", fileext = ".json", {
       writeLines(
         format(teal_slices(
@@ -3163,7 +3163,7 @@ testthat::describe("srv_teal snapshot manager", {
     })
   })
 
-  testthat::it("doesn't append uploaded snapshot to the snapshot list when teal_slices have different app_id", {
+  it("doesn't append uploaded snapshot to the snapshot list when teal_slices have different app_id", {
     withr::with_tempfile("snapshot_file", fileext = ".json", {
       slices <- teal.slice::teal_slices(
         teal.slice::teal_slice(dataname = "iris", varname = "Species", selected = "setosa"),
@@ -3199,7 +3199,7 @@ testthat::describe("srv_teal snapshot manager", {
     })
   })
 
-  testthat::it("stores snapshot history in bookmark state as a list of teal_slices", {
+  it("stores snapshot history in bookmark state as a list of teal_slices", {
     slices <- teal_slices(
       teal_slice(
         dataname = "iris", varname = "Species", choices = levels(iris$Species), selected = levels(iris$Species)
@@ -3253,7 +3253,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("restores snapshot history from bookmarked values", {
+  it("restores snapshot history from bookmarked values", {
     # Create a saved snapshot history that would come from a bookmark
     saved_snapshot_history <- list(
       "Initial application state" = as.list(
@@ -3306,7 +3306,7 @@ testthat::describe("srv_teal snapshot manager", {
     )
   })
 
-  testthat::it("is disabled by teal.snapshot_manager.enable = FALSE", {
+  it("is disabled by teal.snapshot_manager.enable = FALSE", {
     withr::with_options(list(teal.snapshot_manager.enable = FALSE), {
       testthat::expect_null(ui_snapshot_manager_panel("snapshot_manager_panel"))
       shiny::testServer(
@@ -3325,7 +3325,7 @@ testthat::describe("srv_teal snapshot manager", {
 })
 
 testthat::describe("Datanames with special symbols", {
-  testthat::it("are detected as datanames when defined as 'all'", {
+  it("are detected as datanames when defined as 'all'", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -3351,7 +3351,7 @@ testthat::describe("Datanames with special symbols", {
     )
   })
 
-  testthat::it("are present in datanames when used in pre-processing code", {
+  it("are present in datanames when used in pre-processing code", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -3381,7 +3381,7 @@ testthat::describe("Datanames with special symbols", {
     )
   })
 
-  testthat::it("(when used as non-native pipe) are present in datanames in the pre-processing code", {
+  it("(when used as non-native pipe) are present in datanames in the pre-processing code", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -3422,7 +3422,7 @@ testthat::describe("Datanames with special symbols", {
 })
 
 testthat::describe("teal.data code with a function defined", {
-  testthat::it("is fully reproducible", {
+  it("is fully reproducible", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -3454,7 +3454,7 @@ testthat::describe("teal.data code with a function defined", {
     )
   })
 
-  testthat::it("has the correct code (with hash)", {
+  it("has the correct code (with hash)", {
     shiny::testServer(
       app = srv_teal,
       args = list(
@@ -4019,7 +4019,7 @@ testthat::describe("srv_teal URL navigation", {
 
   withr::local_options(list(teal.enable_deep_linking = TRUE), .local_envir = parent.frame())
 
-  testthat::it("calls updateTabsetPanel with the URL module when active_module differs from current tab", {
+  it("calls updateTabsetPanel with the URL module when active_module differs from current tab", {
     tab_calls <- list()
     local_url_search("?active_module=mod2")
     testthat::local_mocked_bindings(
@@ -4044,7 +4044,7 @@ testthat::describe("srv_teal URL navigation", {
     testthat::expect_equal(tab_calls[[1]]$selected, "mod2")
   })
 
-  testthat::it("does not call updateTabsetPanel when URL has no active_module parameter", {
+  it("does not call updateTabsetPanel when URL has no active_module parameter", {
     tab_calls <- list()
     local_url_search("?other=foo")
     testthat::local_mocked_bindings(
@@ -4068,7 +4068,7 @@ testthat::describe("srv_teal URL navigation", {
     testthat::expect_length(tab_calls, 0L)
   })
 
-  testthat::it("calls updateQueryString with the active module path when tab changes", {
+  it("calls updateQueryString with the active module path when tab changes", {
     qs_calls <- list()
     testthat::local_mocked_bindings(
       updateQueryString = function(queryString, # nolint
@@ -4097,7 +4097,7 @@ testthat::describe("srv_teal URL navigation", {
     testthat::expect_equal(qs_calls[[1]], "?active_module=mod2")
   })
 
-  testthat::it("does not call updateQueryString when URL already reflects the active tab (guard)", {
+  it("does not call updateQueryString when URL already reflects the active tab (guard)", {
     qs_calls <- list()
     local_url_search("?active_module=mod1")
     testthat::local_mocked_bindings(
@@ -4124,5 +4124,64 @@ testthat::describe("srv_teal URL navigation", {
       }
     )
     testthat::expect_length(qs_calls, 0L)
+  })
+})
+
+testthat::describe("ui_teal reporter", {
+  testthat::skip_if_not_installed("rvest")
+  it("Menu is not generated in UI", {
+    ui <- rvest::read_html(
+      as.character(
+        ui_teal("test_module", modules = modules(example_module(), example_module()), reporter = NULL)
+      )
+    )
+
+    testthat::expect_no_match(
+      rvest::html_text(rvest::html_node(ui, "#test_module-reporter_menu_container .teal.dropdown-button")),
+      "Report"
+    )
+  })
+
+  it("Menu is generated in UI when reporter is not NULL", {
+    ui <- rvest::read_html(
+      as.character(
+        ui_teal(
+          "test_module", modules = modules(example_module(), example_module()), reporter = teal.reporter::teal_report()
+        )
+      )
+    )
+
+    testthat::expect_match(
+      rvest::html_text(rvest::html_node(ui, "#test_module-reporter_menu_container .teal.dropdown-button")),
+      "Report"
+    )
+  })
+
+  it("Add to reporter are not displayed in any of the modules", {
+    ui <- rvest::read_html(
+      as.character(
+        ui_teal("test_module", modules = modules(example_module(), example_module()), reporter = NULL)
+      )
+    )
+
+    testthat::expect_no_match(
+      rvest::html_text(rvest::html_nodes(ui, ".teal.add_reporter_wrapper")),
+      "Add to report"
+    )
+  })
+
+  it("Add to reporter are displayed in all of the modules when reporter is not NULL", {
+    ui <- rvest::read_html(
+      as.character(
+        ui_teal(
+          "test_module", modules = modules(example_module(), example_module()), reporter = teal.reporter::teal_report()
+        )
+      )
+    )
+
+    nodes <- rvest::html_nodes(ui, ".add-reporter-container")
+
+    testthat::expect_length(nodes, 2)
+    testthat::expect_match(rvest::html_text(nodes), "Add to Report")
   })
 })

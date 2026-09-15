@@ -64,14 +64,16 @@ NULL
 
 
 #' @rdname module_teal_module
-ui_teal_module <- function(id, modules) {
+ui_teal_module <- function(id, modules, reporter) {
   ns <- NS(id)
   active_module_id <- restoreInput(
     ns("active_module_id"),
     unlist(modules_slot(modules, "path"), use.names = FALSE)[1]
   )
 
-  module_items <- .ui_teal_module(id = ns("nav"), modules = modules, active_module_id = active_module_id)
+  module_items <- .ui_teal_module(
+    id = ns("nav"), modules = modules, active_module_id = active_module_id, reporter = reporter
+  )
 
   tags$div(
     class = "teal-modules-wrapper",
@@ -200,25 +202,26 @@ srv_teal_module <- function(id,
 }
 
 #' @rdname module_teal_module
-.ui_teal_module <- function(id, modules, active_module_id) {
+.ui_teal_module <- function(id, modules, active_module_id, reporter) {
   checkmate::assert_multi_class(modules, c("teal_modules", "teal_module", "shiny.tag"))
   UseMethod(".ui_teal_module", modules)
 }
 
 #' @rdname module_teal_module
 #' @export
-.ui_teal_module.default <- function(id, modules, active_module_id) {
+.ui_teal_module.default <- function(id, modules, active_module_id, reporter) {
   stop("Modules class not supported: ", paste(class(modules), collapse = " "))
 }
 
 #' @rdname module_teal_module
 #' @export
-.ui_teal_module.teal_modules <- function(id, modules, active_module_id) {
+.ui_teal_module.teal_modules <- function(id, modules, active_module_id, reporter) {
   items <- mapply(
     FUN = .ui_teal_module,
     id = NS(id, .label_to_id(sapply(modules$children, `[[`, "label"))),
     modules = modules$children,
     active_module_id = active_module_id,
+    MoreArgs = list(reporter = reporter),
     SIMPLIFY = FALSE
   )
 
@@ -233,7 +236,7 @@ srv_teal_module <- function(id,
 
 #' @rdname module_teal_module
 #' @export
-.ui_teal_module.teal_module <- function(id, modules, active_module_id) {
+.ui_teal_module.teal_module <- function(id, modules, active_module_id, reporter) {
   ns <- NS(id)
   args <- c(list(id = ns("module")), modules$ui_args)
   ui_teal <- tags$div(
@@ -279,7 +282,7 @@ srv_teal_module <- function(id,
         .modules_breadcrumb(modules),
         tags$div(
           style = "display: flex; gap: 0.5em;",
-          ui_add_reporter(ns("add_reporter_wrapper")),
+          if (!is.null(reporter)) ui_add_reporter(ns("add_reporter_wrapper")),
           ui_source_code(ns("source_code_wrapper"))
         )
       ),

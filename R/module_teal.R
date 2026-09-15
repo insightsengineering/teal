@@ -45,9 +45,10 @@ NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id, modules) {
+ui_teal <- function(id, modules, reporter = NULL) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
+  checkmate::assert_class(reporter, "teal_report", null.ok = TRUE)
   ns <- NS(id)
 
   mod <- extract_module(modules, class = "teal_module_previewer")
@@ -67,32 +68,34 @@ ui_teal <- function(id, modules) {
     )
   )
 
-  navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules)
+  navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules, reporter = reporter)
   nav_elements <- list(
-    withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
-      tags$div(
-        id = ns("reporter_menu_container"),
-        .teal_navbar_menu(
-          label = "Report",
-          icon = "file-text-fill",
-          class = "reporter-menu",
-          if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
-            teal.reporter::preview_report_button_ui(ns("preview_report"), label = "Preview Report")
-          },
-          tags$hr(style = "margin: 0.5rem;"),
-          if ("download" %in% getOption("teal.reporter.nav_buttons")) {
-            teal.reporter::download_report_button_ui(ns("download_report"), label = "Download Report")
-          },
-          if ("load" %in% getOption("teal.reporter.nav_buttons")) {
-            teal.reporter::report_load_ui(ns("load_report"), label = "Load Report")
-          },
-          tags$hr(style = "margin: 0.5rem;"),
-          if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
-            teal.reporter::reset_report_button_ui(ns("reset_reports"), label = "Reset Report")
-          }
+    if (!is.null(reporter)) {
+      withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
+        tags$div(
+          id = ns("reporter_menu_container"),
+          .teal_navbar_menu(
+            label = "Report",
+            icon = "file-text-fill",
+            class = "reporter-menu",
+            if ("preview" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::preview_report_button_ui(ns("preview_report"), label = "Preview Report")
+            },
+            tags$hr(style = "margin: 0.5rem;"),
+            if ("download" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::download_report_button_ui(ns("download_report"), label = "Download Report")
+            },
+            if ("load" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::report_load_ui(ns("load_report"), label = "Load Report")
+            },
+            tags$hr(style = "margin: 0.5rem;"),
+            if ("reset" %in% getOption("teal.reporter.nav_buttons")) {
+              teal.reporter::reset_report_button_ui(ns("reset_reports"), label = "Reset Report")
+            }
+          )
         )
-      )
-    }),
+      })
+    },
     tags$span(style = "margin-left: auto;"),
     ui_bookmark_panel(ns("bookmark_manager"), modules),
     ui_snapshot_manager_panel(ns("snapshot_manager_panel")),
@@ -317,9 +320,6 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
           teal.reporter::report_load_srv("load_report", reporter)
           teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
           teal.reporter::reset_report_button_srv("reset_reports", reporter)
-        } else {
-          removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
-          removeUI(selector = ".report_add_wrapper")
         }
       }
     )
