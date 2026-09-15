@@ -318,8 +318,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
           teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
           teal.reporter::reset_report_button_srv("reset_reports", reporter)
         } else {
-          removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
-          removeUI(selector = ".report_add_wrapper")
+          removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")), multiple = TRUE)
+          removeUI(selector = ".report_add_wrapper", multiple = TRUE)
         }
       }
     )
