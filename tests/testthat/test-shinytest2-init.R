@@ -144,6 +144,4 @@ testthat::describe("e2e: init reporter buttons", {
     testthat::expect_length(app_driver$get_text("#teal-reporter_menu_container .teal.dropdown-button"), 0)
     testthat::expect_length(app_driver$get_text(".report_add_wrapper .teal-reporter.action-button"), 0)
   })
-
-
 })
