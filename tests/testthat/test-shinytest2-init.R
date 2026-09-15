@@ -126,7 +126,9 @@ testthat::describe("e2e: init reporter buttons", {
     )
     withr::defer(app_driver$stop())
 
-    testthat::expect_match(trimws(app_driver$get_text("#teal-reporter_menu_container .teal.dropdown-button")), "^Report$")
+    testthat::expect_match(
+      trimws(app_driver$get_text("#teal-reporter_menu_container .teal.dropdown-button")), "^Report$"
+    )
     testthat::expect_match(app_driver$get_text(".report_add_wrapper .teal-reporter.action-button"), "Add to Report")
   })
 
