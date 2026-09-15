@@ -4146,7 +4146,7 @@ testthat::describe("ui_teal reporter", {
     ui <- rvest::read_html(
       as.character(
         ui_teal(
-          "test_module", modules = modules(example_module(), example_module()), reporter = teal.reporter::teal_report()
+          "test_module", modules = modules(example_module(), example_module()), reporter = teal.reporter::Reporter$new()
         )
       )
     )
@@ -4174,7 +4174,7 @@ testthat::describe("ui_teal reporter", {
     ui <- rvest::read_html(
       as.character(
         ui_teal(
-          "test_module", modules = modules(example_module(), example_module()), reporter = teal.reporter::teal_report()
+          "test_module", modules = modules(example_module(), example_module()), reporter = teal.reporter::Reporter$new()
         )
       )
     )

@@ -48,7 +48,7 @@ NULL
 ui_teal <- function(id, modules, reporter = NULL) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
-  checkmate::assert_class(reporter, "teal_report", null.ok = TRUE)
+  checkmate::assert_class(reporter, "Reporter", null.ok = TRUE)
   ns <- NS(id)
 
   mod <- extract_module(modules, class = "teal_module_previewer")
