@@ -45,7 +45,7 @@ NULL
 
 #' @rdname module_teal
 #' @export
-ui_teal <- function(id, modules, reporter = NULL) {
+ui_teal <- function(id, modules, reporter = teal.reporter::Reporter$new()) {
   checkmate::assert_character(id, max.len = 1, any.missing = FALSE)
   checkmate::assert_class(modules, "teal_modules")
   checkmate::assert_class(reporter, "Reporter", null.ok = TRUE)

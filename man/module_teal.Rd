@@ -6,7 +6,7 @@
 \alias{srv_teal}
 \title{\code{teal} main module}
 \usage{
-ui_teal(id, modules)
+ui_teal(id, modules, reporter = teal.reporter::Reporter$new())
 
 srv_teal(
   id,
@@ -24,13 +24,13 @@ srv_teal(
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
+\item{reporter}{(\code{Reporter}) object used to store report contents. Set to \code{NULL} to globally disable reporting.}
+
 \item{data}{(\code{teal_data}, \code{teal_data_module}, or \code{reactive} returning \code{teal_data})
 The data which application will depend on.}
 
 \item{filter}{(\code{teal_slices}) Optionally,
 specifies the initial filter using \code{\link[=teal_slices]{teal_slices()}}.}
-
-\item{reporter}{(\code{Reporter}) object used to store report contents. Set to \code{NULL} to globally disable reporting.}
 }
 \value{
 \code{NULL} invisibly

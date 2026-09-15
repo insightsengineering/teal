@@ -17,7 +17,7 @@
 \alias{.srv_teal_module.teal_module}
 \title{Calls all \code{modules}}
 \usage{
-ui_teal_module(id, modules)
+ui_teal_module(id, modules, reporter)
 
 srv_teal_module(
   id,
@@ -39,13 +39,13 @@ srv_teal_module(
 
 .teal_navbar_menu(..., id = NULL, label = NULL, class = NULL, icon = NULL)
 
-.ui_teal_module(id, modules, active_module_id)
+.ui_teal_module(id, modules, active_module_id, reporter)
 
-\method{.ui_teal_module}{default}(id, modules, active_module_id)
+\method{.ui_teal_module}{default}(id, modules, active_module_id, reporter)
 
-\method{.ui_teal_module}{teal_modules}(id, modules, active_module_id)
+\method{.ui_teal_module}{teal_modules}(id, modules, active_module_id, reporter)
 
-\method{.ui_teal_module}{teal_module}(id, modules, active_module_id)
+\method{.ui_teal_module}{teal_module}(id, modules, active_module_id, reporter)
 
 .srv_teal_module(
   id,
@@ -99,6 +99,9 @@ srv_teal_module(
 will be displayed in the \code{teal} application. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
 more details.}
 
+\item{reporter}{(\code{Reporter}, singleton)
+Stores reporter-cards appended in the server of \code{teal_module}.}
+
 \item{data}{(\code{reactive} returning \code{teal_data})}
 
 \item{datasets}{(\code{reactive} returning \code{FilteredData} or \code{NULL})
@@ -107,9 +110,6 @@ which implies the filter-panel to be "global". When \code{NULL} then filter-pane
 
 \item{slices_global}{(\code{reactiveVal} returning \code{modules_teal_slices})
 see \code{\link{module_filter_manager}}}
-
-\item{reporter}{(\code{Reporter}, singleton)
-Stores reporter-cards appended in the server of \code{teal_module}.}
 
 \item{data_load_status}{(\code{reactive} returning \code{character(1)})
 Determines action dependent on a data loading status:
