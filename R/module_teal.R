@@ -69,7 +69,7 @@ ui_teal <- function(id, modules) {
 
   navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules)
   nav_elements <- list(
-    withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
+    rlang::with_options(!!!reporter_opts, .expr = { # for backwards compatibility of report_previewer_module$server_args
       tags$div(
         id = ns("reporter_menu_container"),
         .teal_navbar_menu(
