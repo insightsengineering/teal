@@ -67,6 +67,7 @@ ui_teal <- function(id, modules) {
     )
   )
 
+  reporter_opts <- reporter_opts %||% structure(list(), names = character(0L))
   navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules)
   nav_elements <- list(
     rlang::with_options(!!!reporter_opts, .expr = { # for backwards compatibility of report_previewer_module$server_args
