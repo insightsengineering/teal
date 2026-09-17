@@ -67,9 +67,10 @@ ui_teal <- function(id, modules) {
     )
   )
 
+  reporter_opts <- reporter_opts %||% structure(list(), names = character(0L))
   navbar <- ui_teal_module(id = ns("teal_modules"), modules = modules)
   nav_elements <- list(
-    withr::with_options(reporter_opts, { # for backwards compatibility of the report_previewer_module$server_args
+    rlang::with_options(!!!reporter_opts, .expr = { # for backwards compatibility of report_previewer_module$server_args
       tags$div(
         id = ns("reporter_menu_container"),
         .teal_navbar_menu(
@@ -318,8 +319,8 @@ srv_teal <- function(id, data, modules, filter = teal_slices(), reporter = teal.
           teal.reporter::download_report_button_srv(id = "download_report", reporter = reporter)
           teal.reporter::reset_report_button_srv("reset_reports", reporter)
         } else {
-          removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")))
-          removeUI(selector = ".report_add_wrapper")
+          removeUI(selector = sprintf("#%s", session$ns("reporter_menu_container")), multiple = TRUE)
+          removeUI(selector = sprintf("#%s .report_add_wrapper", session$ns("tabpanel_wrapper")), multiple = TRUE)
         }
       }
     )

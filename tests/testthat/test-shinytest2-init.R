@@ -112,3 +112,38 @@ testthat::test_that("e2e: init creates UI containing specified title, favicon, h
   )
   app$stop()
 })
+
+
+testthat::describe("e2e: init reporter buttons", {
+  it("is displayed when report is non null", {
+    skip_if_too_deep(5)
+    app_driver <- TealAppDriver$new(
+      init(
+        data = simple_teal_data(),
+        modules = modules(example_module(label = "Example Module"), example_module(label = "Example Module 2")),
+        reporter = teal.reporter::Reporter$new()
+      )
+    )
+    withr::defer(app_driver$stop())
+
+    testthat::expect_match(
+      trimws(app_driver$get_text("#teal-reporter_menu_container .teal.dropdown-button")), "^Report$"
+    )
+    testthat::expect_match(app_driver$get_text(".report_add_wrapper .teal-reporter.action-button"), "Add to Report")
+  })
+
+  it("is not displayed when report is null", {
+    skip_if_too_deep(5)
+    app_driver <- TealAppDriver$new(
+      init(
+        data = simple_teal_data(),
+        modules = modules(example_module(label = "Example Module"), example_module(label = "Example Module 2")),
+        reporter = NULL
+      )
+    )
+    withr::defer(app_driver$stop())
+
+    testthat::expect_length(app_driver$get_text("#teal-reporter_menu_container .teal.dropdown-button"), 0)
+    testthat::expect_length(app_driver$get_text(".report_add_wrapper .teal-reporter.action-button"), 0)
+  })
+})
