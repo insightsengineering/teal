@@ -1,6 +1,6 @@
 # Changelog
 
-## teal 1.2.1.9004
+## teal 1.2.1.9005
 
 #### Enhancements
 
@@ -9,6 +9,12 @@
   to help module developers resolve the decorators applied to a specific
   output
   ([\#1733](https://github.com/insightsengineering/teal/issues/1733)).
+
+#### Bug fixes
+
+- Prevent reporter buttons from appearing in subsequent tabs if
+  functionality is disabled
+  ([\#1727](https://github.com/insightsengineering/teal/issues/1727)).
 
 ## teal 1.2.1
 

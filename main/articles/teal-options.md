@@ -111,7 +111,7 @@ Default: 72
 This defines the layout of a log message used in a `teal` application.
 `teal` uses this layout to format the emitted log messages. Read the
 documentation of
-[`teal.logger::register_logger`](https://insightsengineering.github.io/teal.logger/latest-tag/reference/register_logger.html)
+[`teal.logger::register_logger`](https://rdrr.io/pkg/teal.logger/man/register_logger.html)
 for more information. This must be set before loading any `teal`
 package(s). In case the option is set after attaching the packages,
 please re-attach the packages again to use it correctly.
