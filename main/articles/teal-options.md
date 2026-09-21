@@ -17,12 +17,14 @@ options available in the package `teal` and its supporting packages
 At any time during an interactive session, you can change an option
 using:
 
-[`options`](https://rdrr.io/r/base/options.html)`(``option_to_set ``=`` ``"value"``)`
+\
+[`options`](https://rdrr.io/r/base/options.html)`(``option_to_set ``=`` ``"value"``)`
 
 A way to change options for only the execution of a specific block of
 code is with the `withr` package like so:
 
-`withr``::`[`with_options`](https://withr.r-lib.org/reference/with_options.html)`(`[`list`](https://rdrr.io/r/base/list.html)`(``digits ``=`` ``3``)``, `[`print`](https://rdrr.io/r/base/print.html)`(``pi``)``)`
+\
+`withr``::`[`with_options`](https://withr.r-lib.org/reference/with_options.html)`(`[`list`](https://rdrr.io/r/base/list.html)`(``digits ``=`` ``3``)``, `[`print`](https://rdrr.io/r/base/print.html)`(``pi``)``)`
 
     ## [1] 3.14
 
@@ -31,6 +33,7 @@ value before the line was run.
 
 The function `getOption` allows to inspect the value of an option:
 
+\
 [`getOption`](https://rdrr.io/r/base/options.html)`(``"option_to_set"``)`
 
     ## [1] "value"
@@ -194,7 +197,12 @@ is downloaded. It should be a subset of “html_document”, “pdf_document”,
 
 Default:
 
-[`c`](https://rdrr.io/r/base/c.html)`(`` `` ``"html"`` ``=`` ``"html_document"``, ``"pdf"`` ``=`` ``"pdf_document"``,`` `` ``"powerpoint"`` ``=`` ``"powerpoint_presentation"``,`` `` ``"word"`` ``=`` ``"word_document"`` ``)`
+\
+[`c`](https://rdrr.io/r/base/c.html)`(`\
+`  ``"html"`` ``=`` ``"html_document"``, ``"pdf"`` ``=`` ``"pdf_document"``,`\
+`  ``"powerpoint"`` ``=`` ``"powerpoint_presentation"``,`\
+`  ``"word"`` ``=`` ``"word_document"`\
+`)`
 
 #### `teal.reporter.rmd_yaml_args` (`character`)
 
@@ -204,7 +212,14 @@ supported YAML args: “author”, “title”, “date”, “output”, “toc
 
 Default:
 
-[`list`](https://rdrr.io/r/base/list.html)`(`` `` author ``=`` ``"NEST"``,`` `` title ``=`` ``"Report"``,`` `` date ``=`` `[`as.character`](https://rdrr.io/r/base/character.html)`(`[`Sys.Date`](https://rdrr.io/r/base/Sys.time.html)`(``)``)``,`` `` output ``=`` ``"html_document"``,`` `` toc ``=`` ``FALSE`` ``)`
+\
+[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  author ``=`` ``"NEST"``,`\
+`  title ``=`` ``"Report"``,`\
+`  date ``=`` `[`as.character`](https://rdrr.io/r/base/character.html)`(`[`Sys.Date`](https://rdrr.io/r/base/Sys.time.html)`(``)``)``,`\
+`  output ``=`` ``"html_document"``,`\
+`  toc ``=`` ``FALSE`\
+`)`
 
 #### `teal.reporter.global_knitr` (`list`)
 
@@ -213,7 +228,12 @@ It allows customizing the global `knitr` parameters which are passed to
 
 Default:
 
-[`list`](https://rdrr.io/r/base/list.html)`(`` `` echo ``=`` ``TRUE``,`` `` tidy.opts ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``width.cutoff ``=`` ``60``)``,`` `` tidy ``=`` `[`requireNamespace`](https://rdrr.io/r/base/ns-load.html)`(``"formatR"``, quietly ``=`` ``TRUE``)`` ``)`
+\
+[`list`](https://rdrr.io/r/base/list.html)`(`\
+`  echo ``=`` ``TRUE``,`\
+`  tidy.opts ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``width.cutoff ``=`` ``60``)``,`\
+`  tidy ``=`` `[`requireNamespace`](https://rdrr.io/r/base/ns-load.html)`(``"formatR"``, quietly ``=`` ``TRUE``)`\
+`)`
 
 #### `teal.reporter.max_request_size` (`numeric`)
 

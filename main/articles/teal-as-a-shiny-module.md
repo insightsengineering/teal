@@ -31,4 +31,33 @@ which are passed to the embedded `teal` component. On the server side,
 is called with a reactive `teal_data` object passed from the parent
 app’s server.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``data`` ``<-`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``)`` ``|>`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(``{`` `` ``iris`` ``<-`` ``iris`` `` ``mtcars`` ``<-`` ``mtcars`` `` ``df`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``a ``=`` ``1``:``10``, b ``=`` ``letters``[``1``:``10``]``)`` ``}``)`` `` ``mods`` ``<-`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``"mod1"``)``,`` `` `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``"mod2"``)`` ``)`` `` ``ui_app`` ``<-`` `[`fluidPage`](https://rdrr.io/pkg/shiny/man/fluidPage.html)`(`` `` title ``=`` ``"Your app with teal as a module"``,`` `` `[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``"datasets"``, ``"Select datasets"``, choices ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"iris"``, ``"mtcars"``, ``"df"``)``, selected ``=`` ``"iris"``, multiple ``=`` ``TRUE``)``,`` `` `[`ui_teal`](https://insightsengineering.github.io/teal/reference/module_teal.md)`(``"teal"``, ``mods``)``,`` `` `[`ui_session_info`](https://insightsengineering.github.io/teal/reference/module_session_info.md)`(``"session_info"``)`` ``)`` `` ``srv_app`` ``<-`` ``function``(``input``, ``output``, ``session``)`` ``{`` `` ``data_subset`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``data``[``input``$``datasets``]``)`` `` `[`srv_teal`](https://insightsengineering.github.io/teal/reference/module_teal.md)`(``"teal"``, data ``=`` ``data_subset``, modules ``=`` ``mods``)`` `` `[`srv_session_info`](https://insightsengineering.github.io/teal/reference/module_session_info.md)`(``"session_info"``)`` ``}`` `` ``if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``ui_app``, ``srv_app``)`` ``}`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`\
+\
+`data`` ``<-`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``)`` ``|>`` `[`within`](https://insightsengineering.github.io/teal/reference/teal_data_module.md)`(``{`\
+`  ``iris`` ``<-`` ``iris`\
+`  ``mtcars`` ``<-`` ``mtcars`\
+`  ``df`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``a ``=`` ``1``:``10``, b ``=`` ``letters``[``1``:``10``]``)`\
+`}``)`\
+\
+`mods`` ``<-`` `[`modules`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`\
+`  `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``"mod1"``)``,`\
+`  `[`example_module`](https://insightsengineering.github.io/teal/reference/example_module.md)`(``"mod2"``)`\
+`)`\
+\
+`ui_app`` ``<-`` `[`fluidPage`](https://rdrr.io/pkg/shiny/man/fluidPage.html)`(`\
+`  title ``=`` ``"Your app with teal as a module"``,`\
+`  `[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``"datasets"``, ``"Select datasets"``, choices ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"iris"``, ``"mtcars"``, ``"df"``)``, selected ``=`` ``"iris"``, multiple ``=`` ``TRUE``)``,`\
+`  `[`ui_teal`](https://insightsengineering.github.io/teal/reference/module_teal.md)`(``"teal"``, ``mods``)``,`\
+`  `[`ui_session_info`](https://insightsengineering.github.io/teal/reference/module_session_info.md)`(``"session_info"``)`\
+`)`\
+\
+`srv_app`` ``<-`` ``function``(``input``, ``output``, ``session``)`` ``{`\
+`  ``data_subset`` ``<-`` `[`reactive`](https://rdrr.io/pkg/shiny/man/reactive.html)`(``data``[``input``$``datasets``]``)`\
+`  `[`srv_teal`](https://insightsengineering.github.io/teal/reference/module_teal.md)`(``"teal"``, data ``=`` ``data_subset``, modules ``=`` ``mods``)`\
+`  `[`srv_session_info`](https://insightsengineering.github.io/teal/reference/module_session_info.md)`(``"session_info"``)`\
+`}`\
+\
+`if`` ``(`[`interactive`](https://rdrr.io/r/base/interactive.html)`(``)``)`` ``{`\
+`  `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``ui_app``, ``srv_app``)`\
+`}`

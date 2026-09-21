@@ -79,6 +79,8 @@ following packages:
   provides a filtering panel to allow filtering of data.
 - [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/):
   allows `teal` applications to generate reports.
+- [`teal.picks`](https://insightsengineering.github.io/teal.picks/latest-tag/):
+  provides the selection and merge of data module for teal applications.
 - [`teal.transform`](https://insightsengineering.github.io/teal.transform/latest-tag/):
   allows the creation of reproducible transform and merge module for
   teal applications.
@@ -91,15 +93,49 @@ teal](https://img.youtube.com/vi/N8ZamECICSI/0.jpg)](https://www.youtube.com/wat
 
 ## Installation
 
+\
 [`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"teal"``)`
 
 Alternatively, you might also use the development version.
 
-`# install.packages("pak")`` ``pak``::`[`pak`](https://pak.r-lib.org/reference/pak.html)`(``"insightsengineering/teal"``)`
+\
+`# install.packages("pak")`\
+`pak``::`[`pak`](https://pak.r-lib.org/reference/pak.html)`(``"insightsengineering/teal"``)`
 
 ## Usage
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`` `` ``app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`` `` data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``iris ``=`` ``iris``)``,`` `` modules ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`` `` `[`module`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`` `` label ``=`` ``"iris histogram"``,`` `` server ``=`` ``function``(``input``, ``output``, ``session``, ``data``)`` ``{`` `` `[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(``session ``=`` ``session``,`` `` inputId ``=`` ``"var"``,`` `` choices ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``"iris"``]``]``)``[``1``:``4``]``)`` `` `` ``output``$``hist`` ``<-`` `[`renderPlot`](https://rdrr.io/pkg/shiny/man/renderPlot.html)`(``{`` `` `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``input``$``var``)`` `` `[`hist`](https://rdrr.io/r/graphics/hist.html)`(``x ``=`` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``"iris"``]``]``[[``input``$``var``]``]``)`` `` ``}``)`` `` ``}``,`` `` ui ``=`` ``function``(``id``)`` ``{`` `` ``ns`` ``<-`` `[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`` `` `[`list`](https://rdrr.io/r/base/list.html)`(`` `` `[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``inputId ``=`` ``ns``(``"var"``)``,`` `` label ``=`` ``"Column name"``,`` `` choices ``=`` ``NULL``)``,`` `` `[`plotOutput`](https://rdrr.io/pkg/shiny/man/plotOutput.html)`(``outputId ``=`` ``ns``(``"hist"``)``)`` `` ``)`` `` ``}`` `` ``)`` `` ``)`` ``)`` `` `[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`teal`](https://insightsengineering.github.io/teal/)`)`\
+\
+`app`` ``<-`` `[`init`](https://insightsengineering.github.io/teal/reference/init.md)`(`\
+`  data ``=`` `[`teal_data`](https://insightsengineering.github.io/teal.data/latest-tag/reference/teal_data.html)`(``iris ``=`` ``iris``)``,`\
+`  modules ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`    `[`module`](https://insightsengineering.github.io/teal/reference/teal_modules.md)`(`\
+`      label ``=`` ``"iris histogram"``,`\
+`      server ``=`` ``function``(``input``, ``output``, ``session``, ``data``)`` ``{`\
+`        `[`updateSelectInput`](https://rdrr.io/pkg/shiny/man/updateSelectInput.html)`(``session ``=`` ``session``,`\
+`                          inputId ``=``  ``"var"``,`\
+`                          choices ``=`` `[`names`](https://rdrr.io/r/base/names.html)`(`[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``"iris"``]``]``)``[``1``:``4``]``)`\
+\
+`        ``output``$``hist`` ``<-`` `[`renderPlot`](https://rdrr.io/pkg/shiny/man/renderPlot.html)`(``{`\
+`          `[`req`](https://rdrr.io/pkg/shiny/man/req.html)`(``input``$``var``)`\
+`          `[`hist`](https://rdrr.io/r/graphics/hist.html)`(``x ``=`` `[`data`](https://rdrr.io/r/utils/data.html)`(``)``[[``"iris"``]``]``[[``input``$``var``]``]``)`\
+`        ``}``)`\
+`      ``}``,`\
+`      ui ``=`` ``function``(``id``)`` ``{`\
+`        ``ns`` ``<-`` `[`NS`](https://rdrr.io/pkg/shiny/man/NS.html)`(``id``)`\
+`        `[`list`](https://rdrr.io/r/base/list.html)`(`\
+`          `[`selectInput`](https://rdrr.io/pkg/shiny/man/selectInput.html)`(``inputId ``=`` ``ns``(``"var"``)``,`\
+`                      label ``=``  ``"Column name"``,`\
+`                      choices ``=`` ``NULL``)``,`\
+`          `[`plotOutput`](https://rdrr.io/pkg/shiny/man/plotOutput.html)`(``outputId ``=`` ``ns``(``"hist"``)``)`\
+`        ``)`\
+`      ``}`\
+`    ``)`\
+`  ``)`\
+`)`\
+\
+[`shinyApp`](https://rdrr.io/pkg/shiny/man/shinyApp.html)`(``app``$``ui``, ``app``$``server``)`
 
 ![App recording](reference/figures/readme_app.gif)
 
