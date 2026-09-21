@@ -53,6 +53,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 - [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/): `shiny` components used within `teal`.
 - [`teal.slice`](https://insightsengineering.github.io/teal.slice/latest-tag/): provides a filtering panel to allow filtering of data.
 - [`teal.reporter`](https://insightsengineering.github.io/teal.reporter/latest-tag/): allows `teal` applications to generate reports.
+- [`teal.picks`](https://insightsengineering.github.io/teal.picks/latest-tag/): provides the selection and merge of data module for teal applications.
 - [`teal.transform`](https://insightsengineering.github.io/teal.transform/latest-tag/): allows the creation of reproducible transform and merge module for teal applications.
 
 Dive deeper into `teal` with our comprehensive video guide.
