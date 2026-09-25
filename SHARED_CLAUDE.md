@@ -106,13 +106,13 @@ There is a CI/CD workflow that manages the versions automatically on the `main` 
 
 ## CI/CD and Development Workflow
 
-<!-- gitlab start here -->
+<!-- gitlab starts here -->
 ### Gitlab Workflows
 
 `.gitlab-ci.yml` reuses CI/CD tasks, such as running all unit tests, `R CMD check`, code quality checks, style checks and website generation.
 <!-- gitlab ends here -->
 
-<!-- github start here -->
+<!-- github starts here -->
 ### GitHub Workflows
 
 Use r.pkg.template workflows for consistency:
