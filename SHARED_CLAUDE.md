@@ -106,10 +106,13 @@ There is a CI/CD workflow that manages the versions automatically on the `main` 
 
 ## CI/CD and Development Workflow
 
+<!-- gitlab start here -->
 ### Gitlab Workflows
 
 `.gitlab-ci.yml` reuses CI/CD tasks, such as running all unit tests, `R CMD check`, code quality checks, style checks and website generation.
+<!-- gitlab ends here -->
 
+<!-- github start here -->
 ### GitHub Workflows
 
 Use r.pkg.template workflows for consistency:
@@ -118,6 +121,7 @@ Use r.pkg.template workflows for consistency:
 - `docs.yaml`: Documentation building and deployment
 - `audit.yaml`: Security and dependency auditing
 - `pkgdown.yaml`: Website generation
+<!-- github ends here -->
 
 ## Quality Assurance
 
