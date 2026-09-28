@@ -1,4 +1,7 @@
-# This package is part of the teal framework. The following configuration applies to all packages within the teal framework.
+
+# Teal Framework Claude Instructions
+
+This package is part of the teal framework. The following configuration applies to all packages within the teal framework:
 
 ## Package Structure and Organization
 
