@@ -79,7 +79,7 @@ When needed prefer specific imports over full package imports.
 ### Shiny Module Testing
 
 - **Server functions**: Test with `shiny::testServer()`
-- **UI functions**: Test basic usage with regular testing (class checks, error generation, snapshots, regexp search). Test UI scenarios and interactions with `teal::TealAppDriver` (based on `shinytest2::AppDriver`) for integration testing
+- **UI functions**: Test basic usage with regular testing (class checks, error generation, snapshots, regexp search). Test UI scenarios and interactions with `teal:::TealAppDriver` (based on `shinytest2::AppDriver`) for integration testing
 - **Reactive behavior**: Test reactive chains and side effects
 
 ### Test Organization and Naming
