@@ -97,7 +97,7 @@ When needed prefer specific imports over full package imports.
 - **`README.md`**: Clear overview, installation, basic usage examples
 - **Vignettes**: Comprehensive guides for complex functionality
 - **Function documentation**: All exported functions must have `roxygen2` documentation
-- **`NEWS.md`**: Detailed changelog following semantic versioning
+- **`NEWS.md`**: Detailed changelog of features, bugs and miscellanea  changes affecting the users
 
 ### Package Version Management
 
