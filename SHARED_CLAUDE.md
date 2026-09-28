@@ -43,7 +43,7 @@ package_name/
 
 - **Run `pre-commit` hooks**: Always run `pre-commit run --all-files` before committing. Fix any issues it reports - the error messages are informative and will guide you. It automatically checks code style, documentation, linting, and other quality issues.
 - **Follow `tidyverse` style**: General R code style follows the `tidyverse` style guide.
-- **Documentation**: All exported functions must have `roxygen2` documentation. Run `devtools::document()` to update documentation.
+- **Documentation**: All exported functions must have `roxygen2` documentation with `@returns` and `@examples` fields
 - **Formatting** rules are configured in the `.lintr` file.
 
 ## Dependencies and Imports
