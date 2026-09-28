@@ -134,7 +134,7 @@ Use r.pkg.template workflows for consistency:
 
 ### Code Review Process
 
-- **Pull Request Reviews**: All changes require review
+- **Pull Request Reviews**: All changes require human review and approval
 - **Automated Checks**: CI must pass before merging
 - **Breaking Changes**: Require special consideration and communication
 - **Documentation Updates**: Must accompany functional changes
