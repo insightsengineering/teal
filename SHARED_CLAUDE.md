@@ -1,4 +1,4 @@
-# This package is part of the teal framework. The following configuration applies to all packages within the teal framework:
+# This package is part of the teal framework. The following configuration applies to all packages within the teal framework.
 
 ## Package Structure and Organization
 
@@ -106,14 +106,11 @@ There is a CI/CD workflow that manages the versions automatically on the `main` 
 
 ## CI/CD and Development Workflow
 
-<!-- gitlab starts here -->
-### Gitlab Workflows
+### Gitlab Workflows (if package hosted in Gitlab)
 
 `.gitlab-ci.yml` reuses CI/CD tasks, such as running all unit tests, `R CMD check`, code quality checks, style checks and website generation.
-<!-- gitlab ends here -->
 
-<!-- github starts here -->
-### GitHub Workflows
+### GitHub Workflows (if package hosted in GitHub)
 
 Use r.pkg.template workflows for consistency:
 
@@ -121,7 +118,6 @@ Use r.pkg.template workflows for consistency:
 - `docs.yaml`: Documentation building and deployment
 - `audit.yaml`: Security and dependency auditing
 - `pkgdown.yaml`: Website generation
-<!-- github ends here -->
 
 ## Quality Assurance
 
@@ -130,7 +126,6 @@ Use r.pkg.template workflows for consistency:
 - **Test Coverage**: ≥80% line coverage
 - **Linting**: No lint violations using configured `.lintr`
 - **Documentation**: 100% of exports documented
-- **Dependencies**: Minimal and justified dependencies only
 
 ### Code Review Process
 
@@ -149,4 +144,5 @@ Use r.pkg.template workflows for consistency:
 ## Maintenance Guidelines
 
 - **Long-term Support**: Maintain backward compatibility when possible
+- **Dependencies**: Minimal and justified dependencies only
 - **Deprecation**: Use `lifecycle` package for function deprecation
