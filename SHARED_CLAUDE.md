@@ -87,7 +87,7 @@ When needed prefer specific imports over full package imports.
 - **One test file per R file**: `test-module_example.R` for `module_example.R`
 - **Descriptive test names**: Clearly describe what is being tested
 - **End to end test names**: `test-shinytest2-module_example.R` for `module_example.R`
-- **Logical grouping**: Group related tests using `describe()` when beneficial
+- **Logical grouping**: Group related tests using `describe()` and individual tests with `it()` when beneficial
 - **Test data**: Create minimal test datasets, avoid external dependencies
 
 ## Documentation and Communication
