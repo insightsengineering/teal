@@ -11,8 +11,8 @@ Follow the standard R package structure with teal-specific conventions:
 
 ```text
 package_name/
-├── .gitlab-ci.yml    # CI/CD workflows (if package uses Gitlab)
-├── .github           # CI/CD workflows (if package uses GitHub)
+├── .gitlab-ci.yml    # CI/CD workflows (if package hosted in Gitlab)
+├── .github           # CI/CD workflows (if package hosted in GitHub)
 ├── R/                # R source code
 ├── tests/testthat/   # Unit tests using testthat
 ├── vignettes/        # Long-form documentation
