@@ -48,5 +48,5 @@ coverage.*
 ^\.covrignore$
 ^inst/cheatsheet$
 AGENTS.md
-SHARED_CLAUDE.md
+SHARED_AGENTS.md
 ^.devcontainer$

@@ -1,5 +1,5 @@
 
-# Teal Framework Claude Instructions
+# Teal Framework Agents Instructions
 
 This package is part of the teal framework. The following configuration applies to all packages within the teal framework.
 
@@ -16,7 +16,7 @@ package_name/
 ├── tests/testthat/   # Unit tests using testthat
 ├── vignettes/        # Long-form documentation
 ├── inst/             # Package assets
-├── CLAUDE.md         # Development guide for AI agents (this file)
+├── AGENTS.md         # Development guide for AI agents (this file)
 ├── DESCRIPTION       # Package metadata
 ├── NAMESPACE         # Exports and imports automa
 ├── NEWS.md           # Change log
