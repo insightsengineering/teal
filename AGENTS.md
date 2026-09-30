@@ -4,27 +4,32 @@
 ## Package Overview
 
 `teal` is the main package of the framework to provide shiny web apps
-for analyzing clinical trials data. It provides a unified user
-interfaces and features for the different modules that analyse the data.
+for analyzing clinical trials data. It provides a unified user interface
+and features for the different modules that analyze the data.
 
 The most important functions are:
 
-- `init`: Responsible of creating an app with teal features.
-- `modules`: Join and contains analysis made by shiny modules.
+- `init`: Creates a teal application.
+- `modules`: Combines analyses implemented as Shiny or teal modules.
+- `teal_slices`: Filters datasets.
 
-Other important helpers: - `example_module`: To show and test framework
-features. - `modify_*` and `disable_*` functions to alter the UI of the
-app and remove some features respectively. - `*_decorators`: Modules can
-be extended with decorators this functions make it easier to build
-custom modules using it. - `validate*`: Functions to validate user’s
-input or objects used in modules.
+Other important helpers:
+
+- `example_module`: To show and test framework features.
+- `modify_*` and `disable_*` functions to alter the UI of the app and
+  remove some features respectively.
+- `*_decorators`: Modules can be extended with decorators that modify
+  the plots, tables and listings; these helpers make it easier to build
+  custom modules with decorators functionality
+- `validate*`: Functions to validate user’s input or objects used in
+  modules.
 
 ## Development Context
 
 The main feature of this package is to generate `teal` apps and
 integrate their features for the users.
 
-Direct dependencies
+### Direct dependencies
 
 - **shiny** - Web app generation and isolating framework.
 - **teal.code** - Bare code generation and evaluation ensuring
@@ -36,10 +41,6 @@ Direct dependencies
 - **teal.slice** - Data filtering capabilities for application
 - **teal.widgets** - Reusable UI components for user input and output
 - **teal.logger** - Standardized logging across the framework
-- **teal.picks** - Data selection and merging utilities using
-  `teal.data` objects
-- **teal.transform** - Data transformation utilities (deprecated in
-  favor of teal.picks)
 
 ### Supporting Packages
 
@@ -51,6 +52,14 @@ The `teal` package is used by module packages in examples and functions:
   from Bioconductor.
 - **teal.goshawk** - Pharmacokinetics analysis modules
 - **teal.osprey** - Advanced clinical analysis modules
+
+In addition to help the analysis these two packages might be used on
+modules:
+
+- **teal.picks** - Data selection and merging utilities using
+  `teal.data` objects
+- **teal.transform** - Data transformation utilities (deprecated in
+  favor of teal.picks)
 
 ## Workflows
 
@@ -65,12 +74,8 @@ The `teal` package is used by module packages in examples and functions:
 - If something is needed for more than one module it might be needed on
   this package to be exported to all of them or in one of the
   dependencies.
-- Use `snake_case` consistently for function names.
-- Use `PascalCase` (e.g., `TealAppDriver`) for class names.
-- Prefix UI functions with `ui_` and server functions with `srv_` for
-  module functions.
-- Use descriptive names without export for internal functions
-- The package should be back-compatible
+- Before making a change to an API exported in `teal`, please ensure
+  that it will be backwards compatible
 - Use the pattern `module_<name>.R` for shiny modules.
 - Prefix helper functions with the main function they support
 - Group related utilities in shared files (e.g., `utils.R`,
