@@ -30,7 +30,7 @@
 #' Returns NULL if the final validation call passes and a `shiny.silent.error` if it fails.
 #'
 #' @seealso [`shinyvalidate::InputValidator`], [`shiny::validate`]
-#'
+#' @family validations
 #'
 #' @examplesShinylive
 #' library(teal)
@@ -211,7 +211,7 @@ any_names <- function(x) {
 #'  Condition should determine expected state, `FALSE` throws.
 #' @param message (`character(1)`) Character string of validation message to display.
 #' @param session Shiny session object
-#'
+#' @family validations
 #' @return `NULL` or `shiny.silent.error` when condition is not met
 #'
 #' @examples

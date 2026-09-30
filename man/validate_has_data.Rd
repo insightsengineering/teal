@@ -53,6 +53,18 @@ if (interactive()) {
 }
 
 }
+\seealso{
+Other validations:
+\code{\link[=validate_has_elements]{validate_has_elements()}},
+\code{\link[=validate_has_variable]{validate_has_variable()}},
+\code{\link[=validate_in]{validate_in()}},
+\code{\link[=validate_input]{validate_input()}},
+\code{\link[=validate_inputs]{validate_inputs()}},
+\code{\link[=validate_n_levels]{validate_n_levels()}},
+\code{\link[=validate_no_intersection]{validate_no_intersection()}},
+\code{\link[=validate_one_row_per_id]{validate_one_row_per_id()}}
+}
+\concept{validations}
 \section{Examples in Shinylive}{
 \describe{
   \item{example-1}{

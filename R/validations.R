@@ -7,7 +7,7 @@
 #' @param complete (`logical(1)`) Flag specifying whether to check only complete cases. Defaults to `FALSE`.
 #' @param allow_inf (`logical(1)`) Flag specifying whether to allow infinite values. Defaults to `TRUE`.
 #' @param msg (`character(1)`) Additional message to display alongside the default message.
-#'
+#' @family validations
 #' @export
 #'
 #' @examplesShinylive
@@ -79,7 +79,7 @@ validate_has_data <- function(x,
 #'
 #' @param x (`data.frame`)
 #' @param key (`character`) Vector of ID variables from `x` that identify unique records.
-#'
+#' @family validations
 #' @export
 #'
 #' @examplesShinylive
@@ -123,6 +123,7 @@ validate_one_row_per_id <- function(x, key = c("USUBJID", "STUDYID")) {
 #' @param msg (`character(1)`) Error message to display if some elements of `x` are not elements of `choices`.
 #'
 #' @export
+#' @family validations
 #'
 #' @examplesShinylive
 #' library(teal)
@@ -160,7 +161,7 @@ validate_in <- function(x, choices, msg) {
 #'
 #' @param x vector
 #' @param msg message to display
-#'
+#' @family validations
 #' @export
 #'
 #' @examplesShinylive
@@ -210,7 +211,7 @@ validate_has_elements <- function(x, msg) {
 #' @param x vector
 #' @param y vector
 #' @param msg (`character(1)`) message to display if `x` and `y` intersect
-#'
+#' @family validations
 #' @export
 #'
 #' @examplesShinylive
@@ -266,7 +267,7 @@ validate_no_intersection <- function(x, y, msg) {
 #' @param data (`data.frame`)
 #' @param varname (`character(1)`) name of variable to check for in `data`
 #' @param msg (`character(1)`) message to display if `data` does not include `varname`
-#'
+#' @family validations
 #' @export
 #'
 #' @examplesShinylive
@@ -326,7 +327,7 @@ validate_has_variable <- function(data, varname, msg) {
 #' @param max_levels cutoff for maximum number of levels of `x`
 #' @param var_name name of variable being validated for use in
 #'   validation message
-#'
+#' @family validations
 #' @export
 #'
 #' @examplesShinylive
