@@ -50,3 +50,5 @@ coverage.*
 AGENTS.md
 SHARED_AGENTS.md
 ^.devcontainer$
+^CLAUDE\.md$
+^vignettes/_AGENTS\.Rmd$
