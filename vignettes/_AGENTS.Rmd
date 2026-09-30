@@ -18,12 +18,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Package Overview
 
 `teal` is the main package of the framework to provide shiny web apps for analyzing clinical trials data. 
-It provides a unified user interfaces and features for the different modules that analyze the data.
+It provides a unified user interface and features for the different modules that analyze the data.
 
 The most important functions are:
 
-- `init`: Responsible of creating an app with teal features.
-- `modules`: Join and contains analysis made by shiny modules.
+- `init`: Creates a teal application.
+- `modules`: Combines analyses implemented as Shiny or teal modules.
+- `teal_slices`: Filters datasets.
 
 Other important helpers:
 - `example_module`: To show and test framework features.
@@ -36,7 +37,7 @@ Other important helpers:
 The main feature of this package is to generate `teal` apps and integrate their features for the users.
 
 
-Direct dependencies
+### Direct dependencies
 
 - **shiny** - Web app generation and isolating framework. 
 - **teal.code** - Bare code generation and evaluation ensuring reproducibility
@@ -46,8 +47,6 @@ Direct dependencies
 - **teal.slice** - Data filtering capabilities for application
 - **teal.widgets** - Reusable UI components for user input and output
 - **teal.logger** - Standardized logging across the framework
-- **teal.picks** - Data selection and merging utilities using `teal.data` objects
-- **teal.transform** - Data transformation utilities (deprecated in favor of teal.picks)
 
 ### Supporting Packages
 
@@ -59,6 +58,11 @@ The `teal` package is used by module packages in examples and functions:
 - **teal.goshawk** - Pharmacokinetics analysis modules
 - **teal.osprey** - Advanced clinical analysis modules
 
+In addition to help the analysis these two packages might be used on modules:
+
+- **teal.picks** - Data selection and merging utilities using `teal.data` objects
+- **teal.transform** - Data transformation utilities (deprecated in favor of teal.picks)
+
 
 ## Workflows
 
@@ -66,10 +70,6 @@ The `teal` package is used by module packages in examples and functions:
 - Before changing code in the `init()` function, consider the compatibility of this change with the module packages.
 - The internal `TealAppDriver` object is used for end to end test the modules packages. If any change is done check the compatibility with the module packages.
 - If something is needed for more than one module it might be needed on this package to be exported to all of them or in one of the dependencies.
-- Use `snake_case` consistently for function names.
-- Use `PascalCase` (e.g., `TealAppDriver`) for class names.
-- Prefix UI functions with `ui_` and server functions with `srv_` for module functions.
-- Use descriptive names without export for internal functions
 - The package should be back-compatible
 - Use the pattern `module_<name>.R` for shiny modules.
 - Prefix helper functions with the main function they support
