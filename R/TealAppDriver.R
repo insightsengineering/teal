@@ -301,22 +301,10 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         self$namespaces(TRUE)$filter_panel("filters-filter_active_vars_contents > div > span")
       )
 
-      js_code <- sprintf(
-        "
-          const accordionTitles = document.querySelectorAll(
-            '#%s-filters-filter_active_vars_contents .accordion-title'
-          );
-          let textContents = [];
-
-          accordionTitles.forEach(accordionTitle => {
-              let textNode = accordionTitle.childNodes[0];
-              textContents.push(textNode.textContent);
-          });
-          textContents;
-        ",
-        self$namespaces()$filter_panel(NULL)
+      available_datasets <- self$get_attr(
+        self$namespaces(TRUE)$filter_panel("filters-filter_active_vars_contents .accordion-item"),
+        "data-value"
       )
-      available_datasets <- unlist(self$get_js(js_code))
 
       available_datasets[displayed_datasets_index]
     },
