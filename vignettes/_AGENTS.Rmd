@@ -27,9 +27,10 @@ The most important functions are:
 - `teal_slices`: Filters datasets.
 
 Other important helpers:
+
 - `example_module`: To show and test framework features.
 - `modify_*` and `disable_*` functions to alter the UI of the app and remove some features respectively. 
-- `*_decorators`:  Modules can be extended with decorators this functions make it easier to build custom modules using it.
+- `*_decorators`:  Modules can be extended with decorators that modify the plots, tables and listings; these helpers make it easier to build custom modules with decorators functionality
 - `validate*`: Functions to validate user's input or objects used in modules.
 
 ## Development Context
@@ -70,7 +71,7 @@ In addition to help the analysis these two packages might be used on modules:
 - Before changing code in the `init()` function, consider the compatibility of this change with the module packages.
 - The internal `TealAppDriver` object is used for end to end test the modules packages. If any change is done check the compatibility with the module packages.
 - If something is needed for more than one module it might be needed on this package to be exported to all of them or in one of the dependencies.
-- The package should be back-compatible
+- Before making a change to an API exported in `teal`, please ensure that it will be backwards compatible
 - Use the pattern `module_<name>.R` for shiny modules.
 - Prefix helper functions with the main function they support
 - Group related utilities in shared files (e.g., `utils.R`, `validations.R`).
