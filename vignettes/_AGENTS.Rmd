@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Package Overview
 
 `teal` is the main package of the framework to provide shiny web apps for analyzing clinical trials data. 
-It provides a unified user interfaces and features for the different modules that analyse the data.
+It provides a unified user interfaces and features for the different modules that analyze the data.
 
 The most important functions are:
 

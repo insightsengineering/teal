@@ -1,9 +1,12 @@
+ADaM
 Biomarker
 CDISC
 Deprecations
 Hoffmann
 MAEs
+MultiAssayExperiment
 ORCID
+Pharmacokinetics
 Shinylive
 TLG
 Transformators
@@ -16,6 +19,7 @@ decorable
 favicon
 favicons
 funder
+hermes
 lockfile
 modularized
 omics
@@ -29,6 +33,8 @@ summarization
 tabset
 themer
 theming
+tmc
+tmg
 toc
 transformator
 transformators
