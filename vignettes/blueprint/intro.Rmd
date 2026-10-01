@@ -29,7 +29,7 @@ The `teal` framework's functionality draws heavily from the following packages:
 |[`teal.data`](https://insightsengineering.github.io/teal.data)           | provides the data structure used in all `teal` applications|
 |[`teal.slice`](https://insightsengineering.github.io/teal.slice)         | provides the filter panel to allow dynamic filtering of data|
 |[`teal.code`](https://insightsengineering.github.io/teal.code)           | provides a mechanism for tracking code to reproduce an analysis|
-|[`teal.logger`](https://insightsengineering.github.io/teal.logger)       | standardizes logging within `teal` framework|
+|[`teal.logger`](https://pharmaverse.github.io/teal.logger)               | standardizes logging within `teal` framework|
 |[`teal.reporter`](https://insightsengineering.github.io/teal.reporter)   | allows `teal` applications to generate reports|
 
 Although these packages are mentioned in the material, we strongly recommend visiting their vignettes to learn more about them.
