@@ -1,5 +1,5 @@
 
-<!-- markdownlint-disable-file MD0002 -->
+<!-- markdownlint-disable-file MD0002 MD0041 -->
 
 This package is part of the teal framework. The following configuration applies to all packages within the teal framework.
 
@@ -285,6 +285,7 @@ There is a CI/CD workflow that manages the versions automatically on the `main` 
 ## CI/CD and Development Workflow
 
 Prefer to reuse templates from r.pkg.template. Main checks in place are:
+
 - `check.yaml`: R CMD check, unit tests, coverage
 - `docs.yaml`: Documentation building and deployment
 - `audit.yaml`: Security and dependency auditing
