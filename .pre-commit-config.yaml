@@ -34,7 +34,7 @@ repos:
           - insightsengineering/roxy.shinylive
           - insightsengineering/teal.code
           - insightsengineering/teal.data
-          - insightsengineering/teal.logger
+          - pharmaverse/teal.logger
           - insightsengineering/teal.reporter
           - insightsengineering/teal.slice
           - insightsengineering/teal.widgets
