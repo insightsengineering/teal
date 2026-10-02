@@ -1,457 +1,222 @@
-# Teal Ecosystem R Package Development Guide
 
-## Introduction
+# teal R Package Development Guide
 
-The teal framework uses shiny to create reproducible environments for analysts. The ecosystem comprises several interconnected packages with specific roles:
+## Package Overview
 
-### Core Packages
+`teal` is the main package of the framework to provide shiny web apps
+for analyzing clinical trials data. It provides a unified user interface
+and features for the different modules that analyze the data.
 
-- **teal** - The main framework package providing the application structure
-- **teal.code** - Bare code generation and evaluation ensuring reproducibility
-- **teal.data** - Data management and relationships between datasets
-(contains sample data for ADaM datasets and default keys to merge ADaM datasets)
+The most important functions are:
+
+- `init`: Creates a teal application.
+- `modules`: Combines analyses implemented as Shiny or teal modules.
+- `teal_slices`: Filters datasets.
+
+Other important helpers:
+
+- `example_module`: To show and test framework features.
+- `modify_*` and `disable_*` functions to alter the UI of the app and
+  remove some features respectively.
+- `*_decorators`: Modules can be extended with decorators that modify
+  the plots, tables and listings; these helpers make it easier to build
+  custom modules with decorators functionality
+- `validate*`: Functions to validate user’s input or objects used in
+  modules.
+
+## Development Context
+
+The main feature of this package is to generate `teal` apps and
+integrate their features for the users.
+
+### Direct dependencies
+
+- **shiny** - Web app generation and isolating framework.
+- **teal.code** - Bare code generation and evaluation ensuring
+  reproducibility
+- **teal.data** - Data management and relationships between datasets via
+  join_keys (contains sample data for ADaM datasets and default keys to
+  merge ADaM datasets)
 - **teal.reporter** - Report generation functionality
 - **teal.slice** - Data filtering capabilities for application
-- **teal.widgets** - Reusable UI components
+- **teal.widgets** - Reusable UI components for user input and output
 - **teal.logger** - Standardized logging across the framework
-- **teal.picks** - Data selection and merging utilities using `teal.data` objects
-- **teal.transform** - Data transformation utilities (deprecated in favor of teal.picks)
-
-### Module Packages
-
-- **teal.modules.general** (tmg) - General-purpose analysis modules
-- **teal.modules.clinical** (tmc) - Clinical trial specific modules
-- **teal.modules.hermes** - MultiAssayExperiment analysis modules
-- **teal.goshawk** - Pharmacokinetics analysis modules
-- **teal.osprey** - Advanced clinical analysis modules
 
 ### Supporting Packages
 
-- **tern** - Statistical analysis functions
-- **rtables** - Table creation and formatting
-- **formatters** - Output formatting utilities
-- **gtsummary** - Table creation and formatting
+The `teal` package is used by module packages in examples and functions:
 
-**Key Principle**: Balance dependency value with features. Minimize dependencies to packages not already in use within the ecosystem.
+- **teal.modules.general** (tmg) - General-purpose analysis modules
+- **teal.modules.clinical** (tmc) - Clinical trial specific modules
+- **teal.modules.hermes** - analysis modules using MultiAssayExperiment
+  from Bioconductor.
+- **teal.goshawk** - Pharmacokinetics analysis modules
+- **teal.osprey** - Advanced clinical analysis modules
+
+In addition to help the analysis these two packages might be used on
+modules:
+
+- **teal.picks** - Data selection and merging utilities using
+  `teal.data` objects
+- **teal.transform** - Data transformation utilities (deprecated in
+  favor of teal.picks)
+
+## Workflows
+
+- Before fixing an issue consider that this package is part of teal
+  framework, so a bug that manifests in this package might have a
+  different origin.
+- Before changing code in the `init()` function, consider the
+  compatibility of this change with the module packages.
+- The internal `TealAppDriver` object is used for end to end test the
+  modules packages. If any change is done check the compatibility with
+  the module packages.
+- If something is needed for more than one module it might be needed on
+  this package to be exported to all of them or in one of the
+  dependencies.
+- Before making a change to an API exported in `teal`, please ensure
+  that it will be backwards compatible
+- Use the pattern `module_<name>.R` for shiny modules.
+- Group related utilities in shared files (e.g., `utils.R`,
+  `validations.R`).
+
+<!-- markdownlint-disable-file MD002 MD041 -->
+
+This package is part of the teal framework. The following configuration
+applies to all packages within the teal framework.
 
 ## Package Structure and Organization
 
-### Standard Package Layout
+### Key Directories
 
 Follow the standard R package structure with teal-specific conventions:
 
-```text
+``` text
 package_name/
-├── .github/workflows/     # CI/CD workflows (use r.pkg.template)
-├── R/                     # R source code
-├── tests/testthat/        # Unit tests
-├── man/                   # Documentation
-├── vignettes/             # Long-form documentation
-├── inst/                  # Package assets
-├── DESCRIPTION            # Package metadata
-├── NAMESPACE              # Exports and imports
-├── NEWS.md                # Change log
-├── README.md              # Package overview
-├── _pkgdown.yml          # Documentation website config
-├── .lintr                # Linting configuration
-└── .Rbuildignore         # Build exclusions
+├── .github           # CI/CD workflows
+├── R/                # R source code
+├── tests/testthat/   # Unit tests using testthat
+├── vignettes/        # Long-form documentation
+├── inst/             # Package assets
+├── AGENTS.md         # Development guide for AI agents (this file)
+├── DESCRIPTION       # Package metadata
+├── NAMESPACE         # Exports and imports
+├── NEWS.md           # Change log
+├── README.md         # Package overview
+├── _pkgdown.yml      # Documentation website config
+├── .lintr            # Linting configuration
+└── .Rbuildignore     # Build exclusions
 ```
 
 ### Naming Conventions
 
-- **Package names**: Use `teal.` prefix for ecosystem packages (e.g., `teal.widgets`)
 - **Function names**: Use `snake_case` consistently
 - **Class names**: Use `PascalCase` (e.g., `TealAppDriver`)
-- **Module functions**: Prefix UI functions with `ui_` and server functions with `srv_`
+- **Module functions**: Prefix UI functions with `ui_` and server
+  functions with `srv_`
 - **Internal functions**: Use descriptive names without export
 
 ### File Organization
 
 - **One main function per file** when the function is substantial
-- **Group related utilities** in shared files (e.g., `utils.R`, `validations.R`)
-- **Module files**: Use pattern `module_<name>.R` for shiny modules
+- **Group related utilities** in shared files (e.g., `utils.R`,
+  `validations.R`)
+- **Module files**: Use pattern `tm_<name>.R` for teal modules
 - **Helper functions**: Prefix with the main function they support
 
 ## Code Style and Standards
 
 ### Code Quality
 
-- **Run pre-commit hooks**: Always run `pre-commit run --all-files` before committing. Fix any issues it reports - the error messages are informative and will guide you.
-- **Follow tidyverse style**: General R code style follows the tidyverse style guide.
-- **Documentation**: All exported functions must have roxygen2 documentation. Run `devtools::document()` to update documentation.
-
-### Formatting
-
-Formatting rules are configured in the `.lintr` file.
-
-### Teal-Specific Conventions
-
-- **Naming**: Follow the naming conventions outlined in the Package Structure section
+- **Run `pre-commit` hooks**: Always run `pre-commit run --all-files`
+  before committing, Fix any issues it reports - the error messages are
+  informative and will guide you. It automatically checks code style,
+  documentation and other quality issues. If pre-commit is not
+  available, run the checks manually. Lint the R code manually as well
+  if not called by pre-commit.
+- **Follow `tidyverse` style**: General R code style follows the
+  `tidyverse` style guide.
+- **Documentation**: All exported functions must have `roxygen2`
+  documentation with `@returns` and `@examples` fields.
+- **Formatting** rules are configured in the `.lintr` file.
 
 ## Dependencies and Imports
 
 ### Dependency Management
 
-- **Minimize dependencies**: Only add dependencies that provide significant value
-- **Version constraints**: Specify minimum versions for critical dependencies
-- **Ecosystem coherence**: Prefer packages already used within teal ecosystem
-
-```r
-# DESCRIPTION example
-Depends:
-    R (>= 4.1),
-    shiny (>= 1.8.1)
-Imports:
-    checkmate (>= 2.1.0),
-    rlang (>= 1.0.0),
-    teal.widgets (>= 0.5.0)
-Suggests:
-    testthat (>= 3.2.0),
-    knitr,
-    rmarkdown
-```
+- **Minimize dependencies**: Only add dependencies that provide
+  significant value
+- **Version constraints**: Specify minimum versions for critical
+  dependencies
+- **Ecosystem coherence**: Prefer packages already used within teal
+  ecosystem
 
 ### Import Best Practices
 
-```r
-# In NAMESPACE, prefer specific imports over full package imports
-#' @importFrom shiny moduleServer NS tagList
-#' @importFrom checkmate assert_character assert_function
-#' @import teal.data  # Only for core teal packages
-
-# In code, use explicit namespacing for clarity when appropriate
-checkmate::assert_string(label)
-```
-
-## Modules Development
-
-### Module features
-
-Each module should produce one or more Table, Listing, or Graph (TLG):
-
-- **Reproducibility**: All code being executed to generate TLGs should be run using `teal_data` and
-`within()` / `teal.code::eval_code()`
-  - At the end of the module this object should be returned to enable Reporter and "Show R code" functionalities
-- **User Parameters**: Configurable inputs via `teal.picks::picks()` for flexible data selection
-- **Transformators**: Optional pre-processing functions that derive variables and validate data before analysis
-- **Decorators**: Optional post-processing functions that customize output presentation (titles, legends, annotations)
-
-### Module Architecture
-
-Teal modules follow a specific pattern with UI and server components:
-
-```r
-# UI Function
-ui_example_module <- function(id, var_x, var_y, decorators) {
-  ns <- shiny::NS(id)
-  select_decorators <- getFromNamespace("select_decorators", "teal") # import from teal internal functions
-
-  shiny::tagList(
-    # Input controls
-    teal.widgets::standard_layout(
-      # Output displays
-      output = teal.widgets::white_small_well(
-        teal::ui_transform_teal_data("decorator_table", select_decorators(decorators, "plot")),
-        teal::ui_transform_teal_data("decorator_table", select_decorators(decorators, "table")),
-        shiny::tags$h4("Results"),
-        shiny::plotOutput(ns("plot")),
-        shiny::tags$h4("Summary data"),
-        gt::gt_output(ns("table"))
-      ),
-      # Encoding panel
-      encoding = shiny::tags$div(
-        shiny::tags$label("Encodings", class = "text-primary"),
-        shiny::tags$br(),
-        shiny::tags$div(
-          shiny::tags$strong("Select X-Axis Variable"),
-          teal.picks::picks_ui(ns("var_x"), var_x)
-        ),
-        shiny::tags$div(
-          shiny::tags$strong("Select Y-Axis Variable"),
-          teal.picks::picks_ui(ns("var_y"), var_y)
-        )
-      )
-    )
-  )
-}
-
-# Server Function
-srv_example_module <- function(id, data, var_x, var_y, decorators) {
-  checkmate::assert_string(id)
-  checkmate::assert_class(data, "reactive")
-
-  select_decorators <- getFromNamespace("select_decorators", "teal") # import from teal internal functions
-  shiny::moduleServer(id, function(input, output, session) {
-    selectors <- teal.picks::picks_srv("picks", picks = list(var_x = var_x, var_y = var_y), data = data)
-    merged <- teal.picks::merge_srv(
-      "merge_picks",
-      data = data,
-      selectors = selectors,
-      output_name = "anl",
-      join_fun = "dplyr::inner_join"
-    )
-    # Data preparation
-    validated_q <- shiny::reactive({
-      shiny::validate(
-        teal::need_input(
-          inputId = "var_x-variables-selected",
-          condition = length(selectors$var_x()$variables$selected) > 0,
-          message = "X-Axis Variable must be selected"
-        ),
-        teal::need_input(
-          inputId = "var_y-variables-selected",
-          condition = length(selectors$var_y()$variables$selected) > 0,
-          message = "Y-Axis Variable must be selected"
-        )
-      )
-      shiny::validate(
-        teal::need_input(
-          inputId = c("var_x-variables-selected", "var_y-variables-selected"),
-          condition = !any(selectors$var_x()$variables$selected %in% selectors$var_y()$variables$selected),
-          message = "X-axis variable and Y-axis variable must be different"
-        )
-      )
-      q <- merged$data()
-      teal.reporter::teal_card(q) <- c(teal.reporter::teal_card(q), "## Module's output")
-      q
-    })
-
-    # Generate plot inside qenv
-    qenv_plot <- reactive({
-      within(validated_q(), {
-        plot <- ggplot2::ggplot(anl) +
-          ggplot2::geom_point(ggplot2::aes(x = env_var_x, y = env_var_y))
-      }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
-    })
-    decorated_plot <- teal::srv_transform_teal_data(
-      "decorator_table",
-      qenv_plot,
-      select_decorators(decorators, "plot"),
-      expr = quote(plot)
-    )
-
-    qenv_table <- reactive({
-      within(validated_q(), {
-        table <- gtsummary::tbl_summary(anl, by = env_var_x, missing = "no")
-      }, env_var_x = as.name(merged$variables()$var_x), env_var_y = as.name(merged$variables()$var_y))
-    })
-    decorated_table <- teal::srv_transform_teal_data(
-      "decorator_table",
-      qenv_table,
-      select_decorators(decorators, "table"),
-      expr = quote(table)
-    )
-
-    # Output rendering: use ggplot2 for visualizations
-    output$plot <- shiny::renderPlot(decorated_plot()[["plot"]])
-    output$table <- gt::render_gt(expr = gtsummary::as_gt(decorated_table()[["table"]]))
-     # Return reactive
-
-    reactive(c(decorated_plot(), decorated_table()))
-  })
-}
-
-tm_example_module <- function(
-  label = "Example Module",
-  var_x = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 1L)),
-  var_y = teal.picks::picks(teal.picks::datasets(), teal.picks::variables(is.numeric, selected = 2L)),
-  decorators = list(),
-  transformators = list()
-) {
-  checkmate::assert_string(label)
-  checkmate::assert_class(var_x, "picks")
-  checkmate::assert_class(var_y, "picks")
-  checkmate::assert_list(transformators, types = "teal_transform_module")
-  args <- list(var_x = var_x, var_y = var_y, decorators = decorators)
-  teal::module(
-    label = label,
-    server = srv_example_module,
-    ui = ui_example_module,
-    ui_args = args[names(args) %in% names(formals(ui_example_module))],
-    server_args = args[names(args) %in% names(formals(srv_example_module))],
-    transformators = transformators
-  )
-}
-```
-
-### Code Style for Modules
-
-- **Use tidyverse style**: Write clear, readable code using dplyr, ggplot2 patterns
-- **Use maggritr pipes in reproducible execution**: For code executed for `teal_data`/`qenv` data objects with `eval_code()` and `within()`
-- **Prefer ggplot2**: For all visualizations over base R plotting
-- **Use gt and gtsummary**: For statistical tables and summaries
-- **Error handling**: Implement proper validation using `checkmate` and `shiny::validate(teal::need_input(...))`
-
-```r
-# Good: Clear data manipulation
-plot_data <- data %>%
-  dplyr::filter(!is.na(variable)) %>%
-  dplyr::group_by(category) %>%
-  dplyr::summarise(
-    mean_value = mean(value),
-    n = dplyr::n(),
-    .groups = "drop"
-  )
-
-# Good: Descriptive ggplot2 code
-ggplot2::ggplot(plot_data, ggplot2::aes(x = category, y = mean_value)) +
-  ggplot2::geom_col(fill = "steelblue") +
-  ggplot2::labs(
-    title = "Mean Values by Category",
-    x = "Category",
-    y = "Mean Value"
-  ) +
-  ggplot2::theme_minimal()
-```
+Avoid importing package functions via roxygen2 (`#' @import pkg`)tags in
+favor of explicit namespacing for clarity when appropriate. When needed
+prefer specific imports over full package imports.
 
 ## Testing Framework
 
 ### Testing Philosophy
 
-- **Test public functions only**: Internal utilities should be tested through public interfaces
-- **Precise, focused tests**: Each test should verify one specific behavior
-- **High coverage**: Maintain at least 80% test coverage as measured by `covr`
+- **Test public functions only**: Internal utilities should be tested
+  through public interfaces
+- **Precise, focused tests**: Each test should verify one specific
+  behavior
+- **High coverage**: Maintain at least 80% test coverage as measured by
+  `covr`
 - **Integration over units**: Test realistic usage patterns
-- **Test Dependencies**.: Add `testthat::skip_if_not_installed(package_name)` only for dependencies in SUGGESTS or related to tests cases
-
-### Test Structure
-
-Follow the established patterns from `test-module_teal.R`:
-
-```r
-# Test organization
-testthat::test_that("function_name works with valid inputs", {
-  # Setup
-  test_data <- data.frame(x = 1:10, y = rnorm(10))
-
-  # Execution
-  result <- function_name(test_data)
-
-  # Verification - one expectation per test preferably
-  testthat::expect_s3_class(result, "data.frame")
-})
-
-testthat::test_that("function_name handles edge cases", {
-  # Test empty input
-  testthat::expect_error(
-    function_name(data.frame()),
-    "Input data cannot be empty"
-  )
-})
-
-testthat::test_that("function_name validates input types", {
-  # Test invalid input type
-  testthat::expect_error(
-    function_name("not a data frame"),
-    class = "checkmate_error"
-  )
-})
-```
+- **Test Dependencies**.: Add
+  `testthat::skip_if_not_installed(package_name)` only for dependencies
+  in `Suggests` or related to tests cases
 
 ### Shiny Module Testing
 
 - **Server functions**: Test with `shiny::testServer()`
-- **UI functions**: Test basic usage with regular testing (class checks, error generation, snapshots, regexp search). Test UI scenarios and interactions with `TealAppDriver` (based on `shinytest2::AppDriver`) for integration testing
+- **UI functions**: Test basic usage with regular testing (class checks,
+  error generation, snapshots, regexp search). Test UI scenarios and
+  interactions with `teal:::TealAppDriver` (based on
+  `shinytest2::AppDriver`) for integration testing
 - **Reactive behavior**: Test reactive chains and side effects
-
-```r
-testthat::test_that("srv_my_module processes data correctly", {
-  # Test server logic
-  shiny::testServer(
-    app = srv_my_module,
-    args = list(
-      data = reactive(test_data),
-      filter_panel_api = NULL
-    ),
-    expr = {
-      # Test reactive computations
-      result <- processed_data()
-      testthat::expect_s3_class(result, "teal_data")
-    }
-  )
-})
-
-testthat::test_that("my_module UI renders correctly", {
-  # Integration test with TealAppDriver
-  app <- init(
-    data = teal_data(mtcars = mtcars),
-    modules = my_module()
-  )
-
-  driver <- TealAppDriver$new(app)
-  withr::defer(driver$stop())
-  driver$navigate_teal_tab("My Module")
-
-  # Test UI elements are present
-  driver$expect_visible("#plot")
-})
-```
 
 ### Test Organization and Naming
 
-- **One test file per R file**: `test-module_example.R` for `module_example.R`
+- **One test file per R file**: `test-module_example.R` for
+  `module_example.R`
 - **Descriptive test names**: Clearly describe what is being tested
-- **End to end test names**: `test-shinytest2-module_example.R` for `module_example.R`
-- **Logical grouping**: Group related tests using `describe()` when beneficial
-- **Test data**: Create minimal test datasets, avoid external dependencies
+- **End to end test names**: `test-shinytest2-module_example.R` for
+  `module_example.R`
+- **Logical grouping**: Group related tests using `describe()` and
+  individual tests with `it()` when beneficial
+- **Test data**: Create minimal test datasets, avoid external
+  dependencies
 
 ## Documentation and Communication
 
 ### Package Documentation
 
-- **README.md**: Clear overview, installation, basic usage examples
+- **`README.md`**: Clear overview, installation, basic usage examples
 - **Vignettes**: Comprehensive guides for complex functionality
-- **Function documentation**: All exported functions must have roxygen2 documentation
-- **NEWS.md**: Detailed changelog following semantic versioning
+- **Function documentation**: All exported functions must have
+  `roxygen2` documentation
+- **`NEWS.md`**: Detailed changelog of features, bugs and miscellanea
+  changes affecting the users
 
-### Website Generation
+### Package Version Management
 
-Use `_pkgdown.yml` for documentation websites:
-
-```yaml
-url: https://insightsengineering.github.io/package.name
-
-template:
-  package: nesttemplate
-
-reference:
-  - title: "Main Functions"
-    contents:
-      - init
-      - module
-  - title: "Helper Functions"
-    contents:
-      - starts_with("validate_")
-```
-
-### Version Management
-
-Do not change versions on your own.
+Do not change versions on your own. There is a CI/CD workflow that
+manages the versions automatically on the `main` branch.
 
 ## CI/CD and Development Workflow
 
-### GitHub Workflows
+Prefer to reuse templates from r.pkg.template. Main checks in place are:
 
-Use `r.pkg.template` workflows for consistency:
-
-- **check.yaml**: R CMD check, unit tests, coverage
-- **docs.yaml**: Documentation building and deployment
-- **audit.yaml**: Security and dependency auditing
-- **pkgdown.yaml**: Website generation
-
-### Pre-commit Hooks
-
-**Always run pre-commit before committing code**:
-
-```bash
-pre-commit run --all-files
-```
-
-Fix any issues that pre-commit reports. The error messages are informative and will guide you on what needs to be fixed. Pre-commit automatically checks code style, documentation, linting, and other quality issues.
-
-### Dependency Management with Staged Dependencies
-
-`staged_dependencies.yaml` is an old artifact. Ignore it.
+- `check.yaml`: R CMD check, unit tests, coverage
+- `docs.yaml`: Documentation building and deployment
+- `audit.yaml`: Security and dependency auditing
+- `pkgdown.yaml`: Website generation
 
 ## Quality Assurance
 
@@ -460,11 +225,11 @@ Fix any issues that pre-commit reports. The error messages are informative and w
 - **Test Coverage**: ≥80% line coverage
 - **Linting**: No lint violations using configured `.lintr`
 - **Documentation**: 100% of exports documented
-- **Dependencies**: Minimal and justified dependencies only
 
 ### Code Review Process
 
-- **Pull Request Reviews**: All changes require review
+- **Pull Request Reviews**: All changes require human review and
+  approval
 - **Automated Checks**: CI must pass before merging
 - **Breaking Changes**: Require special consideration and communication
 - **Documentation Updates**: Must accompany functional changes
@@ -479,6 +244,5 @@ Fix any issues that pre-commit reports. The error messages are informative and w
 ## Maintenance Guidelines
 
 - **Long-term Support**: Maintain backward compatibility when possible
+- **Dependencies**: Minimal and justified dependencies only
 - **Deprecation**: Use `lifecycle` package for function deprecation
-
-This guide ensures consistency, quality, and maintainability across the teal ecosystem while following R community best practices.

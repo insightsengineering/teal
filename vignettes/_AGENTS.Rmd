@@ -1,0 +1,90 @@
+---
+# This file generates AGENTS.md in the package root.
+# It is not part of the package build or the pkgdown site.
+# To regenerate it, run from the package root:
+#     rmarkdown::render("vignettes/_AGENTS.Rmd", output_file = file.path("AGENTS.md"), output_dir = ".")
+output:
+  github_document:
+    html_preview: false
+params:
+  url: "../SHARED_AGENTS.md"
+---
+# teal R Package Development Guide
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Package Overview
+
+`teal` is the main package of the framework to provide shiny web apps for analyzing clinical trials data. 
+It provides a unified user interface and features for the different modules that analyze the data.
+
+The most important functions are:
+
+- `init`: Creates a teal application.
+- `modules`: Combines analyses implemented as Shiny or teal modules.
+- `teal_slices`: Filters datasets.
+
+Other important helpers:
+
+- `example_module`: To show and test framework features.
+- `modify_*` and `disable_*` functions to alter the UI of the app and remove some features respectively. 
+- `*_decorators`:  Modules can be extended with decorators that modify the plots, tables and listings; these helpers make it easier to build custom modules with decorators functionality
+- `validate*`: Functions to validate user's input or objects used in modules.
+
+## Development Context
+
+The main feature of this package is to generate `teal` apps and integrate their features for the users.
+
+
+### Direct dependencies
+
+- **shiny** - Web app generation and isolating framework. 
+- **teal.code** - Bare code generation and evaluation ensuring reproducibility
+- **teal.data** - Data management and relationships between datasets via join_keys
+(contains sample data for ADaM datasets and default keys to merge ADaM datasets)
+- **teal.reporter** - Report generation functionality
+- **teal.slice** - Data filtering capabilities for application
+- **teal.widgets** - Reusable UI components for user input and output
+- **teal.logger** - Standardized logging across the framework
+
+### Supporting Packages
+
+The `teal` package is used by module packages in examples and functions:
+
+- **teal.modules.general** (tmg) - General-purpose analysis modules
+- **teal.modules.clinical** (tmc) - Clinical trial specific modules
+- **teal.modules.hermes** - analysis modules using MultiAssayExperiment from Bioconductor.
+- **teal.goshawk** - Pharmacokinetics analysis modules
+- **teal.osprey** - Advanced clinical analysis modules
+
+In addition to help the analysis these two packages might be used on modules:
+
+- **teal.picks** - Data selection and merging utilities using `teal.data` objects
+- **teal.transform** - Data transformation utilities (deprecated in favor of teal.picks)
+
+
+## Workflows
+
+- Before fixing an issue consider that this package is part of teal framework, so a bug that manifests in this package might have a different origin.
+- Before changing code in the `init()` function, consider the compatibility of this change with the module packages.
+- The internal `TealAppDriver` object is used for end to end test the modules packages. If any change is done check the compatibility with the module packages.
+- If something is needed for more than one module it might be needed on this package to be exported to all of them or in one of the dependencies.
+- Before making a change to an API exported in `teal`, please ensure that it will be backwards compatible
+- Use the pattern `module_<name>.R` for shiny modules.
+- Group related utilities in shared files (e.g., `utils.R`, `validations.R`).
+
+```{r teal_content, echo=FALSE, results='asis'}
+# Append common shared instructions from teal framework (special case as they are on this repo)
+common_agents_shared <- readLines(params$url)
+# remove a heading line only intented to aovid a markdown lint error
+line_to_avoid_lintr <- grep("^# ", common_agents_shared)
+# remove section intended only for module packages
+begins_module_section <- grep("<!-- Begins Module Section", common_agents_shared, fixed = TRUE)
+ends_module_section <- grep("<!-- Ends Module Section", common_agents_shared, fixed = TRUE)
+common_agents_shared <- common_agents_shared[
+  -1 * c(line_to_avoid_lintr, seq(from = begins_module_section, to = ends_module_section))
+]
+cat(common_agents_shared, sep = "\n")
+```
