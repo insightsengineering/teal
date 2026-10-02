@@ -19,7 +19,7 @@ package_name/
 ├── inst/             # Package assets
 ├── AGENTS.md         # Development guide for AI agents (this file)
 ├── DESCRIPTION       # Package metadata
-├── NAMESPACE         # Exports and imports automa
+├── NAMESPACE         # Exports and imports
 ├── NEWS.md           # Change log
 ├── README.md         # Package overview
 ├── _pkgdown.yml      # Documentation website config
