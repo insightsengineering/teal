@@ -1,5 +1,5 @@
 
-# Teal Framework Agents Instructions
+<!-- markdownlint-disable-file MD0002 -->
 
 This package is part of the teal framework. The following configuration applies to all packages within the teal framework.
 
@@ -11,8 +11,7 @@ Follow the standard R package structure with teal-specific conventions:
 
 ```text
 package_name/
-├── .gitlab-ci.yml    # CI/CD workflows (if package hosted in Gitlab)
-├── .github           # CI/CD workflows (if package hosted in GitHub)
+├── .github           # CI/CD workflows
 ├── R/                # R source code
 ├── tests/testthat/   # Unit tests using testthat
 ├── vignettes/        # Long-form documentation
@@ -285,14 +284,7 @@ There is a CI/CD workflow that manages the versions automatically on the `main` 
 
 ## CI/CD and Development Workflow
 
-### Gitlab Workflows (if package hosted in Gitlab)
-
-`.gitlab-ci.yml` reuses CI/CD tasks, such as running all unit tests, `R CMD check`, code quality checks, style checks and website generation.
-
-### GitHub Workflows (if package hosted in GitHub)
-
-Use r.pkg.template workflows for consistency:
-
+Prefer to reuse templates from r.pkg.template. Main checks in place are:
 - `check.yaml`: R CMD check, unit tests, coverage
 - `docs.yaml`: Documentation building and deployment
 - `audit.yaml`: Security and dependency auditing
