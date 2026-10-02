@@ -73,7 +73,6 @@ In addition to help the analysis these two packages might be used on modules:
 - If something is needed for more than one module it might be needed on this package to be exported to all of them or in one of the dependencies.
 - Before making a change to an API exported in `teal`, please ensure that it will be backwards compatible
 - Use the pattern `module_<name>.R` for shiny modules.
-- Prefix helper functions with the main function they support
 - Group related utilities in shared files (e.g., `utils.R`, `validations.R`).
 
 ```{r teal_content, echo=FALSE, results='asis'}
