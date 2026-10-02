@@ -122,6 +122,7 @@ reference:
       - assert_decorators
       - build_app_title
       - check_decorators
+      - select_decorators
   - title: Example module
     desc: A simple `teal` module
     contents:

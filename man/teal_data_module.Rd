@@ -50,7 +50,7 @@ It is possible to preserve original formatting of the \code{code} by providing a
 
 \item{data}{(\code{teal_data_module}) object}
 
-\item{expr}{(\code{expression}) to evaluate. Must be inline code. See \code{\link[=within]{within()}}}
+\item{expr}{(\code{expression}) to evaluate. Must be inline code. See \code{\link[base:within]{within()}}.}
 
 \item{...}{See \code{Details}.}
 }

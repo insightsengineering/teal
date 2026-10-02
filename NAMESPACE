@@ -35,6 +35,7 @@ export(modules)
 export(need_input)
 export(report_card_template)
 export(reporter_previewer_module)
+export(select_decorators)
 export(srv_session_info)
 export(srv_teal)
 export(srv_transform_teal_data)
@@ -54,13 +55,18 @@ export(validate_inputs)
 export(validate_n_levels)
 export(validate_no_intersection)
 export(validate_one_row_per_id)
+if (getRversion() < "4.4.0") importFrom(rlang, "%||%")
 import(shiny)
 import(teal.data)
 import(teal.slice)
-importFrom(methods,as)
-importFrom(methods,new)
-importFrom(methods,setMethod)
-importFrom(shiny,reactiveVal)
-importFrom(shiny,reactiveValues)
+importFrom(methods,
+  as,
+  new,
+  setMethod
+)
+importFrom(shiny,
+  reactiveVal,
+  reactiveValues
+)
 importFrom(stats,setNames)
 importMethodsFrom(teal.code,eval_code)

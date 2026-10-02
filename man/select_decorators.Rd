@@ -16,6 +16,22 @@ A \code{list} of \code{teal_transform_module} objects matching the given \code{s
 Returns an empty list if \code{scope} and \code{all} is not found in \code{decorators}.
 }
 \description{
-Subset decorators based on the scope
+Subset a named list of decorators, keeping only those matching the requested
+\code{scope} together with any decorators registered under the \code{"all"} name. This is
+a helper for module developers to resolve the decorators applied to a specific
+output when a module produces several decorable outputs.
 }
-\keyword{internal}
+\examples{
+plot_decorator <- teal_transform_module(server = function(id, data) data)
+table_decorator <- teal_transform_module(server = function(id, data) data)
+decorators <- list(all = plot_decorator, table = table_decorator)
+
+# Decorators for the "table" output: both "all" and "table" scoped decorators.
+str(select_decorators(decorators, "table"))
+
+# An unknown scope keeps only the "all" decorators.
+str(select_decorators(decorators, "plot"))
+}
+\seealso{
+\code{\link[=check_decorators]{check_decorators()}}
+}

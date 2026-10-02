@@ -73,6 +73,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
         }
       }
 
+      rlang::check_installed("withr")
       suppressWarnings(
         withr::with_envvar(
           new = extra_envvar,
