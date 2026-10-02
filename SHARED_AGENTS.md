@@ -1,5 +1,5 @@
 
-<!-- markdownlint-disable-file MD0002 MD0041 -->
+<!-- markdownlint-disable-file MD002 MD041 -->
 
 This package is part of the teal framework. The following configuration applies to all packages within the teal framework.
 
