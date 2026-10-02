@@ -67,7 +67,7 @@ analyzing data. `teal` applications require app developers to specify:
 A lot of the functionality of the `teal` framework derives from the
 following packages:
 
-- [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/):
+- [`teal.logger`](https://pharmaverse.github.io/teal.logger/latest-tag/):
   standardizes logging within `teal` framework.
 - [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/):
   handles reproducibility of outputs.
