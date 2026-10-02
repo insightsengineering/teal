@@ -77,6 +77,14 @@ In addition to help the analysis these two packages might be used on modules:
 
 ```{r teal_content, echo=FALSE, results='asis'}
 # Append common shared instructions from teal framework (special case as they are on this repo)
-common_claude_shared <- readLines(params$url)
-cat(common_claude_shared, sep = "\n")
+common_agents_shared <- readLines(params$url)
+# remove a heading line only intented to aovid a markdown lint error
+line_to_avoid_lintr <- grep("^# ", common_agents_shared)
+# remove section intended only for module packages
+begins_module_section <- grep("<!-- Begins Module Section", common_agents_shared, fixed = TRUE)
+ends_module_section <- grep("<!-- Ends Module Section", common_agents_shared, fixed = TRUE)
+common_agents_shared <- common_agents_shared[
+  -1 * c(line_to_avoid_lintr, seq(from = begins_module_section, to = ends_module_section))
+]
+cat(common_agents_shared, sep = "\n")
 ```
