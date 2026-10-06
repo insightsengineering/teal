@@ -47,7 +47,7 @@ A lot of the functionality of the `teal` framework derives from the following pa
 
 <!-- markdownlint-disable MD007 MD030 -->
 
-- [`teal.logger`](https://insightsengineering.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
+- [`teal.logger`](https://pharmaverse.github.io/teal.logger/latest-tag/): standardizes logging within `teal` framework.
 - [`teal.code`](https://insightsengineering.github.io/teal.code/latest-tag/): handles reproducibility of outputs.
 - [`teal.data`](https://insightsengineering.github.io/teal.data/latest-tag/): creating and loading the data needed for `teal` applications.
 - [`teal.widgets`](https://insightsengineering.github.io/teal.widgets/latest-tag/): `shiny` components used within `teal`.
