@@ -48,7 +48,6 @@
   padding: 1em;
 }
 
-/* stack multiple input validation messages one per line */
 .shiny-input-validation-error {
   display: block;
 }
