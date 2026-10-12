@@ -395,5 +395,8 @@ need_input <- function(inputId, # nolint
 #' @export
 use_validate_input_js <- function() {
   addResourcePath("js", system.file("js", package = "teal"))
-  singleton(tags$script(src = "js/input-validator.js"))
+  tagList(
+    include_css_files("validation.css"),
+    singleton(tags$script(src = "js/input-validator.js"))
+  )
 }
