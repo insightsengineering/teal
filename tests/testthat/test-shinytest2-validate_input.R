@@ -229,6 +229,11 @@ testthat::test_that("validate_input shinytest2 - sequence of errors with paralle
               message = "Select at least one letter."
             ),
             need_input(
+              "letters1",
+              condition = !"F" %in% input$letters1,
+              message = "Letter F is not allowed."
+            ),
+            need_input(
               c("letters1", "letters2"),
               condition = function(x, y) all(!x %in% y),
               message = "Letters in the first group should not be in the second group."
@@ -280,6 +285,19 @@ testthat::test_that("validate_input shinytest2 - sequence of errors with paralle
     app_driver$get_text(".shiny-output-error.shiny-input-validation-error"),
     rep("Letters in the first group should not be in the second group.", 2)
   )
+
+  # multiple errors for the same input are all shown, each on a separate line
+  app_driver$set_inputs("teal-teal_modules-nav-my_module-module-letters1" = c("A", "F"))
+  testthat::expect_setequal(
+    app_driver$get_text("#teal-teal_modules-nav-my_module-module-letters1 ~ .shiny-input-validation-error"),
+    c("Letter F is not allowed.", "Letters in the first group should not be in the second group.")
+  )
+  tops <- app_driver$get_js(
+    "Array.from(
+      document.querySelectorAll('#teal-teal_modules-nav-my_module-module-letters1 ~ .shiny-input-validation-error')
+    ).map(el => el.getBoundingClientRect().top)"
+  )
+  testthat::expect_false(identical(tops[[1]], tops[[2]]))
 })
 
 testthat::test_that("validate_input shinytest2 - stale messages are not shown", {

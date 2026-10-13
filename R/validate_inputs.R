@@ -357,7 +357,7 @@ need_input <- function(inputId, # nolint
                        session = shiny::getDefaultReactiveDomain()) {
   # Simple fingerprint based on inputId and message to ensure validation messages
   # in Javascript are not incorrectly removed.
-  fingerprint <- paste0(inputId, collapse = "|")
+  fingerprint <- paste0(c(inputId, rlang::hash(message)), collapse = "|")
 
   checkmate::assert_character(inputId, min.len = 1)
   checkmate::assert(

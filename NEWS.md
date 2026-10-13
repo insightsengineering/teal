@@ -7,7 +7,7 @@
 ### Bug fixes
 
 * Prevent reporter buttons from appearing in subsequent tabs if functionality is disabled (#1727).
-* Multiple input validation messages from `need_input()` are now displayed on separate lines (#1717).
+* Multiple validation messages for the same input are now all displayed, each on its own line (#1717).
 
 # teal 1.2.1
 
