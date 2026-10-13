@@ -288,15 +288,15 @@ testthat::test_that("validate_input shinytest2 - sequence of errors with paralle
 
   # multiple errors for the same input are all shown, each on a separate line
   app_driver$set_inputs("teal-teal_modules-nav-my_module-module-letters1" = c("A", "F"))
+  letters1_errors <- "[data-ref^='teal-teal_modules-nav-my_module-module-letters1-']"
   testthat::expect_setequal(
-    app_driver$get_text("#teal-teal_modules-nav-my_module-module-letters1 ~ .shiny-input-validation-error"),
+    app_driver$get_text(letters1_errors),
     c("Letter F is not allowed.", "Letters in the first group should not be in the second group.")
   )
   tops <- app_driver$get_js(
-    "Array.from(
-      document.querySelectorAll('#teal-teal_modules-nav-my_module-module-letters1 ~ .shiny-input-validation-error')
-    ).map(el => el.getBoundingClientRect().top)"
+    sprintf("Array.from(document.querySelectorAll(\"%s\")).map(el => el.getBoundingClientRect().top)", letters1_errors)
   )
+  testthat::expect_length(tops, 2)
   testthat::expect_false(identical(tops[[1]], tops[[2]]))
 })
 
