@@ -357,7 +357,7 @@ need_input <- function(inputId, # nolint
                        session = shiny::getDefaultReactiveDomain()) {
   # Simple fingerprint based on inputId and message to ensure validation messages
   # in Javascript are not incorrectly removed.
-  fingerprint <- paste0(inputId, collapse = "|")
+  fingerprint <- paste0(c(inputId, rlang::hash(message)), collapse = "|")
 
   checkmate::assert_character(inputId, min.len = 1)
   checkmate::assert(
@@ -395,5 +395,8 @@ need_input <- function(inputId, # nolint
 #' @export
 use_validate_input_js <- function() {
   addResourcePath("js", system.file("js", package = "teal"))
-  singleton(tags$script(src = "js/input-validator.js"))
+  tagList(
+    include_css_files("validation.css"),
+    singleton(tags$script(src = "js/input-validator.js"))
+  )
 }
