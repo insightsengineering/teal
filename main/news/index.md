@@ -1,6 +1,6 @@
 # Changelog
 
-## teal 1.2.1.9011
+## teal 1.2.1.9012
 
 #### Enhancements
 
@@ -15,6 +15,9 @@
 - Prevent reporter buttons from appearing in subsequent tabs if
   functionality is disabled
   ([\#1727](https://github.com/insightsengineering/teal/issues/1727)).
+- Multiple validation messages for the same input are now all displayed,
+  each on its own line
+  ([\#1717](https://github.com/insightsengineering/teal/issues/1717)).
 
 ## teal 1.2.1
 
