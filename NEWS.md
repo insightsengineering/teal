@@ -3,6 +3,7 @@
 ### Enhancements
 
 * Exported `select_decorators()` to help module developers resolve the decorators applied to a specific output (#1733).
+* Add support for function argument in `TealAppDriver$new(app)` (#1753).
 
 ### Bug fixes
 

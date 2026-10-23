@@ -96,7 +96,14 @@ driving a teal application for performing interactions for \code{shinytest2} tes
   \subsection{Arguments}{
     \if{html}{\out{<div class="arguments">}}
     \describe{
-      \item{\code{app}}{(\code{teal_app})}
+      \item{\code{app}}{(\code{teal_app} or \code{function}) The \code{teal} application to be tested.
+This value can be 2 different things:
+\itemize{
+\item A \code{teal_app} object, which is the result of calling \code{teal::init()}.
+\item A function that returns a \code{teal_app} object.
+}
+
+Other values that \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{new()} functions accepts are not yet supported.}
       \item{\code{options}}{(\code{list}) passed to \code{shinyApp(options)}. See \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
       \item{\code{teal_options}}{(\code{list}) named list of R options to set inside the spawned
 Shiny process (e.g. \code{list(teal.enable_deep_linking = TRUE)}). Applied at session
@@ -145,7 +152,7 @@ if the \code{ACTIONS_STEP_DEBUG} environment variable is set to \code{true} (cas
 \if{html}{\out{<a id="method-TealAppDriver-click"></a>}}
 \if{latex}{\out{\hypertarget{method-TealAppDriver-click}{}}}
 \subsection{\code{TealAppDriver$click()}}{
-  Append parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click} method with a call to \code{waif_for_idle()} method.
+  Append parent \code{\link[shinytest2:AppDriver]{shinytest2::AppDriver}} \code{click} method with a call to \code{wait_for_idle()} method.
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{TealAppDriver$click(...)}
