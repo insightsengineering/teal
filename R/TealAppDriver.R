@@ -25,7 +25,12 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
     #' @description
     #' Initialize a `TealAppDriver` object for testing a `teal` application.
     #'
-    #' @param app (`teal_app`)
+    #' @param app (`teal_app` or `function`) The `teal` application to be tested.
+    #' This value can be 2 different things:
+    #' - A `teal_app` object, which is the result of calling `teal::init()`.
+    #' - A function that returns a `teal_app` object.
+    #'
+    #' Other values that [`shinytest2::AppDriver`] `new()` functions accepts are not yet supported.
     #' @param options (`list`) passed to `shinyApp(options)`. See [shiny::shinyApp()].
     #' @param timeout (`numeric`) Default number of milliseconds for any timeout or
     #' timeout_ parameter in the `TealAppDriver` class.
@@ -126,7 +131,7 @@ TealAppDriver <- R6::R6Class( # nolint: object_name.
       super$stop(...)
     },
     #' @description
-    #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `waif_for_idle()` method.
+    #' Append parent [`shinytest2::AppDriver`] `click` method with a call to `wait_for_idle()` method.
     #' @param ... arguments passed to parent [`shinytest2::AppDriver`] `click()` method.
     click = function(...) {
       super$click(...)
